@@ -2,8 +2,8 @@ application/cache/
 
 #codeigniter 3
 application/logs/
-# application/config/database.php
-# !application/logs/index.html
-# !application/logs/.htaccess
-# /vendor/
-# uploads/
+application/config/database.php
+!application/logs/index.html
+!application/logs/.htaccess
+/vendor/
+uploads/
