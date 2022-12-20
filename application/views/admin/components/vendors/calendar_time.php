@@ -148,6 +148,7 @@ $(document).ready(function() {
           }); 
 		  }      
        },
+
        header: {
            left: 'today, prevYear, nextYear, printButton',
            center: 'prev, title, next',
@@ -160,10 +161,12 @@ $(document).ready(function() {
             } else {
 				$(".fc-content").css('height','auto');
 			}
+			$(".fc-day-number").css('font-size','12px');
        },
        eventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
             $('.popover.fade.top').remove();
        },
+
        locale: 'en-GB',
        allDaySlot: false,
        firstDay: 1,
@@ -182,6 +185,8 @@ $(document).ready(function() {
        longPressDelay : 0,
        eventLongPressDelay : 0,
        selectLongPressDelay : 0,
+       eventBackgroundColor: "#156b7c",
+       contentHeight: 600,
        
        events: [
 	   <?php
@@ -327,6 +332,8 @@ $(document).ready(function() {
 				$fclockout = $iclock_out->format('h:i a');
 				$clockin = '<i class="fa fa-clock-o"></i>'.$fclockin;
 				$clockout = '<i class="fa fa-clock-o"></i>'.$fclockout;
+				$fclockinP = "In : ".$fclockin; 
+				$fclockinO = "Out : ".$fclockout; 
 				// total hours work/ed
 				$total_hrs = $this->Timesheet_model->total_hours_worked_attendance($user_id,$attendance_date);
 				$hrs_old_int1 = 0;
@@ -402,6 +409,28 @@ $(document).ready(function() {
 			   backgroundColor: "<?php echo $bgcolor;?>",
 			   textColor: "#ffffff",
 		   },
+ 			{
+			   _id: '<?php echo $i;?>',
+			   title: '<?php echo $fclockinP;?>',
+			   etitle: '<?php echo $estatus;?>',
+			   start: '<?php echo $attendance_date;?>',
+			   end: '<?php echo $attendance_date;?>',
+			   clock_in: '<?php echo $clockin;?>',
+			   clock_out: '<?php echo $clockout;?>',
+			   total_work: '<?php echo $total_work;?>',
+		   },
+		   {
+			   _id: '<?php echo $i;?>',
+			   title: '<?php echo $fclockinO;?>',
+			   etitle: '<?php echo $estatus;?>',
+			   start: '<?php echo $attendance_date;?>',
+			   end: '<?php echo $attendance_date;?>',
+			   clock_in: '<?php echo $clockin;?>',
+			   clock_out: '<?php echo $clockout;?>',
+			   total_work: '<?php echo $total_work;?>',
+		   },
+
+
 			<?php } 
 			else if($estatus == 'Holiday'){
 			?>

@@ -1883,6 +1883,10 @@ class Employees extends MY_Controller {
 		if ($iresult) {
 			
 			$id = $iresult;
+
+			$proxi = array('user_id' => $id, 'proxi_id' => $this->input->post('proxi_id'), 'status' => 1);
+			$this->db->insert('xin_proxi', $proxi);
+			
 			if($count_module_attributes > 0){
 				foreach($module_attributes as $mattribute) {
 				 	/*$attr_data = array(

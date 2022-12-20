@@ -252,23 +252,23 @@ $(document).ready(function(){
 </script>
 <?php } ?>
  <script type="text/javascript">
- $(document).ready(function(){
-   setTimeout(refreshChatMsgs, 5000);
-});
-function refreshChatMsgs() {
-	  $.ajax({
-		url: site_url + "chat/refresh_chat_users_msg/",
-		type: 'GET',
-		dataType: 'html',
-		success: function(data) {
-			setTimeout(refreshChatMsgs, 5000);
-		  	jQuery('#msgs_count').html(data);
-		},
-		error: function() {
-		  
-		}
-	  });
-}
+	 /*$(document).ready(function(){
+	   setTimeout(refreshChatMsgs, 5000);
+	});*/
+	function refreshChatMsgs() {
+		  $.ajax({
+			url: site_url + "chat/refresh_chat_users_msg/",
+			type: 'GET',
+			dataType: 'html',
+			success: function(data) {
+				setTimeout(refreshChatMsgs, 5000);
+			  	jQuery('#msgs_count').html(data);
+			},
+			error: function() {
+			  
+			}
+		  });
+	}
 </script>
 <?php } ?>
 <?php if($this->router->fetch_class() =='theme'){?>
@@ -293,3 +293,4 @@ function refreshChatMsgs() {
   });
 </script>
 <?php } ?>
+

@@ -105,4 +105,5 @@
 <?php if($this->router->fetch_method() =='tasks_scrum_board' || $this->router->fetch_method() =='projects_scrum_board') { ?>
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_tasks_scrum_board.css">
 <?php } ?>
+<script type="text/javascript" src="<?php echo base_url('skin/hrsale_assets/vendor/jquery/jquery-3.2.1.min.js');?>"></script>
 </head>
