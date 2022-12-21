@@ -332,7 +332,7 @@
 	}
 	
 	// get record of leave > by id
-	 public function read_leave_information($id) {
+	public function read_leave_information($id) {
 	
 		$sql = 'SELECT * FROM xin_leave_applications WHERE leave_id = ? limit 1';
 		$binds = array($id);

@@ -74,11 +74,11 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> 'mysql:host=localhost;dbname=mysoft_mhr_cloud',
+	'dsn'	=> 'mysql:host=localhost;dbname=admin_smarthr',
 	'hostname' => "localhost",
 	'username' => "root",
 	'password' => "",
-	'database' => "mysoft_mhr_cloud",
+	'database' => "admin_smarthr",
 	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

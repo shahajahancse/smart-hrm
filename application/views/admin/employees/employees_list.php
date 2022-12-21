@@ -148,13 +148,13 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="first_name"><?php echo $this->lang->line('xin_employee_first_name');?><i class="hrsale-asterisk">*</i></label>
+                    <label for="first_name"><?php echo $this->lang->line('xin_employee_first_name');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_first_name');?>" name="first_name" type="text" value="">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="last_name" class="control-label"><?php echo $this->lang->line('xin_employee_last_name');?><i class="hrsale-asterisk">*</i></label>
+                    <label for="last_name" class="control-label"><?php echo $this->lang->line('xin_employee_last_name');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_last_name');?>" name="last_name" type="text" value="">
                   </div>
                 </div>
@@ -163,7 +163,7 @@
                 <?php if($user_info[0]->user_role_id==1){ ?>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="first_name"><?php echo $this->lang->line('left_company');?><i class="hrsale-asterisk">*</i></label>
+                    <label for="first_name"><?php echo $this->lang->line('left_company');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                     <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
                       <option value=""></option>
                       <?php foreach($get_all_companies as $company) {?>
@@ -200,13 +200,13 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="username"><?php echo $this->lang->line('dashboard_username');?><i class="hrsale-asterisk">*</i></label>
+                    <label for="username"><?php echo $this->lang->line('dashboard_username');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('dashboard_username');?>" name="username" type="text" value="">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="email" class="control-label"><?php echo $this->lang->line('dashboard_email');?><i class="hrsale-asterisk">*</i></label>
+                    <label for="email" class="control-label"><?php echo $this->lang->line('dashboard_email');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('dashboard_email');?>" name="email" type="text" value="">
                   </div>
                 </div>
@@ -214,13 +214,13 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="date_of_birth"><?php echo $this->lang->line('xin_employee_dob');?><i class="hrsale-asterisk">*</i></label>
+                    <label for="date_of_birth"><?php echo $this->lang->line('xin_employee_dob');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                     <input class="form-control date_of_birth" readonly placeholder="<?php echo $this->lang->line('xin_employee_dob');?>" name="date_of_birth" type="text" value="">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="contact_no" class="control-label"><?php echo $this->lang->line('xin_contact_number');?><i class="hrsale-asterisk">*</i></label>
+                    <label for="contact_no" class="control-label"><?php echo $this->lang->line('xin_contact_number');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('xin_contact_number');?>" name="contact_no" type="text" value="">
                   </div>
                 </div>
@@ -228,15 +228,22 @@
             </div>
             <div class="col-md-6">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <div class="form-group">
-                    <label for="employee_id"><?php echo $this->lang->line('dashboard_employee_id');?><i class="hrsale-asterisk">*</i></label>
+                    <label for="employee_id"><?php echo $this->lang->line('dashboard_employee_id');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('dashboard_employee_id');?>" name="employee_id" type="text" value="">
                   </div>
                 </div>
-                <div class="col-md-6">
+
+                <div class="col-md-4">
                   <div class="form-group">
-                    <label for="date_of_joining" class="control-label"><?php echo $this->lang->line('xin_employee_doj');?><i class="hrsale-asterisk">*</i></label>
+                    <label for="proxi_id" class="control-label"><?php echo"Proxi Id";?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_doj');?>" name="proxi_id" type="text" value="">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="date_of_joining" class="control-label"><?php echo $this->lang->line('xin_employee_doj');?><i class="hrsale-asterisk"></i></label>
                     <input class="form-control date_of_joining" readonly placeholder="<?php echo $this->lang->line('xin_employee_doj');?>" name="date_of_joining" type="text" value="">
                   </div>
                 </div>
@@ -298,13 +305,13 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="xin_employee_password"><?php echo $this->lang->line('xin_employee_password');?><i class="hrsale-asterisk">*</i></label>
+                    <label for="xin_employee_password"><?php echo $this->lang->line('xin_employee_password');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_password');?>" name="password" type="text" value="">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="confirm_password" class="control-label"><?php echo $this->lang->line('xin_employee_cpassword');?><i class="hrsale-asterisk">*</i></label>
+                    <label for="confirm_password" class="control-label"><?php echo $this->lang->line('xin_employee_cpassword');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_cpassword');?>" name="confirm_password" type="text" value="">
                   </div>
                 </div>
@@ -314,7 +321,7 @@
           <div class="row">
             <div class="col-md-3">
               <div class="form-group">
-                <label for="role"><?php echo $this->lang->line('xin_employee_role');?><i class="hrsale-asterisk">*</i></label>
+                <label for="role"><?php echo $this->lang->line('xin_employee_role');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                 <select class="form-control" name="role" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_employee_role');?>">
                   <option value=""></option>
                   <?php foreach($all_user_roles as $role) {?>

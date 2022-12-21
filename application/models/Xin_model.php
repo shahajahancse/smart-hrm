@@ -977,10 +977,20 @@ class Xin_model extends CI_Model {
   	  return $query->result();
 	}
 	
+	// get company info by id
+	public function get_company_info($company_id)
+	{
+		$sql = 'SELECT * from xin_companies WHERE company_id = ?';
+		$binds = array($company_id);
+		$query = $this->db->query($sql, $binds);
+  	  	return $query->row();
+	}
+	
 	// get all leave applications
 	public function get_leave_applications()
 	{
 	  $query = $this->db->query("SELECT * from xin_leave_applications");
+	  $binds = array($id);
   	  return $query->result();
 	}
 	
@@ -1445,6 +1455,24 @@ class Xin_model extends CI_Model {
 	{
 	  $query = $this->db->query("SELECT * from xin_employees where user_role_id!=1");
   	  return $query->result();
+	}	
+
+	// get employees by company waise
+	// shahajahan ali 
+	public function get_employee($company_id = null, $user_id = null)
+	{
+		// vardump($user_id);
+	  $query = $this->db->select("*");
+
+	  if ($company_id != null) {
+	  	$query->where('company_id', $company_id);
+	  }
+
+	  if ($user_id != null && $user_id != 0) {
+	  	$query->where('user_id', $user_id);
+	  }
+
+  	  return $query->get('xin_employees')->result(); 
 	}
 	
 	// get all employees

@@ -40,7 +40,129 @@ class Timesheet extends MY_Controller {
 		/*Final JSON response*/
 		exit(json_encode($Return));
 	}
-	
+
+	// daily attendance file upload > timesheet  19-12-2022 shahajahan
+	public function attn_file_upload()
+    {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$upload_date = date('Y-m-d', strtotime($this->input->post('upload_date')));
+		// dd($upload_date);
+
+		$check = $this->db->where('upload_date', $upload_date)->get('xin_att_file_upload')->num_rows();
+		if (!empty($_FILES['upload_file']['name'])) {
+			if ($check == 0) {
+				$upload_file = $this->upload_attn_file($_FILES['upload_file']);
+
+				$comData = array(
+		            'upload_file' => $upload_file,
+		            'upload_date' => $upload_date,
+		            'status'      => 1,
+		        );
+		        $this->db->insert('xin_att_file_upload',$comData);
+				$this->file_process_for_attendance($upload_date);
+
+
+		        $response = ['status' => 'success', 'message' => "Successfully Insert Done"];
+		        echo json_encode( $response );
+				exit;
+
+			} else {
+				$response = ['status' => 'error', 'message' => "Sorry Already exist."];
+		        echo json_encode( $response );
+		        exit;
+			}
+		}
+
+
+		$data['title'] = $this->lang->line('dashboard_attendance').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('dashboard_attendance');
+		$data['path_url'] = 'attendance';
+
+		$data['files'] = $this->db->get("xin_att_file_upload")->result();
+
+		$data['subview'] = $this->load->view("admin/timesheet/attn_file_upload", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+    }
+    // attendance file upload
+    public function upload_attn_file($upload_file = array())
+    {
+		if($upload_file["name"] != ''){
+            $config['upload_path'] = './attn_data/';
+            $config['allowed_types'] = 'txt';
+            $config['max_size'] = '20000';
+            $config['max_width']  = '10000';
+            $config['max_height']  = '10000';
+            $this->load->library('upload', $config);
+            if ( ! $this->upload->do_upload('upload_file')){
+                // exit('gdfg');
+                $error = array('error' => $this->upload->display_errors());
+                // echo $error["error"];
+            }else{
+                $data = array('upload_data' => $this->upload->data());
+                return $upload_file = $data["upload_data"]["file_name"];
+            }
+        }
+    }
+	//machine row data (attendance file data) read
+	function file_process_for_attendance($upload_date){
+		date_default_timezone_set('Asia/Dhaka');
+		$this->db->select('upload_file');
+		$this->db->where('upload_date',$upload_date);
+		$query = $this->db->get('xin_att_file_upload');
+		if($query->num_rows() == 0){
+			echo "Please upload attendance file.";
+			exit;	
+		}
+
+		$rawfile_name = $query->row()->upload_file;
+		$file_name = "attn_data/$rawfile_name";
+		if (file_exists($file_name)){
+			$lines = file($file_name);
+			$out = array();
+			$prox_no = $date = $time = $format = $device_id = $f = 0;
+			foreach(array_values($lines)  as $line) {
+				// dd(preg_split('/\s+/', trim($line)));
+				if (!empty(strlen(chop($line)))) {
+					list($prox_no, $date, $time, $format, $device_id, $f) = preg_split('/\s+/', trim($line));
+
+					// list($y,$m,$d) = explode('/', trim($date));
+					$date_time = date("Y-m-d H:i:s", strtotime($date.' '.$time .' '.$format));
+					// dd($date_time);
+
+					$this->db->where("proxi_id", $prox_no);
+					$this->db->where("date_time", $date_time);
+					$query1 = $this->db->get("xin_att_machine");
+					$num_rows1 = $query1->num_rows();
+
+					if($num_rows1 == 0 ){
+						$data = array(
+									'proxi_id' 	=> $prox_no,
+									'date_time'	=> $date_time,
+									'device_id' => ($device_id === 0)? 1:$device_id ,
+								);
+						$this->db->insert("xin_att_machine" , $data);
+					}
+				}
+			}
+			return true;
+		}else{
+			exit('Please Put the Data File.');
+		}
+	}
+	// delete attn file
+	public function delete_attn_file($id)
+	{
+		$this->db->where('id', $id);
+        $this->db->delete('xin_att_file_upload');
+	    redirect(base_url('admin/timesheet/attn_file_upload'));
+	}
+	// end daily attendance file upload 19-12-2022
+
+
 	 // daily attendance > timesheet
 	 public function attendance()
      {
@@ -138,6 +260,8 @@ class Timesheet extends MY_Controller {
 			redirect('admin/dashboard');
 		}		  
      }
+
+
 	 // index > timesheet
 	 public function index() {
 		$session = $this->session->userdata('username');
@@ -146,12 +270,15 @@ class Timesheet extends MY_Controller {
 		}
 		$month_year = $this->input->post('month_year');
 		if(isset($month_year)): $title = date('F Y', strtotime($month_year)); else: $title = date('F Y'); endif;
+
 		$data['title'] = $this->lang->line('xin_employees_monthly_timesheet').' | '.$title;
+
 		$data['breadcrumbs'] = $this->lang->line('xin_monthly_timesheet');
 		$data['path_url'] = 'timesheet_monthly';		
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
+
 		if(in_array('10',$role_resources_ids)) {
 			if(!empty($session)){ 
 				$data['subview'] = $this->load->view("admin/timesheet/timesheet_monthly", $data, TRUE);
@@ -163,6 +290,42 @@ class Timesheet extends MY_Controller {
 			redirect('admin/dashboard');
 		}		  
      }
+
+     
+	 // monthly_attn_sheet_print > timesheet
+	 // monthly attendance sheet print
+	 public function monthly_attn_sheet_print() {
+
+		$month_year = $this->input->post('month_year');
+		if(isset($month_year)): $title = date('F Y', strtotime($month_year)); else: $title = date('F Y'); endif;
+
+		$data['get_all_companies'] = $this->Xin_model->get_companies();
+		$data['all_employees'] = $this->Xin_model->all_employees();
+		// dd($data['all_employees']);
+
+	 	echo $this->load->view("admin/timesheet/monthly_attn_sheet_print", $data, TRUE);
+		  
+     } 
+
+	 // job_card > timesheet
+	 // Job Card Report
+	 public function job_card() {
+	 	$month_year = $this->uri->segment(4);
+	 	$company_id = $this->uri->segment(5);
+	 	$employee_id = $this->uri->segment(6);
+
+		$data['month_year'] = $month_year;
+		$data['company_info'] = $this->Xin_model->get_company_info((int)$company_id);
+		$data['all_employees'] = $this->Xin_model->get_employee($company_id, (int)$employee_id);
+		// echo "<pre>"; print_r($data['all_employees']); exit;
+		// dd($data['company_info']);
+
+	 	echo $this->load->view("admin/timesheet/job_card", $data, TRUE);
+		  
+     }
+
+
+
 	 // timecard > timesheet
 	 public function timecalendar() {
 		$session = $this->session->userdata('username');
