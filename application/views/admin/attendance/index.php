@@ -50,7 +50,7 @@
   <div class="box-body">
     <table>
       <tr>
-        <td id="daily_present"><button class="btn btn-primary">Daily Present</button></td>
+        <td id="daily_present"><button onclick="daily_present_report('Absent')" class="btn btn-primary">Daily Present</button></td>
         <td></td>
         <td></td>
       </tr>
@@ -58,54 +58,6 @@
   </div>
 </div>
 
+
+<script type="text/javascript" src="<?php echo base_url('skin/hrsale_assets/js/hrm.js'); ?>"></script>
  
-<script>
-
-    // attendance process
-    function attn_process()
-    {
-      var ajaxRequest;  // The variable that makes Ajax possible!
-      ajaxRequest = new XMLHttpRequest();
-
-
-      process_date = document.getElementById('process_date').value;
-      
-      if(process_date =='')
-      {
-        alert('Please select process date');
-        return ;
-      }
-
-      status = document.getElementById('status').value;
-      
-      if(status =='')
-      {
-        alert('Please select status');
-        return ;
-      }
- 
-      var okyes;
-      okyes=confirm('Are you sure you want to start process?');
-      if(okyes==false) return;
-
-      $("#loader").show();
-      
-
-      url = "<?php echo base_url() ?>admin/attendance/attendance_process/"+process_date+"/"+status;
-      ajaxRequest.open("GET", url, true);
-      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-      ajaxRequest.send();
-
-      ajaxRequest.onreadystatechange = function(){
-        if(ajaxRequest.readyState == 4){
-          console.log(ajaxRequest);
-          var resp = ajaxRequest.responseText;
-          $("#loader").hide();
-          alert(resp);
-        }
-      }
-    }
-
-
-
-</script>
