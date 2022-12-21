@@ -68,5 +68,11 @@ class Attendance extends MY_Controller {
 
     }
 
+    // status wise daily report
+    public function daily_present_report($value='')
+    {
+    	// code...
+    }
+
 	
 }

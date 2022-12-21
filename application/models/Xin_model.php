@@ -193,6 +193,14 @@ class Xin_model extends CI_Model {
 		} else if($mClass=='chat') {
 			$arr['chat_active'] = 'active';
 			return $arr;
+		} else if($mClass=='timesheet' && $mMethod=='attn_file_upload') {
+			$arr['attnf_active'] = 'active';
+			$arr['attnd_open'] = 'active';
+			return $arr;
+		} else if($mClass=='attendance' && $mMethod=='index') {
+			$arr['attnp_active'] = 'active';
+			$arr['attnd_open'] = 'active';
+			return $arr;
 		} else if($mClass=='timesheet' && $mMethod=='attendance') {
 			$arr['attnd_active'] = 'active';
 			$arr['attnd_open'] = 'active';

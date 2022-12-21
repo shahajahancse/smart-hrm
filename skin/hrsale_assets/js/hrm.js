@@ -43,6 +43,43 @@
       }
     }
 
-    function daily_present_report(argument) {
-      // body...
+
+
+    function daily_present_report(present_status)
+    {
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+
+
+      attendance_date = document.getElementById('process_date').value;
+      if(process_date =='')
+      {
+        alert('Please select attendance date');
+        return ;
+      }
+
+      status = document.getElementById('status').value;
+      if(status =='')
+      {
+        alert('Please select status');
+        return ;
+      }
+      
+      // var queryString="month_year="+month_year+"&company="+company+"&employee_id="+employee_id;
+
+      url = base_url + "/daily_present_report/"+attendance_date+"/"+status+'/'+present_status;
+      ajaxRequest.open("GET", url, true);
+      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+       ajaxRequest.send();
+        // alert(url); return;
+
+      ajaxRequest.onreadystatechange = function(){
+        if(ajaxRequest.readyState == 4){
+          // console.log(ajaxRequest.responseText); return;
+          var resp = ajaxRequest.responseText;
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+          a.document.write(resp);
+          // a.close();
+        }
+      }
     }
