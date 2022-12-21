@@ -25,9 +25,12 @@ class Attendance extends MY_Controller {
 			redirect('admin/');
 		}
 		//load the model
-		$this->load->model("Timesheet_model");
-		$this->load->model("Employees_model");
+		$this->load->model('Attendance_model');
 		$this->load->model("Xin_model");
+
+
+		// $this->load->model("Timesheet_model");
+		// $this->load->model("Employees_model");
 		// $this->load->library('email');
 		// $this->load->model("Department_model");
 		// $this->load->model("Designation_model");
@@ -49,53 +52,21 @@ class Attendance extends MY_Controller {
 
 	public function attendance_process($process_date, $status)
     {
-    	$employees = $this->get_employees($status);
-    	foreach ($employees as $key => $row) {
-    		$emp      = $row->user_id;
-    		$shift_id = $row->shift_id;
-	    	$shift_schedule = $this->get_shift_schedule($shift_id);
+    	$process_date = date("Y-m-d", strtotime($process_date));
+		$this->Attendance_model->attn_process($process_date, $status);
+		$this->db->trans_complete();
+			
+		if ($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			echo "Process failed";
+		}
+		else
+		{
+			echo "Process completed sucessfully";
+		}
 
-	    	$in_start_time  = $shift_schedule->in_start_time;
-		    $late_start 	= $shift_schedule->late_start;
-		    $out_time 		= $shift_schedule->out_time;
-		    $out_start 		= $shift_schedule->out_start;
-		    dd();
-		    $start_time = date("Y-m-d H:i:s", strtotime($process_date.' '.$in_start_time));
-		    $end_time   = date("Y-m-d H:i:s", strtotime($process_date.' '.$out_time));
-
-	    	$in_time 	= $this->check_in_out_time($start_time, $end_time, 'ASC');
-	    	$out_time 	= $this->check_in_out_time($start_time, $end_time, 'DESC');
-
-
-
-
-    	}
     }
 
-    	function check_in_out_time($start_time, $end_time, $order)
-	{
-		$this->db->select("date_time");
-		$this->db->where("date_time BETWEEN '$start_time' and '$end_time'");
-		$this->db->order_by("date_time",$order);
-		$this->db->limit("1");
-		$query = $this->db->get('xin_att_machine')->row();
-		return $query->date_time;
-	}
-	
-
-    public function get_employees($status = null)
-    {
-    	$this->db->select('user_id, office_shift_id as shift_id');
-    	if ($status != null) {
-	    	$this->db->where('is_active',$status);
-    	}
-    	$this->db->where('company_id',1);
-    	return $this->db->get('xin_employees')->result();
-    }
-
-    public function get_shift_schedule($shift_id = null)
-    {
-    	return $this->db->where('office_shift_id',$shift_id)->get('xin_office_shift')->row();
-    }
 	
 }

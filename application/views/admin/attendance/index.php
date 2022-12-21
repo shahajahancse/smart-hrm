@@ -48,6 +48,13 @@
     <h3 class="box-title"><?php echo $this->lang->line('xin_daily_attendance_report');?></h3>
   </div>
   <div class="box-body">
+    <table>
+      <tr>
+        <td id="daily_present"><button class="btn btn-primary">Daily Present</button></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
   </div>
 </div>
 
@@ -91,6 +98,7 @@
 
       ajaxRequest.onreadystatechange = function(){
         if(ajaxRequest.readyState == 4){
+          console.log(ajaxRequest);
           var resp = ajaxRequest.responseText;
           $("#loader").hide();
           alert(resp);
