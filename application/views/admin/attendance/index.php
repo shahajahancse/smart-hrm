@@ -110,7 +110,7 @@
 <div class="box" style="height: 74vh;overflow-y: scroll;">
 <table class="table table-striped" id="fileDiv">
   <tr>
-      <th class="active" style="width:10%"><input type="checkbox" class="select-all checkbox" name="select-all" /></th>
+      <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox" name="select-all" /></th>
       <th class="success" style="width:10%">Id</th>
       <th class="warning text-center">Name</th>
   </tr>
@@ -120,6 +120,11 @@
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 <script>
   $(document).ready(function(){
+    // select all item or deselect all item
+    $("#select_all").click(function(){
+      $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+
     // on load employee
     $("#status").change(function(){
       status = document.getElementById('status').value;
@@ -138,7 +143,7 @@
             var items = '';
             $.each(arr, function(index,value) {
               items += '<tr id="removeTr">';
-              items += '<td><input type="checkbox" class="select-item checkbox" name="select-item" value="'+value.emp_id+'" ></td>';
+              items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="'+value.emp_id+'" ></td>';
               items += '<td class="success">'+value.emp_id+'</td>';
               items += '<td class="warning text-center">'+value.first_name +' '+ value.last_name +'</td>';
               items += '</tr>';
@@ -153,25 +158,5 @@
     });
   });
 </script>
-<script>
-    $(function(){
-      //button select all or cancel
-      $("#select-all").click(function () {
-          var all = $("input.select-all")[0];
-          all.checked = !all.checked
-          var checked = all.checked;
-          $("input.select-item").each(function (index,item) {
-              item.checked = checked;
-          });
-      });
 
-      //column checkbox select all or cancel
-      $("input.select-all").click(function () {
-          var checked = this.checked;
-          $("input.select-item").each(function (index,item) {
-              item.checked = checked;
-          });
-      });
-    });
-</script>
 
