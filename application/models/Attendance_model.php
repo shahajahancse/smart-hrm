@@ -125,6 +125,7 @@ class Attendance_model extends CI_Model {
 
     public function daily_report($attendance_date, $status,$late_status=null)
     {
+        // dd($late_status);
         $this->db->select('
             xin_employees.user_id as emp_id,
             xin_employees.employee_id,
@@ -146,6 +147,9 @@ class Attendance_model extends CI_Model {
         $this->db->from('xin_departments');
         $this->db->from('xin_designations');
         $this->db->from('xin_attendance_time');
+        if ($late_status != null && $late_status != 0 && $late_status != '') {
+            $this->db->where("xin_attendance_time.late_status", 1);
+        }
 
 
         $this->db->where("xin_employees.is_active", 1);
