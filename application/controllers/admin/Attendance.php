@@ -69,22 +69,25 @@ class Attendance extends MY_Controller {
     }
 
     // status wise daily report
-    public function daily_present_report($attendance_date, $status)
+    public function daily_report($attendance_date,$status,$late_status)
     {
     	$attendance_date = date("Y-m-d", strtotime($attendance_date));
-    	$data["values"] = $this->Attendance_model->daily_present_report($attendance_date, $status);
-
-
+		$data['status']= $status;
+    	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $status,$late_status);
         $data["attendance_date"] = $attendance_date;
+		
         if(is_string($data["values"]))
         {
             echo $data["values"];
         }
         else
-        {
-            $this->load->view('admin/attendance/daily_present_report',$data);
+        {	
+			// dd($data["values"]);
+            $this->load->view('admin/attendance/daily_report',$data);
         }
     }
+
+
 
 	
 }
