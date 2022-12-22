@@ -66,14 +66,14 @@
     <div class="tab-content" id="myTabContent">
 
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
-          <button class="btn btn-sm btn-danger"> Button one</button>
-          <button class="btn btn-sm btn-danger"> Button two</button>
-          <button class="btn btn-sm btn-danger"> Button three</button>
-          <button class="btn btn-sm btn-danger"> Button four</button>
-          <button class="btn btn-sm btn-danger"> Button five</button>
-          <button class="btn btn-sm btn-danger"> Button six</button>
-          <button class="btn btn-sm btn-danger"> Button seven</button>
-          <button class="btn btn-sm btn-danger"> Button eight</button>
+          <button class="btn btn-sm" style="background: #2393e3eb; color: white;" onclick="daily_present_report('Present')">Present Report</button>
+          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button two</button>
+          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button three</button>
+          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button four</button>
+          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button five</button>
+          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button six</button>
+          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button seven</button>
+          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button eight</button>
       </div>
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
@@ -305,7 +305,6 @@
 </div>
 <script>
     $(function(){
-
         //button select all or cancel
         $("#select-all").click(function () {
             var all = $("input.select-all")[0];
@@ -316,9 +315,6 @@
             });
         });
 
-
-
-
         //column checkbox select all or cancel
         $("input.select-all").click(function () {
             var checked = this.checked;
@@ -326,57 +322,7 @@
                 item.checked = checked;
             });
         });
-
-
     });
 </script>
-<script>
 
-    // attendance process
-    function attn_process()
-    {
-      var ajaxRequest;  // The variable that makes Ajax possible!
-      ajaxRequest = new XMLHttpRequest();
-
-
-      process_date = document.getElementById('process_date').value;
-      
-      if(process_date =='')
-      {
-        alert('Please select process date');
-        return ;
-      }
-
-      status = document.getElementById('status').value;
-      
-      if(status =='')
-      {
-        alert('Please select status');
-        return ;
-      }
- 
-      var okyes;
-      okyes=confirm('Are you sure you want to start process?');
-      if(okyes==false) return;
-
-      $("#loader").show();
-      
-
-      url = "<?php echo base_url() ?>admin/attendance/attendance_process/"+process_date+"/"+status;
-      ajaxRequest.open("GET", url, true);
-      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-      ajaxRequest.send();
-
-      ajaxRequest.onreadystatechange = function(){
-        if(ajaxRequest.readyState == 4){
-          console.log(ajaxRequest);
-          var resp = ajaxRequest.responseText;
-          $("#loader").hide();
-          alert(resp);
-        }
-      }
-    }
-
-
-
-</script>
+<script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
