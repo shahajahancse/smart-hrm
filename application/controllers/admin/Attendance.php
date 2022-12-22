@@ -82,7 +82,6 @@ class Attendance extends MY_Controller {
         }
         else
         {
-    	dd($data["values"]);
             $this->load->view('admin/attendance/daily_present_report',$data);
         }
     }
