@@ -1,3 +1,18 @@
+    // get check box select value
+    function get_checked_value(checkboxes) {
+      var vals = "";
+      for (var i=0, n=checkboxes.length;i<n;i++) 
+      {
+          if (checkboxes[i].checked) 
+          {
+              vals += ","+checkboxes[i].value;
+          }
+      }
+      if (vals) vals = vals.substring(1);
+      return vals;
+    }
+
+
     // attendance process
     function attn_process()
     {

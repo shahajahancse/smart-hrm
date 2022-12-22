@@ -147,6 +147,7 @@ class Attendance_model extends CI_Model {
         $this->db->from('xin_designations');
         $this->db->from('xin_attendance_time');
 
+
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
         $this->db->where("xin_attendance_time.attendance_status", $status);
@@ -165,6 +166,17 @@ class Attendance_model extends CI_Model {
         }
     }
 
+
+    public function get_employee_ajax_request($status)
+    {
+        $this->db->select('user_id as emp_id, first_name, last_name');
+        $this->db->where('status',$status);
+        $this->db->where('company_id',1);
+        $this->db->order_by('user_id', 'asc');
+        return $result = $this->db->get('xin_employees')->result();
+        // dd($result);
+    }
+ 
 
 
 
