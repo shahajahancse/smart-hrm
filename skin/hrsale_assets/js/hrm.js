@@ -60,7 +60,7 @@
 
 
 
-    function daily_present_report(status)
+    function daily_report(status,late_status=null)
     {
       var ajaxRequest;  // The variable that makes Ajax possible!
       ajaxRequest = new XMLHttpRequest();
@@ -75,7 +75,7 @@
 
       // var queryString="month_year="+month_year+"&company="+company+"&employee_id="+employee_id;
 
-      url = base_url + "/daily_present_report/"+attendance_date+"/"+status;
+      url = base_url + "/daily_report/"+attendance_date+"/"+status+"/"+late_status;
       ajaxRequest.open("GET", url, true);
       ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
        ajaxRequest.send();
@@ -85,9 +85,11 @@
         if(ajaxRequest.readyState == 4){
           // console.log(ajaxRequest.responseText); return;
           var resp = ajaxRequest.responseText;
-          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1000,height=800');
           a.document.write(resp);
           // a.close();
         }
       }
     }
+
+

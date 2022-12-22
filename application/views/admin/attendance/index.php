@@ -66,14 +66,11 @@
     <div class="tab-content" id="myTabContent">
 
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
-          <button class="btn btn-sm" style="background: #2393e3eb; color: white;" onclick="daily_present_report('Present')">Present Report</button>
-          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button two</button>
-          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button three</button>
-          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button four</button>
-          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button five</button>
-          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button six</button>
-          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button seven</button>
-          <button class="btn btn-sm" style="background: #2393e3eb; color: white;"> Button eight</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present')">Present Report</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Absent')"> Absent Report</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present',1)"> Late Report</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;"> Leave Report</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;"> Weekend Report</button>
       </div>
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">

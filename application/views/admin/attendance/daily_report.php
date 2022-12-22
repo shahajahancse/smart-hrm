@@ -1,3 +1,4 @@
+<!-- < ?php dd($values);?> -->
 
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_hrsale_custom.css">
@@ -37,8 +38,10 @@
 
 <div class="box" id="print_area">
   <div style="text-align: center;">
-	  <h3 class="box-title"> <?php echo $this->lang->line('xin_employees_monthly_timesheet');?></h3>
-	  <p>For the month of <?php echo $attendance_date; ?> </p>
+	  <h3 class="box-title">Daily <?php echo $status?> Report</h3>
+        <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
+
+	  <p>Report date: <?php echo $attendance_date; ?> </p>
     <span class="box-tools"> A: Absent, P: Present, H: Holiday, L: Leave</span><br><br>
   </div>
 
@@ -47,9 +50,29 @@
 	    <div class="box-datatable table-responsive">
 	      <table class="table table-striped table-bordered">
 	        <thead>
+                <td>Sl. No.</td>
+                <td>Employee Name</td>
+                <td>Department Name</td>
+                <td>Designation Name</td>
+                <td>In Time</td>
+                <td>Out Time</td>
+                <td>Status</td>
 	        </thead>
-	        <tbody>
-	        </tbody>
+            <?php $i=1; foreach($values as $row){?>
+            <tbody >
+                <td><?php echo $i++;?></td>
+                <td><?php echo $row->first_name.' '.$row->last_name?></td>
+                <td><?php echo $row->department_name?></td>
+                <td><?php echo $row->designation_name?></td>
+                <td><?php  echo $row->clock_in==""? "": date('H:m:s a',strtotime($row->clock_in))?></td>
+                <td><?php echo $row->clock_out==""? "": date('H:m:s a',strtotime($row->clock_out))?></td>
+                <td><?php echo $row->attendance_status == "Present" ? "P" :
+                            (  $row->attendance_status == "Absent"  ? "A" :
+                            (  $row->attendance_status == "Leave"   ? "L" : "H" ))
+                    ?>
+                </td>
+            </tbody>
+            <?php }?>
 	      </table>
 	    </div>
 	  </div>
