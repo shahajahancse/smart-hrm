@@ -22,7 +22,7 @@
             <div class="form-group">
               <label for="upload_file">status</label>
               <select class="form-control" name="status" id="status">
-                <option value="">Select one</option>
+                <option value="8">Select one</option>
                 <option value="1">regular</option>
                 <option value="2">left</option>
                 <option value="3">resign</option>
@@ -108,218 +108,70 @@
 
 <div class="col-lg-4">
 <div class="box" style="height: 74vh;overflow-y: scroll;">
-<table class="table table-striped">
-    <tr>
-        <th class="active" style="width:10%">
-            <input type="checkbox" class="select-all checkbox" name="select-all" />
-        </th>
-        <th class="success" style="width:10%">Id</th>
-        <th class="warning text-center">Name</th>
-       
-    </tr>
-    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">01</td>
-        <td class="warning text-center">Md. Mafizur Rahman </td>
-       
-    </tr>
-
-    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">02</td>
-        <td class="warning text-center">Md. Imdadul Haque</td>
-       
-    </tr>
-
-    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">03</td>
-        <td class="warning text-center">Md Juel Ali</td>
-       
-    </tr>
-
-    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">04</td>
-        <td class="warning text-center">Md manjur Morshed</td>
-       
-    </tr>
-
-    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">05</td>
-        <td class="warning text-center">Md Shahajahan Ali</td>
-       
-    </tr>
-
-    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">06</td>
-        <td class="warning text-center">Khalid Bin Walid</td>
-       
-    </tr>
-
-    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">07</td>
-        <td class="warning text-center">Md Shakil Hossain</td>
-       
-    </tr>
-
-    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">08</td>
-        <td class="warning text-center">Md Tahid</td>
-       
-    </tr>
-
-    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">09</td>
-        <td class="warning text-center">Md Mijanur Rahman</td>
-       
-    </tr>
-
-    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">10</td>
-        <td class="warning text-center">Md Khorshed Alom</td>
-       
-    </tr>
-    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">10</td>
-        <td class="warning text-center">Md Khorshed Alom</td>
-       
-    </tr>    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">10</td>
-        <td class="warning text-center">Md Khorshed Alom</td>
-       
-    </tr>    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">10</td>
-        <td class="warning text-center">Md Khorshed Alom</td>
-       
-    </tr>    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">10</td>
-        <td class="warning text-center">Md Khorshed Alom</td>
-       
-    </tr>    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">10</td>
-        <td class="warning text-center">Md Khorshed Alom</td>
-       
-    </tr>    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">10</td>
-        <td class="warning text-center">Md Khorshed Alom</td>
-       
-    </tr>    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">10</td>
-        <td class="warning text-center">Md Khorshed Alom</td>
-       
-    </tr>    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">10</td>
-        <td class="warning text-center">Md Khorshed Alom</td>
-       
-    </tr>    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">10</td>
-        <td class="warning text-center">Md Khorshed Alom</td>
-       
-    </tr>    <tr>
-        <td class="active">
-            <input type="checkbox" class="select-item checkbox" 	
-            name="select-item" value="1000" />
-        </td>
-        <td class="success">10</td>
-        <td class="warning text-center">Md Khorshed Alom</td>
-       
-    </tr>
+<table class="table table-striped" id="fileDiv">
+  <tr>
+      <th class="active" style="width:10%"><input type="checkbox" class="select-all checkbox" name="select-all" /></th>
+      <th class="success" style="width:10%">Id</th>
+      <th class="warning text-center">Name</th>
+  </tr>
 </table>
 </div>
 </div>
+<script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
+<script>
+  $(document).ready(function(){
+    // on load employee
+    $("#status").change(function(){
+      status = document.getElementById('status').value;
+      var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
+      $.ajax({
+        url: url,
+        type: 'GET',
+        data: {"status":status},
+        contentType: "application/json",
+        dataType: "json",
+
+
+        success: function(response){
+          arr = response.employees;
+          if (arr.length != 0) {
+            var items = '';
+            $.each(arr, function(index,value) {
+              items += '<tr id="removeTr">';
+              items += '<td><input type="checkbox" class="select-item checkbox" name="select-item" value="'+value.emp_id+'" ></td>';
+              items += '<td class="success">'+value.emp_id+'</td>';
+              items += '<td class="warning text-center">'+value.first_name +' '+ value.last_name +'</td>';
+              items += '</tr>';
+            });
+            // console.log(items);
+            $('#fileDiv tr:last').after(items);
+          } else {
+            $('#fileDiv #removeTr').remove();
+          }
+        }
+      });
+    });
+  });
+</script>
 <script>
     $(function(){
-        //button select all or cancel
-        $("#select-all").click(function () {
-            var all = $("input.select-all")[0];
-            all.checked = !all.checked
-            var checked = all.checked;
-            $("input.select-item").each(function (index,item) {
-                item.checked = checked;
-            });
-        });
+      //button select all or cancel
+      $("#select-all").click(function () {
+          var all = $("input.select-all")[0];
+          all.checked = !all.checked
+          var checked = all.checked;
+          $("input.select-item").each(function (index,item) {
+              item.checked = checked;
+          });
+      });
 
-        //column checkbox select all or cancel
-        $("input.select-all").click(function () {
-            var checked = this.checked;
-            $("input.select-item").each(function (index,item) {
-                item.checked = checked;
-            });
-        });
+      //column checkbox select all or cancel
+      $("input.select-all").click(function () {
+          var checked = this.checked;
+          $("input.select-item").each(function (index,item) {
+              item.checked = checked;
+          });
+      });
     });
 </script>
 
-<script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>

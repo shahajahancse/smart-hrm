@@ -164,6 +164,16 @@ class Attendance_model extends CI_Model {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
+
+    public function get_employee_ajax_request($status)
+    {
+        $this->db->select('user_id as emp_id, first_name, last_name');
+        $this->db->where('status',$status);
+        $this->db->where('company_id',1);
+        $this->db->order_by('user_id', 'asc');
+        return $result = $this->db->get('xin_employees')->result();
+        // dd($result);
+    }
  
 
 }
