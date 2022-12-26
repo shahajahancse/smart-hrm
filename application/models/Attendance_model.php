@@ -8,7 +8,7 @@ class Attendance_model extends CI_Model {
         parent::__construct();
     }
 
-    public function attn_process($process_date, $status)
+    public function attn_process($process_date, $status, $emp_ids)
     {
         $attn_file = $this->db->where('upload_date', $process_date)->get('xin_att_file_upload')->num_rows();
         if ($attn_file == 0) {
@@ -16,7 +16,7 @@ class Attendance_model extends CI_Model {
             exit;
         }
 
-        $employees = $this->get_employees($status);
+        $employees = $this->get_employees($emp_ids, $status);
         foreach ($employees as $key => $row) {
             $emp_id      = $row->user_id;
             $shift_id = $row->shift_id;
@@ -122,14 +122,14 @@ class Attendance_model extends CI_Model {
         return $date_time;
     }
 
-    public function get_employees($status = null)
+    public function get_employees($emp_ids = null, $status = null)
     {
         $this->db->select('user_id, office_shift_id as shift_id');
         if ($status != null) {
             $this->db->where('status',$status);
         }
         $this->db->where('company_id',1);
-        // $this->db->where('user_id',34);
+        $this->db->where_in('user_id',$emp_ids);
         return $this->db->get('xin_employees')->result();
     }
 

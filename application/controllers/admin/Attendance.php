@@ -50,10 +50,17 @@ class Attendance extends MY_Controller {
 			  
     }
 
-	public function attendance_process($process_date, $status)
+	// public function attendance_process($process_date, $status)
+	public function attendance_process()
     {
+    	// dd($sql);
+    	$process_date = $this->input->post('process_date');
+    	$status = $this->input->post('status');
+    	$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+
     	$process_date = date("Y-m-d", strtotime($process_date));
-		$this->Attendance_model->attn_process($process_date, $status);
+		$this->Attendance_model->attn_process($process_date, $status, $emp_id);
 		$this->db->trans_complete();
 			
 		if ($this->db->trans_status() === FALSE)
