@@ -76,11 +76,17 @@ class Attendance extends MY_Controller {
     }
 
     // status wise daily report
-    public function daily_report($attendance_date,$status,$late_status)
-    {
-    	$attendance_date = date("Y-m-d", strtotime($attendance_date));
+    public function daily_report()
+    {  
+		$report_date = $this->input->post('attendance_date');
+    	$attendance_date = date("Y-m-d", strtotime($report_date));
+		$status = $this->input->post('status');
+		$late_status = $this->input->post('late_status');
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+
 		$data['status']= $status;
-    	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $status,$late_status);
+    	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $status,$late_status,$emp_id);
         $data["attendance_date"] = $attendance_date;
 		
         if(is_string($data["values"]))

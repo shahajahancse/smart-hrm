@@ -91,33 +91,39 @@
       }
 
      var emp_id = document.getElementsByName('select_emp_id[]');
-     var emp_ids = get_checked_value(emp_id);
+     var sql = get_checked_value(emp_id);
      
-     if(emp_ids == ''){
-      alert('Please select employee id');
+     if(sql == ''){
+      alert('Please select employee Id');
       return ;
      }
 
 
       // var queryString="month_year="+month_year+"&company="+company+"&employee_id="+employee_id;
 
-
-
-      url = base_url + "/daily_report/"+attendance_date+"/"+status+"/"+emp_ids+"/"+late_status;
-      ajaxRequest.open("GET", url, true);
+      var data = "attendance_date="+attendance_date+"&status="+status+"&sql="+sql+"&late_status="+late_status;
+      
+      // console.log(data); return;
+      url = base_url + "/daily_report";
+      ajaxRequest.open("POST", url, true);
       ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-       ajaxRequest.send();
-        // alert(url); return;
+      ajaxRequest.send(data);
 
       ajaxRequest.onreadystatechange = function(){
         if(ajaxRequest.readyState == 4){
-          // console.log(ajaxRequest.responseText); return;
+          // console.log(ajaxRequest);
           var resp = ajaxRequest.responseText;
           a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1000,height=800');
           a.document.write(resp);
-          // a.close();
         }
       }
+
+
+
+
+
+
+
     }
 
 
