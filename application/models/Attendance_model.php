@@ -155,7 +155,7 @@ class Attendance_model extends CI_Model {
     }
 
 
-    public function daily_report($attendance_date, $status,$late_status=null,$emp_id)
+    public function daily_report($attendance_date, $status,$emp_id,$late_status=null)
     {
      
         $this->db->select('
