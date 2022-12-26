@@ -24,12 +24,16 @@ class Attendance_model extends CI_Model {
             $out_time = '';
             $clock_in_out = 0;
             $late_status = 0;
+            $lunch_late_status = 0;
+            $early_out_status = 0;
 
             $shift_schedule  = $this->get_shift_schedule($emp_id, $process_date, $shift_id);
             $in_start_time   = $shift_schedule->in_start_time;
             $out_end_time    = $shift_schedule->out_end_time;
             $out_start_time  = $shift_schedule->out_start_time;
             $late_start_time = $shift_schedule->late_start;
+            $lunch_time      = $shift_schedule->lunch_time;
+            $lunch_minute    = $shift_schedule->lunch_minute;
             $ot_start_time   = $shift_schedule->ot_start_time;
 
             $start_time      = date("Y-m-d H:i:s", strtotime($process_date.' '.$in_start_time));
@@ -37,10 +41,22 @@ class Attendance_model extends CI_Model {
             $out_start_time  = date("Y-m-d H:i:s", strtotime($process_date.' '.$out_start_time));
             $late_start_time = date("Y-m-d H:i:s", strtotime($process_date.' '.$late_start_time));
 
+            $lunch_time      = date("Y-m-d H:i:s", strtotime($process_date.' '.$lunch_time));
+            $lunch_start     = date('Y-m-d H:i:s', strtotime($lunch_time. ' -30 minutes'));
+            $lunch_in        = date('Y-m-d H:i:s', strtotime($lunch_time. ' +'.$lunch_minute));
+            $lunch_end       = date('Y-m-d H:i:s', strtotime($lunch_time. ' +30 minutes'));
+            $lunch_late_time = date('Y-m-d H:i:s', strtotime($lunch_in. ' +5 minutes'));
+            $early_out_time  = date("Y-m-d H:i:s", strtotime($process_date.' '.$ot_start_time));
+
+
             $proxi_id   = $this->get_proxi($emp_id);
             $in_time    = $this->check_in_out_time($proxi_id, $start_time, $end_time, 'ASC');
             $out_time   = $this->check_in_out_time($proxi_id, $out_start_time, $end_time, 'DESC');
 
+            $lunch_out   = $this->check_in_out_time($proxi_id, $lunch_start, $lunch_in, 'ASC');
+            $lunch_in    = $this->check_in_out_time($proxi_id, $lunch_time, $lunch_end, 'DESC');
+
+            // check present status
             if ($in_time == '' && $out_time == '') {
                 $status = 'Absent';
             } else {
@@ -51,6 +67,17 @@ class Attendance_model extends CI_Model {
                 $late_status = 1; 
             }
 
+            if (strtotime($lunch_in) > strtotime($lunch_late_time)) {
+                $lunch_late_status = 1; 
+            }
+
+            if (strtotime($out_time) < strtotime($early_out_time) && strtotime($out_time) != null) {
+                $early_out_status = 1; 
+            }
+
+            // dd($out_time .' '. $early_out_time .' '. $early_out_status);
+
+
 
             $data = array(
                 'employee_id'       => $emp_id,
@@ -58,8 +85,12 @@ class Attendance_model extends CI_Model {
                 'attendance_date'   => $process_date,
                 'clock_in'          => $in_time,
                 'clock_out'         => $out_time,
+                'lunch_in'          => $lunch_in,
+                'lunch_out'         => $lunch_out,
                 'attendance_status' => $status,
                 'late_status'       => $late_status,
+                'lunch_late_status' => $lunch_late_status,
+                'early_out_status'  => $early_out_status,
             );
 
             $query = $this->db->where('employee_id',$emp_id)->where('attendance_date',$process_date)->get('xin_attendance_time');
@@ -98,6 +129,7 @@ class Attendance_model extends CI_Model {
             $this->db->where('status',$status);
         }
         $this->db->where('company_id',1);
+        // $this->db->where('user_id',34);
         return $this->db->get('xin_employees')->result();
     }
 
