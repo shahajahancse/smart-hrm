@@ -28,7 +28,7 @@
             <div class="form-group">
               <label for="upload_file">status</label>
               <select class="form-control" name="status" id="status">
-                <option value="8">Select one</option>
+                <option value="">Select one</option>
                 <option value="1">regular</option>
                 <option value="2">left</option>
                 <option value="3">resign</option>
@@ -75,7 +75,7 @@
           <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present')">Present Report</button>
           <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Absent')"> Absent Report</button>
           <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present',1)">Late Report</button>
-          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;">Lunch In/Out</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="lunch_report('Lunch in/out')">Lunch In/Out</button>
           <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;">Lunch Late</button>
           <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;">Early Out</button>
       </div>
