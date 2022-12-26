@@ -88,11 +88,13 @@ class Attendance extends MY_Controller {
     }
 
 
+
+
+
     public function get_employee_ajax_request()
     {
     	$status = $this->input->get('status');
     	$data["employees"] = $this->Attendance_model->get_employee_ajax_request($status);
         echo json_encode($data);
     }
-	
 }

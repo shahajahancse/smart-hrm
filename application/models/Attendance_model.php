@@ -183,6 +183,7 @@ class Attendance_model extends CI_Model {
             $this->db->where("xin_attendance_time.late_status", 1);
         }
 
+
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
         $this->db->where("xin_attendance_time.attendance_status", $status);
@@ -212,6 +213,11 @@ class Attendance_model extends CI_Model {
         // dd($result);
     }
  
+
+
+
+
+
 
 }
 ?>
