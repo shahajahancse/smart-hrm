@@ -65,7 +65,7 @@
       var ajaxRequest;  // The variable that makes Ajax possible!
       ajaxRequest = new XMLHttpRequest();
 
-
+      
       attendance_date = document.getElementById('process_date').value;
       if(process_date =='')
       {
@@ -73,9 +73,27 @@
         return ;
       }
 
+      emp_status = document.getElementById('status').value;
+      if(emp_status =='Select one')
+      {
+        alert('Please select employee status');
+        return ;
+      }
+
+     var emp_id = document.getElementsByName('select_emp_id[]');
+     var emp_ids = get_checked_value(emp_id);
+     
+     if(emp_ids == ''){
+      alert('Please select employee id');
+      return ;
+     }
+
+
       // var queryString="month_year="+month_year+"&company="+company+"&employee_id="+employee_id;
 
-      url = base_url + "/daily_report/"+attendance_date+"/"+status+"/"+late_status;
+
+
+      url = base_url + "/daily_report/"+attendance_date+"/"+status+"/"+emp_ids+"/"+late_status;
       ajaxRequest.open("GET", url, true);
       ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
        ajaxRequest.send();

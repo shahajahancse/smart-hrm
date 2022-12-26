@@ -46,7 +46,7 @@
 
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border">
-    <h3 class="box-title"> Attendence Report
+    <h3 class="box-title"> Employee Report
       <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
    </h3>
   </div>
@@ -68,9 +68,10 @@
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
           <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present')">Present Report</button>
           <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Absent')"> Absent Report</button>
-          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present',1)"> Late Report</button>
-          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;"> Leave Report</button>
-          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;"> Weekend Report</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present',1)">Late Report</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;">Lunch In/Out</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;">Lunch Late</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;">Early Out</button>
       </div>
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
@@ -108,8 +109,8 @@
 <table class="table table-striped" id="fileDiv">
   <tr>
       <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox" name="select-all" /></th>
-      <th class="success" style="width:10%">Id</th>
-      <th class="warning text-center">Name</th>
+      <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
+      <th class=" text-center" style="background:#0177bc80;color:white">Name</th>
   </tr>
 </table>
 </div>
@@ -148,7 +149,7 @@
             // console.log(items);
             $('#fileDiv tr:last').after(items);
           } else {
-            $('#fileDiv #removeTr').remove();
+            $('#fileDiv #removeTr').remove(); 
           }
         }
       });
