@@ -27,6 +27,7 @@ class Attendance extends MY_Controller {
 		//load the model
 		$this->load->model('Attendance_model');
 		$this->load->model("Xin_model");
+		$this->load->model("job_card_model");
 
 
 		// $this->load->model("Timesheet_model");
@@ -96,6 +97,23 @@ class Attendance extends MY_Controller {
 
 
 
+	// job_card > timesheet
+	// Job Card Report
+	public function job_card() {
+	 	$first_date = $this->input->post('first_date');
+	 	$second_date = $this->input->post('second_date');
+    	$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+
+		$data['first_date'] = $first_date;
+		$data['second_date'] = $second_date;
+		$data['company_info'] = $this->Xin_model->get_company_info(1);
+		$data['all_employees'] = $this->Attendance_model->get_employee_infos($emp_id);
+		// dd($data['all_employees']);
+
+	 	echo $this->load->view("admin/attendance/job_card", $data, TRUE);
+		  
+    }
 
 
     public function get_employee_ajax_request()

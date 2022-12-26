@@ -180,14 +180,21 @@ if($theme[0]->sub_menu_icons != ''){
     <?php  if(in_array('27',$role_resources_ids) || in_array('28',$role_resources_ids) || in_array('29',$role_resources_ids) || in_array('30',$role_resources_ids) || in_array('31',$role_resources_ids) || in_array('7',$role_resources_ids) || in_array('8',$role_resources_ids) || in_array('46',$role_resources_ids) || in_array('401',$role_resources_ids)) {?>
     <li class="<?php if(!empty($arr_mod['attnd_open']))echo $arr_mod['attnd_open'];?> treeview"> <a href="#"> <i class="fa fa-clock-o"></i> <span><?php echo $this->lang->line('left_timesheet');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
       <ul class="treeview-menu">
-		<?php if(in_array('28',$role_resources_ids)) { ?>
+
+		  <?php if(in_array('1001',$role_resources_ids)) { ?>
 
         <li class="sidenav-link <?php if(!empty($arr_mod['attnf_active']))echo $arr_mod['attnf_active'];?>"> <a href="<?php echo site_url('admin/timesheet/attn_file_upload');?>"><i class="fa <?php echo $submenuicon;?>"></i> attn file upload</a> </li>    
+      <?php } ?>   
 
+      <?php if(in_array('1002',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['attnp_active']))echo $arr_mod['attnp_active'];?>"> <a href="<?php echo site_url('admin/attendance/');?>"> <i class="fa <?php echo $submenuicon;?>"></i> attendance process</a> </li>
+      <?php } ?> 
 
+      <?php if(in_array('28',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['attnd_active']))echo $arr_mod['attnd_active'];?>"> <a href="<?php echo site_url('admin/timesheet/attendance');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('left_attendance');?> </a> </li>
         <?php } ?>
+
+
         <?php if(in_array('10',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['timesheet_active']))echo $arr_mod['timesheet_active'];?>"> <a href="<?php echo site_url('admin/timesheet/');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_month_timesheet_title');?> </a> </li>
         <?php } ?>

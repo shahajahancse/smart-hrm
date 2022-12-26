@@ -133,6 +133,31 @@ class Attendance_model extends CI_Model {
         return $this->db->get('xin_employees')->result();
     }
 
+    public function get_employee_infos($emp_ids = null)
+    {
+        $this->db->select('
+                xin_employees.user_id, 
+                xin_employees.office_shift_id as shift_id, 
+                xin_employees.first_name, 
+                xin_employees.last_name, 
+                xin_employees.date_of_birth, 
+                xin_employees.date_of_joining, 
+                xin_employees.department_id,  
+                xin_employees.designation_id,
+                xin_departments.department_name,
+                xin_designations.designation_name,
+            ');
+
+        $this->db->from('xin_employees');
+        $this->db->from('xin_departments');
+        $this->db->from('xin_designations');
+        $this->db->where('xin_employees.company_id',1);
+        $this->db->where('xin_employees.department_id = xin_departments.department_id');
+        $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
+        $this->db->where_in('xin_employees.user_id',$emp_ids);
+        return $this->db->get()->result();
+    }
+
     public function get_shift_schedule($emp_id, $process_date = null, $shift_id = null)
     {
         $this->db->select("office_shift_id");
@@ -201,6 +226,15 @@ class Attendance_model extends CI_Model {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
+
+
+
+
+
+
+
+
+
 
 
     public function get_employee_ajax_request($status)

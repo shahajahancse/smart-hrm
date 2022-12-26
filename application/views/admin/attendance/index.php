@@ -11,14 +11,20 @@
     <div class="row">
       <div class="col-md-12">
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="form-group">
-              <label for="process_date"><?php echo $this->lang->line('xin_e_details_date');?></label>
+              <label for="process_date">First Date</label>
               <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>" required>
             </div>
           </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="process_date">Second Date</label>
+              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text">
+            </div>
+          </div>
 
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="form-group">
               <label for="upload_file">status</label>
               <select class="form-control" name="status" id="status">
@@ -30,7 +36,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="form-group"> &nbsp;
               <label for="first_name">&nbsp;</label><br />
               <button class="btn btn-success" onclick="attn_process()">Process</button>
@@ -75,6 +81,8 @@
       </div>
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
+          <button class="btn btn-success" onclick="jobCard()">Job Card</button>
+
         <button class="btn btn-sm btn-danger"> Button one</button>
         <button class="btn btn-sm btn-danger"> Button two</button>
         <button class="btn btn-sm btn-danger"> Button three</button>
