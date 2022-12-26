@@ -16,6 +16,7 @@
     // attendance process
     function attn_process()
     {
+      // alert(csrf_token); return;
       var ajaxRequest;  // The variable that makes Ajax possible!
       ajaxRequest = new XMLHttpRequest();
 
@@ -35,18 +36,27 @@
         alert('Please select status');
         return ;
       }
+
+      var checkboxes = document.getElementsByName('select_emp_id[]');
+      var sql = get_checked_value(checkboxes);
+      if(sql =='')
+      {
+        alert('Please select employee Id');
+        return ;
+      }
  
       var okyes;
       okyes=confirm('Are you sure you want to start process?');
       if(okyes==false) return;
 
       $("#loader").show();
+       var data = "process_date="+process_date+"&status="+status+'&sql='+sql;
       
-      // alert(base_url); return;
-      url = base_url + "/attendance_process/"+process_date+"/"+status;
-      ajaxRequest.open("GET", url, true);
+      // console.log(data); return;
+      url = base_url + "/attendance_process";
+      ajaxRequest.open("POST", url, true);
       ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-      ajaxRequest.send();
+      ajaxRequest.send(data);
 
       ajaxRequest.onreadystatechange = function(){
         if(ajaxRequest.readyState == 4){
