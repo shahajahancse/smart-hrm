@@ -168,6 +168,9 @@
 
     function lunch_report(status)
     {
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+
       attendance_date = document.getElementById('process_date').value;
       if(process_date =='')
       {
@@ -197,6 +200,7 @@
       
       // console.log(data); return;
       url = base_url + "/lunch_report";
+
       ajaxRequest.open("POST", url, true);
       ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
       ajaxRequest.send(data);
