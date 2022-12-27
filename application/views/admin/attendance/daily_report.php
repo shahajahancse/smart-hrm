@@ -38,7 +38,9 @@
 
 <div class="box" id="print_area">
   <div style="text-align: center;">
-	  <h3 class="box-title">Daily <?php echo $status?> Report</h3>
+	  <h3 class="box-title">Daily <?php echo $status == "Present" ? "Late": 
+	  									  (  $status == "Absent"  ? "Absent"  :
+										  (  $status == "Present" ? "Present" :""))?> Report</h3>
         <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
 
 	  <p>Report date: <?php echo $attendance_date; ?> </p>

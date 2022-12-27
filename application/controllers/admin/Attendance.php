@@ -110,7 +110,6 @@ class Attendance extends MY_Controller {
 		$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
 		$data['status']= $status;
-		
     	$data["values"] = $this->Attendance_model->lunch_report($attendance_date, $emp_id, $status);
         $data["attendance_date"] = $attendance_date;
 		
@@ -120,8 +119,7 @@ class Attendance extends MY_Controller {
         }
         else
         {	
-			// dd($data["values"]);
-            $this->load->view('admin/reports/lunch/lunch_in_out',$data);
+            $this->load->view('admin/attendance/lunch/lunch_in_out',$data);
         }
     }
 
