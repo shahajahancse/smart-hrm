@@ -124,9 +124,9 @@ $imonth = date('F', $date);
         <?php echo form_close(); ?> 
       </div>
       <div class="col-md-2">
-      	<div class="row" style="margin-top: 20px;">
-      		<button class="btn btn-success" onclick="jobCard()">Job Card</button>
-      		<button class="btn btn-info" onclick="printDiv()">print</button>
+      	<div class="row" style="margin-top: 20px; margin-right: 15px;" >
+      		<!-- <button class="btn btn-success" onclick="jobCard()">Job Card</button> -->
+      		<button class="btn btn-info pull-right" onclick="printDiv()">print</button>
       	</div>
       </div>
     </div>

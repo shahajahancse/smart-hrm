@@ -307,24 +307,6 @@ class Timesheet extends MY_Controller {
 		  
      } 
 
-	 // job_card > timesheet
-	 // Job Card Report
-	 public function job_card() {
-	 	$month_year = $this->uri->segment(4);
-	 	$company_id = $this->uri->segment(5);
-	 	$employee_id = $this->uri->segment(6);
-
-		$data['month_year'] = $month_year;
-		$data['company_info'] = $this->Xin_model->get_company_info((int)$company_id);
-		$data['all_employees'] = $this->Xin_model->get_employee($company_id, (int)$employee_id);
-		// echo "<pre>"; print_r($data['all_employees']); exit;
-		// dd($data['company_info']);
-
-	 	echo $this->load->view("admin/timesheet/job_card", $data, TRUE);
-		  
-     }
-
-
 
 	 // timecard > timesheet
 	 public function timecalendar() {

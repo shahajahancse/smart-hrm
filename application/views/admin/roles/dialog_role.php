@@ -310,6 +310,11 @@ dataSource: [
 	]},
 	]},
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('left_timesheet');?>",  add_info: "", check: "<?php if(isset($_GET['role_id'])) { if(in_array('27',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>", value: "27",  items: [
+
+{ id: "", class: "role-checkbox", text: "attn file upload",  add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", value: "1001",check: "<?php if(isset($_GET['role_id'])) { if(in_array('1001',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+
+{ id: "", class: "role-checkbox", text: "attendance process",  add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", value: "1002",check: "<?php if(isset($_GET['role_id'])) { if(in_array('1002',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('left_attendance');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "28", check: "<?php if(isset($_GET['role_id'])) { if(in_array('28',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>", items: [
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('xin_role_enable');?>",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "28", check: "<?php if(isset($_GET['role_id'])) { if(in_array('28',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo '<small>'.$this->lang->line('xin_role_view').' '.$this->lang->line('left_timesheet').'</small>';?>",  add_info: "<?php echo $this->lang->line('xin_role_view');?>", value: "397", check: "<?php if(isset($_GET['role_id'])) { if(in_array('397',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"}
