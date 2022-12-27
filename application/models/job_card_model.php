@@ -6,6 +6,154 @@ class Job_card_model extends CI_Model{
 		parent::__construct();
 	}
 
+	function emp_job_card($grid_firstdate, $grid_seconddate, $emp_id)
+	{
+		$data = array();
+		$grid_firstdate = date("Y-m-d", strtotime($grid_firstdate)); 
+		$grid_seconddate = date("Y-m-d", strtotime($grid_seconddate));
+
+		$joining_check = $this->get_join_date($emp_id, $grid_firstdate, $grid_seconddate);
+		if( $joining_check != false)
+		{
+			$start_date = $joining_check;
+		}
+		else
+		{
+			$start_date = $grid_firstdate;
+		}
+			
+		$resign_check  = $this->get_resign_date($emp_id, $grid_firstdate, $grid_seconddate);
+		if($resign_check != false)
+		{
+			$end_date = $resign_check;
+		}
+		else
+		{
+			$end_date = $grid_seconddate;
+		}
+			
+		$left_check  = $this->get_left_date($emp_id, $grid_firstdate, $grid_seconddate);
+		if($left_check != false)
+		{
+			$end_date = $left_check;
+		}
+		else
+		{
+			$end_date = $grid_seconddate;
+		}
+			
+
+		$data['dayoff'] = $this->check_dayoff($start_date, $end_date, $emp_id);
+		$data['holiday'] = $this->check_holiday($start_date, $end_date, $emp_id);
+
+		$data['leave'] = $this->leave_per_emp($start_date, $end_date, $emp_id);
+		// echo "<pre>"; print_r($data['leave']); exit();
+			
+		
+		
+			
+		$this->db->select('
+				pr_emp_shift_log.in_time , 
+				pr_emp_shift_log.out_time, 
+				pr_emp_shift_log.ln_out_time, 
+				pr_emp_shift_log.ln_in_time, 
+				pr_emp_shift_log.shift_log_date, 
+				pr_emp_shift_log.ot_hour,
+				pr_emp_shift_log.extra_ot_hour, 
+				pr_emp_shift_log.eot_hour_in_8pm, 
+				pr_emp_shift_log.late_status,
+				pr_emp_shift_log.late_min,
+				pr_emp_shift_log.deduction_hour,
+			');
+		$this->db->from('pr_emp_shift_log');
+		$this->db->where('pr_emp_shift_log.emp_id', $emp_id);
+		$this->db->where("pr_emp_shift_log.shift_log_date >=", $start_date);
+		$this->db->where("pr_emp_shift_log.shift_log_date <=", $end_date);
+		$this->db->order_by("pr_emp_shift_log.shift_log_date");				
+		$query = $this->db->get()->result();
+
+		$data['emp_data'] = $query;
+
+		return $data;
+	}
+
+
+	function get_join_date($emp_id, $sStartDate, $sEndDate)
+	{
+		$this->db->select('date_of_joining');
+		$this->db->where("date_of_joining BETWEEN '$sStartDate' AND '$sEndDate'");
+		$this->db->where("user_id = '$emp_id'");
+		$query = $this->db->get("xin_employees");
+		if($query->num_rows() > 0)
+		{
+			$row = $query->row();
+			return $date_of_joining = $row->date_of_joining;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function get_resign_date($emp_id, $sStartDate, $sEndDate)
+	{
+		$this->db->select('resign_date');
+		$this->db->where("resign_date BETWEEN '$sStartDate' AND '$sEndDate'");
+		$this->db->where("emp_id = '$emp_id'");
+		$query = $this->db->get("xin_employee_resign");
+		if($query->num_rows() > 0)
+		{
+			$row = $query->row();
+			return $resign_date = $row->resign_date;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function get_left_date($emp_id, $sStartDate, $sEndDate)
+	{
+		$this->db->select('left_date');
+		$this->db->where("left_date BETWEEN '$sStartDate' AND '$sEndDate'");
+		$this->db->where("emp_id = '$emp_id'");
+		$query = $this->db->get("xin_employee_left");
+		if($query->num_rows() > 0)
+		{
+			$row = $query->row();
+			return $resign_date = $row->left_date;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function check_dayoff($sStartDate, $sEndDate, $emp_id)
+	{	
+		$days = GetDayDate($sStartDate, $sEndDate);
+		$off_day = array('Friday','Saturday');
+		$dayoff = array();
+
+		foreach ($days as $row)
+		{
+			if (in_array($row->day, $off_day)) {
+				$dayoff[] = $row->date;
+			}
+		}
+		return $dayoff;
+	}
+
+
+
+
+
+
+
+
+
+
+	// old
 
 	function leave_per_emp($sStartDate, $sEndDate, $emp_id){
  		$this->db->select("*");		
@@ -24,33 +172,6 @@ class Job_card_model extends CI_Model{
 		return $leave;
 	}
 
-	function check_weekend($sStartDate, $sEndDate, $emp_id)
-	{
-		$this->db->select("work_off_date");
-		$this->db->where("work_off_date BETWEEN '$sStartDate' AND '$sEndDate'");
-		$this->db->where("emp_id = '$emp_id'");
-		$query = $this->db->get("pr_work_off");
-		$weekend = array();
-		foreach ($query->result() as $row)
-		{
-			$weekend[] = $row->work_off_date;
-		}
-		return $weekend;
-	}
-
-	function check_dayoff($sStartDate, $sEndDate, $emp_id)
-	{
-		$this->db->select("day_off_date");
-		$this->db->where("day_off_date BETWEEN '$sStartDate' AND '$sEndDate'");
-		$this->db->where("emp_id = '$emp_id'");
-		$query = $this->db->get("pr_day_off");
-		$dayoff = array();
-		foreach ($query->result() as $row)
-		{
-			$dayoff[] = $row->day_off_date;
-		}
-		return $dayoff;
-	}
 
 	function holiday_calculation($sStartDate, $sEndDate, $emp_id)
 	{
@@ -125,77 +246,6 @@ class Job_card_model extends CI_Model{
 		return $leave_type;
    }
 
-	function emp_job_card($grid_firstdate, $grid_seconddate, $emp_id, $desig_id)
-	{
-		$data = array();
-		$grid_firstdate = date("Y-m-d", strtotime($grid_firstdate)); 
-		$grid_seconddate = date("Y-m-d", strtotime($grid_seconddate));
-
-		$joining_check = $this->get_join_date($emp_id, $grid_firstdate, $grid_seconddate);
-		if( $joining_check != false)
-		{
-			$start_date = $joining_check;
-		}
-		else
-		{
-			$start_date = $grid_firstdate;
-		}
-			
-		$resign_check  = $this->get_resign_date($emp_id, $grid_firstdate, $grid_seconddate);
-		if($resign_check != false)
-		{
-			$end_date = $resign_check;
-		}
-		else
-		{
-			$end_date = $grid_seconddate;
-		}
-			
-		$left_check  = $this->get_left_date($emp_id, $grid_firstdate, $grid_seconddate);
-		if($left_check != false)
-		{
-			$end_date = $left_check;
-		}
-		else
-		{
-			$end_date = $grid_seconddate;
-		}
-			
-
-		$data['leave'] = $this->leave_per_emp($start_date, $end_date, $emp_id);
-		// echo "<pre>"; print_r($data['leave']); exit();
-			
-		$data['weekend'] = $this->check_weekend($start_date, $end_date, $emp_id);
-
-		$data['dayoff'] = $this->check_dayoff($start_date, $end_date, $emp_id);
-		
-		$data['holiday'] = $this->holiday_calculation($start_date, $end_date, $emp_id);
-		
-			
-		$this->db->select('
-				pr_emp_shift_log.in_time , 
-				pr_emp_shift_log.out_time, 
-				pr_emp_shift_log.ln_out_time, 
-				pr_emp_shift_log.ln_in_time, 
-				pr_emp_shift_log.shift_log_date, 
-				pr_emp_shift_log.ot_hour,
-				pr_emp_shift_log.extra_ot_hour, 
-				pr_emp_shift_log.eot_hour_in_8pm, 
-				pr_emp_shift_log.late_status,
-				pr_emp_shift_log.late_min,
-				pr_emp_shift_log.deduction_hour,
-			');
-		$this->db->from('pr_emp_shift_log');
-		$this->db->where('pr_emp_shift_log.emp_id', $emp_id);
-		$this->db->where("pr_emp_shift_log.shift_log_date >=", $start_date);
-		$this->db->where("pr_emp_shift_log.shift_log_date <=", $end_date);
-		$this->db->order_by("pr_emp_shift_log.shift_log_date");				
-		$query = $this->db->get()->result();
-
-		$data['emp_data'] = $query;
-
-		return $data;
-	}
 
 	function get_short_leave_timing($emp_id,$date)
 	{
@@ -286,104 +336,6 @@ class Job_card_model extends CI_Model{
 	}
 
 
-	function get_formated_out_time_2hours_eot($emp_id, $out_time, $emp_shift, $deduction_hour)
-	{
-		//echo $out_time;
-		if($out_time =='00:00:00')
-		{
-			return $out_time ='';
-		}
-
-		$schedule 				= $this->schedule_check($emp_shift);
-		$out_start				= $schedule[0]["out_start"];
-		$ot_start				= $schedule[0]["ot_start"];
-		$out_end				= $schedule[0]["out_end"];
-		$one_hour_ot_out_time	= $schedule[0]["one_hour_ot_out_time"];
-		$two_hour_ot_out_time	= $schedule[0]["two_hour_ot_out_time"];
-		$three_hour_ot      	= "20:00:00";
-		$four_hour_ot      	    = "21:00:00";
-		// echo "<pre>"; print_r($schedule); die();
-
-		if($ot_start < $out_time)
-		{
-			if($four_hour_ot >= $out_time)
-			{
-				return $out_time = $this->time_am_pm_format($out_time);
-			} elseif($out_time > $four_hour_ot){
-				return $out_time = $this->get_buyer_in_time($four_hour_ot ,$out_time);
-			}
-			else
-			{
-				return $out_time = $this->time_am_pm_format($out_time);
-			}
-		} else if ("00:00:01" <= $out_time && $out_time <= $out_end) {
-			return $out_time = $this->get_buyer_in_time($four_hour_ot ,$out_time);
-		} 
-		else
-		{
-			return $out_time = $this->time_am_pm_format($out_time);
-		}
-	}
-
-	function get_formated_out_time_3hours_eot($emp_id, $out_time, $emp_shift, $deduction_hour)
-	{
-		//echo $out_time;
-		if($out_time =='00:00:00')
-		{
-			return $out_time ='';
-		}
-
-		$schedule 				= $this->schedule_check($emp_shift);
-		$out_start				= $schedule[0]["out_start"];
-		$ot_start				= $schedule[0]["ot_start"];
-		$out_end				= $schedule[0]["out_end"];
-		$one_hour_ot_out_time	= $schedule[0]["one_hour_ot_out_time"];
-		$two_hour_ot_out_time	= $schedule[0]["two_hour_ot_out_time"];
-		$three_hour_ot      	= "20:00:00";
-		$four_hour_ot      	    = "21:00:00";
-		$five_hour_ot       	= "22:00:00";
-		// echo "<pre>"; print_r($schedule); die();
-
-		if($ot_start < $out_time)
-		{
-			if($five_hour_ot >= $out_time)
-			{
-				return $out_time = $this->time_am_pm_format($out_time);
-			} elseif($out_time > $five_hour_ot){
-				return $out_time = $this->get_buyer_in_time($five_hour_ot ,$out_time);
-			}
-			else
-			{
-				return $out_time = $this->time_am_pm_format($out_time);
-			}
-		} else if ("00:00:01" <= $out_time && $out_time <= $out_end) {
-			return $out_time = $this->get_buyer_in_time($five_hour_ot ,$out_time);
-		} 
-		else
-		{
-			return $out_time = $this->time_am_pm_format($out_time);
-		}
-	}
-
-	function get_buyer_in_time($exact_time_15min_back ,$in_time)
-	{
-		//echo $in_time;
-		$exact_hour_min_sec = $this->get_hour_min_sec($exact_time_15min_back);
-		$exact_hour   		= $exact_hour_min_sec['hour'];
-		$exact_minute 		= $exact_hour_min_sec['minute'];
-
-		$real_hour_min_sec 	= $this->get_hour_min_sec($in_time);
-		$real_minute  		= $real_hour_min_sec['minute'];
-		$real_second 		= $real_hour_min_sec['second'];
-
-		$buyer_minute = $this->create_buyer_minute($real_minute);
-
-		$buyer_minute = $buyer_minute + $exact_minute;
-
-		return $time_format = date("h:i:s A", mktime($exact_hour, $buyer_minute, $real_second, 0, 0, 0));
-
-	}
-
 	function get_hour_min_sec($time)
 	{
 		$data = array();
@@ -403,55 +355,6 @@ class Job_card_model extends CI_Model{
 		return $buyer_minute;
 	}
 
-	function get_join_date($emp_id, $sStartDate, $sEndDate)
-	{
-		$this->db->select('emp_join_date');
-		$this->db->where("emp_join_date BETWEEN '$sStartDate' AND '$sEndDate'");
-		$this->db->where("emp_id = '$emp_id'");
-		$query = $this->db->get("pr_emp_com_info");
-		if($query->num_rows() > 0)
-		{
-			$row = $query->row();
-			return $emp_join_date = $row->emp_join_date;
-		}
-		else
-		{
-			return false;
-		}
-	}
 
-	function get_resign_date($emp_id, $sStartDate, $sEndDate)
-	{
-		$this->db->select('resign_date');
-		$this->db->where("resign_date BETWEEN '$sStartDate' AND '$sEndDate'");
-		$this->db->where("emp_id = '$emp_id'");
-		$query = $this->db->get("pr_emp_resign_history");
-		if($query->num_rows() > 0)
-		{
-			$row = $query->row();
-			return $resign_date = $row->resign_date;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	function get_left_date($emp_id, $sStartDate, $sEndDate)
-	{
-		$this->db->select('left_date');
-		$this->db->where("left_date BETWEEN '$sStartDate' AND '$sEndDate'");
-		$this->db->where("emp_id = '$emp_id'");
-		$query = $this->db->get("pr_emp_left_history");
-		if($query->num_rows() > 0)
-		{
-			$row = $query->row();
-			return $resign_date = $row->left_date;
-		}
-		else
-		{
-			return false;
-		}
-	}
 
 }

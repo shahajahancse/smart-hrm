@@ -137,6 +137,7 @@ class Attendance_model extends CI_Model {
     {
         $this->db->select('
                 xin_employees.user_id, 
+                xin_employees.employee_id, 
                 xin_employees.office_shift_id as shift_id, 
                 xin_employees.first_name, 
                 xin_employees.last_name, 
