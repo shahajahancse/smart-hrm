@@ -180,7 +180,7 @@ class Attendance_model extends CI_Model {
     }
 
 
-    public function daily_report($attendance_date, $status,$emp_id, $late_status=null)
+    public function daily_report($attendance_date, $emp_id, $status = null, $late_status=null)
     {
      
         $this->db->select('
@@ -230,7 +230,7 @@ class Attendance_model extends CI_Model {
 
 
 
-    public function lunch_report($attendance_date,$status,$emp_id)
+    public function lunch_report($attendance_date,$emp_id,$status)
     {
 
         $this->db->select('

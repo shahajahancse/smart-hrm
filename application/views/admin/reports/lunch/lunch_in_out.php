@@ -40,9 +40,7 @@
   <div style="text-align: center;">
 	  <h3 class="box-title">Daily <?php echo $status?> Report</h3>
         <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
-
 	  <p>Report date: <?php echo $attendance_date; ?> </p>
-    <span class="box-tools"> A: Absent, P: Present, H: Holiday, L: Leave</span><br><br>
   </div>
 
   <div class="container">
@@ -65,8 +63,11 @@
                 <td><?php echo $row->first_name.' '.$row->last_name?></td>
                 <td><?php echo $row->department_name?></td>
                 <td><?php echo $row->designation_name?></td>
-                <td><?php  echo $row->lunch_in==""? "": date('H:m:s a',strtotime($row->clock_in))?></td>
-                <td><?php echo $row->lunch_out==""? "": date('H:m:s a',strtotime($row->clock_out))?></td>
+                <td><?php  echo $row->lunch_in==""? "": date('H:m:s a',strtotime($row->lunch_in))?></td>
+                <td><?php echo $row->lunch_out==""? "": date('H:m:s a',strtotime($row->lunch_out))?></td>
+                <td><?php echo $row->lunch_late_status== NULL?"Not Late":"Late"?></td>
+                <td> </td>
+
             </tbody>
             <?php }?>
 	      </table>

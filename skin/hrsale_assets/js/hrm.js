@@ -205,7 +205,7 @@
         if(ajaxRequest.readyState == 4){
           // console.log(ajaxRequest);
           var resp = ajaxRequest.responseText;
-          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1000,height=800');
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1200,height=800');
           a.document.write(resp);
         }
       }
