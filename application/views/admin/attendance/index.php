@@ -81,7 +81,6 @@
       </div>
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
-          <button class="btn btn-success" onclick="jobCard()">Job Card</button>
 
         <button class="btn btn-sm btn-danger"> Button one</button>
         <button class="btn btn-sm btn-danger"> Button two</button>
@@ -94,6 +93,7 @@
       </div>
 
       <div class="tab-pane fade" id="continuously" role="tabpanel" aria-labelledby="continuously-tab" style="margin-top: 30px;">
+        <button class="btn btn-success" onclick="jobCard()">Job Card</button>
         <button class="btn btn-sm btn-info"> Button one</button>
         <button class="btn btn-sm btn-info"> Button two</button>
         <button class="btn btn-sm btn-info"> Button three</button>

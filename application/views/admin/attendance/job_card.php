@@ -21,12 +21,10 @@ $wk_off_count = 0;
 $day_off_count = 0;
 $holiday_count = 0;
 
-// $count = count($values);
+
 $this->load->model('job_card_model');
 
-// for($i = 0; $i<$count;$i++)
-// {
-foreach ($values as $key => $value) { 
+foreach ($all_employees as $key => $value) { 
 
 	echo "<div style='min-height:1000px; overflow:hidden;'>";
 	$present_count = 0;
@@ -40,83 +38,112 @@ foreach ($values as $key => $value) {
 	$perror_count = 0;
 	$total_ot_hour = 0;
 
-	$this->load->view('head_english');
+	$this->load->view('admin/head_bangla');
+
+
 	echo "<span style='font-size:13px; font-weight:bold;'>";
-	echo "Job Card Report from  $grid_firstdate -TO- $grid_seconddate";
+	echo "Job Card Report from  $first_date -TO- $second_date";
 	echo "</span>";
 	echo "<br /><br />";
 	
 	echo "<table border='0' style='font-size:13px;' width='480'>";
-	echo "<tr>";
-	echo "<td width='70'>";
-	echo "<strong>Emp ID:</strong>";
-	echo "</td>";
-	echo "<td width='200'>";
-	echo $value->emp_id;
-	echo "</td>";
-	
-	echo "<td width='55'>";
-	echo "<strong>Name :</strong>";
-	echo "</td>";
-	echo "<td width='150'>";
-	echo $value->emp_full_name;
-	echo "</td>";
-	echo "</tr>";
-	
-	echo "<tr>";
-	echo "<td >";
-	echo "<strong>Proxi NO. :</strong>";
-	echo "</td>";
-	echo "<td >";
-	echo $value->proxi_id;
-	echo "</td>";
-	
-	echo "<td style:width:20px'>";
-	echo "<strong>Section :</strong>";
-	echo "</td>";
-	echo "<td width='30px'>";
-	echo $value->sec_name;
-	echo "</td>";
-	echo "</tr>";
-	echo "<tr>";
-	echo "<td>";
-	echo "<strong>Line :</strong>";
-	echo "</td>";
-	echo "<td>";
-	echo $value->line_name;
-	echo "</td>";
-	echo "<td>";
-	echo "<strong>Desig :</strong>";
-	echo "</td>";
-	echo "<td>";
-	echo $value->desig_name;
-	echo "</td>";
-	echo "</tr>";
-	echo "<tr>";
-	echo "<td>";
-	echo "<strong>DOJ :</strong>";
-	echo "</td>";
-	echo "<td>";
-	echo date("d-M-Y", strtotime($value->emp_join_date));
-	echo "</td>";
-	
-	echo "<td >";
-	echo "<strong>Dept :</strong>";
-	echo "</td>";
-	echo "<td >";
-	echo $value->dept_name;
-	echo "</td>";
-	echo "</tr>";
+		echo "<tr>";
+		echo "<td width='70'>";
+		echo "<strong>Emp ID:</strong>";
+		echo "</td>";
+		echo "<td width='200'>";
+		echo $value->employee_id;
+		echo "</td>";
+		
+		echo "<td width='55'>";
+		echo "<strong>Name :</strong>";
+		echo "</td>";
+		echo "<td width='150'>";
+		echo $value->first_name ." ". $value->last_name;
+		echo "</td>";
+		echo "</tr>";
+		
+
+		echo "<tr>";
+		echo "<td>";
+		echo "<strong>Dept :</strong>";
+		echo "</td>";
+		echo "<td>";
+		echo $value->department_name;
+		echo "</td>";
+		echo "<td>";
+		echo "<strong>Desig :</strong>";
+		echo "</td>";
+		echo "<td>";
+		echo $value->designation_name;
+		echo "</td>";
+		echo "</tr>";
+
+		echo "<tr>";
+		echo "<td>";
+		echo "<strong>DOJ :</strong>";
+		echo "</td>";
+		echo "<td>";
+		echo date("d-M-Y", strtotime($value->date_of_joining));
+		echo "</td>";
+		
+		echo "<td >";
+		echo "<strong>DOB :</strong>";
+		echo "</td>";
+		echo "<td >";
+		echo date("d-M-Y", strtotime($value->date_of_birth));
+		echo "</td>";
+		echo "</tr>";
 	echo "<table>";
-	
-	// $count1 = count($values[$emp_id]["shift_log_date"]);
-	$emp_data = $this->job_card_model->emp_job_card($grid_firstdate,$grid_seconddate, $value->emp_id,$value->desig_id);
+
+	$emp_data = $this->job_card_model->emp_job_card($first_date,$second_date, $value->user_id);
 		// echo "<pre>";	print_r($emp_data); exit;
 
 	
 	echo "<table class='sal' border='1' bordercolor='#000000' cellspacing='0' cellpadding='0' style='text-align:center; font-size:13px; '> <th>Date</th><th>In Time</th><th>Out Time</th><th>Attn.Status</th><th>Overtime</th><th>Lunch Out Time</th><th>Lunch IN Time</th><th>Late</th><th>Before 5PM</th><th>Remarks</th>";
 
 		foreach ($emp_data['emp_data'] as $key => $row) {
+
+			if(in_array($row->shift_log_date,$emp_data['leave']))
+			{
+				$leave_type = $this->job_card_model->get_leave_type($row->shift_log_date,$value->emp_id);
+				$att_status_count = "Leave";
+				$att_status = $leave_type;
+				$row->in_time = "00:00:00";
+				$row->out_time = "00:00:00";
+			}
+			elseif(in_array($row->shift_log_date,$emp_data['holiday']))
+			{
+				$att_status = "Holiday";
+				$att_status_count = "Holiday";
+				$row->in_time = "00:00:00";
+				$row->out_time = "00:00:00";
+				$row->ot_hour ="";
+			} 
+			elseif(in_array($row->shift_log_date,$emp_data['dayoff']))
+			{
+				$att_status = "Day Off";
+				$att_status_count = "Day Off";
+				$row->in_time = "00:00:00";
+				$row->out_time = "00:00:00";
+				$row->ot_hour ="";
+			}
+			elseif($row->in_time !='00:00:00' and $row->out_time !='00:00:00')
+			{
+				$att_status = "P";
+				$att_status_count = "P";
+			}
+			elseif($row->in_time !='00:00:00' or $row->out_time !='00:00:00')
+			{
+				$att_status = "P(Error)";
+				$att_status_count = "P(Error)";
+			}
+			else
+			{
+				$att_status = "A";
+				$att_status_count = "A";
+			}
+
 
 			echo "<tr>";
 			
@@ -218,11 +245,12 @@ foreach ($values as $key => $value) {
 				
 				
 				echo "<td>&nbsp;";
-				echo $formated_ot_hour = $this->common_model->ot_minutes_to_fraction($late_min);
+				// echo $formated_ot_hour = $this->common_model->ot_minutes_to_fraction($late_min);
+				echo 0;
 				echo "</td>";
 				
 				echo "<td>&nbsp;";
-				echo $formated_ot_hour = $this->common_model->ot_minutes_to_fraction($deduction_hour);
+				echo 0;
 				echo "</td>";
 				
 				echo "<td>&nbsp;";
@@ -314,7 +342,7 @@ foreach ($values as $key => $value) {
 
 	
 	echo "<td>";
-	echo $formated_ot_hour = $this->common_model->ot_minutes_to_fraction($total_ot_hour);
+	echo 0;
 	echo "</td>";
 	
 	echo "</tr>";
