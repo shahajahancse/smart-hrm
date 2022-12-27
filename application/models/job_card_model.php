@@ -144,6 +144,21 @@ class Job_card_model extends CI_Model{
 		return $dayoff;
 	}
 
+	function check_holiday($sStartDate, $sEndDate, $emp_id)
+	{
+		$this->db->select("start_date");
+		$this->db->where("start_date BETWEEN '$sStartDate' AND '$sEndDate'");
+		$this->db->where("user_id = '$emp_id'");
+		$query = $this->db->get("xin_holidays");
+		$holiday = array();
+		foreach ($query->result() as $row)
+		{
+			$holiday[] = $row->start_date;
+		}
+		return $holiday;
+	}
+
+	
 
 
 
