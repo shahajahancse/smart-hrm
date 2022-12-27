@@ -151,7 +151,7 @@
               items += '<tr id="removeTr">';
               items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="'+value.emp_id+'" ></td>';
               items += '<td class="success">'+value.emp_id+'</td>';
-              items += '<td class="warning text-center">'+value.first_name +' '+ value.last_name +'</td>';
+              items += '<td class="warning ">'+value.first_name +' '+ value.last_name +'</td>';
               items += '</tr>';
             });
             // console.log(items);
