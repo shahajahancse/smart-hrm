@@ -87,7 +87,7 @@ class Attendance extends MY_Controller {
     	$emp_id = explode(',', trim($sql));
 
 		$data['status']= $status;
-    	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $status,$emp_id);
+    	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id, $status);
         $data["attendance_date"] = $attendance_date;
 		
         if(is_string($data["values"]))
@@ -111,7 +111,7 @@ class Attendance extends MY_Controller {
     	$emp_id = explode(',', trim($sql));
 		$data['status']= $status;
 		
-    	$data["values"] = $this->Attendance_model->lunch_report($attendance_date,$status,$emp_id);
+    	$data["values"] = $this->Attendance_model->lunch_report($attendance_date, $emp_id, $status);
         $data["attendance_date"] = $attendance_date;
 		
         if(is_string($data["values"]))
