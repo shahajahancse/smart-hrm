@@ -182,8 +182,8 @@ class Attendance_model extends CI_Model {
 
 
     public function daily_report($attendance_date, $emp_id, $status = null, $late_status=null)
-    {
-     
+    {   
+
         $this->db->select('
             xin_employees.user_id as emp_id,
             xin_employees.employee_id,
@@ -205,10 +205,10 @@ class Attendance_model extends CI_Model {
         $this->db->from('xin_departments');
         $this->db->from('xin_designations');
         $this->db->from('xin_attendance_time');
+
         if ($late_status != null && $late_status != 0 && $late_status != '') {
             $this->db->where("xin_attendance_time.late_status", 1);
         }
-
 
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
@@ -218,7 +218,7 @@ class Attendance_model extends CI_Model {
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
         $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
         $data = $this->db->get()->result();
-  
+    
         if($data)
         {
             return $data;
@@ -231,8 +231,9 @@ class Attendance_model extends CI_Model {
 
 
 
-    public function lunch_report($attendance_date,$emp_id,$status)
+    public function lunch_report($attendance_date,$emp_id,$status=null,$late_status=null)
     {
+        // dd($late_status);
 
         $this->db->select('
             xin_employees.user_id as emp_id,
@@ -245,20 +246,25 @@ class Attendance_model extends CI_Model {
             xin_departments.department_name,
             xin_designations.designation_name,
             xin_attendance_time.attendance_date,
+            xin_attendance_time.attendance_status,
             xin_attendance_time.lunch_in,
             xin_attendance_time.lunch_out,
             xin_attendance_time.lunch_late_status,
         ');
+
 
         $this->db->from('xin_employees');
         $this->db->from('xin_departments');
         $this->db->from('xin_designations');
         $this->db->from('xin_attendance_time');
         $this->db->where("xin_employees.is_active", 1);
+        if ($late_status != null && $late_status != 0 && $late_status != '') {
+            $this->db->where("xin_attendance_time.lunch_late_status", 1);
+        }
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
+  
         $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
-        $this->db->where("xin_attendance_time.lunch_in", '0000-00-00 00:00:00');
-        $this->db->where("xin_attendance_time.lunch_out", '0000-00-00 00:00:00');
+        $this->db->where("xin_attendance_time.attendance_status", "Present");
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
         $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
@@ -274,6 +280,60 @@ class Attendance_model extends CI_Model {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
+
+
+
+    public function early_out_report($attendance_date,$emp_id,$status)
+    {
+        
+        // dd($out_time);
+        // $out_time= $this->db->select('ot_start_time')->from('xin_office_shift')->get()->result();
+        $this->db->select('
+            xin_employees.user_id as emp_id,
+            xin_employees.employee_id,
+            xin_employees.first_name,
+            xin_employees.last_name,
+            xin_employees.department_id,
+            xin_employees.designation_id,
+            xin_employees.date_of_joining,
+            xin_departments.department_name,
+            xin_designations.designation_name,
+            xin_attendance_time.attendance_date,
+            xin_attendance_time.attendance_status,
+            xin_attendance_time.clock_in,
+            xin_attendance_time.clock_out,
+            xin_attendance_time.early_out_status,
+        ');
+
+       
+
+        $this->db->from('xin_employees');
+        $this->db->from('xin_departments');
+        $this->db->from('xin_designations');
+        $this->db->from('xin_attendance_time');
+        $this->db->where("xin_employees.is_active", 1);
+        $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
+        $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
+        $this->db->where_in("xin_attendance_time.early_out_status", 1);
+        $this->db->where("xin_attendance_time.attendance_status", "Present");
+        $this->db->where('xin_employees.department_id = xin_departments.department_id');
+        $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
+        $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
+
+
+        $data = $this->db->get()->result();
+        // dd($data);
+  
+        if($data)
+        {
+            return $data;
+        }
+        else
+        {
+            return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+        }
+    }
+
 
 
 

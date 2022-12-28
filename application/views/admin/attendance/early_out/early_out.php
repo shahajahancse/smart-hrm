@@ -1,4 +1,4 @@
-<!-- < ?php dd($late_status);?> -->
+<!-- < ?php dd($values);?> -->
 
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_hrsale_custom.css">
@@ -38,12 +38,10 @@
 
 <div class="box" id="print_area">
   <div style="text-align: center;">
-<?php  $this->load->view('admin/head_bangla'); ?>
-  <h4 class="box-title">Daily <?php echo $status=="Present" && $late_status==1 ? "Late":$status ?> Report</h4>
+  <?php  $this->load->view('admin/head_bangla'); ?>
+	  <h4 class="box-title">Daily <?php echo $status?> Report</h4>
         <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
-
 	  <p>Report date: <?php echo $attendance_date; ?> </p>
-    <span class="box-tools"> A: Absent, P: Present, H: Holiday, L: Leave</span><br><br>
   </div>
 
   <div class="container">
@@ -55,9 +53,7 @@
                 <td>Employee Name</td>
                 <td>Department Name</td>
                 <td>Designation Name</td>
-                <td>In Time</td>
                 <td>Out Time</td>
-                <td>Status</td>
 	        </thead>
             <?php $i=1; foreach($values as $row){?>
             <tbody >
@@ -65,13 +61,7 @@
                 <td><?php echo $row->first_name.' '.$row->last_name?></td>
                 <td><?php echo $row->department_name?></td>
                 <td><?php echo $row->designation_name?></td>
-                <td><?php  echo $row->clock_in==""? "": date('H:i:s A',strtotime($row->clock_in))?></td>
-                <td><?php echo $row->clock_out==""? "": date('h:i:s a',strtotime($row->clock_out))?></td>
-                <td><?php echo $row->attendance_status == "Present" && $row->late_status == 0  ? "P" :
-                            (  $row->attendance_status == "Absent"  ? "A" :
-                            (  $row->attendance_status == "Leave"   ? "L" : ( $row->attendance_status == "Present" && $row->late_status == 1 ? "P(Late)":"H" )));
-                    ?>
-                </td>
+                <td><?php  echo $row->clock_out==""? "": date('h:i:s a',strtotime($row->clock_out))?></td>
             </tbody>
             <?php }?>
 	      </table>

@@ -85,9 +85,9 @@ class Attendance extends MY_Controller {
 		$late_status = $this->input->post('late_status');
 		$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
-
 		$data['status']= $status;
-    	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id, $status);
+		$data['late_status']= $late_status;
+    	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id, $status,$late_status);
         $data["attendance_date"] = $attendance_date;
 		
         if(is_string($data["values"]))
@@ -107,10 +107,12 @@ class Attendance extends MY_Controller {
 		$report_date = $this->input->post('attendance_date');
     	$attendance_date = date("Y-m-d", strtotime($report_date));
 		$status = $this->input->post('status');
+		$late_status = $this->input->post('late_status');
 		$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
 		$data['status']= $status;
-    	$data["values"] = $this->Attendance_model->lunch_report($attendance_date, $emp_id, $status);
+		// dd($late_status." ".$status);
+    	$data["values"] = $this->Attendance_model->lunch_report($attendance_date, $emp_id,$status,$late_status);
         $data["attendance_date"] = $attendance_date;
 		
         if(is_string($data["values"]))
@@ -122,6 +124,29 @@ class Attendance extends MY_Controller {
             $this->load->view('admin/attendance/lunch/lunch_in_out',$data);
         }
     }
+
+	
+	// Early Out Report
+	public function early_out_report() {
+		$report_date = $this->input->post('attendance_date');
+    	$attendance_date = date("Y-m-d", strtotime($report_date));
+		$status = $this->input->post('status');
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+		$data['status']= $status;
+    	$data["values"] = $this->Attendance_model->early_out_report($attendance_date, $emp_id, $status);
+        $data["attendance_date"] = $attendance_date;
+		
+        if(is_string($data["values"]))
+        {
+            echo $data["values"];
+        }
+        else
+        {	
+            $this->load->view('admin/attendance/early_out/early_out',$data);
+		}
+		 
+   }
 
 
 

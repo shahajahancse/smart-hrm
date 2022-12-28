@@ -38,7 +38,8 @@
 
 <div class="box" id="print_area">
   <div style="text-align: center;">
-	  <h3 class="box-title">Daily <?php echo $status?> Report</h3>
+  <?php  $this->load->view('admin/head_bangla'); ?>
+	  <h4 class="box-title">Daily <?php echo $status?> Report</h4>
         <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
 	  <p>Report date: <?php echo $attendance_date; ?> </p>
   </div>
@@ -52,10 +53,10 @@
                 <td>Employee Name</td>
                 <td>Department Name</td>
                 <td>Designation Name</td>
-                <td>Lunch In Time</td>
-                <td>Lunch Out Time</td>
-                <td>Late Status</td>
-                <td>Comment</td>
+				<td>Out Time</td>
+                <td>In Time</td>
+               
+                <!-- <td>Comment</td> -->
 	        </thead>
             <?php $i=1; foreach($values as $row){?>
             <tbody >
@@ -63,10 +64,9 @@
                 <td><?php echo $row->first_name.' '.$row->last_name?></td>
                 <td><?php echo $row->department_name?></td>
                 <td><?php echo $row->designation_name?></td>
-                <td><?php  echo $row->lunch_in==""? "": date('H:m:s a',strtotime($row->lunch_in))?></td>
-                <td><?php echo $row->lunch_out==""? "": date('H:m:s a',strtotime($row->lunch_out))?></td>
-                <td><?php echo $row->lunch_late_status== NULL?"Not Late":"Late"?></td>
-                <td> </td>
+                <td><?php echo $row->lunch_out==""? "": date('h:i:s a',strtotime($row->lunch_out))?></td>
+                <td><?php  echo $row->lunch_in==""? "": date('h:i:s a',strtotime($row->lunch_in))?></td>
+                <!-- <td> </td> -->
 
             </tbody>
             <?php }?>
