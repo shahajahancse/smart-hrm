@@ -10,7 +10,7 @@
 <div align="center" style="height:100%; width:100%; overflow:hidden;" >
 
 <?php
-//print_r($values);
+// dd($all_employees);
 
 $present_count = 0;
 $absent_count = 0;
@@ -100,40 +100,40 @@ foreach ($all_employees as $key => $value) {
 		// echo "<pre>";	print_r($emp_data); exit;
 
 	
-	echo "<table class='sal' border='1' bordercolor='#000000' cellspacing='0' cellpadding='0' style='text-align:center; font-size:13px; '> <th>Date</th><th>In Time</th><th>Out Time</th><th>Attn.Status</th><th>Overtime</th><th>Lunch Out Time</th><th>Lunch IN Time</th><th>Late</th><th>Before 5PM</th><th>Remarks</th>";
+	echo "<table class='sal' border='1' bordercolor='#000000' cellspacing='0' cellpadding='0' style='text-align:center; font-size:13px; '> <th>Date</th><th>In Time</th><th>Out Time</th><th>Attn.Status</th><th>Lunch Out Time</th><th>Lunch IN Time</th><th>Late</th><th>Before 5PM</th><th>Remarks</th>";
 
 		foreach ($emp_data['emp_data'] as $key => $row) {
 
-			if(in_array($row->shift_log_date,$emp_data['leave']))
+			if(in_array($row->attendance_date,$emp_data['leave']))
 			{
-				$leave_type = $this->job_card_model->get_leave_type($row->shift_log_date,$value->emp_id);
+				$leave_type = $this->job_card_model->get_leave_type($row->attendance_date,$value->employee_id);
 				$att_status_count = "Leave";
 				$att_status = $leave_type;
-				$row->in_time = "00:00:00";
-				$row->out_time = "00:00:00";
+				$row->clock_in = "00:00:00";
+				$row->clock_out = "00:00:00";
 			}
-			elseif(in_array($row->shift_log_date,$emp_data['holiday']))
+			elseif(in_array($row->attendance_date,$emp_data['holiday']))
 			{
 				$att_status = "Holiday";
 				$att_status_count = "Holiday";
-				$row->in_time = "00:00:00";
-				$row->out_time = "00:00:00";
+				$row->clock_in = "00:00:00";
+				$row->clock_out = "00:00:00";
 				$row->ot_hour ="";
 			} 
-			elseif(in_array($row->shift_log_date,$emp_data['dayoff']))
+			elseif(in_array($row->attendance_date,$emp_data['dayoff']))
 			{
 				$att_status = "Day Off";
 				$att_status_count = "Day Off";
-				$row->in_time = "00:00:00";
-				$row->out_time = "00:00:00";
+				$row->clock_in = "00:00:00";
+				$row->clock_out = "00:00:00";
 				$row->ot_hour ="";
 			}
-			elseif($row->in_time !='00:00:00' and $row->out_time !='00:00:00')
+			elseif(($row->clock_in !='' && $row->clock_out !=''))
 			{
 				$att_status = "P";
 				$att_status_count = "P";
 			}
-			elseif($row->in_time !='00:00:00' or $row->out_time !='00:00:00')
+			elseif($row->clock_in !='' || $row->clock_out !='')
 			{
 				$att_status = "P(Error)";
 				$att_status_count = "P(Error)";
@@ -148,32 +148,28 @@ foreach ($all_employees as $key => $value) {
 			echo "<tr>";
 			
 				echo "<td>&nbsp;";
-				echo $shift_log_date;
+				echo $row->attendance_date;
 				echo "</td>";
 				
 				echo "<td>&nbsp;";
-				if($in_time == "00:00:00")
+				if($row->clock_in == "")
 				{
 					echo "&nbsp;";
 				}
 				else
 				{
-					echo $in_time;
+					echo date('H:i:s a',strtotime($row->clock_in));
 				}
 				echo "</td>";
 						
 				echo "<td>&nbsp;";
-				if($out_time =="00:00:00")
+				if($row->clock_out =="")
 				{
 					echo "&nbsp;";
 				}
-				elseif($value->emp_id =='10007895' && $shift_log_date =='10-Jul-18')
-				{
-				   echo "&nbsp;";	
-				}
 				else
 				{
-					echo $out_time;
+					echo date('h:i:s a',strtotime($row->clock_out));
 				}
 				echo "</td>";
 				
@@ -220,27 +216,13 @@ foreach ($all_employees as $key => $value) {
 					$remark = "";
 				}
 				
-
-				echo "<td>&nbsp;";
-				if($row->ot_hour == 0)
-				{
-					echo "&nbsp;";
-				}
-				else
-				{
-					echo $formated_ot_hour = $this->common_model->ot_minutes_to_fraction($row->ot_hour);
-				}
-				echo "</td>";
-				
-				$total_ot_hour = $total_ot_hour + $row->ot_hour;
-
 				
 				echo "<td>&nbsp;";
-				echo $lunch_out;
+				echo date('h:i:s a',strtotime($row->lunch_out));
 				echo "</td>";
 				
 				echo "<td>&nbsp;";
-				echo $lunch_in;
+				echo  date('h:i:s a',strtotime($row->lunch_in));
 				echo "</td>";
 				
 				
@@ -300,9 +282,9 @@ foreach ($all_employees as $key => $value) {
 	echo "LATE COUNT";
 	echo "</td>";
 	
-	echo "<td width='75' style='border-bottom:#000000 1px solid;'>";
-	echo "OVERTIME";
-	echo "</td>";
+	// echo "<td width='75' style='border-bottom:#000000 1px solid;'>";
+	// echo "OVERTIME";
+	// echo "</td>";
 			
 	echo "</tr>";
 			
@@ -340,10 +322,6 @@ foreach ($all_employees as $key => $value) {
 	echo $late_count;
 	echo "</td>";
 
-	
-	echo "<td>";
-	echo 0;
-	echo "</td>";
 	
 	echo "</tr>";
 	echo "</table>";
