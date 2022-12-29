@@ -89,6 +89,7 @@ class Attendance extends MY_Controller {
 		$data['late_status']= $late_status;
     	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id, $status,$late_status);
         $data["attendance_date"] = $attendance_date;
+		dd($data);
 		
         if(is_string($data["values"]))
         {
