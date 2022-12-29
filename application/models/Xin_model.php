@@ -197,6 +197,10 @@ class Xin_model extends CI_Model {
 			$arr['attnf_active'] = 'active';
 			$arr['attnd_open'] = 'active';
 			return $arr;
+		} else if($mClass=='timesheet' && $mMethod=='move_register') {
+			$arr['move_active'] = 'active';
+			$arr['attnd_open'] = 'active';
+			return $arr;
 		} else if($mClass=='attendance' && $mMethod=='index') {
 			$arr['attnp_active'] = 'active';
 			$arr['attnd_open'] = 'active';

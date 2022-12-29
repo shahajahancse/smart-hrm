@@ -28,9 +28,8 @@ class Attendance extends MY_Controller {
 		$this->load->model('Attendance_model');
 		$this->load->model("Xin_model");
 		$this->load->model("job_card_model");
+		$this->load->model("Timesheet_model");
 
-
-		// $this->load->model("Timesheet_model");
 		// $this->load->model("Employees_model");
 		// $this->load->library('email');
 		// $this->load->model("Department_model");
@@ -143,7 +142,7 @@ class Attendance extends MY_Controller {
         }
         else
         {	
-            $this->load->view('admin/attendance/early_out/early_out',$data);
+            $this->load->view('admin/attendance/early_out',$data);
 		}
 		 
    }
@@ -167,6 +166,76 @@ class Attendance extends MY_Controller {
 	 	echo $this->load->view("admin/attendance/job_card", $data, TRUE);
 		  
     }
+
+	// movement register > attendance
+	public function move_register() {
+		
+		$session = $this->session->userdata('username');
+		// dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		
+		$data['title'] = 'move leave'.' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Movement leave';
+		$data['path_url'] = 'attendance';
+
+		if ($session['user_id'] == 7 || $session['user_id'] = 2) {
+			$data['results'] = $this->Attendance_model->get_movement_register();
+		} else {
+			$data['results'] = $this->Attendance_model->get_movement_register($session['user_id']);
+		}
+
+
+		$data['subview'] = $this->load->view("admin/attendance/move_register", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+
+     }
+
+     public function create_move_register()
+     {
+     	if (!empty($_POST)) {
+			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'0000-00-00 00:00:00';
+			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'0000-00-00 00:00:00';
+
+			$comData = array(
+	            'employee_id' => $this->input->post('user_id'),
+	            'date' 		  => $this->input->post('date'),
+	            'out_time'    => $out_time,
+	            'in_time'     => $in_time,
+	            'status' 	  => 0,
+	            'reason'	  => $this->input->post('reason'),
+	        );
+	        $this->db->insert('xin_employee_move_register',$comData);
+
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE)
+			{
+				$this->db->trans_rollback();
+		        $response = ['status' => 'success', 'message' => "failed"];
+				echo json_encode( $response );
+				exit;
+			}
+			else
+			{
+		        $response = ['status' => 'success', 'message' => "Successfully Insert Done"];
+		        echo json_encode( $response );
+				exit;
+			}
+		}
+     }
+	 
+
+
+
+
+
+
+
+
+
+
+
 
 
     public function get_employee_ajax_request()
