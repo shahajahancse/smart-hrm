@@ -157,6 +157,7 @@ class Attendance_model extends CI_Model {
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
         $this->db->where_in('xin_employees.user_id',$emp_ids);
         return $this->db->get()->result();
+        
     }
 
     public function get_shift_schedule($emp_id, $process_date = null, $shift_id = null)
