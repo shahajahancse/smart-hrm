@@ -48,31 +48,26 @@ class Job_card_model extends CI_Model{
 
 		$data['leave'] = $this->leave_per_emp($start_date, $end_date, $emp_id);
 		// echo "<pre>"; print_r($data['leave']); exit();
-			
-		
 		
 			
 		$this->db->select('
-				pr_emp_shift_log.in_time , 
-				pr_emp_shift_log.out_time, 
-				pr_emp_shift_log.ln_out_time, 
-				pr_emp_shift_log.ln_in_time, 
-				pr_emp_shift_log.shift_log_date, 
-				pr_emp_shift_log.ot_hour,
-				pr_emp_shift_log.extra_ot_hour, 
-				pr_emp_shift_log.eot_hour_in_8pm, 
-				pr_emp_shift_log.late_status,
-				pr_emp_shift_log.late_min,
-				pr_emp_shift_log.deduction_hour,
+				xin_attendance_time.clock_in , 
+				xin_attendance_time.clock_out, 
+				xin_attendance_time.lunch_in, 
+				xin_attendance_time.lunch_out, 
+				xin_attendance_time.attendance_date, 
+				xin_attendance_time.attendance_status,
+				xin_attendance_time.late_status,
 			');
-		$this->db->from('pr_emp_shift_log');
-		$this->db->where('pr_emp_shift_log.emp_id', $emp_id);
-		$this->db->where("pr_emp_shift_log.shift_log_date >=", $start_date);
-		$this->db->where("pr_emp_shift_log.shift_log_date <=", $end_date);
-		$this->db->order_by("pr_emp_shift_log.shift_log_date");				
+		$this->db->from('xin_attendance_time');
+		$this->db->where('xin_attendance_time.employee_id', $emp_id);
+		$this->db->where("xin_attendance_time.attendance_date >=", $start_date);
+		$this->db->where("xin_attendance_time.attendance_date <=", $end_date);
+		$this->db->order_by("xin_attendance_time.attendance_date");				
 		$query = $this->db->get()->result();
 
 		$data['emp_data'] = $query;
+		// dd($data);
 
 		return $data;
 	}
@@ -148,7 +143,7 @@ class Job_card_model extends CI_Model{
 	{
 		$this->db->select("start_date");
 		$this->db->where("start_date BETWEEN '$sStartDate' AND '$sEndDate'");
-		$this->db->where("user_id = '$emp_id'");
+		// $this->db->where("user_id = '$emp_id'");
 		$query = $this->db->get("xin_holidays");
 		$holiday = array();
 		foreach ($query->result() as $row)
@@ -172,8 +167,8 @@ class Job_card_model extends CI_Model{
 
 	function leave_per_emp($sStartDate, $sEndDate, $emp_id){
  		$this->db->select("*");		
- 		$this->db->where("((start_date <= '$sStartDate' AND end_date >='$sEndDate') OR (start_date <= '$sStartDate' AND end_date >= '$sStartDate') OR (start_date >= '$sStartDate' AND end_date <= '$sEndDate') OR (start_date <= '$sEndDate' AND end_date >= '$sEndDate')) AND (emp_id = '$emp_id')");
-		$query = $this->db->get("pr_leave_trans");
+ 		$this->db->where("((from_date <= '$sStartDate' AND to_date >='$sEndDate') OR (from_date <= '$sStartDate' AND to_date >= '$sStartDate') OR (from_date >= '$sStartDate' AND to_date <= '$sEndDate') OR (from_date <= '$sEndDate' AND to_date >= '$sEndDate')) AND (employee_id = '$emp_id')");
+		$query = $this->db->get("xin_leave_applications");
 		$leave = array();
 
 		foreach ($query->result() as $row){
@@ -205,9 +200,9 @@ class Job_card_model extends CI_Model{
 	function emp_shift_check($emp_id, $att_date)
 	{
 		$this->db->select("shift_id, shift_duty");
-		$this->db->from("pr_emp_shift_log");
+		$this->db->from("xin_attendance_time");
 		$this->db->where("emp_id", $emp_id);
-		$this->db->where("shift_log_date", $att_date);
+		$this->db->where("attendance_date", $att_date);
 		$query = $this->db->get();
 
 		if($query->num_rows() > 0 )
