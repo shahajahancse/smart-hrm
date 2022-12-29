@@ -81,14 +81,9 @@
       </div>
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
-        <button class="btn btn-sm btn-danger"> Button one</button>
-        <button class="btn btn-sm btn-danger"> Button two</button>
-        <button class="btn btn-sm btn-danger"> Button three</button>
-        <button class="btn btn-sm btn-danger"> Button four</button>
-        <button class="btn btn-sm btn-danger"> Button five</button>
-        <button class="btn btn-sm btn-danger"> Button six</button>
-        <button class="btn btn-sm btn-danger"> Button seven</button>
-        <button class="btn btn-sm btn-danger"> Button eight</button>
+        <!-- <button class="btn btn-sm btn-danger"> Button one</button>-->
+        <h3 class="text-center text-warning fw-bold">Under Maintaince...</h3>
+
       </div>
 
       <div class="tab-pane fade" id="continuously" role="tabpanel" aria-labelledby="continuously-tab" style="margin-top: 30px;">

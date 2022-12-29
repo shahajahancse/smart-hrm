@@ -1,23 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE >
+<html >
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>Job Card</title>
-<link rel="stylesheet" type="text/css" href="../../../../../css/SingleRow.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
 
 <body>
-<div align="center" style="height:100%; width:100%; overflow:hidden;" >
+<div class="container" align="center">
 
 <?php
 // dd($all_employees);
 
 $present_count = 0;
-$absent_count = 0;
-$leave_count = 0;
-$ot_count = 0;
-$late_count = 0;
-$wk_off_count = 0;
+$absent_count  = 0;
+$leave_count   = 0;
+$late_count    = 0;
 $day_off_count = 0;
 $holiday_count = 0;
 
@@ -26,17 +24,14 @@ $this->load->model('job_card_model');
 
 foreach ($all_employees as $key => $value) { 
 
-	echo "<div style='min-height:1000px; overflow:hidden;'>";
+	echo "<div style='min-height:700px; overflow:hidden;'>";
 	$present_count = 0;
-	$absent_count = 0;
-	$leave_count = 0;
-	$ot_count = 0;
-	$late_count = 0;
-	$wk_off_count = 0;
+	$absent_count  = 0;
+	$leave_count   = 0;
+	$late_count    = 0;
 	$day_off_count = 0;
 	$holiday_count = 0;
-	$perror_count = 0;
-	$total_ot_hour = 0;
+	$perror_count  = 0;
 
 	$this->load->view('admin/head_bangla');
 
@@ -100,7 +95,15 @@ foreach ($all_employees as $key => $value) {
 		// echo "<pre>";	print_r($emp_data); exit;
 
 	
-	echo "<table class='sal' border='1' bordercolor='#000000' cellspacing='0' cellpadding='0' style='text-align:center; font-size:13px; '> <th>Date</th><th>In Time</th><th>Out Time</th><th>Attn.Status</th><th>Lunch Out Time</th><th>Lunch IN Time</th><th>Late</th><th>Before 5PM</th><th>Remarks</th>";
+	echo "<table class='table table-bordered table-sm   table-striped sal mt-2' style='text-align:center; font-size:13px; '> 
+		  <th>Date</th>
+		  <th>In Time</th>
+		  <th>Out Time</th>
+		  <th>Lunch Out Time</th>
+		  <th>Lunch In Time</th>
+		  <th>Attendance Status</th>
+		  <th>Remarks</th>
+		  ";
 
 		foreach ($emp_data['emp_data'] as $key => $row) {
 
@@ -109,24 +112,24 @@ foreach ($all_employees as $key => $value) {
 				$leave_type = $this->job_card_model->get_leave_type($row->attendance_date,$value->employee_id);
 				$att_status_count = "Leave";
 				$att_status = $leave_type;
-				$row->clock_in = "00:00:00";
-				$row->clock_out = "00:00:00";
+				$row->clock_in = "";
+				$row->clock_out = "";
 			}
 			elseif(in_array($row->attendance_date,$emp_data['holiday']))
 			{
 				$att_status = "Holiday";
 				$att_status_count = "Holiday";
-				$row->clock_in = "00:00:00";
-				$row->clock_out = "00:00:00";
-				$row->ot_hour ="";
+				$row->clock_in = "";
+				$row->clock_out = "";
+				
 			} 
 			elseif(in_array($row->attendance_date,$emp_data['dayoff']))
 			{
 				$att_status = "Day Off";
 				$att_status_count = "Day Off";
-				$row->clock_in = "00:00:00";
-				$row->clock_out = "00:00:00";
-				$row->ot_hour ="";
+				$row->clock_in = "";
+				$row->clock_out = "";
+				
 			}
 			elseif(($row->clock_in !='' && $row->clock_out !=''))
 			{
@@ -173,9 +176,7 @@ foreach ($all_employees as $key => $value) {
 				}
 				echo "</td>";
 				
-				echo "<td style='text-transform:uppercase;'>&nbsp;";
-				echo $att_status;
-				echo "</td>";
+
 				
 				if($att_status == "P")
 				{
@@ -218,21 +219,15 @@ foreach ($all_employees as $key => $value) {
 				
 				
 				echo "<td>&nbsp;";
-				echo date('h:i:s a',strtotime($row->lunch_out));
+				echo $row->lunch_out==null || $row->lunch_out==''?"": date('h:i:s a',strtotime($row->lunch_out));
 				echo "</td>";
 				
 				echo "<td>&nbsp;";
-				echo  date('h:i:s a',strtotime($row->lunch_in));
+				echo $row->lunch_out==null || $row->lunch_out==''?"":  date('h:i:s a',strtotime($row->lunch_in));
 				echo "</td>";
-				
-				
-				echo "<td>&nbsp;";
-				// echo $formated_ot_hour = $this->common_model->ot_minutes_to_fraction($late_min);
-				echo 0;
-				echo "</td>";
-				
-				echo "<td>&nbsp;";
-				echo 0;
+
+				echo "<td style='text-transform:uppercase;'>&nbsp;";
+				echo $att_status;
 				echo "</td>";
 				
 				echo "<td>&nbsp;";
@@ -247,42 +242,39 @@ foreach ($all_employees as $key => $value) {
 	echo "</table>";
 	
 	echo "<br>";
-	echo "<table border='0' style='font-size:13px;'>";
+	echo "<table class='table table-bordered table-sm' style='font-size:13px;'>";
 	echo "<tr align='center'>";
 			
-	echo "<td width='75' style='border-bottom:#000000 1px solid;'>";
+	echo "<td>";
 	echo "PRESENT";
 	echo "</td>";
 			
-	echo "<td width='75' style='border-bottom:#000000 1px solid;'>";
+	echo "<td>";
 	echo "ABSENT";
 	echo "</td>";
 			
-	echo "<td width='75' style='border-bottom:#000000 1px solid;'>";
+	echo "<td>";
 	echo "LEAVE";
 	echo "</td>";
 			
-	echo "<td width='75' style='border-bottom:#000000 1px solid;'>";
-	echo "WORK OFF";
-	echo "</td>";
 	
-	echo "<td width='75' style='border-bottom:#000000 1px solid;'>";
+	echo "<td>";
 	echo "DAY OFF";
 	echo "</td>";
 			
-	echo "<td width='75' style='border-bottom:#000000 1px solid;'>";
+	echo "<td>";
 	echo "HOLIDAY";
 	echo "</td>";
 	
-	echo "<td width='75' style='border-bottom:#000000 1px solid;'>";
+	echo "<td>";
 	echo "PRESENT ERROR";
 	echo "</td>";
 		
-	echo "<td width='75' style='border-bottom:#000000 1px solid;'>";
+	echo "<td>";
 	echo "LATE COUNT";
 	echo "</td>";
 	
-	// echo "<td width='75' style='border-bottom:#000000 1px solid;'>";
+	// echo "<td>";
 	// echo "OVERTIME";
 	// echo "</td>";
 			
@@ -300,10 +292,6 @@ foreach ($all_employees as $key => $value) {
 	
 	echo "<td>";
 	echo $leave_count;
-	echo "</td>";
-			
-	echo "<td>";
-	echo $wk_off_count;
 	echo "</td>";
 	
 	echo "<td>";
