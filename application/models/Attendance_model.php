@@ -210,7 +210,6 @@ class Attendance_model extends CI_Model {
         if ($late_status != null && $late_status != 0 && $late_status != '') {
             $this->db->where("xin_attendance_time.late_status", 1);
         }
-
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
         $this->db->where("xin_attendance_time.attendance_status", $status);
