@@ -190,6 +190,10 @@ if($theme[0]->sub_menu_icons != ''){
         <li class="sidenav-link <?php if(!empty($arr_mod['attnp_active']))echo $arr_mod['attnp_active'];?>"> <a href="<?php echo site_url('admin/attendance/');?>"> <i class="fa <?php echo $submenuicon;?>"></i> attendance process</a> </li>
       <?php } ?> 
 
+      <?php if(in_array('1003',$role_resources_ids)) { ?>
+        <li class="sidenav-link <?php if(!empty($arr_mod['move_active']))echo $arr_mod['move_active'];?>"> <a href="<?php echo site_url('admin/attendance/move_register');?>"> <i class="fa <?php echo $submenuicon;?>"></i> movement register</a> </li>
+      <?php } ?> 
+
       <?php if(in_array('28',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['attnd_active']))echo $arr_mod['attnd_active'];?>"> <a href="<?php echo site_url('admin/timesheet/attendance');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('left_attendance');?> </a> </li>
         <?php } ?>
