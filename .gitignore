@@ -7,3 +7,4 @@ application/config/database.php
 !application/logs/.htaccess
 /vendor/
 uploads/
+attn_data/

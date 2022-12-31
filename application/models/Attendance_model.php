@@ -6,15 +6,16 @@ class Attendance_model extends CI_Model {
     public function __construct()
     {
         parent::__construct();
+        $this->load->database();
     }
 
     public function attn_process($process_date, $status, $emp_ids)
     {
-        $attn_file = $this->db->where('upload_date', $process_date)->get('xin_att_file_upload')->num_rows();
+        /*$attn_file = $this->db->where('upload_date', $process_date)->get('xin_att_file_upload')->num_rows();
         if ($attn_file == 0) {
             echo 'Please upload attendance file to process';
             exit;
-        }
+        }*/
 
         $employees = $this->get_employees($emp_ids, $status);
         foreach ($employees as $key => $row) {

@@ -27,7 +27,7 @@ class Attendance extends MY_Controller {
 		//load the model
 		$this->load->model('Attendance_model');
 		$this->load->model("Xin_model");
-		$this->load->model("job_card_model");
+		$this->load->model("Job_card_model");
 		$this->load->model("Timesheet_model");
 
 		// $this->load->model("Employees_model");
@@ -88,7 +88,6 @@ class Attendance extends MY_Controller {
 		$data['late_status']= $late_status;
     	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id, $status,$late_status);
         $data["attendance_date"] = $attendance_date;
-		dd($data);
 		
         if(is_string($data["values"]))
         {
