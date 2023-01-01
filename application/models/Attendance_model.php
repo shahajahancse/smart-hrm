@@ -17,6 +17,7 @@ class Attendance_model extends CI_Model {
             exit;
         }*/
         $off_day = $this->dayoff_check($process_date);
+        $holiday_day = $this->holiday_check($process_date);
         $employees = $this->get_employees($emp_ids, $status);
 
         foreach ($employees as $key => $row) {
@@ -95,6 +96,8 @@ class Attendance_model extends CI_Model {
             // check present status
             if ($off_day == true) {
                 $status = 'Off Day';
+            } else if ($holiday_day == true) {
+                $status = 'Holiday';
             } else  if ($in_time == '' && $out_time == '') {
                 $status = 'Absent';
             } else {
@@ -172,13 +175,25 @@ class Attendance_model extends CI_Model {
         return $date_time;
     }
 
-    function dayoff_check($sStartDate)
+    function dayoff_check($process_date)
     {     
         $off_day = array('Friday','Saturday');
         // get day  
-        $day = date("l", strtotime($sStartDate));
+        $day = date("l", strtotime($process_date));
 
         if (in_array($day, $off_day)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function holiday_check($process_date)
+    {
+        $this->db->where("start_date <=", $process_date);
+        $this->db->where("end_date >=", $process_date);
+        $query = $this->db->get("xin_holidays");
+        if($query->num_rows() > 0 ){
             return true;
         } else {
             return false;
