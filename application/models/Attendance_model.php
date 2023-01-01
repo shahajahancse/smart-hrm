@@ -6,16 +6,15 @@ class Attendance_model extends CI_Model {
     public function __construct()
     {
         parent::__construct();
-        $this->load->database();
     }
 
     public function attn_process($process_date, $status, $emp_ids)
     {
-        /*$attn_file = $this->db->where('upload_date', $process_date)->get('xin_att_file_upload')->num_rows();
-        if ($attn_file == 0) {
-            echo 'Please upload attendance file to process';
-            exit;
-        }*/
+        // $attn_file = $this->db->where('upload_date', $process_date)->get('xin_att_file_upload')->num_rows();
+        // if ($attn_file == 0) {
+        //     echo 'Please upload attendance file to process';
+        //     exit;
+        // }
 
         $employees = $this->get_employees($emp_ids, $status);
         foreach ($employees as $key => $row) {
@@ -211,6 +210,7 @@ class Attendance_model extends CI_Model {
         if ($late_status != null && $late_status != 0 && $late_status != '') {
             $this->db->where("xin_attendance_time.late_status", 1);
         }
+
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
         $this->db->where("xin_attendance_time.attendance_status", $status);
@@ -335,24 +335,6 @@ class Attendance_model extends CI_Model {
         }
     }
 
-
-    public function get_movement_register($id = null)
-    {
-        $this->db->select('
-                empm.id, em.first_name, em.last_name, empm.employee_id as emp_id, empm.date, empm.out_time, empm.in_time, empm.reason, empm.status
-            ');
-
-        $this->db->from('xin_employee_move_register as empm');
-        $this->db->from('xin_employees as em');
-
-        if ($id != null) {
-            $this->db->where('empm.employee_id',$id);
-        }
-
-        $this->db->where('em.user_id = empm.employee_id');
-        $this->db->order_by('user_id', 'DESC');
-        return $result = $this->db->get()->result();
-    }
 
 
 
