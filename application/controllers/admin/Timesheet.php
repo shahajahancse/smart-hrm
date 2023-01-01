@@ -82,7 +82,7 @@ class Timesheet extends MY_Controller {
 		$data['breadcrumbs'] = $this->lang->line('dashboard_attendance');
 		$data['path_url'] = 'attendance';
 
-		$data['files'] = $this->db->get("xin_att_file_upload")->result();
+		$data['files'] = $this->db->order_by('upload_date','DESC')->get("xin_att_file_upload")->result();
 
 		$data['subview'] = $this->load->view("admin/timesheet/attn_file_upload", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load

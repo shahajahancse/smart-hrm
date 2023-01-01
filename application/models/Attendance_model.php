@@ -16,8 +16,9 @@ class Attendance_model extends CI_Model {
             echo 'Please upload attendance file to process';
             exit;
         }*/
-
+        $off_day = $this->dayoff_check($process_date);
         $employees = $this->get_employees($emp_ids, $status);
+
         foreach ($employees as $key => $row) {
             $emp_id      = $row->user_id;
             $shift_id = $row->shift_id;
@@ -27,7 +28,9 @@ class Attendance_model extends CI_Model {
             $late_status = 0;
             $lunch_late_status = 0;
             $early_out_status = 0;
+            
 
+            $proxi_id   = $this->get_proxi($emp_id);
             $shift_schedule  = $this->get_shift_schedule($emp_id, $process_date, $shift_id);
             $in_start_time   = $shift_schedule->in_start_time;
             $out_end_time    = $shift_schedule->out_end_time;
@@ -43,35 +46,65 @@ class Attendance_model extends CI_Model {
             $late_start_time = date("Y-m-d H:i:s", strtotime($process_date.' '.$late_start_time));
 
             $lunch_time      = date("Y-m-d H:i:s", strtotime($process_date.' '.$lunch_time));
-            $lunch_start     = date('Y-m-d H:i:s', strtotime($lunch_time. ' -30 minutes'));
             $lunch_in        = date('Y-m-d H:i:s', strtotime($lunch_time. ' +'.$lunch_minute));
-            $lunch_end       = date('Y-m-d H:i:s', strtotime($lunch_time. ' +30 minutes'));
+            $lunch_end       = date('Y-m-d H:i:s', strtotime($lunch_time. ' +50 minutes'));
             $lunch_late_time = date('Y-m-d H:i:s', strtotime($lunch_in. ' +5 minutes'));
             $early_out_time  = date("Y-m-d H:i:s", strtotime($process_date.' '.$ot_start_time));
 
-
-            $proxi_id   = $this->get_proxi($emp_id);
-            $in_time    = $this->check_in_out_time($proxi_id, $start_time, $end_time, 'ASC');
-            $out_time   = $this->check_in_out_time($proxi_id, $out_start_time, $end_time, 'DESC');
-
-            $lunch_out   = $this->check_in_out_time($proxi_id, $lunch_start, $lunch_in, 'ASC');
+            // get lunch in and out time and check lunch late status
+            $lunch_out   = $this->check_in_out_time($proxi_id, $out_start_time, $lunch_in, 'ASC');
             $lunch_in    = $this->check_in_out_time($proxi_id, $lunch_time, $lunch_end, 'DESC');
+            if (strtotime($lunch_in) > strtotime($lunch_late_time)) {
+                $lunch_late_status = 1; 
+            }
+
+            // get in time
+            $in_time    = $this->check_in_out_time($proxi_id, $start_time, $end_time, 'ASC');
+            $movement_time = $this->check_movement_time($emp_id, $process_date, 'ASC');
+            if ($movement_time->num_rows() > 0) {
+                $move_out_time = $movement_time->row()->out_time;
+                if (strtotime($move_out_time) < strtotime($late_start_time)) {
+                    $in_time = $move_out_time; 
+                }
+
+                // lunch late check
+                $move_in_time = $movement_time->row()->in_time;
+                if ($move_in_time != '' && strtotime($move_in_time) > strtotime($process_date.' '.$lunch_time)) {
+                    $lunch_late_status = 0; 
+                }
+            } 
+
+
+            // get out time
+            $out_time   = $this->check_in_out_time($proxi_id, $out_start_time, $end_time, 'DESC');
+            $movement_time = $this->check_movement_time($emp_id, $process_date, 'DESC');
+            if ($movement_time->num_rows() > 0) {
+                $move_in_time = $movement_time->row()->in_time;
+                if ($move_in_time != '' && strtotime($move_in_time) > strtotime($early_out_time)) {
+                    $out_time = $move_in_time; 
+                }
+
+                 // lunch late check
+                $move_in_time = $movement_time->row()->in_time;
+                if ($move_in_time != '' && strtotime($move_in_time) > strtotime($process_date.' '.$lunch_time)) {
+                    $lunch_late_status = 0; 
+                }
+            } 
+            
 
             // check present status
-            if ($in_time == '' && $out_time == '') {
+            if ($off_day == true) {
+                $status = 'Off Day';
+            } else  if ($in_time == '' && $out_time == '') {
                 $status = 'Absent';
             } else {
                 $status = 'Present';
             }
 
+            // scheck late and early out status
             if (strtotime($in_time) > strtotime($late_start_time)) {
                 $late_status = 1; 
             }
-
-            if (strtotime($lunch_in) > strtotime($lunch_late_time)) {
-                $lunch_late_status = 1; 
-            }
-
             if (strtotime($out_time) < strtotime($early_out_time) && strtotime($out_time) != null) {
                 $early_out_status = 1; 
             }
@@ -86,13 +119,14 @@ class Attendance_model extends CI_Model {
                 'attendance_date'   => $process_date,
                 'clock_in'          => $in_time,
                 'clock_out'         => $out_time,
-                'lunch_in'          => $lunch_in,
-                'lunch_out'         => $lunch_out,
+                'lunch_in'          => $lunch_in ? $lunch_in:'',
+                'lunch_out'         => $lunch_out ? $lunch_out:'',
                 'attendance_status' => $status,
                 'late_status'       => $late_status,
                 'lunch_late_status' => $lunch_late_status,
                 'early_out_status'  => $early_out_status,
             );
+            // dd($data);
 
             $query = $this->db->where('employee_id',$emp_id)->where('attendance_date',$process_date)->get('xin_attendance_time');
             if($query->num_rows() > 0 ){
@@ -106,6 +140,21 @@ class Attendance_model extends CI_Model {
         return 'Successfully Insert Done';
     }
 
+
+
+    public function get_shift_schedule($emp_id, $process_date = null, $shift_id = null)
+    {
+        $this->db->select("office_shift_id");
+        $this->db->where("employee_id", $emp_id);
+        $this->db->where("attendance_date", $process_date);
+        $query = $this->db->get('xin_attendance_time');
+
+        if($query->num_rows() > 0 ){
+            $shift_id = $query->row()->office_shift_id;
+        } 
+
+        return $this->db->where('office_shift_id',$shift_id)->get('xin_office_shift')->row();
+    }
 
     function check_in_out_time($proxi_id, $start_time, $end_time, $order)
     {
@@ -123,6 +172,28 @@ class Attendance_model extends CI_Model {
         return $date_time;
     }
 
+    function dayoff_check($sStartDate)
+    {     
+        $off_day = array('Friday','Saturday');
+        // get day  
+        $day = date("l", strtotime($sStartDate));
+
+        if (in_array($day, $off_day)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function check_movement_time($emp_id, $process_date, $order)
+    {
+        $this->db->where('employee_id',$emp_id);
+        $this->db->where('date',$process_date);
+        $this->db->order_by("id",$order);
+        return $this->db->get('xin_employee_move_register');
+    }
+
+
     public function get_employees($emp_ids = null, $status = null)
     {
         $this->db->select('user_id, office_shift_id as shift_id');
@@ -133,6 +204,20 @@ class Attendance_model extends CI_Model {
         $this->db->where_in('user_id',$emp_ids);
         return $this->db->get('xin_employees')->result();
     }
+
+    public function get_proxi($emp_id)
+    {
+        $this->db->select('proxi_id');
+        $this->db->where('emp_id',$emp_id);
+        return $this->db->get('xin_proxi')->row()->proxi_id;
+    }
+
+
+
+
+
+
+
 
     public function get_employee_infos($emp_ids = null)
     {
@@ -160,28 +245,6 @@ class Attendance_model extends CI_Model {
         return $this->db->get()->result();
         
     }
-
-    public function get_shift_schedule($emp_id, $process_date = null, $shift_id = null)
-    {
-        $this->db->select("office_shift_id");
-        $this->db->where("employee_id", $emp_id);
-        $this->db->where("attendance_date", $process_date);
-        $query = $this->db->get('xin_attendance_time');
-
-        if($query->num_rows() > 0 ){
-            $shift_id = $query->row()->office_shift_id;
-        } 
-
-        return $this->db->where('office_shift_id',$shift_id)->get('xin_office_shift')->row();
-    }
-
-    public function get_proxi($emp_id)
-    {
-        $this->db->select('proxi_id');
-        $this->db->where('emp_id',$emp_id);
-        return $this->db->get('xin_proxi')->row()->proxi_id;
-    }
-
 
     public function daily_report($attendance_date, $emp_id, $status = null, $late_status=null)
     {   

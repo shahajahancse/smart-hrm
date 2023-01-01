@@ -195,8 +195,8 @@ class Attendance extends MY_Controller {
      public function create_move_register()
      {
      	if (!empty($_POST)) {
-			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'0000-00-00 00:00:00';
-			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'0000-00-00 00:00:00';
+			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
+			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
 
 			$comData = array(
 	            'employee_id' => $this->input->post('user_id'),
