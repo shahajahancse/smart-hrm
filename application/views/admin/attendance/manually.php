@@ -1,7 +1,7 @@
-<?php
+<!-- < ?php
 $dept_names = $this->db->select('department_name')->from('xin_departments')->get()->result();
 $desig_names = $this->db->select('designation_name')->from('xin_designations')->get()->result();
-?>
+?> -->
 
 <span class="h4" id="manu_form">Manually Entry Form</span>
 <button id="back_report" class="btn btn-sm btn-primary col-6"  style="float:right;padding: 6px 10px !important;">Back Report</button>
@@ -24,24 +24,24 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
 <div class="tab-content" id="myTabContent" style="margin-top:20px">
   <div class="tab-pane fade active in" id="insert" role="tabpanel" aria-labelledby="insert-tab">
   <form class="">
-  <div class="form-group col-lg-6">
+  <!-- <div class="form-group col-lg-6">
     <label>Department</label>
     <select class="form-control" >
         <option value="">Select Department</option>
-        <?php foreach($dept_names as $dept_name){?>
-        <option value=""><?php echo $dept_name->department_name?></option>
-        <?php }?>
+        < ?php foreach($dept_names as $dept_name){?>
+        <option value="">< ?php echo $dept_name->department_name?></option>
+        < ?php }?>
     </select>
-  </div>
-  <div class="form-group col-lg-6">
+  </div> -->
+  <!-- <div class="form-group col-lg-6">
     <label>Designation</label>
     <select class="form-control" >
         <option value="">Select Designation</option>
-        <?php foreach($desig_names as $desig_name){?>
-        <option value=""><?php echo $desig_name->designation_name?></option>
-        <?php }?>
+        < ?php foreach($desig_names as $desig_name){?>
+        <option value="">< ?php echo $desig_name->designation_name?></option>
+        < ?php }?>
     </select>
-  </div>
+  </div> -->
   <div class="form-group col-lg-6">
     <label>Time</label>
     <input type="" class="form-control timepicker clear-1" placeholder="Selcet Time HH:MM">
