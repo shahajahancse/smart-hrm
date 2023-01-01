@@ -100,6 +100,10 @@ class Attendance extends MY_Controller {
         }
     }
 
+	public function manually(){
+		$this->load->view('admin/attendance/manually');
+	}
+
 
 	public function lunch_report()
     {  

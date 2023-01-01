@@ -65,11 +65,11 @@
                 <td><?php echo $row->first_name.' '.$row->last_name?></td>
                 <td><?php echo $row->department_name?></td>
                 <td><?php echo $row->designation_name?></td>
-                <td><?php  echo $row->clock_in==""? "": date('H:i:s A',strtotime($row->clock_in))?></td>
+                <td><?php echo $row->clock_in==""? "": date('H:i:s A',strtotime($row->clock_in))?></td>
                 <td><?php echo $row->clock_out==""? "": date('h:i:s a',strtotime($row->clock_out))?></td>
-                <td><?php echo $row->attendance_status == "Present" && $row->late_status == 0  ? "P" :
+                <td><?php echo $row->attendance_status == "Present" && $row->late_status == 0 && ( $row->clock_in == "" || $row->clock_out =="") ? "P(ERROR)":
                             (  $row->attendance_status == "Absent"  ? "A" :
-                            (  $row->attendance_status == "Leave"   ? "L" : ( $row->attendance_status == "Present" && $row->late_status == 1 ? "P(Late)":"H" )));
+                            (  $row->attendance_status == "Leave"   ? "L" : ( $row->attendance_status == "Present" && $row->late_status == 1 ? "P(Late)":($row->attendance_status == "Present" && $row->late_status == 0  ? "P"  :"H") )));
                     ?>
                 </td>
             </tbody>

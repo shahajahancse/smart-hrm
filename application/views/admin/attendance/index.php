@@ -51,33 +51,35 @@
 <div id="loader"  align="center" style="margin:0 auto; width:600px; overflow:hidden; display:none; margin-top:10px;"><img src="<?php echo base_url();?>/uploads/ajax-loader.gif" /></div>
 
 <div class="box <?php echo $get_animate;?>">
-  <div class="box-header with-border">
-    <h3 class="box-title"> Employee Report
+  <div class="box-header with-border" id="report_title">
+    <h3 class="box-title" id="report"> Employee Report
       <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
    </h3>
+     <button id="manually_entry" class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;">Manually Entry</button>
   </div>
-  <div class="box-body">
-      <ul class="nav nav-tabs " id="myTab" role="tablist">
-      <li class="nav-item active">
-        <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily" aria-selected="true">Daily</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Monthly</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="continuously-tab" data-toggle="tab" href="#continuously" role="tab" aria-controls="continuously" aria-selected="false">Continuously</a>
-      </li>
+
+  <div class="box-body" id="emp_report">
+    <ul class="nav nav-tabs " id="myTab" role="tablist">
+        <li class="nav-item active">
+          <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily" aria-selected="true">Daily</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Monthly</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="continuously-tab" data-toggle="tab" href="#continuously" role="tab" aria-controls="continuously" aria-selected="false">Continuously</a>
+        </li>
     </ul>
     
     <div class="tab-content" id="myTabContent">
 
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
-          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present')"      > Present Report </button>
-          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Absent')"       > Absent Report  </button>
-          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present',1)"    > Late Report    </button>
-          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="lunch_report('Lunch in/out')" > Lunch In/Out   </button>
-          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="lunch_report('Lunch Late',1)" > Lunch Late     </button>
-          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="early_out_report('Early Out')"> Early Out      </button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present')"      > Present</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Absent')"       > Absent</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present',1)"    > Late</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="lunch_report('Lunch in/out')" > Lunch In/Out</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="lunch_report('Lunch Late',1)" > Lunch Late </button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="early_out_report('Early Out')"> Early Out  </button>
       </div>
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
@@ -87,18 +89,17 @@
       </div>
 
       <div class="tab-pane fade" id="continuously" role="tabpanel" aria-labelledby="continuously-tab" style="margin-top: 30px;">
-        <button class="btn btn-success" onclick="jobCard()">Job Card</button>
-        <button class="btn btn-sm btn-info"> Button one</button>
-        <button class="btn btn-sm btn-info"> Button two</button>
-        <button class="btn btn-sm btn-info"> Button three</button>
-        <button class="btn btn-sm btn-info"> Button four</button>
-        <button class="btn btn-sm btn-info"> Button five</button>
-        <button class="btn btn-sm btn-info"> Button six</button>
-        <button class="btn btn-sm btn-info"> Button seven</button>
-        <button class="btn btn-sm btn-info"> Button eight</button>
+        <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="jobCard()">Job Card</button>
+
       </div>
 
     </div>
+
+  </div>
+
+
+  <div  class="box-body" id="entry_form">
+
   </div>
 
 
@@ -120,6 +121,15 @@
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 <script>
   $(document).ready(function(){
+
+    // $('#manu_form').hide();
+    $("#manually_entry").click(function(){
+      $('#emp_report').hide();
+   
+      $('#report_title').hide();
+      $("#entry_form").load("<?php echo base_url()?>"+"admin/attendance/manually");
+    });
+
     // select all item or deselect all item
     $("#select_all").click(function(){
       $('input:checkbox').not(this).prop('checked', this.checked);

@@ -6,11 +6,11 @@ class Attendance_model extends CI_Model {
     public function __construct()
     {
         parent::__construct();
-        $this->load->database();
     }
 
     public function attn_process($process_date, $status, $emp_ids)
     {
+
         /*$attn_file = $this->db->where('upload_date', $process_date)->get('xin_att_file_upload')->num_rows();
         if ($attn_file == 0) {
             echo 'Please upload attendance file to process';
@@ -282,6 +282,7 @@ class Attendance_model extends CI_Model {
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
         $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
+        $this->db->order_by('xin_attendance_time.clock_in', "ASC");
         $data = $this->db->get()->result();
     
         if($data)
@@ -398,7 +399,6 @@ class Attendance_model extends CI_Model {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
-
 
     public function get_movement_register($id = null)
     {
