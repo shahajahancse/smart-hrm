@@ -32,7 +32,6 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
         <option value=""><?php echo $dept_name->department_name?></option>
         <?php }?>
     </select>
-    
   </div>
   <div class="form-group col-lg-6">
     <label>Designation</label>
@@ -45,43 +44,43 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
   </div>
   <div class="form-group col-lg-6">
     <label>Time</label>
-    <input type="" class="form-control timepicker clear-1" placeholder="00:00:00 ">
+    <input type="" class="form-control timepicker clear-1" placeholder="Selcet Time HH:MM">
   </div>
-  <button type="submit" class="btn btn-sm btn-success pull-right" style="padding: 6px 10px !important;margin-right:16px">Submit</button>
+
+  <div class="col-lg-12">
+  <button type="submit" class="btn btn-sm btn-success" style="padding: 6px 10px !important;margin-right:16px">Submit</button>
+  </div>
 </form>
 
   </div>
   <div class="tab-pane fade" id="delete" role="tabpanel" aria-labelledby="delete-tab">
-    <h3>Maintaining...</h3>
+
+    <div class="form-group col-lg-6">
+      <button type="submit" class="btn btn-sm btn-success" style="padding: 6px 10px !important;margin-right:16px;margin-top:5px">Weekend Delete</button>
+  </div>
+
+  <div class="form-group col-lg-6">
+      <button type="submit" class="btn btn-sm btn-success" style="padding: 6px 10px !important;margin-right:16px;margin-top:5px">Holiday Delete</button>
+  </div>
+
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 </div>
 
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 <script>
-    
+
     $(document).ready(function(){
+        $('.clockpicker').clockpicker();
+            var input = $('.timepicker').clockpicker({
+            placement: 'bottom',
+            align: 'left',
+            autoclose: true,
+            'default': 'now'
+        });
+
         $("#back_report").click(function(){
             $('#emp_report').show();
             $('#report_title').show();
