@@ -196,8 +196,14 @@ class Attendance extends MY_Controller {
 
      }
 
-     public function create_move_register()
+     public function create_move_register($id=null)
      {
+			if($id !=null){
+				$query=$this->db->query("select id,date,in_time,out_time,reason from xin_employee_move_register where id=".$id);		   
+				$data=$query->row()->out_time ;
+				echo json_encode( $data );
+				exit;	   
+			}
      	if (!empty($_POST)) {
 			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
 			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
