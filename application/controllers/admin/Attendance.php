@@ -172,7 +172,13 @@ class Attendance extends MY_Controller {
     }
 
 	// movement register > attendance
-	public function move_register() {
+	public function move_register($id = null) {
+
+		if($id != null){
+		    $data = $this->db->where('id',$id)->get('xin_employee_move_register')->result();
+			echo json_encode( $data );
+			exit;	   
+		}
 		
 		$session = $this->session->userdata('username');
 		// dd($session);
@@ -196,14 +202,9 @@ class Attendance extends MY_Controller {
 
      }
 
-     public function create_move_register($id=null)
+     public function create_move_register()
      {
-			if($id !=null){
-				$query=$this->db->query("select id,date,in_time,out_time,reason from xin_employee_move_register where id=".$id);		   
-				$data=$query->row()->out_time ;
-				echo json_encode( $data );
-				exit;	   
-			}
+			
      	if (!empty($_POST)) {
 			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
 			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
@@ -216,7 +217,12 @@ class Attendance extends MY_Controller {
 	            'status' 	  => 0,
 	            'reason'	  => $this->input->post('reason'),
 	        );
-	        $this->db->insert('xin_employee_move_register',$comData);
+
+	        if ($this->input->post('id') != null) {
+		        $this->db->where('id', $this->input->post('id'))->update('xin_employee_move_register',$comData);
+	        } else {
+		        $this->db->insert('xin_employee_move_register',$comData);
+	        }
 
 			$this->db->trans_complete();
 			if ($this->db->trans_status() === FALSE)
@@ -228,13 +234,23 @@ class Attendance extends MY_Controller {
 			}
 			else
 			{
-		        $response = ['status' => 'success', 'message' => "Successfully Insert Done"];
+				if ($this->input->post('id') != null) {
+			        $response = ['status' => 'success', 'message' => "Successfully Update Done"];
+				} else {
+			        $response = ['status' => 'success', 'message' => "Successfully Insert Done"];
+				}
 		        echo json_encode( $response );
 				exit;
 			}
 		}
      }
 	 
+	public function delete_move_register($id)
+	{
+		$this->db->where('id', $id);
+        $this->db->delete('xin_employee_move_register');
+	    redirect(base_url('admin/attendance/move_register'));
+	}
 
 
 
