@@ -94,13 +94,29 @@ class Attendance_model extends CI_Model {
             
 
             // check present status
+            $status = '';
+            $astatus = '';
             if ($off_day == true) {
-                $status = 'Off Day';
+                if (($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>strtotime($early_out_time))) {
+                    $astatus = 'Present';
+                    $status = 'Off Day';
+                } else {
+                    $astatus = 'Off Day';
+                    $status = 'Off Day';
+                }
             } else if ($holiday_day == true) {
-                $status = 'Holiday';
+                if (($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>strtotime($early_out_time))) {
+                    $astatus = 'Present';
+                    $status = 'Holiday';
+                } else {
+                    $astatus = 'Holiday';
+                    $status = 'Holiday';
+                }
             } else  if ($in_time == '' && $out_time == '') {
+                $astatus = 'Absent';
                 $status = 'Absent';
             } else {
+                $astatus = 'Present';
                 $status = 'Present';
             }
 
@@ -124,7 +140,8 @@ class Attendance_model extends CI_Model {
                 'clock_out'         => $out_time,
                 'lunch_in'          => $lunch_in ? $lunch_in:'',
                 'lunch_out'         => $lunch_out ? $lunch_out:'',
-                'attendance_status' => $status,
+                'attendance_status' => $astatus,
+                'status'            => $status,
                 'late_status'       => $late_status,
                 'lunch_late_status' => $lunch_late_status,
                 'early_out_status'  => $early_out_status,
