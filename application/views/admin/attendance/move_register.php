@@ -93,7 +93,7 @@
                     <a class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">
                        <button type="button" class="btn btn-info btn-sm" onclick="edit(<?php echo $row->id;?>)">Edit</button>
                     </a> 
-                    <a href="<?php echo base_url('admin/timesheet/delete_attn_file/'.$row->id); ?>" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" class="btn btn-danger btn-sm">Delete</a>
               </td>
               
             </tr>
@@ -108,7 +108,7 @@
 <script>
 
 function edit(id){
-  var url = "<?php echo base_url('admin/attendance/create_move_register/')?>" +id;
+  var url = "<?php echo base_url('admin/attendance/move_register/')?>" +id;
       $.ajax({
           url: url,
           type: 'POST',
@@ -120,14 +120,14 @@ function edit(id){
 
           success: function(response){
             var a = response[0].out_time;
-           
-            // var h = time.getHours();
-            alert(a);
-            var m = time.getMinutes();
+            var b = response[0].in_time;
+            var time = a.slice(10, 16);
+            var intime = b.slice(10, 16);
+
             $("#id").val(response[0].id);
             $("#m_date").val(response[0].date);
-            $("#m_in_time").val(response[0].in_time);
-            $("#m_out_time").val(h+":"+m);
+            $("#m_in_time").val(intime);
+            $("#m_out_time").val(time);
             $("#m_reason").val(response[0].reason);
           }
           
