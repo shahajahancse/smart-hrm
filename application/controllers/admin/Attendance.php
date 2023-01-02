@@ -252,6 +252,49 @@ class Attendance extends MY_Controller {
 	    redirect(base_url('admin/attendance/move_register'));
 	}
 
+	// manual entry system
+	public function manual_attendance()
+	{
+
+     	if (!empty($_POST)) {
+
+            $in_time = $this->input->post('in_time');
+            $out_time = $this->input->post('out_time');
+            $reason_value = $this->input->post('reason_value');
+            $value = $this->input->post('value');
+            $sql = $this->input->post('sql');
+	    	$emp_id = explode(',', trim($sql));
+
+			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
+			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
+
+			$comData = array(
+	            'employee_id' => $this->input->post('user_id'),
+	            'date' 		  => $this->input->post('date'),
+	            'out_time'    => $out_time,
+	            'in_time'     => $in_time,
+	            'status' 	  => 0,
+	            'reason'	  => $this->input->post('reason'),
+	        );
+
+
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE)
+			{
+				$this->db->trans_rollback();
+		        $response = ['status' => 'success', 'message' => "failed"];
+				echo json_encode( $response );
+				exit;
+			}
+			else
+			{
+		        $response = ['status' => 'success', 'message' => "Successfully Insert Done"];
+		        echo json_encode( $response );
+				exit;
+			}
+		}
+	}
+
 
 
 
