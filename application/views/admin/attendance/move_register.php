@@ -5,6 +5,7 @@
 <?php $session = $this->session->userdata('username');?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 
+<div id="page_load">
 <div class="box mb-4 <?php echo $get_animate;?>">
   <div id="accordion">
     <div class="box-header with-border">
@@ -59,6 +60,7 @@
         </div>
         <?php echo form_close(); ?> </div>
     </div>
+
   </div>
 </div>
 
@@ -104,6 +106,7 @@
   </div>
 </div>
 
+</div>
 
 <script>
 
@@ -170,6 +173,7 @@ function edit(id){
 
             if(response.status == 'success') {
               alert(response.message)
+              window.location.replace('<?php echo base_url('admin/attendance/move_register/')?>')
             } else {
               alert(response.message)
             }
