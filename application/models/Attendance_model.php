@@ -60,7 +60,7 @@ class Attendance_model extends CI_Model {
             }
 
             // get in time
-            $in_time    = $this->check_in_out_time($proxi_id, $start_time, $end_time, 'ASC');
+            $in_time    = $this->check_in_out_time($proxi_id, $start_time, $lunch_end, 'ASC');
             $movement_time = $this->check_movement_time($emp_id, $process_date, 'ASC');
             if ($movement_time->num_rows() > 0) {
                 $move_out_time = $movement_time->row()->out_time;

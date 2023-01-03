@@ -190,7 +190,9 @@ class Attendance extends MY_Controller {
 		$data['breadcrumbs'] = 'Movement leave';
 		$data['path_url'] = 'attendance';
 
-		if ($session['user_id'] == 7 || $session['user_id'] = 2) {
+		$id = $session['user_id'];
+		$array = array(1,2,3,4,5,6,7,8);
+		if (in_array($id,$array)) {
 			$data['results'] = $this->Attendance_model->get_movement_register();
 		} else {
 			$data['results'] = $this->Attendance_model->get_movement_register($session['user_id']);
