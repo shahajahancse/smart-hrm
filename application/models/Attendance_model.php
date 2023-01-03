@@ -8,7 +8,7 @@ class Attendance_model extends CI_Model {
         parent::__construct();
     }
 
-    public function attn_process($process_date, $status, $emp_ids)
+    public function attn_process($process_date, $emp_ids, $status = null)
     {
 
         /*$attn_file = $this->db->where('upload_date', $process_date)->get('xin_att_file_upload')->num_rows();
@@ -120,6 +120,15 @@ class Attendance_model extends CI_Model {
                 $status = 'Present';
             }
 
+            //// check present statu for meeting
+            $this->db->where('employee_id',$emp_id)->where('date',$process_date)->where('astatus',1);
+            $num_row = $this->db->get("xin_employee_move_register");
+            $num_rows = $num_row->num_rows();
+
+            if($num_rows != 0 && $num_rows != ''){
+                $astatus = 'Meeting';
+            }
+
             // scheck late and early out status
             if (strtotime($in_time) > strtotime($late_start_time)) {
                 $late_status = 1; 
@@ -226,7 +235,7 @@ class Attendance_model extends CI_Model {
     }
 
 
-    public function get_employees($emp_ids = null, $status = null)
+    public function get_employees($emp_ids, $status = null)
     {
         $this->db->select('user_id, office_shift_id as shift_id');
         if ($status != null) {
@@ -309,7 +318,7 @@ class Attendance_model extends CI_Model {
 
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
-        $this->db->where("xin_attendance_time.attendance_status", $status);
+        $this->db->where("xin_attendance_time.status", $status);
         $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');

@@ -131,11 +131,11 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
         var url = "<?php echo base_url('admin/attendance/manual_attendance'); ?>";
         e.preventDefault();
 
-        var value = document.querySelector("input[type='radio'][name=check_value]:checked").value;
+        status = document.querySelector("input[type='radio'][name=check_value]:checked").value;
+        date = document.getElementById('process_date').value;
         in_time = document.getElementById('in_time').value;
         out_time = document.getElementById('out_time').value;
-        reason_value = document.getElementById('reason_value').value;
-        reason_value = document.getElementById('reason_value').value;
+        reason = document.getElementById('reason_value').value;
 
         var emp_id = document.getElementsByName('select_emp_id[]');
         var sql = get_checked_value(emp_id);
@@ -150,7 +150,7 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
         okyes=confirm('Are you sure you want to leave?');
         if(okyes==false) return;
 
-        var data = "in_time="+in_time+"out_time="+out_time+"reason_value="+reason_value+"&sql="+sql+"&value="+value;
+        var data = "date="+date+"&in_time="+in_time+"&out_time="+out_time+"&reason="+reason+"&sql="+sql+"&status="+status;
 
 
         ajaxRequest.open("POST", url, true);

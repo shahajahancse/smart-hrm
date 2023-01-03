@@ -60,7 +60,7 @@ class Attendance extends MY_Controller {
     	$emp_id = explode(',', trim($sql));
 
     	$process_date = date("Y-m-d", strtotime($process_date));
-		$this->Attendance_model->attn_process($process_date, $status, $emp_id);
+		$this->Attendance_model->attn_process($process_date, $emp_id, $status);
 		$this->db->trans_complete();
 			
 		if ($this->db->trans_status() === FALSE)
@@ -214,11 +214,16 @@ class Attendance extends MY_Controller {
 	            'date' 		  => $this->input->post('date'),
 	            'out_time'    => $out_time,
 	            'in_time'     => $in_time,
-	            'status' 	  => 0,
 	            'reason'	  => $this->input->post('reason'),
 	        );
 
 	        if ($this->input->post('id') != null) {
+	        	$comData = array(
+		            'out_time'    => $out_time,
+		            'in_time'     => $in_time,
+		            'reason'	  => $this->input->post('reason'),
+		        );
+
 		        $this->db->where('id', $this->input->post('id'))->update('xin_employee_move_register',$comData);
 	        } else {
 		        $this->db->insert('xin_employee_move_register',$comData);
@@ -255,41 +260,122 @@ class Attendance extends MY_Controller {
 	// manual entry system
 	public function manual_attendance()
 	{
-
      	if (!empty($_POST)) {
 
+            $date = $this->input->post('date');
             $in_time = $this->input->post('in_time');
             $out_time = $this->input->post('out_time');
-            $reason_value = $this->input->post('reason_value');
-            $value = $this->input->post('value');
+            $reason = $this->input->post('reason');
+            $status = $this->input->post('status');
             $sql = $this->input->post('sql');
 	    	$emp_id = explode(',', trim($sql));
 
-			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
-			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
+			$in_time = $in_time ? $date .' '. $in_time:'';
+			$out_time = $out_time ? $date .' '. $out_time:'';
 
-			$comData = array(
-	            'employee_id' => $this->input->post('user_id'),
-	            'date' 		  => $this->input->post('date'),
-	            'out_time'    => $out_time,
-	            'in_time'     => $in_time,
-	            'status' 	  => 0,
-	            'reason'	  => $this->input->post('reason'),
-	        );
+			// dd($in_time .' = '. $out_time);
+			foreach ($emp_id as $key => $row) {
+				$proxi_id = $this->db->where('emp_id', $row)->get('xin_proxi')->row()->proxi_id;
 
+				// insert in time
+				if ($in_time != '') {
+					$this->db->where("proxi_id", $proxi_id);
+					$this->db->where("date_time", $in_time);
+					$query1 = $this->db->get("xin_att_machine");
+					$num_rows1 = $query1->num_rows();
+
+					if($num_rows1 == 0 ){
+						$data = array(
+								'proxi_id' 	=> $proxi_id,
+								'date_time'	=> $in_time,
+								'device_id' => 0,
+							);
+						$this->db->insert("xin_att_machine" , $data);
+					}
+				}
+
+				// insert out time
+				if ($out_time != '') {
+					$this->db->where("proxi_id", $proxi_id);
+					$this->db->where("date_time", $out_time);
+					$query1 = $this->db->get("xin_att_machine");
+					$num_rows1 = $query1->num_rows();
+
+					if($num_rows1 == 0 ){
+						$data = array(
+								'proxi_id' 	=> $proxi_id,
+								'date_time'	=> $out_time,
+								'device_id' => 0,
+							);
+						$this->db->insert("xin_att_machine" , $data);
+					}
+				}
+
+				// movement register insert
+				if ($status != '' && $status == 1) {
+					$this->db->where("employee_id", $row)->where("date", $date)->where("astatus", 1);
+					$query = $this->db->get("xin_employee_move_register");
+					$num_rows = $query->num_rows();
+
+					if($num_rows == 0 ){
+						$comData = array(
+				            'employee_id' => $row,
+				            'date' 		  => $date,
+				            'out_time'    => $out_time,
+				            'in_time'     => $in_time,
+				            'astatus' 	  => 1,
+				            'reason'	  => $reason,
+				        );
+						$this->db->insert("xin_employee_move_register" , $comData);
+
+					} else {
+						if ($out_time != '' && $in_time != '' && $reason != '') {
+							$comData = array(
+					            'out_time'    => $out_time,
+					            'in_time'     => $in_time,
+					            'reason'	  => $reason,
+					        );
+						} else if ($in_time != '' && $out_time != '') {
+							$comData = array(
+					            'out_time'    => $out_time,
+					            'in_time'     => $in_time,
+					        );
+						}else if ($in_time != '' && $reason != '') {
+							$comData = array(
+					            'in_time'     => $in_time,
+					            'reason'	  => $reason,
+					        );
+						} else if ($out_time != '' && $reason != '') {
+							$comData = array(
+					            'out_time'    => $out_time,
+					            'reason'	  => $reason,
+					        );
+						} else if ($in_time != '') {
+							$comData = array(
+					            'in_time'     => $in_time,
+					        );
+						}  else if ($out_time != '') {
+							$comData = array(
+					            'out_time'    => $out_time,
+					        );
+						}
+						$this->db->where('id', $query->row()->id)->update('xin_employee_move_register',$comData);
+					}
+				}
+			}
+			// attendance process
+	        $this->Attendance_model->attn_process($date, $emp_id);
 
 			$this->db->trans_complete();
 			if ($this->db->trans_status() === FALSE)
 			{
 				$this->db->trans_rollback();
-		        $response = ['status' => 'success', 'message' => "failed"];
-				echo json_encode( $response );
+				echo "failed";
 				exit;
 			}
 			else
 			{
-		        $response = ['status' => 'success', 'message' => "Successfully Insert Done"];
-		        echo json_encode( $response );
+		        echo "Successfully Insert Done";
 				exit;
 			}
 		}
