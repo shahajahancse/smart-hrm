@@ -48,7 +48,7 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
   </div>
 
   <div class="col-lg-12">
-  <button type="submit" class="btn btn-sm btn-success" style="padding: 6px 10px !important;margin-right:16px">Submit</button>
+  <button type="submit" class="btn btn-sm btn-success" id="btn" style="padding: 6px 10px !important;margin-right:16px">Submit</button>
   </div>
 </form>
 
@@ -88,5 +88,24 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
             $('#manu_form').hide();
             $("#form_manually").hide();
         });
+
+     $('#btn').on('click',function(e){
+      e.preventDefault();
+      status = document.getElementById('status').value;
+      if(status == '')
+      {
+        alert('Please select status');
+        return;
+      }
+      var checkboxes = document.getElementsByName('select_emp_id[]');
+      var sql = get_checked_value(checkboxes);
+      if(sql =='')
+      {
+        alert('Please select employee Id');
+        return ;
+      }
+      alert(sql);
+     });
+
     });
 </script>
