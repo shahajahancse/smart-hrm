@@ -109,11 +109,11 @@
 
 <div class="col-lg-4">
 <div class="box" style="height: 74vh;overflow-y: scroll;">
-<table class="table table-striped" id="fileDiv">
-  <tr>
+<table class="table table-striped table-hover" id="fileDiv">
+  <tr style="position: sticky;top: 0;z-index:1">
       <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox" name="select-all" /></th>
       <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
-      <th class=" text-center" style="background:#0177bc80;color:white">Name</th>
+      <th class=" text-center" style="background:#0177bc;color:white">Name</th>
   </tr>
 </table>
 </div>
