@@ -73,9 +73,11 @@
         <thead>
           <tr>
             <th style="width:120px;">No.</th>
+            <th style="width:120px;">Name.</th>
             <th style="width:100px;">Date</th>
-            <th style="width:100px;">Out time</th>
-            <th style="width:100px;">In time</th>
+            <th style="width:100px;">Out</th>
+            <th style="width:100px;">In</th>
+            <th style="width:100px;">Reason</th>
             <th style="width:100px;">Status</th>
             <th style="width:100px;">Action</th>
           </tr>
@@ -84,9 +86,11 @@
           <?php foreach ($results as $key => $row) { ?>
             <tr>
               <td><?php echo $key + 1; ?></td>
+              <td><?php echo $row->first_name .' '. $row->last_name; ?></td>
               <td><?php echo $row->date; ?></td>
-              <td><?php echo $row->out_time == "" ? "" : date('H:i',strtotime($row->out_time)); ?></td>
-              <td><?php echo $row->in_time  == "" ? "" : date('H:i',strtotime($row->in_time));?></td>
+              <td><?php echo $row->in_time  == "" ? "" : date('h:i A',strtotime($row->in_time));?></td>
+              <td><?php echo $row->out_time == "" ? "" : date('h:i A',strtotime($row->out_time)); ?></td>
+              <td><?php echo $row->reason; ?></td>
               <td><?php echo ($row->status == 1)? "active":"Inactive"; ?></td>
               <td>
               <!-- < ?php echo base_url().$row->id; ?> -->
