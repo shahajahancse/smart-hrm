@@ -129,7 +129,7 @@ class Attendance extends MY_Controller {
     }
 
 	
-	// Early Out Report
+	// Early Out Report 
 	public function early_out_report() {
 		$report_date = $this->input->post('attendance_date');
     	$attendance_date = date("Y-m-d", strtotime($report_date));
@@ -150,6 +150,27 @@ class Attendance extends MY_Controller {
 		}
 		 
    }
+
+   public function movement_report() {
+	$report_date = $this->input->post('attendance_date');
+	$attendance_date = date("Y-m-d", strtotime($report_date));
+	$status = $this->input->post('status');
+	$sql = $this->input->post('sql');
+	$emp_id = explode(',', trim($sql));
+	$data['status']= $status;
+	$data["values"] = $this->Attendance_model->movement_report($attendance_date, $emp_id);
+	$data["attendance_date"] = $attendance_date;
+	
+	if(is_string($data["values"]))
+	{
+		echo $data["values"];
+	}
+	else
+	{	
+		$this->load->view('admin/attendance/movement_report',$data);
+	}
+	 
+}
 
 
 

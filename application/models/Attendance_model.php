@@ -389,7 +389,7 @@ class Attendance_model extends CI_Model {
     }
 
 
-
+   
     public function early_out_report($attendance_date,$emp_id,$status)
     {
         
@@ -428,6 +428,41 @@ class Attendance_model extends CI_Model {
         $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
 
 
+        $data = $this->db->get()->result();
+        // dd($data);
+  
+        if($data)
+        {
+            return $data;
+        }
+        else
+        {
+            return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+        }
+    }
+
+    public function  movement_report($attendance_date,$emp_id)
+    {
+        
+
+        $this->db->select('
+            xin_employee_move_register.employee_id,
+            xin_employee_move_register.date,
+            xin_employee_move_register.out_time,
+            xin_employee_move_register.in_time,
+            xin_employee_move_register.reason,
+            xin_employees.employee_id,
+            xin_employees.first_name,
+            xin_employees.last_name,
+           
+        ');
+
+        $this->db->from('xin_employees');
+        $this->db->from('xin_employee_move_register');
+        $this->db->where_in("xin_employee_move_register.employee_id", $emp_id);
+        $this->db->where("xin_employee_move_register.date", $attendance_date);
+        $this->db->where("xin_employees.is_active", 1);
+        $this->db->where('xin_employee_move_register.employee_id = xin_employees.user_id');
         $data = $this->db->get()->result();
         // dd($data);
   
