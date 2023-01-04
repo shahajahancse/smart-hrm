@@ -478,15 +478,24 @@ class Timesheet extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+
 		$data['title'] = $this->lang->line('left_leave').' | '.$this->Xin_model->site_title();
-		$data['all_employees'] = $this->Xin_model->all_employees();
-		$data['get_all_companies'] = $this->Xin_model->get_companies();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		if (in_array($user_info[0]->user_role_id, array(1,2,4))) {
+			$data['all_employees'] = $this->Xin_model->get_employee();
+		} else {
+			$data['all_employees'] = $this->Xin_model->get_employee(1,$session['user_id']);
+			$data['leaves'] = leave_cal($session['user_id']);
+			// dd($data['leaves']);
+		}
+
 		$data['all_leave_types'] = $this->Timesheet_model->all_leave_types();
 		$data['breadcrumbs'] = $this->lang->line('left_leave');
 		$data['path_url'] = 'leave';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('46',$role_resources_ids)) {
 			if(!empty($session)){ 
+				// $data['subview'] = $this->load->view("admin/timesheet/leave_04_01_2023", $data, TRUE);
 				$data['subview'] = $this->load->view("admin/timesheet/leave", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {

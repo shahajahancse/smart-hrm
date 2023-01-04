@@ -1488,6 +1488,7 @@ class Xin_model extends CI_Model {
 	  	$query->where('status', $status);
 	  }
 
+	  $query->where('status !=', 0);
   	  return $query->get('xin_employees')->result(); 
 	}
 	
