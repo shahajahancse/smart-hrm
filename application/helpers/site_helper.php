@@ -84,3 +84,36 @@ if ( ! function_exists('GetDayDate'))
 }
 
 
+
+if ( ! function_exists('leave_cal'))
+{
+    // leave cal
+    function leave_cal($id)
+    {
+        $CI =& get_instance();
+        $data = array();
+        $emp_info = $CI->db->where('user_id', $id)->get('xin_employees')->row();
+
+        $join_cal_date = date("Y-m-d", strtotime("$emp_info->date_of_joining +3 month"));
+
+        if (date("Y") > date("Y", strtotime($join_cal_date))) {
+            $data['els'] = 12;
+            $data['cls'] = 4;
+        } else if (strtotime(date("Y-m-d")) < strtotime($join_cal_date)) {
+            $data['els'] = 0;
+            $data['cls'] = 0;
+        } else {
+            $effective_date = date("Y")."-12-31";
+            $d1 = new DateTime($effective_date); 
+            $d2 = new DateTime($join_cal_date);   
+            $Months = $d2->diff($d1); 
+            $month = $Months->m;
+            $data['els'] = $month;
+            $data['cls'] = floor($month / 3);
+        }
+        return $data;
+    }
+
+}
+
+

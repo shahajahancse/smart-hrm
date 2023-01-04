@@ -1471,7 +1471,7 @@ class Xin_model extends CI_Model {
 
 	// get employees by company waise
 	// shahajahan ali 
-	public function get_employee($company_id = null, $user_id = null)
+	public function get_employee($company_id = null, $user_id = null, $status = null)
 	{
 		// vardump($user_id);
 	  $query = $this->db->select("*");
@@ -1482,6 +1482,10 @@ class Xin_model extends CI_Model {
 
 	  if ($user_id != null && $user_id != 0) {
 	  	$query->where('user_id', $user_id);
+	  }
+
+	  if ($status != null && $status != 0) {
+	  	$query->where('status', $status);
 	  }
 
   	  return $query->get('xin_employees')->result(); 
