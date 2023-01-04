@@ -46,13 +46,14 @@
 
   <div class="container">
   	<div class="box-body">
-	    <div class="box-datatable table-responsive">
-	      <table class="table table-striped table-bordered">
+	    <div class="box-datatable ">
+	      <table class="table table-striped table-responsive  table-bordered table-sm">
 	        <thead>
                 <td>Sl. No.</td>
                 <td>Employee Name</td>
                 <td>Out Time</td>
                 <td>In Time</td>
+                <td>Reason</td>
 	        </thead>
             <?php $i=1; foreach($values as $row){?>
             <tbody >
@@ -62,6 +63,8 @@
                 <td>< ?php echo $row->designation_name?></td> -->
                 <td><?php  echo $row->out_time==""? "": date('h:i:s a',strtotime($row->out_time))?></td>
                 <td><?php  echo $row->in_time==""? "": date('h:i:s a',strtotime($row->in_time))?></td>
+                <td><?php echo $row->reason ?></td>
+
             </tbody>
             <?php }?>
 	      </table>
