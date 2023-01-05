@@ -93,69 +93,59 @@ if ( ! function_exists('leave_cal'))
         $CI =& get_instance();
         $data = array();
         $data['leaves'] = array();
-        $emp_info = $CI->db->where('user_id', $id)->get('xin_employees')->row();
 
-        $sql = 'SELECT SUM(qty) as qty FROM xin_leave_applications WHERE employee_id = ? and leave_type_id = ? and status = ? and current_year = ?';
-
-        $join_cal_date = date("Y-m-d", strtotime("$emp_info->date_of_joining +3 month"));
-
-        if (date("Y") > date("Y", strtotime($join_cal_date))) {
-            $binds = array($id,1,2,date("Y"));
-            $query = $CI->db->query($sql, $binds);
-            $qty = $query->row()->qty;
-            $els['id'] = 1;
-            $els['leave_name'] = "Earn leave";
-            $els['qty'] = 12 - $qty;
-            array_push($data['leaves'],$els);
-
-            $binds = array($id,2,2,date("Y"));
-            $query = $CI->db->query($sql, $binds);
-            $qty = $query->row()->qty;
-            $els['id'] = 2;
-            $els['leave_name'] = "Sick leave";
-            $els['qty'] = 4 - $qty;
-            array_push($data['leaves'],$els);
-            $data['ability'] = true;
-
-        } else if (strtotime(date("Y-m-d")) < strtotime($join_cal_date)) {
-            $els['id'] = 1;
-            $els['leave_name'] = "Earn leave";
-            $els['qty'] = 0;
-            array_push($data['leaves'],$els);
-            
-            $els['id'] = 2;
-            $els['leave_name'] = "Sick leave";
-            $els['qty'] = 0;
-            array_push($data['leaves'],$els);
-            $data['ability'] = false;
-        } else {
-            $binds = array($id,1,2,date("Y"));
-            $query = $CI->db->query($sql, $binds);
-            $qty = $query->row()->qty;
-
-            $effective_date = date("Y")."-12-31";
-            $d1 = new DateTime($effective_date); 
-            $d2 = new DateTime($join_cal_date);   
-            $Months = $d2->diff($d1); 
-            $month = $Months->m;
-
-            $els['id'] = 1;
-            $els['leave_name'] = "Earn leave";
-            $els['qty'] = $month - $qty;
-            array_push($data['leaves'],$els);
+        $els['id'] = 1;
+        $els['leave_name'] = "Earn leave";
+        $els['qty'] = get_cal_leave($id,1);
+        array_push($data['leaves'],$els);
 
 
-            $binds = array($id,2,2,date("Y"));
-            $query = $CI->db->query($sql, $binds);
-            $qty = $query->row()->qty;
+        $els['id'] = 2;
+        $els['leave_name'] = "Sick leave";
+        $els['qty'] = get_cal_leave($id,2);
+        array_push($data['leaves'],$els);
 
-            $els['id'] = 2;
-            $els['leave_name'] = "Sick leave";
-            $els['qty'] = floor($month / 3) - $qty;
-            array_push($data['leaves'],$els);
-            $data['ability'] = true;
-        }
         return $data;
+    }
+
+    if ( ! function_exists('get_cal_leave'))
+    {
+        function get_cal_leave($emp_id, $type)
+        {
+
+            $CI =& get_instance();
+            $qty = 0;
+
+            $emp_info = $CI->db->where('user_id', $emp_id)->get('xin_employees')->row();
+            $join_cal_date = date("Y-m-d", strtotime("$emp_info->date_of_joining +3 month"));
+
+            $sql = 'SELECT SUM(qty) as qty FROM xin_leave_applications WHERE employee_id = ? and leave_type_id = ? and status = ? and current_year = ?';
+            $binds = array($emp_id,$type,2,date("Y"));
+            $query = $CI->db->query($sql, $binds);
+
+            if (date("Y") > date("Y", strtotime($join_cal_date))) {
+                if ($type == 2) {
+                    $qty = (4 - $query->row()->qty);
+                } else {
+                    $qty = (12 - $query->row()->qty);
+                }
+            } else if (strtotime(date("Y-m-d")) < strtotime($join_cal_date)) {
+                $qty = 0;
+            } else {
+                $effective_date = date("Y")."-12-31";
+                $d1 = new DateTime($effective_date); 
+                $d2 = new DateTime($join_cal_date);   
+                $Months = $d2->diff($d1); 
+                $month = $Months->m;
+
+                if ($type == 2) {
+                    $qty = (floor($month / 3) - $query->row()->qty);
+                } else {
+                    $qty = ($month - $qty);
+                }
+            }
+            return $qty;
+        }
     }
 
 }

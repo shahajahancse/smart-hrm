@@ -206,7 +206,7 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="email" class="control-label"><?php echo $this->lang->line('dashboard_email');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                    <label for="email" class="control-label"><?php echo $this->lang->line('dashboard_email');?><i class="hrsale-asterisk"><!-- <span style="color:red">*</span> --></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('dashboard_email');?>" name="email" type="text" value="">
                   </div>
                 </div>

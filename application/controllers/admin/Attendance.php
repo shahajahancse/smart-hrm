@@ -75,101 +75,6 @@ class Attendance extends MY_Controller {
 
     }
 
-    // status wise daily report
-    public function daily_report()
-    {  
-		$report_date = $this->input->post('attendance_date');
-    	$attendance_date = date("Y-m-d", strtotime($report_date));
-		$status = $this->input->post('status');
-		$late_status = $this->input->post('late_status');
-		$sql = $this->input->post('sql');
-    	$emp_id = explode(',', trim($sql));
-		$data['status']= $status;
-		$data['late_status']= $late_status;
-    	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id, $status,$late_status);
-        $data["attendance_date"] = $attendance_date;
-		
-        if(is_string($data["values"]))
-        {
-            echo $data["values"];
-        }
-        else
-        {	
-			// dd($data["values"]);
-            $this->load->view('admin/attendance/daily_report',$data);
-        }
-    }
-
-	public function manually(){
-		$this->load->view('admin/attendance/manually');
-	}
-
-
-	public function lunch_report()
-    {  
-		$report_date = $this->input->post('attendance_date');
-    	$attendance_date = date("Y-m-d", strtotime($report_date));
-		$status = $this->input->post('status');
-		$late_status = $this->input->post('late_status');
-		$sql = $this->input->post('sql');
-    	$emp_id = explode(',', trim($sql));
-		$data['status']= $status;
-		// dd($late_status." ".$status);
-    	$data["values"] = $this->Attendance_model->lunch_report($attendance_date, $emp_id,$status,$late_status);
-        $data["attendance_date"] = $attendance_date;
-		
-        if(is_string($data["values"]))
-        {
-            echo $data["values"];
-        }
-        else
-        {	
-            $this->load->view('admin/attendance/lunch/lunch_in_out',$data);
-        }
-    }
-
-	
-	// Early Out Report
-	public function early_out_report() {
-		$report_date = $this->input->post('attendance_date');
-    	$attendance_date = date("Y-m-d", strtotime($report_date));
-		$status = $this->input->post('status');
-		$sql = $this->input->post('sql');
-    	$emp_id = explode(',', trim($sql));
-		$data['status']= $status;
-    	$data["values"] = $this->Attendance_model->early_out_report($attendance_date, $emp_id, $status);
-        $data["attendance_date"] = $attendance_date;
-		
-        if(is_string($data["values"]))
-        {
-            echo $data["values"];
-        }
-        else
-        {	
-            $this->load->view('admin/attendance/early_out',$data);
-		}
-		 
-   }
-
-
-
-	// job_card > timesheet
-	// Job Card Report
-	public function job_card() {
-	 	$first_date = $this->input->post('first_date');
-	 	$second_date = $this->input->post('second_date');
-    	$sql = $this->input->post('sql');
-    	$emp_id = explode(',', trim($sql));
-
-		$data['first_date'] = $first_date;
-		$data['second_date'] = $second_date;
-		$data['company_info'] = $this->Xin_model->get_company_info(1);
-		$data['all_employees'] = $this->Attendance_model->get_employee_infos($emp_id);
-		// dd($data['all_employees']);
-
-	 	echo $this->load->view("admin/attendance/job_card", $data, TRUE);
-		  
-    }
 
 	// movement register > attendance
 	public function move_register($id = null) {
@@ -202,10 +107,10 @@ class Attendance extends MY_Controller {
 		$data['subview'] = $this->load->view("admin/attendance/move_register", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 
-     }
+    }
 
-     public function create_move_register()
-     {
+    public function create_move_register()
+    {
 			
      	if (!empty($_POST)) {
 			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
@@ -250,7 +155,7 @@ class Attendance extends MY_Controller {
 				exit;
 			}
 		}
-     }
+    }
 	 
 	public function delete_move_register($id)
 	{
@@ -258,6 +163,7 @@ class Attendance extends MY_Controller {
         $this->db->delete('xin_employee_move_register');
 	    redirect(base_url('admin/attendance/move_register'));
 	}
+
 
 	// manual entry system
 	public function manual_attendance()
@@ -382,6 +288,106 @@ class Attendance extends MY_Controller {
 			}
 		}
 	}
+
+	public function manually(){
+		$this->load->view('admin/attendance/manually');
+	}
+
+	
+
+    // status wise daily report
+    public function daily_report()
+    {  
+		$report_date = $this->input->post('attendance_date');
+    	$attendance_date = date("Y-m-d", strtotime($report_date));
+		$status = $this->input->post('status');
+		$late_status = $this->input->post('late_status');
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+		$data['status']= $status;
+		$data['late_status']= $late_status;
+    	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id, $status,$late_status);
+        $data["attendance_date"] = $attendance_date;
+		
+        if(is_string($data["values"]))
+        {
+            echo $data["values"];
+        }
+        else
+        {	
+			// dd($data["values"]);
+            $this->load->view('admin/attendance/daily_report',$data);
+        }
+    }
+
+
+	public function lunch_report()
+    {  
+		$report_date = $this->input->post('attendance_date');
+    	$attendance_date = date("Y-m-d", strtotime($report_date));
+		$status = $this->input->post('status');
+		$late_status = $this->input->post('late_status');
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+		$data['status']= $status;
+		// dd($late_status." ".$status);
+    	$data["values"] = $this->Attendance_model->lunch_report($attendance_date, $emp_id,$status,$late_status);
+        $data["attendance_date"] = $attendance_date;
+		
+        if(is_string($data["values"]))
+        {
+            echo $data["values"];
+        }
+        else
+        {	
+            $this->load->view('admin/attendance/lunch/lunch_in_out',$data);
+        }
+    }
+
+	
+	// Early Out Report
+	public function early_out_report() {
+		$report_date = $this->input->post('attendance_date');
+    	$attendance_date = date("Y-m-d", strtotime($report_date));
+		$status = $this->input->post('status');
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+		$data['status']= $status;
+    	$data["values"] = $this->Attendance_model->early_out_report($attendance_date, $emp_id, $status);
+        $data["attendance_date"] = $attendance_date;
+		
+        if(is_string($data["values"]))
+        {
+            echo $data["values"];
+        }
+        else
+        {	
+            $this->load->view('admin/attendance/early_out',$data);
+		}
+		 
+   }
+
+
+
+	// job_card > timesheet
+	// Job Card Report
+	public function job_card() {
+	 	$first_date = $this->input->post('first_date');
+	 	$second_date = $this->input->post('second_date');
+    	$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+
+		$data['first_date'] = $first_date;
+		$data['second_date'] = $second_date;
+		$data['company_info'] = $this->Xin_model->get_company_info(1);
+		$data['all_employees'] = $this->Attendance_model->get_employee_infos($emp_id);
+		// dd($data['all_employees']);
+
+	 	echo $this->load->view("admin/attendance/job_card", $data, TRUE);
+		  
+    }
+
+
 
 
 

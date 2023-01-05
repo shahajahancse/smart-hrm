@@ -1789,9 +1789,12 @@ class Employees extends MY_Controller {
 			 $Return['error'] = $this->lang->line('xin_employee_error_username');
 		} else if($this->Employees_model->check_employee_username($this->input->post('username')) > 0) {
 			 $Return['error'] = $this->lang->line('xin_employee_username_already_exist');
-		} else if($this->input->post('email')==='') {
+		} 
+
+		/*else if($this->input->post('email')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_email');
-		} else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
+		}*/
+		 else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
 			$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
 		} else if($this->Employees_model->check_employee_email($this->input->post('email')) > 0) {
 			 $Return['error'] = $this->lang->line('xin_employee_email_already_exist');
@@ -1811,7 +1814,11 @@ class Employees extends MY_Controller {
 			 $Return['error'] = $this->lang->line('xin_employee_error_password_not_match');
 		} else if($this->input->post('role')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_user_role');
+		} else if($this->input->post('proxi_id')==='') {
+			 $Return['error'] = 'Proxi id is required';
 		} 
+		
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}

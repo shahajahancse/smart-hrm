@@ -56,7 +56,7 @@
                         <div class="col-md-6">
                           <div class="form-group" id="employee_ajax">
                             <label for="employees" class="control-label"> <?php echo $this->lang->line('xin_employee');?> </label>
-                            <select disabled="disabled" class="form-control" name="employee_id" id="employee_id" data-placeholder=" <?php echo $this->lang->line('xin_choose_an_employee');?>">
+                            <select class="form-control" name="employee_id" id="employee_id" data-placeholder=" <?php echo $this->lang->line('xin_choose_an_employee');?>">
                               <?php foreach ($all_employees as $key => $row) { ?>
                               <option value="<?php echo $row->user_id; ?>"> <?php echo $row->first_name .' '. $row->last_name; ?></option>
                               <?php } ?>
@@ -111,9 +111,7 @@
                 </div> -->
                 <div class="form-group">
                   <label for="summary"> <?php echo $this->lang->line('xin_leave_reason');?> </label>
-                  <textarea class="form-control" placeholder="
-    							 <?php echo $this->lang->line('xin_leave_reason');?>" name="reason" cols="30" rows="3" id="reason">
-    							</textarea>
+                  <textarea class="form-control" placeholder="<?php echo $this->lang->line('xin_leave_reason');?>" name="reason" cols="30" rows="3" id="reason"></textarea>
                 </div>
                 
                 <div class="form-actions box-footer">
