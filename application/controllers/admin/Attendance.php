@@ -75,96 +75,6 @@ class Attendance extends MY_Controller {
 
     }
 
-
-	// movement register > attendance
-	public function move_register($id = null) {
-
-		if($id != null){
-		    $data = $this->db->where('id',$id)->get('xin_employee_move_register')->result();
-			echo json_encode( $data );
-			exit;	   
-		}
-		
-		$session = $this->session->userdata('username');
-		// dd($session);
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		
-		$data['title'] = 'move leave'.' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Movement leave';
-		$data['path_url'] = 'attendance';
-
-		$id = $session['user_id'];
-		$array = array(1,2,3,4,5,6,7,8);
-		if (in_array($id,$array)) {
-			$data['results'] = $this->Attendance_model->get_movement_register();
-		} else {
-			$data['results'] = $this->Attendance_model->get_movement_register($session['user_id']);
-		}
-
-
-		$data['subview'] = $this->load->view("admin/attendance/move_register", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
-
-    }
-
-    public function create_move_register()
-    {
-			
-     	if (!empty($_POST)) {
-			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
-			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
-
-			$comData = array(
-	            'employee_id' => $this->input->post('user_id'),
-	            'date' 		  => $this->input->post('date'),
-	            'out_time'    => $out_time,
-	            'in_time'     => $in_time,
-	            'reason'	  => $this->input->post('reason'),
-	        );
-
-	        if ($this->input->post('id') != null) {
-	        	$comData = array(
-		            'out_time'    => $out_time,
-		            'in_time'     => $in_time,
-		            'reason'	  => $this->input->post('reason'),
-		        );
-
-		        $this->db->where('id', $this->input->post('id'))->update('xin_employee_move_register',$comData);
-	        } else {
-		        $this->db->insert('xin_employee_move_register',$comData);
-	        }
-
-			$this->db->trans_complete();
-			if ($this->db->trans_status() === FALSE)
-			{
-				$this->db->trans_rollback();
-		        $response = ['status' => 'success', 'message' => "failed"];
-				echo json_encode( $response );
-				exit;
-			}
-			else
-			{
-				if ($this->input->post('id') != null) {
-			        $response = ['status' => 'success', 'message' => "Successfully Update Done"];
-				} else {
-			        $response = ['status' => 'success', 'message' => "Successfully Insert Done"];
-				}
-		        echo json_encode( $response );
-				exit;
-			}
-		}
-    }
-	 
-	public function delete_move_register($id)
-	{
-		$this->db->where('id', $id);
-        $this->db->delete('xin_employee_move_register');
-	    redirect(base_url('admin/attendance/move_register'));
-	}
-
-
 	// manual entry system
 	public function manual_attendance()
 	{
@@ -293,8 +203,98 @@ class Attendance extends MY_Controller {
 		$this->load->view('admin/attendance/manually');
 	}
 
-	
+	// movement register > attendance
+	public function move_register($id = null) {
 
+		if($id != null){
+		    $data = $this->db->where('id',$id)->get('xin_employee_move_register')->result();
+			echo json_encode( $data );
+			exit;	   
+		}
+		
+		$session = $this->session->userdata('username');
+		// dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		
+		$data['title'] = 'move leave'.' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Movement leave';
+		$data['path_url'] = 'attendance';
+
+		$id = $session['user_id'];
+		$array = array(1,2,3,4,5,6,7,8);
+		if (in_array($id,$array)) {
+			$data['results'] = $this->Attendance_model->get_movement_register();
+		} else {
+			$data['results'] = $this->Attendance_model->get_movement_register($session['user_id']);
+		}
+
+
+		$data['subview'] = $this->load->view("admin/attendance/move_register", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+
+    }
+
+    public function create_move_register()
+    {
+			
+     	if (!empty($_POST)) {
+			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
+			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
+
+			$comData = array(
+	            'employee_id' => $this->input->post('user_id'),
+	            'date' 		  => $this->input->post('date'),
+	            'out_time'    => $out_time,
+	            'in_time'     => $in_time,
+	            'reason'	  => $this->input->post('reason'),
+	        );
+
+	        if ($this->input->post('id') != null) {
+	        	$comData = array(
+		            'out_time'    => $out_time,
+		            'in_time'     => $in_time,
+		            'reason'	  => $this->input->post('reason'),
+		        );
+
+		        $this->db->where('id', $this->input->post('id'))->update('xin_employee_move_register',$comData);
+	        } else {
+		        $this->db->insert('xin_employee_move_register',$comData);
+	        }
+
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === FALSE)
+			{
+				$this->db->trans_rollback();
+		        $response = ['status' => 'success', 'message' => "failed"];
+				echo json_encode( $response );
+				exit;
+			}
+			else
+			{
+				if ($this->input->post('id') != null) {
+			        $response = ['status' => 'success', 'message' => "Successfully Update Done"];
+				} else {
+			        $response = ['status' => 'success', 'message' => "Successfully Insert Done"];
+				}
+		        echo json_encode( $response );
+				exit;
+			}
+		}
+    }
+	 
+	public function delete_move_register($id)
+	{
+		$this->db->where('id', $id);
+        $this->db->delete('xin_employee_move_register');
+	    redirect(base_url('admin/attendance/move_register'));
+	}
+
+
+
+
+	// report section here
     // status wise daily report
     public function daily_report()
     {  
@@ -320,7 +320,6 @@ class Attendance extends MY_Controller {
         }
     }
 
-
 	public function lunch_report()
     {  
 		$report_date = $this->input->post('attendance_date');
@@ -343,7 +342,6 @@ class Attendance extends MY_Controller {
             $this->load->view('admin/attendance/lunch/lunch_in_out',$data);
         }
     }
-
 	
 	// Early Out Report
 	public function early_out_report() {
@@ -367,7 +365,26 @@ class Attendance extends MY_Controller {
 		 
    }
 
-
+    public function movement_report() {
+		$report_date = $this->input->post('attendance_date');
+		$attendance_date = date("Y-m-d", strtotime($report_date));
+		$status = $this->input->post('status');
+		$sql = $this->input->post('sql');
+		$emp_id = explode(',', trim($sql));
+		$data['status']= $status;
+		$data["values"] = $this->Attendance_model->movement_report($attendance_date, $emp_id);
+		$data["attendance_date"] = $attendance_date;
+		
+		if(is_string($data["values"]))
+		{
+			echo $data["values"];
+		}
+		else
+		{	
+			$this->load->view('admin/attendance/movement_report',$data);
+		}
+		 
+	}
 
 	// job_card > timesheet
 	// Job Card Report
