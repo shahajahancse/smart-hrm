@@ -94,8 +94,8 @@ class Attendance_model extends CI_Model {
             
 
             // check present status
-            $status = 'Absent';
-            $astatus = 'Absent';
+            $status = '';
+            $astatus = '';
             if ($off_day == true) {
                 if (($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>strtotime($early_out_time))) {
                     $astatus = 'Present';
@@ -248,12 +248,12 @@ class Attendance_model extends CI_Model {
 
     public function get_proxi($emp_id)
     {
-        $this->db->select('proxi_id');
-        $this->db->where('emp_id',$emp_id);
-        if ($this->db->get('xin_proxi')->num_rows() < 1) {
+        $proxi = $this->db->select('proxi_id')->where('emp_id',$emp_id)->get('xin_proxi');
+
+        if ($proxi->num_rows() < 1) {
             exit("Sorry! $emp_id  This Employee ID does not assign to Punch ID");
         } else {
-            return $this->db->get('xin_proxi')->row()->proxi_id;
+            return $proxi->row()->proxi_id;
         }
     }
 
