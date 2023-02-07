@@ -1005,8 +1005,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group">
-                              <label for="account_title"><?php echo $this->lang->line('xin_e_details_acc_title');?><i class="hrsale-asterisk">*</i></label>
-                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="account_title" type="text" value="" id="account_name">
+                              <label for="account_title"><?php echo $this->lang->line('xin_e_details_acc_title');?></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="account_title" type="text" value="Saving Account" id="account_name">
                             </div>
                           </div>
                           <div class="col-md-6">
@@ -1019,8 +1019,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group">
-                              <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?><i class="hrsale-asterisk">*</i></label>
-                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_name');?>" name="bank_name" type="text" value="" id="bank_name">
+                              <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_name');?>" name="bank_name" type="text" value="Rupali Bank Limited" id="bank_name">
                             </div>
                           </div>
                           <div class="col-md-6">
@@ -1034,7 +1034,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                           <div class="col-md-12">
                             <div class="form-group">
                               <label for="bank_branch"><?php echo $this->lang->line('xin_e_details_bank_branch');?></label>
-                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text" value="" id="bank_branch">
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text" value="Adabor Branch, Mohammadpur, Dhaka 1207" id="bank_branch">
                             </div>
                           </div>
                         </div>
