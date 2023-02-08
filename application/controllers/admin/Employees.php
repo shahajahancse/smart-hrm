@@ -3228,8 +3228,8 @@ class Employees extends MY_Controller {
 		/* Server side PHP input validation */		
 		if($this->input->post('account_title')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_acc_title');
-		} else if(preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('account_title'))!=1) {
-		// } else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('account_title'))!=1) {
+		// } else if(preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('account_title'))!=1) {
+		} else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('account_title'))!=1) {
 			$Return['error'] = $this->lang->line('xin_hr_string_error');
 		} else if($this->input->post('account_number')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_acc_number');

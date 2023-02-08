@@ -172,8 +172,8 @@ class Job_card_model extends CI_Model{
 		$leave = array();
 
 		foreach ($query->result() as $row){
-			$diff=$row->amount;
-			$start_date = $row->start_date;
+			$diff=$row->qty;
+			$start_date = $row->from_date;
 			for($i=0; $i<$diff; $i++){
 				if($sEndDate >= $start_date && $sStartDate <= $start_date)		$leave[] = $start_date;	
 					$start_date = date("Y-m-d", strtotime("+1 day", strtotime($start_date)));
@@ -243,17 +243,15 @@ class Job_card_model extends CI_Model{
 		return $query->result_array();
 	}
 
-   function get_leave_type($shift_log_date,$emp_id)
+   function get_leave_type($attendance_date,$emp_id)
    {
    		$this->db->select('leave_type');
-		$this->db->where('emp_id', $emp_id);
+		$this->db->where('employee_id', $emp_id);
 		//$this->db->where('start_date', $shift_log_date);
-		$this->db->where("start_date <=", $shift_log_date);
-		$this->db->where("end_date >=", $shift_log_date);
-		$query = $this->db->get('pr_leave_trans');
-		$row = $query->row();
-		$leave_type = $row->leave_type;
-		return $leave_type;
+		$this->db->where("from_date <=", $attendance_date);
+		$this->db->where("to_date >=", $attendance_date);
+		$query = $this->db->get('xin_leave_applications');
+		return $query->row()->leave_type; 
    }
 
 

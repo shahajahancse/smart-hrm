@@ -109,11 +109,11 @@ foreach ($all_employees as $key => $value) {
 
 			if(in_array($row->attendance_date,$emp_data['leave']))
 			{
-				$leave_type = $this->job_card_model->get_leave_type($row->attendance_date,$value->employee_id);
+				$leave_type = $this->job_card_model->get_leave_type($row->attendance_date,$value->user_id);
 				$att_status_count = "Leave";
 				$att_status = $leave_type;
-				$row->clock_in = "";
-				$row->clock_out = "";
+				// $row->clock_in = "";
+				// $row->clock_out = "";
 			}
 			elseif(in_array($row->attendance_date,$emp_data['holiday']))
 			{
