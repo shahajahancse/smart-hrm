@@ -236,7 +236,7 @@ if($theme[0]->sub_menu_icons != ''){
       <ul class="treeview-menu">
 
         <?php if(in_array('1021',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['salary_generate_active']))echo $arr_mod['salary_generate_active'];?>"> <a href="<?php echo site_url('admin/payroll/generate_salary');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Generate Salary </a> </li>
+        <li class="sidenav-link <?php if(!empty($arr_mod['salary_active']))echo $arr_mod['salary_active'];?>"> <a href="<?php echo site_url('admin/payroll/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Generate Salary </a> </li>
         <?php } ?>        
 
         <?php if(in_array('36',$role_resources_ids)) { ?>
