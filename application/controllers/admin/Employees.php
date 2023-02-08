@@ -2021,13 +2021,17 @@ class Employees extends MY_Controller {
 		/* Server side PHP input validation */		
 		if($this->input->post('first_name')==='') {
         	$Return['error'] = $this->lang->line('xin_employee_error_first_name');
-		} else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('first_name'))!=1) {
+		}/* else if(preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('first_name'))!=1) {
+		// } else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('first_name'))!=1) {
+
 			$Return['error'] = $this->lang->line('xin_hr_string_error');
-		} else if($this->input->post('last_name')==='') {
+
+		}*/ else if($this->input->post('last_name')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_last_name');
-		} else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('last_name'))!=1) {
+		} /*else if(preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('last_name'))!=1) {
+		// } else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('last_name'))!=1) {
 			$Return['error'] = $this->lang->line('xin_hr_string_error');
-		} else if($this->input->post('employee_id')==='') {
+		}*/ else if($this->input->post('employee_id')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_employee_id');
 		} else if($this->input->post('username')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_username');
@@ -2537,7 +2541,8 @@ class Employees extends MY_Controller {
        		 $Return['error'] = $this->lang->line('xin_employee_error_relation');
 		} else if($this->input->post('contact_name')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_contact_name');
-		} else if(!preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('contact_name'))) {
+		} else if(!preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('contact_name'))) {
+		// } else if(!preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('contact_name'))) {
 			$Return['error'] = $this->lang->line('xin_hr_string_error');
 		} else if($this->input->post('contact_no')!=='' && !preg_match('/^([0-9]*)$/', $this->input->post('contact_no'))) {
 			 $Return['error'] = $this->lang->line('xin_hr_numeric_error');
@@ -3026,7 +3031,8 @@ class Employees extends MY_Controller {
 			
 		if($this->input->post('name')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_sch_uni');
-		} else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('name'))!=1) {
+		} else if(preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('name'))!=1) {
+		// } else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('name'))!=1) {
 			$Return['error'] = $this->lang->line('xin_hr_string_error');
 		} else if($this->input->post('from_year')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_frm_date');
@@ -3222,7 +3228,8 @@ class Employees extends MY_Controller {
 		/* Server side PHP input validation */		
 		if($this->input->post('account_title')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_acc_title');
-		} else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('account_title'))!=1) {
+		} else if(preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('account_title'))!=1) {
+		// } else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('account_title'))!=1) {
 			$Return['error'] = $this->lang->line('xin_hr_string_error');
 		} else if($this->input->post('account_number')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_acc_number');
