@@ -509,6 +509,7 @@ class Timesheet extends MY_Controller {
 	// Validate and add info in database
 	public function add_leave() {
 
+
 		if($this->input->post('add_type')=='leave') {		
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -516,7 +517,6 @@ class Timesheet extends MY_Controller {
 			$start_date = $this->input->post('start_date');
 			$end_date = $this->input->post('end_date');
 			$remarks = $this->input->post('remarks');
-		
 			$st_date = strtotime($start_date);
 			$ed_date = strtotime($end_date);
 			// $qt_remarks = htmlspecialchars(addslashes($remarks), ENT_QUOTES);
