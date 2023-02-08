@@ -616,7 +616,6 @@ class Timesheet extends MY_Controller {
 			'employee_id' => $this->input->post('employee_id'),
 			'company_id' => $this->input->post('company_id'),
 			'leave_type_id' => $this->input->post('leave_type'),
-			'leave_type' => $this->input->post('leave_type')==1?'el':'sl',
 			'from_date' => $this->input->post('start_date'),
 			'to_date' => $this->input->post('end_date'),
 			'applied_on' => date('Y-m-d h:i:s'),
