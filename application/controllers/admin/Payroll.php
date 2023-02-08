@@ -3291,4 +3291,9 @@ class Payroll extends MY_Controller {
 		exit;
 		}
 	}
+
+
+	public function report(){
+		$this->load->view('admin/payroll/report');
+	}
 }
