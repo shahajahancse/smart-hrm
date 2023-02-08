@@ -54,7 +54,7 @@ class Payroll extends MY_Controller {
     	// dd($sql);
 
     	$process_date = date("Y-m-d", strtotime($process_date));
-		$this->Attendance_model->attn_process($process_date, $emp_id, $status);
+		$this->Salary_model->salary_process($process_date, $emp_id, $status);
 		$this->db->trans_complete();
 			
 		if ($this->db->trans_status() === FALSE)
