@@ -32,6 +32,43 @@ class Payroll extends MY_Controller {
 		$this->load->model("Overtime_request_model");
 		$this->load->helper('string');
 	}
+
+	public function index()
+    {
+		$data['title'] = $this->lang->line('left_payroll_templates').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('left_payroll_templates');
+		$data['path_url'] = 'payroll_templates';
+		// $data['all_office_shifts'] = $this->Location_model->all_office_locations();
+		$data['subview'] = $this->load->view("admin/payroll/index", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+			  
+    }
+
+    // salary process
+	public function salary_process()
+    {
+    	$process_date = $this->input->post('process_date');
+    	$status = $this->input->post('status');
+    	$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+    	// dd($sql);
+
+    	$process_date = date("Y-m-d", strtotime($process_date));
+		$this->Attendance_model->attn_process($process_date, $emp_id, $status);
+		$this->db->trans_complete();
+			
+		if ($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			echo "Process failed";
+		}
+		else
+		{
+			echo "Process completed sucessfully";
+		}
+
+    }
+
 	
 	/*Function to set JSON output*/
 	public function output($Return=array()){
