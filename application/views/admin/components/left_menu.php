@@ -229,10 +229,16 @@ if($theme[0]->sub_menu_icons != ''){
       </ul>
     </li>
     <?php } ?>
+
     <?php if($system[0]->module_payroll=='yes'){?>
     <?php  if(in_array('32',$role_resources_ids) || in_array('33',$role_resources_ids) || in_array('34',$role_resources_ids) || in_array('35',$role_resources_ids) || in_array('36',$role_resources_ids) || in_array('37',$role_resources_ids) || in_array('38',$role_resources_ids) || in_array('39',$role_resources_ids)) {?>
     <li class="<?php if(!empty($arr_mod['payrl_open']))echo $arr_mod['payrl_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> <span><?php echo $this->lang->line('left_payroll');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
       <ul class="treeview-menu">
+
+        <?php if(in_array('1021',$role_resources_ids)) { ?>
+        <li class="sidenav-link <?php if(!empty($arr_mod['salary_generate_active']))echo $arr_mod['salary_generate_active'];?>"> <a href="<?php echo site_url('admin/payroll/generate_salary');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Generate Salary </a> </li>
+        <?php } ?>        
+
         <?php if(in_array('36',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['pay_generate_active']))echo $arr_mod['pay_generate_active'];?>"> <a href="<?php echo site_url('admin/payroll/generate_payslip');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('left_generate_payslip');?> </a> </li>
         <?php } ?>
