@@ -277,7 +277,7 @@ class Timesheet extends MY_Controller {
 		$data['breadcrumbs'] = $this->lang->line('xin_monthly_timesheet');
 		$data['path_url'] = 'timesheet_monthly';		
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
-		$data['all_employees'] = $this->Xin_model->all_employees();
+		// $data['all_employees'] = $this->Xin_model->all_employees();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
 		if(in_array('10',$role_resources_ids)) {
@@ -484,17 +484,10 @@ class Timesheet extends MY_Controller {
 
 		$data['title'] = $this->lang->line('left_leave').' | '.$this->Xin_model->site_title();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		if (in_array($user_info[0]->user_role_id, array(1,2,4))) {
-			$data['all_employees'] = $this->Xin_model->get_employee();
-		} else {
-			$data['all_employees'] = $this->Xin_model->get_employee(1,$session['user_id']);
-			$data['leaves'] = leave_cal($session['user_id']);
-			// dd($data['leaves']);
-		}
-
 		$data['all_leave_types'] = $this->Timesheet_model->all_leave_types();
 		$data['breadcrumbs'] = $this->lang->line('left_leave');
 		$data['path_url'] = 'leave';
+		// dd($user_info);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('46',$role_resources_ids)) {
 			if(!empty($session)){ 
@@ -1027,7 +1020,7 @@ class Timesheet extends MY_Controller {
 	 
 	 // task list > timesheet
 	 public function task_list() {
-
+		dd('KO');
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
