@@ -14,9 +14,8 @@ class Employees_model extends CI_Model {
 	  return $this->db->get("xin_employees");
 	}
 	// get all employes > not super admin
-	public function get_employees_for_other($cid) {
-		
-		$sql = 'SELECT * FROM xin_employees WHERE user_id != ? and company_id = ?';
+	public function get_employees_for_other($cid,$user_id) {
+		$sql = 'SELECT * FROM xin_employees WHERE user_id != ? and company_id = ? and user_role_id=3 and user_id='.$user_id;
 		$binds = array(1,$cid);
 		$query = $this->db->query($sql, $binds);
 	    return $query;
@@ -80,12 +79,10 @@ class Employees_model extends CI_Model {
 	    return $query;
 	}
 	// get employes with location
-	public function get_attendance_location_employees($location_id) {
-		
-		$sql = 'SELECT * FROM xin_employees WHERE location_id = ? and is_active = ?';
-		$binds = array($location_id,1);
+	public function get_attendance_location_employees($user_id) {
+		$sql = 'SELECT * FROM xin_employees WHERE  is_active = ? and user_role_id=3 and user_id='.$user_id;
+		$binds = array(1);
 		$query = $this->db->query($sql, $binds);
-		
 	    return $query;
 	}
 	

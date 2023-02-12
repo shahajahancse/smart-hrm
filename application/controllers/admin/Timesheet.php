@@ -175,6 +175,7 @@ class Timesheet extends MY_Controller {
 		$data['path_url'] = 'attendance';
 		$data['all_office_shifts'] = $this->Location_model->all_office_locations();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
+		// dd($session);
 		if(in_array('28',$role_resources_ids)) {
 			if(!empty($session)){
 			$data['subview'] = $this->load->view("admin/timesheet/attendance_list", $data, TRUE);
@@ -295,11 +296,13 @@ class Timesheet extends MY_Controller {
 	 // monthly_attn_sheet_print > timesheet
 	 // monthly attendance sheet print
 	 public function monthly_attn_sheet_print() {
+		// dd($session['user_id']);
 
 		$month_year = $this->input->post('month_year');
 		if(isset($month_year)): $title = date('F Y', strtotime($month_year)); else: $title = date('F Y'); endif;
 
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
+		
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		// dd($data['all_employees']);
 
@@ -1677,12 +1680,16 @@ class Timesheet extends MY_Controller {
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$attendance_date = $this->input->get("attendance_date");
 		$ref_location_id = $this->input->get("location_id");
-		if($user_info[0]->user_role_id==1){
-			if($ref_location_id == 0) {
-				$employee = $this->Employees_model->get_attendance_employees();
-			} else {
-				$employee = $this->Employees_model->get_attendance_location_employees($ref_location_id);
-			}
+
+		if($user_info[0]->user_role_id==3){
+			// if($ref_location_id == 0 || $ref_location_id =='' ) {
+			
+							$employee = $this->Employees_model->get_attendance_location_employees($session['user_id']);
+					// $employee = $this->Employees_model->get_attendance_employees();
+
+			// 	} else {
+
+			// }
 		} else {
 			if(in_array('397',$role_resources_ids)) {
 				$employee = $this->Xin_model->get_company_employees($user_info[0]->company_id);

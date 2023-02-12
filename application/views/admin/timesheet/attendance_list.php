@@ -20,6 +20,7 @@
 			  'value'       => $this->Xin_model->set_date_format(date('Y-m-d')),
 			  'class'       => 'form-control',
 			);
+     
 			echo form_input($data);
 			?>
         <div class="row">
