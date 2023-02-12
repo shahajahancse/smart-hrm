@@ -1,9 +1,12 @@
 <?php /* Leave Application view */ ?> 
 <?php $session = $this->session->userdata('username');?> 
-<?php $user = $this->Xin_model->read_employee_info($session['user_id']);?> 
-<?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?> 
-<?php $get_animate = $this->Xin_model->get_content_animate();?> 
-<?php $role_resources_ids = $this->Xin_model->user_role_resource();?> 
+<?php 
+      $user = $this->Xin_model->read_employee_info($session['user_id']);
+      $user_info = $this->Xin_model->read_user_info($session['user_id']);
+      $get_animate = $this->Xin_model->get_content_animate();
+      $role_resources_ids = $this->Xin_model->user_role_resource();
+      // dd($user);
+?> 
 
 <?php if(in_array('287',$role_resources_ids)) {?> 
   <div class="box mb-4 <?php echo $get_animate;?>">

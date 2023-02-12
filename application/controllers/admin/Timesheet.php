@@ -175,6 +175,7 @@ class Timesheet extends MY_Controller {
 		$data['path_url'] = 'attendance';
 		$data['all_office_shifts'] = $this->Location_model->all_office_locations();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
+		// dd($session);
 		if(in_array('28',$role_resources_ids)) {
 			if(!empty($session)){
 			$data['subview'] = $this->load->view("admin/timesheet/attendance_list", $data, TRUE);
@@ -276,7 +277,7 @@ class Timesheet extends MY_Controller {
 		$data['breadcrumbs'] = $this->lang->line('xin_monthly_timesheet');
 		$data['path_url'] = 'timesheet_monthly';		
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
-		$data['all_employees'] = $this->Xin_model->all_employees();
+		// $data['all_employees'] = $this->Xin_model->all_employees();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
 		if(in_array('10',$role_resources_ids)) {
@@ -295,11 +296,13 @@ class Timesheet extends MY_Controller {
 	 // monthly_attn_sheet_print > timesheet
 	 // monthly attendance sheet print
 	 public function monthly_attn_sheet_print() {
+		// dd($session['user_id']);
 
 		$month_year = $this->input->post('month_year');
 		if(isset($month_year)): $title = date('F Y', strtotime($month_year)); else: $title = date('F Y'); endif;
 
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
+		
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		// dd($data['all_employees']);
 
@@ -481,17 +484,10 @@ class Timesheet extends MY_Controller {
 
 		$data['title'] = $this->lang->line('left_leave').' | '.$this->Xin_model->site_title();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		if (in_array($user_info[0]->user_role_id, array(1,2,4))) {
-			$data['all_employees'] = $this->Xin_model->get_employee();
-		} else {
-			$data['all_employees'] = $this->Xin_model->get_employee(1,$session['user_id']);
-			$data['leaves'] = leave_cal($session['user_id']);
-			// dd($data['leaves']);
-		}
-
 		$data['all_leave_types'] = $this->Timesheet_model->all_leave_types();
 		$data['breadcrumbs'] = $this->lang->line('left_leave');
 		$data['path_url'] = 'leave';
+		// dd($user_info);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('46',$role_resources_ids)) {
 			if(!empty($session)){ 
@@ -509,6 +505,7 @@ class Timesheet extends MY_Controller {
 	// Validate and add info in database
 	public function add_leave() {
 
+
 		if($this->input->post('add_type')=='leave') {		
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -516,7 +513,6 @@ class Timesheet extends MY_Controller {
 			$start_date = $this->input->post('start_date');
 			$end_date = $this->input->post('end_date');
 			$remarks = $this->input->post('remarks');
-		
 			$st_date = strtotime($start_date);
 			$ed_date = strtotime($end_date);
 			// $qt_remarks = htmlspecialchars(addslashes($remarks), ENT_QUOTES);
@@ -1024,7 +1020,7 @@ class Timesheet extends MY_Controller {
 	 
 	 // task list > timesheet
 	 public function task_list() {
-
+		dd('KO');
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
@@ -1677,12 +1673,16 @@ class Timesheet extends MY_Controller {
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$attendance_date = $this->input->get("attendance_date");
 		$ref_location_id = $this->input->get("location_id");
-		if($user_info[0]->user_role_id==1){
-			if($ref_location_id == 0) {
-				$employee = $this->Employees_model->get_attendance_employees();
-			} else {
-				$employee = $this->Employees_model->get_attendance_location_employees($ref_location_id);
-			}
+
+		if($user_info[0]->user_role_id==3){
+			// if($ref_location_id == 0 || $ref_location_id =='' ) {
+			
+							$employee = $this->Employees_model->get_attendance_location_employees($session['user_id']);
+					// $employee = $this->Employees_model->get_attendance_employees();
+
+			// 	} else {
+
+			// }
 		} else {
 			if(in_array('397',$role_resources_ids)) {
 				$employee = $this->Xin_model->get_company_employees($user_info[0]->company_id);
@@ -2943,38 +2943,31 @@ class Timesheet extends MY_Controller {
 		$data = array();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		if($this->input->get("ihr")=='true'){
-			if($this->input->get("company_id")==0 && $this->input->get("employee_id")==0 && $this->input->get("status")==0){
+
+		// if($this->input->get("ihr")=='true'){
+		// 	// dd("A");
+		// 	if($this->input->get("company_id")==0 && $this->input->get("employee_id")==0 && $this->input->get("status")==0){
+		// 		$leave = $this->Timesheet_model->get_leaves();
+		// 	} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")==0 && $this->input->get("status")==0){
+		// 		$leave = $this->Timesheet_model->filter_company_leaves($this->input->get("company_id"));
+		// 	} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")!=0 && $this->input->get("status")==0){
+		// 		$leave = $this->Timesheet_model->filter_company_employees_leaves($this->input->get("company_id"),$this->input->get("employee_id"));
+		// 	} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")!=0 && $this->input->get("status")!=0){
+		// 		$leave = $this->Timesheet_model->filter_company_employees_status_leaves($this->input->get("company_id"),$this->input->get("status"));
+		// 	} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")==0 && $this->input->get("status")!=0){
+		// 		$leave = $this->Timesheet_model->filter_company_only_status_leaves($this->input->get("company_id"),$this->input->get("status"));
+		// 	}
+		// } else {
+			if($user_info[0]->user_role_id==3){
+				$leave = $this->Timesheet_model->login_leaves($session['user_id']);
+			} 
+			
+			else {
 				$leave = $this->Timesheet_model->get_leaves();
-			} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")==0 && $this->input->get("status")==0){
-				$leave = $this->Timesheet_model->filter_company_leaves($this->input->get("company_id"));
-			} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")!=0 && $this->input->get("status")==0){
-				$leave = $this->Timesheet_model->filter_company_employees_leaves($this->input->get("company_id"),$this->input->get("employee_id"));
-			} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")!=0 && $this->input->get("status")!=0){
-				$leave = $this->Timesheet_model->filter_company_employees_status_leaves($this->input->get("company_id"),$this->input->get("status"));
-			} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")==0 && $this->input->get("status")!=0){
-				$leave = $this->Timesheet_model->filter_company_only_status_leaves($this->input->get("company_id"),$this->input->get("status"));
-			}
-		} else {
-			$view_companies_ids = explode(',',$user_info[0]->view_companies_id);
-			if($user_info[0]->user_role_id==1){
-				$leave = $this->Timesheet_model->get_leaves();
-			} else if(in_array($user_info[0]->company_id,$view_companies_ids)) {
-				$leave = $this->Timesheet_model->get_multi_company_leaves($view_companies_ids);
-			} else {
-				if(in_array('290',$role_resources_ids) || in_array('312',$role_resources_ids)) {
-					$leave = $this->Timesheet_model->get_company_leaves($user_info[0]->company_id);
-				} else {
-					//if department head
-					$department = $this->Department_model->read_department_information($user_info[0]->department_id);
-					if($department[0]->employee_id == $session['user_id']){
-						$leave = $this->Timesheet_model->get_employee_leaves_department_wise($user_info[0]->department_id);
-					} else {
-						$leave = $this->Timesheet_model->get_employee_leaves($session['user_id']);
-					}
-				}
-			}
-		}
+			} 
+			
+		// }
+		// dd($leave->result());
 		foreach($leave->result() as $r) {
 			  
 			// get start date and end date

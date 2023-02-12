@@ -90,10 +90,10 @@ class Employees_last_login extends MY_Controller {
 			}
 		} else {
 			$user_info = $this->Xin_model->read_user_info($session['user_id']);
-			if($user_info[0]->user_role_id==1) {
-				$employee = $this->Employees_model->get_employees();
+			if($user_info[0]->user_role_id==3) {
+				$employee = $this->Employees_model->get_employees_for_other($user_info[0]->company_id,$session['user_id']);
 			} else {
-				$employee = $this->Employees_model->get_employees_for_other($user_info[0]->company_id);
+				$employee = $this->Employees_model->get_employees();
 			}
 		}
 		$role_resources_ids = $this->Xin_model->user_role_resource();

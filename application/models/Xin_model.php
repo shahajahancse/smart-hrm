@@ -1473,6 +1473,12 @@ class Xin_model extends CI_Model {
   	  return $query->result();
 	}	
 
+	public function login_employees($id)
+	{
+	  $query = $this->db->query("SELECT * from xin_employees where user_role_id=3 and user_id=$id");
+  	  return $query->result();
+	}	
+
 	// get employees by company waise
 	// shahajahan ali 
 	public function get_employee($company_id = null, $user_id = null, $status = null)
