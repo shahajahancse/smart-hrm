@@ -2,6 +2,7 @@
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php
 $user_info = $this->Xin_model->read_user_info($session['user_id']);
+// dd($user_info);
 $role_resources_ids = $this->Xin_model->user_role_resource();
 $month_year = $this->input->post('month_year');
 if($user_info[0]->user_role_id==3){
@@ -113,7 +114,10 @@ $imonth = date('F', $date);
       <div class="col-md-2">
       	<div class="row" style="margin-top: 20px; margin-right: 15px;" >
       		<!-- <button class="btn btn-success" onclick="jobCard()">Job Card</button> -->
-      		<button class="btn btn-info pull-right" onclick="printDiv()">print</button>
+			<?php 
+				if($user_info[0]->user_role_id==1){?>
+					<button class="btn btn-info pull-right" onclick="printDiv()">print</button>
+		    <?php }?>
       	</div>
       </div>
     </div>

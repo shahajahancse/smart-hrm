@@ -2943,38 +2943,31 @@ class Timesheet extends MY_Controller {
 		$data = array();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		if($this->input->get("ihr")=='true'){
-			if($this->input->get("company_id")==0 && $this->input->get("employee_id")==0 && $this->input->get("status")==0){
+
+		// if($this->input->get("ihr")=='true'){
+		// 	// dd("A");
+		// 	if($this->input->get("company_id")==0 && $this->input->get("employee_id")==0 && $this->input->get("status")==0){
+		// 		$leave = $this->Timesheet_model->get_leaves();
+		// 	} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")==0 && $this->input->get("status")==0){
+		// 		$leave = $this->Timesheet_model->filter_company_leaves($this->input->get("company_id"));
+		// 	} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")!=0 && $this->input->get("status")==0){
+		// 		$leave = $this->Timesheet_model->filter_company_employees_leaves($this->input->get("company_id"),$this->input->get("employee_id"));
+		// 	} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")!=0 && $this->input->get("status")!=0){
+		// 		$leave = $this->Timesheet_model->filter_company_employees_status_leaves($this->input->get("company_id"),$this->input->get("status"));
+		// 	} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")==0 && $this->input->get("status")!=0){
+		// 		$leave = $this->Timesheet_model->filter_company_only_status_leaves($this->input->get("company_id"),$this->input->get("status"));
+		// 	}
+		// } else {
+			if($user_info[0]->user_role_id==3){
+				$leave = $this->Timesheet_model->login_leaves($session['user_id']);
+			} 
+			
+			else {
 				$leave = $this->Timesheet_model->get_leaves();
-			} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")==0 && $this->input->get("status")==0){
-				$leave = $this->Timesheet_model->filter_company_leaves($this->input->get("company_id"));
-			} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")!=0 && $this->input->get("status")==0){
-				$leave = $this->Timesheet_model->filter_company_employees_leaves($this->input->get("company_id"),$this->input->get("employee_id"));
-			} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")!=0 && $this->input->get("status")!=0){
-				$leave = $this->Timesheet_model->filter_company_employees_status_leaves($this->input->get("company_id"),$this->input->get("status"));
-			} else if($this->input->get("company_id")!=0 && $this->input->get("employee_id")==0 && $this->input->get("status")!=0){
-				$leave = $this->Timesheet_model->filter_company_only_status_leaves($this->input->get("company_id"),$this->input->get("status"));
-			}
-		} else {
-			$view_companies_ids = explode(',',$user_info[0]->view_companies_id);
-			if($user_info[0]->user_role_id==1){
-				$leave = $this->Timesheet_model->get_leaves();
-			} else if(in_array($user_info[0]->company_id,$view_companies_ids)) {
-				$leave = $this->Timesheet_model->get_multi_company_leaves($view_companies_ids);
-			} else {
-				if(in_array('290',$role_resources_ids) || in_array('312',$role_resources_ids)) {
-					$leave = $this->Timesheet_model->get_company_leaves($user_info[0]->company_id);
-				} else {
-					//if department head
-					$department = $this->Department_model->read_department_information($user_info[0]->department_id);
-					if($department[0]->employee_id == $session['user_id']){
-						$leave = $this->Timesheet_model->get_employee_leaves_department_wise($user_info[0]->department_id);
-					} else {
-						$leave = $this->Timesheet_model->get_employee_leaves($session['user_id']);
-					}
-				}
-			}
-		}
+			} 
+			
+		// }
+		// dd($leave->result());
 		foreach($leave->result() as $r) {
 			  
 			// get start date and end date
