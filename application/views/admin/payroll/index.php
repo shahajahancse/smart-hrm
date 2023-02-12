@@ -11,16 +11,47 @@
     <div class="row">
       <div class="col-md-12">
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-7">
             <div class="form-group">
-              <label for="process_date">First Date</label>
-              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>" required>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label for="process_date">Second Date</label>
-              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text">
+              <br>
+              <label>Select Month and Year :</label>
+              <select id='sal_month'>
+                <?php 
+                  $year = date('Y');
+                  for($i=1; $i<=12;$i++)
+                  {
+                    $month = date( 'F', mktime(0, 0, 0, $i, 1, $year) );
+                    $month_numeric =  date( 'm', mktime(0, 0, 0, $i, 1, $year) );
+                    $current_month = date('m');
+                    if($current_month == $month_numeric){
+                    ?>
+                      <option value="<?php echo $month_numeric;?>" selected="selected"><?php echo $month;?></option>
+                    <?php
+                    }else{
+                    ?>
+                      <option value="<?php echo $month_numeric;?>" ><?php echo $month;?></option>
+                    <?php
+                    }
+                  }
+                ?>
+              </select>
+              <select id='sal_year'>
+                <?php
+                  $current_year = date('Y');
+                  for($i = $current_year-10; $i <= $current_year + 10; $i++)
+                  {
+                    if($current_year == $i){
+                    ?>
+                      <option value="<?php echo $i;?>" selected="selected"><?php echo $i;?></option>
+                    <?php
+                    }else{
+                    ?>
+                      <option value="<?php echo $i;?>" ><?php echo $i;?></option>
+                    <?php
+                    }
+                  }
+                ?>
+              </select>
             </div>
           </div>
 
@@ -36,7 +67,7 @@
             </div>
           </div>
 
-          <div class="col-md-3">
+          <div class="col-md-2">
             <div class="form-group"> &nbsp;
               <label for="first_name">&nbsp;</label><br />
               <button class="btn btn-success" onclick="salary_process()">Process</button>

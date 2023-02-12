@@ -22,16 +22,23 @@
       ajaxRequest = new XMLHttpRequest();
 
 
-      process_date = document.getElementById('process_date').value;
-      
-      if(process_date =='')
+      sal_month = document.getElementById('sal_month').value;
+      if(sal_month =='')
       {
-        alert('Please select process date');
+        alert('Please select process Month');
         return ;
       }
 
+      sal_year = document.getElementById('sal_year').value;
+      if(sal_year =='')
+      {
+        alert('Please select process Year');
+        return ;
+      }
+
+      process_month = sal_year +'-'+ sal_month +'-'+ '01'
+
       status = document.getElementById('status').value;
-      
       if(status =='')
       {
         alert('Please select status');
@@ -51,8 +58,8 @@
       if(okyes==false) return;
 
       $("#loader").show();
-       var data = "process_date="+process_date+"&status="+status+'&sql='+sql;
-      
+       var data = "process_month="+process_month+"&status="+status+'&sql='+sql;
+  
       // console.log(data); return;
       url = base_url + "/salary_process";
       ajaxRequest.open("POST", url, true);
@@ -68,3 +75,7 @@
         }
       }
     }
+
+
+
+
