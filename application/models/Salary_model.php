@@ -160,6 +160,8 @@ class Salary_model extends CI_Model {
 
             $query = $this->db->where('salary_month',$salary_month)->where('employee_id',$emp_id)->get('xin_salary_payslips');
             if ($query->num_rows() > 0) {
+                $data['modify_salary'] = $query->row()->modify_salary;
+                
                 $this->db->where('payslip_id', $query->row()->payslip_id);
                 $this->db->update('xin_salary_payslips',$data);
             } else {
