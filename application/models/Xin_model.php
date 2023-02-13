@@ -265,11 +265,11 @@ class Xin_model extends CI_Model {
 			$arr['pay_mang_active'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
-		} else if($mClass=='attendance' && $mMethod=='index') {
+		} else if($mClass=='payroll' && $mMethod=='index') {
 			$arr['salary_active'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
-		} else if($mMethod=='generate_payslip') {
+		} else if($mClass=='payroll' && $mMethod=='generate_payslip') {
 			$arr['pay_generate_active'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
