@@ -296,7 +296,7 @@ class Salary_model extends CI_Model {
             xin_departments.department_name,
             xin_designations.designation_name,
             xin_employee_bankaccount.account_number,
-            
+
             sp.salary_month,
             sp.basic_salary,
             sp.present,
@@ -333,6 +333,7 @@ class Salary_model extends CI_Model {
         $this->db->where('sp.designation_id = xin_designations.designation_id');
         $this->db->where('sp.employee_id = xin_employee_bankaccount.employee_id');
 
+        $this->db->group_by('sp.employee_id');
         $this->db->order_by('sp.basic_salary', "DESC");
         $data = $this->db->get()->result();
     

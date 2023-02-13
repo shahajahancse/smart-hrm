@@ -51,9 +51,9 @@
 
 		<?php  $grand_total = $net_total = $modify_total = $etra_pay = $ab_deduct = $late_deduct = 0;
 		foreach ($values as $key => $row) { 
-			$grand_total =  $grand_total + $row->grand_net_salary;
+			$grand_total =  $grand_total + $row->grand_net_salary + ($row->modify_salary);
 			$net_total =    $net_total + $row->net_salary;
-			$modify_total = $modify_total + $row->modify_salary;
+			$modify_total = $modify_total + ($row->modify_salary);
 			$etra_pay =     $etra_pay + $row->extra_pay;
 			$ab_deduct =    $ab_deduct + $row->absent_deduct;
 			$late_deduct =  $late_deduct + $row->late_deduct;
@@ -82,7 +82,7 @@
 				<td class="text-center px-2"><?=$row->extra_pay?></td>
 				<td class="text-center px-2"><?=$row->modify_salary?></td>
 				<td class="text-center px-2"><?=$row->net_salary?></td>
-				<td class="text-center px-2"><?=$row->grand_net_salary?></td>
+				<td class="text-center px-2"><?=$row->grand_net_salary + ($row->modify_salary)?></td>
 			</tr>
 		<?php } ?>
 		<tr>
