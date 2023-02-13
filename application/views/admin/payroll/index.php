@@ -55,22 +55,22 @@
             </div>
           </div>
 
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="upload_file">status</label>
-              <select class="form-control" name="status" id="status">
-                <option value="">Select one</option>
-                <option value="1">regular</option>
-                <option value="2">left</option>
-                <option value="3">resign</option>
+              <br/>
+              <span ><b>Status:</b></span>
+              <select   name  ="status" id="status">
+                <option value =""  >Select one</option>
+                <option value ="1" >Regular   </option>
+                <option value ="2" >Left      </option>
+                <option value ="3" >Resign    </option>
               </select>
             </div>
           </div>
 
-          <div class="col-md-2">
-            <div class="form-group"> &nbsp;
-              <label for="first_name">&nbsp;</label><br />
-              <button class="btn btn-success" onclick="salary_process()">Process</button>
+          <div class="col-md-1">
+            <div class="form-group"> 
+              <button style="margin-top:15px;margin-left: -70px;" class="btn btn-success" onclick="salary_process()">Process</button>
             </div>
           </div>
         </div>

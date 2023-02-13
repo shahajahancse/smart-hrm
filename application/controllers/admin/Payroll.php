@@ -47,7 +47,7 @@ class Payroll extends MY_Controller {
 	public function index()
     {
 		$data['title'] = $this->lang->line('left_payroll_templates').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('left_payroll_templates');
+		$data['breadcrumbs'] = "Payroll";
 		$data['path_url'] = 'payroll_templates';
 		// $data['all_office_shifts'] = $this->Location_model->all_office_locations();
 		$data['subview'] = $this->load->view("admin/payroll/index", $data, TRUE);

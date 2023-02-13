@@ -195,12 +195,12 @@ class Timesheet extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('left_date_wise_attendance').' | '.$this->Xin_model->site_title();
-		$data['all_employees'] = $this->Xin_model->all_employees();
+		$data['title']             = $this->lang->line('left_date_wise_attendance').' | '.$this->Xin_model->site_title();
+		$data['all_employees'] 	   = $this->Xin_model->all_employees();
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
-		$data['breadcrumbs'] = $this->lang->line('left_date_wise_attendance');
-		$data['path_url'] = 'date_wise_attendance';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['breadcrumbs'] 	   = $this->lang->line('left_date_wise_attendance');
+		$data['path_url']          = 'date_wise_attendance';
+		$role_resources_ids        = $this->Xin_model->user_role_resource();
 		if(in_array('29',$role_resources_ids)) {
 			if(!empty($session)){ 
 			$data['subview'] = $this->load->view("admin/timesheet/date_wise", $data, TRUE);
