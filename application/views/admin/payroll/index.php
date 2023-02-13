@@ -83,7 +83,7 @@
 
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border" id="report_title">
-    <h3 class="box-title" id="report"> Employee Report
+    <h3 class="box-title" id="report"> Salary Report
       <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
    </h3>
      <button id="manually_entry" class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;">Manually Entry</button>
@@ -92,10 +92,10 @@
   <div class="box-body" id="emp_report">
     <ul class="nav nav-tabs " id="myTab" role="tablist">
         <li class="nav-item active">
-          <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily" aria-selected="true">Daily</a>
+          <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily" aria-selected="true">Reort</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Monthly</a>
+          <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Excel</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" id="continuously-tab" data-toggle="tab" href="#continuously" role="tab" aria-controls="continuously" aria-selected="false">Continuously</a>
@@ -115,8 +115,7 @@
       </div>
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
-        <!-- <button class="btn btn-sm btn-danger"> Button one</button>-->
-        <h3 class="text-center text-warning fw-bold">Under Maintaince...</h3>
+        <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="salary_sheet_excel()">Salary Sheet</button>
 
       </div>
 
