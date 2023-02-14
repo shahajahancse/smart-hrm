@@ -281,54 +281,60 @@ class Salary_model extends CI_Model {
         return $this->db->get()->result();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    public function daily_report($attendance_date, $emp_id, $status = null, $late_status=null)
-    {   
-
+    // salary sheet excel report
+    public function salary_sheet_excel($salary_month, $emp_id, $status = null)
+    {
         $this->db->select('
-            xin_employees.user_id as emp_id,
-            xin_employees.employee_id,
-            xin_employees.first_name,
-            xin_employees.last_name,
-            xin_employees.department_id,
-            xin_employees.designation_id,
-            xin_employees.date_of_joining,
+            sp.payslip_id,
+            sp.employee_id as emp_id,
+            sp.department_id,
+            sp.designation_id,
+            em.employee_id,
+            em.first_name,
+            em.last_name,
+            em.date_of_joining,
             xin_departments.department_name,
             xin_designations.designation_name,
-            xin_attendance_time.attendance_date,
-            xin_attendance_time.clock_in,
-            xin_attendance_time.clock_out,
-            xin_attendance_time.attendance_status,
-            xin_attendance_time.late_status,
+            xin_employee_bankaccount.account_number,
+
+            sp.salary_month,
+            sp.basic_salary,
+            sp.present,
+            sp.extra_p,
+            sp.absent,
+            sp.holiday,
+            sp.weekend,
+            sp.earn_leave,
+            sp.sick_leave,
+            sp.late_count,
+            sp.late_deduct,
+            sp.absent_deduct,
+            sp.other_payment as extra_pay,
+            sp.modify_salary,
+            sp.net_salary,
+            sp.grand_net_salary,
         ');
 
-        $this->db->from('xin_employees');
+        $this->db->from('xin_salary_payslips as sp');
+        $this->db->from('xin_employees as  em');
         $this->db->from('xin_departments');
         $this->db->from('xin_designations');
-        $this->db->from('xin_attendance_time');
+        $this->db->from('xin_employee_bankaccount');
 
-        if ($late_status != null && $late_status != 0 && $late_status != '') {
-            $this->db->where("xin_attendance_time.late_status", 1);
-        }
+        /*if ($status != null && $status != 0 && $status != '') {
+            $this->db->where("xin_attendance_time.status", $status);
+        }*/
 
-        $this->db->where("xin_employees.is_active", 1);
-        $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
-        $this->db->where("xin_attendance_time.status", $status);
-        $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
-        $this->db->where('xin_employees.department_id = xin_departments.department_id');
-        $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
-        $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
-        $this->db->order_by('xin_attendance_time.clock_in', "ASC");
+        $this->db->where("sp.salary_month", $salary_month);
+        $this->db->where_in("sp.employee_id", $emp_id);
+
+        $this->db->where('sp.employee_id = em.user_id');
+        $this->db->where('sp.department_id = xin_departments.department_id');
+        $this->db->where('sp.designation_id = xin_designations.designation_id');
+        $this->db->where('sp.employee_id = xin_employee_bankaccount.employee_id');
+
+        $this->db->group_by('sp.employee_id');
+        $this->db->order_by('sp.basic_salary', "DESC");
         $data = $this->db->get()->result();
     
         if($data)
@@ -343,161 +349,9 @@ class Salary_model extends CI_Model {
 
 
 
-    public function lunch_report($attendance_date,$emp_id,$status=null,$late_status=null)
-    {
-        // dd($late_status);
-
-        $this->db->select('
-            xin_employees.user_id as emp_id,
-            xin_employees.employee_id,
-            xin_employees.first_name,
-            xin_employees.last_name,
-            xin_employees.department_id,
-            xin_employees.designation_id,
-            xin_employees.date_of_joining,
-            xin_departments.department_name,
-            xin_designations.designation_name,
-            xin_attendance_time.attendance_date,
-            xin_attendance_time.attendance_status,
-            xin_attendance_time.lunch_in,
-            xin_attendance_time.lunch_out,
-            xin_attendance_time.lunch_late_status,
-        ');
 
 
-        $this->db->from('xin_employees');
-        $this->db->from('xin_departments');
-        $this->db->from('xin_designations');
-        $this->db->from('xin_attendance_time');
-        $this->db->where("xin_employees.is_active", 1);
-        if ($late_status != null && $late_status != 0 && $late_status != '') {
-            $this->db->where("xin_attendance_time.lunch_late_status", 1);
-        }
-        $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
-  
-        $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
-        $this->db->where("xin_attendance_time.attendance_status", "Present");
-        $this->db->where('xin_employees.department_id = xin_departments.department_id');
-        $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
-        $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
-        $data = $this->db->get()->result();
-        // dd($data);
-  
-        if($data)
-        {
-            return $data;
-        }
-        else
-        {
-            return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
-        }
-    }
 
-
-   
-    public function early_out_report($attendance_date,$emp_id,$status)
-    {
-        
-        // dd($out_time);
-        // $out_time= $this->db->select('ot_start_time')->from('xin_office_shift')->get()->result();
-        $this->db->select('
-            xin_employees.user_id as emp_id,
-            xin_employees.employee_id,
-            xin_employees.first_name,
-            xin_employees.last_name,
-            xin_employees.department_id,
-            xin_employees.designation_id,
-            xin_employees.date_of_joining,
-            xin_departments.department_name,
-            xin_designations.designation_name,
-            xin_attendance_time.attendance_date,
-            xin_attendance_time.attendance_status,
-            xin_attendance_time.clock_in,
-            xin_attendance_time.clock_out,
-            xin_attendance_time.early_out_status,
-        ');
-
-       
-
-        $this->db->from('xin_employees');
-        $this->db->from('xin_departments');
-        $this->db->from('xin_designations');
-        $this->db->from('xin_attendance_time');
-        $this->db->where("xin_employees.is_active", 1);
-        $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
-        $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
-        $this->db->where_in("xin_attendance_time.early_out_status", 1);
-        $this->db->where("xin_attendance_time.attendance_status", "Present");
-        $this->db->where('xin_employees.department_id = xin_departments.department_id');
-        $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
-        $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
-
-
-        $data = $this->db->get()->result();
-        // dd($data);
-  
-        if($data)
-        {
-            return $data;
-        }
-        else
-        {
-            return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
-        }
-    }
-
-    public function  movement_report($attendance_date,$emp_id)
-    {
-        
-
-        $this->db->select('
-            xin_employee_move_register.employee_id,
-            xin_employee_move_register.date,
-            xin_employee_move_register.out_time,
-            xin_employee_move_register.in_time,
-            xin_employee_move_register.reason,
-            xin_employees.employee_id,
-            xin_employees.first_name,
-            xin_employees.last_name,
-           
-        ');
-
-        $this->db->from('xin_employees');
-        $this->db->from('xin_employee_move_register');
-        $this->db->where_in("xin_employee_move_register.employee_id", $emp_id);
-        $this->db->where("xin_employee_move_register.date", $attendance_date);
-        $this->db->where("xin_employees.is_active", 1);
-        $this->db->where('xin_employee_move_register.employee_id = xin_employees.user_id');
-        $data = $this->db->get()->result();
-        // dd($data);
-  
-        if($data)
-        {
-            return $data;
-        }
-        else
-        {
-            return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
-        }
-    }
-
-    public function get_movement_register($id = null)
-    {
-        $this->db->select('
-                empm.id, em.first_name, em.last_name, empm.employee_id as emp_id, empm.date, empm.out_time, empm.in_time, empm.reason, empm.status
-            ');
-
-        $this->db->from('xin_employee_move_register as empm');
-        $this->db->from('xin_employees as em');
-
-        if ($id != null) {
-            $this->db->where('empm.employee_id',$id);
-        }
-
-        $this->db->where('em.user_id = empm.employee_id');
-        $this->db->order_by('user_id', 'DESC');
-        return $result = $this->db->get()->result();
-    }
 
 
 
