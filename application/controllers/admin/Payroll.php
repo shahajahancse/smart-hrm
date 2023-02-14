@@ -80,6 +80,33 @@ class Payroll extends MY_Controller {
 
     }
 
+	public function modify_salary(){
+
+		if(isset($_GET['id'])){
+			$id= $_GET['id'];
+			$data = $this->Xin_model->modify_salary($id);
+			echo json_encode($data);
+		}
+
+	}
+	public function save_modify_salary(){
+
+		
+
+		if(isset($_POST['btn'])){
+
+			$id= $_POST['id'];
+			$basic_salary= $_POST['basic_salary'];
+			$modify_salary= $_POST['modify_salary'];
+
+			dd($basic_salary);
+
+			// $data = $this->Xin_model->update_salary($id,$basic_salary,$modify_salary);
+			// echo json_encode($data);
+		}
+
+	}
+
 	
 	 // payroll templates
 	 public function templates()
