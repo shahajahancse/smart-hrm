@@ -38,7 +38,8 @@
                             <label for="employees" class="control-label"> <?php echo $this->lang->line('xin_employee');?> </label>
                             <select class="form-control" name="employee_id" id="employee_id" data-plugin="select_hrm" data-placeholder=" <?php echo $this->lang->line('xin_choose_an_employee');?>">
                               <option value=""></option>
-                              <?php foreach ($all_employees as $key => $row) { $employee_id = $row->user_id; ?>
+                              <?php  $all_employees = $this->Xin_model->get_employee(1, null, 1);
+                              foreach ($all_employees as $key => $row) { $employee_id = $row->user_id; ?>
                               <option value="<?php echo $employee_id; ?>"> <?php echo $row->first_name .' '. $row->last_name; ?></option>
                               <?php } ?>
                             </select>
@@ -60,8 +61,9 @@
                           <div class="form-group" id="employee_ajax">
                             <label for="employees" class="control-label"> <?php echo $this->lang->line('xin_employee');?> </label>
                             <select class="form-control" name="employee_id" id="employee_id" data-placeholder=" <?php echo $this->lang->line('xin_choose_an_employee');?>">
-                              <?php foreach ($all_employees as $key => $row) { ?>
-                              <option value="<?php echo $row->user_id; ?>"> <?php echo $row->first_name .' '. $row->last_name; ?></option>
+                              <?php  $all_employees = $this->Xin_model->get_employee(1, $session['user_id'], 1);
+                              foreach ($all_employees as $key => $row) { ?>
+                                <option value="<?php echo $row->user_id; ?>"> <?php echo $row->first_name .' '. $row->last_name; ?></option>
                               <?php } ?>
                             </select>
                           </div>
@@ -72,6 +74,7 @@
                             <select class="form-control" id="leave_type" name="leave_type" data-plugin="select_hrm" data-placeholder="
                               <?php echo $this->lang->line('xin_leave_type');?>">
                               <option value=""></option> 
+                                <?php $leaves = leave_cal($session['user_id']);?>
                                 <?php foreach($leaves['leaves'] as $key => $row) {  ?>
                                   <option value="<?php echo $row['id'];?>"><?php echo $row['leave_name'] .' ('.$row['qty'].' '.$this->lang->line('xin_remaining').')';?></option>
                                 <?php } ?> 
