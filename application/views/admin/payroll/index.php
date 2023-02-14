@@ -59,11 +59,11 @@
             <div class="form-group">
               <br/>
               <span ><b>Status:</b></span>
-              <select   name  ="status" id="status">
-                <option value =""  >Select one</option>
-                <option value ="1" >Regular   </option>
-                <option value ="2" >Left      </option>
-                <option value ="3" >Resign    </option>
+              <select   name="status" id="status">
+                <option value="">Select one</option>
+                <option value="1">regular</option>
+                <option value="2">left</option>
+                <option value="3">resign</option>
               </select>
             </div>
           </div>
@@ -79,6 +79,64 @@
   </div>
 </div>
 
+
+
+<!-- modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modify Employee Salary</h4>
+      </div>
+      <?php
+         $sql= 'SELECT user_id,first_name,last_name FROM xin_employees';
+         $employees = $this->db->query($sql);
+         $emps=$employees->result();
+      ?>
+      <div class="modal-body">
+      <form>
+         
+          <div class="col-md-6">
+            <label>Employee Name</label>
+            <select name="emp_id" class="form-control" id="emp_name">
+              <option value="">Select Employee Name</option>
+              <?php foreach($emps as $emp){?>
+              <option value="<?php echo $emp->user_id?>"><?php echo $emp->first_name.' '.$emp->last_name?></option>
+              <?php }?>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label >Gross Salary</label>
+            <input type="text" readonly class="form-control" id="gross_salary" placeholder="00.00">
+          </div>
+          <div class="col-md-2">
+            <label >Deduct Salary</label>
+            <input type="number" readonly class="form-control" id="deduct_salary" placeholder="00.00">
+          </div>
+
+          <div class="col-md-2">
+            <label >Modify Salary</label>
+            <input type="number"  class="form-control" id="modify_salary" placeholder="00.00">
+          </div>
+          
+          <!-- <input type="text" id="gross_salary" name="gross_salary" value="test" readonly="readonly"> -->
+          <div class="modal-footer" >
+            <button type="button" name="btn" onclick="save_modify_salary()" class="btn btn-sm btn-success" style="margin-top:10px !important">Save</button>
+            <button type="button" class="btn btn-sm btn-danger" style="margin-top:10px !important" data-dismiss="modal">Close</button>
+          </div>
+          </form>
+      </div>
+
+    </div>
+    
+  </div>
+</div>
+<!-- modal close -->
+
+
 <div id="loader"  align="center" style="margin:0 auto; width:600px; overflow:hidden; display:none; margin-top:10px;"><img src="<?php echo base_url();?>/uploads/ajax-loader.gif" /></div>
 
 <div class="box <?php echo $get_animate;?>">
@@ -86,7 +144,7 @@
     <h3 class="box-title" id="report"> Salary Report
       <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
    </h3>
-     <button id="manually_entry" class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;">Manually Entry</button>
+     <button id="modify_salary" class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;" data-toggle="modal" data-target=".bd-example-modal-lg">Modify Salary</button>
   </div>
 
   <div class="box-body" id="emp_report">
@@ -103,6 +161,7 @@
     </ul>
     
     <div class="tab-content" id="myTabContent">
+      
 
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
           <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="daily_report('Present')">Present</button>
@@ -149,6 +208,9 @@
 </table>
 </div>
 </div>
+
+
+
 <!-- <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script> -->
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/salary.js"></script>
 <script>
@@ -191,6 +253,101 @@
       });
     });
   });
+
+  $("#emp_name option").filter(function() {
+        return $id= $(this).val() == $("#gross_salary").val();
+    }).attr('selected', true);
+
+    $("#emp_name").on("change", function() {
+      
+        id= $(this).find("option:selected").attr("value");
+
+        if($('option value') == ''){
+          $("#gross_salary")[0].reset();
+          $("#reduct_salary")[0].reset();
+          return false;
+        }
+        
+        var url = "<?php echo base_url('admin/payroll/modify_salary/'); ?>"+id;
+        $.ajax({
+        url: url,
+        type: 'GET',
+        data: {"id":id},
+        contentType: "application/json",
+        dataType: "json",
+        success: function(response){
+
+          $("#gross_salary").val(response[0].basic_salary);
+          $("#deduct_salary").val(response[0].late_deduct);
+
+          $('.modal').on('hidden.bs.modal', function(){
+              $(this).find('form')[0].reset();
+          });
+         
+        }
+      });
+   
+
+ });
+
+function save_modify_salary(){
+  let basic_salary= $("#gross_salary").val();
+  let deduct_salary= $("#deduct_salary").val();
+  let modify_salary= $("#modify_salary").val();
+  let id= $("#emp_name").val();  
+  var url = "<?php echo base_url('admin/payroll/save_modify_salary'); ?>";
+        $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+                id:id,
+                gross_salary:basic_salary,
+                deduct_salary:deduct_salary,
+                modify_salary:modify_salary
+              },
+        success: function(response){
+          // alert("Success: " +response);
+        }
+      });
+  
+ } 
+
+
+//  function save_modify_salary()
+//   {
+//     // alert(csrf_token); return;
+//     var ajaxRequest;  // The variable that makes Ajax possible!
+//     ajaxRequest = new XMLHttpRequest();
+
+
+//     basic_salary = document.getElementById('gross_salary').value;
+//     deduct_salary = document.getElementById('deduct_salary').value;
+//     modify_salary = document.getElementById('modify_salary').value;
+//     id = document.getElementById('emp_name').value;
+
+//     var data = "basic_salary="+basic_salary+"&deduct_salary="+deduct_salary+'&modify_salary='+modify_salary+"&id="+id;
+
+//     // console.log(data); return;
+//     url = "< ?php echo base_url('admin/payroll/save_modify_salary'); ?>";
+//     ajaxRequest.open("POST", url, true);
+//     ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+//     ajaxRequest.send(data);
+//     return;
+
+//     ajaxRequest.onreadystatechange = function(){
+//       if(ajaxRequest.readyState == 4){
+//         // console.log(ajaxRequest);
+//         var resp = ajaxRequest.responseText;
+//         a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1200,height=800');
+//         a.document.write(resp);
+//       }
+//     }
+//   }
+
+
+
+
+
 </script>
 
 

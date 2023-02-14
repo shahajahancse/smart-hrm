@@ -72,8 +72,6 @@
     {
       var ajaxRequest;  // The variable that makes Ajax possible!
       ajaxRequest = new XMLHttpRequest();
-
-      
       attendance_date = document.getElementById('process_date').value;
       if(process_date =='')
       {

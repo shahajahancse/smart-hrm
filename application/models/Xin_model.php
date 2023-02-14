@@ -21,6 +21,27 @@ class Xin_model extends CI_Model {
 			return null;
 		}
 	}
+
+	public function modify_salary($id=NULL){
+		if($id==''){
+			return "null";
+		}
+		$sql = 'SELECT basic_salary,late_deduct FROM xin_salary_payslips WHERE employee_id ='.$id;
+		$query = $this->db->query($sql);
+		// dd($query->result());
+		return $query->result();
+	}
+	public function update_salary($id=NULL,$basic_salary,$modify_salary){
+
+		return $id;exit;
+		if($id==''){
+			return "null";
+		}
+		$sql = 'UPDATE xin_salary_payslips SET basic_salary="$basic_salary",modify_salary="$modify_salary"  WHERE employee_id ='.$id;
+		$query = $this->db->query($sql);
+		// dd($query->result());
+		return $query->result();
+	}
 		
 	// is logged in to system
 	public function is_logged_in($id)
