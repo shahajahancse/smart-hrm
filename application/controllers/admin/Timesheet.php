@@ -1020,7 +1020,7 @@ class Timesheet extends MY_Controller {
 	 
 	 // task list > timesheet
 	 public function task_list() {
-		dd('KO');
+	
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 

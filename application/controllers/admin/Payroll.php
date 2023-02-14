@@ -90,19 +90,9 @@ class Payroll extends MY_Controller {
 
 	}
 	public function save_modify_salary(){
-
 		
-
-		if(isset($_POST['btn'])){
-
-			// $id= $_POST['id'];
-			// $basic_salary= $_POST['basic_salary'];
-			// $modify_salary= $_POST['modify_salary'];
-
-			// $data = $this->Xin_model->update_salary($id,$basic_salary,$modify_salary);
-			// echo json_encode($data);
-		}
-
+			$data = $this->Xin_model->update_salary($_POST['id'],$_POST['modify_salary']);
+			echo json_encode($data);
 	}
 
 	
