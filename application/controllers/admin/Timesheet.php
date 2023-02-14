@@ -1020,7 +1020,6 @@ class Timesheet extends MY_Controller {
 	 
 	 // task list > timesheet
 	 public function task_list() {
-		dd('KO');
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
@@ -1111,7 +1110,7 @@ class Timesheet extends MY_Controller {
 				}
 				
 				$progress_bar = '<p class="m-b-0-5">'.$this->lang->line('xin_completed').' <span class="pull-xs-right">'.$r->task_progress.'%</span>
-	<div class="progress progress-xs"><div class="progress-bar '.$progress_class.' progress-bar-striped" role="progressbar" aria-valuenow="'.$r->task_progress.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$r->task_progress.'%"></div></div></p>';
+				<div class="progress progress-xs"><div class="progress-bar '.$progress_class.' progress-bar-striped" role="progressbar" aria-valuenow="'.$r->task_progress.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$r->task_progress.'%"></div></div></p>';
 				// task status			
 				if($r->task_status == 0) {
 					$status = '<span class="label label-warning">'.$this->lang->line('xin_not_started').'</span>';
@@ -2959,10 +2958,9 @@ class Timesheet extends MY_Controller {
 		// 	}
 		// } else {
 			if($user_info[0]->user_role_id==3){
-				$leave = $this->Timesheet_model->login_leaves($session['user_id']);
-			} 
-			
-			else {
+				// $leave = $this->Timesheet_model->login_leaves();
+				$leave = $this->Timesheet_model->get_leaves($session['user_id']);
+			} else {
 				$leave = $this->Timesheet_model->get_leaves();
 			} 
 			

@@ -200,14 +200,12 @@
 	}
 	
 	// get all leaves
-	public function get_leaves() {
-	  return $this->db->get("xin_leave_applications");
+	public function get_leaves($id = null) {
+		if ($id != null) {
+			$this->db->where("employee_id", $id);
+		}
+		return $this->db->order_by("leave_id", "DESC")->get("xin_leave_applications");
 	}
-	public function login_leaves($id) {
-		$sql = 'SELECT * FROM xin_leave_applications WHERE employee_id="$id"';
-		$query = $this->db->query($sql);
-		return $query;
-	  }
 	// get company leaves
 	public function filter_company_leaves($company_id) {
 	
