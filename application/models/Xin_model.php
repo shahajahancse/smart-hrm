@@ -31,16 +31,12 @@ class Xin_model extends CI_Model {
 		// dd($query->result());
 		return $query->result();
 	}
-	public function update_salary($id=NULL,$basic_salary,$modify_salary){
+	public function update_salary($id=NULL,$modify_salary){
 
-		return $id;exit;
 		if($id==''){
 			return "null";
 		}
-		$sql = 'UPDATE xin_salary_payslips SET basic_salary="$basic_salary",modify_salary="$modify_salary"  WHERE employee_id ='.$id;
-		$query = $this->db->query($sql);
-		// dd($query->result());
-		return $query->result();
+		$this->db->query("UPDATE `xin_salary_payslips` SET `modify_salary`=".$modify_salary." WHERE `employee_id`=".$id);	
 	}
 		
 	// is logged in to system

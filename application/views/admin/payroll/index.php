@@ -82,7 +82,7 @@
 
 
 <!-- modal -->
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="my_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-lg">
   
     <!-- Modal content-->
@@ -122,7 +122,6 @@
             <input type="number"  class="form-control" id="modify_salary" placeholder="00.00">
           </div>
           
-          <!-- <input type="text" id="gross_salary" name="gross_salary" value="test" readonly="readonly"> -->
           <div class="modal-footer" >
             <button type="button" name="btn" onclick="save_modify_salary()" class="btn btn-sm btn-success" style="margin-top:10px !important">Save</button>
             <button type="button" class="btn btn-sm btn-danger" style="margin-top:10px !important" data-dismiss="modal">Close</button>
@@ -282,6 +281,8 @@
 
           $('.modal').on('hidden.bs.modal', function(){
               $(this).find('form')[0].reset();
+              $("#modify_salary").attr('style', 'border: 1px solid #ccd6e6 !important');
+              $("#emp_name").attr('style', 'border: 1px solid #ccd6e6 !important');
           });
          
         }
@@ -295,7 +296,20 @@ function save_modify_salary(){
   let deduct_salary= $("#deduct_salary").val();
   let modify_salary= $("#modify_salary").val();
   let id= $("#emp_name").val();  
-  var url = "<?php echo base_url('admin/payroll/save_modify_salary'); ?>";
+
+  if(id==''){
+        alert('Please Select Employee Name ');
+        $("#emp_name").attr('style', 'border: 1px solid red !important');
+        return false;
+  }
+  if(modify_salary ==''){
+        alert('Please Set Modify Salary');
+        $("#modify_salary").focus();
+        $("#modify_salary").attr('style', 'border: 1px solid red !important');
+        return false;
+  }
+  
+  var url = "<?php echo base_url('admin/payroll/save_modify_salary');?>";
         $.ajax({
         url: url,
         type: 'POST',
@@ -306,48 +320,29 @@ function save_modify_salary(){
                 modify_salary:modify_salary
               },
         success: function(response){
-          // alert("Success: " +response);
+					alert('Salary Modify Successfully !');
+          $('#my_modal').modal('hide');  
         }
       });
   
  } 
+ $(document).ready(function(){
+    $("#modify_salary").on('input',function(){
+      $("#modify_salary").attr('style', 'border: 1px solid #ccd6e6 !important');
+      if($("#modify_salary").val() ==''){
+        $("#modify_salary").attr('style', 'border: 1px solid red !important');
+        return false;
+      }
+    });
 
-
-//  function save_modify_salary()
-//   {
-//     // alert(csrf_token); return;
-//     var ajaxRequest;  // The variable that makes Ajax possible!
-//     ajaxRequest = new XMLHttpRequest();
-
-
-//     basic_salary = document.getElementById('gross_salary').value;
-//     deduct_salary = document.getElementById('deduct_salary').value;
-//     modify_salary = document.getElementById('modify_salary').value;
-//     id = document.getElementById('emp_name').value;
-
-//     var data = "basic_salary="+basic_salary+"&deduct_salary="+deduct_salary+'&modify_salary='+modify_salary+"&id="+id;
-
-//     // console.log(data); return;
-//     url = "< ?php echo base_url('admin/payroll/save_modify_salary'); ?>";
-//     ajaxRequest.open("POST", url, true);
-//     ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-//     ajaxRequest.send(data);
-//     return;
-
-//     ajaxRequest.onreadystatechange = function(){
-//       if(ajaxRequest.readyState == 4){
-//         // console.log(ajaxRequest);
-//         var resp = ajaxRequest.responseText;
-//         a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1200,height=800');
-//         a.document.write(resp);
-//       }
-//     }
-//   }
-
-
-
-
-
+    $("#emp_name").on('input',function(){
+      $("#emp_name").attr('style', 'border: 1px solid #ccd6e6 !important');
+      if($("#emp_name").val() ==''){
+        $("#emp_name").attr('style', 'border: 1px solid red !important');
+        return false;
+      }
+    });
+});
 </script>
 
 

@@ -91,19 +91,36 @@ class Payroll extends MY_Controller {
 	}
 	public function save_modify_salary(){
 
-		
-
-		if(isset($_POST['btn'])){
-
-			// $id= $_POST['id'];
-			// $basic_salary= $_POST['basic_salary'];
-			// $modify_salary= $_POST['modify_salary'];
-
-			// $data = $this->Xin_model->update_salary($id,$basic_salary,$modify_salary);
-			// echo json_encode($data);
-		}
-
+			$data = $this->Xin_model->update_salary($_POST['id'],$_POST['modify_salary']);
+			echo json_encode($data);
 	}
+
+	// generate salary excel sheet 
+    public function salary_sheet_excel()
+    {  
+    	$excel = $this->input->post('excel');
+    	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
+		$status = $this->input->post('status');
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+    	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id, $status);
+		$data['status']= $status;
+        $data["salary_month"] = $salary_month;
+        $data["emp_id"] = $emp_id;
+		// dd($data["values"]);
+        if(is_string($data["values"]))
+        {
+            echo $data["values"];
+        }
+        else
+        {	
+        	if ($excel == 1) {
+	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
+        	} else {
+	            $this->load->view('admin/payroll/salary_sheet_excel',$data);
+        	}
+        }
+    }
 
 	
 	 // payroll templates
