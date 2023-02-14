@@ -86,6 +86,7 @@ class Auth extends MY_Controller
 				$result = $this->Login_model->read_user_information($username);
 				$session_data = array(
 				'user_id' => $result[0]->user_id,
+				'role_id' => $result[0]->user_role_id,
 				'username' => $result[0]->username,
 				'email' => $result[0]->email,
 				);

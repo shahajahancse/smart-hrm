@@ -95,13 +95,20 @@
               <td><?php echo $row->reason; ?></td>
               <td><?php echo ($row->status == 1)? "active":"Inactive"; ?></td>
               <td>
-              <!-- < ?php echo base_url().$row->id; ?> -->
-                    <a class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">
-                       <button type="button" class="btn btn-info btn-sm" onclick="edit(<?php echo $row->id;?>)">Edit</button>
-                    </a> 
-                    <a href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" class="btn btn-danger btn-sm">Delete</a>
+                <?php if($session['role_id'] != 3): ?>
+                  <a class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">
+                  <button type="button" class="btn btn-info btn-sm" onclick="edit(<?php echo $row->id;?>)">Edit</button>
+                  </a> 
+                  <a href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" class="btn btn-danger btn-sm">Delete</a>
+                <?php else :  ?>
+                  <?php if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))): ?>
+                  <a class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">
+                    <button type="button" class="btn btn-info btn-sm" onclick="edit(<?php echo $row->id;?>)">Edit</button>
+                  </a> 
+                  <a href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" class="btn btn-danger btn-sm">Delete</a>
+                <?php endif; ?>
+                <?php endif; ?>
               </td>
-              
             </tr>
           <?php } ?>
         </tbody>

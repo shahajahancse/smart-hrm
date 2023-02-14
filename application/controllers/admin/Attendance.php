@@ -213,7 +213,6 @@ class Attendance extends MY_Controller {
 		}
 		
 		$session = $this->session->userdata('username');
-		// dd($session);
 		if(empty($session)){ 
 			redirect('admin/');
 		}
@@ -222,9 +221,7 @@ class Attendance extends MY_Controller {
 		$data['breadcrumbs'] = 'Movement leave';
 		$data['path_url'] = 'attendance';
 
-		$id = $session['user_id'];
-		$array = array(1,2,3,4,5,6,7,8);
-		if (in_array($id,$array)) {
+		if ($session['role_id'] != 3) {
 			$data['results'] = $this->Attendance_model->get_movement_register();
 		} else {
 			$data['results'] = $this->Attendance_model->get_movement_register($session['user_id']);
