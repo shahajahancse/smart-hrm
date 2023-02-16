@@ -94,7 +94,11 @@ class Employees_model extends CI_Model {
 		 
 	 public function read_employee_information($id) {
 	
-		$sql = 'SELECT * FROM xin_employees WHERE user_id = ?';
+		$sql = 'SELECT xin_employees.*, xin_proxi.proxi_id 
+				FROM xin_employees
+				LEFT JOIN xin_proxi
+				ON xin_employees.user_id = xin_proxi.emp_id
+				WHERE user_id='.$id;
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		
@@ -159,10 +163,20 @@ class Employees_model extends CI_Model {
 	}
 	
 	// Function to update record in table > basic_info
-	public function basic_info($data, $id){
+	public function basic_info($data, $id,$proxi_id){
 		$this->db->where('user_id', $id);
 		if( $this->db->update('xin_employees',$data)) {
-			return true;
+
+			$query = $this->db->query('SELECT * FROM xin_proxi WHERE emp_id ='.$id);
+			if ($query->num_rows() > 0) {
+				$data=['proxi_id'=>$proxi_id];
+				$this->db->where('emp_id', $id)->update('xin_proxi',$data);
+				return true;
+			} else {
+				$this->db->query("INSERT INTO `xin_proxi`( `emp_id`, `proxi_id`, `status`) VALUES ('$id','$proxi_id',1)");
+				return true;
+			}
+			
 		} else {
 			return false;
 		}		

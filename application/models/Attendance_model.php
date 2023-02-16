@@ -538,6 +538,14 @@ class Attendance_model extends CI_Model {
     }
 
 
+    public function apply_for_ta_da($id,$amount,$details){
+    $this->db->query("UPDATE  xin_employee_move_register 
+                       SET     amount  = '$amount', 
+                               details = '$details'
+                       WHERE   id      = '$id' 
+                    ");
+    }
+
 
 
 

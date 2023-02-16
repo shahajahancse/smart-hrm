@@ -205,6 +205,7 @@ class Attendance extends MY_Controller {
 
 	// movement register > attendance
 	public function move_register($id = null) {
+		// dd("ok");
 
 		if($id != null){
 		    $data = $this->db->where('id',$id)->get('xin_employee_move_register')->result();
@@ -403,7 +404,12 @@ class Attendance extends MY_Controller {
 
 
 
-
+	// apply for ta / da
+	public function apply_for_ta_da(){
+		
+	$data = $this->Attendance_model->apply_for_ta_da($_POST['form_id'],$_POST['amount'],$_POST['short_details']);
+	echo json_encode($data);
+	}
 
 
 

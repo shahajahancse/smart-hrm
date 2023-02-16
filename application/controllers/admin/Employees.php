@@ -1080,6 +1080,7 @@ class Employees extends MY_Controller {
 		}
 		$id = $this->uri->segment(4);
 		$result = $this->Employees_model->read_employee_information($id);
+		// dd($result[0]->proxi_id);
 		if(is_null($result)){
 			redirect('admin/employees');
 		}
@@ -1103,6 +1104,7 @@ class Employees extends MY_Controller {
 			'last_name' => $result[0]->last_name,
 			'user_id' => $result[0]->user_id,
 			'employee_id' => $result[0]->employee_id,
+			'proxi_id' => $result[0]->proxi_id,
 			'company_id' => $result[0]->company_id,
 			'location_id' => $result[0]->location_id,
 			'office_shift_id' => $result[0]->office_shift_id,
@@ -1890,8 +1892,7 @@ class Employees extends MY_Controller {
 		if ($iresult) {
 			
 			$id = $iresult;
-
-			$proxi = array('user_id' => $id, 'proxi_id' => $this->input->post('proxi_id'), 'status' => 1);
+			$proxi = array('emp_id' =>$id , 'proxi_id' => $this->input->post('proxi_id'), 'status' => 1);
 			$this->db->insert('xin_proxi', $proxi);
 			
 			if($count_module_attributes > 0){
@@ -2009,7 +2010,6 @@ class Employees extends MY_Controller {
 	
 	// Validate and update info in database // basic info
 	public function basic_info() {
-	
 		if($this->input->post('type')=='basic_info') {		
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -2141,7 +2141,9 @@ class Employees extends MY_Controller {
 		'is_active' => $this->input->post('status'),
 		);
 		$id = $this->input->post('user_id');
-		$result = $this->Employees_model->basic_info($data,$id);
+		$proxi_id= $this->input->post('proxi_id');
+		$result = $this->Employees_model->basic_info($data,$id,$proxi_id);
+
 		if($count_module_attributes > 0){
 			foreach($module_attributes as $mattribute) {
 				

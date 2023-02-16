@@ -2,6 +2,15 @@
 /* Leave Application view
 */
 ?>
+<style>
+  hr{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 0;
+    border-top: 1px solid #10101029;
+  }
+
+</style>
 <?php $session = $this->session->userdata('username');?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 
@@ -20,11 +29,30 @@
     <div id="add_form" class="collapse add-form <?php echo $get_animate;?>" data-parent="#accordion" style="">
       <div class="box-body">
         <?php $attributes = array('id' => 'move_register', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
-        <?php $hidden = array('user_id' => $session['user_id']);?>
-        <?php echo form_open('admin/attendance/create_move_register', $attributes, $hidden);?>
+        <!-- < ?php $hidden = array('user_id' => $session['user_id']);?> -->
+        <?php echo form_open('admin/attendance/create_move_register', $attributes);?>
         <div class="bg-white">
           <div class="box-block">
             <div class="row">
+              <?php
+                $sql= 'SELECT user_id,first_name,last_name FROM xin_employees';
+                $employees = $this->db->query($sql);
+                $emps=$employees->result();
+
+                if($session['role_id']!=3){
+              ?>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="date">Employee Name</label>
+                  <select name="emp_id" class="form-control" id="emp_name">
+                    <option value="">Select Employee Name</option>
+                    <?php foreach($emps as $emp){?>
+                    <option value="<?php echo $emp->user_id?>"><?php echo $emp->first_name.' '.$emp->last_name?></option>
+                    <?php }?>
+                  </select>
+                </div>
+              </div>
+              <?php }?>
               <div class="col-md-3">
                 <div class="form-group">
                   <label for="date">Date</label>
@@ -65,12 +93,42 @@
 </div>
 
 
+<div class="modal fade bd-example-modal-lg" id='myModal' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+       <h4 class="modal-title" id="exampleModalLabel">Apply for TA/DA</h4>
+      </div>
+ 
+  
+      <form>
+        <div class="form-group col-lg-3">
+          <label>Add Amount</label>
+          <input type="number" class="form-control" id="amount" aria-describedby="amount" placeholder="Enter amount">
+          <input type="hidden" id="form_id">
+        </div>
+        <div class="form-group col-lg-9">
+          <label for="exampleInputPassword1">Short Details</label>
+          <textarea type="text" class="form-control" id="short_details" placeholder="Details"></textarea>
+        </div>
+
+       
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success btn-sm" onclick="apply_for_ta_da()">Submit</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border">
     <h3 class="box-title">Movement leave list</h3>
   </div>
   <div class="box-body">
-    <div class="box-datatable table-responsive">
+    <div class="box-datatable ">
       <table class="datatables-demo table table-striped table-bordered" id="example">
         <thead>
           <tr>
@@ -87,27 +145,34 @@
         <tbody>
           <?php foreach ($results as $key => $row) { ?>
             <tr>
-              <td><?php echo $key + 1; ?></td>
+              <td><?php echo $key + 1;?></td>
               <td><?php echo $row->first_name .' '. $row->last_name; ?></td>
               <td><?php echo $row->date; ?></td>
-              <td><?php echo $row->in_time  == "" ? "" : date('h:i A',strtotime($row->in_time));?></td>
               <td><?php echo $row->out_time == "" ? "" : date('h:i A',strtotime($row->out_time)); ?></td>
+              <td><?php echo $row->in_time  == "" ? "" : date('h:i A',strtotime($row->in_time));?></td>
               <td><?php echo $row->reason; ?></td>
               <td><?php echo ($row->status == 1)? "active":"Inactive"; ?></td>
               <td>
-                <?php if($session['role_id'] != 3): ?>
-                  <a class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">
-                  <button type="button" class="btn btn-info btn-sm" onclick="edit(<?php echo $row->id;?>)">Edit</button>
-                  </a> 
-                  <a href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" class="btn btn-danger btn-sm">Delete</a>
-                <?php else :  ?>
+              <div class="dropdown">
+                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Action
+                </button>
+                <div class="dropdown-menu" style=" min-width: 134px !important;border-radius:0;line-height: 1.7;"  aria-labelledby="dropdownMenuButton">
+                  <?php if($session['role_id'] != 3): ?>
+                  <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
+                  <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
+                  <?php else :  ?>
                   <?php if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))): ?>
-                  <a class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">
-                    <button type="button" class="btn btn-info btn-sm" onclick="edit(<?php echo $row->id;?>)">Edit</button>
-                  </a> 
-                  <a href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" class="btn btn-danger btn-sm">Delete</a>
-                <?php endif; ?>
-                <?php endif; ?>
+                  <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a> <hr>
+                  <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" >Delete</a><hr>
+                  <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>)">Apply for TA/DA</a>
+                 
+                  <?php endif; ?>
+                  <?php endif; ?>
+                 
+                </div>
+              </div>
+
               </td>
             </tr>
           <?php } ?>
@@ -195,14 +260,89 @@ function edit(id){
       });
       return false;
     });
-
-
-
-
-
     $('#example').DataTable();
 
   });
+
+
+
+
+// appply for ta / da
+
+function showModal(id) {
+    $("#form_id").val(id);
+    $('#myModal').modal().show();
+}
+ 
+
+function apply_for_ta_da(){
+  let amount= $("#amount").val();
+  let amount_lenght = amount.toString().length;
+  let short_details= $("#short_details").val();
+  let form_id= $("#form_id").val();  
+
+  if(amount ==''){
+    alert('Please Set Amount');
+    $("#amount").focus();
+    $("#amount").attr('style', 'border: 1px solid red !important');
+    return false;
+  }
+  if(amount_lenght>6){
+      alert("not ok"); return false;
+  }
+  else{
+    alert("ok");
+  }
+  if(short_details==''){
+        alert('Please Enter Short Description');
+        $("#short_details").focus()
+        $("#short_details").attr('style', 'border: 1px solid red !important');
+        return false;
+  }
+        var url = "<?php echo base_url('admin/attendance/apply_for_ta_da');?>";
+        $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: "json",
+        data: {
+                "form_id":form_id,
+                "amount":amount,
+                "short_details":short_details,
+              },
+        success: function(response){
+					alert('Submitted Successfully');
+          $('.modal').modal('hide');  
+        }
+      });
+  
+ } 
+
+
+ $(document).ready(function(){
+
+  $('.modal').on('hidden.bs.modal', function(){
+              $(this).find('form')[0].reset();
+              $("#amount").attr('style', 'border: 1px solid #ccd6e6 !important');
+              $("#short_details").attr('style', 'border: 1px solid #ccd6e6 !important');
+  });
+
+  $("#amount").on('input',function(){
+    $("#amount").attr('style', 'border: 1px solid #ccd6e6 !important');
+    if($("#amount").val() ==''){
+      $("#amount").attr('style', 'border: 1px solid red !important');
+      return false;
+    }
+  });
+
+  $("#short_details").on('input',function(){
+    $("#short_details").attr('style', 'border: 1px solid #ccd6e6 !important');
+    if($("#short_details").val() ==''){
+      $("#short_details").attr('style', 'border: 1px solid red !important');
+      return false;
+    }
+  });
+
+});
 
 </script>
 
