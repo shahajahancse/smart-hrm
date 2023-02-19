@@ -205,7 +205,7 @@ class Attendance extends MY_Controller {
 
 	// movement register > attendance
 	public function move_register($id = null) {
-		// dd("ok");
+		// dd($id);
 
 		if($id != null){
 		    $data = $this->db->where('id',$id)->get('xin_employee_move_register')->result();
@@ -242,7 +242,7 @@ class Attendance extends MY_Controller {
 			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
 
 			$comData = array(
-	            'employee_id' => $this->input->post('user_id'),
+	            'employee_id' => $this->input->post('emp_id'),
 	            'date' 		  => $this->input->post('date'),
 	            'out_time'    => $out_time,
 	            'in_time'     => $in_time,

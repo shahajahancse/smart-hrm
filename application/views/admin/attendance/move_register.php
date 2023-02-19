@@ -52,7 +52,10 @@
                   </select>
                 </div>
               </div>
-              <?php }?>
+              <?php }
+                else{?>
+                     <input type="hidden" name="emp_id" value="<?php echo $session['user_id']?>" id="emp_id">
+               <?php }?>
               <div class="col-md-3">
                 <div class="form-group">
                   <label for="date">Date</label>
@@ -99,8 +102,6 @@
       <div class="modal-header">
        <h4 class="modal-title" id="exampleModalLabel">Apply for TA/DA</h4>
       </div>
- 
-  
       <form>
         <div class="form-group col-lg-3">
           <label>Add Amount</label>
@@ -163,11 +164,11 @@
                   <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
                   <?php else :  ?>
                   <?php if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))): ?>
+
                   <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a> <hr>
                   <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" >Delete</a><hr>
-                  <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>)">Apply for TA/DA</a>
-                 
                   <?php endif; ?>
+                  <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>)">Apply for TA/DA</a>
                   <?php endif; ?>
                  
                 </div>
