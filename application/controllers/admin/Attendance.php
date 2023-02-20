@@ -235,8 +235,8 @@ class Attendance extends MY_Controller {
     }
 
     public function create_move_register()
-    {
-			
+    {	$session = $this->session->userdata('username');
+		
      	if (!empty($_POST)) {
 			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
 			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
@@ -246,6 +246,7 @@ class Attendance extends MY_Controller {
 	            'date' 		  => $this->input->post('date'),
 	            'out_time'    => $out_time,
 	            'in_time'     => $in_time,
+	            'astatus'     => $session['role_id']==3?1:2,
 	            'reason'	  => $this->input->post('reason'),
 	        );
 
@@ -254,6 +255,7 @@ class Attendance extends MY_Controller {
 		            'out_time'    => $out_time,
 		            'in_time'     => $in_time,
 		            'reason'	  => $this->input->post('reason'),
+					'astatus'     => $session['role_id']==3?1:2,
 		        );
 
 		        $this->db->where('id', $this->input->post('id'))->update('xin_employee_move_register',$comData);

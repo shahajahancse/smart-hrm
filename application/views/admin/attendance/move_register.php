@@ -95,7 +95,7 @@
   </div>
 </div>
 
-
+<!-- modal for TA DA -->
 <div class="modal fade bd-example-modal-lg" id='myModal' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -123,6 +123,66 @@
     </div>
   </div>
 </div>
+<!-- Colsed Modal -->
+
+
+
+<!-- Modal for Manage TA/DA-->
+<div class="modal fade bd-example-modal-lg" id="my_modals" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Manage Employee TA/DA</h4>
+      </div>
+      <!-- < ?php
+         $sql= 'SELECT user_id,first_name,last_name FROM xin_employees';
+         $employees = $this->db->query($sql);
+         $emps=$employees->result();
+      ?> -->
+      <!-- <div class="modal-body"> -->
+      <form>
+
+      <div class="form-group col-lg-3">
+          <label>Amount</label>
+          <input type="number" class="form-control" id="amount" aria-describedby="amount" placeholder="Enter amount">
+          <input type="text" id="form_id">
+        </div>
+        <div class="form-group col-lg-9">
+          <label for="exampleInputPassword1">Short Details</label>
+          <textarea type="text" class="form-control" id="short_details" placeholder="Details"></textarea>
+        </div>
+
+        <div class="form-group col-lg-6">
+          <label>Manage TA/DA</label>
+           <select class="form-control">       
+           <option value="" disabled selected>Select</option>
+           <option value="1">Approved</option>
+           <option value="2">Rejected</option>
+           <option value="3">Modify And Approved</option>
+           </select>       
+        </div>
+        
+        <div class="form-group col-lg-6">
+          <label>Set Amount</label>
+          <input type="number" class="form-control" id="amount" aria-describedby="amount" placeholder="Enter amount">
+        </div>
+
+
+          
+          <div class="modal-footer" >
+            <button type="button" name="btn" onclick="save_modify_salary()" class="btn btn-sm btn-success" style="margin-top:10px !important">Save</button>
+            <button type="button" class="btn btn-sm btn-danger" style="margin-top:10px !important" data-dismiss="modal">Close</button>
+          </div>
+          </form>
+      <!-- </div> -->
+
+    </div>
+  </div>
+</div>
+<!-- modal close -->
 
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border">
@@ -139,7 +199,7 @@
             <th style="width:100px;">Out</th>
             <th style="width:100px;">In</th>
             <th style="width:100px;">Reason</th>
-            <th style="width:100px;">Status</th>
+            <th style="width:100px;">TA/DA Request</th>
             <th style="width:100px;">Action</th>
           </tr>
         </thead>
@@ -152,25 +212,35 @@
               <td><?php echo $row->out_time == "" ? "" : date('h:i A',strtotime($row->out_time)); ?></td>
               <td><?php echo $row->in_time  == "" ? "" : date('h:i A',strtotime($row->in_time));?></td>
               <td><?php echo $row->reason; ?></td>
-              <td><?php echo ($row->status == 1)? "active":"Inactive"; ?></td>
+              <td><?php echo ($row->status == 0)? '<span class="badge badge-primary"style="background: #000000c7;color: white;padding: 5px;">Not Applied</span>':($row->status == 1? '<span class="badge" style="background: #ff7600c7;color: white;padding: 5px;">Applied</span>':($row->status == 2?"<span class='badge' style='background: #ff0000b8;color: white;padding: 5px;'>Rejected</span>":($row->status == 3?"<span class='badge' style='background: #036a2c;color: white;padding: 5px;'>Approved</span>":"<span class='badge' style='background: #00bb5c;color: white;padding: 5px;'>Paid</span>")));?></td>
               <td>
               <div class="dropdown">
+
                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Action
                 </button>
+
                 <div class="dropdown-menu" style=" min-width: 134px !important;border-radius:0;line-height: 1.7;"  aria-labelledby="dropdownMenuButton">
-                  <?php if($session['role_id'] != 3): ?>
+                  <?php if($session['role_id'] != 3){ ?>
                   <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
                   <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
-                  <?php else :  ?>
-                  <?php if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))): ?>
 
-                  <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a> <hr>
-                  <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" >Delete</a><hr>
-                  <?php endif; ?>
-                  <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>)">Apply for TA/DA</a>
-                  <?php endif; ?>
-                 
+                  <hr> <a style="padding-left:5px;" href="#" onclick="show_TA_DAModal(<?php echo $row->id?>)">View TA/DA</a>
+                  <?php } else {  ?>
+                  <?php if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))){ ?>
+
+                  <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
+                  <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" >Delete</a>
+                  <?php if($row->status ==0) {?>
+                    <hr> <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>)">Apply for TA/DA</a>
+                  <?php } ?>
+
+
+                  <?php }
+
+                  else{?>
+                    <span class="dropdown-item" style="padding-left:5px;">No Action Need</span>
+                  <?php } }?>
                 </div>
               </div>
 
@@ -274,6 +344,11 @@ function showModal(id) {
     $("#form_id").val(id);
     $('#myModal').modal().show();
 }
+
+function show_TA_DAModal(id) {
+    // $("#form_id").val(id);
+    $('#my_modals').modal().show();
+}
  
 
 function apply_for_ta_da(){
@@ -288,12 +363,10 @@ function apply_for_ta_da(){
     $("#amount").attr('style', 'border: 1px solid red !important');
     return false;
   }
-  if(amount_lenght>6){
-      alert("not ok"); return false;
-  }
-  else{
-    alert("ok");
-  }
+  // if(amount_lenght>6){
+  //     alert("not ok"); return false;
+  // }
+
   if(short_details==''){
         alert('Please Enter Short Description');
         $("#short_details").focus()
@@ -313,6 +386,7 @@ function apply_for_ta_da(){
         success: function(response){
 					alert('Submitted Successfully');
           $('.modal').modal('hide');  
+          window.location.replace("<?php echo base_url('admin/attendance/move_register/');?>")
         }
       });
   
