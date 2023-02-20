@@ -100,11 +100,13 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-       <h4 class="modal-title" id="exampleModalLabel">Apply for TA/DA</h4>
+       <h4 class="modal-title" id="apply_for_ta_da">Apply for TA/DA</h4>
+       <h4 class="modal-title" id="modify_ta_da">Modify TA/DA</h4>
       </div>
       <form>
         <div class="form-group col-lg-3">
-          <label>Add Amount</label>
+          <label id="add_amount">Add Amount</label>
+          <label id="amounts">Amount</label>
           <input type="number" class="form-control" id="amount" aria-describedby="amount" placeholder="Enter amount">
           <input type="hidden" id="form_id">
         </div>
@@ -113,10 +115,24 @@
           <textarea type="text" class="form-control" id="short_details" placeholder="Details"></textarea>
         </div>
 
+        <div class="form-group col-lg-6" id="ta_da_div">
+          <label id="manage_ta_da">Manage TA/DA</label>
+          <select class="form-control">
+            <option value="" disabled selected>Select</option>
+            <option value="1">Approved</option>
+            <option value="2">Reject</option>
+            <option value="3">Modify Amount</option>
+          </select>
+        </div>
+        <div class="form-group col-lg-6" id="set_ta_da_amount">
+          <label>Set Amount</label>
+          <input type="text" class="form-control" id="payable_amount" placeholder="Set Amount">
+        </div>
+
        
         <div class="modal-footer">
           <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-success btn-sm" onclick="apply_for_ta_da()">Submit</button>
+          <button type="button" class="btn btn-success btn-sm" onclick="manage_ta_da()">Submit</button>
         </div>
 
       </form>
@@ -124,65 +140,6 @@
   </div>
 </div>
 <!-- Colsed Modal -->
-
-
-
-<!-- Modal for Manage TA/DA-->
-<div class="modal fade bd-example-modal-lg" id="my_modals" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-<div class="modal-dialog modal-lg">
-  
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Manage Employee TA/DA</h4>
-      </div>
-      <!-- < ?php
-         $sql= 'SELECT user_id,first_name,last_name FROM xin_employees';
-         $employees = $this->db->query($sql);
-         $emps=$employees->result();
-      ?> -->
-      <!-- <div class="modal-body"> -->
-      <form>
-
-      <div class="form-group col-lg-3">
-          <label>Amount</label>
-          <input type="number" class="form-control" id="amount" aria-describedby="amount" placeholder="Enter amount">
-          <input type="text" id="form_id">
-        </div>
-        <div class="form-group col-lg-9">
-          <label for="exampleInputPassword1">Short Details</label>
-          <textarea type="text" class="form-control" id="short_details" placeholder="Details"></textarea>
-        </div>
-
-        <div class="form-group col-lg-6">
-          <label>Manage TA/DA</label>
-           <select class="form-control">       
-           <option value="" disabled selected>Select</option>
-           <option value="1">Approved</option>
-           <option value="2">Rejected</option>
-           <option value="3">Modify And Approved</option>
-           </select>       
-        </div>
-        
-        <div class="form-group col-lg-6">
-          <label>Set Amount</label>
-          <input type="number" class="form-control" id="amount" aria-describedby="amount" placeholder="Enter amount">
-        </div>
-
-
-          
-          <div class="modal-footer" >
-            <button type="button" name="btn" onclick="save_modify_salary()" class="btn btn-sm btn-success" style="margin-top:10px !important">Save</button>
-            <button type="button" class="btn btn-sm btn-danger" style="margin-top:10px !important" data-dismiss="modal">Close</button>
-          </div>
-          </form>
-      <!-- </div> -->
-
-    </div>
-  </div>
-</div>
-<!-- modal close -->
 
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border">
@@ -224,23 +181,28 @@
                   <?php if($session['role_id'] != 3){ ?>
                   <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
                   <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
+                   <?php if($row->status==1){?> 
+                  <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">View TA/DA</a>
 
-                  <hr> <a style="padding-left:5px;" href="#" onclick="show_TA_DAModal(<?php echo $row->id?>)">View TA/DA</a>
-                  <?php } else {  ?>
+                  <?php } } else {  ?>
                   <?php if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))){ ?>
 
                   <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
                   <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" >Delete</a>
                   <?php if($row->status ==0) {?>
-                    <hr> <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>)">Apply for TA/DA</a>
+                    <hr> <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
                   <?php } ?>
 
 
                   <?php }
 
                   else{?>
+                    <?php if($row->status ==0) {?>
+                    <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
+                    <?php } else{ ?>
+
                     <span class="dropdown-item" style="padding-left:5px;">No Action Need</span>
-                  <?php } }?>
+                  <?php }} }?>
                 </div>
               </div>
 
@@ -340,18 +302,29 @@ function edit(id){
 
 // appply for ta / da
 
-function showModal(id) {
+function showModal(id,role_id) {
     $("#form_id").val(id);
-    $('#myModal').modal().show();
+    $('#myModal').modal().show();  
+
+    if(role_id !="3"){
+      $('#apply_for_ta_da').hide();
+      $('#modify_ta_da').show();
+      $('#add_amount').hide();
+      $('#amounts').show();
+      $('#ta_da_div').show();
+      $('#set_ta_da_amount').show();
+    }
+    else{
+      $('#apply_for_ta_da').show();
+      $('#modify_ta_da').hide();
+      $('#add_amount').show();
+      $('#amounts').hide();
+      $('#ta_da_div').hide();
+      $('#set_ta_da_amount').hide();
+    }
 }
 
-function show_TA_DAModal(id) {
-    // $("#form_id").val(id);
-    $('#my_modals').modal().show();
-}
- 
-
-function apply_for_ta_da(){
+function manage_ta_da(){
   let amount= $("#amount").val();
   let amount_lenght = amount.toString().length;
   let short_details= $("#short_details").val();
@@ -372,7 +345,9 @@ function apply_for_ta_da(){
         $("#short_details").focus()
         $("#short_details").attr('style', 'border: 1px solid red !important');
         return false;
-  }
+  }     
+  
+        var id=   $("#form_id").val();
         var url = "<?php echo base_url('admin/attendance/apply_for_ta_da');?>";
         $.ajax({
         url: url,

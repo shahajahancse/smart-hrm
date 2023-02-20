@@ -414,6 +414,12 @@ class Attendance extends MY_Controller {
 	}
 
 
+	public function modify_for_ta_da(){
+		
+		$data = $this->Attendance_model->modify_for_ta_da($_POST['form_id']);
+		echo json_encode($data);
+	}
+
 
 
 
