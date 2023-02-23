@@ -205,7 +205,7 @@ class Attendance extends MY_Controller {
 
 	// movement register > attendance
 	public function move_register($id = null) {
-		// dd("ok");
+		// dd($id);
 
 		if($id != null){
 		    $data = $this->db->where('id',$id)->get('xin_employee_move_register')->result();
@@ -235,17 +235,18 @@ class Attendance extends MY_Controller {
     }
 
     public function create_move_register()
-    {
-			
+    {	$session = $this->session->userdata('username');
+		
      	if (!empty($_POST)) {
 			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
 			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
 
 			$comData = array(
-	            'employee_id' => $this->input->post('user_id'),
+	            'employee_id' => $this->input->post('emp_id'),
 	            'date' 		  => $this->input->post('date'),
 	            'out_time'    => $out_time,
 	            'in_time'     => $in_time,
+	            'astatus'     => $session['role_id']==3?1:2,
 	            'reason'	  => $this->input->post('reason'),
 	        );
 
@@ -254,6 +255,7 @@ class Attendance extends MY_Controller {
 		            'out_time'    => $out_time,
 		            'in_time'     => $in_time,
 		            'reason'	  => $this->input->post('reason'),
+					'astatus'     => $session['role_id']==3?1:2,
 		        );
 
 		        $this->db->where('id', $this->input->post('id'))->update('xin_employee_move_register',$comData);
@@ -411,6 +413,12 @@ class Attendance extends MY_Controller {
 	echo json_encode($data);
 	}
 
+
+	public function modify_for_ta_da(){
+		
+		$data = $this->Attendance_model->modify_for_ta_da($_POST['form_id']);
+		echo json_encode($data);
+	}
 
 
 
