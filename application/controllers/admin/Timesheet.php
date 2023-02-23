@@ -65,7 +65,6 @@ class Timesheet extends MY_Controller {
 		        $this->db->insert('xin_att_file_upload',$comData);
 				$this->file_process_for_attendance($upload_date);
 
-
 		        $response = ['status' => 'success', 'message' => "Successfully Insert Done"];
 		        echo json_encode( $response );
 				exit;
