@@ -233,6 +233,8 @@ class Attendance extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data); //page load
 
     }
+	
+
 
     public function create_move_register()
     {	$session = $this->session->userdata('username');
@@ -408,28 +410,30 @@ class Attendance extends MY_Controller {
 
 	// apply for ta / da
 	public function apply_for_ta_da(){
-		
-	$data = $this->Attendance_model->apply_for_ta_da($_POST['form_id'],$_POST['amount'],$_POST['short_details']);
+	
+	$data = $this->Attendance_model->apply_for_ta_da($_POST['form_id'],$_POST['request_amount'],$_POST['short_details']);
+	echo json_encode($data);
+	}
+
+	public function view_ta_da(){
+		// dd($_GET['id']);
+	$data = $this->Attendance_model->view_ta_da($_GET['id']);
+	echo json_encode($data);
+	}
+	public function update_ta_da(){
+	$data = $this->Attendance_model->update_ta_da($_POST['form_id'],$_POST['payable_amount'],$_POST['status']);
 	echo json_encode($data);
 	}
 
 
-	public function modify_for_ta_da(){
-		
-		$data = $this->Attendance_model->modify_for_ta_da($_POST['form_id']);
+	public function modify_for_ta_da($id){
+		$data = $this->Attendance_model->modify_for_ta_da($id);
+		// dd($id);
 		echo json_encode($data);
+		exit;
 	}
 
-
-
-
-
-
-
-
-
-
-    public function get_employee_ajax_request()
+	public function get_employee_ajax_request()
     {
     	$status = $this->input->get('status');
     	$data["employees"] = $this->Attendance_model->get_employee_ajax_request($status);
