@@ -91,59 +91,27 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                 <input class="form-control" placeholder="<?php echo $this->lang->line('dashboard_email');?>" name="email" type="text" value="<?php echo $email;?>">
                               </div>
                             </div>
-
                           </div>
-                          <div class="row">
-                          <?php if($user_info[0]->user_role_id==1){ ?>
-                            <div class="col-md-4">
-                              <div class="form-group">
-                                <label for="first_name"><?php echo $this->lang->line('left_company');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
-                                <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
-                                  <option value=""></option>
-                                  <?php foreach($get_all_companies as $company) {?>
-                                  <option value="<?php echo $company->company_id?>" <?php if($company_id==$company->company_id):?> selected="selected"<?php endif;?>><?php echo $company->name?></option>
-                                  <?php } ?>
-                                </select>
-                              </div>
-                            </div>
-                            <?php } else {?>
-                            <?php $ecompany_id = $user_info[0]->company_id;?>
-                            <div class="col-md-4">
-                              <div class="form-group">
-                                <label for="first_name"><?php echo $this->lang->line('left_company');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
-                                <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
-                                  <option value=""></option>
-                                  <?php foreach($get_all_companies as $company) {?>
-									  <?php if($ecompany_id == $company->company_id):?>
-                                      <option value="<?php echo $company->company_id?>" <?php if($company_id==$company->company_id):?> selected="selected"<?php endif;?>><?php echo $company->name?></option>
-                                      <?php endif; ?>
-                                  <?php } ?>
-                                </select>
-                              </div>
-                            </div>
-                            <?php } ?>
+
                             <?php $colmd=4;
-                                if($system[0]->is_active_sub_departments=='yes'){
-                                  $colmd=4;
-                                  $is_id= 'aj_subdepartments';
-                                } else {
-                                  $colmd=4;
-                                  $is_id= 'is_aj_subdepartments';
-                                }
+                              if($system[0]->is_active_sub_departments=='yes'){
+                                $colmd=4;
+                                $is_id= 'aj_subdepartments';
+                              } else {
+                                $colmd=4;
+                                $is_id= 'is_aj_subdepartments';
+                              }
                             ?>
-                            <?php //$eall_departments = $this->Company_model->ajax_company_departments_info($company_id);?>
-                            <?php $el_result = $this->Department_model->ajax_company_location_information($company_id);?>
-                            <?php $eall_departments = $this->Department_model->ajax_location_departments_information($location_id);?>
-                            <div class="col-md-4" id="location_ajax">
-                            <div class="form-group">
-                              <label for="name"><?php echo $this->lang->line('left_location');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
-                              <select name="location_id" id="location_id" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_location');?>">
-                                <?php foreach($el_result as $location) {?>
-                                <option value="<?php echo $location->location_id?>" <?php if($location_id == $location->location_id):?> selected="selected"<?php endif;?>><?php echo $location->location_name?></option>
-                                <?php } ?>
-                              </select>
-                            </div>
-                            </div>
+
+                          <?php $el_result = $this->Department_model->ajax_company_location_information($company_id);?>
+                          <?php $eall_departments = $this->Department_model->ajax_location_departments_information($location_id);?>
+
+                          <?php if($system[0]->is_active_sub_departments=='yes'){?>
+                          	<?php $eall_designations = $this->Designation_model->ajax_designation_information($sub_department_id);?>
+                          <?php } else {?>
+                          	<?php $eall_designations = $this->Designation_model->ajax_is_designation_information($department_id);?>
+                          <?php } ?>
+                          <div class="row">
                             <div class="col-md-<?php echo $colmd;?>">
                               <div class="form-group" id="department_ajax">
                                 <label for="department"><?php echo $this->lang->line('xin_employee_department');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
@@ -155,14 +123,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                 </select>
                               </div>
                             </div>
-                            
-                          </div>
-                          <?php if($system[0]->is_active_sub_departments=='yes'){?>
-                          	<?php $eall_designations = $this->Designation_model->ajax_designation_information($sub_department_id);?>
-                          <?php } else {?>
-                          	<?php $eall_designations = $this->Designation_model->ajax_is_designation_information($department_id);?>
-                          <?php } ?>
-                          <div class="row">
+
+
                             <?php $colmd=3; if($system[0]->is_active_sub_departments=='yes'){ $ncolmd = 3; } else { $ncolmd = 4;}?>
                             <?php if($system[0]->is_active_sub_departments=='yes'){?>
                             <div class="col-md-<?php echo $ncolmd;?>" id="subdepartment_ajax">
@@ -175,7 +137,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                   <option value=""></option>
                                   <?php foreach($subresult as $sbdeparment) {?>
                                   <option value="<?php echo $sbdeparment->sub_department_id;?>" <?php if($sub_department_id==$sbdeparment->sub_department_id):?> selected <?php endif;?>><?php echo $sbdeparment->department_name;?></option>
-								  <?php } ?>
+								              <?php } ?>
                                 </select>
                               </div>
                             </div>
@@ -192,21 +154,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                   <?php } ?>
                                 </select>
                               </div>
-                            </div>
-                            <div class="col-md-<?php echo $ncolmd;?>">
-                              <div class="form-group">
-                                <label for="date_of_joining" class="control-label"><?php echo $this->lang->line('xin_employee_doj');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
-                                <input class="form-control date" readonly placeholder="<?php echo $this->lang->line('xin_employee_doj');?>" name="date_of_joining" type="text" value="<?php echo $date_of_joining;?>">
-                              </div>
-                            </div>
-                            <div class="col-md-<?php echo $ncolmd;?>">
-                              <div class="form-group">
-                                <label for="date_of_leaving" class="control-label"><?php echo $this->lang->line('xin_employee_dol');?></label>
-                                <input class="form-control date" readonly placeholder="<?php echo $this->lang->line('xin_employee_dol');?>" name="date_of_leaving" type="text" value="<?php echo $date_of_leaving;?>">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
+                            </div> 
+
                             <div class="col-md-4">
                               <div class="form-group">
                                 <label for="role"><?php echo $this->lang->line('xin_employee_role');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
@@ -216,7 +165,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                   <?php if($user_info[0]->user_role_id==1){?>
                                   <option value="<?php echo $role->role_id?>" <?php if($user_role_id==$role->role_id):?> selected <?php endif;?>><?php echo $role->role_name?></option>
                                   <?php } else {?>
-									<?php if($role->role_id!=1){?>
+                                   <?php if($role->role_id!=1){?>
                                     <option value="<?php echo $role->role_id?>" <?php if($user_role_id==$role->role_id):?> selected <?php endif;?>><?php echo $role->role_name?></option>
                                     <?php } ?>
                                   <?php } ?>
@@ -224,6 +173,53 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                 </select>
                               </div>
                             </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label for="date_of_joining" class="control-label"><?php echo $this->lang->line('xin_employee_doj');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                <input class="form-control date" readonly placeholder="<?php echo $this->lang->line('xin_employee_doj');?>" autocomplete="off" name="date_of_joining" type="text" value="<?php echo $date_of_joining;?>">
+                              </div>
+                            </div>
+
+                            <input type="hidden" name="company_id" value="<?php echo $company_id?>">
+                            <input type="hidden" name="location_id" value="<?php echo $location_id?>">
+
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label for="probation">Next Incre/Prob Date<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_contact_number');?>" name="notify_incre_prob" autocomplete="off" type="text" value="<?php echo $notify_incre_prob;?>">
+                              </div>
+                            </div>
+
+                            <div class="col-md-4" id="status">
+                              <div class="form-group">
+                                <label for="status"><?php echo $this->lang->line('dashboard_xin_status');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                <select name="status" id="status" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_location');?>">
+                                  <option value="4" <?php echo ($status == 4)? "selected":"";?> >New</option>
+                                  <option value="1" <?php echo ($status == 1)? "selected":"";?> >Regular</option>
+                                  <option value="2" <?php echo ($status == 2)? "selected":"";?> >Left</option>
+                                  <option value="3" <?php echo ($status == 3)? "selected":"";?> >Resign</option>
+                                </select>
+                              </div>
+                            </div>
+                            
+                          </div>
+
+
+                          <div class="row">                          
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label for="office_shift_id" class="control-label"><?php echo $this->lang->line('xin_employee_office_shift');?></label>
+                                <select class="form-control" name="office_shift_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_employee_office_shift');?>">
+                                  <?php foreach($all_office_shifts as $shift) {?>
+                                  <option value="<?php echo $shift->office_shift_id?>" <?php if($office_shift_id == $shift->office_shift_id):?> selected="selected" <?php endif; ?>><?php echo $shift->shift_name?></option>
+                                  <?php } ?>
+                                </select>
+                              </div>
+                            </div>
+
                             <div class="col-md-4">
                               <div class="form-group">
                                 <label for="gender" class="control-label"><?php echo $this->lang->line('xin_employee_gender');?></label>
@@ -245,6 +241,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                               </div>
                             </div>
                           </div>
+
                           <div class="row">
                             <div class="col-md-4">
                               <div class="form-group">
@@ -254,24 +251,22 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
-                                <label for="status" class="control-label"><?php echo $this->lang->line('dashboard_xin_status');?></label>
-                                <select class="form-control" name="status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
+                                <label for="is_active" class="control-label">active status</label>
+                                <select class="form-control" name="is_active" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
                                   <option value="0" <?php if($is_active=='0'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_employees_inactive');?></option>
                                   <option value="1" <?php if($is_active=='1'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_employees_active');?></option>
                                 </select>
                               </div>
                             </div>
+
                             <div class="col-md-4">
                               <div class="form-group">
-                                <label for="office_shift_id" class="control-label"><?php echo $this->lang->line('xin_employee_office_shift');?></label>
-                                <select class="form-control" name="office_shift_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_employee_office_shift');?>">
-                                  <?php foreach($all_office_shifts as $shift) {?>
-                                  <option value="<?php echo $shift->office_shift_id?>" <?php if($office_shift_id == $shift->office_shift_id):?> selected="selected" <?php endif; ?>><?php echo $shift->shift_name?></option>
-                                  <?php } ?>
-                                </select>
+                                <label for="date_of_leaving" class="control-label"><?php echo $this->lang->line('xin_employee_dol');?></label>
+                                <input class="form-control date" readonly placeholder="<?php echo $this->lang->line('xin_employee_dol');?>" name="date_of_leaving" type="text" value="<?php echo $date_of_leaving;?>">
                               </div>
                             </div>
                           </div>
+
                           <div class="row">
                           	<div class="col-md-4">
                               <div class="form-group">
@@ -351,12 +346,12 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                             <?php foreach($module_attributes as $mattribute):?>
                             <?php $attribute_info = $this->Custom_fields_model->get_employee_custom_data($user_id,$mattribute->custom_field_id);?>
                             <?php
-								if(!is_null($attribute_info)){
-									$attr_val = $attribute_info->attribute_value;
-								} else {
-									$attr_val = '';
-								}
-							?>
+              								if(!is_null($attribute_info)){
+              									$attr_val = $attribute_info->attribute_value;
+              								} else {
+              									$attr_val = '';
+              								}
+              							?>
                             <?php if($mattribute->attribute_type == 'date'){?>
                             <div class="col-md-4">
                               <div class="form-group">
@@ -418,7 +413,10 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                           </div>
                           <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_save'))); ?> </div>
                         </div>
-                        <?php echo form_close(); ?> </div>                   
+                        <?php echo form_close(); ?> </div> 
+
+
+
                     <div class="tab-pane current-tab <?php echo $get_animate;?>" id="immigration" style="display:none;">
                       <div class="box">
                         <div class="box-header with-border">

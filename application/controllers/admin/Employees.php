@@ -201,7 +201,7 @@ class Employees extends MY_Controller {
 				$employee = $this->Employees_model->get_company_location_department_designation_employees_flt($this->input->get("company_id"),$this->input->get("location_id"),$this->input->get("department_id"),$this->input->get("designation_id"));
 			}
 		} else {
-			if($user_info[0]->user_role_id==1) {
+			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
 				$employee = $this->Employees_model->get_employees();
 			} else {
 				if(in_array('372',$role_resources_ids)) {
@@ -215,6 +215,7 @@ class Employees extends MY_Controller {
 		}
 		
 		$data = array();
+		// dd($employee->result());
 
         foreach($employee->result() as $r) {		  
 		
@@ -263,7 +264,8 @@ class Employees extends MY_Controller {
 			if($r->is_active==0): $status = '<span class="badge bg-red">'.$this->lang->line('xin_employees_inactive').'</span>';
 			elseif($r->is_active==1): $status = '<span class="badge bg-green">'.$this->lang->line('xin_employees_active').'</span>';endif;
 			
-			if($r->user_id != '1') {
+			// if($r->user_id != '1') {
+			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
 				if(in_array('203',$role_resources_ids)) {
 					$del_opt = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fa fa-trash"></span></button></span>';
 				} else {
@@ -272,12 +274,20 @@ class Employees extends MY_Controller {
 			} else {
 				$del_opt = '';
 			}
+
+			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
+				$lr_opt = ' <span data-toggle="tooltip" data-placement="top" title="Left/Resign"><a href="'.site_url().'admin/employees/left_resign/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-info waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
+			} else {
+				$lr_opt = '';
+			}
+
 			if(in_array('202',$role_resources_ids)) {
 				$view_opt = ' <span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
 			} else {
 				$view_opt = '';
 			}
-			$function = $view_opt.$del_opt.'';
+
+			$function = $view_opt.$lr_opt.$del_opt.'';
 			if($r->wages_type == 1){
 				$bsalary = $this->Xin_model->currency_sign($r->basic_salary);
 			} else {
@@ -1106,6 +1116,8 @@ class Employees extends MY_Controller {
 			'employee_id' => $result[0]->employee_id,
 			'proxi_id' => $result[0]->proxi_id,
 			'company_id' => $result[0]->company_id,
+			'notify_incre_prob' => $result[0]->notify_incre_prob,
+			'status' => $result[0]->status,
 			'location_id' => $result[0]->location_id,
 			'office_shift_id' => $result[0]->office_shift_id,
 			'username' => $result[0]->username,
@@ -1155,6 +1167,7 @@ class Employees extends MY_Controller {
 			'all_office_locations' => $this->Location_model->all_office_locations(),
 			'all_leave_types' => $this->Timesheet_model->all_leave_types(),
 			);
+		// dd($data);
 		
 		$data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
@@ -1864,30 +1877,36 @@ class Employees extends MY_Controller {
 		$password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
 		$leave_categories = array($this->input->post('leave_categories'));
 		$cat_ids = implode(',',$this->input->post('leave_categories'));
+		$probation = $this->input->post('probation');
+		$probation_end = date("Y-m-d",strtotime("+ $probation months",strtotime($date_of_joining)));
+		$probation_end = ($date_of_joining > $probation_end) ? $date_of_joining:$probation_end;
 
 		$data = array(
-		'employee_id' => $employee_id,
-		'office_shift_id' => $this->input->post('office_shift_id'),
-		'first_name' => $first_name,
-		'last_name' => $last_name,
-		'username' => $username,
-		'company_id' => $this->input->post('company_id'),
-		'location_id' => $this->input->post('location_id'),
-		'email' => $this->input->post('email'),
-		'password' => $password_hash,
-		'date_of_birth' => $date_of_birth,
-		'gender' => $this->input->post('gender'),
-		'user_role_id' => $this->input->post('role'),
-		'department_id' => $this->input->post('department_id'),
-		'sub_department_id' => $this->input->post('subdepartment_id'),
-		'designation_id' => $this->input->post('designation_id'),
-		'date_of_joining' => $date_of_joining,
-		'contact_no' => $contact_no,
-		'address' => $address,
-		'is_active' => 1,
-		'leave_categories' => $cat_ids,
-		'created_at' => date('Y-m-d h:i:s')
+			'employee_id' => $employee_id,
+			'office_shift_id' => $this->input->post('office_shift_id'),
+			'first_name' => $first_name,
+			'last_name' => $last_name,
+			'username' => $username,
+			'company_id' => $this->input->post('company_id'),
+			'location_id' => $this->input->post('location_id'),
+			'email' => $this->input->post('email'),
+			'status' => 4,
+			'password' => $password_hash,
+			'date_of_birth' => $date_of_birth,
+			'gender' => $this->input->post('gender'),
+			'user_role_id' => $this->input->post('role'),
+			'department_id' => $this->input->post('department_id'),
+			'sub_department_id' => $this->input->post('subdepartment_id'),
+			'designation_id' => $this->input->post('designation_id'),
+			'date_of_joining' => $date_of_joining,
+			'probation_end' => $probation_end,
+			'contact_no' => $contact_no,
+			'address' => $address,
+			'is_active' => 1,
+			'leave_categories' => $cat_ids,
+			'created_at' => date('Y-m-d h:i:s')
 		);
+
 		$iresult = $this->Employees_model->add($data);
 		if ($iresult) {
 			
@@ -2111,35 +2130,39 @@ class Employees extends MY_Controller {
 				$this->output($Return);
 			}	
 		}
-	
+		
+
 		$data = array(
-		'employee_id' => $employee_id,
-		'office_shift_id' => $this->input->post('office_shift_id'),
-		'first_name' => $first_name,
-		'last_name' => $last_name,
-		'username' => $username,
-		'company_id' => $this->input->post('company_id'),
-		'location_id' => $this->input->post('location_id'),
-		'email' => $this->input->post('email'),
-		'date_of_birth' => $date_of_birth,
-		'gender' => $this->input->post('gender'),
-		'user_role_id' => $this->input->post('role'),
-		'department_id' => $this->input->post('department_id'),
-		'sub_department_id' => $this->input->post('subdepartment_id'),
-		'designation_id' => $this->input->post('designation_id'),
-		'date_of_joining' => $date_of_joining,
-		'contact_no' => $contact_no,
-		'address' => $address,
-		'state' => $this->input->post('estate'),
-		'city' => $this->input->post('ecity'),
-		'zipcode' => $this->input->post('ezipcode'),
-		'ethnicity_type' => $this->input->post('ethnicity_type'),
-		'leave_categories' => $cat_ids,
-		'view_companies_id' => $view_companies_id,
-		'date_of_leaving' => $this->input->post('date_of_leaving'),
-		'marital_status' => $this->input->post('marital_status'),
-		'is_active' => $this->input->post('status'),
+			'employee_id' => $employee_id,
+			'office_shift_id' => $this->input->post('office_shift_id'),
+			'first_name' => $first_name,
+			'last_name' => $last_name,
+			'username' => $username,
+			'company_id' => $this->input->post('company_id'),
+			'location_id' => $this->input->post('location_id'),
+			'notify_incre_prob' => $this->input->post('notify_incre_prob'),
+			'email' => $this->input->post('email'),
+			'date_of_birth' => $date_of_birth,
+			'gender' => $this->input->post('gender'),
+			'user_role_id' => $this->input->post('role'),
+			'department_id' => $this->input->post('department_id'),
+			'sub_department_id' => $this->input->post('subdepartment_id'),
+			'designation_id' => $this->input->post('designation_id'),
+			'date_of_joining' => $date_of_joining,
+			'contact_no' => $contact_no,
+			'address' => $address,
+			'state' => $this->input->post('estate'),
+			'city' => $this->input->post('ecity'),
+			'zipcode' => $this->input->post('ezipcode'),
+			'ethnicity_type' => $this->input->post('ethnicity_type'),
+			'leave_categories' => $cat_ids,
+			'view_companies_id' => $view_companies_id,
+			'date_of_leaving' => $this->input->post('date_of_leaving'),
+			'marital_status' => $this->input->post('marital_status'),
+			'is_active' => $this->input->post('is_active'),
+			'status' => $this->input->post('status'),
 		);
+		// dd($data);
 		$id = $this->input->post('user_id');
 		$proxi_id= $this->input->post('proxi_id');
 		$result = $this->Employees_model->basic_info($data,$id,$proxi_id);
