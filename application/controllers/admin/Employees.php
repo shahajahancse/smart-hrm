@@ -276,7 +276,13 @@ class Employees extends MY_Controller {
 			}
 
 			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
-				$lr_opt = ' <span data-toggle="tooltip" data-placement="top" title="Left/Resign"><a href="'.site_url().'admin/employees/left_resign/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-info waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
+				$lr_opt = ' <span data-toggle="tooltip" data-placement="top" title="Left/Resign">
+								<a href="'.site_url().'admin/employees/left_resign/'.$r->user_id.'">
+									<button type="button" class="btn icon-btn btn-xs btn-info waves-effect waves-light">
+									<span class="fa fa-arrow-circle-right"></span>
+									</button>
+								</a>
+							</span>';
 			} else {
 				$lr_opt = '';
 			}
@@ -6156,5 +6162,12 @@ class Employees extends MY_Controller {
 		} else {
 			redirect('admin/');
 		}
+	}
+
+	public function left_resign($id){
+		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = "Left or Resign";
+		$data['subview'] = $this->load->view("admin/employees/left_resign", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 }
