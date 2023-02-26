@@ -264,7 +264,8 @@ class Employees extends MY_Controller {
 			if($r->is_active==0): $status = '<span class="badge bg-red">'.$this->lang->line('xin_employees_inactive').'</span>';
 			elseif($r->is_active==1): $status = '<span class="badge bg-green">'.$this->lang->line('xin_employees_active').'</span>';endif;
 			
-			if($r->user_id != '1') {
+			// if($r->user_id != '1') {
+			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
 				if(in_array('203',$role_resources_ids)) {
 					$del_opt = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fa fa-trash"></span></button></span>';
 				} else {
@@ -273,12 +274,20 @@ class Employees extends MY_Controller {
 			} else {
 				$del_opt = '';
 			}
+
+			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
+				$lr_opt = ' <span data-toggle="tooltip" data-placement="top" title="Left/Resign"><a href="'.site_url().'admin/employees/left_resign/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-info waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
+			} else {
+				$lr_opt = '';
+			}
+
 			if(in_array('202',$role_resources_ids)) {
 				$view_opt = ' <span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
 			} else {
 				$view_opt = '';
 			}
-			$function = $view_opt.$del_opt.'';
+
+			$function = $view_opt.$lr_opt.$del_opt.'';
 			if($r->wages_type == 1){
 				$bsalary = $this->Xin_model->currency_sign($r->basic_salary);
 			} else {
@@ -2132,7 +2141,6 @@ class Employees extends MY_Controller {
 			'company_id' => $this->input->post('company_id'),
 			'location_id' => $this->input->post('location_id'),
 			'notify_incre_prob' => $this->input->post('notify_incre_prob'),
-			'status' => $this->input->post('status'),
 			'email' => $this->input->post('email'),
 			'date_of_birth' => $date_of_birth,
 			'gender' => $this->input->post('gender'),
@@ -2151,7 +2159,7 @@ class Employees extends MY_Controller {
 			'view_companies_id' => $view_companies_id,
 			'date_of_leaving' => $this->input->post('date_of_leaving'),
 			'marital_status' => $this->input->post('marital_status'),
-			'is_active' => $this->input->post('status'),
+			'is_active' => $this->input->post('is_active'),
 			'status' => $this->input->post('status'),
 		);
 		// dd($data);
