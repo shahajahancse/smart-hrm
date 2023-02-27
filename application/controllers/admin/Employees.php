@@ -276,6 +276,7 @@ class Employees extends MY_Controller {
 			}
 
 			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
+				if($r->status==1){
 				$lr_opt = ' <span data-toggle="tooltip" data-placement="top" title="Left/Resign">
 								<a href="'.site_url().'admin/employees/left_resign/'.$r->user_id.'">
 									<button type="button" class="btn icon-btn btn-xs btn-info waves-effect waves-light">
@@ -283,6 +284,10 @@ class Employees extends MY_Controller {
 									</button>
 								</a>
 							</span>';
+				}
+				else{
+					$lr_opt = '';
+				}			
 			} else {
 				$lr_opt = '';
 			}
@@ -6167,7 +6172,22 @@ class Employees extends MY_Controller {
 	public function left_resign($id){
 		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = "Left or Resign";
+		$data['id']=$id;
 		$data['subview'] = $this->load->view("admin/employees/left_resign", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
+		$this->load->view('admin/layout/layout_main', $data,$id); //page load
+	}
+	public function left_resign_apply(){
+		// dd($_POST);
+		$session = $this->session->userdata('username');
+		$emp_id = $_POST['id'];
+		$dept_id = $_POST['department_id'];
+		$desig_id = $_POST['designation_id'];
+		$join_date = $_POST['joining_date'];
+		$effect_date = $_POST['effective_date'];
+		$status = $_POST['status'];
+		$create_by = $session['user_id'];
+
+		$data=$this->Employees_model->left_resign_apply($emp_id,$dept_id,$desig_id,$join_date,$effect_date,$status,$create_by);
+
 	}
 }
