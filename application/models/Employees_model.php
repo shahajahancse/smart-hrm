@@ -1694,5 +1694,24 @@ class Employees_model extends CI_Model {
 			return false;
 		}		
 	}
+
+	public function left_resign_apply($emp_id,$dept_id,$desig_id,$join_date,$effect_date,$status,$create_by){
+		$data = [
+					'emp_id'=>$emp_id,		
+					'department_id'=>$dept_id,		
+					'designation_id'=>$desig_id,		
+					'joining_date'=>$join_date,		
+					'effective_date'=>$effect_date,		
+					'status'=>$status,		
+					'created_by	'=>$create_by,		
+		];
+	
+		
+		$insert_data=$this->db->insert('xin_employee_left_resign',$data);
+		if($insert_data){
+			$update_status=$this->db->where('user_id',$data['emp_id'])->update('xin_employees',['is_active'=>0,'status'=>$data['status']==1?2:3]);
+		}
+		return $insert_data;
+	}
 }
 ?>

@@ -533,7 +533,7 @@ class Attendance_model extends CI_Model {
         }
 
         $this->db->where('em.user_id = empm.employee_id');
-        $this->db->order_by('user_id', 'DESC');
+        $this->db->order_by('empm.id', 'DESC');
         return $result = $this->db->get()->result();
     }
 
@@ -549,11 +549,30 @@ class Attendance_model extends CI_Model {
     return "ok";                
     }
 
-    public function modify_for_ta_da($id){
+    
+    public function update_ta_da($id,$amount,$status){
 
-      $data = $this->db->query("SELECT * FROM xin_employee_move_register WHERE   id= '$id' ");
-     dd($data->result());                
+        $this->db->query("UPDATE  xin_employee_move_register 
+                           SET     `payable_amount`  = '$amount', 
+                                   `status`  = '$status'
+                           WHERE   id        = '$id' 
+                        ");
+        return "update";                
         }
+    
+
+    public function modify_for_ta_da($id){
+        $this->db->select("request_amount,details")
+                 ->from('xin_employee_move_register')
+                 ->where('id',$id);   
+        return $result = $this->db->get()->result();        
+    }
+    public function view_ta_da($id){
+        $this->db->select("request_amount,payable_amount")
+                 ->from('xin_employee_move_register')
+                 ->where('id',$id);   
+        return $result = $this->db->get()->result();        
+    }
 
 
 
