@@ -18,7 +18,7 @@ class Attendance_model extends CI_Model {
         }*/
         $off_day = $this->dayoff_check($process_date);
         $holiday_day = $this->holiday_check($process_date);
-        $employees = $this->get_employees($emp_ids, $status);
+        $employees = $this->get_employees($emp_ids);
 
         foreach ($employees as $key => $row) {
             $emp_id      = $row->user_id;
@@ -277,9 +277,9 @@ class Attendance_model extends CI_Model {
     function get_employees($emp_ids, $status = null)
     {
         $this->db->select('user_id, office_shift_id as shift_id');
-        if ($status != null) {
+        /*if ($status != null) {
             $this->db->where('status',$status);
-        }
+        }*/
         $this->db->where('company_id',1);
         $this->db->where_in('user_id',$emp_ids);
         return $this->db->get('xin_employees')->result();
@@ -361,7 +361,7 @@ class Attendance_model extends CI_Model {
 
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
-        $this->db->where("xin_attendance_time.status", $status);
+        // $this->db->where("xin_attendance_time.status", $status);
         $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
@@ -586,7 +586,11 @@ class Attendance_model extends CI_Model {
     public function get_employee_ajax_request($status)
     {
         $this->db->select('user_id as emp_id, first_name, last_name');
-        $this->db->where('status',$status);
+        if ($status == 1) {
+            $this->db->where_in('status', array(1,4));
+        } else {
+            $this->db->where('status',$status);
+        }
         $this->db->where('company_id',1);
         $this->db->order_by('user_id', 'asc');
         return $result = $this->db->get('xin_employees')->result();
