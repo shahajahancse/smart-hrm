@@ -276,7 +276,7 @@ class Employees extends MY_Controller {
 			}
 
 			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
-				if($r->status==1){
+				if($r->status==1 || $r->status==4){
 					$lr_opt = ' <span data-toggle="tooltip" data-placement="top" title="Left/Resign">
 								<a href="'.site_url().'admin/employees/left_resign/'.$r->user_id.'">
 									<button type="button" class="btn icon-btn btn-xs btn-info waves-effect waves-light">
