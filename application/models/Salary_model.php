@@ -8,7 +8,7 @@ class Salary_model extends CI_Model {
         parent::__construct();
     }
 
-    public function salary_process($process_month, $grid_emp_id, $status=null)
+    public function salary_process($process_month, $grid_emp_id)
     {
         
         set_time_limit(0);

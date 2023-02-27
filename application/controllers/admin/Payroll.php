@@ -65,7 +65,7 @@ class Payroll extends MY_Controller {
     	// dd($sql);
 
     	$process_month = date("Y-m-d", strtotime($process_month));
-		$this->Salary_model->Salary_process($process_month, $emp_id, $status);
+		$this->Salary_model->Salary_process($process_month, $emp_id);
 		$this->db->trans_complete();
 			
 		if ($this->db->trans_status() === FALSE)
@@ -103,7 +103,7 @@ class Payroll extends MY_Controller {
 		$status = $this->input->post('status');
 		$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
-    	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id, $status);
+    	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;

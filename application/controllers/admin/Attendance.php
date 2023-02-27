@@ -60,7 +60,7 @@ class Attendance extends MY_Controller {
     	$emp_id = explode(',', trim($sql));
 
     	$process_date = date("Y-m-d", strtotime($process_date));
-		$this->Attendance_model->attn_process($process_date, $emp_id, $status);
+		$this->Attendance_model->attn_process($process_date, $emp_id);
 		$this->db->trans_complete();
 			
 		if ($this->db->trans_status() === FALSE)
