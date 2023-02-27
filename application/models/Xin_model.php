@@ -306,6 +306,30 @@ class Xin_model extends CI_Model {
 			$arr['pay_advn_rpt_active'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='index') {
+			$arr['requi_active'] = 'active';
+			$arr['invtry_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='unit') {
+			$arr['invtry_open'] = 'active';
+			$arr['insetting_open'] = 'active';
+			$arr['product_open'] = 'active';
+			return $arr;
+		}  else if($mClass=='inventory' && $mMethod=='unit') {
+			$arr['invtry_open'] = 'active';
+			$arr['insetting_open'] = 'active';
+			$arr['unit_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='category') {
+			$arr['invtry_open'] = 'active';
+			$arr['insetting_open'] = 'active';
+			$arr['cat_open'] = 'active';
+			return $arr;
+		}  else if($mClass=='inventory' && $mMethod=='sub_category') {
+			$arr['invtry_open'] = 'active';
+			$arr['insetting_open'] = 'active';
+			$arr['subcat_open'] = 'active';
+			return $arr;
 		} else if($mClass=='performance_indicator') {
 			$arr['per_indi_active'] = 'active';
 			$arr['performance_open'] = 'active';
