@@ -6189,4 +6189,12 @@ class Employees extends MY_Controller {
 		$data=$this->Employees_model->left_resign_apply($emp_id,$dept_id,$desig_id,$join_date,$effect_date,$status,$create_by);
 
 	}
+	public function inactive_employee(){
+		
+		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = "Left or Resign";
+	
+		$data['subview'] = $this->load->view("admin/employees/left_resign", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data,$id); //page load
+	}
 }

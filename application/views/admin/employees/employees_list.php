@@ -13,7 +13,7 @@
                     <i class="fa fa-user"></i>
                 </span>
                 <div>
-                    <h5 class="mb-1"><b><?php echo active_employees();?> <small><?php echo $this->lang->line('xin_employees_active');?></small></b></h5>
+                    <h5 class="mb-1"> <b> <?php echo active_employees();?> <?php echo $this->lang->line('xin_employees_active');?></b></h5>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
                     <i class="fa fa-user-times"></i>
                 </span>
                 <div>
-                    <h5 class="mb-1"><b><?php echo inactive_employees();?> <small><?php echo $this->lang->line('xin_employees_inactive');?></small></b></h5>
+                    <h5 class="mb-1"><b><a href="<?php echo base_url('admin/employees/inactive_employee')?>"><?php echo inactive_employees();?> <?php echo $this->lang->line('xin_employees_inactive');?></a></b></h5>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
                     <i class="fa fa-male"></i>
                 </span>
                 <div>
-                    <h5 class="mb-1"><b><?php echo $this->Xin_model->male_employees();?>% <small><?php echo $this->lang->line('xin_gender_male');?></small></b></h5>
+                    <h5 class="mb-1"><b><?php echo $this->Xin_model->male_employees();?>% <?php echo $this->lang->line('xin_gender_male');?></b></h5>
                 </div>
             </div>
         </div>
@@ -49,7 +49,7 @@
                     <i class="fa fa-female"></i>
                 </span>
                 <div>
-                    <h5 class="mb-1"><b><?php echo $this->Xin_model->female_employees();?>% <small><?php echo $this->lang->line('xin_gender_female');?></small></b></h5>
+                    <h5 class="mb-1"><b><?php echo $this->Xin_model->female_employees();?>% <?php echo $this->lang->line('xin_gender_female');?></b></h5>
                 </div>
             </div>
         </div>
