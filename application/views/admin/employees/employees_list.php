@@ -426,6 +426,37 @@
 </div>
 
 
+<!-- left resign modal -->
+<div class="modal fadeInLeft animated " role="dialog" aria-hidden="true" id="left-resign-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"> <?php echo form_button(array('aria-label' => 'Close', 'data-dismiss' => 'modal', 'type' => 'button', 'class' => 'close', 'content' => '<span aria-hidden="true">×</span>')); ?> <strong class="modal-title"><?php echo $this->lang->line('xin_delete_confirm');?></strong> </div>
+      <div class="alert alert-danger">
+        <strong><?php echo $this->lang->line('xin_d_not_restored');?></strong>
+      </div>
+      <?php $attributes = array('name' => 'delete_record', 'id' => 'delete_record', 'autocomplete' => 'off', 'role'=>'form');?>
+        <?php $hidden = array('_method' => 'DELETE', '_token' => '000');?>
+        <?php echo form_open('', $attributes, $hidden);?> 
+        <div class="modal-footer">
+        
+    <?php
+    $del_token = array(
+      'type'  => 'hidden',
+      'id'  => 'token_type',
+      'name'  => 'token_type',
+      'value' => 0,
+    );
+    echo form_input($del_token);
+    ?>
+        
+    <?php echo form_button(array('data-dismiss' => 'modal', 'type' => 'button', 'class' => 'btn btn-secondary', 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_close'))); ?> 
+    <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_confirm_del'))); ?> <?php echo form_close(); ?> </div>
+    </div>
+  </div>
+</div>
+
+
+
 <script type="text/javascript">
   $(document).ready(function(){
     // get designations
@@ -439,4 +470,11 @@
     $('[data-plugin="select_hrm"]').select2({ width:'100%' });
 
   });
+</script>
+
+<script>
+  function left_resign(id) {
+    alert(id)
+     $("#left-resign-modal").modal("show");
+  }
 </script>
