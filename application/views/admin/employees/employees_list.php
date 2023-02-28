@@ -427,34 +427,52 @@
 
 
 <!-- left resign modal -->
-<div class="modal fadeInLeft animated " role="dialog" aria-hidden="true" id="left-resign-modal">
-  <div class="modal-dialog">
+
+<div class="modal fade " id="left-resign-modal"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header"> <?php echo form_button(array('aria-label' => 'Close', 'data-dismiss' => 'modal', 'type' => 'button', 'class' => 'close', 'content' => '<span aria-hidden="true">×</span>')); ?> <strong class="modal-title"><?php echo $this->lang->line('xin_delete_confirm');?></strong> </div>
-      <div class="alert alert-danger">
-        <strong><?php echo $this->lang->line('xin_d_not_restored');?></strong>
-      </div>
-      <?php $attributes = array('name' => 'delete_record', 'id' => 'delete_record', 'autocomplete' => 'off', 'role'=>'form');?>
-        <?php $hidden = array('_method' => 'DELETE', '_token' => '000');?>
-        <?php echo form_open('', $attributes, $hidden);?> 
-        <div class="modal-footer">
-        
-    <?php
-    $del_token = array(
-      'type'  => 'hidden',
-      'id'  => 'token_type',
-      'name'  => 'token_type',
-      'value' => 0,
-    );
-    echo form_input($del_token);
-    ?>
-        
-    <?php echo form_button(array('data-dismiss' => 'modal', 'type' => 'button', 'class' => 'btn btn-secondary', 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_close'))); ?> 
-    <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_confirm_del'))); ?> <?php echo form_close(); ?> </div>
+    <div class="card" style="padding:10px">
+    <h3 style="margin-left:15px">Employee Left/Resign Form</h3>
+    <form>
+        <div class="form-group col-md-6">
+          <level>Employee Name</label>
+          <input disabled class="form-control" id="emp_name" >
+        </div>
+        <div class="form-group col-md-6">
+          <level>Department Name</label>
+          <input disabled class="form-control" id="department" >
+        </div>
+        <div class="form-group col-md-6">
+          <level>Designation Name</label>
+          <input disabled class="form-control" id="designation" >
+        </div>
+        <div class="form-group col-md-6">
+          <level>Joining Date</label>
+          <input disabled class="form-control" id="joining_date" >
+        </div>
+      <input id='department_id' type="hidden">
+      <input id='designation_id' type="hidden">
+      <input id='id' type="hidden">
+        <div class="form-group col-md-6">
+          <level>Employee Status</label>
+          <select class="form-control" id="status" >
+            <option value="" disabled selected>Select Status</option>
+            <option value="1">Left</option>
+            <option value="2">Resign</option>
+          </select>
+        </div>
+
+        <div class="form-group col-md-6">
+          <level>Effective Date</label>
+          <input type="date" class="form-control" id="effective_date">
+        </div>
+
+        <button id="button" class="btn btn-sm btn-primary pull-right " style="margin-right:16px;margin-bottom:20px">Submit</button>
+    </form>
+</div>
     </div>
   </div>
 </div>
-
 
 
 <script type="text/javascript">
@@ -474,7 +492,96 @@
 
 <script>
   function left_resign(id) {
-    alert(id)
+
+    var url = "<?php echo base_url('admin/employees/left_resign/');?>"+id;
+  
+    $.ajax({
+        url         : url,
+        type        : 'POST',
+        dataType    : 'json',
+        data        : {id:id},
+        success     : function(response){
+          console.log(response);
+          // alert(response)
+
+          $('#id').val(id);
+          $('#emp_name').val(response[0].first_name +' '+response[0].last_name);
+          $('#department_id').val(response[0].department_id);
+          $('#department').val(response[0].department_name);
+          $('#designation_id').val(response[0].designation_id);
+          $('#designation').val(response[0].designation_name);
+          $('#joining_date').val(response[0].date_of_joining);
+        }
+    });
      $("#left-resign-modal").modal("show");
+
   }
+
+  $('#button').on('click',function(){
+
+      var id=  $('#id').val();
+      var department_id=  $('#department_id').val();
+      var designation_id=   $('#designation_id').val();
+      var status= $('#status').val();
+      var effective_date= $('#effective_date').val();
+      if($('#status').val()==null){
+        // alert('Please Select Status');
+        $('#status').focus();
+        $("#status").attr('style', 'border: 1px solid red !important');
+        
+        return false;
+      }
+
+      if($('#effective_date').val()==''){
+        // alert('Please Insert Effective Date');
+        $('#effective_date').focus();
+        $("#effective_date").attr('style', 'border: 1px solid red !important');
+
+        return false;
+      }
+      var url = "<?php echo base_url('admin/employees/left_resign_apply');?>";
+     
+      $.ajax({
+              url : url,
+              type: 'POST',
+              data: {
+                      id:id,
+                      department_id:department_id,
+                      designation_id:designation_id,
+                      status:status,
+                      effective_date:effective_date,
+                    },
+              success: function(response){
+                alert(status == 1 ? "Employee Status Set Left Successfully !":"Employye Status Set Resign Successfully !");
+                window.location.replace("<?php echo base_url('admin/employees')?>");
+              }
+      });
+  });
+
+$(document).ready(function(){
+
+  $('#left-resign-modal').on('hidden.bs.modal', function(){
+              $('#status').val('');
+              $('#effective_date').val('');
+              $("#status").attr('style', 'border: 1px solid #ccd6e6 !important');
+              $("#effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
+  });
+
+  $("#status").on('input',function(){
+    $("#status").attr('style', 'border: 1px solid #ccd6e6 !important');
+    if($("#status").val() ==''){
+      $("#status").attr('style', 'border: 1px solid red !important');
+      return false;
+    }
+  });
+
+  $("#effective_date").on('input',function(){
+    $("#effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
+    if($("#effective_date").val() ==''){
+      $("#effective_date").attr('style', 'border: 1px solid red !important');
+      return false;
+    }
+  });
+
+});
 </script>

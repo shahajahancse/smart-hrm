@@ -1694,7 +1694,24 @@ class Employees_model extends CI_Model {
 			return false;
 		}		
 	}
+	public function fetch_user_info($id){
+	return	$data = $this->db->select('xin_employees.first_name,
+                           xin_employees.last_name,
+                           xin_employees.date_of_joining,
+                           xin_departments.department_id,
+                           xin_departments.department_name,
+                           xin_designations.designation_id,
+                           xin_designations.designation_name,
+                          ')
+                  ->from('xin_employees')
+                  ->from('xin_departments')
+                  ->from('xin_designations')
+                  ->where('xin_departments.department_id = xin_employees.department_id')
+                  ->where('xin_designations.designation_id = xin_employees.designation_id')
+                  ->where('xin_employees.user_id',$id)
+                  ->get()->result();
 
+	}
 	public function left_resign_apply($emp_id, $data){
 		if($this->db->insert('xin_employee_left_resign',$data)){
 			$arr = array(

@@ -421,14 +421,29 @@ function manage_ta_da(role_id){
     var id=   $("#form_id").val();
     var status=   $("#status").val();
     var payable_amount=   $("#payable_amount").val();
+    if($('#status').val()==null){
+        // alert('Please Select Status');
+        $('#status').focus();
+        $("#status").attr('style', 'border: 1px solid red !important');
+        
+        return false;
+      }
+
+      if($('#payable_amount').val()==''){
+        // alert('Please Insert Effective Date');
+        $('#payable_amount').focus();
+        $("#payable_amount").attr('style', 'border: 1px solid red !important');
+
+        return false;
+      }
     var url = "<?php echo base_url('admin/attendance/update_ta_da');?>";
       $.ajax({
       url: url,
       type: 'POST',
       dataType: "json",
       data: {
-              "form_id"        : form_id,   
-              "status" : status,
+              "form_id"         : form_id,   
+              "status"          : status,
               "payable_amount"  : payable_amount,
             },
       success: function(response){

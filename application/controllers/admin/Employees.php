@@ -6165,12 +6165,10 @@ class Employees extends MY_Controller {
 		}
 	}
 
-	public function left_resign($id){
-		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = "Left or Resign";
-		$data['id']=$id;
-		$data['subview'] = $this->load->view("admin/employees/left_resign", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data,$id); //page load
+	public function left_resign(){
+		$data= $this->Employees_model->fetch_user_info($_POST['id']);
+		echo json_encode( $data );
+		exit();
 	}
 	public function left_resign_apply(){
 		// dd($_POST);
