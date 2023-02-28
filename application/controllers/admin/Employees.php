@@ -275,15 +275,12 @@ class Employees extends MY_Controller {
 				$del_opt = '';
 			}
 
+			// <a href="'.site_url().'admin/employees/left_resign/'.$r->user_id.'"></a>
 			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
 				if($r->status==1 || $r->status==4){
-					$lr_opt = ' <span data-toggle="tooltip" data-placement="top" title="Left/Resign">
-								<a href="'.site_url().'admin/employees/left_resign/'.$r->user_id.'">
-									<button type="button" class="btn icon-btn btn-xs btn-info waves-effect waves-light">
-									<span class="fa fa-arrow-circle-right"></span>
-									</button>
-								</a>
-							</span>';
+					$lr_opt = '<span onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign">
+									<button type="button" class="btn btn-xs btn-info"><span class="fa fa-arrow-circle-right"></span></button>
+								</span>';
 				} else {
 					$lr_opt = '';
 				}			
@@ -6181,13 +6178,26 @@ class Employees extends MY_Controller {
 		$emp_id = $_POST['id'];
 		$dept_id = $_POST['department_id'];
 		$desig_id = $_POST['designation_id'];
-		$join_date = $_POST['joining_date'];
 		$effect_date = $_POST['effective_date'];
 		$status = $_POST['status'];
 		$create_by = $session['user_id'];
 
-		$data=$this->Employees_model->left_resign_apply($emp_id,$dept_id,$desig_id,$join_date,$effect_date,$status,$create_by);
+		$data = array(
+			'emp_id'=> $emp_id,		
+			'department_id'=> $dept_id,		
+			'designation_id'=> $desig_id,		
+			'effective_date'=> $effect_date,		
+			'status'=> $status,		
+			'created_by	'=> $create_by,		
+		);
 
+		if ($this->Employees_model->left_resign_apply($emp_id, $data)) {
+			$response = ['status' => 'success', 'message' => "Successfully Record Insert Done"];
+		} else {
+			$response = ['status' => 'success', 'message' => "Sorry! Something Wrong"];
+		}
+        echo json_encode( $response );
+        exit;
 	}
 	public function inactive_employee(){
 		

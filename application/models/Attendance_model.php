@@ -361,7 +361,7 @@ class Attendance_model extends CI_Model {
 
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
-        // $this->db->where("xin_attendance_time.status", $status);
+        $this->db->where("xin_attendance_time.status", $status);
         $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
