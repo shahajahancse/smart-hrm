@@ -120,7 +120,7 @@
               <i class="fa fa-bell-o"></i>
               <span class="label" style="font-size: 12px !important; background: #fb0202 !important"><?php echo $fcount;?></span>
             </a>
-            <?php if(count($leaveapp) > 0 || $tsk_count > 0 ){?>
+            <?php if(count($leaveapp) > 0  ){?>
             <ul class="dropdown-menu menu <?php echo $animated;?>">
               <li>
                 <!-- inner menu: contains the actual data --> 
@@ -236,151 +236,7 @@
             </ul>
             <?php } ?>
           </li> 
-
-          <!-- <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" title="<?php echo $this->lang->line('header_notifications');?>">
-              <i class="fa fa-bell-o"></i>
-              <span class="label label-success"><?php echo $fcount;?></span>
-            </a>
-            <?php if($proj_count > 0 || $leave_count > 0 || $tsk_count > 0 || $nst_count > 0 || $tkt_count > 0){?>
-            <ul class="dropdown-menu menu <?php echo $animated;?>">
-              <li>
-                <ul class="menu" style="max-height: 245px;">
-                  <li>
-
-                    <?php if($leave_count > 0){?>
-                    <ul class="menu">
-                      <div class="callout callout-hrsale-bg-leave callout-hrsale">
-                        <p><?php echo $this->lang->line('xin_leave_notifications');?></p>
-                      </div>
-                      <?php foreach($leaveapp as $leave_notify){?>
-                        <?php $employee_info = $this->Xin_model->read_user_info($leave_notify->employee_id);?>
-                        <?php
-                          if(!is_null($employee_info)){
-                              $emp_name = $employee_info[0]->first_name. ' '.$employee_info[0]->last_name;
-                          } else {
-                              $emp_name = '--'; 
-                          }
-                        ?>
-
-                        <li>
-                          <a href="<?php echo site_url('admin/timesheet/leave_details/id')?>/<?php echo $leave_notify->leave_id;?>/">
-                            <div class="pull-left">
-                              <?php  if($user[0]->profile_picture!='' && $user[0]->profile_picture!='no file') {?>
-                              <img src="<?php  echo base_url().'uploads/profile/'.$user[0]->profile_picture;?>" alt="" id="user_avatar" 
-                              class="img-circle user_profile_avatar">
-                              <?php } else {?>
-                              <?php  if($user[0]->gender=='Male') { ?>
-                              <?php   $de_file = base_url().'uploads/profile/default_male.jpg';?>
-                              <?php } else { ?>
-                              <?php   $de_file = base_url().'uploads/profile/default_female.jpg';?>
-                              <?php } ?>
-                              <img src="<?php  echo $de_file;?>" alt="" id="user_avatar" class="img-circle user_profile_avatar">
-                              <?php  } ?>
-                            </div>
-                            <h4>
-                              <?php echo $emp_name;?>
-                              <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($leave_notify->applied_on);?></small>
-                            </h4>
-                            <p><?php echo $this->lang->line('header_has_applied_for_leave');?></p>
-                          </a>
-                        </li>
-                      <?php } ?>
-                    </ul>
-                    <?php } ?>
-                      
-                    <?php if($proj_count > 0){?>
-                    <ul class="menu">
-                      <div class="callout callout-success callout-hrsale">
-                        <p><?php echo $this->lang->line('xin_projects_notifications');?></p>
-                      </div>
-                      <?php foreach($nproject as $nprj) {?>
-                      <li>
-                        <a href="<?php echo site_url('admin/project/detail')?>/<?php echo $nprj->project_id;?>/">
-                          <div class="pull-left">
-                            <i class="fa fa-fw fa-tasks text-green"></i>
-                          </div>
-                          <h4>
-                            <?php echo $nprj->title;?>
-                            <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($nprj->end_date);?></small>
-                          </h4>
-                        </a>
-                      </li>
-                      <?php } ?>
-                    </ul>
-                    <?php } ?>
-                      
-                    <?php if($tsk_count > 0){?>
-                    <ul class="menu">
-                      <div class="callout callout-info callout-hrsale">
-                        <p><?php echo $this->lang->line('xin_tasks_notifications');?></p>
-                      </div>
-                      <?php foreach($ntask as $ntsk) {?>
-                        <li>
-                        <a href="<?php echo site_url('admin/timesheet/task_details')?>/id/<?php echo $ntsk->task_id;?>/">
-                          <div class="pull-left">
-                            <i class="fa fa-fw fa-bullhorn text-aqua"></i>
-                          </div>
-                          <h4>
-                            <?php echo $ntsk->task_name;?>
-                            <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($ntsk->end_date);?></small>
-                          </h4>
-                        </a>
-                      </li>
-                      <?php } ?>
-                    </ul>
-                    <?php } ?>
-
-                    <?php if($nst_count > 0){?>
-                    <ul class="menu">
-                      <div class="callout callout-warning callout-hrsale">
-                        <p><?php echo $this->lang->line('dashboard_announcements');?></p>
-                      </div>
-                      <?php foreach($nannouncements as $n_annc) {?>
-                        <li>
-                        <a href="<?php echo site_url('admin/announcement')?>/?is_notify=1">
-                          <div class="pull-left">
-                            <i class="fa fa-warning text-yellow"></i>
-                          </div>
-                          <h4>
-                            <?php echo $n_annc->title;?>
-                            <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($n_annc->start_date);?></small>
-                          </h4>
-                        </a>
-                      </li>
-                      <?php } ?>
-                    </ul>
-                    <?php } ?>
-
-                    <?php if($user[0]->user_role_id!='1'){?>
-                      <?php if($tkt_count > 0){?>
-                      <ul class="menu">
-                        <div class="callout callout-danger callout-hrsale">
-                          <p><?php echo $this->lang->line('left_tickets');?></p>
-                        </div>
-                        <?php foreach($ntickets as $n_ticket) {?>
-                          <li>
-                            <a href="<?php echo site_url('admin/tickets/details')?>/<?php echo $n_ticket->ticket_id;?>">
-                            <div class="pull-left">
-                              <i class="fa fa-ticket text-red"></i>
-                            </div>
-                            <h4>
-                              <?php echo $n_ticket->subject;?>
-                              <small><i class="fa fa-codepen"></i> <?php echo $n_ticket->ticket_code;?></small>
-                            </h4>
-                          </a>
-                        </li>
-                        <?php } ?>
-                      </ul>
-                      <?php } ?>
-                    <?php } ?>
-                      
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            <?php } ?>
-          </li>  -->
+          
           <?php } ?>
 
 
@@ -509,4 +365,4 @@
   </header>
 
 
-  
+
