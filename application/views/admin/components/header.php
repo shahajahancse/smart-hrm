@@ -139,140 +139,125 @@ if($theme[0]->animation_style == '') {
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" title="<?php echo $this->lang->line('header_notifications');?>">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-success"><?php echo $fcount;?></span>
+              <span class="label" style="font-size: 12px !important; background: #fb0202 !important"><?php echo $fcount;?></span>
             </a>
-            <?php if($proj_count > 0 || $leave_count > 0 || $tsk_count > 0 || $nst_count > 0 || $tkt_count > 0){?>
+            <?php if(count($leaveapp) > 0  ){?>
             <ul class="dropdown-menu menu <?php echo $animated;?>">
-              <li><ul class="menu" style="max-height: 245px;"><li>
-                <!-- inner menu: contains the actual data -->               
-                <?php if($leave_count > 0){?>
+              <li>
+                <!-- inner menu: contains the actual data --> 
+                <!-- Ieave application here -->              
+                <?php if(count($leaveapp) > 0){?>
                 <ul class="menu">
                   <div class="callout callout-hrsale-bg-leave callout-hrsale">
-                    <p><?php echo $this->lang->line('xin_leave_notifications');?></p>
+                    <p><?php echo $this->lang->line('xin_leave_notifications');?><span style="color: #d30505; padding: 4px; font-weight: bolder;"><?=count($leaveapp) ?></p>
                   </div>
-                  <?php foreach($leaveapp as $leave_notify){?>
-					<?php $employee_info = $this->Xin_model->read_user_info($leave_notify->employee_id);?>
+                  <?php foreach($leaveapp as $row){?>
+  					        <?php $emp_info = $this->Xin_model->read_user_info($row->employee_id);?>
                     <?php
-                        if(!is_null($employee_info)){
-                            $emp_name = $employee_info[0]->first_name. ' '.$employee_info[0]->last_name;
-                        } else {
-                            $emp_name = '--';	
-                        }
+                      if(!is_null($emp_info)){
+                          $emp_name = $emp_info[0]->first_name. ' '.$emp_info[0]->last_name;
+                      } else {
+                          $emp_name = '--';	
+                      }
                     ?>
+
                     <li><!-- start message -->
-                    <a href="<?php echo site_url('admin/timesheet/leave_details/id')?>/<?php echo $leave_notify->leave_id;?>/">
-                      <div class="pull-left">
-                        <?php  if($user[0]->profile_picture!='' && $user[0]->profile_picture!='no file') {?>
-                        <img src="<?php  echo base_url().'uploads/profile/'.$user[0]->profile_picture;?>" alt="" id="user_avatar" 
-                        class="img-circle user_profile_avatar">
-                        <?php } else {?>
-                        <?php  if($user[0]->gender=='Male') { ?>
-                        <?php 	$de_file = base_url().'uploads/profile/default_male.jpg';?>
-                        <?php } else { ?>
-                        <?php 	$de_file = base_url().'uploads/profile/default_female.jpg';?>
-                        <?php } ?>
-                        <img src="<?php  echo $de_file;?>" alt="" id="user_avatar" class="img-circle user_profile_avatar">
-                        <?php  } ?>
-                      </div>
-                      <h4>
-                        <?php echo $emp_name;?>
-                        <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($leave_notify->applied_on);?></small>
-                      </h4>
-                      <p><?php echo $this->lang->line('header_has_applied_for_leave');?></p>
-                    </a>
-                  </li>
+                      <a href="<?php echo site_url('admin/timesheet/leave_details/id')?>/<?php echo $row->leave_id;?>/">
+                        <div class="pull-left">
+                          <?php  if($emp_info[0]->profile_picture!='' && $emp_info[0]->profile_picture!='no file') {?>
+                          <img src="<?php  echo base_url().'uploads/profile/'.$emp_info[0]->profile_picture;?>" alt="" id="user_avatar" 
+                          class="img-circle user_profile_avatar">
+                          <?php } else {?>
+                          <?php  if($emp_info[0]->gender=='Male') { ?>
+                          <?php 	$de_file = base_url().'uploads/profile/default_male.jpg';?>
+                          <?php } else { ?>
+                          <?php 	$de_file = base_url().'uploads/profile/default_female.jpg';?>
+                          <?php } ?>
+                          <img src="<?php  echo $de_file;?>" alt="" id="user_avatar" class="img-circle user_profile_avatar">
+                          <?php  } ?>
+                        </div>
+                        <h4> <?php echo $emp_name;?> </h4>
+                        <p>applied for leave <?php echo $this->Xin_model->set_date_format($row->applied_on);?></p>
+                      </a>
+                    </li>
                   <?php } ?>
-                  </ul>
-				  <?php } ?>
-                  
-                  <?php if($proj_count > 0){?>
-                  <ul class="menu">
-                  <div class="callout callout-success callout-hrsale">
-                    <p><?php echo $this->lang->line('xin_projects_notifications');?></p>
+                </ul>
+                <br>
+				        <?php } ?>
+
+                <!-- Increment here -->
+                <?php if(count($incrementapp) > 0){?>
+                <ul class="menu">
+                  <div class="callout callout-hrsale" style="background: #0691d3; color: white;">
+                    <p>Increment notifications <span style="color: #d30505; padding: 4px; font-weight: bolder;"><?=count($incrementapp) ?></p>
                   </div>
-                  <?php foreach($nproject as $nprj) {?>
-                    <li><!-- start message -->
-                    <a href="<?php echo site_url('admin/project/detail')?>/<?php echo $nprj->project_id;?>/">
-                      <div class="pull-left">
-                        <i class="fa fa-fw fa-tasks text-green"></i>
-                      </div>
-                      <h4>
-                        <?php echo $nprj->title;?>
-                        <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($nprj->end_date);?></small>
-                      </h4>
-                    </a>
-                  </li>
+                  <?php foreach($incrementapp as $row){?>
+                    <?php 
+                      $ipdate = $row->notify_incre_prob;
+                      $red_zone = date('Y-m-d', strtotime('-20 days', strtotime(date($ipdate)))); 
+                    ?>
+                    <li class="lir">
+                      <a onclick="incrementFun(<?php echo $row->user_id; ?>)">
+                        <div class="pull-left">
+                          <?php  if($row->profile_picture!='' && $row->profile_picture!='no file') {?>
+                          <img src="<?php  echo base_url('uploads/profile/'.$row->profile_picture);?>" alt="" id="user_avatar" 
+                          class="img-circle user_profile_avatar">
+                          <?php } else {?>
+                          <?php  if($row->gender=='Male') { ?>
+                          <?php   $de_file = base_url().'uploads/profile/default_male.jpg';?>
+                          <?php } else { ?>
+                          <?php   $de_file = base_url().'uploads/profile/default_female.jpg';?>
+                          <?php } ?>
+                          <img src="<?php  echo $de_file;?>" alt="" id="user_avatar" class="img-circle user_profile_avatar">
+                          <?php  } ?>
+                        </div>
+                        <h4 class="<?php echo ($red_zone < date('Y-m-d'))? 'nrcolor':'ngcolor' ?>"> <?php echo $row->first_name. ' '.$row->last_name;?> </h4>
+                        <p class="<?php echo ($red_zone < date('Y-m-d'))? 'nrcolor':'ngcolor' ?>"> Increment on <?php echo date("d-M-Y", strtotime($ipdate));?> </p>
+                      </a>
+                    </li>
                   <?php } ?>
-                  </ul>
-                  <?php } ?>
-                  
-                  <?php if($tsk_count > 0){?>
-                  <ul class="menu">
-                  <div class="callout callout-info callout-hrsale">
-                    <p><?php echo $this->lang->line('xin_tasks_notifications');?></p>
+                </ul>
+                <br>
+                <?php } ?>  
+
+                <!--  Probation here  -->
+                <?php if(count($probationapp) > 0){?>
+                <ul class="menu">
+                  <div class="callout callout-hrsale" style="background: #6266df; color: white;">
+                    <p>Probation notifications <span style="color: #d30505; padding: 4px; font-weight: bolder;"><?=count($probationapp) ?></span></p>
                   </div>
-                  <?php foreach($ntask as $ntsk) {?>
-                    <li><!-- start message -->
-                    <a href="<?php echo site_url('admin/timesheet/task_details')?>/id/<?php echo $ntsk->task_id;?>/">
-                      <div class="pull-left">
-                        <i class="fa fa-fw fa-bullhorn text-aqua"></i>
-                      </div>
-                      <h4>
-                        <?php echo $ntsk->task_name;?>
-                        <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($ntsk->end_date);?></small>
-                      </h4>
-                    </a>
-                  </li>
+                  <?php foreach($probationapp as $row){?>
+                    <?php 
+                      $ipdate = $row->notify_incre_prob;
+                      $red_zone = date('Y-m-d', strtotime('-20 days', strtotime(date($ipdate)))); 
+                    ?>
+                    <li class="lir"><!-- start message -->
+                      <a onclick="probationFun(<?php echo $row->user_id; ?>)">
+                        <div class="pull-left">
+                          <?php  if($row->profile_picture!='' && $row->profile_picture!='no file') {?>
+                          <img src="<?php  echo base_url('uploads/profile/'.$row->profile_picture);?>" alt="" id="user_avatar" 
+                          class="img-circle user_profile_avatar">
+                          <?php } else {?>
+                          <?php  if($row->gender=='Male') { ?>
+                          <?php   $de_file = base_url().'uploads/profile/default_male.jpg';?>
+                          <?php } else { ?>
+                          <?php   $de_file = base_url().'uploads/profile/default_female.jpg';?>
+                          <?php } ?>
+                          <img src="<?php  echo $de_file;?>" alt="" id="user_avatar" class="img-circle user_profile_avatar">
+                          <?php  } ?>
+                        </div>
+                        <h4 class="<?php echo ($red_zone < date('Y-m-d'))? 'nrcolor':'ngcolor' ?>"> <?php echo $row->first_name. ' '.$row->last_name;?> </h4>
+                        <p class="<?php echo ($red_zone < date('Y-m-d'))? 'nrcolor':'ngcolor' ?>"> Probation on <?php echo date("d-M-Y", strtotime($ipdate));?> </p>
+                      </a>
+                    </li>
                   <?php } ?>
-                  </ul>
-                  <?php } ?>
-                  <?php if($nst_count > 0){?>
-                  <ul class="menu">
-                  <div class="callout callout-warning callout-hrsale">
-                    <p><?php echo $this->lang->line('dashboard_announcements');?></p>
-                  </div>
-                  <?php foreach($nannouncements as $n_annc) {?>
-                    <li><!-- start message -->
-                    <a href="<?php echo site_url('admin/announcement')?>/?is_notify=1">
-                      <div class="pull-left">
-                        <i class="fa fa-warning text-yellow"></i>
-                      </div>
-                      <h4>
-                        <?php echo $n_annc->title;?>
-                        <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($n_annc->start_date);?></small>
-                      </h4>
-                    </a>
-                  </li>
-                  <?php } ?>
-                  </ul>
-                  <?php } ?>
-                  <?php if($user[0]->user_role_id!='1'){?>
-                  <?php if($tkt_count > 0){?>
-                  <ul class="menu">
-                  <div class="callout callout-danger callout-hrsale">
-                    <p><?php echo $this->lang->line('left_tickets');?></p>
-                  </div>
-                  <?php foreach($ntickets as $n_ticket) {?>
-                    <li><!-- start message -->
-                      <a href="<?php echo site_url('admin/tickets/details')?>/<?php echo $n_ticket->ticket_id;?>">
-                      <div class="pull-left">
-                        <i class="fa fa-ticket text-red"></i>
-                      </div>
-                      <h4>
-                        <?php echo $n_ticket->subject;?>
-                        <small><i class="fa fa-codepen"></i> <?php echo $n_ticket->ticket_code;?></small>
-                      </h4>
-                    </a>
-                  </li>
-                  <?php } ?>
-                  </ul>
-                  <?php } ?><?php } ?>
-                  <!-- end message -->
+                </ul>
+                <?php } ?>                
               </li>
             </ul>
-            </li></ul>
             <?php } ?>
           </li> 
+          
           <?php } ?>
           <!-- Tasks: style can be found in dropdown.less -->
           <!-- User Account: style can be found in dropdown.less -->
@@ -395,3 +380,6 @@ if($theme[0]->animation_style == '') {
       </div>
     </nav>
   </header>
+
+
+
