@@ -4,7 +4,45 @@
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
-<?php $system = $this->Xin_model->read_setting_info(1);?>
+<?php $system = $this->Xin_model->read_setting_info(1);
+      $lefts = $this->db->select('xin_employees.first_name,
+                                  xin_employees.last_name,
+                                  xin_employees.user_id,
+                                  xin_employees.date_of_joining,
+                                  xin_departments.department_name,
+                                  xin_designations.designation_name,
+                                  xin_employee_left_resign.effective_date
+                                ')
+                          ->from('xin_employees')
+                          ->from('xin_departments')
+                          ->from('xin_designations')
+                          ->from('xin_employee_left_resign')
+                          ->where('xin_departments.department_id = xin_employees.department_id')
+                          ->where('xin_designations.designation_id = xin_employees.designation_id')
+                          ->where('xin_employee_left_resign.emp_id = xin_employees.user_id')
+                          ->where('xin_employees.status',2)
+                          ->where('xin_employees.is_active',0)
+                          ->get()->result();
+      $resigns= $this->db->select('xin_employees.first_name,
+                                   xin_employees.last_name,
+                                   xin_employees.user_id,
+                                   xin_employees.date_of_joining,
+                                   xin_departments.department_name,
+                                   xin_designations.designation_name,
+                                   xin_employee_left_resign.effective_date
+                                ')
+                            ->from('xin_employees')
+                            ->from('xin_departments')
+                            ->from('xin_designations')
+                            ->from('xin_employee_left_resign')
+                            ->where('xin_departments.department_id = xin_employees.department_id')
+                            ->where('xin_designations.designation_id = xin_employees.designation_id')
+                            ->where('xin_employee_left_resign.emp_id = xin_employees.user_id')
+                            ->where('xin_employees.status',3)
+                            ->where('xin_employees.is_active',0)
+                            ->get()->result();
+
+?>
 <div class="row <?php echo $get_animate;?>">
     <div class="col-sm-6 col-lg-3">
         <div class="card p-3">
@@ -24,8 +62,8 @@
                 <span class="stamp-hrsale-4 stamp-hrsale-md bg-hrsale-danger-4 mr-3">
                     <i class="fa fa-user-times"></i>
                 </span>
-                <div>
-                    <h5 class="mb-1"><b><a href="<?php echo base_url('admin/employees/inactive_employee')?>"><?php echo inactive_employees();?> <?php echo $this->lang->line('xin_employees_inactive');?></a></b></h5>
+                <div> 
+                    <h5 class="mb-1"><b><?php echo inactive_employees();?> <?php echo $this->lang->line('xin_employees_inactive');?></b></h5>
                 </div>
             </div>
         </div>
@@ -397,9 +435,12 @@
 
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border">
-    <h3 class="box-title"> <?php echo $this->lang->line('xin_list_all');?> <?php echo $this->lang->line('xin_employees');?> </h3>
+    
+    <h3 class="box-title">Employee List</h3>
     <?php if($user_info[0]->user_role_id==1){ ?>
-    <div class="box-tools pull-right"> <a class="text-dark collapsed" data-toggle="collapse" href="#filter_hrsale" aria-expanded="false">
+    <div class="box-tools pull-right"> 
+        <button class="btn btn-sm btn-info" id="inactive">Left Or Resign List</button>
+        <a class="text-dark collapsed" data-toggle="collapse" href="#filter_hrsale" aria-expanded="false">  
         <button type="button" class="btn btn-xs btn-primary"> <span class="fa fa-filter"></span> <?php echo $this->lang->line('xin_filter');?></button>
        </a> <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="fa fa-bar-chart"></span> <?php echo $this->lang->line('xin_report');?> <span class="fa fa-caret-down"></span></button>
        <ul class="dropdown-menu">
@@ -470,6 +511,101 @@
         <button id="button" class="btn btn-sm btn-primary pull-right " style="margin-right:16px;margin-bottom:20px">Submit</button>
     </form>
 </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade " id="left_resign_list"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="card" style="padding:10px">
+         <h3 style="margin-left:15px">Employee Left/Resign Form</h3>
+         <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+          <li class="nav-item active">
+            <a class="nav-link" id="left-tab" data-toggle="tab" href="#left" role="tab" aria-controls="left" aria-selected="false">Employee Left List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="resign-tab" data-toggle="tab" href="#resign" role="tab" aria-controls="resign" aria-selected="false">Employee Resign List</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade active in" id="left" role="tabpanel" aria-labelledby="left-tab">
+          <div class="box-body">
+            <div class="box-datatable ">
+              <table class="datatables-demo table table-responsive table-striped table-bordered" id="left_table">
+            <?php 
+                if(count($lefts)==''){
+                  echo "<h3 class='text-center text-danger'>Data not Found</h3>";
+                }else{?>
+            <thead>
+              <tr>
+                <th class="text-center" scope="col">Sl. No.</th>
+                <th class="text-center" scope="col">Name</th>
+                <th class="text-center" scope="col">Department Name</th>
+                <th class="text-center" scope="col">Designation Name</th>
+                <th class="text-center" scope="col">Left Date</th>
+                <th class="text-center" scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+            <?php $i=1; foreach($lefts as $left){?>
+              <tr>
+                <td class="text-center" scope="row"><?php echo $i++?></td>
+                <td class="text-center"><?php echo $left->first_name.' '.$left->last_name?></td>
+                <td class="text-center"><?php echo $left->department_name?></td>
+                <td class="text-center"><?php echo $left->designation_name?></td>
+                <td class="text-center"><?php echo $left->effective_date?></td>
+                <td class="text-center"><a class="btn btn-sm btn-primary" href="<?php echo base_url('admin/employees/detail/').$left->user_id?>"><i class="fa fa-eye"></i> Details</a></td>
+              </tr>
+              <?php }}?>
+            </tbody>
+          </table>
+            </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="resign" role="tabpanel" aria-labelledby="resign-tab">
+          <div class="box-body">
+            <div class="box-datatable">
+              <table class="datatables-demo table table-striped table-bordered table-responsive" id="resign_table">
+                  <?php 
+                        if(count($resigns)==''){
+                            echo "<h3 class='text-center text-danger'>Data not Found</h3>";
+                        }else{?>
+                      <thead>
+                        <tr>
+                          <th class="text-center" scope="col">Sl. No.</th>
+                          <th class="text-center" scope="col">Name</th>
+                          <th class="text-center" scope="col">Department Name</th>
+                          <th class="text-center" scope="col">Designation Name</th>
+                          <th class="text-center" scope="col">Resign Date</th>
+                          <th class="text-center" scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php $i=1; foreach($resigns as $resign){?>
+                            <tr>
+                              <td class="text-center" scope="row"><?php echo $i++?></td>
+                              <td class="text-center"><?php echo $resign->first_name.' '.$resign->last_name?></td>
+                              <td class="text-center"><?php echo $resign->department_name?></td>
+                              <td class="text-center"><?php echo $resign->designation_name?></td>
+                              <td class="text-center"><?php echo $resign->effective_date?></td>
+                              <td class="text-center"><a class="btn btn-sm btn-primary" href="<?php echo base_url('admin/employees/detail/').$resign->user_id?>"><i class="fa fa-eye"></i> Details</a></td>
+                            </tr>
+                        <?php } }?>
+                      </tbody>
+                   </table>
+               </div>
+              </div>
+
+          </div>
+        </div>
+
+        </div>
+        <button data-dismiss="modal" id="button" class="btn btn-sm btn-danger" style="margin-left:16px;margin-bottom:20px">Close</button>
     </div>
   </div>
 </div>
@@ -584,4 +720,13 @@ $(document).ready(function(){
   });
 
 });
+
+
+$('#inactive').click(function(e){
+  e.preventDefault();
+
+  $('#left_resign_list').modal('show');
+  $('#left_table').DataTable();
+  $('#resign_table').DataTable();
+})
 </script>

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-   var xin_table = $('#xin_table').dataTable({
+   var  = $('#').dataTable({
         "bDestroy": true,
 		"ajax": {
             url : site_url+"job_post/pages_list/",
