@@ -120,7 +120,7 @@
               <i class="fa fa-bell-o"></i>
               <span class="label" style="font-size: 12px !important; background: #fb0202 !important"><?php echo $fcount;?></span>
             </a>
-            <?php if(count($leaveapp) > 0 ){?>
+            <?php if(count($fcount) > 0 ){?>
             <ul class="dropdown-menu menu <?php echo $animated;?>">
               <li>
                 <!-- inner menu: contains the actual data -->               
@@ -228,7 +228,9 @@
                     </li>
                   <?php } ?>
                 </ul>
-                <?php } ?>                
+                <?php } ?>  
+
+                              
               </li>
             </ul>
             <?php } ?>
