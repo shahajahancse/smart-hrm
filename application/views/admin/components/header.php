@@ -516,35 +516,35 @@
           <div class="col-md-6">
             <div class="form-group">
               <label> Employee Name </label>
-              <input disabled class="form-control" id="emp_name" >
+              <input disabled class="form-control" id="emp_id" name="emp_id" value="">
             </div>
           </div>
 
           <div class="col-md-6">
             <div class="form-group">
               <label>Current Department</label>
-              <input disabled class="form-control" id="department" >
+              <input disabled class="form-control" id="old_dept_id" name="old_dept_id" value="">
             </div>
           </div>
 
           <div class="col-md-6">
             <div class="form-group">
               <label>Current Designation</label>
-              <input disabled class="form-control" id="designation" >
+              <input disabled class="form-control" id="old_desig_id" name="old_desig_id" value="">
             </div>
           </div>
 
           <div class="col-md-3">
             <div class="form-group">
               <label>Joining Date</label>
-              <input disabled class="form-control" id="joining_date" />
+              <input disabled class="form-control" id="joining_date" name="joining_date" value="" />
             </div>
           </div>
 
           <div class="col-md-3">
             <div class="form-group">
               <label> Select Status</label>
-              <select class="form-control" id="status" >
+              <select class="form-control" id="status" name="status">
                 <option value="" disabled selected>Select Status</option>
                 <option value="1">Probation to Regular</option>
                 <option value="2">Increment</option>
@@ -553,18 +553,58 @@
             </div>
           </div>
 
-
-          <input id='department_id' type="hidden">
-          <input id='designation_id' type="hidden">
-          <input id='id' type="hidden">
-          <div class="form-group col-md-6">
-            <label>Incr/Prom End Date</label>
-            
+          <div class="col-md-6" id="new_dept">
+            <div class="form-group">
+              <label>New Department</label>
+              <select class="form-control" id="new_dept_id" name="new_dept_id">
+                <option value="" disabled selected>Select Department</option>
+                <?php $results = $this->db->get('xin_departments')->result(); ?>
+                <?php foreach ($results as $key => $row) { ?>
+                  <option value="<?= $row->department_id ?>"><?= $row->department_name ?></option>
+                <?php } ?>
+              </select>
+            </div>
           </div>
 
-          <div class="form-group col-md-6">
-            <label>Effective Date</label>
-            <input type="date" class="form-control" id="effective_date">
+          <div class="col-md-6" id="new_desig">
+            <div class="form-group">
+              <label>New Designation</label>
+              <select class="form-control" id="new_desig_id" name="new_desig_id">
+                <option value="" disabled selected>Select Designation</option>
+                <?php $results = $this->db->get('xin_designations')->result(); ?>
+                <?php foreach ($results as $key => $row) { ?>
+                  <option value="<?= $row->designation_id ?>"><?= $row->designation_name ?></option>
+                <?php } ?>
+              </select>
+            </div>
+          </div>
+            
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Current Salary</label>
+              <input class="form-control" id="old_salary" name="old_salary" value="" />
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>New Salary</label>
+              <input class="form-control" id="new_salary" name="new_salary" value="" />
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Effective Date</label>
+              <input class="form-control" id="effective_date" name="effective_date" value="" />
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>End Date</label>
+              <input class="form-control" id="notify_incre_prob" name="notify_incre_prob" value="" />
+            </div>
           </div>
 
           <button id="button" class="btn btn-sm btn-primary pull-right " style="margin-right:16px;margin-bottom:20px">Submit</button>
@@ -575,7 +615,10 @@
 </div>
 
 <script>
+
   function incrementFun(id) {
+    $('#new_dept').hide();
+    $('#new_desig').hide();
 
     var url = "<?php echo base_url('admin/employees/fetch_user_info_ajax/');?>"+id;
     $.ajax({
@@ -584,16 +627,27 @@
       dataType    : 'json',
       success     : function(response){
         console.log(response);
-        $('#id').val(id);
-        $('#emp_name').val(response[0].first_name +' '+response[0].last_name);
-        $('#department_id').val(response[0].department_id);
-        $('#department').val(response[0].department_name);
+        $('#emp_id').val(response[0].first_name +' '+response[0].last_name);
+        $('#old_dept_id').val(response[0].department_name);
+        $('#old_desig_id').val(response[0].designation_name);
+        $('#joining_date').val(response[0].date_of_joining);
+        $('#old_salary').val(response[0].date_of_joining);
+
+
         $('#designation_id').val(response[0].designation_id);
         $('#designation').val(response[0].designation_name);
-        $('#joining_date').val(response[0].date_of_joining);
       }
     });
     $("#increment-modal").modal("show");
-
   }
+
+  $("#status").change(function () {
+    if ($("#status").val() == 2) {
+      $('#new_dept').hide();
+      $('#new_desig').hide();
+    } else {
+      $('#new_dept').show();
+      $('#new_desig').show();
+    }
+  })
 </script>
