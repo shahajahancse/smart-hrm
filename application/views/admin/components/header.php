@@ -120,7 +120,7 @@
               <i class="fa fa-bell-o"></i>
               <span class="label" style="font-size: 12px !important; background: #fb0202 !important"><?php echo $fcount;?></span>
             </a>
-            <?php if(count($leaveapp) > 0 || $tsk_count > 0 ){?>
+            <?php if(count($leaveapp) > 0 ){?>
             <ul class="dropdown-menu menu <?php echo $animated;?>">
               <li>
                 <!-- inner menu: contains the actual data -->               
@@ -506,8 +506,94 @@
   </header>
 
 
+<!-- Increment modal -->
+<div class="modal fade " id="increment-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="card" style="padding:10px">
+        <h3 style="margin-left:15px">Employee  Form</h3>
+        <form>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label> Employee Name </label>
+              <input disabled class="form-control" id="emp_name" >
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Current Department</label>
+              <input disabled class="form-control" id="department" >
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Current Designation</label>
+              <input disabled class="form-control" id="designation" >
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Joining Date</label>
+              <input disabled class="form-control" id="joining_date" />
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label> Select Status</label>
+              <select class="form-control" id="status" >
+                <option value="" disabled selected>Select Status</option>
+                <option value="1">Probation to Regular</option>
+                <option value="2">Increment</option>
+                <option value="3">Promotion</option>
+              </select>
+            </div>
+          </div>
+
+
+          <input id='department_id' type="hidden">
+          <input id='designation_id' type="hidden">
+          <input id='id' type="hidden">
+          <div class="form-group col-md-6">
+            <label>Incr/Prom End Date</label>
+            
+          </div>
+
+          <div class="form-group col-md-6">
+            <label>Effective Date</label>
+            <input type="date" class="form-control" id="effective_date">
+          </div>
+
+          <button id="button" class="btn btn-sm btn-primary pull-right " style="margin-right:16px;margin-bottom:20px">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   function incrementFun(id) {
-    
+
+    var url = "<?php echo base_url('admin/employees/fetch_user_info_ajax/');?>"+id;
+    $.ajax({
+      url         : url,
+      type        : 'POST',
+      dataType    : 'json',
+      success     : function(response){
+        console.log(response);
+        $('#id').val(id);
+        $('#emp_name').val(response[0].first_name +' '+response[0].last_name);
+        $('#department_id').val(response[0].department_id);
+        $('#department').val(response[0].department_name);
+        $('#designation_id').val(response[0].designation_id);
+        $('#designation').val(response[0].designation_name);
+        $('#joining_date').val(response[0].date_of_joining);
+      }
+    });
+    $("#increment-modal").modal("show");
+
   }
 </script>

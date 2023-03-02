@@ -1695,7 +1695,7 @@ class Employees_model extends CI_Model {
 		}		
 	}
 	public function fetch_user_info($id){
-	return	$data = $this->db->select('xin_employees.first_name,
+		return	$data = $this->db->select('xin_employees.first_name,
                            xin_employees.last_name,
                            xin_employees.date_of_joining,
                            xin_departments.department_id,
@@ -1712,6 +1712,7 @@ class Employees_model extends CI_Model {
                   ->get()->result();
 
 	}
+	
 	public function left_resign_apply($emp_id, $data){
 		if($this->db->insert('xin_employee_left_resign',$data)){
 			$arr = array(

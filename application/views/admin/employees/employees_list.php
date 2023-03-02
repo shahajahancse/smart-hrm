@@ -629,16 +629,13 @@
 <script>
   function left_resign(id) {
 
-    var url = "<?php echo base_url('admin/employees/left_resign/');?>"+id;
+    var url = "<?php echo base_url('admin/employees/fetch_user_info_ajax/');?>"+id;
   
     $.ajax({
         url         : url,
         type        : 'POST',
         dataType    : 'json',
-        data        : {id:id},
         success     : function(response){
-          console.log(response);
-          // alert(response)
 
           $('#id').val(id);
           $('#emp_name').val(response[0].first_name +' '+response[0].last_name);

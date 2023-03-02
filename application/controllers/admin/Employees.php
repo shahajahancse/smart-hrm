@@ -6165,11 +6165,6 @@ class Employees extends MY_Controller {
 		}
 	}
 
-	public function left_resign(){
-		$data= $this->Employees_model->fetch_user_info($_POST['id']);
-		echo json_encode( $data );
-		exit();
-	}
 	public function left_resign_apply(){
 		// dd($_POST);
 		$session = $this->session->userdata('username');
@@ -6205,4 +6200,13 @@ class Employees extends MY_Controller {
 		$data['subview'] = $this->load->view("admin/employees/left_resign", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data,$id); //page load
 	}
+
+	// this function common function
+	public function fetch_user_info_ajax($id){
+		$data= $this->Employees_model->fetch_user_info($id);
+		echo json_encode( $data );
+		exit();
+	}
+
+
 }
