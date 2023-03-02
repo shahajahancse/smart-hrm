@@ -10,53 +10,53 @@
 <?php $wz_lang = $site_lang->session->userdata('site_lang');?>
 <?php
   if(!empty($wz_lang)):
-    $lang_code = $this->Xin_model->get_language_info($wz_lang);
-    $flg_icn = $lang_code[0]->language_flag;
-    $flg_icn = '<img src="'.base_url().'uploads/languages_flag/'.$flg_icn.'">';
+  	$lang_code = $this->Xin_model->get_language_info($wz_lang);
+  	$flg_icn = $lang_code[0]->language_flag;
+  	$flg_icn = '<img src="'.base_url().'uploads/languages_flag/'.$flg_icn.'">';
   elseif($system[0]->default_language!=''):
-    $lang_code = $this->Xin_model->get_language_info($system[0]->default_language);
-    $flg_icn = $lang_code[0]->language_flag;
-    $flg_icn = '<img src="'.base_url().'uploads/languages_flag/'.$flg_icn.'">';
+  	$lang_code = $this->Xin_model->get_language_info($system[0]->default_language);
+  	$flg_icn = $lang_code[0]->language_flag;
+  	$flg_icn = '<img src="'.base_url().'uploads/languages_flag/'.$flg_icn.'">';
   else:
-    $flg_icn = '<img src="'.base_url().'uploads/languages_flag/gb.gif">'; 
+  	$flg_icn = '<img src="'.base_url().'uploads/languages_flag/gb.gif">';	
   endif;
 ?>
 
 <?php
   $role_user = $this->Xin_model->read_user_role_info($user[0]->user_role_id);
   if(!is_null($role_user)){
-    $role_resources_ids = explode(',',$role_user[0]->role_resources);
+  	$role_resources_ids = explode(',',$role_user[0]->role_resources);
   } else {
-    $role_resources_ids = explode(',',0); 
+  	$role_resources_ids = explode(',',0);	
   }
   //$designation_info = $this->Xin_model->read_designation_info($user_info[0]->designation_id);
   // set color
   if($theme[0]->is_semi_dark==1):
-    $light_cls = 'navbar-semi-dark navbar-shadow';
-    $ext_clr = '';
+  	$light_cls = 'navbar-semi-dark navbar-shadow';
+  	$ext_clr = '';
   else:
-    $light_cls = 'navbar-dark';
-    $ext_clr = $theme[0]->top_nav_dark_color;
+  	$light_cls = 'navbar-dark';
+  	$ext_clr = $theme[0]->top_nav_dark_color;
   endif;
   // set layout / fixed or static
   if($theme[0]->boxed_layout=='true'){
-    $lay_fixed = 'container boxed-layout';
+  	$lay_fixed = 'container boxed-layout';
   } else {
-    $lay_fixed = '';
+  	$lay_fixed = '';
   }
   if($theme[0]->animation_style == '') {
-    $animated = 'animated flipInY';
+  	$animated = 'animated flipInY';
   } else {
-    $animated = 'animated '.$theme[0]->animation_style;
+  	$animated = 'animated '.$theme[0]->animation_style;
   }
 ?>
 
 <style type="text/css">
   .main-header .sidebar-toggle-hrsale-chat:before {
-    content: "\f0e6";
+  	content: "\f0e6";
   }
   .main-header .sidebar-toggle-hrsale-quicklinks:before {
-    content: "\f00a";
+  	content: "\f00a";
   }
 </style>
 
@@ -80,37 +80,37 @@
           <?php if($unread_msgs > 0) {?><span class="chat-badge label label-aqua" id="msgs_count"><?php echo $unread_msgs;?></span><?php } ?>
         </a>
       <?php } if($user[0]->user_role_id=='1'){?>
-        <a href="javascript:void(0);" class="sidebar-toggle sidebar-toggle-hrsale-quicklinks" role="button" data-toggle="modal" data-target=".modal-hrsaleapps" title="<?php echo $this->lang->line('xin_quick_links');?>"> </a>
+        <a href="javascript:void(0);" class="sidebar-toggle sidebar-toggle-hrsale-quicklinks" role="button" data-toggle="modal" data-target=".modal-hrsaleapps" title="<?php echo $this->lang->line('xin_quick_links');?>">	</a>
       <?php } ?>  
             
-      <!-- Notification here -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">     
-          <?php  if(in_array('90',$role_resources_ids)) { 
+  		    <?php  if(in_array('90',$role_resources_ids)) { 
           $fcount = 0;
-          if($user[0]->user_role_id != 3){
-            $leaveapp = $this->Xin_model->get_notify_leave_applications();
+  				if($user[0]->user_role_id != 3){
+  					$leaveapp = $this->Xin_model->get_notify_leave_applications();
             $start_date = date('Y-m-d', strtotime('-1 month', strtotime(date("Y-m-01"))));
             $end_date = date('Y-m-d', strtotime('+2 month', strtotime(date("Y-m-00"))));
             $incrementapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 1);
             $probationapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 4);
 
-            // $nproject = $this->Xin_model->get_notify_projects();
-            // $ntask = $this->Xin_model->get_notify_tasks();
-            // $nannouncements = $this->Xin_model->get_notify_announcements();
-            // $ntickets = $this->Xin_model->get_notify_tickets();
-            // count
-            // $leave_count = $this->Xin_model->count_notify_leave_applications();
-            // $proj_count = $this->Xin_model->count_notify_projects();
-            // $tsk_count = $this->Xin_model->count_notify_tasks();
-            // $nst_count = $this->Xin_model->count_notify_announcements();
+  					// $nproject = $this->Xin_model->get_notify_projects();
+  					// $ntask = $this->Xin_model->get_notify_tasks();
+  					// $nannouncements = $this->Xin_model->get_notify_announcements();
+  					// $ntickets = $this->Xin_model->get_notify_tickets();
+  					// count
+  					// $leave_count = $this->Xin_model->count_notify_leave_applications();
+  					// $proj_count = $this->Xin_model->count_notify_projects();
+  					// $tsk_count = $this->Xin_model->count_notify_tasks();
+  					// $nst_count = $this->Xin_model->count_notify_announcements();
 
             //$this->Xin_model->count_notify_tickets();
-            //$tsk_count = $this->Xin_model->count_notify_tasks();
+  					//$tsk_count = $this->Xin_model->count_notify_tasks();
 
-            $fcount = count($leaveapp) + count($incrementapp) + count($probationapp);
-          } ?>
+  					$fcount = count($leaveapp) + count($incrementapp) + count($probationapp);
+  				} ?>
           <style>
+            .lir {cursor: pointer !important;}
             .menu>li>a>.nrcolor { color: #ff0101 !important; }
             .menu>li>a>.ngcolor { color: #037c29 !important; }
           </style>
@@ -120,23 +120,22 @@
               <i class="fa fa-bell-o"></i>
               <span class="label" style="font-size: 12px !important; background: #fb0202 !important"><?php echo $fcount;?></span>
             </a>
-            <?php if(count($leaveapp) > 0  ){?>
+            <?php if(count($leaveapp) > 0 || $tsk_count > 0 ){?>
             <ul class="dropdown-menu menu <?php echo $animated;?>">
               <li>
-                <!-- inner menu: contains the actual data --> 
-                <!-- Ieave application here -->              
+                <!-- inner menu: contains the actual data -->               
                 <?php if(count($leaveapp) > 0){?>
                 <ul class="menu">
                   <div class="callout callout-hrsale-bg-leave callout-hrsale">
                     <p><?php echo $this->lang->line('xin_leave_notifications');?><span style="color: #d30505; padding: 4px; font-weight: bolder;"><?=count($leaveapp) ?></p>
                   </div>
                   <?php foreach($leaveapp as $row){?>
-                    <?php $emp_info = $this->Xin_model->read_user_info($row->employee_id);?>
+  					        <?php $emp_info = $this->Xin_model->read_user_info($row->employee_id);?>
                     <?php
                       if(!is_null($emp_info)){
                           $emp_name = $emp_info[0]->first_name. ' '.$emp_info[0]->last_name;
                       } else {
-                          $emp_name = '--'; 
+                          $emp_name = '--';	
                       }
                     ?>
 
@@ -148,9 +147,9 @@
                           class="img-circle user_profile_avatar">
                           <?php } else {?>
                           <?php  if($emp_info[0]->gender=='Male') { ?>
-                          <?php   $de_file = base_url().'uploads/profile/default_male.jpg';?>
+                          <?php 	$de_file = base_url().'uploads/profile/default_male.jpg';?>
                           <?php } else { ?>
-                          <?php   $de_file = base_url().'uploads/profile/default_female.jpg';?>
+                          <?php 	$de_file = base_url().'uploads/profile/default_female.jpg';?>
                           <?php } ?>
                           <img src="<?php  echo $de_file;?>" alt="" id="user_avatar" class="img-circle user_profile_avatar">
                           <?php  } ?>
@@ -162,9 +161,8 @@
                   <?php } ?>
                 </ul>
                 <br>
-                <?php } ?>
+				        <?php } ?>
 
-                <!-- Increment here -->
                 <?php if(count($incrementapp) > 0){?>
                 <ul class="menu">
                   <div class="callout callout-hrsale" style="background: #0691d3; color: white;">
@@ -175,7 +173,7 @@
                       $ipdate = $row->notify_incre_prob;
                       $red_zone = date('Y-m-d', strtotime('-20 days', strtotime(date($ipdate)))); 
                     ?>
-                    <li class="lir">
+                    <li class="lir"><!-- start message -->
                       <a onclick="incrementFun(<?php echo $row->user_id; ?>)">
                         <div class="pull-left">
                           <?php  if($row->profile_picture!='' && $row->profile_picture!='no file') {?>
@@ -199,7 +197,6 @@
                 <br>
                 <?php } ?>  
 
-                <!--  Probation here  -->
                 <?php if(count($probationapp) > 0){?>
                 <ul class="menu">
                   <div class="callout callout-hrsale" style="background: #6266df; color: white;">
@@ -211,7 +208,7 @@
                       $red_zone = date('Y-m-d', strtotime('-20 days', strtotime(date($ipdate)))); 
                     ?>
                     <li class="lir"><!-- start message -->
-                      <a onclick="probationFun(<?php echo $row->user_id; ?>)">
+                      <a >
                         <div class="pull-left">
                           <?php  if($row->profile_picture!='' && $row->profile_picture!='no file') {?>
                           <img src="<?php  echo base_url('uploads/profile/'.$row->profile_picture);?>" alt="" id="user_avatar" 
@@ -236,7 +233,151 @@
             </ul>
             <?php } ?>
           </li> 
-          
+
+          <!-- <li class="dropdown messages-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" title="<?php echo $this->lang->line('header_notifications');?>">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-success"><?php echo $fcount;?></span>
+            </a>
+            <?php if($proj_count > 0 || $leave_count > 0 || $tsk_count > 0 || $nst_count > 0 || $tkt_count > 0){?>
+            <ul class="dropdown-menu menu <?php echo $animated;?>">
+              <li>
+                <ul class="menu" style="max-height: 245px;">
+                  <li>
+
+                    <?php if($leave_count > 0){?>
+                    <ul class="menu">
+                      <div class="callout callout-hrsale-bg-leave callout-hrsale">
+                        <p><?php echo $this->lang->line('xin_leave_notifications');?></p>
+                      </div>
+                      <?php foreach($leaveapp as $leave_notify){?>
+                        <?php $employee_info = $this->Xin_model->read_user_info($leave_notify->employee_id);?>
+                        <?php
+                          if(!is_null($employee_info)){
+                              $emp_name = $employee_info[0]->first_name. ' '.$employee_info[0]->last_name;
+                          } else {
+                              $emp_name = '--'; 
+                          }
+                        ?>
+
+                        <li>
+                          <a href="<?php echo site_url('admin/timesheet/leave_details/id')?>/<?php echo $leave_notify->leave_id;?>/">
+                            <div class="pull-left">
+                              <?php  if($user[0]->profile_picture!='' && $user[0]->profile_picture!='no file') {?>
+                              <img src="<?php  echo base_url().'uploads/profile/'.$user[0]->profile_picture;?>" alt="" id="user_avatar" 
+                              class="img-circle user_profile_avatar">
+                              <?php } else {?>
+                              <?php  if($user[0]->gender=='Male') { ?>
+                              <?php   $de_file = base_url().'uploads/profile/default_male.jpg';?>
+                              <?php } else { ?>
+                              <?php   $de_file = base_url().'uploads/profile/default_female.jpg';?>
+                              <?php } ?>
+                              <img src="<?php  echo $de_file;?>" alt="" id="user_avatar" class="img-circle user_profile_avatar">
+                              <?php  } ?>
+                            </div>
+                            <h4>
+                              <?php echo $emp_name;?>
+                              <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($leave_notify->applied_on);?></small>
+                            </h4>
+                            <p><?php echo $this->lang->line('header_has_applied_for_leave');?></p>
+                          </a>
+                        </li>
+                      <?php } ?>
+                    </ul>
+                    <?php } ?>
+                      
+                    <?php if($proj_count > 0){?>
+                    <ul class="menu">
+                      <div class="callout callout-success callout-hrsale">
+                        <p><?php echo $this->lang->line('xin_projects_notifications');?></p>
+                      </div>
+                      <?php foreach($nproject as $nprj) {?>
+                      <li>
+                        <a href="<?php echo site_url('admin/project/detail')?>/<?php echo $nprj->project_id;?>/">
+                          <div class="pull-left">
+                            <i class="fa fa-fw fa-tasks text-green"></i>
+                          </div>
+                          <h4>
+                            <?php echo $nprj->title;?>
+                            <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($nprj->end_date);?></small>
+                          </h4>
+                        </a>
+                      </li>
+                      <?php } ?>
+                    </ul>
+                    <?php } ?>
+                      
+                    <?php if($tsk_count > 0){?>
+                    <ul class="menu">
+                      <div class="callout callout-info callout-hrsale">
+                        <p><?php echo $this->lang->line('xin_tasks_notifications');?></p>
+                      </div>
+                      <?php foreach($ntask as $ntsk) {?>
+                        <li>
+                        <a href="<?php echo site_url('admin/timesheet/task_details')?>/id/<?php echo $ntsk->task_id;?>/">
+                          <div class="pull-left">
+                            <i class="fa fa-fw fa-bullhorn text-aqua"></i>
+                          </div>
+                          <h4>
+                            <?php echo $ntsk->task_name;?>
+                            <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($ntsk->end_date);?></small>
+                          </h4>
+                        </a>
+                      </li>
+                      <?php } ?>
+                    </ul>
+                    <?php } ?>
+
+                    <?php if($nst_count > 0){?>
+                    <ul class="menu">
+                      <div class="callout callout-warning callout-hrsale">
+                        <p><?php echo $this->lang->line('dashboard_announcements');?></p>
+                      </div>
+                      <?php foreach($nannouncements as $n_annc) {?>
+                        <li>
+                        <a href="<?php echo site_url('admin/announcement')?>/?is_notify=1">
+                          <div class="pull-left">
+                            <i class="fa fa-warning text-yellow"></i>
+                          </div>
+                          <h4>
+                            <?php echo $n_annc->title;?>
+                            <small><i class="fa fa-calendar"></i> <?php echo $this->Xin_model->set_date_format($n_annc->start_date);?></small>
+                          </h4>
+                        </a>
+                      </li>
+                      <?php } ?>
+                    </ul>
+                    <?php } ?>
+
+                    <?php if($user[0]->user_role_id!='1'){?>
+                      <?php if($tkt_count > 0){?>
+                      <ul class="menu">
+                        <div class="callout callout-danger callout-hrsale">
+                          <p><?php echo $this->lang->line('left_tickets');?></p>
+                        </div>
+                        <?php foreach($ntickets as $n_ticket) {?>
+                          <li>
+                            <a href="<?php echo site_url('admin/tickets/details')?>/<?php echo $n_ticket->ticket_id;?>">
+                            <div class="pull-left">
+                              <i class="fa fa-ticket text-red"></i>
+                            </div>
+                            <h4>
+                              <?php echo $n_ticket->subject;?>
+                              <small><i class="fa fa-codepen"></i> <?php echo $n_ticket->ticket_code;?></small>
+                            </h4>
+                          </a>
+                        </li>
+                        <?php } ?>
+                      </ul>
+                      <?php } ?>
+                    <?php } ?>
+                      
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <?php } ?>
+          </li>  -->
           <?php } ?>
 
 
@@ -244,14 +385,14 @@
 
           <!-- Tasks: style can be found in dropdown.less -->
           <!-- User Account: style can be found in dropdown.less -->
-            <?php  if(in_array('61',$role_resources_ids) || in_array('93',$role_resources_ids) || in_array('63',$role_resources_ids) || in_array('92',$role_resources_ids) || in_array('62',$role_resources_ids) || in_array('94',$role_resources_ids) || in_array('96',$role_resources_ids) || in_array('60',$role_resources_ids) || $user[0]->user_role_id==1 || $system[0]->module_recruitment=='true' || $system[0]->enable_job_application_candidates=='1' || in_array('50',$role_resources_ids) || in_array('393',$role_resources_ids) || in_array('118',$role_resources_ids)) { ?>
+          	<?php  if(in_array('61',$role_resources_ids) || in_array('93',$role_resources_ids) || in_array('63',$role_resources_ids) || in_array('92',$role_resources_ids) || in_array('62',$role_resources_ids) || in_array('94',$role_resources_ids) || in_array('96',$role_resources_ids) || in_array('60',$role_resources_ids) || $user[0]->user_role_id==1 || $system[0]->module_recruitment=='true' || $system[0]->enable_job_application_candidates=='1' || in_array('50',$role_resources_ids) || in_array('393',$role_resources_ids) || in_array('118',$role_resources_ids)) { ?>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true" title="<?php echo $this->lang->line('header_configuration');?>">
                   <i class="fa fa-qrcode"></i>
                 </a>
                 <ul class="dropdown-menu <?php echo $animated;?>">
                   <?php if($system[0]->module_recruitment=='true'){?>
-          <?php if($system[0]->enable_job_application_candidates=='1'){?>
+				  <?php if($system[0]->enable_job_application_candidates=='1'){?>
                   <?php  if(in_array('50',$role_resources_ids)) { ?>
                   <li role="presentation">
                     <a role="menuitem" tabindex="-1" target="_blank" href="<?php echo site_url('jobs');?>"><i class="fa fa-newspaper-o"></i><?php echo $this->lang->line('left_jobs_listing');?>
@@ -260,7 +401,7 @@
                   <?php  } ?>
                   <?php  } ?>
                   <?php  } ?>
-          <?php  if(in_array('61',$role_resources_ids)) { ?>
+				  <?php  if(in_array('61',$role_resources_ids)) { ?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/settings/constants');?>"> <i class="fa fa-align-justify"></i><?php echo $this->lang->line('left_constants');?></a></li>
                   <?php } ?>
@@ -268,7 +409,7 @@
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/custom_fields');?>"> <i class="fa fa-sliders"></i><?php echo $this->lang->line('xin_hrsale_custom_fields');?></a></li>
                   <?php } ?>
-          <?php  if($user[0]->user_role_id==1) { ?>
+				  <?php  if($user[0]->user_role_id==1) { ?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/roles');?>"> <i class="fa fa-unlock-alt"></i><?php echo $this->lang->line('xin_role_urole');?></a></li>
                   <?php } ?>
@@ -284,7 +425,7 @@
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/employees/import');?>"> <i class="fa fa-users"></i><?php echo $this->lang->line('xin_import_employees');?></a></li>
                   <?php } ?>
-          <?php  if(in_array('62',$role_resources_ids)) { ?>
+				  <?php  if(in_array('62',$role_resources_ids)) { ?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/settings/database_backup');?>"> <i class="fa fa-database"></i><?php echo $this->lang->line('header_db_log');?></a></li>
                   <?php } ?>
@@ -297,7 +438,7 @@
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/settings/payment_gateway');?>"> <i class="fa fa-cc-visa"></i><?php echo $this->lang->line('xin_acc_payment_gateway');?></a></li>
                   <?php } ?>
                   <?php if($system[0]->module_orgchart=='true'){?>
-                <?php if(in_array('96',$role_resources_ids)) { ?>
+            	  <?php if(in_array('96',$role_resources_ids)) { ?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/organization/chart');?>"> <i class="fa fa-sitemap"></i><?php echo $this->lang->line('xin_org_chart_title');?></a></li>
                   <?php } ?>
@@ -310,20 +451,20 @@
                 </ul>
               </li>
             <?php } ?>  
-            <?php if($system[0]->module_language=='true'){?>
+          	<?php if($system[0]->module_language=='true'){?>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true" title="<?php echo $this->lang->line('xin_languages');?>">
                   <?php echo $flg_icn;?>
                 </a>
                 <ul class="dropdown-menu <?php echo $animated;?>">
                 <?php $languages = $this->Xin_model->all_languages();?>
-        <?php foreach($languages as $lang):?>
+				<?php foreach($languages as $lang):?>
                 <?php $flag = '<img src="'.base_url().'uploads/languages_flag/'.$lang->language_flag.'">';?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/dashboard/set_language/').$lang->language_code;?>"><?php echo $flag;?> &nbsp; <?php echo $lang->language_name;?></a></li>
                   <?php endforeach;?>
                   <?php if($system[0]->module_language=='true'){?>
-              <?php  if(in_array('89',$role_resources_ids)) { ?>
+            	<?php  if(in_array('89',$role_resources_ids)) { ?>
                   <li class="divider"></li>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/languages');?>"> <i class="fa fa-cog text-aqua"></i><?php echo $this->lang->line('left_settings');?></a></li>
@@ -337,7 +478,7 @@
               <i class="glyphicon glyphicon-user"></i>
             </a>
             <ul class="dropdown-menu <?php echo $animated;?>">
-                <li role="presentation">
+              	<li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/profile');?>"> <i class="ion ion-person"></i><?php echo $this->lang->line('header_my_profile');?></a></li>
                   <li role="presentation">
                   <a data-toggle="modal" data-target=".policy" href="#"> <i class="fa fa-flag-o"></i><?php echo $this->lang->line('header_policies');?></a></li>
@@ -365,4 +506,8 @@
   </header>
 
 
-
+<script>
+  function incrementFun(id) {
+    
+  }
+</script>

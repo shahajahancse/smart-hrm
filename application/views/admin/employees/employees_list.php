@@ -472,45 +472,45 @@
 <div class="modal fade " id="left-resign-modal"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-    <div class="card" style="padding:10px">
-    <h3 style="margin-left:15px">Employee Left/Resign Form</h3>
-    <form>
-        <div class="form-group col-md-6">
-          <level>Employee Name</label>
-          <input disabled class="form-control" id="emp_name" >
-        </div>
-        <div class="form-group col-md-6">
-          <level>Department Name</label>
-          <input disabled class="form-control" id="department" >
-        </div>
-        <div class="form-group col-md-6">
-          <level>Designation Name</label>
-          <input disabled class="form-control" id="designation" >
-        </div>
-        <div class="form-group col-md-6">
-          <level>Joining Date</label>
-          <input disabled class="form-control" id="joining_date" >
-        </div>
-      <input id='department_id' type="hidden">
-      <input id='designation_id' type="hidden">
-      <input id='id' type="hidden">
-        <div class="form-group col-md-6">
-          <level>Employee Status</label>
-          <select class="form-control" id="status" >
-            <option value="" disabled selected>Select Status</option>
-            <option value="1">Left</option>
-            <option value="2">Resign</option>
-          </select>
-        </div>
+      <div class="card" style="padding:10px">
+        <h3 style="margin-left:15px">Employee Left/Resign Form</h3>
+        <form>
+          <div class="form-group col-md-6">
+            <level>Employee Name</label>
+            <input disabled class="form-control" id="emp_name" >
+          </div>
+          <div class="form-group col-md-6">
+            <level>Department Name</label>
+            <input disabled class="form-control" id="department" >
+          </div>
+          <div class="form-group col-md-6">
+            <level>Designation Name</label>
+            <input disabled class="form-control" id="designation" >
+          </div>
+          <div class="form-group col-md-6">
+            <level>Joining Date</label>
+            <input disabled class="form-control" id="joining_date" >
+          </div>
+          <input id='department_id' type="hidden">
+          <input id='designation_id' type="hidden">
+          <input id='id' type="hidden">
+          <div class="form-group col-md-6">
+            <level> Employee Status </label>
+            <select class="form-control" id="status" >
+              <option value="" disabled selected>Select Status</option>
+              <option value="1">Left</option>
+              <option value="2">Resign</option>
+            </select>
+          </div>
 
-        <div class="form-group col-md-6">
-          <level>Effective Date</label>
-          <input type="date" class="form-control" id="effective_date">
-        </div>
+          <div class="form-group col-md-6">
+            <level>Effective Date</label>
+            <input type="date" class="form-control" id="effective_date">
+          </div>
 
-        <button id="button" class="btn btn-sm btn-primary pull-right " style="margin-right:16px;margin-bottom:20px">Submit</button>
-    </form>
-</div>
+          <button id="button" class="btn btn-sm btn-primary pull-right " style="margin-right:16px;margin-bottom:20px">Submit</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
@@ -694,39 +694,39 @@
       });
   });
 
-$(document).ready(function(){
+  $(document).ready(function(){
 
-  $('#left-resign-modal').on('hidden.bs.modal', function(){
-              $('#status').val('');
-              $('#effective_date').val('');
-              $("#status").attr('style', 'border: 1px solid #ccd6e6 !important');
-              $("#effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
+    $('#left-resign-modal').on('hidden.bs.modal', function(){
+                $('#status').val('');
+                $('#effective_date').val('');
+                $("#status").attr('style', 'border: 1px solid #ccd6e6 !important');
+                $("#effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
+    });
+
+    $("#status").on('input',function(){
+      $("#status").attr('style', 'border: 1px solid #ccd6e6 !important');
+      if($("#status").val() ==''){
+        $("#status").attr('style', 'border: 1px solid red !important');
+        return false;
+      }
+    });
+
+    $("#effective_date").on('input',function(){
+      $("#effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
+      if($("#effective_date").val() ==''){
+        $("#effective_date").attr('style', 'border: 1px solid red !important');
+        return false;
+      }
+    });
+
   });
 
-  $("#status").on('input',function(){
-    $("#status").attr('style', 'border: 1px solid #ccd6e6 !important');
-    if($("#status").val() ==''){
-      $("#status").attr('style', 'border: 1px solid red !important');
-      return false;
-    }
-  });
 
-  $("#effective_date").on('input',function(){
-    $("#effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
-    if($("#effective_date").val() ==''){
-      $("#effective_date").attr('style', 'border: 1px solid red !important');
-      return false;
-    }
-  });
+  $('#inactive').click(function(e){
+    e.preventDefault();
 
-});
-
-
-$('#inactive').click(function(e){
-  e.preventDefault();
-
-  $('#left_resign_list').modal('show');
-  $('#left_table').DataTable();
-  $('#resign_table').DataTable();
-})
+    $('#left_resign_list').modal('show');
+    $('#left_table').DataTable();
+    $('#resign_table').DataTable();
+  })
 </script>
