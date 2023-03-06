@@ -20,7 +20,7 @@
           <div class="col-md-3">
             <div class="form-group">
               <label for="process_date">Second Date</label>
-              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text">
+              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text" autocomplete="off">
             </div>
           </div>
 

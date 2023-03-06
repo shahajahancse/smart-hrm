@@ -208,7 +208,7 @@
                       $red_zone = date('Y-m-d', strtotime('-20 days', strtotime(date($ipdate)))); 
                     ?>
                     <li class="lir"><!-- start message -->
-                      <a >
+                      <a onclick="incrementFun(<?php echo $row->user_id; ?>)">
                         <div class="pull-left">
                           <?php  if($row->profile_picture!='' && $row->profile_picture!='no file') {?>
                           <img src="<?php  echo base_url('uploads/profile/'.$row->profile_picture);?>" alt="" id="user_avatar" 
@@ -394,7 +394,7 @@
                 </a>
                 <ul class="dropdown-menu <?php echo $animated;?>">
                   <?php if($system[0]->module_recruitment=='true'){?>
-				  <?php if($system[0]->enable_job_application_candidates=='1'){?>
+				          <?php if($system[0]->enable_job_application_candidates=='1'){?>
                   <?php  if(in_array('50',$role_resources_ids)) { ?>
                   <li role="presentation">
                     <a role="menuitem" tabindex="-1" target="_blank" href="<?php echo site_url('jobs');?>"><i class="fa fa-newspaper-o"></i><?php echo $this->lang->line('left_jobs_listing');?>
@@ -403,7 +403,7 @@
                   <?php  } ?>
                   <?php  } ?>
                   <?php  } ?>
-				  <?php  if(in_array('61',$role_resources_ids)) { ?>
+				          <?php  if(in_array('61',$role_resources_ids)) { ?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/settings/constants');?>"> <i class="fa fa-align-justify"></i><?php echo $this->lang->line('left_constants');?></a></li>
                   <?php } ?>
@@ -411,7 +411,7 @@
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/custom_fields');?>"> <i class="fa fa-sliders"></i><?php echo $this->lang->line('xin_hrsale_custom_fields');?></a></li>
                   <?php } ?>
-				  <?php  if($user[0]->user_role_id==1) { ?>
+				          <?php  if($user[0]->user_role_id==1) { ?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/roles');?>"> <i class="fa fa-unlock-alt"></i><?php echo $this->lang->line('xin_role_urole');?></a></li>
                   <?php } ?>
@@ -427,7 +427,7 @@
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/employees/import');?>"> <i class="fa fa-users"></i><?php echo $this->lang->line('xin_import_employees');?></a></li>
                   <?php } ?>
-				  <?php  if(in_array('62',$role_resources_ids)) { ?>
+				          <?php  if(in_array('62',$role_resources_ids)) { ?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/settings/database_backup');?>"> <i class="fa fa-database"></i><?php echo $this->lang->line('header_db_log');?></a></li>
                   <?php } ?>
@@ -460,13 +460,13 @@
                 </a>
                 <ul class="dropdown-menu <?php echo $animated;?>">
                 <?php $languages = $this->Xin_model->all_languages();?>
-				<?php foreach($languages as $lang):?>
+				        <?php foreach($languages as $lang):?>
                 <?php $flag = '<img src="'.base_url().'uploads/languages_flag/'.$lang->language_flag.'">';?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/dashboard/set_language/').$lang->language_code;?>"><?php echo $flag;?> &nbsp; <?php echo $lang->language_name;?></a></li>
                   <?php endforeach;?>
                   <?php if($system[0]->module_language=='true'){?>
-            	<?php  if(in_array('89',$role_resources_ids)) { ?>
+            	    <?php  if(in_array('89',$role_resources_ids)) { ?>
                   <li class="divider"></li>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/languages');?>"> <i class="fa fa-cog text-aqua"></i><?php echo $this->lang->line('left_settings');?></a></li>
@@ -514,7 +514,9 @@
     <div class="modal-content">
       <div class="card" style="padding:10px">
         <h3 style="margin-left:15px">Employee  Form</h3>
-        <form>
+          <?php $attributes = array('id' => 'modal_form', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
+          <?php $hidden = array('user_id' => $session['user_id']);?>
+          <?php echo form_open('admin/employees/manual_attendance', $attributes, $hidden);?>
           <div class="col-md-6">
             <div class="form-group">
               <label> Employee Name </label>
@@ -522,6 +524,7 @@
             </div>
           </div>
 
+          <input type="hidden" id="hidden_emp_id">
           <div class="col-md-6">
             <div class="form-group">
               <label>Current Department</label>
@@ -591,30 +594,141 @@
           <div class="col-md-3">
             <div class="form-group">
               <label>New Salary</label>
-              <input class="form-control" id="new_salary" name="new_salary" value="" />
+              <input class="form-control" type="number" id="new_salary" name="new_salary" value="" />
             </div>
           </div>
 
           <div class="col-md-3">
             <div class="form-group">
               <label>Effective Date</label>
-              <input class="form-control" id="effective_date" name="effective_date" value="" />
+              <input class="form-control attendance_date" id="effective_date" name="effective_date" value="" />
             </div>
           </div>
 
           <div class="col-md-3">
             <div class="form-group">
               <label>End Date</label>
-              <input class="form-control" id="notify_incre_prob" name="notify_incre_prob" value="" />
+              <input class="form-control attendance_date" id="notify_incre_prob" name="notify_incre_prob" value="" />
             </div>
           </div>
 
           <button id="button" class="btn btn-sm btn-primary pull-right " style="margin-right:16px;margin-bottom:20px">Submit</button>
-        </form>
+        <?php echo form_close(); ?>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+      // Month & Year
+      $('.attendance_date').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        // maxDate: '0',
+        dateFormat:'yy-mm-dd',
+        altField: "#date_format",
+        altFormat: js_date_format,
+        yearRange: '1970:' + addOneYear(),
+        beforeShow: function(input) {
+          $(input).datepicker("widget").show();
+        }
+      });
+
+      // form submit to insert participant list
+      $("#modal_form").on("submit", function (e) {
+        e.preventDefault();
+
+        // validation here
+        if($('#status').val() === null) {
+          $('#status').focus();
+          $('#status').attr('style', 'border: 1px solid red !important');
+          return false;
+        } else {
+          $("#status").attr('style', 'border: 1px solid #ccd6e6 !important');
+          if ($('#status').val() != 2) {
+            if($('#new_dept_id').val()  === null){
+              $('#new_dept_id').focus();
+              $('#new_dept_id').attr('style', 'border: 1px solid red !important');
+              return false;
+            } else {
+              $("#new_dept_id").attr('style', 'border: 1px solid #ccd6e6 !important');
+            }
+            
+            if($('#new_desig_id').val()  === null){
+              $('#new_desig_id').focus();
+              $('#new_desig_id').attr('style', 'border: 1px solid red !important');
+              return false;
+            } else {
+              $("#new_desig_id").attr('style', 'border: 1px solid #ccd6e6 !important');
+            }
+          }
+        }
+
+        if($('#new_salary').val() ==''){
+          $('#new_salary').focus();
+          $('#new_salary').attr('style', 'border: 1px solid red !important');
+          return false;
+        } else {
+          $("#new_salary").attr('style', 'border: 1px solid #ccd6e6 !important');
+        }
+
+        if($('#effective_date').val() ==''){
+          $('#effective_date').focus();
+          $('#effective_date').attr('style', 'border: 1px solid red !important');
+          return false;
+        } else {
+          $("#effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
+        }
+
+        if($('#notify_incre_prob').val() ==''){
+          $('#notify_incre_prob').focus();
+          $('#notify_incre_prob').attr('style', 'border: 1px solid red !important');
+          return false;
+        }  else {
+          $("#notify_incre_prob").attr('style', 'border: 1px solid #ccd6e6 !important');
+        }
+        // end validation 
+
+        // ajax request on form submit
+        var emp_id = $('#hidden_emp_id').val();
+        var sendData = $(this).serialize();
+        var targetUrl = "<?=base_url('admin/employees/incre_prob_prom_add/')?>" + emp_id;
+        $.ajax({
+            url: targetUrl,
+            type: "POST",
+            data: sendData,
+            dataType: "json",
+            success: function (response) {
+              if (response.success == true) {
+                alert(response.message);
+              } else {
+                alert(response.message);
+              }
+              location.reload();
+            },
+        });
+
+      });
+
+      // reset modal value
+      $('#modal_form').on('hidden.bs.modal', function(){
+        $('#new_salary').val('');
+        $('#effective_date').val('');
+        $('#notify_incre_prob').val('');
+        $("#new_salary").attr('style', 'border: 1px solid #ccd6e6 !important');
+        $("#effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
+        $("#notify_incre_prob").attr('style', 'border: 1px solid #ccd6e6 !important');
+      });
+    }); 
+
+
+    function addOneYear() {
+      date = new Date().getFullYear();
+      return date + 2;
+    }
+
+</script>
 
 <script>
 
@@ -628,12 +742,13 @@
       type        : 'POST',
       dataType    : 'json',
       success     : function(response){
-        console.log(response);
+        // console.log(response);
+        $('#hidden_emp_id').val(id);
         $('#emp_id').val(response[0].first_name +' '+response[0].last_name);
         $('#old_dept_id').val(response[0].department_name);
         $('#old_desig_id').val(response[0].designation_name);
         $('#joining_date').val(response[0].date_of_joining);
-        $('#old_salary').val(response[0].date_of_joining);
+        $('#old_salary').val(response[0].basic_salary);
 
 
         $('#designation_id').val(response[0].designation_id);

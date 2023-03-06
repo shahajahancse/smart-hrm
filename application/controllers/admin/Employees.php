@@ -86,90 +86,8 @@ class Employees extends MY_Controller {
 		}
      }
 	
-	// employees directory/hr
-	public function hr() {
-		
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['title'] = $this->lang->line('xin_employees_directory').' | '.$this->Xin_model->site_title();
-		$data['all_departments'] = $this->Department_model->all_departments();
-		$data['all_designations'] = $this->Designation_model->all_designations();
-		$data['all_user_roles'] = $this->Roles_model->all_user_roles();
-		$data['all_employees'] = $this->Xin_model->all_employees();
-		$data['get_all_companies'] = $this->Xin_model->get_companies();
-		$data['breadcrumbs'] = $this->lang->line('xin_employees_directory');
-		$data['path_url'] = 'employees_directory';
-		
-		// init params
-        $config = array();
-        $limit_per_page = 18;
-        $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
-		if($this->input->post("hrsale_directory")==1){
-			if($this->input->post("company_id")==0 && $this->input->post("location_id")==0 && $this->input->post("department_id")==0 && $this->input->post("designation_id")==0){
-				$total_records = $this->Employees_model->record_count();
-				// get current page records
-				$data["results"] = $this->Employees_model->fetch_all_employees($limit_per_page, $page*$limit_per_page);
-			} else if($this->input->post("company_id")!=0 && $this->input->post("location_id")==0 && $this->input->post("department_id")==0 && $this->input->post("designation_id")==0){
-				$total_records = $this->Employees_model->record_count_company_employees($this->input->post("company_id"));
-				// get current page records
-				$data["results"] = $this->Employees_model->fetch_all_company_employees_flt($limit_per_page, $page*$limit_per_page,$this->input->post("company_id"));
-			} else if($this->input->post("company_id")!=0 && $this->input->post("location_id")!=0 && $this->input->post("department_id")==0 && $this->input->post("designation_id")==0){
-				$total_records = $this->Employees_model->record_count_company_location_employees($this->input->post("company_id"),$this->input->post("location_id"));
-				// get current page records
-				$data["results"] = $this->Employees_model->fetch_all_company_location_employees_flt($limit_per_page, $page*$limit_per_page,$this->input->post("company_id"),$this->input->post("location_id"));
-			} else if($this->input->post("company_id")!=0 && $this->input->post("location_id")!=0 && $this->input->post("department_id")!=0 && $this->input->post("designation_id")==0){
-				$total_records = $this->Employees_model->record_count_company_location_department_employees($this->input->post("company_id"),$this->input->post("location_id"),$this->input->post("department_id"));
-				// get current page records
-				$data["results"] = $this->Employees_model->fetch_all_company_location_department_employees_flt($limit_per_page, $page*$limit_per_page,$this->input->post("company_id"),$this->input->post("location_id"),$this->input->post("department_id"));
-			} else if($this->input->post("company_id")!=0 && $this->input->post("location_id")!=0 && $this->input->post("department_id")!=0 && $this->input->post("designation_id")!=0){
-				$total_records = $this->Employees_model->record_count_company_location_department_designation_employees($this->input->post("company_id"),$this->input->post("location_id"),$this->input->post("department_id"),$this->input->post("designation_id"));
-				// get current page records
-				$data["results"] = $this->Employees_model->fetch_all_company_location_department_designation_employees_flt($limit_per_page, $page*$limit_per_page,$this->input->post("company_id"),$this->input->post("location_id"),$this->input->post("department_id"),$this->input->post("designation_id"));
-			}
-		} else {
-			$total_records = $this->Employees_model->record_count();
-			// get current page records
-			$data["results"] = $this->Employees_model->fetch_all_employees($limit_per_page, $page*$limit_per_page);
-		}
-		$config['base_url'] = site_url() . "admin/employees/hr";
-		$config['total_rows'] = $total_records;
-		$config['per_page'] = $limit_per_page;
-		$config["uri_segment"] = 4;
-		 
-		// custom paging configuration
-	   // $config['num_links'] = 2;
-		$config['use_page_numbers'] = TRUE;
-		$config['reuse_query_string'] = FALSE;
-		//$config['page_query_string'] = TRUE;
-		 
-		//$config['use_page_numbers'] = TRUE;
-		$config['num_links'] = $total_records;
-		$config['cur_tag_open'] = '&nbsp;<a>';
-		$config['cur_tag_close'] = '</a>';
-		$config['next_link'] = '»';
-		$config['prev_link'] = '«';
-		 
-		$this->pagination->initialize($config);
-			 
-		// build paging links
-		//$data["links"] = $this->pagination->create_links();
-		$str_links = $this->pagination->create_links();
-		$data["links"] = explode('&nbsp;',$str_links );
-		$data["total_record"] = $total_records;
-		// View data according to array.
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('88',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/employees/directory", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}	  
-     } 
- 
     public function employees_list()
-     {
+    {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
@@ -334,16 +252,80 @@ class Employees extends MY_Controller {
 				$role_status,
 			);
       
-	  }
-	  $output = array(
+	    }
+
+	    $output = array(
 		   "draw" => $draw,
 			 "recordsTotal" => $employee->num_rows(),
 			 "recordsFiltered" => $employee->num_rows(),
 			 "data" => $data
 		);
-	  echo json_encode($output);
-	  exit();
-     }
+	    echo json_encode($output);
+	    exit();
+    }
+
+    // increment/probation/promotion here
+    public function incre_prob_prom_add($id)
+    {
+    	$user_info = $this->db->where('user_id', $id)->get('xin_employees')->row();
+
+		if ($this->input->post('status') == 2) {
+			$form_data = array(
+				'emp_id' => $id,
+				'old_dept_id' => $user_info->department_id,
+				'old_desig_id' => $user_info->designation_id,
+				'old_salary' => $user_info->basic_salary,
+				'new_dept_id' => $user_info->department_id,
+				'new_desig_id' => $user_info->designation_id,
+				'new_salary' => $this->input->post('new_salary'),
+				'effective_date' => $this->input->post('effective_date'),
+				'status' => $this->input->post('status'),
+				'letter_status' => 0,
+			);
+		} else {
+			$form_data = array(
+				'emp_id' => $id,
+				'old_dept_id' => $user_info->department_id,
+				'old_desig_id' => $user_info->designation_id,
+				'old_salary' => $user_info->basic_salary,
+				'new_dept_id' => $this->input->post('new_dept_id'),
+				'new_desig_id' => $this->input->post('new_desig_id'),
+				'new_salary' => $this->input->post('new_salary'),
+				'effective_date' => $this->input->post('effective_date'),
+				'status' => $this->input->post('status'),
+				'letter_status' => 0,
+			);
+		}
+
+		if ($this->db->insert('xin_employee_incre_prob', $form_data)) {
+			if ($this->input->post('status') == 1) {
+				$data = array(
+					'status' => 1,
+					'basic_salary' => $this->input->post('new_salary'),
+					'notify_incre_prob' => $this->input->post('notify_incre_prob'),
+				);
+			} else {
+				$data = array(
+					'basic_salary' => $this->input->post('new_salary'),
+					'notify_incre_prob' => $this->input->post('notify_incre_prob'),
+				);
+			}
+
+			$this->db->where('user_id', $id);
+			if ($this->db->update('xin_employees', $data)) {
+				$Return['success'] = true;
+				$Return['message'] = "Successfully Employee Information Updated";
+			} else {
+				$Return['success'] = false;
+				$Return['message'] = $this->lang->line('xin_error_msg');
+			}
+			$this->output($Return);
+		}
+
+		exit;
+    }
+
+
 	 
 	 public function download_profile(){
 		$system = $this->Xin_model->read_setting_info(1);		
@@ -1205,6 +1187,90 @@ class Employees extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	 } 
+
+	// employees directory/hr
+	public function hr() {
+		
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_employees_directory').' | '.$this->Xin_model->site_title();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		$data['all_user_roles'] = $this->Roles_model->all_user_roles();
+		$data['all_employees'] = $this->Xin_model->all_employees();
+		$data['get_all_companies'] = $this->Xin_model->get_companies();
+		$data['breadcrumbs'] = $this->lang->line('xin_employees_directory');
+		$data['path_url'] = 'employees_directory';
+		
+		// init params
+        $config = array();
+        $limit_per_page = 18;
+        $page = ($this->uri->segment(4)) ? ($this->uri->segment(4) - 1) : 0;
+		if($this->input->post("hrsale_directory")==1){
+			if($this->input->post("company_id")==0 && $this->input->post("location_id")==0 && $this->input->post("department_id")==0 && $this->input->post("designation_id")==0){
+				$total_records = $this->Employees_model->record_count();
+				// get current page records
+				$data["results"] = $this->Employees_model->fetch_all_employees($limit_per_page, $page*$limit_per_page);
+			} else if($this->input->post("company_id")!=0 && $this->input->post("location_id")==0 && $this->input->post("department_id")==0 && $this->input->post("designation_id")==0){
+				$total_records = $this->Employees_model->record_count_company_employees($this->input->post("company_id"));
+				// get current page records
+				$data["results"] = $this->Employees_model->fetch_all_company_employees_flt($limit_per_page, $page*$limit_per_page,$this->input->post("company_id"));
+			} else if($this->input->post("company_id")!=0 && $this->input->post("location_id")!=0 && $this->input->post("department_id")==0 && $this->input->post("designation_id")==0){
+				$total_records = $this->Employees_model->record_count_company_location_employees($this->input->post("company_id"),$this->input->post("location_id"));
+				// get current page records
+				$data["results"] = $this->Employees_model->fetch_all_company_location_employees_flt($limit_per_page, $page*$limit_per_page,$this->input->post("company_id"),$this->input->post("location_id"));
+			} else if($this->input->post("company_id")!=0 && $this->input->post("location_id")!=0 && $this->input->post("department_id")!=0 && $this->input->post("designation_id")==0){
+				$total_records = $this->Employees_model->record_count_company_location_department_employees($this->input->post("company_id"),$this->input->post("location_id"),$this->input->post("department_id"));
+				// get current page records
+				$data["results"] = $this->Employees_model->fetch_all_company_location_department_employees_flt($limit_per_page, $page*$limit_per_page,$this->input->post("company_id"),$this->input->post("location_id"),$this->input->post("department_id"));
+			} else if($this->input->post("company_id")!=0 && $this->input->post("location_id")!=0 && $this->input->post("department_id")!=0 && $this->input->post("designation_id")!=0){
+				$total_records = $this->Employees_model->record_count_company_location_department_designation_employees($this->input->post("company_id"),$this->input->post("location_id"),$this->input->post("department_id"),$this->input->post("designation_id"));
+				// get current page records
+				$data["results"] = $this->Employees_model->fetch_all_company_location_department_designation_employees_flt($limit_per_page, $page*$limit_per_page,$this->input->post("company_id"),$this->input->post("location_id"),$this->input->post("department_id"),$this->input->post("designation_id"));
+			}
+		} else {
+			$total_records = $this->Employees_model->record_count();
+			// get current page records
+			$data["results"] = $this->Employees_model->fetch_all_employees($limit_per_page, $page*$limit_per_page);
+		}
+		$config['base_url'] = site_url() . "admin/employees/hr";
+		$config['total_rows'] = $total_records;
+		$config['per_page'] = $limit_per_page;
+		$config["uri_segment"] = 4;
+		 
+		// custom paging configuration
+	   // $config['num_links'] = 2;
+		$config['use_page_numbers'] = TRUE;
+		$config['reuse_query_string'] = FALSE;
+		//$config['page_query_string'] = TRUE;
+		 
+		//$config['use_page_numbers'] = TRUE;
+		$config['num_links'] = $total_records;
+		$config['cur_tag_open'] = '&nbsp;<a>';
+		$config['cur_tag_close'] = '</a>';
+		$config['next_link'] = '»';
+		$config['prev_link'] = '«';
+		 
+		$this->pagination->initialize($config);
+			 
+		// build paging links
+		//$data["links"] = $this->pagination->create_links();
+		$str_links = $this->pagination->create_links();
+		$data["links"] = explode('&nbsp;',$str_links );
+		$data["total_record"] = $total_records;
+		// View data according to array.
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if(in_array('88',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/employees/directory", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}	  
+    } 
+ 
+
 	/* // get location > departments
 	 public function get_company_elocations() {
 
