@@ -298,9 +298,11 @@ class Employees extends MY_Controller {
 		}
 
 		if ($this->db->insert('xin_employee_incre_prob', $form_data)) {
-			if ($this->input->post('status') == 1) {
+			if ($this->input->post('status') != 2) {
 				$data = array(
 					'status' => 1,
+					'department_id' => $this->input->post('new_dept_id'),
+					'designation_id' => $this->input->post('new_desig_id'),
 					'basic_salary' => $this->input->post('new_salary'),
 					'notify_incre_prob' => $this->input->post('notify_incre_prob'),
 				);
@@ -325,7 +327,24 @@ class Employees extends MY_Controller {
 		exit;
     }
 
+    // increment/probation/promotion list here
+    public function increment_pro_list()
+    {
+    	$data['results'] = $this->Employees_model->increment_pro_list();
 
+		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
+		/*$data['all_departments'] = $this->Department_model->all_departments();
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		$data['all_user_roles'] = $this->Roles_model->all_user_roles();
+		$data['all_office_shifts'] = $this->Employees_model->all_office_shifts();
+		$data['get_all_companies'] = $this->Xin_model->get_companies();
+		$data['all_leave_types'] = $this->Timesheet_model->all_leave_types();*/
+		$data['breadcrumbs'] = $this->lang->line('xin_employees');
+		$data['path_url'] = 'employees';
+
+		$data['subview'] = $this->load->view("admin/employees/increment_pro_list", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data);
+    }
 	 
 	 public function download_profile(){
 		$system = $this->Xin_model->read_setting_info(1);		
@@ -6231,33 +6250,35 @@ class Employees extends MY_Controller {
 		}
 	}
 
-	public function left_resign_apply(){
-		// dd($_POST);
+	public function emp_left_resign($id){
+
+    	$user_info = $this->db->where('user_id', $id)->get('xin_employees')->row();
 		$session = $this->session->userdata('username');
-		$emp_id = $_POST['id'];
-		$dept_id = $_POST['department_id'];
-		$desig_id = $_POST['designation_id'];
-		$effect_date = $_POST['effective_date'];
-		$status = $_POST['status'];
-		$create_by = $session['user_id'];
 
 		$data = array(
-			'emp_id'=> $emp_id,		
-			'department_id'=> $dept_id,		
-			'designation_id'=> $desig_id,		
-			'effective_date'=> $effect_date,		
-			'status'=> $status,		
-			'created_by	'=> $create_by,		
+			'emp_id'=> $id,		
+			'department_id'=> $user_info->department_id,		
+			'designation_id'=> $user_info->designation_id,		
+			'effective_date'=> $this->input->post('effective_date'),		
+			'status'=> $this->input->post('left_resign_status'),		
+			'created_by	'=> $session['user_id'],		
 		);
 
-		if ($this->Employees_model->left_resign_apply($emp_id, $data)) {
-			$response = ['status' => 'success', 'message' => "Successfully Record Insert Done"];
+		if($this->db->insert('xin_employee_left_resign',$data)){
+			$arr = array(
+				'is_active'=> 0,
+				'status'=> $data['status']==1?2:3
+			);
+			$this->db->where('user_id',$id)->update('xin_employees', $arr);
+			$response = ['status' => true, 'message' => "Successfully Record Insert Done"];
 		} else {
-			$response = ['status' => 'success', 'message' => "Sorry! Something Wrong"];
+			$response = ['status' => false, 'message' => "Sorry! Something Wrong, Try again"];
 		}
-        echo json_encode( $response );
+
+        $this->output($response);
         exit;
 	}
+
 	public function inactive_employee(){
 		
 		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();

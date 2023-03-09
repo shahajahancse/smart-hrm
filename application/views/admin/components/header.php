@@ -59,6 +59,14 @@
   	content: "\f00a";
   }
 </style>
+  <style>
+    marquee{
+/*      font-size: 30px;*/
+      font-weight: 800;
+      color: #fff;
+      font-family: sans-serif;
+    }
+  </style>
 
 <header class="main-header">
     <!-- Logo -->
@@ -82,33 +90,40 @@
       <?php } if($user[0]->user_role_id=='1'){?>
         <a href="javascript:void(0);" class="sidebar-toggle sidebar-toggle-hrsale-quicklinks" role="button" data-toggle="modal" data-target=".modal-hrsaleapps" title="<?php echo $this->lang->line('xin_quick_links');?>">	</a>
       <?php } ?>  
+
+      <?php  if(in_array('90',$role_resources_ids)) { 
+        $fcount = 0;
+        if($user[0]->user_role_id != 3){
+          $leaveapp = $this->Xin_model->get_notify_leave_applications();
+          $start_date = date('Y-m-d', strtotime('-1 month', strtotime(date("Y-m-01"))));
+          $end_date = date('Y-m-d', strtotime('+2 month', strtotime(date("Y-m-00"))));
+          $incrementapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 1);
+          $probationapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 4);
+          $fcount = count($leaveapp) + count($incrementapp) + count($probationapp);
+
+          // $nproject = $this->Xin_model->get_notify_projects();
+          // $ntask = $this->Xin_model->get_notify_tasks();
+          // $nannouncements = $this->Xin_model->get_notify_announcements();
+          // $ntickets = $this->Xin_model->get_notify_tickets();
+          // count
+          // $leave_count = $this->Xin_model->count_notify_leave_applications();
+          // $proj_count = $this->Xin_model->count_notify_projects();
+          // $tsk_count = $this->Xin_model->count_notify_tasks();
+          // $nst_count = $this->Xin_model->count_notify_announcements();
+
+          //$this->Xin_model->count_notify_tickets();
+          //$tsk_count = $this->Xin_model->count_notify_tasks(); ?>
+
+          <p style="float: left; margin-top: 15px; width: 65%;">
+            <marquee>Leave : <?= count($leaveapp); ?>, Increment : <?= count($incrementapp); ?>,  Probation : <?= count($probationapp); ?> </marquee>
+          </p>
+
+      <?php }  ?>
+
             
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">     
-  		    <?php  if(in_array('90',$role_resources_ids)) { 
-          $fcount = 0;
-  				if($user[0]->user_role_id != 3){
-  					$leaveapp = $this->Xin_model->get_notify_leave_applications();
-            $start_date = date('Y-m-d', strtotime('-1 month', strtotime(date("Y-m-01"))));
-            $end_date = date('Y-m-d', strtotime('+2 month', strtotime(date("Y-m-00"))));
-            $incrementapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 1);
-            $probationapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 4);
 
-  					// $nproject = $this->Xin_model->get_notify_projects();
-  					// $ntask = $this->Xin_model->get_notify_tasks();
-  					// $nannouncements = $this->Xin_model->get_notify_announcements();
-  					// $ntickets = $this->Xin_model->get_notify_tickets();
-  					// count
-  					// $leave_count = $this->Xin_model->count_notify_leave_applications();
-  					// $proj_count = $this->Xin_model->count_notify_projects();
-  					// $tsk_count = $this->Xin_model->count_notify_tasks();
-  					// $nst_count = $this->Xin_model->count_notify_announcements();
-
-            //$this->Xin_model->count_notify_tickets();
-  					//$tsk_count = $this->Xin_model->count_notify_tasks();
-
-  					$fcount = count($leaveapp) + count($incrementapp) + count($probationapp);
-  				} ?>
           <style>
             .lir {cursor: pointer !important;}
             .menu>li>a>.nrcolor { color: #ff0101 !important; }
@@ -229,8 +244,6 @@
                   <?php } ?>
                 </ul>
                 <?php } ?>  
-
-                              
               </li>
             </ul>
             <?php } ?>
@@ -549,7 +562,7 @@
           <div class="col-md-3">
             <div class="form-group">
               <label> Select Status</label>
-              <select class="form-control" id="status" name="status">
+              <select class="form-control" id="emp_status" name="status">
                 <option value="" disabled selected>Select Status</option>
                 <option value="1">Probation to Regular</option>
                 <option value="2">Increment</option>
@@ -587,7 +600,7 @@
           <div class="col-md-3">
             <div class="form-group">
               <label>Current Salary</label>
-              <input class="form-control" id="old_salary" name="old_salary" value="" />
+              <input class="form-control" id="old_salary" name="old_salary" value="" disabled />
             </div>
           </div>
 
@@ -640,13 +653,13 @@
         e.preventDefault();
 
         // validation here
-        if($('#status').val() === null) {
-          $('#status').focus();
-          $('#status').attr('style', 'border: 1px solid red !important');
+        if($('#emp_status').val() === null) {
+          $('#emp_status').focus();
+          $('#emp_status').attr('style', 'border: 1px solid red !important');
           return false;
         } else {
-          $("#status").attr('style', 'border: 1px solid #ccd6e6 !important');
-          if ($('#status').val() != 2) {
+          $("#emp_status").attr('style', 'border: 1px solid #ccd6e6 !important');
+          if ($('#emp_status').val() != 2) {
             if($('#new_dept_id').val()  === null){
               $('#new_dept_id').focus();
               $('#new_dept_id').attr('style', 'border: 1px solid red !important');
@@ -758,8 +771,8 @@
     $("#increment-modal").modal("show");
   }
 
-  $("#status").change(function () {
-    if ($("#status").val() == 2) {
+  $("#emp_status").change(function () {
+    if ($("#emp_status").val() == 2) {
       $('#new_dept').hide();
       $('#new_desig').hide();
     } else {

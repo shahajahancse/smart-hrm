@@ -63,7 +63,8 @@ $theme = $this->Xin_model->read_theme_info(1);
       </a>
     </div>
   </div>
-  <div class="col-sm-6 col-lg-3">
+
+  <!-- <div class="col-sm-6 col-lg-3">
     <div class="card p-3">
       <a href="<?php echo site_url('admin/roles'); ?>">
         <div class="d-flex align-items-center">
@@ -83,7 +84,28 @@ $theme = $this->Xin_model->read_theme_info(1);
         </div>
       </a>
     </div>
+  </div> -->
+
+  <div class="col-sm-6 col-lg-3">
+    <div class="card p-3">
+      <a href="<?php echo site_url('admin/employees/increment_pro_list'); ?>">
+        <div class="d-flex align-items-center">
+          <span class="stamp-hrsale-4 stamp-hrsale-md bg-hrsale-success-4 mr-3">
+            <i class="fa fa-lock"></i>
+          </span>
+          <div>
+            <h5 class="mb-1"><b> <span style="color: #00c0ef !important">Increment</span>, <span style="color: #31ce36!important;">Probation</span>  
+             <span style="color: #6861ce !important">Promotion</span></b> &nbsp;&nbsp;
+              <small class="text-muted">
+                <?php echo $this->lang->line('xin_performance_management'); ?>
+              </small>
+            </h5>
+          </div>
+        </div>
+      </a>
+    </div>
   </div>
+
   <div class="col-sm-6 col-lg-3">
     <div class="card p-3">
       <a href="<?php echo site_url('admin/timesheet/leave'); ?>">
@@ -105,6 +127,7 @@ $theme = $this->Xin_model->read_theme_info(1);
       </a>
     </div>
   </div>
+
   <div class="col-sm-6 col-lg-3">
     <div class="card p-3">
       <a href="<?php echo site_url('admin/settings'); ?>">

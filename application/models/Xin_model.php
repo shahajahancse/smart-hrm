@@ -3580,6 +3580,28 @@ ORDER BY `expiry_date`");
 			$Total = gmdate("H:i", $hrs_old_int1);
 		}
 		return $Total;
+	}	
+
+	// actual hours for timelog > project
+	public function left_resign_list($status) {
+		$this->db->select('xin_employees.first_name,
+               xin_employees.last_name,
+               xin_employees.user_id,
+               xin_employees.date_of_joining,
+               xin_departments.department_name,
+               xin_designations.designation_name,
+               xin_employee_left_resign.effective_date
+            ')
+            ->from('xin_employees')
+            ->from('xin_departments')
+            ->from('xin_designations')
+            ->from('xin_employee_left_resign')
+            ->where('xin_departments.department_id = xin_employees.department_id')
+            ->where('xin_designations.designation_id = xin_employees.designation_id')
+            ->where('xin_employee_left_resign.emp_id = xin_employees.user_id')
+            ->where('xin_employee_left_resign.status',$status)
+            ->where('xin_employees.is_active',0);
+        return $this->db->get()->result();
 	}
 }
 ?>

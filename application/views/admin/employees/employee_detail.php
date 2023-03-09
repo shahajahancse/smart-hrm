@@ -199,8 +199,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                 <select name="status" id="status" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_location');?>">
                                   <option value="4" <?php echo ($status == 4)? "selected":"";?> >New</option>
                                   <option value="1" <?php echo ($status == 1)? "selected":"";?> >Regular</option>
-                                  <option value="2" <?php echo ($status == 2)? "selected":"";?> >Left</option>
-                                  <option value="3" <?php echo ($status == 3)? "selected":"";?> >Resign</option>
+                                  <!-- <option value="2" <?php echo ($status == 2)? "selected":"";?> >Left</option> -->
+                                  <!-- <option value="3" <?php echo ($status == 3)? "selected":"";?> >Resign</option> -->
                                 </select>
                               </div>
                             </div>

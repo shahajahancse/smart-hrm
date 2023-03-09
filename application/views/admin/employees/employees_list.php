@@ -4,45 +4,9 @@
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
-<?php $system = $this->Xin_model->read_setting_info(1);
-      $lefts = $this->db->select('xin_employees.first_name,
-                                  xin_employees.last_name,
-                                  xin_employees.user_id,
-                                  xin_employees.date_of_joining,
-                                  xin_departments.department_name,
-                                  xin_designations.designation_name,
-                                  xin_employee_left_resign.effective_date
-                                ')
-                          ->from('xin_employees')
-                          ->from('xin_departments')
-                          ->from('xin_designations')
-                          ->from('xin_employee_left_resign')
-                          ->where('xin_departments.department_id = xin_employees.department_id')
-                          ->where('xin_designations.designation_id = xin_employees.designation_id')
-                          ->where('xin_employee_left_resign.emp_id = xin_employees.user_id')
-                          ->where('xin_employees.status',2)
-                          ->where('xin_employees.is_active',0)
-                          ->get()->result();
-      $resigns= $this->db->select('xin_employees.first_name,
-                                   xin_employees.last_name,
-                                   xin_employees.user_id,
-                                   xin_employees.date_of_joining,
-                                   xin_departments.department_name,
-                                   xin_designations.designation_name,
-                                   xin_employee_left_resign.effective_date
-                                ')
-                            ->from('xin_employees')
-                            ->from('xin_departments')
-                            ->from('xin_designations')
-                            ->from('xin_employee_left_resign')
-                            ->where('xin_departments.department_id = xin_employees.department_id')
-                            ->where('xin_designations.designation_id = xin_employees.designation_id')
-                            ->where('xin_employee_left_resign.emp_id = xin_employees.user_id')
-                            ->where('xin_employees.status',3)
-                            ->where('xin_employees.is_active',0)
-                            ->get()->result();
-
-?>
+<?php $system = $this->Xin_model->read_setting_info(1); ?> 
+<?php $lefts = $this->Xin_model->left_resign_list(1); ?>
+<?php $resigns = $this->Xin_model->left_resign_list(2); ?>
 <div class="row <?php echo $get_animate;?>">
     <div class="col-sm-6 col-lg-3">
         <div class="card p-3">
@@ -466,57 +430,7 @@
   </div>
 </div>
 
-
-<!-- left resign modal -->
-
-<div class="modal fade " id="left-resign-modal"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="card" style="padding:10px">
-        <h3 style="margin-left:15px">Employee Left/Resign Form</h3>
-        <form>
-          <div class="form-group col-md-6">
-            <level>Employee Name</label>
-            <input disabled class="form-control" id="emp_name" >
-          </div>
-          <div class="form-group col-md-6">
-            <level>Department Name</label>
-            <input disabled class="form-control" id="department" >
-          </div>
-          <div class="form-group col-md-6">
-            <level>Designation Name</label>
-            <input disabled class="form-control" id="designation" >
-          </div>
-          <div class="form-group col-md-6">
-            <level>Joining Date</label>
-            <input disabled class="form-control" id="joining_date" >
-          </div>
-          <input id='department_id' type="hidden">
-          <input id='designation_id' type="hidden">
-          <input id='id' type="hidden">
-          <div class="form-group col-md-6">
-            <level> Employee Status </label>
-            <select class="form-control" id="status" >
-              <option value="" disabled selected>Select Status</option>
-              <option value="1">Left</option>
-              <option value="2">Resign</option>
-            </select>
-          </div>
-
-          <div class="form-group col-md-6">
-            <level>Effective Date</label>
-            <input type="date" class="form-control" id="effective_date">
-          </div>
-
-          <button id="button" class="btn btn-sm btn-primary pull-right " style="margin-right:16px;margin-bottom:20px">Submit</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
+<!-- left resign list modal -->
 <div class="modal fade " id="left_resign_list"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -605,11 +519,58 @@
         </div>
 
         </div>
-        <button data-dismiss="modal" id="button" class="btn btn-sm btn-danger" style="margin-left:16px;margin-bottom:20px">Close</button>
+        <button data-dismiss="modal" id="buttonsss" class="btn btn-sm btn-danger" style="margin-left:16px;margin-bottom:20px">Close</button>
     </div>
   </div>
 </div>
 
+
+<!-- left resign form modal -->
+<div class="modal fade " id="left-resign-modal"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="card" style="padding:10px">
+        <h3 style="margin-left:15px">Employee Left/Resign Form</h3>
+        <?php $attributes = array('id' => 'emp_left_resign', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
+        <?php $hidden = array('user_id' => $session['user_id']);?>
+        <?php echo form_open('admin/employees/emp_left_resign', $attributes, $hidden);?>
+          <div class="form-group col-md-6">
+            <level>Employee Name</label>
+            <input disabled class="form-control" id="emp_name" >
+          </div>
+          <div class="form-group col-md-6">
+            <level>Department Name</label>
+            <input disabled class="form-control" id="department" >
+          </div>
+          <div class="form-group col-md-6">
+            <level>Designation Name</label>
+            <input disabled class="form-control" id="designation" >
+          </div>
+          <div class="form-group col-md-6">
+            <level>Joining Date</label>
+            <input disabled class="form-control" id="doj" >
+          </div>
+          <input id='hidden_id_emp' type="hidden" name="hidden_id_emp">
+
+          <div class="form-group col-md-6">
+            <level> Employee Status </label>
+            <select class="form-control" id="left_resign_status" name="left_resign_status">
+              <option value="" disabled selected>Select Status</option>
+              <option value="1">Left</option>
+              <option value="2">Resign</option>
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <level>Effective Date</label>
+            <input type="date" class="form-control" id="lr_effective_date" name="effective_date">
+          </div>
+
+          <button id="button" class="btn btn-sm btn-primary pull-right " style="margin-right:16px;margin-bottom:20px">Submit</button>
+        <?php echo form_close(); ?>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
   $(document).ready(function(){
@@ -626,104 +587,106 @@
   });
 </script>
 
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#emp_left_resign").on("submit", function (e) {
+      e.preventDefault();
+
+      // validation here
+      if($('#left_resign_status').val() === null) {
+        $('#left_resign_status').focus();
+        $('#left_resign_status').attr('style', 'border: 1px solid red !important');
+        return false;
+      } else {
+        $("#left_resign_status").attr('style', 'border: 1px solid #ccd6e6 !important');
+      }
+        
+      if($('#lr_effective_date').val() ==''){
+        $('#lr_effective_date').focus();
+        $('#lr_effective_date').attr('style', 'border: 1px solid red !important');
+        return false;
+      } else {
+        $("#lr_effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
+      }
+      // end validation 
+
+      // ajax request on form submit
+      var emp_id = $('#hidden_id_emp').val();
+      var sendData = $(this).serialize();
+      var targetUrl = "<?=base_url('admin/employees/emp_left_resign/')?>" + emp_id;
+      $.ajax({
+          url: targetUrl,
+          type: "POST",
+          data: sendData,
+          dataType: "json",
+          success: function (response) {
+            if (response.status == true) {
+              alert(response.message);
+            } else {
+              alert(response.message);
+            }
+            location.reload();
+          },
+      });
+    });
+  });
+
+</script>
+
 <script>
   function left_resign(id) {
 
     var url = "<?php echo base_url('admin/employees/fetch_user_info_ajax/');?>"+id;
   
     $.ajax({
-        url         : url,
-        type        : 'POST',
-        dataType    : 'json',
-        success     : function(response){
-
-          $('#id').val(id);
-          $('#emp_name').val(response[0].first_name +' '+response[0].last_name);
-          $('#department_id').val(response[0].department_id);
-          $('#department').val(response[0].department_name);
-          $('#designation_id').val(response[0].designation_id);
-          $('#designation').val(response[0].designation_name);
-          $('#joining_date').val(response[0].date_of_joining);
-        }
+      url         : url,
+      type        : 'POST',
+      dataType    : 'json',
+      success     : function(response){
+        $('#hidden_id_emp').val(id);
+        $('#emp_name').val(response[0].first_name +' '+response[0].last_name);
+        $('#department_id').val(response[0].department_id);
+        $('#department').val(response[0].department_name);
+        $('#designation_id').val(response[0].designation_id);
+        $('#designation').val(response[0].designation_name);
+        $('#doj').val(response[0].date_of_joining);
+      }
     });
-     $("#left-resign-modal").modal("show");
 
+    $("#left-resign-modal").modal("show");
   }
-
-  $('#button').on('click',function(){
-
-      var id=  $('#id').val();
-      var department_id=  $('#department_id').val();
-      var designation_id=   $('#designation_id').val();
-      var status= $('#status').val();
-      var effective_date= $('#effective_date').val();
-      if($('#status').val()==null){
-        // alert('Please Select Status');
-        $('#status').focus();
-        $("#status").attr('style', 'border: 1px solid red !important');
-        
-        return false;
-      }
-
-      if($('#effective_date').val()==''){
-        // alert('Please Insert Effective Date');
-        $('#effective_date').focus();
-        $("#effective_date").attr('style', 'border: 1px solid red !important');
-
-        return false;
-      }
-      var url = "<?php echo base_url('admin/employees/left_resign_apply');?>";
-     
-      $.ajax({
-              url : url,
-              type: 'POST',
-              data: {
-                      id:id,
-                      department_id:department_id,
-                      designation_id:designation_id,
-                      status:status,
-                      effective_date:effective_date,
-                    },
-              success: function(response){
-                alert(status == 1 ? "Employee Status Set Left Successfully !":"Employye Status Set Resign Successfully !");
-                window.location.replace("<?php echo base_url('admin/employees')?>");
-              }
-      });
-  });
 
   $(document).ready(function(){
 
     $('#left-resign-modal').on('hidden.bs.modal', function(){
-                $('#status').val('');
-                $('#effective_date').val('');
-                $("#status").attr('style', 'border: 1px solid #ccd6e6 !important');
-                $("#effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
+      $('#left_resign_status').val('');
+      $('#lr_effective_date').val('');
+      $("#left_resign_status").attr('style', 'border: 1px solid #ccd6e6 !important');
+      $("#lr_effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
     });
 
-    $("#status").on('input',function(){
-      $("#status").attr('style', 'border: 1px solid #ccd6e6 !important');
-      if($("#status").val() ==''){
-        $("#status").attr('style', 'border: 1px solid red !important');
+    $("#left_resign_status").on('input',function(){
+      $("#left_resign_status").attr('style', 'border: 1px solid #ccd6e6 !important');
+      if($("#left_resign_status").val() ==''){
+        $("#left_resign_status").attr('style', 'border: 1px solid red !important');
         return false;
       }
     });
 
-    $("#effective_date").on('input',function(){
-      $("#effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
-      if($("#effective_date").val() ==''){
-        $("#effective_date").attr('style', 'border: 1px solid red !important');
+    $("#lr_effective_date").on('input',function(){
+      $("#lr_effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
+      if($("#lr_effective_date").val() ==''){
+        $("#lr_effective_date").attr('style', 'border: 1px solid red !important');
         return false;
       }
     });
+
+    $('#inactive').click(function(e){
+      e.preventDefault();
+      $('#left_resign_list').modal('show');
+      $('#left_table').DataTable();
+      $('#resign_table').DataTable();
+    })
 
   });
-
-
-  $('#inactive').click(function(e){
-    e.preventDefault();
-
-    $('#left_resign_list').modal('show');
-    $('#left_table').DataTable();
-    $('#resign_table').DataTable();
-  })
 </script>

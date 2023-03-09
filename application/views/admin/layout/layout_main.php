@@ -97,15 +97,16 @@ if(!is_null($role_user)){
             </div>
       </h1>
       <img id="hrload-img" src="<?php echo base_url()?>skin/img/loading.gif" style="">
-	<style type="text/css">
-    #hrload-img {
-        display: none;
-        z-index: 87896969;
-        float: right;
-        margin-right: 25px;
-        margin-top: -32px;
-    }
-    </style>
+      	 <style type="text/css">
+            #hrload-img {
+              display: none;
+              z-index: 87896969;
+              float: right;
+              margin-right: 25px;
+              margin-top: -32px;
+            }
+          </style>
+
       <?php if($user_info[0]->user_role_id==1): ?>
       <ol class="breadcrumb">
         <li><a href="<?php echo site_url('admin/theme/');?>"><i class="fa fa-columns"></i> <?php echo $this->lang->line('xin_theme_settings');?></a></li>

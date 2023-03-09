@@ -1717,17 +1717,28 @@ class Employees_model extends CI_Model {
 
 	}
 	
-	public function left_resign_apply($emp_id, $data){
-		if($this->db->insert('xin_employee_left_resign',$data)){
-			$arr = array(
-				'is_active'=> 0,
-				'status'=> $data['status']==1?2:3
-			);
-			$this->db->where('user_id',$emp_id)->update('xin_employees', $arr);
-			return true;
-		} else {
-			return false;
-		}
+
+	public function increment_pro_list(){
+		$this->db->select('
+				   xin_employees.first_name,
+                   xin_employees.last_name,
+                   xin_employees.basic_salary,
+                   xin_employees.date_of_joining,
+                   xin_departments.department_name,
+                   xin_designations.designation_name,
+                   emip.id,
+                   emip.old_salary,
+                   emip.new_salary,
+                   emip.letter_status,
+                ');
+    	$this->db->from('xin_employee_incre_prob as emip');
+    	$this->db->from('xin_employees');
+    	$this->db->from('xin_departments');
+    	$this->db->from('xin_designations');
+    	$this->db->where('xin_employees.user_id = emip.emp_id');
+    	$this->db->where('xin_departments.department_id = emip.new_dept_id');
+    	$this->db->where('xin_designations.designation_id = emip.new_desig_id');
+    	return $this->db->order_by('id','DESC')->get()->result();
 	}
 }
 ?>
