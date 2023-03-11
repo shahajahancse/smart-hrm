@@ -1730,6 +1730,7 @@ class Employees_model extends CI_Model {
                    emip.old_salary,
                    emip.new_salary,
                    emip.letter_status,
+                   emip.status,
                 ');
     	$this->db->from('xin_employee_incre_prob as emip');
     	$this->db->from('xin_employees');
