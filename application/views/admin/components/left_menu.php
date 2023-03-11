@@ -258,6 +258,10 @@ if($theme[0]->sub_menu_icons != ''){
 
           <?php if(in_array('1031',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['requi_active']))echo $arr_mod['requi_active'];?>"> <a href="<?php echo site_url('admin/inventory/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Item Requisition </a> </li>
+          <?php } ?>    
+
+          <?php if(in_array('1036',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['purchase_active']))echo $arr_mod['purchase_active'];?>"> <a href="<?php echo site_url('admin/inventory/purchase');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Purchase </a> </li>
           <?php } ?>        
 
           <?php if(in_array('1041',$role_resources_ids)) { ?>

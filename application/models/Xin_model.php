@@ -310,6 +310,10 @@ class Xin_model extends CI_Model {
 			$arr['requi_active'] = 'active';
 			$arr['invtry_open'] = 'active';
 			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='purchase') {
+			$arr['purchase_active'] = 'active';
+			$arr['invtry_open'] = 'active';
+			return $arr;
 		} else if($mClass=='inventory' && $mMethod=='products') {
 			$arr['invtry_open'] = 'active';
 			$arr['insetting_open'] = 'active';
