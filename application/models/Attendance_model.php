@@ -216,9 +216,15 @@ class Attendance_model extends CI_Model {
     }
 
     function dayoff_check($process_date)
-    {     
-        $off_day = array('Friday','Saturday');
-        // get day  
+    {   
+        if ($process_date == '2023-03-25') {
+            $off_day = array('Friday','Saturday');
+        } else if ($process_date < '2023-04-20' && $process_date > '2023-03-10') {
+            $off_day = array('Friday');
+        } else {
+            $off_day = array('Friday','Saturday');
+        }
+        // get day name
         $day = date("l", strtotime($process_date));
 
         if (in_array($day, $off_day)) {

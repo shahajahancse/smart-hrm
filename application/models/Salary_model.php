@@ -368,7 +368,12 @@ class Salary_model extends CI_Model {
     public function get_employee_ajax_request($status)
     {
         $this->db->select('user_id as emp_id, first_name, last_name');
-        $this->db->where('status',$status);
+        if ($status == 1) {
+            $this->db->where_in('status', array(1,4));
+        } else {
+            $this->db->where('status',$status);
+        }
+        // $this->db->where('status',$status);
         $this->db->where('company_id',1);
         $this->db->order_by('user_id', 'asc');
         return $result = $this->db->get('xin_employees')->result();
