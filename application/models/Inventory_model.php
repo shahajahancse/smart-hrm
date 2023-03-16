@@ -32,6 +32,31 @@
 	public function save($table, $data){
 	   return $this->db->insert($table, $data);
 	} 
+	public function purchase_products($id,$role_id){
+	       $this->db->select("products_categories.category_name,
+									products_sub_categories.sub_cate_name,
+									products.product_name,
+									purchase_requisitions.quantity,
+									purchase_requisitions.status,
+									purchase_requisitions.id,
+									purchase_requisitions.requisition_id,
+									xin_employees.first_name,
+									xin_employees.last_name
+						 		")
+									->from("products_categories")
+									->from("products_sub_categories")
+									->from("products")
+									->from("purchase_requisitions")
+									->from('xin_employees')
+									->where("xin_employees.user_id = purchase_requisitions.requisition_id")
+									->where("products_categories.id = purchase_requisitions.cat_id")
+									->where("products_sub_categories.id= purchase_requisitions.sub_cate_id")
+									->where("products.id = purchase_requisitions.product_id");
+		if($role_id==4){
+			$this->db->where('purchase_requisitions.requisition_id',$id);
+		}
+		return	$this->db->get()->result();
+	} 
 
 }
 ?>
