@@ -58,48 +58,46 @@ class Inventory extends MY_Controller {
 		}
 		if(isset($_POST['btn'])){
 
+			$ids=$this->Inventory_model->save('requisitions', ['user_id'=>$session['user_id']]);
+			$last_id=$this->db->insert_id();
 			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
-			$requisition_data=[ 
-								'cat_id' => $_POST['cat_id'][$i],
-								'sub_cate_id'=>$_POST['sub_cate_id'][$i],
-								'product_id'=>$_POST['product_id'][$i],
-								'quantity'=>$_POST['quantity'][$i],
-								'requisition_id'=>$_POST['user_id'],
-					];
-			// dd($requisition_data);	
-			if ($hid = $this->input->post('hidden_id')) {
-				$this->db->where('id', $hid)->update('purchase_requisitions', $requisition_data);
-		        $this->session->set_flashdata('success', 'Successfully Updated Done');
-			} else {
-				if($this->Inventory_model->save('purchase_requisitions', $requisition_data)){
-			        $this->session->set_flashdata('success', 'Successfully Insert Done');
+				$requisition_data=[ 
+									'cat_id'		 => $_POST['cat_id'][$i],
+									'sub_cate_id'	 => $_POST['sub_cate_id'][$i],
+									'product_id'	 => $_POST['product_id'][$i],
+									'quantity'		 => $_POST['quantity'][$i],
+									'requisition_id' => $last_id,
+								  ];
+				if ($hid = $this->input->post('hidden_id')) {
+					$this->db->where('id', $hid)->update('requisition_details', $requisition_data);
+					$this->session->set_flashdata('success', 'Successfully Updated Done');
 				} else {
-					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
-				}
-			}
-		}
-		redirect('admin/inventory/purchase');
-			
+					if($this->Inventory_model->save('requisition_details', $requisition_data)){
+						$this->session->set_flashdata('success', 'Successfully Insert Done');
+					} else {
+						$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+					}
+				}		
+		    }
+			redirect('admin/inventory/purchase');	
 		}				
 
         //Dropdown
-		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
-		$data['path_url'] = 'inventory';
-	    $data['categorys'] = $this->db->get("products_categories")->result();
-	    $data['products'] = $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-	    $data['results'] = $this->Inventory_model->product_list();
-	    $data['sub_categorys'] = $this->db->get("products_sub_categories")->result();
-	    $data['units'] = $this->db->get("product_unit")->result();
-	    $data['col'] = $id;
-	    $data['user_role_id'] = $session['role_id'];
+		$data['title'] 			= 'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Inventory';
+		$data['path_url'] 		= 'inventory';
+	    $data['categorys']		= $this->db->get("products_categories")->result();
+	    $data['products'] 		= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+	    $data['results'] 		= $this->Inventory_model->product_list();
+	    $data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
+	    $data['units'] 			= $this->db->get("product_unit")->result();
+	    $data['col'] 			= $id;
+	    $data['user_role_id'] 	= $session['role_id'];
 		if ($id != null) {
-			$data['row'] = $this->db->where('id',$id)->get("products")->row();
+			$data['row'] 		= $this->db->where('id',$id)->get("products")->row();
 		}
-
-
-		$data['subview'] = $this->load->view("admin/inventory/purchase", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
+		$data['subview'] 		= $this->load->view("admin/inventory/purchase", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
 	public function products($id = null)
