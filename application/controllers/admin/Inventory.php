@@ -302,5 +302,19 @@ class Inventory extends MY_Controller {
         echo (json_encode($data));
 	}
 
+	public function purchase_detals($id)	{
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Inventory';
+		$data['path_url'] = 'inventory';
+	    $data['results'] = $this->Inventory_model->requisition_details($id);
+		$data['subview'] = $this->load->view("admin/inventory/purchase_details", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
 }
 ?>
