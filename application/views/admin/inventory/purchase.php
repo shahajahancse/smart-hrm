@@ -72,11 +72,13 @@
               <?php if($user_role_id==1){?>
                 <th class="text-center" style="width:100px;">Requisition By</th>
                 <th class="text-center" style="width:20px;">Status</th>
+                <th class="text-center" style="width:20px;">Request Date</th>
                 <th class="text-center" style="width:50px;">Action</th>
               <?php }?> 
               <?php if($user_role_id==4){?>
                 <th class="text-center" style="width:100px;">Category Name</th>
                 <th class="text-center" style="width:20px;">Status</th>
+                <th class="text-center" style="width:20px;">Request Date</th>
                 <th class="text-center" style="width:50px;">Action</th>
               <?php }?> 
           </tr>
@@ -89,25 +91,28 @@
                   <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                   <td class="text-center"><?php echo $rows->status==1?"
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
-                      ($rows->status==2 ? "<span class='badge' style='background-color:#28a745'><b>Approved</b>
-                      </span>" : "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>");
-                ?>
+                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
+                    ?>
               </td>
-                <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_detals/'.$rows->user_id);?>"><i class="fa fa-edit" aria-hidden="true"></i> Edit</></td>
+              <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
+                <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->user_id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td>
               <?php } ?>
               <?php if($user_role_id==4){?>
                 <td class="text-center"><?php echo $rows->category_name; ?></td>
                 <td class="text-center"><?php echo $rows->status==1?"
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
-                     ($row->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>");
+                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
                     ?></td>
+                <td class="text-center"><?php echo $rows->created_at; ?></td>
+
                 <td class="text-center">
                 <?php if($rows->status ==1){?>
-                  <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_detals/'.$rows->cat_id);?>"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a>
+                  <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->cat_id);?>"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a>
                 <?php } else{?>
-                <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase/'.$rows->cat_id);?>"><i class="fa fa-eye" aria-hidden="true"></i>Details</a>
+                <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->user_id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
                 <?php }?>
               </td>
+
             </tr>
           <?php }} ?>
         </tbody>

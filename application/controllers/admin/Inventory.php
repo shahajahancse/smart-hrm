@@ -60,6 +60,7 @@ class Inventory extends MY_Controller {
 
 			$ids=$this->Inventory_model->save('requisitions', ['user_id'=>$session['user_id']]);
 			$last_id=$this->db->insert_id();
+
 			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
 				$requisition_data=[ 
 									'cat_id'		 => $_POST['cat_id'][$i],
@@ -68,6 +69,7 @@ class Inventory extends MY_Controller {
 									'quantity'		 => $_POST['quantity'][$i],
 									'requisition_id' => $last_id,
 								  ];
+								  
 				if ($hid = $this->input->post('hidden_id')) {
 					$this->db->where('id', $hid)->update('requisition_details', $requisition_data);
 					$this->session->set_flashdata('success', 'Successfully Updated Done');
@@ -302,19 +304,69 @@ class Inventory extends MY_Controller {
         echo (json_encode($data));
 	}
 
-	public function purchase_detals($id)	{
+	public function purchase_details($id)	{
+		// dd($id);
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-
 		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Inventory';
 		$data['path_url'] = 'inventory';
 	    $data['results'] = $this->Inventory_model->requisition_details($id);
+	    $data['status'] = $this->db->select('status')->where('user_id',$id)->limit(1)->get('requisitions')->row()->status;
+	    $data['user_id'] = $id;
 		$data['subview'] = $this->load->view("admin/inventory/purchase_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
+	public function purchase_approved($id){
+		// dd($id);
+		$approved = $this->db->where('user_id',$id)->update('requisitions',['status'=>2]);
+		if($approved){
+		 redirect("admin/inventory/purchase","refresh");
+		}
+	}
+
+	public function purchase_rejected($id){
+		// dd($id);
+		$approved = $this->db->where('user_id',$id)->update('requisitions',['status'=>4]);
+		if($approved){
+		 redirect("admin/inventory/purchase","refresh");
+		}
+	}
+
+	public function purchase_edit_approved($id){
+		// dd($id);
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Inventory';
+		$data['path_url'] = 'inventory';
+	    $data['results'] = $this->Inventory_model->requisition_details($id);
+	    // $data['status'] = $this->db->select('status')->where('user_id',$id)->limit(1)->get('requisitions')->row()->status;
+	    $data['user_id'] = $id;
+		$data['subview'] = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data);
+
+		// $approved = $this->db->where('user_id',$id)->update('requisitions',['status'=>4]);
+		// if($approved){
+		//  redirect("admin/inventory/purchase","refresh");
+		// }
+	}
+
+
+	public function persial_approved($id){
+		// dd($id);
+		$approved = $this->db->where('user_id',$id)->update('requisitions',['status'=>4]);
+		if($approved){
+		 redirect("admin/inventory/purchase","refresh");
+		}
+	}
+
+
 
 }
 ?>
