@@ -104,15 +104,9 @@
                      ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
                     ?></td>
                 <td class="text-center"><?php echo $rows->created_at; ?></td>
-
                 <td class="text-center">
-                <?php if($rows->status ==1){?>
-                  <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->cat_id);?>"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a>
-                <?php } else{?>
-                <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->user_id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
-                <?php }?>
-              </td>
-
+                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->cat_id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
+                </td>
             </tr>
           <?php }} ?>
         </tbody>

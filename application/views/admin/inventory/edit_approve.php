@@ -1,6 +1,6 @@
 <?php 
 $session = $this->session->userdata('username');
-// dd($user_id);
+// dd($results);
 $get_animate = $this->Xin_model->get_content_animate();
 ?>
 <style>
@@ -36,6 +36,8 @@ $get_animate = $this->Xin_model->get_content_animate();
                 <td><?php echo $row->sub_cate_name?></td>
                 <td><?php echo $row->product_name?></td>
                 <td><input type="number" name="qunatity[]" min="1" style="width:20%" value="<?php echo $row->quantity?>"></td>
+                <td><a href="<?php echo  $row->id?>">Delete</a></td>
+
             </tr>
             <?php }?>
         </tbody>

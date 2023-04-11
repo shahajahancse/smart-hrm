@@ -310,18 +310,25 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
+		$data['title'] 		 = 'Inventory | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Inventory';
-		$data['path_url'] = 'inventory';
-	    $data['results'] = $this->Inventory_model->requisition_details($id);
-	    $data['status'] = $this->db->select('status')->where('user_id',$id)->limit(1)->get('requisitions')->row()->status;
-	    $data['user_id'] = $id;
-		$data['subview'] = $this->load->view("admin/inventory/purchase_details", $data, TRUE);
+		$data['path_url'] 	 = 'inventory';
+		if($session['role_id']==1){
+		$data['results']	 = $this->Inventory_model->requisition_details($id);
+	    $data['status']      = $this->db->select('status')
+										->where('user_id',$id)
+										->get('requisitions')
+										->row()->status;
+		}
+		else{
+			$data['results']	 = $this->Inventory_model->req_details_cat_wise($id);
+		}
+	    $data['user_id'] 	 = $id;
+		$data['subview'] 	 = $this->load->view("admin/inventory/purchase_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
 	public function purchase_approved($id){
-		// dd($id);
 		$approved = $this->db->where('user_id',$id)->update('requisitions',['status'=>2]);
 		if($approved){
 		 redirect("admin/inventory/purchase","refresh");
@@ -329,7 +336,6 @@ class Inventory extends MY_Controller {
 	}
 
 	public function purchase_rejected($id){
-		// dd($id);
 		$approved = $this->db->where('user_id',$id)->update('requisitions',['status'=>4]);
 		if($approved){
 		 redirect("admin/inventory/purchase","refresh");
@@ -337,24 +343,17 @@ class Inventory extends MY_Controller {
 	}
 
 	public function purchase_edit_approved($id){
-		// dd($id);
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
+		$data['title']       = 'Inventory | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Inventory';
-		$data['path_url'] = 'inventory';
-	    $data['results'] = $this->Inventory_model->requisition_details($id);
-	    // $data['status'] = $this->db->select('status')->where('user_id',$id)->limit(1)->get('requisitions')->row()->status;
-	    $data['user_id'] = $id;
-		$data['subview'] = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
+		$data['path_url']    = 'inventory';
+	    $data['results'] 	 = $this->Inventory_model->requisition_details($id);
+	    $data['user_id'] 	 = $id;
+		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data);
-
-		// $approved = $this->db->where('user_id',$id)->update('requisitions',['status'=>4]);
-		// if($approved){
-		//  redirect("admin/inventory/purchase","refresh");
-		// }
 	}
 
 

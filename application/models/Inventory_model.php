@@ -64,12 +64,14 @@
 	} 
 
 	public  function requisition_details($id){
+		// dd($id);
 			$this->db->select(" 
+								requisition_details.id,
+								requisitions.user_id,
 								products_categories.category_name,
 								products_sub_categories.sub_cate_name,
 								products.product_name,
 								requisition_details.quantity,
-								requisitions.user_id,
 							")
 			->from("products_categories")
 			->from("products_sub_categories")
@@ -83,6 +85,28 @@
 			->where("requisitions.id 			= requisition_details.requisition_id")	
 			->where("xin_employees.user_id 		= requisitions.user_id")	
 			->where("requisitions.user_id 		= $id")
+			->group_by('requisition_details.id');
+			return $this->db->get()->result();
+	}
+	public  function req_details_cat_wise($id){
+		// dd($id);
+			$this->db->select(" 
+								products_categories.category_name,
+								products_sub_categories.sub_cate_name,
+								products.product_name,
+								requisition_details.quantity,
+								requisitions.user_id,
+							")
+			->from("products_categories")
+			->from("products_sub_categories")
+			->from("products")
+			->from("requisitions")
+			->from("requisition_details")
+			->where("products_categories.id     = requisition_details.cat_id")	
+			->where("products_sub_categories.id = requisition_details.sub_cate_id")	
+			->where("products.id 				= requisition_details.product_id")	
+			->where("requisitions.id 			= requisition_details.requisition_id")
+			->where("requisition_details.cat_id = $id")
 			->group_by('requisition_details.id');
 			return $this->db->get()->result();
 	}
