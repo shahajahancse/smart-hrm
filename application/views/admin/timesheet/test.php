@@ -29,6 +29,10 @@ td {
 
 
 }
+.tdb{
+    background-color: cadetblue;
+
+}
 </style>
     <!-- Bootstrap CSS -->
   </head>
@@ -95,7 +99,7 @@ $imonth = date('F', $date);
     <div class="box-datatable table-responsive">
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
         <thead>
-          <tr>
+          <tr class="tdb">
             <th class="mastering"><?php echo $this->lang->line('xin_employee');?></th>
             <th class="mastering">Designation</th>
             <?php for($i = 1; $i <= $daysInMonth; $i++): ?>
