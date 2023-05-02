@@ -11,14 +11,22 @@
             border: 2px black solid;
     border-collapse: collapse;
     width: -webkit-fill-available;
-    font-size: large;
-    font-family: sans-serif;
 }
-th, td {
+th{
     border: 2px black solid;
     border-collapse: collapse;
-    width: auto;
-    height: auto;
+    font-size: 20px;
+
+
+}
+
+td {
+    border: 2px black solid;
+    border-collapse: collapse;
+    font-size: 15px;
+    text-align: center;
+
+
 
 }
 </style>
@@ -100,7 +108,7 @@ $imonth = date('F', $date);
 						?>
             <th><strong><?php echo '<div>'.$i.' </div>';?></strong></th>
             <?php endfor; ?>
-            <th width="100px">W.D</th>
+            <th width="100px">P</th>
             <th width="100px">A</th>
             <th width="100px">W</th>
             <th width="100px">H</th>
