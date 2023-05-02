@@ -369,6 +369,14 @@ class Attendance_model extends CI_Model {
         return $this->db->get()->result();
         
     }
+    public function get_employee($emp_ids = null)
+    {
+        $this->db->select('*');
+        $this->db->from('xin_employees');
+        $this->db->where_in('xin_employees.user_id', $emp_ids);
+        return $this->db->get()->result();
+        
+    }
 
     public function daily_report($attendance_date, $emp_id, $status = null, $late_status=null)
     {   

@@ -32,8 +32,8 @@ class Attendance extends MY_Controller {
 
 		// $this->load->model("Employees_model");
 		// $this->load->library('email');
-		// $this->load->model("Department_model");
-		// $this->load->model("Designation_model");
+		$this->load->model("Department_model");
+		$this->load->model("Designation_model");
 		// $this->load->model("Roles_model");
 		// $this->load->model("Project_model");
 		// $this->load->model("Location_model");
@@ -86,6 +86,7 @@ class Attendance extends MY_Controller {
             $reason = $this->input->post('reason');
             $status = $this->input->post('status');
             $sql = $this->input->post('sql');
+
 	    	$emp_id = explode(',', trim($sql));
 
 			$in_time = $in_time ? $date .' '. $in_time:'';
@@ -409,14 +410,38 @@ class Attendance extends MY_Controller {
 	 	$second_date = $this->input->post('second_date');
     	$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
+		
+			
+
 
 		$data['first_date'] = $first_date;
 		$data['second_date'] = $second_date;
 		$data['company_info'] = $this->Xin_model->get_company_info(1);
 		$data['all_employees'] = $this->Attendance_model->get_employee_infos($emp_id);
-		// dd($data['all_employees']);
+		
 
 	 	echo $this->load->view("admin/attendance/job_card", $data, TRUE);
+		  
+    }
+
+
+	public function monthly_report() {
+	 	$first_date = $this->input->post('first_date');
+	 
+    	$sql = $this->input->post('sql');
+		$emp_id = explode(',', trim($sql));
+
+
+		$data['first_date'] = $first_date;
+		
+		
+		
+		$data['xin_employees'] =  $this->Attendance_model->get_employee($emp_id);
+		// dd($data['all_employees']);
+
+		echo $this->load->view("admin/timesheet/test", $data, TRUE);
+		
+
 		  
     }
 

@@ -30,6 +30,7 @@ class Timesheet extends MY_Controller {
 		$this->load->model("Roles_model");
 		$this->load->model("Project_model");
 		$this->load->model("Location_model");
+		$this->load->model("Attendance_model");
 	}
 	
 	/*Function to set JSON output*/
@@ -290,6 +291,11 @@ class Timesheet extends MY_Controller {
 			redirect('admin/dashboard');
 		}		  
      }
+
+	  
+	//   public function other() {
+	// 	$this->load->view("admin/timesheet/test"); 
+    //  }
 
      
 	 // monthly_attn_sheet_print > timesheet
