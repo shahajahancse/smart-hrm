@@ -5,6 +5,33 @@
 <?php $session = $this->session->userdata('username');?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
+<style>
+
+#loading {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3; /* set z-index higher than other elements */
+  background-color: rgba(255, 255, 255, 0.8); /* semi-transparent background */
+}
+
+#loading img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+</style>
+<div id="loading">
+
+  <img src="<?php echo base_url()?>skin/hrsale_assets/img/loding.gif">
+
+</div>
+
 <div class="col-lg-8">
 <div class="box mb-4 <?php echo $get_animate;?>">
   <div class="box-body">
@@ -103,6 +130,7 @@
   <div  class="box-body" id="entry_form">
 
   </div>
+
 
 
 

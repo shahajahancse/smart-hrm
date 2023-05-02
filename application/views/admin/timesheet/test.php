@@ -6,8 +6,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <style>
+        table{
+            border: 2px black solid;
+    border-collapse: collapse;
+    width: -webkit-fill-available;
+    font-size: large;
+    font-family: sans-serif;
+}
+th, td {
+    border: 2px black solid;
+    border-collapse: collapse;
+    width: auto;
+    height: auto;
+
+}
+</style>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <body>
 
@@ -54,8 +69,17 @@ $imonth = date('F', $date);
 
 
   <div class="box-header with-border">
+  <div class="box-header with-border">
+    <div style="
+    text-align: center;
+">
+    <h3 class="box-title">Monthly Report</h3>
+    <h5>For the month of
+      <?php if(isset($month_year)): echo date('F Y', strtotime($month_year)); else: echo date('F Y'); endif;?>
+    </h5>
+    </div>
+    <div class="box-tools pull-right"> A: Absent, P: Present, H: Holiday, L: Leave, W=Weekend</div>
  
-    <div class="box-tools pull-right"> A: Absent, P: Present, H: Holiday, L: Leave</div>
 
 
 
@@ -65,6 +89,7 @@ $imonth = date('F', $date);
         <thead>
           <tr>
             <th class="mastering"><?php echo $this->lang->line('xin_employee');?></th>
+            <th class="mastering">Designation</th>
             <?php for($i = 1; $i <= $daysInMonth; $i++): ?>
             <?php $i = str_pad($i, 2, 0, STR_PAD_LEFT); ?>
             <?php
@@ -72,16 +97,27 @@ $imonth = date('F', $date);
 						//Convert the date string into a unix timestamp.
 						$unixTimestamp = strtotime($tdate);
 						//Get the day of the week
-						$dayOfWeek = date("D", $unixTimestamp);
 						?>
-            <th><strong><?php echo '<div>'.$i.' </div><span style="text-decoration:underline;">'.$dayOfWeek.'</span>';?></strong></th>
+            <th><strong><?php echo '<div>'.$i.' </div>';?></strong></th>
             <?php endfor; ?>
-            <th width="100px"><?php echo $this->lang->line('xin_timesheet_workdays');?></th>
+            <th width="100px">W.D</th>
+            <th width="100px">A</th>
+            <th width="100px">W</th>
+            <th width="100px">H</th>
+            <th width="100px">L</th>
+            <th width="100px">T.D</th>
+            
           </tr>
         </thead>
         <tbody>
           <?php $j=0;foreach($xin_employees as $r):?>
           <?php 
+           $holiday=0;
+           $weekend=0;
+           $leave=0;
+           $absent=0;
+           $present=0;
+           $totalday=0;
           	$full_name = $r->first_name.' '.$r->last_name;
 						// get designation
 						$designation = $this->Designation_model->read_designation_information($r->designation_id);
@@ -99,10 +135,12 @@ $imonth = date('F', $date);
 						}
 						$department_designation = $designation_name.' ('.$department_name.')';$pcount=0;
 					?>
-          <?php $employee_name = $full_name.'<br><small class="text-muted"><i>'.$department_designation.'<i></i></i></small><br><small class="text-muted"><i>'.$this->lang->line('xin_employees_id').': '.$r->employee_id.'<i></i></i></small>';
+          <?php $employee_name = $full_name;
           ?>
           <tr>
             <td><?php echo $employee_name;?></td>
+            <td><?php echo $designation_name;?></td>
+            
             <?php for($i = 1; $i <= $daysInMonth; $i++):
 							$i = str_pad($i, 2, 0, STR_PAD_LEFT);
 							// get date <
@@ -150,35 +188,52 @@ $imonth = date('F', $date);
 								$leave_arr[] = '99-99-99';
 							}
 							$attendance_status = '';
+                            // $holiday=0;
+                            // $weekend=0;
+                            // $leave=0;
+                            // $absent=0;
 							$check = $this->Timesheet_model->attendance_first_in_check($r->user_id,$attendance_date);
 							if($office_shift[0]->monday_in_time == '' && $day == 'Monday') {
-								$status = 'H';	
+								$status = 'H';
+                                $holiday++;
+
 							} else if($office_shift[0]->tuesday_in_time == '' && $day == 'Tuesday') {
 								$status = 'H';
+                                $holiday++;
 							} else if($office_shift[0]->wednesday_in_time == '' && $day == 'Wednesday') {
 								$status = 'H';
+                                $holiday++;
 							} else if($office_shift[0]->thursday_in_time == '' && $day == 'Thursday') {
 								$status = 'H';
+                                $holiday++;
 							} else if($office_shift[0]->friday_in_time == '' && $day == 'Friday') {
-								$status = 'H';
+								$status = 'W';
+                                $weekend++;
 							} else if($office_shift[0]->saturday_in_time == '' && $day == 'Saturday') {
-								$status = 'H';
+								$status = 'W';
+                                $weekend++;
 							} else if($office_shift[0]->sunday_in_time == '' && $day == 'Sunday') {
 								$status = 'H';
+                                $holiday++;
 							} else if(in_array($attendance_date,$holiday_arr)) { // holiday
 								$status = 'H';
+                                $holiday++;
 							} else if(in_array($attendance_date,$leave_arr)) { // on leave
 								$status = 'L';
+                                $leave++;
 							} else if($check->num_rows() > 0){
 							$attendance = $this->Timesheet_model->attendance_first_in($r->user_id,$attendance_date);
 							$status = 'P';//$attendance[0]->attendance_status;
+                            $present++;
 								
 							} else {
 								
 								 
 								$status = 'A';
+                                $absent++;
 								//$pcount += 0;
 							}
+                            
 							$pcount += $check->num_rows();
 							// set to present date
 							$iattendance_date = strtotime($attendance_date);
@@ -197,7 +252,15 @@ $imonth = date('F', $date);
 						?>
             <td><?php echo $status; ?></td>
             <?php endfor; ?>
-            <td><?php echo $pcount;?></td>
+            <?php $totalday=$present+$absent+$weekend+$holiday+$leave+$totalday;
+             ?>
+            <td><?php echo $present;?></td>
+            <td><?php echo $absent;?></td>
+            <td><?php echo $weekend;?></td>
+            <td><?php echo $holiday;?></td>
+            <td><?php echo $leave;?></td>
+            <td><?php echo $totalday;?></td>
+
           </tr>
           <?php endforeach;?>
         </tbody>
