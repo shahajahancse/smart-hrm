@@ -85,7 +85,8 @@
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
         <!-- <button class="btn btn-sm btn-danger"> Button one</button>-->
-        <h3 class="text-center text-warning fw-bold">Under Maintaince...</h3>
+        <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="monthly_report()">Monthly Report</button>
+
 
       </div>
 
