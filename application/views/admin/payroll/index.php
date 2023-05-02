@@ -92,9 +92,15 @@
         <h4 class="modal-title">Modify Employee Salary</h4>
       </div>
       <?php
-         $sql= 'SELECT user_id,first_name,last_name FROM xin_employees';
+        $this->db->select('user_id, first_name, last_name');
+        $this->db->where_in('status', array(1,4));
+        $this->db->where('company_id',1);
+        $this->db->order_by('user_id', 'asc');
+        $emps = $this->db->get('xin_employees')->result();
+
+         /*$sql= 'SELECT user_id, first_name,last_name FROM xin_employees';
          $employees = $this->db->query($sql);
-         $emps=$employees->result();
+         $emps=$employees->result();*/
       ?>
       <div class="modal-body">
       <form>
@@ -104,7 +110,7 @@
             <select name="emp_id" class="form-control" id="emp_name">
               <option value="">Select Employee Name</option>
               <?php foreach($emps as $emp){?>
-              <option value="<?php echo $emp->user_id?>"><?php echo $emp->first_name.' '.$emp->last_name?></option>
+              <option value="<?php echo $emp->user_id?>"><?php echo $emp->user_id ."  &nbsp;&nbsp;". $emp->first_name.' '.$emp->last_name?></option>
               <?php }?>
             </select>
           </div>

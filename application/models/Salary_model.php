@@ -85,27 +85,30 @@ class Salary_model extends CI_Model {
                 $total_days = $num_of_days;
             }
 
-            $late_count = $this->attendance_count_status($emp_id,1,$first_date,$end_date,"late_status");
+            //=======PRESENT STATUS ======
+            /*$late_count = $this->attendance_count_status($emp_id,1,$first_date,$end_date,"late_status");
             $extra_p = $this->attendance_count_status($emp_id,"Present",$first_date,$end_date,'attendance_status');
-            $meeting = $this->attendance_count_status($emp_id,"Meeting",$first_date,$end_date,'attendance_status');
+            $meeting = $this->attendance_count_status($emp_id,"Meeting",$first_date,$end_date,'attendance_status');*/
             $rows = $this->count_attendance_status_wise($emp_id,$first_date,$end_date);
             $leave = $this->leave_count_status($emp_id, $first_date,$end_date);
 
-            $extra_attend = ($extra_p + $meeting) - $rows->attend;
-            $present = $num_of_days - ($leave->el + $leave->sl + $rows->weekend + $rows->holiday + $rows->absent);
-
-            //=======PRESENT STATUS======
+            $present = $rows->attend + $rows->HalfDay;
+            $leaves = $rows->leaves + $rows->Hleave;
+            $extra_attend = ($rows->extra_p + $rows->meeting) - $rows->attend;
+            $absent = $num_of_days - ($leaves + $rows->weekend + $rows->holiday + $present);
+            // dd($rows);
+            //=======PRESENT STATUS END======
 
             //======= salary calculation here ==========//
             $perday_salary = round($salary / $num_of_days);
 
             // absent deduction
             $absent_deduct = 0; 
-            $absent_deduct = $perday_salary * $rows->absent;
+            $absent_deduct = $perday_salary * $absent;
 
             // late deduction
             $late_deduct = 0;
-            if ($late_count > 2) {
+            if ($rows->late_status > 2) {
                 $late_deduct = $perday_salary;
             }
 
@@ -129,13 +132,13 @@ class Salary_model extends CI_Model {
 
                 'present' => $present,
                 'extra_p' => $extra_attend,
-                'absent' => $rows->absent,
+                'absent' => $absent,
                 'holiday' => $rows->holiday,
                 'weekend' => $rows->weekend ,
                 'earn_leave' => ($leave->el != null) ? $leave->el:0,
                 'sick_leave' => ($leave->sl != null) ? $leave->sl:0,
 
-                'late_count' => $late_count,
+                'late_count' => $rows->late_status,
                 'late_deduct' => $late_deduct,
                 'absent_deduct' => $absent_deduct,
                 'modify_salary' => 0,
@@ -157,6 +160,7 @@ class Salary_model extends CI_Model {
                 'year_to_date' => date('d-m-Y'),
                 'created_at' => date('d-m-Y h:i:s')
             );
+            // dd($data);
 
             $query = $this->db->where('salary_month',$salary_month)->where('employee_id',$emp_id)->get('xin_salary_payslips');
             if ($query->num_rows() > 0) {
@@ -185,7 +189,7 @@ class Salary_model extends CI_Model {
         $query = $this->db->get('xin_leave_applications');
         return $query->row();
     }
-
+    // this method not used 06-04-2023
     function attendance_count_status($emp_id,$present_status,$FS_on_date,$FS_off_date, $fields)
     {
         $this->db->select('employee_id');
@@ -199,12 +203,17 @@ class Salary_model extends CI_Model {
 
     function count_attendance_status_wise($emp_id,$FS_on_date,$FS_off_date)
     {
-
         $this->db->select("
-                SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END ) AS attend,
-                SUM(CASE WHEN status = 'Absent' THEN 1 ELSE 0 END ) AS absent,
-                SUM(CASE WHEN status = 'Off Day' THEN 1 ELSE 0 END ) AS weekend,
-                SUM(CASE WHEN status = 'Holiday' THEN 1 ELSE 0 END ) AS holiday, 
+                SUM(CASE WHEN status = 'Present'  THEN 1 ELSE 0 END ) AS attend,
+                SUM(CASE WHEN status = 'HalfDay'  THEN 0.5 ELSE 0 END ) AS HalfDay, 
+                SUM(CASE WHEN status = 'Absent'   THEN 1 ELSE 0 END ) AS absent,
+                SUM(CASE WHEN status = 'Off Day'  THEN 1 ELSE 0 END ) AS weekend,
+                SUM(CASE WHEN status = 'Holiday'  THEN 1 ELSE 0 END ) AS holiday, 
+                SUM(CASE WHEN status = 'Leave'    THEN 1 ELSE 0 END ) AS leaves, 
+                SUM(CASE WHEN status = 'Hleave'   THEN 0.5 ELSE 0 END ) AS Hleave, 
+                SUM(CASE WHEN attendance_status = 'Present' THEN 1 ELSE 0 END ) AS extra_p, 
+                SUM(CASE WHEN attendance_status = 'Meeting' THEN 1 ELSE 0 END ) AS meeting, 
+                SUM(CASE WHEN late_status = '1' THEN 1 ELSE 0 END ) AS late_status, 
             ");
 
         $this->db->where('employee_id',$emp_id);

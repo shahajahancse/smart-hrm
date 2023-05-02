@@ -44,7 +44,7 @@ class Job_card_model extends CI_Model{
 			
 
 		$data['dayoff'] = $this->check_dayoff($start_date, $end_date, $emp_id);
-		$data['holiday'] = $this->check_holiday($start_date, $end_date, $emp_id);
+		// $data['holiday'] = $this->check_holiday($start_date, $end_date, $emp_id);
 
 		$data['leave'] = $this->leave_per_emp($start_date, $end_date, $emp_id);
 		// echo "<pre>"; print_r($data['leave']); exit();
@@ -132,6 +132,11 @@ class Job_card_model extends CI_Model{
 
 		foreach ($days as $row)
 		{
+			if ($row->date == '2023-03-25' || $row->date == '2023-04-15') {
+	            $off_day = array('Friday','Saturday');
+	        } else if ($row->date < '2023-04-20' && $row->date > '2023-03-10') {
+	            $off_day = array('Friday');
+	        }
 			if (in_array($row->day, $off_day)) {
 				$dayoff[] = $row->date;
 			}

@@ -26,7 +26,7 @@ class Xin_model extends CI_Model {
 		if($id==''){
 			return "null";
 		}
-		$sql = 'SELECT basic_salary,late_deduct FROM xin_salary_payslips WHERE employee_id ='.$id;
+		$sql = 'SELECT basic_salary,late_deduct FROM xin_salary_payslips WHERE employee_id ='.$id.' ORDER BY salary_month DESC';
 		$query = $this->db->query($sql);
 		// dd($query->result());
 		return $query->result();

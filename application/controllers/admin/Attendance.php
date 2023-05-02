@@ -94,6 +94,15 @@ class Attendance extends MY_Controller {
 			// dd($in_time .' = '. $out_time);
 			foreach ($emp_id as $key => $row) {
 				$proxi_id = $this->db->where('emp_id', $row)->get('xin_proxi')->row()->proxi_id;
+				if ($proxi_id == null) {
+					$name = $this->db->where('user_id', $row)->get('xin_employees')->row();
+					echo "Required to Punch Id of $name->first_name $name->last_name";
+					exit;
+				} else if ($proxi_id == ' ') {
+					$name = $this->db->where('user_id', $row)->get('xin_employees')->row();
+					echo "Required to Punch Id of $name->first_name $name->last_name";
+					exit;
+				}
 
 				// insert in time
 				if ($in_time != '') {
@@ -308,6 +317,11 @@ class Attendance extends MY_Controller {
     	$emp_id = explode(',', trim($sql));
 		$data['status']= $status;
 		$data['late_status']= $late_status;
+		if ($status == 'Present') {
+			$status = array('Present', 'HalfDay');
+		} else {
+			$status = array($status);
+		}
     	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id, $status,$late_status);
         $data["attendance_date"] = $attendance_date;
 		
