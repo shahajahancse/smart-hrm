@@ -317,6 +317,8 @@
   
 
   function monthly_report() {
+
+
     
     var ajaxRequest;  // The variable that makes Ajax possible!
     ajaxRequest = new XMLHttpRequest();
@@ -340,7 +342,14 @@
     {
       alert('Please select second date');
       return ;
+    }else{
+      document.getElementById("loading").style.visibility = "visible";
+
+
     }
+
+    
+
     
     var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql;
 
@@ -353,6 +362,8 @@
     ajaxRequest.onreadystatechange = function(){
       if(ajaxRequest.readyState == 4){
         // console.log(ajaxRequest.responseText); return;
+        document.getElementById("loading").style.visibility = "hidden";
+
         var resp = ajaxRequest.responseText;
         a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
         a.document.write(resp);
