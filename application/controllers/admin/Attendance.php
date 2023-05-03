@@ -41,6 +41,7 @@ class Attendance extends MY_Controller {
 
 	public function index()
     {
+		
 		$data['title'] = $this->lang->line('dashboard_attendance').' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('dashboard_attendance');
 		$data['path_url'] = 'attendance';
