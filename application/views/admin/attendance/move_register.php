@@ -1,7 +1,12 @@
 <?php
-/* Leave Application view
+/* Leave Application 
+
+ 
 */
+
+
 ?>
+
 <style>
   hr{
     margin-top: 5px;
@@ -45,7 +50,11 @@
                 <div class="form-group">
                   <label for="date">Employee Name</label>
                   <select name="emp_id" class="form-control" id="emp_name">
-                    <option value="">Select Employee Name</option>
+                
+                    <option id="emp" value="">Select Employee Name</option>
+
+                   
+                    
                     <?php foreach($emps as $emp){?>
                     <option value="<?php echo $emp->user_id?>"><?php echo $emp->first_name.' '.$emp->last_name?></option>
                     <?php }?>
@@ -107,7 +116,7 @@
         <div class="form-group col-lg-3">
           <label id="add_amount">Add Amount</label>
           <label id="amounts">Amount</label>
-          <input type="number" class="form-control" id="request_amount" aria-describedby="amount" placeholder="Enter amount">
+          <input type="number" class="form-control" onkeyup="copyText()"  id="request_amount" aria-describedby="amount" placeholder="Enter amount">
           <input type="hidden" id="form_id">
         </div>
         <div class="form-group col-lg-9">
@@ -266,16 +275,23 @@ function edit(id){
           contentType: false,
           cache : false,
 
-          success: function(response){
+          success: function(data){
+            response=data[0]
+          
+
+            emp=data[1][0];
             var a = response[0].out_time;
             var b = response[0].in_time;
             var time = a.slice(10, 16);
             var intime = b.slice(10, 16);
 
             $("#id").val(response[0].id);
+            $("#id").val(response[0].id);
+
             $("#m_date").val(response[0].date);
             $("#m_in_time").val(intime);
             $("#m_out_time").val(time);
+            $("#emp").html(emp['first_name']+' '+emp['last_name']);
             $("#m_reason").val(response[0].reason);
           }
           
@@ -359,7 +375,7 @@ function edit(id){
 // appply for ta / da
 
 function showModal(id,role_id) {
-  // alert(id + ' '+ role_id); 
+   //alert(id + ' '+ role_id); 
     $("#form_id").val(id);
     $('#myModal').modal().show();
 
@@ -502,5 +518,26 @@ function manage_ta_da(role_id){
 
 });
 
+
+
+function copyText() {
+    var request_amount = $('#request_amount').val();
+    var url = "<?php echo base_url('admin/attendance/copy_value'); ?>";
+    $.ajax({
+      type: 'POST',
+      // url: 'admin/attendance/copy_value',
+      url: url,
+      data: {request_amount: request_amount},
+      success: function(response) {
+        $('#payable_amount').val(response);
+      }
+    });
+  }
 </script>
+
+
+
+
+
+</scrip>
 

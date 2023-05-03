@@ -210,7 +210,12 @@ class Attendance extends MY_Controller {
 
 		if($id != null){
 		    $data = $this->db->where('id',$id)->get('xin_employee_move_register')->result();
-			echo json_encode( $data );
+		    $emplyeedata = $this->db->where('user_id',$data[0]->employee_id)->get('xin_employees')->result();
+			$array=[$data,$emplyeedata];
+		
+
+	
+			echo json_encode( $array);
 			exit;	   
 		}
 		
@@ -293,6 +298,15 @@ class Attendance extends MY_Controller {
         $this->db->delete('xin_employee_move_register');
 	    redirect(base_url('admin/attendance/move_register'));
 	}
+
+
+	//copy value input to another input field
+
+	public function copy_value() {
+		$request_amount = $this->input->post('request_amount');
+		echo $request_amount;
+	  }
+	  
 
 
 
