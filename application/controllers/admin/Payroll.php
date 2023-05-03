@@ -98,6 +98,7 @@ class Payroll extends MY_Controller {
 	// generate salary excel sheet 
     public function salary_sheet_excel()
     {  
+		
     	$excel = $this->input->post('excel');
     	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
 		$status = $this->input->post('status');
@@ -107,14 +108,21 @@ class Payroll extends MY_Controller {
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;
+		
 		// dd($data["values"]);
         if(is_string($data["values"]))
         {
+					// dd($data["values"]);
+
             echo $data["values"];
         }
         else
         {	
+
         	if ($excel == 1) {
+				// dd($data["values"]);
+
+				
 	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
         	} else {
 	            $this->load->view('admin/payroll/salary_sheet_excel',$data);

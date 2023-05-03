@@ -7,36 +7,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <style>
-        table{
-            border: 2px black solid;
-    border-collapse: collapse;
-    width: -webkit-fill-available;
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 100%; /* Set max-width to 100% */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-th{
-    border: 2px black solid;
-    border-collapse: collapse;
-    font-size: 20px;
 
+
+th {
+	background-color: #4CAF50;
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+    text-align: center;
+    /* border: 2px solid #4CAF50; */
+}
+.im{
+    background: #d5b2b2 !important;
+    color: currentcolor !important;
 
 }
 
 td {
-    border: 2px black solid;
-    border-collapse: collapse;
-    font-size: 15px;
+	font-size: 15px;
     text-align: center;
-
-
-
+    border: 2px solid #ddd;
+    width: 19px;
 }
-.tdb{
-    background-color: cadetblue;
 
+tr:hover {
+  background-color: #f5f5f5;
 }
+
+.tdb {
+  background-color: cadetblue;
+}
+
+
+
+.btn {
+    background-color: #0890dd;
+    height: 39px;
+    width: 103px;
+    font-size: 19px;
+    border: none;
+    border-radius: 11px;
+    cursor: pointer;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+}
+
+.btn:hover {
+    background-color: #0c69a5;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+}
+
+
+
 </style>
     <!-- Bootstrap CSS -->
   </head>
-  <body>
+  <body >
+
+  <button onclick="exportToExcel()">Export to Excel</button>
 
 
 
@@ -77,20 +116,17 @@ $daysInMonth = cal_days_in_month(0, $month, $year);
 $imonth = date('F', $date);
 ?>
 
+<div  style="
+   
+    float: right;
+"><button class="btn" onclick="printPage()">Print</button></div>
 
 
+  <div  class="box-header with-border">
+  <div id="print-content"  class="box-header with-border">
+   
+	
 
-  <div class="box-header with-border">
-  <div class="box-header with-border">
-    <div style="
-    text-align: center;
-">
-    <h3 class="box-title">Monthly Report</h3>
-    <h5>For the month of
-      <?php if(isset($month_year)): echo date('F Y', strtotime($month_year)); else: echo date('F Y'); endif;?>
-    </h5>
-    </div>
-    <div class="box-tools pull-right"> A: Absent, P: Present, H: Holiday, L: Leave, W=Weekend</div>
  
 
 
@@ -98,7 +134,20 @@ $imonth = date('F', $date);
   <div class="box-body">
     <div class="box-datatable table-responsive">
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
+	 <tr><div style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px"><?php echo xin_company_info(1)->company_name; ?></div>
+				<div style="font-size:20px; font-weight:bold; text-align:center;height:0px;"></div>
+				<div style="font-size:20px; line-height:15px; font-weight:bold; text-align:center;"> <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
+
+				<h5 style="margin-top: 6px;font-size: 18px;margin-bottom: 6px;line-height:15px;font-weight:bold;/* justify-content: center; *//* margin: unset; */text-align:center;margin-left: -103px;">For the month of
+      <?php if(isset($month_year)): echo date('F Y', strtotime($month_year)); else: echo date('F Y'); endif;?>
+    </h5>				<div style="font-size:12px; font-weight:bold; text-align:center;"></div>
+		
+	<div style="font-size:12px; font-weight:bold; text-align:center;"></div>
+	<div class="box-tools pull-right"> A: Absent, P: Present, H: Holiday, L: Leave, W=Weekend</div>
+	</tr> 
         <thead>
+
+		
           <tr class="tdb">
             <th class="mastering"><?php echo $this->lang->line('xin_employee');?></th>
             <th class="mastering">Designation</th>
@@ -112,12 +161,12 @@ $imonth = date('F', $date);
 						?>
             <th><strong><?php echo '<div>'.$i.' </div>';?></strong></th>
             <?php endfor; ?>
-            <th width="100px">P</th>
-            <th width="100px">A</th>
-            <th width="100px">W</th>
-            <th width="100px">H</th>
-            <th width="100px">L</th>
-            <th width="100px">T.D</th>
+            <th class="im">P</th>
+            <th class="im">A</th>
+            <th class="im">W</th>
+            <th class="im" >H</th>
+            <th class="im" >L</th>
+            <th class="im" >T.D</th>
             
           </tr>
         </thead>
@@ -266,12 +315,12 @@ $imonth = date('F', $date);
             <?php endfor; ?>
             <?php $totalday=$present+$absent+$weekend+$holiday+$leave+$totalday;
              ?>
-            <td><?php echo $present;?></td>
-            <td><?php echo $absent;?></td>
-            <td><?php echo $weekend;?></td>
-            <td><?php echo $holiday;?></td>
-            <td><?php echo $leave;?></td>
-            <td><?php echo $totalday;?></td>
+            <td class="im"><?php echo $present;?></td>
+            <td class="im"><?php echo $absent;?></td>
+            <td class="im"><?php echo $weekend;?></td>
+            <td class="im"><?php echo $holiday;?></td>
+            <td class="im"><?php echo $leave;?></td>
+            <td class="im"><?php echo $totalday;?></td>
 
           </tr>
           <?php endforeach;?>
@@ -327,51 +376,31 @@ $imonth = date('F', $date);
 				}
 			}
 		}
+		 </script>
+
+<script>function printPage() {
+    var printContents = document.getElementById("print-content").innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    // set custom layout, page size, page margin, and page heading
+    var printCSS = '<style>@page { size: A4 landscape; margin: 1cm; @top-center { content: "My Custom Page Header"; } } \
+                    body { -webkit-print-color-adjust: exact; color-adjust: exact; } \
+                    table { border-collapse: collapse; width: 100%; margin: 0 auto; max-width: 100%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); } \
+                    th { background-color: #4CAF50; color: white; font-size: 21px; font-weight: bold; text-align: center; } \
+                    .im { background: #d5b2b2 !important; color: currentcolor !important; } \
+                    td { font-size: 15px; text-align: center; border: 2px solid #ddd; width: 19px; } \
+                    tr:hover { background-color: #f5f5f5; } \
+                    .tdb { background-color: cadetblue; }</style>';
+    
+    document.body.innerHTML = printCSS + '<div id="print-content">' + printContents + '</div>';
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+}
 
 
-
-		function jobCard()
-		{
-			var ajaxRequest;  // The variable that makes Ajax possible!
-		  ajaxRequest = new XMLHttpRequest();
-
-		  var month_year = document.getElementById('d_month_year').value;
-			var company = document.getElementById('aj_company').value
-			var employee_id = document.getElementById('employee_id').value;
-			// var csrf_hrsale = document.querySelector('[name="csrf_hrsale"]').value;
-			// console.log(csrf_hrsale); return
-
-			if(month_year =='')	{
-				alert('Please select date');
-				return ;
-			}
-			if(company =='Select' || company == '')
-			{
-				alert("Please select Company option");
-				return;
-			}
-			
-			var queryString="month_year="+month_year+"&company="+company+"&employee_id="+employee_id;
-
-		  url = "<?php echo base_url() ?>admin/timesheet/job_card/"+month_year+"/"+company+"/"+employee_id;
-		  ajaxRequest.open("GET", url, true);
-		  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-		   ajaxRequest.send();
-				// alert(url); return;
-
-			ajaxRequest.onreadystatechange = function(){
-				if(ajaxRequest.readyState == 4){
-					// console.log(ajaxRequest.responseText); return;
-					var resp = ajaxRequest.responseText;
-					a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
-					a.document.write(resp);
-					// a.close();
-				}
-			}
-		}
-
-  </script>
-
+</script>
 
 
       
@@ -384,5 +413,41 @@ $imonth = date('F', $date);
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
+
+
+
+<script>
+
+function exportToExcel() {
+  // Get the HTML table element
+  var table = document.getElementById("xin_table");
+
+  // Create a new Excel workbook
+  var wb = XLSX.utils.book_new();
+
+  // Add the worksheet
+  var ws = XLSX.utils.table_to_sheet(table);
+
+  // Set cell width and height
+  ws['!cols'] = [{wch: 50}, {wch: 55}, {wch: 55}, {wch: 55}, {wch: 55}];
+  ws['!rows'] = [{hpt: 105}];
+
+  // Add the heading text to the worksheet
+  XLSX.utils.sheet_add_aoa(ws, [
+    ["Employee Attendance Report for the Month of May 2023"]
+  ], {origin: "T1"});
+
+  // Add the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, "Attendance Report");
+
+  // Save the workbook as an Excel file
+  var date = new Date();
+  var filename = "Attendance_Report_" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + ".xlsx";
+  XLSX.writeFile(wb, filename);
+}
+
+</script>
+
+</body>
 </html>
