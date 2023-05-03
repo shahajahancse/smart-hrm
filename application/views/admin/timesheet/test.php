@@ -259,7 +259,7 @@ $imonth = date('F', $date);
 							if($idate_of_joining < $iattendance_date){
 								$status = $status;
 							} else {
-								$status = '';
+								$status = '-';
 							}
 						?>
             <td><?php echo $status; ?></td>
