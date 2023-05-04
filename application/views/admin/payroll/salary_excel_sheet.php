@@ -5,13 +5,14 @@
 
 <body style="width:800px;">
 <?php
-exit("hello");
 
 	$filename = "Salary_$salary_month.xls";
 	header('Content-Type: application/vnd.ms-excel'); //mime type
 	header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
 	header('Cache-Control: max-age=0'); //no cache
 ?>
+
+
 
 
 	<table align="center" height="auto"  class="sal" border="1" cellspacing="0" cellpadding="2" style="font-size:12px; width:750px;">
@@ -97,7 +98,7 @@ exit("hello");
 			<th class="text-center px-2"><?=$net_total?></th>
 			<th class="text-center px-2"><?=$grand_total?></th>
 		</tr>
-	</table>
+	</table> 
 	<br>
 	<br>
 	<br>

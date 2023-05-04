@@ -420,6 +420,8 @@ class Attendance extends MY_Controller {
 
 
 		$data['first_date'] = $first_date;
+		$data['sql'] = $sql;
+
 		
 		
 		
@@ -427,6 +429,23 @@ class Attendance extends MY_Controller {
 		// dd($data['all_employees']);
 
 		echo $this->load->view("admin/timesheet/test", $data, TRUE);
+		
+
+		  
+    }
+	public function monthly_report_excel() {
+		$first_date = $this->input->post('first_date');
+	 
+    	$sql = $this->input->post('sql');
+	 
+		$emp_id = explode(',', trim($sql));
+
+
+		$data['first_date'] = $first_date;
+		$data['xin_employees'] =  $this->Attendance_model->get_employee($emp_id);
+		
+
+		echo $this->load->view("admin/timesheet/excel_monthly_report", $data, TRUE);
 		
 
 		  
