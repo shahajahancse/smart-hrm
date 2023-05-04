@@ -109,7 +109,8 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-       <h4 class="modal-title" id="apply_for_ta_da">Apply for TA/DA</h4>
+       <h4 class="modal-title" id="
+       ">Apply for TA/DA</h4>
        <h4 class="modal-title" id="modify_ta_da">Modify TA/DA</h4>
       </div>
       <form>
@@ -155,11 +156,11 @@
 
       <?php 
 			  
-           $role_id =$session['role_id'];
+           $role_id1 =$session['role_id'];
          
             // dd($session['role_id']);
 
-        if ($role_id == 3) { ?>
+        if ($role_id1 == 3) { ?>
           <div class="form-group col-lg-6" id="set_ta_da_amount" style="display: none;">
             <label>Set Amount</label>
             <input type="text" class="form-control" id="payable_amount" placeholder="Set Amount">
@@ -254,7 +255,6 @@
                   
                 <?php 
                   if($session['role_id'] != 3){ ?>
-
                   <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
                   <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
                   <hr> <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
@@ -299,6 +299,7 @@
 <script>
 
 function edit(id){
+  
   var url = "<?php echo base_url('admin/attendance/move_register/')?>" +id;
       $.ajax({
           url: url,
@@ -449,9 +450,8 @@ function showModal(id,role_id) {
 
 function manage_ta_da(role_id){
   let request_amount= $("#request_amount").val();
-  // alert(request_amount);return false;
   let short_details= $("#short_details").val();
-  let form_id= $("#form_id").val();  
+  let form_id= $("#form_id").val(); 
   if(request_amount ==''){
     alert('Please Set Amount');
     $("#request_amount").focus();
@@ -503,8 +503,10 @@ function manage_ta_da(role_id){
       } 
     });
   } 
+
   else{
     var id=   $("#form_id").val();
+        
         var url = "<?php echo base_url('admin/attendance/apply_for_ta_da');?>";
         $.ajax({
         url: url,

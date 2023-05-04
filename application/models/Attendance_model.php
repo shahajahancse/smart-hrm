@@ -556,7 +556,7 @@ class Attendance_model extends CI_Model {
 
     $this->db->query("UPDATE  xin_employee_move_register 
                        SET     `request_amount`  = '$amount', 
-                               `details` = '$details',
+                               `reason` = '$details',
                                `status`  = 1
                        WHERE   id        = '$id' 
                     ");
