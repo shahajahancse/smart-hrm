@@ -337,16 +337,12 @@
     {
       alert('Please select first date');
       return ;
-    }
-    if(second_date =='')
-    {
-      alert('Please select second date');
-      return ;
     }else{
       document.getElementById("loading").style.visibility = "visible";
 
 
     }
+    
 
     
 

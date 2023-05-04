@@ -39,7 +39,7 @@
 
 <script>
   $('button').on('click',function(e){
-    alert("ok"); return;
+    // alert("ok"); return;
     e.preventDefault();
       var id= <?php echo $id?>; 
       var department_id= <?php echo  $data[0]->department_id?>;
