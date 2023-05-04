@@ -123,20 +123,53 @@
           <label for="exampleInputPassword1">Short Details</label>
           <textarea type="text" class="form-control" id="short_details" placeholder="Details"></textarea>
         </div>
+        
+        <?php 
+			    //  $role_id = $this->session->userdata('role_id');
+           $role_id =$session['role_id'];
+         
+            // dd($session['role_id']);
 
-        <div class="form-group col-lg-6" id="ta_da_div">
-          <label id="manage_ta_da">Manage TA/DA</label>
-          <select class="form-control" id="status">
-            <option value="" disabled selected>Select</option>
-            <option value="2">Approved</option>
-            <option value="3">Reject</option>
-          </select>
-        </div>
-        <div class="form-group col-lg-6" id="set_ta_da_amount">
-          <label>Set Amount</label>
-          <input type="text" class="form-control" id="payable_amount" placeholder="Set Amount">
-        </div>
+        if ($role_id == 3) { ?>
+          <div class="form-group col-lg-6" id="ta_da_div" style="display: none;">
+            <label id="manage_ta_da">Manage TA/DA</label>
+            <select class="form-control" id="status">
+              <option value="" disabled selected>Select</option>
+              <option value="2">Approved</option>
+              <option value="3">Reject</option>
+            </select>
+          </div>
+			  <?php } else { ?>
+          <div class="form-group col-lg-6" id="ta_da_div" >
+            <label id="manage_ta_da">Manage TA/DA</label>
+            <select class="form-control" id="status">
+              <option value="" disabled selected>Select</option>
+              <option value="2">Approved</option>
+              <option value="3">Reject</option>
+            </select>
+          </div>
+		  <?php } ?>
 
+
+
+
+      <?php 
+			  
+           $role_id =$session['role_id'];
+         
+            // dd($session['role_id']);
+
+        if ($role_id == 3) { ?>
+          <div class="form-group col-lg-6" id="set_ta_da_amount" style="display: none;">
+            <label>Set Amount</label>
+            <input type="text" class="form-control" id="payable_amount" placeholder="Set Amount">
+          </div>
+			  <?php } else { ?>
+              <div class="form-group col-lg-6" id="set_ta_da_amount">
+              <label>Set Amount</label>
+              <input type="text" class="form-control" id="payable_amount" placeholder="Set Amount">
+            </div>
+		  <?php } ?>   
        
         <div class="modal-footer">
           <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
@@ -224,6 +257,7 @@
 
                   <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
                   <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
+                  <hr> <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
                    <?php if($row->status==1){?> 
                   <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">View TA/DA</a>
                   <?php } else{ if($row->status ==2 ){?>
