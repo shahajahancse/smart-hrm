@@ -11,7 +11,7 @@
 
     <style>
         .fullt{
-            height: 700px;
+            height: 680px;
     margin: 30px
 
 ;
@@ -259,23 +259,23 @@ for ($i = 0; $i < count($values); $i++) {
   <td>".$values[$i]->first_name."</td>
   <td>".$values[$i]->designation_name."</td>
   <td>".$values[$i]->date_of_joining."</td>
-  <td>".$values[$i]->basic_salary."</td>
+  <td>".intval($values[$i]->basic_salary)."</td>
   <td>
       <table>
           <tr>
-              <td class='colors1'>".$values[$i]->present."</td>
-              <td class='colors1'>".$values[$i]->absent."</td>
-              <td class='colors1'>".$values[$i]->weekend."</td>
-              <td class='colors1'>".$values[$i]->holiday."</td>
-              <td class='colors1'>".$values[$i]->extra_p."</td>
+              <td class='colors1'>".intval($values[$i]->present)."</td>
+              <td class='colors1'>".intval($values[$i]->absent)."</td>
+              <td class='colors1'>".intval($values[$i]->weekend)."</td>
+              <td class='colors1'>".intval($values[$i]->holiday)."</td>
+              <td class='colors1'>".intval($values[$i]->extra_p)."</td>
           </tr>
       </table>
   </td>
   <td>
       <table>
           <tr>
-              <td class='colors2'>".$values[$i]->earn_leave."</td>
-              <td class='colors2'>".$values[$i]->sick_leave."</td>
+              <td class='colors2'>".intval($values[$i]->earn_leave)."</td>
+              <td class='colors2'>".intval($values[$i]->sick_leave)."</td>
           </tr>
       </table>
   </td>
