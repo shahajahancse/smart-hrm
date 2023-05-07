@@ -140,7 +140,7 @@
     <div  style="float: right;">
 
   
-            <div style="position:absolute; right:0; ">
+            <div style="position:absolute;display: flex;right:0;">
                     <form action="<?php echo base_url();?>admin/payroll/salary_sheet_excel" method="post">
                         <input type="hidden" name="salary_month" value="<?php echo $salary_month; ?>"></input>
                         <input type="hidden" name="sql" value="<?php echo implode(",",$emp_id); ?>"></input>
