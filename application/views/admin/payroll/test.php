@@ -9,140 +9,150 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+
     <style>
-        .fullt{
-            height: 680px;
-    margin: 30px
-
-;
-        }
-      .colors1 {
-               background-color: #a58b4373;
-               color: black !important;
-               width: 20%;
-               }
-      .colors4 {
-                background-color: #afaf8e;
-               color: black !important;
-              
-               }
-    .colors2 {
-            background-color: #a9a9a95e !important;
-            color: black !important;
-            width: 50%;
-            }
-    .colors3 {
-             background-color: #1de1eb47 !important;
-              color: black !important;
-              width: 50%;
-             }
-        .bnr{
-
-            border-right: none;
-        }
-        .bnl{
-
-            border-left: none;
-        }
-        .bnt{
-
-            border-top: none;
-        }
-        .bnb{
-
-            border-bottom: none;
-        }
-       
-       table {
-            border-collapse: collapse;
-            width: 100%;
-            text-align: center;
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: -webkit-fill-available;
-        }
-        
-        th, td {
-            text-align: left;
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ddd;
-            margin: 0;
-            padding: 0;
-        }
-        
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-            text-align: center;
-            padding: 15px;
-            margin: 0;
-            border: 1px solid #ddd;
-            margin: 0;
-            padding: 0;
-        }
-        
-        td {
-            text-align: center;
-            border: 1px solid #ddd;
-            margin: 0;
-            padding: 0;
-        }
-        
-        td table {
-            border: none;
-            
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        
-        td table td {
-            border: none;
-    width: 30px;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    border-right: 1px solid black;
-        }
-        
-        td table th {
-            border: none;
-          
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            
-        }
-        
-        /* Style the rows alternating gray and white */
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        
-        /* Style the header row */
-        thead th {
-            background-color: #d7d4d4;
-    color: black;
-    margin: 0;
-    padding: 0
+   .btn {
+     background-color: #0890dd;
+     height: 39px;
+     width: 103px;
+     font-size: 19px;
+     border: none;
+     border-radius: 11px;
+     cursor: pointer;
+     color: #fff;
+     font-family: Arial, sans-serif;
+     text-transform: uppercase;
+     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+     transition: all 0.3s ease-in-out;
+     margin: 5px;
+}
+ .btn:hover {
+     background-color: #0c69a5;
+     box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
+     transform: translateY(-3px);
+}
+ .fullt{
+     height: 690px;
+     margin: 20px;
+}
+ .colors1 {
+     background-color: #0177bc3b;
+     color: black !important;
+     width: 20%;
+}
+ .colors4 {
+     background-color: #dff0d8bd;;
+     color: black !important;
+}
+ .colors2 {
+     background-color: #a9a9a95e !important;
+     color: black !important;
+     width: 50%;
+}
+ .colors3 {
+     background-color: #97eff347 !important;
+     color: black !important;
+     width: 50%;
+}
+ .bnr{
+     border-right: none;
+}
+ .bnl{
+     border-left: none;
+}
+ .bnt{
+     border-top: none;
+}
+ .bnb{
+     border-bottom: none;
+}
+ table {
+     border-collapse: collapse;
+     width: 100%;
+     text-align: center;
+     font-family: Arial, Helvetica, sans-serif;
+     margin: 0;
+     padding: 0;
+     height: -webkit-fill-available;
+}
+ th, td {
+     text-align: left;
+     padding: 10px;
+     text-align: center;
+     border: 1px solid #ddd;
+     margin: 0;
+     padding: 0;
+}
+ th {
+     background-color: #f2f2f2;
+     font-weight: bold;
+     text-align: center;
+     padding: 15px;
+     margin: 0;
+     border: 1px solid #ddd;
+     margin: 0;
+     padding: 0;
+}
+ td {
+     text-align: center;
+     border: 1px solid #ddd;
+     margin: 0;
+     padding: 0;
+}
+ td table {
+     border: none;
+     text-align: center;
+     margin: 0;
+     padding: 0;
+}
+ td table td {
+     border: none;
+     width: 30px;
+     text-align: center;
+     margin: 0;
+     padding: 0;
+     border-right: 1px solid black;
+}
+ td table th {
+     border: none;
+     text-align: center;
+     margin: 0;
+     padding: 0;
+}
+/* Style the rows alternating gray and white */
+ tr:nth-child(even) {
+     background-color: #f2f2f2;
+}
+/* Style the header row */
+ thead th {
+     background-color: #d7d4d4;
+     color: black;
+     margin: 0;
+     padding: 0
+}
+ thead{
+    font-size: 15px;
 }
     </style>
   </head>
   <body>
-     
+    <div  style="float: right;">
+
   
-<div style="position:absolute; right:0; margin-right: 25px;; margin-top: 25px; font-size: 20px;">
-	<form action="<?php echo base_url();?>admin/payroll/salary_sheet_excel" method="post">
-		<input type="hidden" name="salary_month" value="<?php echo $salary_month; ?>"></input>
-		<input type="hidden" name="sql" value="<?php echo implode(",",$emp_id); ?>"></input>
-		<input type="hidden" name="excel" value="1"></input>
-		<input type="hidden" name="status" value="<?php echo $status; ?>"></input>
-		<button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS Export</button>
-	</form>
-</div>
-     
+            <div style="position:absolute; right:0; ">
+                    <form action="<?php echo base_url();?>admin/payroll/salary_sheet_excel" method="post">
+                        <input type="hidden" name="salary_month" value="<?php echo $salary_month; ?>"></input>
+                        <input type="hidden" name="sql" value="<?php echo implode(",",$emp_id); ?>"></input>
+                        <input type="hidden" name="excel" value="1"></input>
+                        <input type="hidden" name="status" value="<?php echo $status; ?>"></input>
+                        <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS</button>
+                    </form>
+                    <button class="btn" onclick="printPage()">Print</button></div>
+
+            </div>
+    </div>
+
+  <div id="print-content">   
 
 <?php
 $total_basic_salary=0;
@@ -182,8 +192,7 @@ echo "
 <div style='font-size:12px; font-weight:bold; text-align:center;height:0px;'></div>
 <div style='font-size:20px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->address_1."</div>
 <div style='align-items: center;text-align: center;'>Salary Month : ". $salary_month ."</div>
-<div style='font-size:12px; font-weight:bold; text-align:center;'><br></div>
-<div style='font-size:12px; font-weight:bold; text-align:center;'><br></div>
+
 </div>
 <div class='fullt'>
 <table   >";
@@ -191,8 +200,8 @@ echo "
 
 echo " <thead>
 <tr>
-    <th class='bnb'>Id</th>
-    <th  class='bnb'>Name Degi Join.d </th>
+    <th class='bnb'>SL</th>
+    <th  class='bnb'>Name</th>
     <th  class='bnb'>Degi  </th>
     <th  class='bnb'>Join.d</th>
     <th  class='bnb'>Basic Salary</th>
@@ -249,13 +258,13 @@ echo " <thead>
 </tr>
 </thead>
 <tbody>";
-   
+$j=1;
 // print the rows for all pages
 for ($i = 0; $i < count($values); $i++) {
     
    
   echo"<tr>
-  <td>".$values[$i]->emp_id."</td>
+  <td>".($j)."</td>
   <td>".$values[$i]->first_name."</td>
   <td>".$values[$i]->designation_name."</td>
   <td>".$values[$i]->date_of_joining."</td>
@@ -308,9 +317,9 @@ for ($i = 0; $i < count($values); $i++) {
 
 
     echo "</tr>";
-   
+    $j=$j+1;
     if (($i+1) % $rows_per_page == 0 && $i != count($values)-1) {
-      
+        $j=1;
 echo "</tbody>
         <tfoot>
 <tr>
@@ -361,8 +370,7 @@ margin-top: 132px;
        <div style='font-size:12px; font-weight:bold; text-align:center;height:0px;'></div>
        <div style='font-size:20px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->address_1."</div>
        <div style='align-items: center;text-align: center;'>Salary Month : ". $salary_month ."</div>
-       <div style='font-size:12px; font-weight:bold; text-align:center;'><br></div>
-       <div style='font-size:12px; font-weight:bold; text-align:center;'><br></div>
+       
        </div>
        <div class='fullt'>
        <table>";
@@ -371,8 +379,8 @@ margin-top: 132px;
         $page_number = ($i+1)/$rows_per_page + 1;
  echo " <thead>
         <tr>
-            <th class='bnb'>Id</th>
-            <th  class='bnb'>Name Degi Join.d </th>
+            <th class='bnb'>SL</th>
+            <th  class='bnb'>Name</th>
             <th  class='bnb'> Degi  </th>
             <th  class='bnb'>Join.d </th>
             <th  class='bnb'>Basic Salary</th>
@@ -432,8 +440,10 @@ margin-top: 132px;
     }
 
 
+
     
 }
+
 
 echo"<tfoot>
 <tr>
@@ -473,10 +483,31 @@ font-weight: bold;
 </div>";
 ?>
 
-
+</div>
   <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  </body>
+  
+    <script>function printPage() {
+    var printContents = document.getElementById("print-content").innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    // set custom layout, page size, page margin, and page heading
+    var printCSS = '<style>@page { size: A4 landscape; margin: 1cm;}</style>';
+                  
+    
+    document.body.innerHTML = printCSS + '<div id="print-content">' + printContents + '</div>';
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+}
+
+
+</script>
+
+
+
+</body>
 </html>
