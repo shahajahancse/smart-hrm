@@ -10,9 +10,10 @@
 
     <style>
         .fullt{
-            height: 600px;
-            margin: 30px;
-            margin-bottom: 50px;
+            height: 550px;
+    margin: 30px
+
+;
         }
       .colors1 {
                background-color: #a58b4373;
@@ -121,16 +122,25 @@
         
         /* Style the header row */
         thead th {
-            background-color: #4CAF50;
-            color: white;
-            margin: 0;
-            padding: 0;
-        }
+            background-color: #d7d4d4;
+    color: black;
+    margin: 0;
+    padding: 0
+}
     </style>
   </head>
   <body>
      
   
+<div style="position:absolute; right:0; margin-right: 25px;; margin-top: 25px; font-size: 20px;">
+	<form action="<?php echo base_url();?>admin/payroll/salary_sheet_excel" method="post">
+		<input type="hidden" name="salary_month" value="<?php echo $salary_month; ?>"></input>
+		<input type="hidden" name="sql" value="<?php echo implode(",",$emp_id); ?>"></input>
+		<input type="hidden" name="excel" value="1"></input>
+		<input type="hidden" name="status" value="<?php echo $status; ?>"></input>
+		<button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS Export</button>
+	</form>
+</div>
      
 
 <?php
@@ -182,7 +192,7 @@ echo "
 <div class='fullt'>
 
 
-<table >";
+<table   >";
 
 
 echo " <thead>
@@ -331,17 +341,28 @@ $total_extra_pay=0;
 $total_modify_salary=0;
 
 echo"</table>
-
 <div style='
+display: flex;
 text-align: center;
+align-items: center;
+margin-top: 78px;
+font-size: 18px;
+font-weight: bold;
 '>
-hello
-</div>
+<section style='width: 33%;'>Created by</section>
+<section style='width: 33%;'>Aprovde by</section>
+<section style='width: 33%;'>MD</section>
+
+
+
+      </div>
 
 
 
 </div>";
-echo "<div>
+echo "<div style='
+margin-top: 132px;
+'>
        <div style='font-size:20px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->company_name ."</div>
        <div style='font-size:12px; font-weight:bold; text-align:center;height:0px;'></div>
        <div style='font-size:20px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->address_1."</div>
@@ -439,44 +460,26 @@ echo"<tfoot>
 
 // print the table footer
 echo "</table>
+<div style='
+display: flex;
+text-align: center;
+align-items: center;
+margin-top: 78px;
+font-size: 18px;
+font-weight: bold;
+'>
+<section style='width: 33%;'>Created by</section>
+<section style='width: 33%;'>Aprovde by</section>
+<section style='width: 33%;'>MD</section>
 
 
 
-
+      </div>
 </div>";
 ?>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- Optional JavaScript -->
+  <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
