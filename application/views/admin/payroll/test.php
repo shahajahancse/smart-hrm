@@ -1,7 +1,9 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Title</title>
+    <title><?php
+      echo  xin_company_info(1)->company_name
+        ?></title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,6 +18,11 @@
                background-color: #a58b4373;
                color: black !important;
                width: 20%;
+               }
+      .colors4 {
+                background-color: #afaf8e;
+               color: black !important;
+              
                }
     .colors2 {
             background-color: #a9a9a95e !important;
@@ -150,10 +157,7 @@ $start_index = ($current_page - 1) * $rows_per_page;
 $end_index = min($start_index + $rows_per_page - 1, count($values) - 1);
 
 // print the table header
-echo "
-<div>
-
-";
+echo "<div>";
 $total_grand_net_salary=0;
 $total_basic_salary=0;
 $total_net_salary=0;
@@ -178,7 +182,7 @@ echo "
 <div class='fullt'>
 
 
-<table class='fullt'>";
+<table >";
 
 
 echo " <thead>
@@ -193,7 +197,7 @@ echo " <thead>
     <th  class='bnb'>Extra Pay</th>
     <th  class='bnb'>Modify Salary</th>
     <th  class='bnb'>Net Salary</th>
-    <th  class='bnb'>Grand Net Salary</th>
+    <th  class='bnb '>Grand Net Salary</th>
     <th  class='bnb'>account Number</th>
 </tr>
 <tr>
@@ -204,19 +208,19 @@ echo " <thead>
     <th>
         <table>
             <tr>
-                <th class='colors1'>Present</th>
-                <th class='colors1'>Absent</th>
-                <th class='colors1'>Weekend</th>
-                <th class='colors1'>Holiday</th>
-                <th class='colors1'>Extra.p</th>
+                <th class=''>Present</th>
+                <th class=''>Absent</th>
+                <th class=''>Weekend</th>
+                <th class=''>Holiday</th>
+                <th class=''>Extra.p</th>
             </tr>
         </table>
     </th>
     <th>
         <table >
             <tr >
-                <th class='colors2'>Earn Leave</th>
-                <th class='colors2'>Sick Leave</th>
+                <th class=''>Earn Leave</th>
+                <th class=''>Sick Leave</th>
             </tr>
         </table>
     </th>
@@ -224,8 +228,8 @@ echo " <thead>
     <th>
         <table>
             <tr>
-                <th  class='colors3'>Late Deduction</th>
-                <th  class='colors3'>Absent Deduction</th>
+                <th  class=''>Late Deduction</th>
+                <th  class=''>Absent Deduction</th>
             </tr>
         </table>
     </th>
@@ -279,7 +283,7 @@ for ($i = 0; $i < count($values); $i++) {
   <td>".$values[$i]->extra_pay."</td>
   <td>".$values[$i]->modify_salary."</td>
   <td>".$values[$i]->net_salary."</td>
-  <td>".$values[$i]->grand_net_salary."</td>";
+  <td class='colors4'>".$values[$i]->grand_net_salary."</td>";
 
   $total_grand_net_salary+=$values[$i]->grand_net_salary;
   $total_basic_salary+=$values[$i]->basic_salary;
@@ -297,17 +301,12 @@ for ($i = 0; $i < count($values); $i++) {
    
     if (($i+1) % $rows_per_page == 0 && $i != count($values)-1) {
       
-     
-        echo "
-        </tbody>
+echo "</tbody>
         <tfoot>
 <tr>
   <td colspan='2'>Total:</td>
   <td  colspan='1'>".$total_basic_salary."</td>
   <td colspan='3'></td>
-
-  
-  
   <td colspan='1'>
     <table>
         <tr>
@@ -319,14 +318,8 @@ for ($i = 0; $i < count($values); $i++) {
   <td  colspan='1'>".$total_extra_pay."</td>
   <td colspan='1'>".$total_modify_salary."</td>
   <td colspan='1'>".$total_net_salary."</td>
-  <td colspan='1'>".$total_grand_net_salary."</td>
-  <td colspan='1'></td>
-  
-  
-  
-  
-  
-  
+  <td class='colors4' colspan='1'>".$total_grand_net_salary."</td>
+  <td colspan='1'></td> 
 </tr>
 </tfoot>";
 $total_grand_net_salary=0;
@@ -337,37 +330,31 @@ $total_absent_deduct=0;
 $total_extra_pay=0;
 $total_modify_salary=0;
 
-echo"
+echo"</table>
 
-        </table>
-         </div>";
+<div style='
+text-align: center;
+'>
+hello
+</div>
 
-     
-        
-       echo "
-       <div>
-       
-       
-   
-       
+
+
+</div>";
+echo "<div>
        <div style='font-size:20px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->company_name ."</div>
        <div style='font-size:12px; font-weight:bold; text-align:center;height:0px;'></div>
        <div style='font-size:20px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->address_1."</div>
-       
        <div style='align-items: center;text-align: center;'>Salary Month : ". $salary_month ."</div>
-       
        <div style='font-size:12px; font-weight:bold; text-align:center;'><br></div>
        <div style='font-size:12px; font-weight:bold; text-align:center;'><br></div>
        </div>
-
        <div class='fullt'>
-       
-       
        <table>";
         
         // add page number
         $page_number = ($i+1)/$rows_per_page + 1;
-        echo " <thead>
+ echo " <thead>
         <tr>
             <th class='bnb'>Id</th>
             <th  class='bnb'>Name Degi Join.d </th>
@@ -390,19 +377,19 @@ echo"
             <th>
                 <table>
                     <tr>
-                        <th class='colors1'>Present</th>
-                        <th class='colors1'>Absent</th>
-                        <th class='colors1'>Weekend</th>
-                        <th class='colors1'>Holiday</th>
-                        <th class='colors1'>Extra.p</th>
+                        <th class=''>Present</th>
+                        <th class=''>Absent</th>
+                        <th class=''>Weekend</th>
+                        <th class=''>Holiday</th>
+                        <th class=''>Extra.p</th>
                     </tr>
                 </table>
             </th>
             <th>
                 <table >
                     <tr >
-                        <th class='colors2'>Earn Leave</th>
-                        <th class='colors2'>Sick Leave</th>
+                        <th class=''>Earn Leave</th>
+                        <th class=''>Sick Leave</th>
                     </tr>
                 </table>
             </th>
@@ -410,8 +397,8 @@ echo"
             <th>
                 <table>
                     <tr>
-                        <th  class='colors3'>Late Deduction</th>
-                        <th  class='colors3'>Absent Deduction</th>
+                        <th  class=''>Late Deduction</th>
+                        <th  class=''>Absent Deduction</th>
                     </tr>
                 </table>
             </th>
@@ -429,15 +416,12 @@ echo"
     
 }
 
-echo"   <tfoot>
+echo"<tfoot>
 <tr>
   <td colspan='2'>Total:</td>
   <td  colspan='1'>".$total_basic_salary."</td>
   <td colspan='3'></td>
-
-  
-  
-  <td colspan='1'>
+   <td colspan='1'>
     <table>
         <tr>
         <td style='width: 50%' colspan='1'>".$total_late_deduct."</td>
@@ -450,17 +434,16 @@ echo"   <tfoot>
   <td colspan='1'>".$total_net_salary."</td>
   <td colspan='1'>".$total_grand_net_salary."</td>
   <td colspan='1'></td>
-  
-  
-  
-  
-  
-  
-</tr>
+  </tr>
 </tfoot>";
 
 // print the table footer
-echo "</table>";
+echo "</table>
+
+
+
+
+</div>";
 ?>
 
 
