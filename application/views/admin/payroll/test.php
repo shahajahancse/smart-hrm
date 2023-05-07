@@ -11,7 +11,7 @@
 
     <style>
         .fullt{
-            height: 750px;
+            height: 700px;
     margin: 30px
 
 ;
