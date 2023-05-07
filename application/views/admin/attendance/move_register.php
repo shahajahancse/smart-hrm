@@ -397,9 +397,13 @@ function edit(id){
         success: function(data){                    
           // $('#view_ta_td').html(data[0].request_amount);
           var trHTML = '';
+        // $.each(data, function (i, item) {
+        //     trHTML += '<tr class="text-center"><td>' + item.request_amount + '</td><td>' + item.payable_amount + '</td></tr>';
+        // });
         $.each(data, function (i, item) {
-            trHTML += '<tr class="text-center"><td>' + item.request_amount + '</td><td>' + item.payable_amount + '</td></tr>';
-        });
+            var payable = item.payable_amount !== null ? item.payable_amount : 'waiting';
+            trHTML += '<tr class="text-center"><td>' + item.request_amount + '</td><td>' + payable + '</td></tr>';
+          });
         $('#ta_da_view').html(trHTML);
 
         }
