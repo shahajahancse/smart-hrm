@@ -12,19 +12,19 @@
 
     <style>
    .btn {
-     background-color: #0890dd;
-     height: 39px;
-     width: 103px;
-     font-size: 19px;
-     border: none;
-     border-radius: 11px;
-     cursor: pointer;
-     color: #fff;
-     font-family: Arial, sans-serif;
-     text-transform: uppercase;
-     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-     transition: all 0.3s ease-in-out;
-     margin: 5px;
+    background-color: #0890dd;
+    height: 28px;
+    width: 64px;
+    font-size: 12px;
+    border: none;
+    border-radius: 11px;
+    cursor: pointer;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+    margin: 5px;
 }
  .btn:hover {
      background-color: #0c69a5;
@@ -32,7 +32,7 @@
      transform: translateY(-3px);
 }
  .fullt{
-     height: 690px;
+     height: 500px;
      margin: 20px;
 }
  .colors1 {
@@ -93,6 +93,7 @@
      border: 1px solid #ddd;
      margin: 0;
      padding: 0;
+     
 }
  td {
      text-align: center;
@@ -132,8 +133,12 @@
      padding: 0
 }
  thead{
-    font-size: 15px;
+    font-size: 13px!important;
 }
+ tbody{
+    font-size: 12px!important;
+}
+
     </style>
   </head>
   <body>
@@ -189,10 +194,9 @@ $total_extra_pay=0;
 $total_modify_salary=0;
 
 echo "
-<div style='font-size:20px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->company_name ."</div>
-<div style='font-size:12px; font-weight:bold; text-align:center;height:0px;'></div>
-<div style='font-size:20px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->address_1."</div>
-<div style='align-items: center;text-align: center;'>Salary Month : ". $salary_month ."</div>
+<div style='font-size:18px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->company_name ."</div>
+<div style='font-size:14px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->address_1."</div>
+<div style='font-size:12px;align-items: center;text-align: center;'>Salary Month : ". $salary_month ."</div>
 
 </div>
 <div class='fullt'>
@@ -205,16 +209,16 @@ echo " <thead>
     <th  class='bnb'>Name</th>
     <th  class='bnb'>Degi  </th>
     <th  class='bnb'>Join.d</th>
-    <th  class='bnb'>Basic Salary</th>
-    <th>Present Status</th>
+    <th  class='bnb'>B.Salary</th>
+    <th style='width: 139px;'>Status</th>
     <th >Leave</th>
     <th  class='bnb'>Late</th>
-    <th >Deduction</th>
+    <th style='width: 139px;'>Deduction</th>
     <th  class='bnb'>Extra Pay</th>
     <th  class='bnb'>Modify Salary</th>
     <th  class='bnb'>Net Salary</th>
     <th  class='bnb '>Grand Net Salary</th>
-    <th  class='bnb'>account Number</th>
+    <th  class='bnb'>Account Number</th>
 </tr>
 <tr>
     <th  class='bnt'></th>
@@ -226,19 +230,19 @@ echo " <thead>
     <th>
         <table>
             <tr>
-                <th class=''>Present</th>
-                <th class=''>Absent</th>
-                <th class=''>Weekend</th>
-                <th class=''>Holiday</th>
-                <th class=''>Extra.p</th>
+                <th class=''>P</th>
+                <th class=''>A</th>
+                <th class=''>W</th>
+                <th class=''>H</th>
+                <th class=''>E</th>
             </tr>
         </table>
     </th>
     <th>
         <table >
             <tr >
-                <th class=''>Earn Leave</th>
-                <th class=''>Sick Leave</th>
+                <th class=''>Earn</th>
+                <th class=''>Sick</th>
             </tr>
         </table>
     </th>
@@ -246,8 +250,8 @@ echo " <thead>
     <th>
         <table>
             <tr>
-                <th  class=''>Late Deduction</th>
-                <th  class=''>Absent Deduction</th>
+                <th  class=''>Late</th>
+                <th  class=''>Abse</th>
             </tr>
         </table>
     </th>
@@ -356,7 +360,7 @@ display: flex;
 text-align: center;
 align-items: center;
 margin-top: 78px;
-font-size: 18px;
+font-size: 14px;
 font-weight: bold;
 '>
 <section style='width: 33%;'>Created by</section>
@@ -367,11 +371,10 @@ font-weight: bold;
 echo "<div style='
 margin-top: 132px;
 '>
-       <div style='font-size:20px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->company_name ."</div>
-       <div style='font-size:12px; font-weight:bold; text-align:center;height:0px;'></div>
-       <div style='font-size:20px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->address_1."</div>
-       <div style='align-items: center;text-align: center;'>Salary Month : ". $salary_month ."</div>
-       
+<div style='font-size:18px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->company_name ."</div>
+<div style='font-size:14px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->address_1."</div>
+<div style='font-size:12px;align-items: center;text-align: center;'>Salary Month : ". $salary_month ."</div>
+
        </div>
        <div class='fullt'>
        <table>";
@@ -379,64 +382,64 @@ margin-top: 132px;
         // add page number
         $page_number = ($i+1)/$rows_per_page + 1;
  echo " <thead>
-        <tr>
-            <th class='bnb'>SL</th>
-            <th  class='bnb'>Name</th>
-            <th  class='bnb'> Degi  </th>
-            <th  class='bnb'>Join.d </th>
-            <th  class='bnb'>Basic Salary</th>
-            <th>Present Status</th>
-            <th >Leave</th>
-            <th  class='bnb'>Late</th>
-            <th >Deduction</th>
-            <th  class='bnb'>Extra Pay</th>
-            <th  class='bnb'>Modify Salary</th>
-            <th  class='bnb'>Net Salary</th>
-            <th  class='bnb'>Grand Net Salary</th>
-            <th  class='bnb'>account Number</th>
-        </tr>
-        <tr>
-            <th  class='bnt'></th>
-            <th  class='bnt'></th>
-            <th  class='bnt'></th>
-            <th  class='bnt'></th>
-            <th  class='bnt'></th>
-            
-            <th>
-                <table>
-                    <tr>
-                        <th class=''>Present</th>
-                        <th class=''>Absent</th>
-                        <th class=''>Weekend</th>
-                        <th class=''>Holiday</th>
-                        <th class=''>Extra.p</th>
-                    </tr>
-                </table>
-            </th>
-            <th>
-                <table >
-                    <tr >
-                        <th class=''>Earn Leave</th>
-                        <th class=''>Sick Leave</th>
-                    </tr>
-                </table>
-            </th>
-            <th  class='bnt'> </th>
-            <th>
-                <table>
-                    <tr>
-                        <th  class=''>Late Deduction</th>
-                        <th  class=''>Absent Deduction</th>
-                    </tr>
-                </table>
-            </th>
-            <th  class='bnt'></th>
-            <th  class='bnt'></th>
-            <th  class='bnt'></th>
-            <th  class='bnt'></th>
-            <th  class='bnt'></th>
-        </tr>
-        </thead>
+ <tr>
+ <th class='bnb'>SL</th>
+ <th  class='bnb'>Name</th>
+ <th  class='bnb'>Degi  </th>
+ <th  class='bnb'>Join.d</th>
+ <th  class='bnb'>B.Salary</th>
+ <th style='width: 150px;'>Status</th>
+ <th >Leave</th>
+ <th  class='bnb'>Late</th>
+ <th style='width: 139px;'>Deduction</th>
+ <th  class='bnb'>Extra Pay</th>
+ <th  class='bnb'>Modify Salary</th>
+ <th  class='bnb'>Net Salary</th>
+ <th  class='bnb '>Grand Net Salary</th>
+ <th  class='bnb'>Account Number</th>
+ </tr>
+ <tr>
+     <th  class='bnt'></th>
+     <th  class='bnt'></th>
+     <th  class='bnt'></th>
+     <th  class='bnt'></th>
+     <th  class='bnt'></th>
+     
+     <th>
+         <table>
+             <tr>
+                 <th class='r5'>P</th>
+                 <th class='r5'>A</th>
+                 <th class='r5'>W</th>
+                 <th class='r5'>H</th>
+                 <th class='r5'>E</th>
+             </tr>
+         </table>
+     </th>
+     <th>
+         <table >
+             <tr >
+                 <th class=''>Earn</th>
+                 <th class=''>Sick</th>
+             </tr>
+         </table>
+     </th>
+     <th  class='bnt'> </th>
+     <th>
+         <table>
+             <tr>
+                 <th  class=''>Late</th>
+                 <th  class=''>Abse</th>
+             </tr>
+         </table>
+     </th>
+     <th  class='bnt'></th>
+     <th  class='bnt'></th>
+     <th  class='bnt'></th>
+     <th  class='bnt'></th>
+     <th  class='bnt'></th>
+ </tr>
+ </thead>
         <tbody> ";        // echo "Page $page_number";
     }
 
