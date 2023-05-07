@@ -205,20 +205,20 @@ echo "
 
 echo " <thead>
 <tr>
-    <th class='bnb'>SL</th>
-    <th  class='bnb'>Name</th>
-    <th  class='bnb'>Degi  </th>
-    <th  class='bnb'>Join.d</th>
-    <th  class='bnb'>B.Salary</th>
-    <th style='width: 139px;'>Status</th>
-    <th >Leave</th>
-    <th  class='bnb'>Late</th>
-    <th style='width: 139px;'>Deduction</th>
-    <th  class='bnb'>Extra Pay</th>
-    <th  class='bnb'>Modify Salary</th>
-    <th  class='bnb'>Net Salary</th>
-    <th  class='bnb '>Grand Net Salary</th>
-    <th  class='bnb'>Account Number</th>
+<th class='bnb'>SL</th>
+<th  class='bnb'>Name</th>
+<th  class='bnb'>Degi  </th>
+<th  class='bnb'>Join.d</th>
+<th  class='bnb'>B.Salary</th>
+<th style='width: 160px;'>Status</th>
+<th style='width: 92px;'>Leave</th>
+<th  class='bnb'>Late</th>
+<th style='width: 139px;'>Deduction</th>
+<th  class='bnb'>Extra Pay</th>
+<th  class='bnb'>Modify Salary</th>
+<th  class='bnb'>Net Salary</th>
+<th  class='bnb '>Grand Net Salary</th>
+<th  class='bnb'>Account Number</th>
 </tr>
 <tr>
     <th  class='bnt'></th>
@@ -326,7 +326,7 @@ for ($i = 0; $i < count($values); $i++) {
     if (($i+1) % $rows_per_page == 0 && $i != count($values)-1) {
         $j=1;
 echo "</tbody>
-        <tfoot>
+<tfoot style='font-size: 12px;'>
 <tr>
   <td colspan='4'>Total:</td>
   <td  colspan='1'>".$total_basic_salary."</td>
@@ -388,8 +388,8 @@ margin-top: 132px;
  <th  class='bnb'>Degi  </th>
  <th  class='bnb'>Join.d</th>
  <th  class='bnb'>B.Salary</th>
- <th style='width: 150px;'>Status</th>
- <th >Leave</th>
+ <th style='width: 160px;'>Status</th>
+ <th style='width: 92px;'>Leave</th>
  <th  class='bnb'>Late</th>
  <th style='width: 139px;'>Deduction</th>
  <th  class='bnb'>Extra Pay</th>
@@ -449,7 +449,7 @@ margin-top: 132px;
 }
 
 
-echo"<tfoot>
+echo"<tfoot style='font-size: 12px;'>
 <tr>
   <td colspan='4'>Total:</td>
   <td  colspan='1'>".$total_basic_salary."</td>
@@ -477,7 +477,7 @@ display: flex;
 text-align: center;
 align-items: center;
 margin-top: 78px;
-font-size: 18px;
+font-size: 14px;
 font-weight: bold;
 '>
 <section style='width: 33%;'>Created by</section>
