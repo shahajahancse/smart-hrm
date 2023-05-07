@@ -8,13 +8,9 @@
 
     <style>
         .fullt{
-
-            height: 700px;
+            height: 600px;
             margin: 30px;
-
-
-
-
+            margin-bottom: 50px;
         }
       .colors1 {
                background-color: #a58b4373;
