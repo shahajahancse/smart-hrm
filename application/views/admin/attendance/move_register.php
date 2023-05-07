@@ -257,7 +257,7 @@
                   if($session['role_id'] != 3){ ?>
                   <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
                   <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
-                  <hr> <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
+                  
                    <?php if($row->status==1){?> 
                   <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">View TA/DA</a>
                   <?php } else{ if($row->status ==2 ){?>
@@ -410,10 +410,10 @@ function edit(id){
 // appply for ta / da
 
 function showModal(id,role_id) {
-   //alert(id + ' '+ role_id); 
+  //  alert(id + ' '+ role_id); 
     $("#form_id").val(id);
     $('#myModal').modal().show();
-
+     
     var url = "<?php echo base_url('admin/attendance/modify_for_ta_da/')?>" + id;
     jQuery.ajax({
           url: url,
@@ -422,11 +422,11 @@ function showModal(id,role_id) {
           type: 'POST',
 
           success: function(response){
-              // console.log(response[0].request_amount);
+              console.log(response[0].request_amount);
 
               if(role_id !="3"){
                 $("#request_amount").val(response[0].request_amount);
-                $("#short_details").val(response[0].details);
+                $("#short_details").val(response[0].reason);
                 $('#apply_for_ta_da').hide();
                 $('#modify_ta_da').show();
                 $('#add_amount').hide();
