@@ -21,6 +21,23 @@ class Xin_model extends CI_Model {
 			return null;
 		}
 	}
+
+	public function modify_salary($id=NULL){
+		if($id==''){
+			return "null";
+		}
+		$sql = 'SELECT basic_salary,late_deduct FROM xin_salary_payslips WHERE employee_id ='.$id;
+		$query = $this->db->query($sql);
+		// dd($query->result());
+		return $query->result();
+	}
+	public function update_salary($id=NULL,$modify_salary){
+
+		if($id==''){
+			return "null";
+		}
+		$this->db->query("UPDATE `xin_salary_payslips` SET `modify_salary`=".$modify_salary." WHERE `employee_id`=".$id);	
+	}
 		
 	// is logged in to system
 	public function is_logged_in($id)
@@ -193,6 +210,18 @@ class Xin_model extends CI_Model {
 		} else if($mClass=='chat') {
 			$arr['chat_active'] = 'active';
 			return $arr;
+		} else if($mClass=='timesheet' && $mMethod=='attn_file_upload') {
+			$arr['attnf_active'] = 'active';
+			$arr['attnd_open'] = 'active';
+			return $arr;
+		} else if($mClass=='attendance' && $mMethod=='move_register') {
+			$arr['move_active'] = 'active';
+			$arr['attnd_open'] = 'active';
+			return $arr;
+		} else if($mClass=='attendance' && $mMethod=='index') {
+			$arr['attnp_active'] = 'active';
+			$arr['attnd_open'] = 'active';
+			return $arr;
 		} else if($mClass=='timesheet' && $mMethod=='attendance') {
 			$arr['attnd_active'] = 'active';
 			$arr['attnd_open'] = 'active';
@@ -253,7 +282,11 @@ class Xin_model extends CI_Model {
 			$arr['pay_mang_active'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
-		} else if($mMethod=='generate_payslip') {
+		} else if($mClass=='payroll' && $mMethod=='index') {
+			$arr['salary_active'] = 'active';
+			$arr['payrl_open'] = 'active';
+			return $arr;
+		} else if($mClass=='payroll' && $mMethod=='generate_payslip') {
 			$arr['pay_generate_active'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
@@ -272,6 +305,34 @@ class Xin_model extends CI_Model {
 		} else if($mMethod=='advance_salary_report') {
 			$arr['pay_advn_rpt_active'] = 'active';
 			$arr['payrl_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='index') {
+			$arr['requi_active'] = 'active';
+			$arr['invtry_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='purchase') {
+			$arr['purchase_active'] = 'active';
+			$arr['invtry_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='products') {
+			$arr['invtry_open'] = 'active';
+			$arr['insetting_open'] = 'active';
+			$arr['product_open'] = 'active';
+			return $arr;
+		}  else if($mClass=='inventory' && $mMethod=='unit') {
+			$arr['invtry_open'] = 'active';
+			$arr['insetting_open'] = 'active';
+			$arr['unit_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='category') {
+			$arr['invtry_open'] = 'active';
+			$arr['insetting_open'] = 'active';
+			$arr['cat_open'] = 'active';
+			return $arr;
+		}  else if($mClass=='inventory' && $mMethod=='sub_category') {
+			$arr['invtry_open'] = 'active';
+			$arr['insetting_open'] = 'active';
+			$arr['subcat_open'] = 'active';
 			return $arr;
 		} else if($mClass=='performance_indicator') {
 			$arr['per_indi_active'] = 'active';
@@ -993,6 +1054,18 @@ class Xin_model extends CI_Model {
 	  $binds = array($id);
   	  return $query->result();
 	}
+
+	// 0
+	function get_notify_incr_prob_applications($start_date, $end_date, $status = null){
+		if ($status != null) {
+			$this->db->where('status', $status);
+		}
+		$this->db->where("notify_incre_prob BETWEEN '$start_date' and '$end_date'");
+		$this->db->order_by('notify_incre_prob', 'ASC');
+		$query = $this->db->get('xin_employees');
+		return $query->result();	
+	}
+
 	
 	// 1
 	public function get_notify_leave_applications() {
@@ -1457,9 +1530,15 @@ class Xin_model extends CI_Model {
   	  return $query->result();
 	}	
 
+	public function login_employees($id)
+	{
+	  $query = $this->db->query("SELECT * from xin_employees where user_role_id=3 and user_id=$id");
+  	  return $query->result();
+	}	
+
 	// get employees by company waise
 	// shahajahan ali 
-	public function get_employee($company_id = null, $user_id = null)
+	public function get_employee($company_id = null, $user_id = null, $status = null)
 	{
 		// vardump($user_id);
 	  $query = $this->db->select("*");
@@ -1472,6 +1551,11 @@ class Xin_model extends CI_Model {
 	  	$query->where('user_id', $user_id);
 	  }
 
+	  if ($status != null && $status != 0) {
+	  	$query->where('status', $status);
+	  }
+
+	  $query->where('status !=', 0);
   	  return $query->get('xin_employees')->result(); 
 	}
 	
@@ -3500,6 +3584,28 @@ ORDER BY `expiry_date`");
 			$Total = gmdate("H:i", $hrs_old_int1);
 		}
 		return $Total;
+	}	
+
+	// actual hours for timelog > project
+	public function left_resign_list($status) {
+		$this->db->select('xin_employees.first_name,
+               xin_employees.last_name,
+               xin_employees.user_id,
+               xin_employees.date_of_joining,
+               xin_departments.department_name,
+               xin_designations.designation_name,
+               xin_employee_left_resign.effective_date
+            ')
+            ->from('xin_employees')
+            ->from('xin_departments')
+            ->from('xin_designations')
+            ->from('xin_employee_left_resign')
+            ->where('xin_departments.department_id = xin_employees.department_id')
+            ->where('xin_designations.designation_id = xin_employees.designation_id')
+            ->where('xin_employee_left_resign.emp_id = xin_employees.user_id')
+            ->where('xin_employee_left_resign.status',$status)
+            ->where('xin_employees.is_active',0);
+        return $this->db->get()->result();
 	}
 }
 ?>

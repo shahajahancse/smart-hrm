@@ -23,6 +23,7 @@ class Payroll extends MY_Controller {
 		$this->load->library('Pdf');
 		//load the model
 		$this->load->model("Payroll_model");
+		$this->load->model("Salary_model");
 		$this->load->model("Xin_model");
 		$this->load->model("Employees_model");
 		$this->load->model("Designation_model");
@@ -32,7 +33,7 @@ class Payroll extends MY_Controller {
 		$this->load->model("Overtime_request_model");
 		$this->load->helper('string');
 	}
-	
+
 	/*Function to set JSON output*/
 	public function output($Return=array()){
 		/*Set response header*/
@@ -41,6 +42,133 @@ class Payroll extends MY_Controller {
 		/*Final JSON response*/
 		exit(json_encode($Return));
 	}
+
+
+	public function index()
+    {
+		$data['title'] = $this->lang->line('left_payroll_templates').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = "Payroll";
+		$data['path_url'] = 'payroll_templates';
+		// $data['all_office_shifts'] = $this->Location_model->all_office_locations();
+		$data['subview'] = $this->load->view("admin/payroll/index", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+			  
+    }
+
+    // salary process
+	public function salary_process()
+    {
+    	$process_month = $this->input->post('process_month');
+    	$status = $this->input->post('status');
+    	$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+    	// dd($sql);
+
+    	$process_month = date("Y-m-d", strtotime($process_month));
+		$this->Salary_model->Salary_process($process_month, $emp_id);
+		$this->db->trans_complete();
+			
+		if ($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			echo "Process failed";
+		}
+		else
+		{
+			echo "Process completed sucessfully";
+		}
+
+    }
+
+	public function modify_salary(){
+
+		if(isset($_GET['id'])){
+			$id= $_GET['id'];
+			$data = $this->Xin_model->modify_salary($id);
+			echo json_encode($data);
+		}
+
+	}
+	public function save_modify_salary(){
+
+			$data = $this->Xin_model->update_salary($_POST['id'],$_POST['modify_salary']);
+			echo json_encode($data);
+	}
+
+	// generate salary excel sheet 
+    public function salary_sheet_excel()
+    {  
+		
+    	$excel = $this->input->post('excel');
+    	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
+		$status = $this->input->post('status');
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+    	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
+		$data['status']= $status;
+        $data["salary_month"] = $salary_month;
+        $data["emp_id"] = $emp_id;
+		
+		// dd($data["values"]);
+        if(is_string($data["values"]))
+        {
+					// dd($data["values"]);
+
+            echo $data["values"];
+        }
+        else
+        {	
+
+        	if ($excel == 1) {
+				// dd($data["values"]);
+
+				
+	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
+        	} else {
+
+
+	            $this->load->view('admin/payroll/salary_sheet_excel',$data);
+        	}
+        }
+    }
+	// generate salary excel sheet 
+    public function Actual_salary_sheet_excel()
+    {  
+		
+    	$excel = $this->input->post('excel');
+    	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
+		$status = $this->input->post('status');
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+    	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
+		$data['status']= $status;
+        $data["salary_month"] = $salary_month;
+        $data["emp_id"] = $emp_id;
+		
+		// dd($data["values"]);
+        if(is_string($data["values"]))
+        {
+					// dd($data["values"]);
+
+            echo $data["values"];
+        }
+        else
+        {	
+
+        	if ($excel == 1) {
+				// dd($data["values"]);
+
+				
+	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
+        	} else {
+
+
+	            // $this->load->view('admin/payroll/salary_sheet_excel',$data);
+	            $this->load->view('admin/payroll/test',$data);
+        	}
+        }
+    }
+
 	
 	 // payroll templates
 	 public function templates()
@@ -708,228 +836,228 @@ class Payroll extends MY_Controller {
 	public function add_pay_monthly() {
 	
 		if($this->input->post('add_type')=='add_monthly_payment') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
 				
-		/*if($Return['error']!=''){
-       		$this->output($Return
-			);
-    	}*/
-		$basic_salary = $this->input->post('basic_salary');
-		$system = $this->Xin_model->read_setting_info(1);
-		$euser_info = $this->Xin_model->read_user_info($this->input->post('emp_id'));
-		if($system[0]->is_half_monthly==1){
-			$is_half_monthly_payroll = 1;
-		} else {
-			$is_half_monthly_payroll = 0;
-		}
-		
-		$jurl = random_string('alnum', 40);	
-		$data = array(
-		'employee_id' => $this->input->post('emp_id'),
-		'department_id' => $this->input->post('department_id'),
-		'company_id' => $this->input->post('company_id'),
-		'location_id' => $this->input->post('location_id'),
-		'designation_id' => $this->input->post('designation_id'),
-		'salary_month' => $this->input->post('pay_date'),
-		'basic_salary' => $basic_salary,
-		'net_salary' => $this->input->post('net_salary'),
-		'wages_type' => $this->input->post('wages_type'),
-		'is_half_monthly_payroll' => $is_half_monthly_payroll,
-		'total_commissions' => $this->input->post('total_commissions'),
-		'total_statutory_deductions' => $this->input->post('total_statutory_deductions'),
-		'total_other_payments' => $this->input->post('total_other_payments'),
-		'total_allowances' => $this->input->post('total_allowances'),
-		'total_loan' => $this->input->post('total_loan'),
-		'total_overtime' => $this->input->post('total_overtime'),
-		'is_payment' => '1',
-		'status' => '0',
-		'payslip_type' => 'full_monthly',
-		'payslip_key' => $jurl,
-		'year_to_date' => date('d-m-Y'),
-		'created_at' => date('d-m-Y h:i:s')
-		);
-		$result = $this->Payroll_model->add_salary_payslip($data);	
-		
-		if ($result) {
-			// set allowance
-			$salary_allowances = $this->Employees_model->read_salary_allowances($this->input->post('emp_id'));
-			$count_allowances = $this->Employees_model->count_employee_allowances($this->input->post('emp_id'));
-			$allowance_amount = 0;
-			if($count_allowances > 0) {
-				foreach($salary_allowances as $sl_allowances){
-					 $esl_allowances = $sl_allowances->allowance_amount;
-					 if($system[0]->is_half_monthly==1){
-					  	 if($system[0]->half_deduct_month==2){
-							 $eallowance_amount = $esl_allowances/2;
-						 } else {
-							 $eallowance_amount = $esl_allowances;
-						 }
-                      } else {
-						  $eallowance_amount = $esl_allowances;
-                      }
-					$allowance_data = array(
-					'payslip_id' => $result,
-					'employee_id' => $this->input->post('emp_id'),
-					'salary_month' => $this->input->post('pay_date'),
-					'allowance_title' => $sl_allowances->allowance_title,
-					'allowance_amount' => $eallowance_amount,
-					'created_at' => date('d-m-Y h:i:s')
-					);
-					$_allowance_data = $this->Payroll_model->add_salary_payslip_allowances($allowance_data);
-				}
-			}
-			// set commissions
-			$salary_commissions = $this->Employees_model->read_salary_commissions($this->input->post('emp_id'));
-			$count_commission = $this->Employees_model->count_employee_commissions($this->input->post('emp_id'));
-			$commission_amount = 0;
-			if($count_commission > 0) {
-				foreach($salary_commissions as $sl_commission){
-					$esl_commission = $sl_commission->commission_amount;
-					 if($system[0]->is_half_monthly==1){
-					  	 if($system[0]->half_deduct_month==2){
-							 $ecommission_amount = $esl_commission/2;
-						 } else {
-							 $ecommission_amount = $esl_commission;
-						 }
-                      } else {
-						  $ecommission_amount = $esl_commission;
-                      }
-					$commissions_data = array(
-					'payslip_id' => $result,
-					'employee_id' => $this->input->post('emp_id'),
-					'salary_month' => $this->input->post('pay_date'),
-					'commission_title' => $sl_commission->commission_title,
-					'commission_amount' => $ecommission_amount,
-					'created_at' => date('d-m-Y h:i:s')
-					);
-					$this->Payroll_model->add_salary_payslip_commissions($commissions_data);
-				}
-			}
-			// set other payments
-			$salary_other_payments = $this->Employees_model->read_salary_other_payments($this->input->post('emp_id'));
-			$count_other_payment = $this->Employees_model->count_employee_other_payments($this->input->post('emp_id'));
-			$other_payment_amount = 0;
-			if($count_other_payment > 0) {
-				foreach($salary_other_payments as $sl_other_payments){
-					$esl_other_payments = $sl_other_payments->payments_amount;
-					 if($system[0]->is_half_monthly==1){
-					  	 if($system[0]->half_deduct_month==2){
-							 $epayments_amount = $esl_other_payments/2;
-						 } else {
-							 $epayments_amount = $esl_other_payments;
-						 }
-                      } else {
-						  $epayments_amount = $esl_other_payments;
-                      }
-					 $other_payments_data = array(
-					'payslip_id' => $result,
-					'employee_id' => $this->input->post('emp_id'),
-					'salary_month' => $this->input->post('pay_date'),
-					'payments_title' => $sl_other_payments->payments_title,
-					'payments_amount' => $epayments_amount,
-					'created_at' => date('d-m-Y h:i:s')
-					);
-					$this->Payroll_model->add_salary_payslip_other_payments($other_payments_data);
-				}
-			}
-			// set statutory_deductions
-			$salary_statutory_deductions = $this->Employees_model->read_salary_statutory_deductions($this->input->post('emp_id'));
-			$count_statutory_deductions = $this->Employees_model->count_employee_statutory_deductions($this->input->post('emp_id'));
-			$statutory_deductions_amount = 0;
-			if($count_statutory_deductions > 0) {
-				foreach($salary_statutory_deductions as $sl_statutory_deduction){
-					$esl_statutory_deduction = $sl_statutory_deduction->deduction_amount;
-					 if($system[0]->is_half_monthly==1){
-					  	 if($system[0]->half_deduct_month==2){
-							 $ededuction_amount = $esl_statutory_deduction/2;
-						 } else {
-							 $ededuction_amount = $esl_statutory_deduction;
-						 }
-                      } else {
-						  $ededuction_amount = $esl_statutory_deduction;
-                      }
-					  $statutory_deduction_data = array(
-					'payslip_id' => $result,
-					'employee_id' => $this->input->post('emp_id'),
-					'salary_month' => $this->input->post('pay_date'),
-					'deduction_title' => $sl_statutory_deduction->deduction_title,
-					'deduction_amount' => $ededuction_amount,
-					'created_at' => date('d-m-Y h:i:s')
-					);
-					$this->Payroll_model->add_salary_payslip_statutory_deductions($statutory_deduction_data);
-				}
-			}
-			// set loan
-			$salary_loan_deduction = $this->Employees_model->read_salary_loan_deductions($this->input->post('emp_id'));
-			$count_loan_deduction = $this->Employees_model->count_employee_deductions($this->input->post('emp_id'));
-			$loan_de_amount = 0;
-			if($count_loan_deduction > 0) {
-				foreach($salary_loan_deduction as $sl_salary_loan_deduction){
-					$esl_salary_loan_deduction = $sl_salary_loan_deduction->loan_deduction_amount;
-					 if($system[0]->is_half_monthly==1){
-					  	 if($system[0]->half_deduct_month==2){
-							 $eloan_deduction_amount = $esl_salary_loan_deduction/2;
-						 } else {
-							 $eloan_deduction_amount = $esl_salary_loan_deduction;
-						 }
-                      } else {
-						  $eloan_deduction_amount = $esl_salary_loan_deduction;
-                      }
-					$loan_data = array(
-					'payslip_id' => $result,
-					'employee_id' => $this->input->post('emp_id'),
-					'salary_month' => $this->input->post('pay_date'),
-					'loan_title' => $sl_salary_loan_deduction->loan_deduction_title,
-					'loan_amount' => $eloan_deduction_amount,
-					'created_at' => date('d-m-Y h:i:s')
-					);
-					$_loan_data = $this->Payroll_model->add_salary_payslip_loan($loan_data);
-				}
-			}
-			// set overtime
-			$salary_overtime = $this->Employees_model->read_salary_overtime($this->input->post('emp_id'));
-			$count_overtime = $this->Employees_model->count_employee_overtime($this->input->post('emp_id'));
-			$overtime_amount = 0;
-			if($count_overtime > 0) {
-				foreach($salary_overtime as $sl_overtime){
-					$eovertime_hours = $sl_overtime->overtime_hours;
-					$eovertime_rate = $sl_overtime->overtime_rate;
-					 if($system[0]->is_half_monthly==1){
-					  	 if($system[0]->half_deduct_month==2){
-							 $esl_overtime_hr = $eovertime_hours/2;
-							 $esl_overtime_rate = $eovertime_rate/2;
-						 } else {
-							 $esl_overtime_hr = $eovertime_hours;
-							 $esl_overtime_rate = $eovertime_rate;
-						 }
-                      } else {
-						  $esl_overtime_hr = $eovertime_hours;
-						  $esl_overtime_rate = $eovertime_rate;
-                      }
-					  $overtime_data = array(
-					'payslip_id' => $result,
-					'employee_id' => $this->input->post('emp_id'),
-					'overtime_salary_month' => $this->input->post('pay_date'),
-					'overtime_title' => $sl_overtime->overtime_type,
-					'overtime_no_of_days' => $sl_overtime->no_of_days,
-					'overtime_hours' => $esl_overtime_hr,
-					'overtime_rate' => $esl_overtime_rate,
-					'created_at' => date('d-m-Y h:i:s')
-					);
-					$_overtime_data = $this->Payroll_model->add_salary_payslip_overtime($overtime_data);
-				}
+			/* Server side PHP input validation */
+					
+			/*if($Return['error']!=''){
+	       		$this->output($Return
+				);
+	    	}*/
+			$basic_salary = $this->input->post('basic_salary');
+			$system = $this->Xin_model->read_setting_info(1);
+			$euser_info = $this->Xin_model->read_user_info($this->input->post('emp_id'));
+			if($system[0]->is_half_monthly==1){
+				$is_half_monthly_payroll = 1;
+			} else {
+				$is_half_monthly_payroll = 0;
 			}
 			
-		$Return['result'] = $this->lang->line('xin_success_payment_paid');
-		} else {
-			$Return['error'] = $this->lang->line('xin_error_msg');
-		}
-		$this->output($Return);
-		exit;
+			$jurl = random_string('alnum', 40);	
+			$data = array(
+				'employee_id' => $this->input->post('emp_id'),
+				'department_id' => $this->input->post('department_id'),
+				'company_id' => $this->input->post('company_id'),
+				'location_id' => $this->input->post('location_id'),
+				'designation_id' => $this->input->post('designation_id'),
+				'salary_month' => $this->input->post('pay_date'),
+				'basic_salary' => $basic_salary,
+				'net_salary' => $this->input->post('net_salary'),
+				'wages_type' => $this->input->post('wages_type'),
+				'is_half_monthly_payroll' => $is_half_monthly_payroll,
+				'total_commissions' => $this->input->post('total_commissions'),
+				'total_statutory_deductions' => $this->input->post('total_statutory_deductions'),
+				'total_other_payments' => $this->input->post('total_other_payments'),
+				'total_allowances' => $this->input->post('total_allowances'),
+				'total_loan' => $this->input->post('total_loan'),
+				'total_overtime' => $this->input->post('total_overtime'),
+				'is_payment' => '1',
+				'status' => '0',
+				'payslip_type' => 'full_monthly',
+				'payslip_key' => $jurl,
+				'year_to_date' => date('d-m-Y'),
+				'created_at' => date('d-m-Y h:i:s')
+			);
+			$result = $this->Payroll_model->add_salary_payslip($data);	
+			
+			if ($result) {
+				// set allowance
+				$salary_allowances = $this->Employees_model->read_salary_allowances($this->input->post('emp_id'));
+				$count_allowances = $this->Employees_model->count_employee_allowances($this->input->post('emp_id'));
+				$allowance_amount = 0;
+				if($count_allowances > 0) {
+					foreach($salary_allowances as $sl_allowances){
+						 $esl_allowances = $sl_allowances->allowance_amount;
+						 if($system[0]->is_half_monthly==1){
+						  	 if($system[0]->half_deduct_month==2){
+								 $eallowance_amount = $esl_allowances/2;
+							 } else {
+								 $eallowance_amount = $esl_allowances;
+							 }
+	                      } else {
+							  $eallowance_amount = $esl_allowances;
+	                      }
+						$allowance_data = array(
+							'payslip_id' => $result,
+							'employee_id' => $this->input->post('emp_id'),
+							'salary_month' => $this->input->post('pay_date'),
+							'allowance_title' => $sl_allowances->allowance_title,
+							'allowance_amount' => $eallowance_amount,
+							'created_at' => date('d-m-Y h:i:s')
+						);
+						$_allowance_data = $this->Payroll_model->add_salary_payslip_allowances($allowance_data);
+					}
+				}
+				// set commissions
+				$salary_commissions = $this->Employees_model->read_salary_commissions($this->input->post('emp_id'));
+				$count_commission = $this->Employees_model->count_employee_commissions($this->input->post('emp_id'));
+				$commission_amount = 0;
+				if($count_commission > 0) {
+					foreach($salary_commissions as $sl_commission){
+						$esl_commission = $sl_commission->commission_amount;
+						 if($system[0]->is_half_monthly==1){
+						  	 if($system[0]->half_deduct_month==2){
+								 $ecommission_amount = $esl_commission/2;
+							 } else {
+								 $ecommission_amount = $esl_commission;
+							 }
+	                      } else {
+							  $ecommission_amount = $esl_commission;
+	                      }
+						$commissions_data = array(
+							'payslip_id' => $result,
+							'employee_id' => $this->input->post('emp_id'),
+							'salary_month' => $this->input->post('pay_date'),
+							'commission_title' => $sl_commission->commission_title,
+							'commission_amount' => $ecommission_amount,
+							'created_at' => date('d-m-Y h:i:s')
+						);
+						$this->Payroll_model->add_salary_payslip_commissions($commissions_data);
+					}
+				}
+				// set other payments
+				$salary_other_payments = $this->Employees_model->read_salary_other_payments($this->input->post('emp_id'));
+				$count_other_payment = $this->Employees_model->count_employee_other_payments($this->input->post('emp_id'));
+				$other_payment_amount = 0;
+				if($count_other_payment > 0) {
+					foreach($salary_other_payments as $sl_other_payments){
+						$esl_other_payments = $sl_other_payments->payments_amount;
+						 if($system[0]->is_half_monthly==1){
+						  	 if($system[0]->half_deduct_month==2){
+								 $epayments_amount = $esl_other_payments/2;
+							 } else {
+								 $epayments_amount = $esl_other_payments;
+							 }
+	                      } else {
+							  $epayments_amount = $esl_other_payments;
+	                      }
+						 $other_payments_data = array(
+							'payslip_id' => $result,
+							'employee_id' => $this->input->post('emp_id'),
+							'salary_month' => $this->input->post('pay_date'),
+							'payments_title' => $sl_other_payments->payments_title,
+							'payments_amount' => $epayments_amount,
+							'created_at' => date('d-m-Y h:i:s')
+						);
+						$this->Payroll_model->add_salary_payslip_other_payments($other_payments_data);
+					}
+				}
+				// set statutory_deductions
+				$salary_statutory_deductions = $this->Employees_model->read_salary_statutory_deductions($this->input->post('emp_id'));
+				$count_statutory_deductions = $this->Employees_model->count_employee_statutory_deductions($this->input->post('emp_id'));
+				$statutory_deductions_amount = 0;
+				if($count_statutory_deductions > 0) {
+					foreach($salary_statutory_deductions as $sl_statutory_deduction){
+						$esl_statutory_deduction = $sl_statutory_deduction->deduction_amount;
+						 if($system[0]->is_half_monthly==1){
+						  	 if($system[0]->half_deduct_month==2){
+								 $ededuction_amount = $esl_statutory_deduction/2;
+							 } else {
+								 $ededuction_amount = $esl_statutory_deduction;
+							 }
+	                      } else {
+							  $ededuction_amount = $esl_statutory_deduction;
+	                      }
+						$statutory_deduction_data = array(
+							'payslip_id' => $result,
+							'employee_id' => $this->input->post('emp_id'),
+							'salary_month' => $this->input->post('pay_date'),
+							'deduction_title' => $sl_statutory_deduction->deduction_title,
+							'deduction_amount' => $ededuction_amount,
+							'created_at' => date('d-m-Y h:i:s')
+						);
+						$this->Payroll_model->add_salary_payslip_statutory_deductions($statutory_deduction_data);
+					}
+				}
+				// set loan
+				$salary_loan_deduction = $this->Employees_model->read_salary_loan_deductions($this->input->post('emp_id'));
+				$count_loan_deduction = $this->Employees_model->count_employee_deductions($this->input->post('emp_id'));
+				$loan_de_amount = 0;
+				if($count_loan_deduction > 0) {
+					foreach($salary_loan_deduction as $sl_salary_loan_deduction){
+						$esl_salary_loan_deduction = $sl_salary_loan_deduction->loan_deduction_amount;
+						 if($system[0]->is_half_monthly==1){
+						  	 if($system[0]->half_deduct_month==2){
+								 $eloan_deduction_amount = $esl_salary_loan_deduction/2;
+							 } else {
+								 $eloan_deduction_amount = $esl_salary_loan_deduction;
+							 }
+	                      } else {
+							  $eloan_deduction_amount = $esl_salary_loan_deduction;
+	                      }
+						$loan_data = array(
+							'payslip_id' => $result,
+							'employee_id' => $this->input->post('emp_id'),
+							'salary_month' => $this->input->post('pay_date'),
+							'loan_title' => $sl_salary_loan_deduction->loan_deduction_title,
+							'loan_amount' => $eloan_deduction_amount,
+							'created_at' => date('d-m-Y h:i:s')
+						);
+						$_loan_data = $this->Payroll_model->add_salary_payslip_loan($loan_data);
+					}
+				}
+				// set overtime
+				$salary_overtime = $this->Employees_model->read_salary_overtime($this->input->post('emp_id'));
+				$count_overtime = $this->Employees_model->count_employee_overtime($this->input->post('emp_id'));
+				$overtime_amount = 0;
+				if($count_overtime > 0) {
+					foreach($salary_overtime as $sl_overtime){
+						$eovertime_hours = $sl_overtime->overtime_hours;
+						$eovertime_rate = $sl_overtime->overtime_rate;
+						 if($system[0]->is_half_monthly==1){
+						  	 if($system[0]->half_deduct_month==2){
+								 $esl_overtime_hr = $eovertime_hours/2;
+								 $esl_overtime_rate = $eovertime_rate/2;
+							 } else {
+								 $esl_overtime_hr = $eovertime_hours;
+								 $esl_overtime_rate = $eovertime_rate;
+							 }
+	                      } else {
+							  $esl_overtime_hr = $eovertime_hours;
+							  $esl_overtime_rate = $eovertime_rate;
+	                      }
+					  	$overtime_data = array(
+							'payslip_id' => $result,
+							'employee_id' => $this->input->post('emp_id'),
+							'overtime_salary_month' => $this->input->post('pay_date'),
+							'overtime_title' => $sl_overtime->overtime_type,
+							'overtime_no_of_days' => $sl_overtime->no_of_days,
+							'overtime_hours' => $esl_overtime_hr,
+							'overtime_rate' => $esl_overtime_rate,
+							'created_at' => date('d-m-Y h:i:s')
+						);
+						$_overtime_data = $this->Payroll_model->add_salary_payslip_overtime($overtime_data);
+					}
+				}
+				
+			$Return['result'] = $this->lang->line('xin_success_payment_paid');
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_msg');
+			}
+			$this->output($Return);
+			exit;
 		}
 	}
 	// Validate and add info in database > add monthly payment
@@ -3253,5 +3381,10 @@ class Payroll extends MY_Controller {
 		$this->output($Return);
 		exit;
 		}
+	}
+
+
+	public function report(){
+		$this->load->view('admin/payroll/report');
 	}
 }

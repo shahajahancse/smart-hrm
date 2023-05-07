@@ -194,6 +194,7 @@ if($attendances->num_rows() < 1) {
 	$bgatt = 'bg-success';
 } else {
 	$bgatt = 'bg-danger';
+	$bgatt = 'bg-success';
 }
 ?>
 <div class="row <?php echo $get_animate;?>">
@@ -246,10 +247,10 @@ if($attendances->num_rows() < 1) {
                       <input type="hidden" value="<?php echo $dat[0]->time_attendance_id;?>" name="time_id" id="time_id">
                       <div class="row">
                         <div class="col-md-6">
-                          <button class="btn btn-success btn-block text-uppercase" disabled="disabled" type="submit" id="clock_btn"><i class="fa fa-arrow-circle-right"></i> <?php echo $this->lang->line('dashboard_clock_in');?></button>
+                          <!-- <button class="btn btn-success btn-block text-uppercase" disabled="disabled" type="submit" id="clock_btn"><i class="fa fa-arrow-circle-right"></i> <?php echo $this->lang->line('dashboard_clock_in');?></button> -->
                         </div>
                         <div class="col-md-6">
-                          <button class="btn btn-danger btn-block text-uppercase" type="submit" id="clock_btn"><i class="fa fa-arrow-circle-left"></i> <?php echo $this->lang->line('dashboard_clock_out');?></button>
+                          <!-- <button class="btn btn-danger btn-block text-uppercase" type="submit" id="clock_btn"><i class="fa fa-arrow-circle-left"></i> <?php echo $this->lang->line('dashboard_clock_out');?></button> -->
                         </div>
                       </div>
                       <?php } ?>

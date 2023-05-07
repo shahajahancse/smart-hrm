@@ -88,70 +88,65 @@ $department = $this->Department_model->read_department_information($user[0]->dep
       </div>
     </section>
   </div>
-  <?php //if($user[0]->user_role_id == 1) {?>
+
   <div class="col-md-4">
     <section id="decimal">
       <div class="row">
         <div class="col-md-12">
           <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title"> <?php echo $this->lang->line('xin_update_status');?> </h3>
-              </div>
-            <div class="box-body">
-                  <?php $attributes = array('name' => 'update_status', 'id' => 'update_status', 'autocomplete' => 'off');?>
-				  <?php $hidden = array('user_id' => $session['user_id'], '_token_status' => $leave_id);?>
-                  <?php echo form_open('admin/timesheet/update_leave_status/'.$leave_id, $attributes, $hidden);?>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <?php if($user[0]->user_role_id == 1) {?>
-                      <div class="form-group">
-                        <label for="status"><?php echo $this->lang->line('dashboard_xin_status');?></label>
-                        <select class="form-control" name="status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
-                          <option value="1" <?php if($status=='1'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_pending');?></option>
-                          <option value="4" <?php if($status=='4'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_role_first_level_approval');?></option>
-                          <option value="2" <?php if($status=='2'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_approved');?></option>
-                          <option value="3" <?php if($status=='3'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_rejected');?></option>
-                        </select>
-                      </div>
-                      <?php } else {?>
-                      <div class="form-group">
-                        <label for="status"><?php echo $this->lang->line('dashboard_xin_status');?></label>
-                        <select class="form-control" name="status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
-                          
-                          <?php if($department[0]->employee_id == $session['user_id'] && !in_array('312',$role_resources_ids)) {?>
-                          <option value="1" <?php if($status=='1'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_pending');?></option>
-                          <option value="4" <?php if($status=='4'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_role_first_level_approval');?></option>
-                          <?php } ?>
-						  <?php if(in_array('312',$role_resources_ids)) {?>
-                          <option value="2" <?php if($status=='2'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_approved');?></option>
-                          <?php } ?>
-                          <?php if($department[0]->employee_id == $session['user_id'] || in_array('312',$role_resources_ids)) {?>
-                          <option value="3" <?php if($status=='3'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_rejected');?></option>
-                          <?php } ?>
-                        </select>
-                      </div>
-                      <?php } ?>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label for="remarks"><?php echo $this->lang->line('xin_remarks');?></label>
-                        <textarea class="form-control textarea" placeholder="<?php echo $this->lang->line('xin_remarks');?>" name="remarks" id="remarks" cols="30" rows="5"><?php echo $remarks;?></textarea>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-actions box-footer">
-                    <button type="submit" class="btn btn-primary"> <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
-                  </div>
-                <?php echo form_close(); ?>
-              </div>
+              <h3 class="box-title"> <?php echo $this->lang->line('xin_update_status');?> </h3>
             </div>
+            <div class="box-body">
+              <?php $attributes = array('name' => 'update_status', 'id' => 'update_status', 'autocomplete' => 'off');?>
+				        <?php $hidden = array('user_id' => $session['user_id'], '_token_status' => $leave_id);?>
+                <?php echo form_open('admin/timesheet/update_leave_status/'.$leave_id, $attributes, $hidden);?>
+                <div class="row">
+                  <div class="col-md-12">
+                    <?php if($user[0]->user_role_id == 1) {?>
+                    <div class="form-group">
+                      <label for="status"><?php echo $this->lang->line('dashboard_xin_status');?></label>
+                      <select class="form-control" name="status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
+                        <option value="1" <?php if($status=='1'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_pending');?></option>
+                        <option value="4" <?php if($status=='4'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_role_first_level_approval');?></option>
+                        <option value="2" <?php if($status=='2'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_approved');?></option>
+                        <option value="3" <?php if($status=='3'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_rejected');?></option>
+                      </select>
+                    </div>
+                    <?php } else {?>
+                    <div class="form-group">
+                      <label for="status"><?php echo $this->lang->line('dashboard_xin_status');?></label>
+                      <select class="form-control" name="status" disabled >
+                        <option value="1" <?php echo ($status=='1')? "selected":""; ?>><?php echo $this->lang->line('xin_pending');?></option>
+                        <option value="2" <?php echo ($status=='2')? "selected":""; ?>><?php echo $this->lang->line('xin_approved');?></option>
+                        <option value="3" <?php echo ($status=='3')? "selected":""; ?>><?php echo $this->lang->line('xin_rejected');?></option>
+                        <option value="4" <?php echo ($status=='4')? "selected":""; ?>><?php echo $this->lang->line('xin_role_first_level_approval');?></option>
+                      </select>
+                    </div>
+                  <?php } ?>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="remarks"><?php echo $this->lang->line('xin_remarks');?></label>
+                      <textarea class="form-control textarea" placeholder="<?php echo $this->lang->line('xin_remarks');?>" name="remarks" id="remarks" cols="30" rows="5"><?php echo $remarks;?></textarea>
+                    </div>
+                  </div>
+                </div>
+                <?php if($user[0]->user_role_id != 3) {?>
+                <div class="form-actions box-footer">
+                  <button type="submit" class="btn btn-primary"> <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
+                </div>
+                <?php }?>
+              <?php echo form_close(); ?>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   </div>
-  <?php //} ?>
+
   <div class="col-md-4">
     <section id="decimal">
       <div class="row">

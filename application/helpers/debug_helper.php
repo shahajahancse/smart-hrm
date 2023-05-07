@@ -19,7 +19,7 @@
  * @access	public
  * @param	mixed 
  */
-if ( ! function_exists('printr'))
+if ( ! function_exists('dd'))
 {
 	function dd($var)
 	{

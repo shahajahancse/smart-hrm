@@ -200,8 +200,11 @@
 	}
 	
 	// get all leaves
-	public function get_leaves() {
-	  return $this->db->get("xin_leave_applications");
+	public function get_leaves($id = null) {
+		if ($id != null) {
+			$this->db->where("employee_id", $id);
+		}
+		return $this->db->order_by("leave_id", "DESC")->get("xin_leave_applications");
 	}
 	// get company leaves
 	public function filter_company_leaves($company_id) {
@@ -744,8 +747,8 @@
 	public function employee_count_total_leaves($leave_type_id,$employee_id) {
 		
 		//$sql = 'SELECT * FROM xin_leave_applications WHERE employee_id = ? and leave_type_id = ? and status = ? and created_at >= DATE_SUB(NOW(),INTERVAL 1 YEAR)';
-		$sql = 'SELECT * FROM xin_leave_applications WHERE employee_id = ? and leave_type_id = ? and status = ?';
-		$binds = array($employee_id,$leave_type_id,2);
+		$sql = 'SELECT * FROM xin_leave_applications WHERE employee_id = ? and leave_type_id = ? and status = ? and current_year = ?';
+		$binds = array($employee_id,$leave_type_id,2,date("Y"));
 		$query = $this->db->query($sql, $binds);
 
 		return $query->num_rows();

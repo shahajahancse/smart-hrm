@@ -11,12 +11,12 @@ class Employees_model extends CI_Model {
  
  	// get all employes
 	public function get_employees() {
-	  return $this->db->get("xin_employees");
+		$this->db->order_by("user_id", 'desc')->where('is_active',1);
+		return $this->db->get("xin_employees");
 	}
 	// get all employes > not super admin
-	public function get_employees_for_other($cid) {
-		
-		$sql = 'SELECT * FROM xin_employees WHERE user_id != ? and company_id = ?';
+	public function get_employees_for_other($cid,$user_id) {
+		$sql = 'SELECT * FROM xin_employees WHERE user_id != ? and company_id = ? and user_role_id=3 and user_id='.$user_id;
 		$binds = array(1,$cid);
 		$query = $this->db->query($sql, $binds);
 	    return $query;
@@ -80,12 +80,10 @@ class Employees_model extends CI_Model {
 	    return $query;
 	}
 	// get employes with location
-	public function get_attendance_location_employees($location_id) {
-		
-		$sql = 'SELECT * FROM xin_employees WHERE location_id = ? and is_active = ?';
-		$binds = array($location_id,1);
+	public function get_attendance_location_employees($user_id) {
+		$sql = 'SELECT * FROM xin_employees WHERE  is_active = ? and user_role_id=3 and user_id='.$user_id;
+		$binds = array(1);
 		$query = $this->db->query($sql, $binds);
-		
 	    return $query;
 	}
 	
@@ -97,7 +95,11 @@ class Employees_model extends CI_Model {
 		 
 	 public function read_employee_information($id) {
 	
-		$sql = 'SELECT * FROM xin_employees WHERE user_id = ?';
+		$sql = 'SELECT xin_employees.*, xin_proxi.proxi_id 
+				FROM xin_employees
+				LEFT JOIN xin_proxi
+				ON xin_employees.user_id = xin_proxi.emp_id
+				WHERE user_id='.$id;
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		
@@ -162,10 +164,20 @@ class Employees_model extends CI_Model {
 	}
 	
 	// Function to update record in table > basic_info
-	public function basic_info($data, $id){
+	public function basic_info($data, $id,$proxi_id){
 		$this->db->where('user_id', $id);
 		if( $this->db->update('xin_employees',$data)) {
-			return true;
+
+			$query = $this->db->query('SELECT * FROM xin_proxi WHERE emp_id ='.$id);
+			if ($query->num_rows() > 0) {
+				$data=['proxi_id'=>$proxi_id];
+				$this->db->where('emp_id', $id)->update('xin_proxi',$data);
+				return true;
+			} else {
+				$this->db->query("INSERT INTO `xin_proxi`( `emp_id`, `proxi_id`, `status`) VALUES ('$id','$proxi_id',1)");
+				return true;
+			}
+			
 		} else {
 			return false;
 		}		
@@ -1681,6 +1693,53 @@ class Employees_model extends CI_Model {
 		} else {
 			return false;
 		}		
+	}
+	public function fetch_user_info($id){
+		$data = $this->db->select('
+				   xin_employees.first_name,
+                   xin_employees.last_name,
+                   xin_employees.basic_salary,
+                   xin_employees.date_of_joining,
+                   xin_departments.department_id,
+                   xin_departments.department_name,
+                   xin_designations.designation_id,
+                   xin_designations.designation_name,
+                ')
+              ->from('xin_employees')
+              ->from('xin_departments')
+              ->from('xin_designations')
+              ->where('xin_departments.department_id = xin_employees.department_id')
+              ->where('xin_designations.designation_id = xin_employees.designation_id')
+              ->where('xin_employees.user_id',$id)
+              ->get()->result();
+
+        return	$data;
+
+	}
+	
+
+	public function increment_pro_list(){
+		$this->db->select('
+				   xin_employees.first_name,
+                   xin_employees.last_name,
+                   xin_employees.basic_salary,
+                   xin_employees.date_of_joining,
+                   xin_departments.department_name,
+                   xin_designations.designation_name,
+                   emip.id,
+                   emip.old_salary,
+                   emip.new_salary,
+                   emip.letter_status,
+                   emip.status,
+                ');
+    	$this->db->from('xin_employee_incre_prob as emip');
+    	$this->db->from('xin_employees');
+    	$this->db->from('xin_departments');
+    	$this->db->from('xin_designations');
+    	$this->db->where('xin_employees.user_id = emip.emp_id');
+    	$this->db->where('xin_departments.department_id = emip.new_dept_id');
+    	$this->db->where('xin_designations.designation_id = emip.new_desig_id');
+    	return $this->db->order_by('id','DESC')->get()->result();
 	}
 }
 ?>

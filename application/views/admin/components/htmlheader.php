@@ -106,4 +106,5 @@
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_tasks_scrum_board.css">
 <?php } ?>
 <script type="text/javascript" src="<?php echo base_url('skin/hrsale_assets/vendor/jquery/jquery-3.2.1.min.js');?>"></script>
+<script> var base_url = "<?php echo base_url(); ?>"</script>
 </head>
