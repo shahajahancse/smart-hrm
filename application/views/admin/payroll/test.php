@@ -44,6 +44,7 @@
      background-color: #dff0d8bd;;
      color: black !important;
 }
+
  .colors2 {
      background-color: #a9a9a95e !important;
      color: black !important;
