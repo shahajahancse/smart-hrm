@@ -11,7 +11,7 @@
 
     <style>
         .fullt{
-            height: 550px;
+            height: 750px;
     margin: 30px
 
 ;
@@ -193,6 +193,8 @@ echo " <thead>
 <tr>
     <th class='bnb'>Id</th>
     <th  class='bnb'>Name Degi Join.d </th>
+    <th  class='bnb'>Degi  </th>
+    <th  class='bnb'>Join.d</th>
     <th  class='bnb'>Basic Salary</th>
     <th>Present Status</th>
     <th >Leave</th>
@@ -205,6 +207,8 @@ echo " <thead>
     <th  class='bnb'>account Number</th>
 </tr>
 <tr>
+    <th  class='bnt'></th>
+    <th  class='bnt'></th>
     <th  class='bnt'></th>
     <th  class='bnt'></th>
     <th  class='bnt'></th>
@@ -253,6 +257,8 @@ for ($i = 0; $i < count($values); $i++) {
   echo"<tr>
   <td>".$values[$i]->emp_id."</td>
   <td>".$values[$i]->first_name."</td>
+  <td>".$values[$i]->designation_name."</td>
+  <td>".$values[$i]->date_of_joining."</td>
   <td>".$values[$i]->basic_salary."</td>
   <td>
       <table>
@@ -308,7 +314,7 @@ for ($i = 0; $i < count($values); $i++) {
 echo "</tbody>
         <tfoot>
 <tr>
-  <td colspan='2'>Total:</td>
+  <td colspan='4'>Total:</td>
   <td  colspan='1'>".$total_basic_salary."</td>
   <td colspan='3'></td>
   <td colspan='1'>
@@ -367,6 +373,8 @@ margin-top: 132px;
         <tr>
             <th class='bnb'>Id</th>
             <th  class='bnb'>Name Degi Join.d </th>
+            <th  class='bnb'> Degi  </th>
+            <th  class='bnb'>Join.d </th>
             <th  class='bnb'>Basic Salary</th>
             <th>Present Status</th>
             <th >Leave</th>
@@ -379,6 +387,8 @@ margin-top: 132px;
             <th  class='bnb'>account Number</th>
         </tr>
         <tr>
+            <th  class='bnt'></th>
+            <th  class='bnt'></th>
             <th  class='bnt'></th>
             <th  class='bnt'></th>
             <th  class='bnt'></th>
@@ -427,7 +437,7 @@ margin-top: 132px;
 
 echo"<tfoot>
 <tr>
-  <td colspan='2'>Total:</td>
+  <td colspan='4'>Total:</td>
   <td  colspan='1'>".$total_basic_salary."</td>
   <td colspan='3'></td>
    <td colspan='1'>
