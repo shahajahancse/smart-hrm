@@ -104,6 +104,7 @@ class Payroll extends MY_Controller {
 		$status = $this->input->post('status');
 		$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
+	
     	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;
