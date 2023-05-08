@@ -41,6 +41,7 @@ class Attendance extends MY_Controller {
 
 	public function index()
     {
+		
 		$data['title'] = $this->lang->line('dashboard_attendance').' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('dashboard_attendance');
 		$data['path_url'] = 'attendance';
@@ -429,26 +430,27 @@ class Attendance extends MY_Controller {
 	 
     	$sql = $this->input->post('sql');
 		$emp_id = explode(',', trim($sql));
-
-
 		$data['first_date'] = $first_date;
-		
-		
-		
+		$data['sql'] = $sql;
 		$data['xin_employees'] =  $this->Attendance_model->get_employee($emp_id);
-		// dd($data['all_employees']);
-
-		echo $this->load->view("admin/timesheet/test", $data, TRUE);
+		echo $this->load->view("admin/timesheet/monthly_report", $data, TRUE);
 		
 
 		  
     }
+	public function monthly_report_excel() {
+		$first_date = $this->input->post('first_date');
+		$sql = $this->input->post('sql');
+		$emp_id = explode(',', trim($sql));
+		$data['first_date'] = $first_date;
+		$data['xin_employees'] =  $this->Attendance_model->get_employee($emp_id);
+		echo $this->load->view("admin/timesheet/excel_monthly_report", $data, TRUE);
+	 }
 
 
 
 	// apply for ta / da
 	public function apply_for_ta_da(){
-
 	
 	$data = $this->Attendance_model->apply_for_ta_da($_POST['form_id'],$_POST['request_amount'],$_POST['short_details']);
 	echo json_encode($data);

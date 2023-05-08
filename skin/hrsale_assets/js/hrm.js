@@ -324,7 +324,7 @@
     ajaxRequest = new XMLHttpRequest();
 
     first_date = document.getElementById('process_date').value;
-    second_date = document.getElementById('second_date').value;
+    // second_date = document.getElementById('second_date').value;
     var checkboxes = document.getElementsByName('select_emp_id[]');
     var sql = get_checked_value(checkboxes);
     if(sql =='')
@@ -337,16 +337,12 @@
     {
       alert('Please select first date');
       return ;
-    }
-    if(second_date =='')
-    {
-      alert('Please select second date');
-      return ;
     }else{
       document.getElementById("loading").style.visibility = "visible";
 
 
     }
+    
 
     
 

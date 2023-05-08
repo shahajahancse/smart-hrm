@@ -7,36 +7,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <style>
-        table{
-            border: 2px black solid;
+  table {
     border-collapse: collapse;
-    width: -webkit-fill-available;
+    width: 100%;
+  margin: 0 auto;
+  max-width: 100%; /* Set max-width to 100% */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-th{
-    border: 2px black solid;
-    border-collapse: collapse;
-    font-size: 20px;
 
+
+th {
+	background-color: #0177BC;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    /* border: 2px solid #4CAF50; */
+}
+.im{
+    background: #d5b2b2 !important;
+    color: currentcolor !important;
 
 }
 
 td {
-    border: 2px black solid;
-    border-collapse: collapse;
-    font-size: 15px;
+	font-size: 15px;
     text-align: center;
-
-
-
+    border: 2px solid #ddd;
+    width: 19px;
 }
-.tdb{
-    background-color: cadetblue;
 
+tr:hover {
+  background-color: #f5f5f5;
 }
+
+.tdb {
+  background-color: cadetblue;
+}
+
+
+
+.btn {
+    background-color: #0890dd;
+    height: 30px;
+    width: 95;
+    font-size: 15px;
+	padding-right: 5px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    /* text-transform: uppercase; */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+    margin: 5px;
+}
+
+.btn:hover {
+    background-color: #0c69a5;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+}
+
+
+
 </style>
-    <!-- Bootstrap CSS -->
   </head>
-  <body>
+  <body >
+
+
 
 
 
@@ -51,54 +91,51 @@ $imonth_year = explode('-',$month_year);
 		$month = date($imonth_year[1], $date);
 		$year = date($imonth_year[0], $date);
 
-/* Set the date */
-// $date = strtotime(date("Y-m-d"));
-// get month and year
-
-
-
-    // $day = date('d', $date);
-    // $month = date('m', $date);
-    // $year = date('Y', $date);
-
-    // $emp_id = [2, 9, 10];
-
-    // $xin_employees= $this->Attendance_model->get_employee($emp_id);
-
-
-    // $xin_employees = $this->Timesheet_model->get_xin_employees();
-    // dd($xin_employees);
-
-    // $xin_employees = $this->Xin_model->read_user_info(2);
-
 
 // total days in month
 $daysInMonth = cal_days_in_month(0, $month, $year);
 $imonth = date('F', $date);
 ?>
 
+<div>
+
+
+<div  style="float: right;">
+
+<button class="btn" onclick="printPage()">Print</button>   </div>
+<div>
+<form style="
+    float: right;
+"  action="<?php echo base_url('admin/Attendance/monthly_report_excel'); ?>" method="post">
+  <input type="hidden" name="first_date" value="<?php echo $first_date; ?>">
+  <input type="hidden" name="sql" value="<?php echo $sql; ?>">
+  <button class="btn" type="submit">Excel</button>
+</form>
+</div>
+</div>
+<div style="clear: both;"></div>
 
 
 
-  <div class="box-header with-border">
-  <div class="box-header with-border">
-    <div style="
-    text-align: center;
-">
-    <h3 class="box-title">Monthly Report</h3>
-    <h5>For the month of
-      <?php if(isset($month_year)): echo date('F Y', strtotime($month_year)); else: echo date('F Y'); endif;?>
-    </h5>
-    </div>
-    <div class="box-tools pull-right"> A: Absent, P: Present, H: Holiday, L: Leave, W=Weekend</div>
- 
-
-
-
+  <div  class="box-header with-border">
+  <div id="print-content"  class="box-header with-border">
   <div class="box-body">
-    <div class="box-datatable table-responsive">
+    <div class="box-datatable table-responsive" style="text-align:center;">
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
+	 <tr><div style="font-size:18px; font-weight:bold; text-align:center;margin-top:10px"><?php echo xin_company_info(1)->company_name; ?></div>
+				<div style="font-size:20px; font-weight:bold; text-align:center;height:0px;"></div>
+				<div style="font-size:14px; line-height:15px; font-weight:bold; text-align:center;"> <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
+
+				<h5 style="margin-top: 4px;font-size: 14px;margin-bottom: 4px;line-height:15px;font-weight:bold;/* justify-content: center; *//* margin: unset; */text-align:center;">For the month of
+      <?php if(isset($month_year)): echo date('F Y', strtotime($month_year)); else: echo date('F Y'); endif;?>
+    </h5>				<div style="font-size:12px; font-weight:bold; text-align:center;"></div>
+		
+	<div style="font-size:12px; font-weight:bold; text-align:center;"></div>
+	<div class="box-tools pull-right" style=" text-align:center; margin-bottom:5px;"> A: Absent, P: Present, H: Holiday, L: Leave, W=Weekend</div>
+	</tr> 
         <thead>
+
+		
           <tr class="tdb">
             <th class="mastering"><?php echo $this->lang->line('xin_employee');?></th>
             <th class="mastering">Designation</th>
@@ -112,12 +149,12 @@ $imonth = date('F', $date);
 						?>
             <th><strong><?php echo '<div>'.$i.' </div>';?></strong></th>
             <?php endfor; ?>
-            <th width="100px">P</th>
-            <th width="100px">A</th>
-            <th width="100px">W</th>
-            <th width="100px">H</th>
-            <th width="100px">L</th>
-            <th width="100px">T.D</th>
+            <th class="im">P</th>
+            <th class="im">A</th>
+            <th class="im">W</th>
+            <th class="im" >H</th>
+            <th class="im" >L</th>
+            <th class="im" >T.D</th>
             
           </tr>
         </thead>
@@ -259,19 +296,19 @@ $imonth = date('F', $date);
 							if($idate_of_joining < $iattendance_date){
 								$status = $status;
 							} else {
-								$status = '';
+								$status = '-';
 							}
 						?>
             <td><?php echo $status; ?></td>
             <?php endfor; ?>
             <?php $totalday=$present+$absent+$weekend+$holiday+$leave+$totalday;
              ?>
-            <td><?php echo $present;?></td>
-            <td><?php echo $absent;?></td>
-            <td><?php echo $weekend;?></td>
-            <td><?php echo $holiday;?></td>
-            <td><?php echo $leave;?></td>
-            <td><?php echo $totalday;?></td>
+            <td class="im"><?php echo $present;?></td>
+            <td class="im"><?php echo $absent;?></td>
+            <td class="im"><?php echo $weekend;?></td>
+            <td class="im"><?php echo $holiday;?></td>
+            <td class="im"><?php echo $leave;?></td>
+            <td class="im"><?php echo $totalday;?></td>
 
           </tr>
           <?php endforeach;?>
@@ -327,55 +364,34 @@ $imonth = date('F', $date);
 				}
 			}
 		}
+		 </script>
+
+<script>function printPage() {
+    var printContents = document.getElementById("print-content").innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    // set custom layout, page size, page margin, and page heading
+    var printCSS = '<style>@page { size: A4 landscape; margin: 1cm; @top-center { content: "My Custom Page Header"; } } \
+                    body { -webkit-print-color-adjust: exact; color-adjust: exact; } \
+                    table { border-collapse: collapse; width: 100%; margin: 0 auto; max-width: 100%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); } \
+                    th { background-color: #0177BC; color: white; font-size: 18px; font-weight: bold; text-align: center; padding: .5px} \
+                    .im { background: #d5b2b2 !important; color: currentcolor !important; } \
+                    td { font-size: 15px; text-align: center; border: 2px solid #ddd; width: 19px; } \
+                    tr:hover { background-color: #f5f5f5; } \
+                    .tdb { background-color: cadetblue; }</style>';
+    
+    document.body.innerHTML = printCSS + '<div id="print-content">' + printContents + '</div>';
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+}
 
 
-
-		function jobCard()
-		{
-			var ajaxRequest;  // The variable that makes Ajax possible!
-		  ajaxRequest = new XMLHttpRequest();
-
-		  var month_year = document.getElementById('d_month_year').value;
-			var company = document.getElementById('aj_company').value
-			var employee_id = document.getElementById('employee_id').value;
-			// var csrf_hrsale = document.querySelector('[name="csrf_hrsale"]').value;
-			// console.log(csrf_hrsale); return
-
-			if(month_year =='')	{
-				alert('Please select date');
-				return ;
-			}
-			if(company =='Select' || company == '')
-			{
-				alert("Please select Company option");
-				return;
-			}
-			
-			var queryString="month_year="+month_year+"&company="+company+"&employee_id="+employee_id;
-
-		  url = "<?php echo base_url() ?>admin/timesheet/job_card/"+month_year+"/"+company+"/"+employee_id;
-		  ajaxRequest.open("GET", url, true);
-		  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-		   ajaxRequest.send();
-				// alert(url); return;
-
-			ajaxRequest.onreadystatechange = function(){
-				if(ajaxRequest.readyState == 4){
-					// console.log(ajaxRequest.responseText); return;
-					var resp = ajaxRequest.responseText;
-					a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
-					a.document.write(resp);
-					// a.close();
-				}
-			}
-		}
-
-  </script>
-
+</script>
 
 
       
-
 
 
 
@@ -384,5 +400,9 @@ $imonth = date('F', $date);
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+
+
+
+
+</body>
 </html>
