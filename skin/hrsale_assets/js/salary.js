@@ -198,6 +198,47 @@
       }
     }
 
+    function modify_salary()
+    {
+     
+
+      sal_month = document.getElementById('sal_month').value;
+      if(sal_month =='')
+      {
+        alert('Please select salary month');
+        return ;
+      }
+
+      sal_year = document.getElementById('sal_year').value;
+      if(sal_year =='')
+      {
+        alert('Please select alary year');
+        return ;
+      }
+
+     var salary_month = sal_year +'-'+ sal_month
+ 
+     
+
+      //  var data = "salary_month="+salary_month;
+  
+      // console.log(data); return;
+      // url = base_url + "/modify_salary";
+      // var url = "<?php echo base_url('admin/payroll/modify_salary');?>";
+      $.ajax({
+      url: 'modify_salary',
+      type: 'POST',
+      data: {
+        salary_month:salary_month,
+             
+            },
+      success: function(response){
+       console.log(response);
+        
+      }
+    });
+    }
+
 
 
 
