@@ -363,9 +363,9 @@ margin-top: 78px;
 font-size: 14px;
 font-weight: bold;
 '>
-<section style='width: 33%;'>Created by</section>
-<section style='width: 33%;'>Aprovde by</section>
-<section style='width: 33%;'>MD</section>
+<section style='width: 33%;'>Prepared By</section>
+<section style='width: 33%;'>Confirmed By</section>
+<section style='width: 33%;'>Aproved By(Managing Director)</section>
       </div>
 </div>";
 echo "<div style='
@@ -480,9 +480,9 @@ margin-top: 78px;
 font-size: 14px;
 font-weight: bold;
 '>
-<section style='width: 33%;'>Created by</section>
-<section style='width: 33%;'>Aprovde by</section>
-<section style='width: 33%;'>MD</section>
+<section style='width: 33%;'>Prepared By</section>
+<section style='width: 33%;'>Confirmed By</section>
+<section style='width: 33%;'>Aproved By(Managing Director)</section>
       </div>
 </div>";
 ?>

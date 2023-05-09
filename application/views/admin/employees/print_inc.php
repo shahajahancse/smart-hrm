@@ -20,19 +20,25 @@
   table {
     border-collapse: collapse;
     width: 100%;
+    margin-top: 15px;
  
   max-width: 100%; /* Set max-width to 100% */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
+/* hh */
 
 th {
 	background-color: #4CAF50;
     color: white;
-    font-size: 21px;
+    font-size: 15px;
     font-weight: bold;
     text-align: center;
     /* border: 2px solid #4CAF50; */
+}
+th {
+	
+    font-size: 14px;
+   
 }
 .im{
     background: #d5b2b2 !important;
@@ -59,9 +65,9 @@ tr:hover {
 
 .btn {
     background-color: #0890dd;
-    height: 39px;
-    width: 103px;
-    font-size: 19px;
+    height: 31px;
+    width: 66px;
+    font-size: 16px;
     border: none;
     border-radius: 11px;
     cursor: pointer;
@@ -90,14 +96,9 @@ tr:hover {
 
 
   
-<div  style="
-   
-    float: right;
-">
+<div  style="float: right;">
 <button class="btn" onclick="printPage()">Print</button></div>
-<form style="
-    float: right;
-"  action="<?php echo base_url('admin/Employees/excel_inc'); ?>" method="post">
+<form style="float: right;"  action="<?php echo base_url('admin/Employees/excel_inc'); ?>" method="post">
   
   <input type="hidden" name="status" value="<?php echo $status; ?>">
   <button class="btn" type="submit">XLS</button>

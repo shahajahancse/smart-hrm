@@ -27,27 +27,27 @@ header('Cache-Control: max-age=0'); //no cache
 	
 		<tr  style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px;">
             
-            <th style="background-color: #4CAF50;color: white;">No.</th>
-            <th style="background-color: #4CAF50;color: white;">Name</th>
-            <th style="background-color: #4CAF50;color: white;">Department</th>
-            <th style="background-color: #4CAF50;color: white;">Designation</th>
-            <th style="background-color: #4CAF50;color: white;">DOJ</th>
-            <th style="background-color: #4CAF50;color: white;">Old Salary</th>
-            <th style="background-color: #4CAF50;color: white;">New Salary</th>
-            <th style="background-color: #4CAF50;color: white;">G.Letter</th>
+            <th style="background-color: #4CAF50;color: white;font-size: 14px;">No.</th>
+            <th style="background-color: #4CAF50;color: white;font-size: 14px;">Name</th>
+            <th style="background-color: #4CAF50;color: white;font-size: 14px;">Department</th>
+            <th style="background-color: #4CAF50;color: white;font-size: 14px;">Designation</th>
+            <th style="background-color: #4CAF50;color: white;font-size: 14px;">DOJ</th>
+            <th style="background-color: #4CAF50;color: white;font-size: 14px;">Old Salary</th>
+            <th style="background-color: #4CAF50;color: white;font-size: 14px;">New Salary</th>
+            <th style="background-color: #4CAF50;color: white;font-size: 14px;">G.Letter</th>
            
         </tr>
 		 
         <?php foreach($results as $key => $row):?>
             <tr>
-              <td><?php echo $key + 1; ?></td>
-              <td><?php echo $row->first_name .' '. $row->last_name; ?></td>
-              <td><?php echo $row->department_name; ?></td>
-              <td><?php echo $row->designation_name; ?></td>
-              <td><?php echo $row->date_of_joining; ?></td>
-              <td><?php echo $row->old_salary; ?></td>
-              <td><?php echo $row->new_salary; ?></td>
-              <td><?php echo $row->letter_status == 1 ? "Yes":"No"; ?></td>
+              <td style="font-size: 13px;" ><?php echo $key + 1; ?></td>
+              <td style="font-size: 13px;" ><?php echo $row->first_name .' '. $row->last_name; ?></td>
+              <td style="font-size: 13px;" ><?php echo $row->department_name; ?></td>
+              <td style="font-size: 13px;" ><?php echo $row->designation_name; ?></td>
+              <td style="font-size: 13px;" ><?php echo $row->date_of_joining; ?></td>
+              <td style="font-size: 13px;" ><?php echo $row->old_salary; ?></td>
+              <td style="font-size: 13px;" ><?php echo $row->new_salary; ?></td>
+              <td style="font-size: 13px;" ><?php echo $row->letter_status == 1 ? "Yes":"No"; ?></td>
             </tr>
           <?php endforeach;?>
          
