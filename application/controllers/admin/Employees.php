@@ -345,6 +345,25 @@ class Employees extends MY_Controller {
 		$data['subview'] = $this->load->view("admin/employees/increment_pro_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data);
     }
+    public function print_inc()
+    {
+
+		$status = $this->input->post('status');
+		
+    	$data['results'] = $this->Employees_model->print_inc($status);
+    	$data['status'] = $status;
+        $this->load->view('admin/employees/print_inc', $data);
+    }
+    public function excel_inc()
+    {
+
+		$status = $this->input->post('status');
+
+    	$data['results'] = $this->Employees_model->print_inc($status);
+	
+    	
+        $this->load->view('admin/employees/excel_in', $data);
+    }
 	 
 	 public function download_profile(){
 		$system = $this->Xin_model->read_setting_info(1);		
