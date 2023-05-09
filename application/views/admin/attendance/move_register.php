@@ -260,11 +260,12 @@
                   
                    <?php if($row->status==1){?> 
                   <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">View TA/DA</a>
-                  <?php } else{ if($row->status ==2 ){?>
+                  <?php } else{ if($row->status ==2){?>
                        <hr><a class='dropdown-item' style='padding-left:5px;'  href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
                 <?php }
                   else{ if($row->status ==3 ){?>
                 <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)"> Modify TA/DA</a>
+                <hr><a class='dropdown-item' style='padding-left:5px;'  href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
                  <?php }}
               }} 
                  
