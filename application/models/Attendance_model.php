@@ -576,7 +576,7 @@ class Attendance_model extends CI_Model {
     
 
     public function modify_for_ta_da($id){
-        $this->db->select("request_amount,reason")
+        $this->db->select("request_amount,reason,status")
                  ->from('xin_employee_move_register')
                  ->where('id',$id);   
         return $result = $this->db->get()->result();        

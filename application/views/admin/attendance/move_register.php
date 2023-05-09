@@ -262,7 +262,11 @@
                   <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">View TA/DA</a>
                   <?php } else{ if($row->status ==2 ){?>
                        <hr><a class='dropdown-item' style='padding-left:5px;'  href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
-                <?php }}} 
+                <?php }
+                  else{ if($row->status ==3 ){?>
+                <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)"> Modify TA/DA</a>
+                 <?php }}
+              }} 
                  
                  else {  
                         if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))){ ?>
@@ -279,9 +283,11 @@
                     else {  
                           if($row->status ==0) {?>
                             <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
-                            <?php } else{ ?>
+                            <?php } else{?>
                             <span class="dropdown-item" style="padding-left:5px;">No Action Need</span>
-                    <?php }} }?>
+                    <?php }}  if($row->status ==3 ){?>
+                <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">  Again Apply </a>
+                 <?php }   }?>
                 </div>
               </div>
 
@@ -427,6 +433,7 @@ function showModal(id,role_id) {
 
           success: function(response){
               console.log(response[0].request_amount);
+              // console.log(response[0].status);
 
               if(role_id !="3"){
                 $("#request_amount").val(response[0].request_amount);
@@ -440,6 +447,12 @@ function showModal(id,role_id) {
               }
               else{
                 $('#apply_for_ta_da').show();
+                $("#request_amount").val(response[0].request_amount);
+                
+                if(response[0].status==3){
+                  // console.log(response[0].status);
+                   $("#short_details").val(response[0].reason);
+                }
                 $('#modify_ta_da').hide();
                 $('#add_amount').show();
                 $('#amounts').hide();
