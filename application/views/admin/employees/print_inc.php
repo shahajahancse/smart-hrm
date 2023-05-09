@@ -25,7 +25,7 @@
   max-width: 100%; /* Set max-width to 100% */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
+/* hh */
 
 th {
 	background-color: #4CAF50;
