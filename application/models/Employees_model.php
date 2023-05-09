@@ -1741,5 +1741,52 @@ class Employees_model extends CI_Model {
     	$this->db->where('xin_designations.designation_id = emip.new_desig_id');
     	return $this->db->order_by('id','DESC')->get()->result();
 	}
+	public function print_inc($status){
+		$this->db->select('
+				   xin_employees.first_name,
+                   xin_employees.last_name,
+                   xin_employees.basic_salary,
+                   xin_employees.date_of_joining,
+                   xin_departments.department_name,
+                   xin_designations.designation_name,
+                   emip.id,
+                   emip.old_salary,
+                   emip.new_salary,
+                   emip.letter_status,
+                   emip.status,
+                ');
+    	$this->db->from('xin_employee_incre_prob as emip');
+    	$this->db->from('xin_employees');
+    	$this->db->from('xin_departments');
+    	$this->db->from('xin_designations');
+    	$this->db->where('xin_employees.user_id = emip.emp_id');
+    	$this->db->where('xin_departments.department_id = emip.new_dept_id');
+    	$this->db->where('xin_designations.designation_id = emip.new_desig_id');
+    	$this->db->where('emip.status',$status);
+    	return $this->db->order_by('id','DESC')->get()->result();
+	}
+	public function increment__list(){
+		$this->db->select('
+				   xin_employees.first_name,
+                   xin_employees.last_name,
+                   xin_employees.basic_salary,
+                   xin_employees.date_of_joining,
+                   xin_departments.department_name,
+                   xin_designations.designation_name,
+                   emip.id,
+                   emip.old_salary,
+                   emip.new_salary,
+                   emip.letter_status,
+                   emip.status,
+                ');
+    	$this->db->from('xin_employee_incre_prob as emip');
+    	$this->db->from('xin_employees');
+    	$this->db->from('xin_departments');
+    	$this->db->from('xin_designations');
+    	$this->db->where('xin_employees.user_id = emip.emp_id');
+    	$this->db->where('xin_departments.department_id = emip.new_dept_id');
+    	$this->db->where('xin_designations.designation_id = emip.new_desig_id');
+    	return $this->db->order_by('id','DESC')->get()->result();
+	}
 }
 ?>

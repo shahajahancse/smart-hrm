@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <style>
-table {
-  border-collapse: collapse;
-  width: 100%;
+  table {
+    border-collapse: collapse;
+    width: 100%;
   margin: 0 auto;
   max-width: 100%; /* Set max-width to 100% */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -72,7 +72,6 @@ tr:hover {
 
 
 </style>
-    <!-- Bootstrap CSS -->
   </head>
   <body >
 
@@ -90,26 +89,6 @@ $imonth_year = explode('-',$month_year);
 		$day = date('d', $date);
 		$month = date($imonth_year[1], $date);
 		$year = date($imonth_year[0], $date);
-
-/* Set the date */
-// $date = strtotime(date("Y-m-d"));
-// get month and year
-
-
-
-    // $day = date('d', $date);
-    // $month = date('m', $date);
-    // $year = date('Y', $date);
-
-    // $emp_id = [2, 9, 10];
-
-    // $xin_employees= $this->Attendance_model->get_employee($emp_id);
-
-
-    // $xin_employees = $this->Timesheet_model->get_xin_employees();
-    // dd($xin_employees);
-
-    // $xin_employees = $this->Xin_model->read_user_info(2);
 
 
 // total days in month
