@@ -98,6 +98,21 @@
 			<th class="text-center px-2"><?=$net_total?></th>
 			<th class="text-center px-2"><?=$grand_total?></th>
 		</tr>
+
+<tr><tr><tr></tr></tr></tr>
+		<tr height="85px">
+			<td colspan="5" style="text-align:center; font-size:16px; font-weight:bold; ">
+			  <div>Prepared By</div>
+			</td>
+			<td colspan="9" style="text-align:center; font-size:16px; font-weight:bold;">
+			  <div>Confirmed By</div>
+			</td>
+			<td colspan="9" style="text-align:center; font-size:16px; font-weight:bold;">
+			  <div>Aproved By(Managing Director)</div>
+
+		
+			</td>
+		</tr>
 	</table> 
 	<br>
 	<br>
