@@ -144,7 +144,7 @@
           <div class="form-group col-lg-6" id="ta_da_div" >
             <label id="manage_ta_da">Manage TA/DA</label>
             <select class="form-control" id="status">
-              <option value="" disabled selected>Select</option>
+              <option value="" disabled selected id="std">Select</option>
               <option value="2">Approved</option>
               <option value="3">Reject</option>
             </select>
@@ -260,19 +260,28 @@
                   
                    <?php if($row->status==1){?> 
                   <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">View TA/DA</a>
-                  <?php } else{ if($row->status ==2 ){?>
+                  <?php } else{ if($row->status ==2){?>
                        <hr><a class='dropdown-item' style='padding-left:5px;'  href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
                 <?php }
                   else{ if($row->status ==3 ){?>
                 <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)"> Modify TA/DA</a>
+                <hr><a class='dropdown-item' style='padding-left:5px;'  href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
                  <?php }}
               }} 
                  
                  else {  
                         if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))){ ?>
 
-                  <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
-                  <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" >Delete</a>
+                  
+                         <?php if( $row->status==3 ||$row->status==2){?>
+                           <a style="padding-left:5px; pointer-events: none; " onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
+                          <a style="padding-left:5px; pointer-events: none;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id);?>" disable >Delete</a>       
+                          <?php } else{?>
+
+                             <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
+                              <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" >Delete</a>
+                            <?php }?>
+                  
                   <?php if($row->status ==0) {?>
                     <hr> <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
                   <?php } 
@@ -285,8 +294,8 @@
                             <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
                             <?php } else{?>
                             <span class="dropdown-item" style="padding-left:5px;">No Action Need</span>
-                    <?php }}  if($row->status ==3 ){?>
-                <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">  Again Apply </a>
+                    <?php }}  if($row->status ==1 ){?>
+                <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)"> Edit TA/DA </a>
                  <?php }   }?>
                 </div>
               </div>
@@ -432,7 +441,7 @@ function showModal(id,role_id) {
           type: 'POST',
 
           success: function(response){
-              console.log(response[0].request_amount);
+              //console.log(response[0].request_amount);
               // console.log(response[0].status);
 
               if(role_id !="3"){
@@ -440,6 +449,9 @@ function showModal(id,role_id) {
                 $("#short_details").val(response[0].reason);
                 $('#apply_for_ta_da').hide();
                 $('#modify_ta_da').show();
+                 if(response[0].status==3){
+                  $("#std").html("Reject");}
+             
                 $('#add_amount').hide();
                 $('#amounts').show();
                 $('#ta_da_div').show();
@@ -449,7 +461,7 @@ function showModal(id,role_id) {
                 $('#apply_for_ta_da').show();
                 $("#request_amount").val(response[0].request_amount);
                 
-                if(response[0].status==3){
+                if(response[0].status==3 || response[0].status==1){
                   // console.log(response[0].status);
                    $("#short_details").val(response[0].reason);
                 }
