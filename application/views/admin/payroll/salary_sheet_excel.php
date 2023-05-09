@@ -94,6 +94,11 @@
 			<th class="text-center px-2"><?=$net_total?></th>
 			<th class="text-center px-2"><?=$grand_total?></th>
 		</tr>
+
+		
+	
+
+
 	</table>
 	<br>
 	<br>

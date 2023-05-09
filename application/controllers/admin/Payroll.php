@@ -164,8 +164,8 @@ class Payroll extends MY_Controller {
         	} else {
 
 
-	            // $this->load->view('admin/payroll/salary_sheet_excel',$data);
-	            $this->load->view('admin/payroll/test',$data);
+	           
+	            $this->load->view('admin/payroll/Actual_salary_sheet_excel',$data);
         	}
         }
     }
