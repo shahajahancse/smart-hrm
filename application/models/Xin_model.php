@@ -35,9 +35,6 @@ class Xin_model extends CI_Model {
 		$this->db->where('s.salary_month =', $first_date );
 		$result = $this->db->get()->result();
 		
-
-
-		// dd($query->result());
 		return $result;
 	}
 	public function update_salary($id=NULL,$modify_salary){
@@ -62,7 +59,7 @@ class Xin_model extends CI_Model {
 		return $is_logged_in;       
 	}
 	
-	// generate random string
+	// generate random strings
 	public function generate_random_string($length = 7) {
 		$characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$charactersLength = strlen($characters);

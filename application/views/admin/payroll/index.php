@@ -91,7 +91,19 @@
         <button  type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Modify Employee Salary</h4>
       </div>
-    
+      <?php
+        $this->db->select('user_id, first_name, last_name');
+        $this->db->where_in('status', array(1,4));
+        $this->db->where('company_id',1);
+        $this->db->order_by('user_id', 'asc');
+        $emps = $this->db->get('xin_employees')->result();
+
+         /*$sql= 'SELECT user_id, first_name,last_name FROM xin_employees';
+         $employees = $this->db->query($sql);
+         $emps=$employees->result();*/
+      ?>
+
+
       <div class="modal-body">
 
             <form >
