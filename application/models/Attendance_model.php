@@ -335,6 +335,44 @@ class Attendance_model extends CI_Model {
         return $this->db->get()->result();
         
     }
+
+
+    public function get_employee_information()
+    {
+        $this->db->select('
+                xin_employees.user_id, 
+                xin_employees.employee_id, 
+                xin_employees.office_shift_id as shift_id, 
+                xin_employees.first_name, 
+                xin_employees.last_name, 
+                xin_employees.date_of_birth, 
+                xin_employees.date_of_joining, 
+                xin_employees.department_id,  
+                xin_employees.designation_id,
+                xin_departments.department_name,
+                xin_designations.designation_name,
+            ');
+
+        $this->db->from('xin_employees');
+        $this->db->from('xin_departments');
+        $this->db->from('xin_designations');
+        $this->db->where('xin_employees.company_id',1);
+        $this->db->where('xin_employees.department_id = xin_departments.department_id');
+        $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
+        // $this->db->where_in('xin_employees.user_id',$emp_ids);
+        return $this->db->get()->result();
+        
+    }
+
+     
+
+
+
+
+
+
+
+
     public function get_employee($emp_ids = null)
     {
         $this->db->select('*');
@@ -498,6 +536,7 @@ class Attendance_model extends CI_Model {
         }
     }
 
+
     public function  movement_report($attendance_date,$emp_id)
     {
         
@@ -532,6 +571,121 @@ class Attendance_model extends CI_Model {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
+
+
+
+
+
+
+
+    public function movment_unpaid_report($f1_date, $f2_date)
+    {
+    $this->db->select('
+        xin_employee_move_register.employee_id,
+        xin_employee_move_register.date,
+        xin_employee_move_register.out_time,
+        xin_employee_move_register.in_time,
+        xin_employee_move_register.reason,
+        xin_employee_move_register.request_amount,
+        xin_employee_move_register.payable_amount,
+        xin_employees.department_id,
+        xin_employees.designation_id,
+        xin_departments.department_name,
+        xin_designations.designation_name,
+        xin_employees.employee_id,
+        xin_employees.first_name,
+        xin_employees.last_name
+    ');
+
+    $this->db->from('xin_employees');
+    $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+    $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+    $this->db->join('xin_employee_move_register', 'xin_employee_move_register.employee_id = xin_employees.user_id');
+    $this->db->where('xin_employees.is_active', 1);
+    $this->db->where("xin_employee_move_register.date BETWEEN '$f1_date' AND '$f2_date'");
+    $this->db->where('xin_employee_move_register.status',2);
+    $query = $this->db->get();
+    $data = $query->result();
+   
+ 
+
+    if ($query->num_rows() > 0) {
+        return $data;
+     
+    } else {
+        return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+    }
+}
+
+
+
+
+//movement_unpadid report
+
+// public function movment_unpaid_report($f1_date,$f2_date)
+// {
+    
+
+//     $this->db->select('
+//         xin_employee_move_register.employee_id,
+//         xin_employee_move_register.date,
+//         xin_employee_move_register.out_time,
+//         xin_employee_move_register.in_time,
+//         xin_employee_move_register.reason,
+//         xin_employee_move_register.request_amount,
+//         xin_employee_move_register.payable_amount,
+//         xin_employees.department_id,  
+//         xin_employees.designation_id,
+//         xin_departments.department_name,
+//         xin_designations.designation_name,
+//         xin_employees.employee_id,
+//         xin_employees.first_name,
+//         xin_employees.last_name,
+//         xin_employees.last_name,
+       
+//     ');
+
+//     $this->db->from('xin_employees');
+//     $this->db->from('xin_designations');
+//     $this->db->from('xin_departments');
+//     $this->db->from('xin_employee_move_register');
+//     $this->db->where("xin_employees.is_active", 1);
+//     $this->db->where("xin_employee_move_register.date BETWEEN '$f1_date' AND '$f2_date'");
+//     $this->db->where('xin_employee_move_register.employee_id = xin_employees.user_id');
+//     $this->db->where('xin_employee_move_register.status',3);
+
+//     $data = $this->db->get()->result();
+//     dd($data);
+
+//     if($data)
+//     {
+       
+//         return $data;
+//     }
+//     else
+//     {
+//         return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function get_movement_register($id = null)
     {
