@@ -109,7 +109,8 @@ class Salary_model extends CI_Model {
             // late deduction
             $late_deduct = 0;
             if ($rows->late_status > 2) {
-                $late_deduct = $perday_salary;
+                $late = floor($rows->late_status / 3);
+                $late_deduct = $perday_salary / $late;
             }
 
             // extra pay salary 
