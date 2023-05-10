@@ -88,7 +88,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button  type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Modify Employee Salary</h4>
       </div>
       <?php
@@ -102,7 +102,10 @@
          $employees = $this->db->query($sql);
          $emps=$employees->result();*/
       ?>
+
+
       <div class="modal-body">
+
       <form>
          
           <div class="col-md-6">
@@ -149,7 +152,7 @@
     <h3 class="box-title" id="report"> Salary Report
       <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
    </h3>
-     <button id="modify_salary" class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;" data-toggle="modal" data-target=".bd-example-modal-lg">Modify Salary</button>
+     <button onclick=modify_salary() id="modify_salary" class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;" data-toggle="modal" data-target=".bd-example-modal-lg">Modify Salary</button>
   </div>
 
   <div class="box-body" id="emp_report">
@@ -234,7 +237,9 @@
 
 
         success: function(response){
+      
           arr = response.employees;
+          console.log(arr);
           if (arr.length != 0) {
             var items = '';
             $.each(arr, function(index,value) {
@@ -258,39 +263,7 @@
         return $id= $(this).val() == $("#gross_salary").val();
     }).attr('selected', true);
 
-    $("#emp_name").on("change", function() {
-      
-        id= $(this).find("option:selected").attr("value");
-
-        if($('option value') == ''){
-          $("#gross_salary")[0].reset();
-          $("#reduct_salary")[0].reset();
-          return false;
-        }
-        
-        var url = "<?php echo base_url('admin/payroll/modify_salary/'); ?>"+id;
-        $.ajax({
-        url: url,
-        type: 'GET',
-        data: {"id":id},
-        contentType: "application/json",
-        dataType: "json",
-        success: function(response){
-
-          $("#gross_salary").val(response[0].basic_salary);
-          $("#deduct_salary").val(response[0].late_deduct);
-
-          $('.modal').on('hidden.bs.modal', function(){
-              $(this).find('form')[0].reset();
-              $("#modify_salary").attr('style', 'border: 1px solid #ccd6e6 !important');
-              $("#emp_name").attr('style', 'border: 1px solid #ccd6e6 !important');
-          });
-         
-        }
-      });
    
-
- });
 
 function save_modify_salary(){
   let basic_salary= $("#gross_salary").val();

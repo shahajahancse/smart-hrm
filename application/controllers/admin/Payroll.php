@@ -81,14 +81,19 @@ class Payroll extends MY_Controller {
     }
 
 	public function modify_salary(){
+		
+		
 
-		if(isset($_GET['id'])){
-			$id= $_GET['id'];
-			$data = $this->Xin_model->modify_salary($id);
-			echo json_encode($data);
-		}
+	
+			$salary_month= $_POST['salary_month'];
+			
+			$data = $this->Xin_model->modify_salary($salary_month);
+			
+			echo $data;
+	
 
 	}
+
 	public function save_modify_salary(){
 
 			$data = $this->Xin_model->update_salary($_POST['id'],$_POST['modify_salary']);
