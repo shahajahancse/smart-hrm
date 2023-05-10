@@ -22,14 +22,6 @@ class Xin_model extends CI_Model {
 		}
 	}
 
-<<<<<<< HEAD
-	public function modify_salary($id=NULL){
-		if($id==''){
-			return "null";
-		}
-		$sql = 'SELECT basic_salary,late_deduct FROM xin_salary_payslips WHERE employee_id ='.$id.' ORDER BY salary_month DESC';
-		$query = $this->db->query($sql);
-=======
 	public function modify_salary(){
 		$first_date="2023-01";
 		// $sql = 'SELECT basic_salary, late_deduct FROM xin_salary_payslips WHERE employee_id =' . $id . ' AND late_deduct > 0';
@@ -43,10 +35,6 @@ class Xin_model extends CI_Model {
 		$this->db->where('s.salary_month =', $first_date );
 		$result = $this->db->get()->result();
 		
-
-
->>>>>>> 0ec2dd741b458ef8ad58f332db779b26fdac675c
-		// dd($query->result());
 		return $result;
 	}
 	public function update_salary($id=NULL,$modify_salary){
