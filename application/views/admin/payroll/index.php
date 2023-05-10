@@ -94,8 +94,43 @@
     
       <div class="modal-body">
 
-      <form >
-                <div id="total" class="col-md-12" style="display: inline-flex;"> </div>
+            <form >
+                <div id="total" class="col-md-12" style="display: inline-flex;"> 
+                  
+                 
+              
+              
+              </div>
+                <div class="col-md-12" style="display: inline-flex;margin-bottom: -16px;"> 
+                  <div class="form-group col-md-3">
+                    <label style="margin-left: -22px;">Employee name</label>
+                  </div>
+                  
+                  <div class="form-group col-md-2">
+                    <label>Date</label>
+                  </div>
+                  
+                  <div class="form-group col-md-2">
+                    <label>Basic Salary</label>
+                  </div>
+                  
+                  <div class="form-group col-md-2">
+                    <label style="margin-left: 16px;">Late Deduct</label>
+                  </div>
+                  
+                  <div class="form-group col-md-1">
+                    <label style="margin-left: 23px;">Late</label>
+                  </div>
+                  
+                  <div class="form-group col-md-2">
+                    <label style="margin-left: 14px;">Modify Salary</label>
+                  </div>
+                  
+                  
+                 
+              
+              
+              </div>
                  <div id="empfrom"></div>
             <div class="modal-footer" >
                 <button type="button" name="btn" onclick=save_modify_salary() class="btn btn-sm btn-success" style="margin-top:10px !important">Save</button>
