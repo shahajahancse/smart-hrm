@@ -62,7 +62,7 @@ class Xin_model extends CI_Model {
 		return $is_logged_in;       
 	}
 	
-	// generate random string
+	// generate random strings
 	public function generate_random_string($length = 7) {
 		$characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$charactersLength = strlen($characters);
