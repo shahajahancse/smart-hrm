@@ -35,9 +35,6 @@ class Xin_model extends CI_Model {
 		$this->db->where('s.salary_month =', $first_date );
 		$result = $this->db->get()->result();
 		
-
-
-		// dd($query->result());
 		return $result;
 	}
 	public function update_salary($id=NULL,$modify_salary){

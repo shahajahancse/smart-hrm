@@ -32,7 +32,26 @@ class Attendance_model extends CI_Model {
             
 
             $proxi_id   = $this->get_proxi($emp_id);
-            $shift_schedule  = $this->get_shift_schedule($emp_id, $process_date, $shift_id);
+            if (strtotime('2023-04-29') >= strtotime($process_date)) {
+                $shift_schedule = (object) array(
+                    'office_shift_id' => 1,
+                    'company_id' => 1,
+                    'shift_name' => 'Morning Shift',
+                    'default_shift' => 1,
+                    'in_start_time' => '06:30:00',
+                    'in_time' => '09:00:00',
+                    'late_start' => '09:00:01',
+                    'lunch_time' => '13:00:00',
+                    'lunch_minute' => 30,
+                    'out_start_time' => '12:00:00',
+                    'ot_start_time' => '16:30:00',
+                    'out_end_time' => '23:59:59',
+                );
+            } else {
+                $shift_schedule  = $this->get_shift_schedule($emp_id, $process_date, $shift_id);
+            }
+            // dd($shift_schedule);
+
             $in_start_time   = $shift_schedule->in_start_time;
             $out_end_time    = $shift_schedule->out_end_time;
             $out_start_time  = $shift_schedule->out_start_time;
@@ -63,7 +82,7 @@ class Attendance_model extends CI_Model {
             $in_time    = $this->check_in_out_time($proxi_id, $start_time, $lunch_end, 'ASC');
             $movement_time = $this->check_movement_time($emp_id, $process_date, 'ASC');
             if ($movement_time->num_rows() > 0) {
-                $move_out_time = $movement_time->row()->out_time;
+                $move_out_time = $movement_time->row()->in_time;
                 if (strtotime($move_out_time) < strtotime($late_start_time)) {
                     $in_time = $move_out_time; 
                 }
@@ -80,7 +99,7 @@ class Attendance_model extends CI_Model {
             $out_time   = $this->check_in_out_time($proxi_id, $out_start_time, $end_time, 'DESC');
             $movement_time = $this->check_movement_time($emp_id, $process_date, 'DESC');
             if ($movement_time->num_rows() > 0) {
-                $move_in_time = $movement_time->row()->in_time;
+                $move_in_time = $movement_time->row()->out_time;
                 if ($move_in_time != '' && strtotime($move_in_time) > strtotime($early_out_time)) {
                     $out_time = $move_in_time; 
                 }
@@ -94,7 +113,7 @@ class Attendance_model extends CI_Model {
 
             // check leave
             $leave = $this->leave_chech($process_date, $emp_id);
-
+            // dd($leave);
             // check present status
             $status = '';
             $astatus = '';
@@ -106,15 +125,7 @@ class Attendance_model extends CI_Model {
                 $astatus = 'Leave';
                 $status = 'Leave';
             } else {
-                if ($off_day == true) {
-                    if (($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>strtotime($early_out_time))) {
-                        $astatus = 'Present';
-                        $status = 'Off Day';
-                    } else {
-                        $astatus = 'Off Day';
-                        $status = 'Off Day';
-                    }
-                } else if ($holiday_day == true) {
+                if ($holiday_day == true) {
                     if (($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>strtotime($early_out_time))) {
                         $astatus = 'Present';
                         $status = 'Holiday';
@@ -122,16 +133,38 @@ class Attendance_model extends CI_Model {
                         $astatus = 'Holiday';
                         $status = 'Holiday';
                     }
+                } else if ($off_day == true) {
+                    if (($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>strtotime($early_out_time))) {
+                        $astatus = 'Present';
+                        $status = 'Off Day';
+                    } else {
+                        $astatus = 'Off Day';
+                        $status = 'Off Day';
+                    }
                 } else  if ($in_time == '' && $out_time == '') {
                     $astatus = 'Absent';
                     $status = 'Absent';
                 } else {
                     $astatus = 'Present';
                     $status = 'Present';
+
+                    // Half day calculation here 
+                    if ($in_time != '' && $out_time != '') {
+                        $half_morning = date("Y-m-d H:i:s", strtotime($process_date.' '.'11:59:59'));
+                        if (strtotime($in_time) > strtotime($half_morning)) {
+                            $astatus = 'HalfDay';
+                            $status = 'HalfDay';
+                        }
+                        $half_evening = date('Y-m-d H:i:s', strtotime($early_out_time. ' -3 hours'));
+                        if (strtotime($out_time) < strtotime($half_evening)) {
+                            $astatus = 'HalfDay';
+                            $status = 'HalfDay';
+                        }
+                    }
+                    // half day calculation end
                 }
 
             }
-
             // dd($leave);
 
             //// check present statu for meeting
@@ -217,7 +250,7 @@ class Attendance_model extends CI_Model {
 
     function dayoff_check($process_date)
     {   
-        if ($process_date == '2023-03-25') {
+        if ($process_date == '2023-03-25' || $process_date == '2023-04-15') {
             $off_day = array('Friday','Saturday');
         } else if ($process_date < '2023-04-20' && $process_date > '2023-03-10') {
             $off_day = array('Friday');
@@ -250,6 +283,7 @@ class Attendance_model extends CI_Model {
     {
         $this->db->where("from_date >=", $process_date);
         $this->db->where("to_date <=", $process_date);
+        $this->db->where("employee_id", $emp_id);
         $query = $this->db->get("xin_leave_applications");
         if($query->num_rows() > 0 ){
             if ($query->row()->is_half_day == 1) {
@@ -375,7 +409,7 @@ class Attendance_model extends CI_Model {
 
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
-        $this->db->where("xin_attendance_time.status", $status);
+        $this->db->where_in("xin_attendance_time.status", $status);
         $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');

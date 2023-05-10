@@ -115,7 +115,8 @@ foreach ($all_employees as $key => $value) {
 				// $row->clock_in = "";
 				// $row->clock_out = "";
 			}
-			elseif(in_array($row->attendance_date,$emp_data['holiday']))
+			elseif($row->attendance_status == 'Holiday')
+			// elseif(in_array($row->attendance_date,$emp_data['holiday']))
 			{
 				$att_status = "Holiday";
 				$att_status_count = "Holiday";
@@ -180,7 +181,16 @@ foreach ($all_employees as $key => $value) {
 				
 				if($att_status == "P")
 				{
-					$present_count++;
+					if ($row->attendance_status == 'Present') {
+						$present_count++;
+					} else if ($row->attendance_status == 'Meeting') {
+						$present_count++;
+						$att_status = 'Meeting';
+					} else {
+						$present_count = $present_count + 0.5;
+						$att_status = 'HalfDay';
+						$absent_count = $absent_count + 0.5;
+					}
 				}
 				elseif($att_status == "A")
 				{

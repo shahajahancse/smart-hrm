@@ -91,17 +91,51 @@
         <button  type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Modify Employee Salary</h4>
       </div>
-    
+      <?php
+        $this->db->select('user_id, first_name, last_name');
+        $this->db->where_in('status', array(1,4));
+        $this->db->where('company_id',1);
+        $this->db->order_by('user_id', 'asc');
+        $emps = $this->db->get('xin_employees')->result();
+
+         /*$sql= 'SELECT user_id, first_name,last_name FROM xin_employees';
+         $employees = $this->db->query($sql);
+         $emps=$employees->result();*/
+      ?>
+
+
       <div class="modal-body">
 
-      <form >
-                <div id="total" class="col-md-12" style="display: inline-flex;"> </div>
-                 <div id="empfrom"></div>
-            <div class="modal-footer" >
-                <button type="button" name="btn" onclick=save_modify_salary() class="btn btn-sm btn-success" style="margin-top:10px !important">Save</button>
-                <button type="button" class="btn btn-sm btn-danger" style="margin-top:10px !important" data-dismiss="modal">Close</button>
-            </div>
-        </form>
+      <form>
+         
+          <div class="col-md-6">
+            <label>Employee Name</label>
+            <select name="emp_id" class="form-control" id="emp_name">
+              <option value="">Select Employee Name</option>
+              <?php foreach($emps as $emp){?>
+              <option value="<?php echo $emp->user_id?>"><?php echo $emp->user_id ."  &nbsp;&nbsp;". $emp->first_name.' '.$emp->last_name?></option>
+              <?php }?>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label >Gross Salary</label>
+            <input type="text" readonly class="form-control" id="gross_salary" placeholder="00.00">
+          </div>
+          <div class="col-md-2">
+            <label >Deduct Salary</label>
+            <input type="number" readonly class="form-control" id="deduct_salary" placeholder="00.00">
+          </div>
+
+          <div class="col-md-2">
+            <label >Modify Salary</label>
+            <input type="number"  class="form-control" id="modify_salary" placeholder="00.00">
+          </div>
+          
+          <div class="modal-footer" >
+            <button type="button" name="btn" onclick="save_modify_salary()" class="btn btn-sm btn-success" style="margin-top:10px !important">Save</button>
+            <button type="button" class="btn btn-sm btn-danger" style="margin-top:10px !important" data-dismiss="modal">Close</button>
+          </div>
+          </form>
       </div>
 
     </div>
