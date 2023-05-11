@@ -28,7 +28,7 @@ header('Cache-Control: max-age=0'); //no cache
     <td colspan="9" style="text-align:center;">
         <div style="font-size:30px; font-weight:bold; text-align:center;margin-top:3px"><?php echo xin_company_info(1)->company_name; ?></div>
         <div style="font-size:20px; font-weight:bold; text-align:center;"><?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div> 
-        <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px">movement_unpaid : <?php echo $first_date; ?> To  <?php echo $second_date; ?></div>
+        <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px">Movement Unpaid : <?php echo $first_date; ?> To  <?php echo $second_date; ?></div>
 
     </td>
 </tr>
