@@ -13,11 +13,13 @@
 // dd($all_employees);
 
 $present_count = 0;
+$extrap_count  = 0;
 $absent_count  = 0;
 $leave_count   = 0;
 $late_count    = 0;
 $day_off_count = 0;
 $holiday_count = 0;
+$perror_count  = 0;
 
 
 $this->load->model('job_card_model');
@@ -26,6 +28,7 @@ foreach ($all_employees as $key => $value) {
 
 	echo "<div style='min-height:700px; overflow:hidden;'>";
 	$present_count = 0;
+	$extrap_count  = 0;
 	$absent_count  = 0;
 	$leave_count   = 0;
 	$late_count    = 0;
@@ -110,7 +113,15 @@ foreach ($all_employees as $key => $value) {
 			if(in_array($row->attendance_date,$emp_data['leave']))
 			{
 				$leave_type = $this->job_card_model->get_leave_type($row->attendance_date,$value->user_id);
-				$att_status_count = "Leave";
+				$att_status_check = "Leave";
+				$att_status = $leave_type;
+				// $row->clock_in = "";
+				// $row->clock_out = "";
+			}
+			if($row->attendance_status == 'Hleave')
+			{
+				$leave_type = $this->job_card_model->get_leave_type($row->attendance_date,$value->user_id);
+				$att_status_check = "Hleave";
 				$att_status = $leave_type;
 				// $row->clock_in = "";
 				// $row->clock_out = "";
@@ -196,9 +207,13 @@ foreach ($all_employees as $key => $value) {
 				{
 					$absent_count++;
 				}
-				elseif($att_status_count == "Leave")
+				elseif($att_status_check == "Leave")
 				{
 					$leave_count++;
+				}
+				elseif($att_status_check == "Hleave")
+				{
+					$leave_count = $leave_count + 0.5;
 				}
 				elseif($att_status == "P(Error)")
 				{

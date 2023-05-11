@@ -157,7 +157,7 @@ class Attendance_model extends CI_Model {
                     $astatus = 'Absent';
                     $status = 'Absent';
                 } else {
-                    $astatus = 'Present';
+                    $astatus = 'Absent';
                     $status = 'Present';
 
                     // Half day calculation here 
