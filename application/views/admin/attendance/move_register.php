@@ -1,7 +1,12 @@
 <?php
-/* Leave Application view
+/* Leave Application 
+
+ 
 */
+
+
 ?>
+
 <style>
   hr{
     margin-top: 5px;
@@ -45,7 +50,11 @@
                 <div class="form-group">
                   <label for="date">Employee Name</label>
                   <select name="emp_id" class="form-control" id="emp_name">
-                    <option value="">Select Employee Name</option>
+                
+                    <option id="emp" value="">Select Employee Name</option>
+
+                   
+                    
                     <?php foreach($emps as $emp){?>
                     <option value="<?php echo $emp->user_id?>"><?php echo $emp->first_name.' '.$emp->last_name?></option>
                     <?php }?>
@@ -100,34 +109,68 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-       <h4 class="modal-title" id="apply_for_ta_da">Apply for TA/DA</h4>
+       <h4 class="modal-title" id="
+       ">Apply for TA/DA</h4>
        <h4 class="modal-title" id="modify_ta_da">Modify TA/DA</h4>
       </div>
       <form>
         <div class="form-group col-lg-3">
           <label id="add_amount">Add Amount</label>
           <label id="amounts">Amount</label>
-          <input type="number" class="form-control" id="request_amount" aria-describedby="amount" placeholder="Enter amount">
+          <input type="number" class="form-control" onkeyup="copyText()"  id="request_amount" aria-describedby="amount" placeholder="Enter amount">
           <input type="hidden" id="form_id">
         </div>
         <div class="form-group col-lg-9">
           <label for="exampleInputPassword1">Short Details</label>
           <textarea type="text" class="form-control" id="short_details" placeholder="Details"></textarea>
         </div>
+        
+        <?php 
+			    //  $role_id = $this->session->userdata('role_id');
+           $role_id =$session['role_id'];
+         
+            // dd($session['role_id']);
 
-        <div class="form-group col-lg-6" id="ta_da_div">
-          <label id="manage_ta_da">Manage TA/DA</label>
-          <select class="form-control" id="status">
-            <option value="" disabled selected>Select</option>
-            <option value="2">Approved</option>
-            <option value="3">Reject</option>
-          </select>
-        </div>
-        <div class="form-group col-lg-6" id="set_ta_da_amount">
-          <label>Set Amount</label>
-          <input type="text" class="form-control" id="payable_amount" placeholder="Set Amount">
-        </div>
+        if ($role_id == 3) { ?>
+          <div class="form-group col-lg-6" id="ta_da_div" style="display: none;">
+            <label id="manage_ta_da">Manage TA/DA</label>
+            <select class="form-control" id="status">
+              <option value="" disabled selected>Select</option>
+              <option value="2">Approved</option>
+              <option value="3">Reject</option>
+            </select>
+          </div>
+			  <?php } else { ?>
+          <div class="form-group col-lg-6" id="ta_da_div" >
+            <label id="manage_ta_da">Manage TA/DA</label>
+            <select class="form-control" id="status">
+              <option value="" disabled selected id="std">Select</option>
+              <option value="2">Approved</option>
+              <option value="3">Reject</option>
+            </select>
+          </div>
+		  <?php } ?>
 
+
+
+
+      <?php 
+			  
+           $role_id1 =$session['role_id'];
+         
+            // dd($session['role_id']);
+
+        if ($role_id1 == 3) { ?>
+          <div class="form-group col-lg-6" id="set_ta_da_amount" style="display: none;">
+            <label>Set Amount</label>
+            <input type="text" class="form-control" id="payable_amount" placeholder="Set Amount">
+          </div>
+			  <?php } else { ?>
+              <div class="form-group col-lg-6" id="set_ta_da_amount">
+              <label>Set Amount</label>
+              <input type="text" class="form-control" id="payable_amount" placeholder="Set Amount">
+            </div>
+		  <?php } ?>   
        
         <div class="modal-footer">
           <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
@@ -212,20 +255,33 @@
                   
                 <?php 
                   if($session['role_id'] != 3){ ?>
-
                   <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
                   <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
+                  
                    <?php if($row->status==1){?> 
                   <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">View TA/DA</a>
-                  <?php } else{ if($row->status ==2 ){?>
+                  <?php } else{ if($row->status ==2){?>
                        <hr><a class='dropdown-item' style='padding-left:5px;'  href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
-                <?php }}} 
+                <?php }
+                  else{ if($row->status ==3 ){?>
+                <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)"> Modify TA/DA</a>
+                <hr><a class='dropdown-item' style='padding-left:5px;'  href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
+                 <?php }}
+              }} 
                  
                  else {  
                         if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))){ ?>
 
-                  <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
-                  <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" >Delete</a>
+                  
+                         <?php if( $row->status==3 ||$row->status==2){?>
+                           <a style="padding-left:5px; pointer-events: none; " onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
+                          <a style="padding-left:5px; pointer-events: none;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id);?>" disable >Delete</a>       
+                          <?php } else{?>
+
+                             <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a><hr>
+                              <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>" >Delete</a>
+                            <?php }?>
+                  
                   <?php if($row->status ==0) {?>
                     <hr> <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
                   <?php } 
@@ -236,9 +292,11 @@
                     else {  
                           if($row->status ==0) {?>
                             <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
-                            <?php } else{ ?>
+                            <?php } else{?>
                             <span class="dropdown-item" style="padding-left:5px;">No Action Need</span>
-                    <?php }} }?>
+                    <?php }}  if($row->status ==1 ){?>
+                <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)"> Edit TA/DA </a>
+                 <?php }   }?>
                 </div>
               </div>
 
@@ -256,6 +314,7 @@
 <script>
 
 function edit(id){
+  
   var url = "<?php echo base_url('admin/attendance/move_register/')?>" +id;
       $.ajax({
           url: url,
@@ -266,16 +325,23 @@ function edit(id){
           contentType: false,
           cache : false,
 
-          success: function(response){
+          success: function(data){
+            response=data[0]
+          
+
+            emp=data[1][0];
             var a = response[0].out_time;
             var b = response[0].in_time;
             var time = a.slice(10, 16);
             var intime = b.slice(10, 16);
 
             $("#id").val(response[0].id);
+            $("#id").val(response[0].id);
+
             $("#m_date").val(response[0].date);
             $("#m_in_time").val(intime);
             $("#m_out_time").val(time);
+            $("#emp").html(emp['first_name']+' '+emp['last_name']);
             $("#m_reason").val(response[0].reason);
           }
           
@@ -346,9 +412,13 @@ function edit(id){
         success: function(data){                    
           // $('#view_ta_td').html(data[0].request_amount);
           var trHTML = '';
+        // $.each(data, function (i, item) {
+        //     trHTML += '<tr class="text-center"><td>' + item.request_amount + '</td><td>' + item.payable_amount + '</td></tr>';
+        // });
         $.each(data, function (i, item) {
-            trHTML += '<tr class="text-center"><td>' + item.request_amount + '</td><td>' + item.payable_amount + '</td></tr>';
-        });
+            var payable = item.payable_amount !== null ? item.payable_amount : 'waiting';
+            trHTML += '<tr class="text-center"><td>' + item.request_amount + '</td><td>' + payable + '</td></tr>';
+          });
         $('#ta_da_view').html(trHTML);
 
         }
@@ -359,10 +429,10 @@ function edit(id){
 // appply for ta / da
 
 function showModal(id,role_id) {
-  // alert(id + ' '+ role_id); 
+  //  alert(id + ' '+ role_id); 
     $("#form_id").val(id);
     $('#myModal').modal().show();
-
+     
     var url = "<?php echo base_url('admin/attendance/modify_for_ta_da/')?>" + id;
     jQuery.ajax({
           url: url,
@@ -371,13 +441,17 @@ function showModal(id,role_id) {
           type: 'POST',
 
           success: function(response){
-              // console.log(response[0].request_amount);
+              //console.log(response[0].request_amount);
+              // console.log(response[0].status);
 
               if(role_id !="3"){
                 $("#request_amount").val(response[0].request_amount);
-                $("#short_details").val(response[0].details);
+                $("#short_details").val(response[0].reason);
                 $('#apply_for_ta_da').hide();
                 $('#modify_ta_da').show();
+                 if(response[0].status==3){
+                  $("#std").html("Reject");}
+             
                 $('#add_amount').hide();
                 $('#amounts').show();
                 $('#ta_da_div').show();
@@ -385,6 +459,12 @@ function showModal(id,role_id) {
               }
               else{
                 $('#apply_for_ta_da').show();
+                $("#request_amount").val(response[0].request_amount);
+                
+                if(response[0].status==3 || response[0].status==1){
+                  // console.log(response[0].status);
+                   $("#short_details").val(response[0].reason);
+                }
                 $('#modify_ta_da').hide();
                 $('#add_amount').show();
                 $('#amounts').hide();
@@ -399,9 +479,8 @@ function showModal(id,role_id) {
 
 function manage_ta_da(role_id){
   let request_amount= $("#request_amount").val();
-  // alert(request_amount);return false;
   let short_details= $("#short_details").val();
-  let form_id= $("#form_id").val();  
+  let form_id= $("#form_id").val(); 
   if(request_amount ==''){
     alert('Please Set Amount');
     $("#request_amount").focus();
@@ -453,8 +532,10 @@ function manage_ta_da(role_id){
       } 
     });
   } 
+
   else{
     var id=   $("#form_id").val();
+        
         var url = "<?php echo base_url('admin/attendance/apply_for_ta_da');?>";
         $.ajax({
         url: url,
@@ -502,5 +583,26 @@ function manage_ta_da(role_id){
 
 });
 
+
+
+function copyText() {
+    var request_amount = $('#request_amount').val();
+    var url = "<?php echo base_url('admin/attendance/copy_value'); ?>";
+    $.ajax({
+      type: 'POST',
+      // url: 'admin/attendance/copy_value',
+      url: url,
+      data: {request_amount: request_amount},
+      success: function(response) {
+        $('#payable_amount').val(response);
+      }
+    });
+  }
 </script>
+
+
+
+
+
+</scrip>
 

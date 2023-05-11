@@ -17,9 +17,9 @@
 
 
 th {
-	background-color: #4CAF50;
+	background-color: #0177BC;
     color: white;
-    font-size: 21px;
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
     /* border: 2px solid #4CAF50; */
@@ -49,15 +49,16 @@ tr:hover {
 
 .btn {
     background-color: #0890dd;
-    height: 39px;
-    width: 103px;
-    font-size: 19px;
+    height: 30px;
+    width: 95;
+    font-size: 15px;
+	padding-right: 5px;
     border: none;
-    border-radius: 11px;
+    border-radius: 6px;
     cursor: pointer;
     color: #fff;
     font-family: Arial, sans-serif;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease-in-out;
     margin: 5px;
@@ -96,41 +97,41 @@ $daysInMonth = cal_days_in_month(0, $month, $year);
 $imonth = date('F', $date);
 ?>
 
-<div  style="
-   
-    float: right;
-">
-<button class="btn" onclick="printPage()">Print</button></div>
+<div>
+
+
+<div  style="float: right;">
+
+<button class="btn" onclick="printPage()">Print</button>   </div>
+<div>
 <form style="
     float: right;
 "  action="<?php echo base_url('admin/Attendance/monthly_report_excel'); ?>" method="post">
   <input type="hidden" name="first_date" value="<?php echo $first_date; ?>">
   <input type="hidden" name="sql" value="<?php echo $sql; ?>">
-  <button class="btn" type="submit">XLS</button>
+  <button class="btn" type="submit">Excel</button>
 </form>
+</div>
+</div>
+<div style="clear: both;"></div>
+
+
 
   <div  class="box-header with-border">
   <div id="print-content"  class="box-header with-border">
-   
-	
-
- 
-
-
-
   <div class="box-body">
-    <div class="box-datatable table-responsive">
+    <div class="box-datatable table-responsive" style="text-align:center;">
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
-	 <tr><div style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px"><?php echo xin_company_info(1)->company_name; ?></div>
+	 <tr><div style="font-size:18px; font-weight:bold; text-align:center;margin-top:10px"><?php echo xin_company_info(1)->company_name; ?></div>
 				<div style="font-size:20px; font-weight:bold; text-align:center;height:0px;"></div>
-				<div style="font-size:20px; line-height:15px; font-weight:bold; text-align:center;"> <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
+				<div style="font-size:14px; line-height:15px; font-weight:bold; text-align:center;"> <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
 
-				<h5 style="margin-top: 6px;font-size: 18px;margin-bottom: 6px;line-height:15px;font-weight:bold;/* justify-content: center; *//* margin: unset; */text-align:center;margin-left: -103px;">For the month of
+				<h5 style="margin-top: 4px;font-size: 14px;margin-bottom: 4px;line-height:15px;font-weight:bold;/* justify-content: center; *//* margin: unset; */text-align:center;">For the month of
       <?php if(isset($month_year)): echo date('F Y', strtotime($month_year)); else: echo date('F Y'); endif;?>
     </h5>				<div style="font-size:12px; font-weight:bold; text-align:center;"></div>
 		
 	<div style="font-size:12px; font-weight:bold; text-align:center;"></div>
-	<div class="box-tools pull-right"> A: Absent, P: Present, H: Holiday, L: Leave, W=Weekend</div>
+	<div class="box-tools pull-right" style=" text-align:center; margin-bottom:5px;"> A: Absent, P: Present, H: Holiday, L: Leave, W=Weekend</div>
 	</tr> 
         <thead>
 
@@ -373,7 +374,7 @@ $imonth = date('F', $date);
     var printCSS = '<style>@page { size: A4 landscape; margin: 1cm; @top-center { content: "My Custom Page Header"; } } \
                     body { -webkit-print-color-adjust: exact; color-adjust: exact; } \
                     table { border-collapse: collapse; width: 100%; margin: 0 auto; max-width: 100%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); } \
-                    th { background-color: #4CAF50; color: white; font-size: 21px; font-weight: bold; text-align: center; } \
+                    th { background-color: #0177BC; color: white; font-size: 18px; font-weight: bold; text-align: center; padding: .5px} \
                     .im { background: #d5b2b2 !important; color: currentcolor !important; } \
                     td { font-size: 15px; text-align: center; border: 2px solid #ddd; width: 19px; } \
                     tr:hover { background-color: #f5f5f5; } \

@@ -194,7 +194,7 @@ $total_extra_pay=0;
 $total_modify_salary=0;
 
 echo "
-<div style='font-size:18px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->company_name ."</div>
+<div style='font-size:18px; font-weight:bold; text-gn:cealinter;margin-top:10px'>".xin_company_info(1)->company_name ."</div>
 <div style='font-size:14px; font-weight:bold; text-align:center;margin-top:10px'>".xin_company_info(1)->address_1."</div>
 <div style='font-size:12px;align-items: center;text-align: center;'>Salary Month : ". $salary_month ."</div>
 
