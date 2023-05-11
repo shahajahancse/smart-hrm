@@ -340,6 +340,7 @@
       return ;
     }
     
+    
     var data = "first_date="+first_date+"&second_date="+second_date;
     url = base_url + "/movment_unpaid_report";
     ajaxRequest.open("POST", url, true);
