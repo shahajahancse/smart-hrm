@@ -439,20 +439,21 @@ class Attendance extends MY_Controller {
     }
 
 
-	public function movment_unpaid_report() {
+	public function movment_status_report() {
 		$first_date = $this->input->post('first_date');
 		$second_date = $this->input->post('second_date');
 
 		$f1_date = date("Y-m-d", strtotime($first_date));
 		$f2_date = date("Y-m-d", strtotime($second_date));
+		$statusC = $this->input->post('statusC');
 
 		
 	//    $sql = $this->input->post('sql');
 	//    $emp_id = explode(',', trim($sql));
 
-	  $data["values"] = $this->Attendance_model->movment_unpaid_report($f1_date, $f2_date);
+	  $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date, $statusC);
 
-
+	   $data['statusC']= $statusC;
 	   $data['first_date'] = $first_date;
 	   $data['second_date'] = $second_date;
 	//    $data['company_info'] = $this->Xin_model->get_company_info(1);
@@ -463,7 +464,7 @@ class Attendance extends MY_Controller {
 			}
 			else
 			{	
-				echo $this->load->view("admin/attendance/movment_unpaid_report", $data, TRUE);
+				echo $this->load->view("admin/attendance/movment_status_report", $data, TRUE);
 			}
     
 		
@@ -473,23 +474,25 @@ class Attendance extends MY_Controller {
 
 
    
-	public function movment_unpaid_report_excel() {
+	public function movment_status_report_excel() {
 		
 		$first_date = $this->input->post('first_date');
 		$second_date = $this->input->post('second_date');
 
 		$f1_date = date("Y-m-d", strtotime($first_date));
 		$f2_date = date("Y-m-d", strtotime($second_date));
+		$statusC = $this->input->post('statusC');
 
 		
 	//    $sql = $this->input->post('sql');
 	//    $emp_id = explode(',', trim($sql));
 
-	  $data["values"] = $this->Attendance_model->movment_unpaid_report($f1_date, $f2_date);
+	  $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date,$statusC);
 
 
 	   $data['first_date'] = $first_date;
 	   $data['second_date'] = $second_date;
+	   $data['statusC']= $statusC;
 	//    $data['company_info'] = $this->Xin_model->get_company_info(1);
 	//    $data['all_employees'] = $this->Attendance_model->get_employee_information();
 			if(is_string($data["values"]))
@@ -498,7 +501,7 @@ class Attendance extends MY_Controller {
 			}
 			else
 			{	
-				echo $this->load->view("admin/attendance/movment_unpaid_report_excel", $data, TRUE);
+				echo $this->load->view("admin/attendance/movment_status_report_excel", $data, TRUE);
 			}
     
 		

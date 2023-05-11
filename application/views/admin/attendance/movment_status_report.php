@@ -1,4 +1,16 @@
 <!-- < ?php dd($values);?> -->
+<?php
+$statusText = "";
+if ($statusC == 1) {
+    $statusText = "Processing";
+} elseif ($statusC == 2) {
+    $statusText = "Approved";
+} elseif ($statusC == 3) {
+    $statusText = "Rejected";
+} elseif ($statusC == 4) {
+    $statusText = "Paid";
+}
+?>
 
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_hrsale_custom.css">
@@ -41,6 +53,7 @@
 .ti1{
     margin-top: 3px;
     margin-bottom: 0px;
+    font-size: 15px;
 }
 
 
@@ -69,9 +82,10 @@
 
 <button class="btn" onclick="printPageMove()">Print</button>   </div>
 <div>
-<form style="float: right;"  action="<?php echo base_url('admin/Attendance/movment_unpaid_report_excel'); ?>" method="post">
+<form style="float: right;"  action="<?php echo base_url('admin/Attendance/movment_status_report_excel'); ?>" method="post">
   <input type="hidden" name="first_date" value="<?php echo $first_date; ?>">
   <input type="hidden" name="second_date" value="<?php echo $second_date; ?>">
+  <input type="hidden" name="statusC" value="<?php echo $statusC; ?>">
  <button class="btn" type="submit">Excel</button>
 </form>
 </div>
@@ -81,7 +95,8 @@
 <div class="box" id="print-content">
   <div style="text-align: center;">
   <?php  $this->load->view('admin/head_bangla'); ?>
-	  <h5 class="box-title ti1">Daily Unpaid Report</h4>
+	  <!-- <h5 class="box-title ti1">Daily Unpaid Report</h4> -->
+      <h4 class="box-title  ti1">Daily <?php echo $statusText; ?> Report</h4>
         <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
 	  <p>Report date: <?php echo $first_date; ?> To <?php echo $second_date; ?> </p>
   </div>
