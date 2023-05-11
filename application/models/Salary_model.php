@@ -206,12 +206,12 @@ class Salary_model extends CI_Model {
     {
         $this->db->select("
                 SUM(CASE WHEN status = 'Present'  THEN 1 ELSE 0 END ) AS attend,
-                SUM(CASE WHEN status = 'HalfDay'  THEN 0.5 ELSE 0 END ) AS HalfDay, 
                 SUM(CASE WHEN status = 'Absent'   THEN 1 ELSE 0 END ) AS absent,
                 SUM(CASE WHEN status = 'Off Day'  THEN 1 ELSE 0 END ) AS weekend,
                 SUM(CASE WHEN status = 'Holiday'  THEN 1 ELSE 0 END ) AS holiday, 
                 SUM(CASE WHEN status = 'Leave'    THEN 1 ELSE 0 END ) AS leaves, 
                 SUM(CASE WHEN status = 'Hleave'   THEN 0.5 ELSE 0 END ) AS Hleave, 
+                SUM(CASE WHEN attendance_status = 'HalfDay'  THEN 0.5 ELSE 0 END ) AS HalfDay, 
                 SUM(CASE WHEN attendance_status = 'Present' THEN 1 ELSE 0 END ) AS extra_p, 
                 SUM(CASE WHEN attendance_status = 'Meeting' THEN 1 ELSE 0 END ) AS meeting, 
                 SUM(CASE WHEN late_status = '1' THEN 1 ELSE 0 END ) AS late_status, 
