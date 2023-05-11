@@ -54,7 +54,8 @@ class Dashboard extends MY_Controller {
 	public function index()
 	{
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		// dd($session);
+		if(empty($session) && !is_array($session)){ 
 			redirect('admin/');
 		}
 		$system = $this->Xin_model->read_setting_info(1);

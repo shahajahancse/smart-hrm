@@ -88,45 +88,67 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button  type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Modify Employee Salary</h4>
       </div>
       <?php
-         $sql= 'SELECT user_id,first_name,last_name FROM xin_employees';
-         $employees = $this->db->query($sql);
-         $emps=$employees->result();
-      ?>
-      <div class="modal-body">
-      <form>
-         
-          <div class="col-md-6">
-            <label>Employee Name</label>
-            <select name="emp_id" class="form-control" id="emp_name">
-              <option value="">Select Employee Name</option>
-              <?php foreach($emps as $emp){?>
-              <option value="<?php echo $emp->user_id?>"><?php echo $emp->first_name.' '.$emp->last_name?></option>
-              <?php }?>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label >Gross Salary</label>
-            <input type="text" readonly class="form-control" id="gross_salary" placeholder="00.00">
-          </div>
-          <div class="col-md-2">
-            <label >Deduct Salary</label>
-            <input type="number" readonly class="form-control" id="deduct_salary" placeholder="00.00">
-          </div>
+        $this->db->select('user_id, first_name, last_name');
+        $this->db->where_in('status', array(1,4));
+        $this->db->where('company_id',1);
+        $this->db->order_by('user_id', 'asc');
+        $emps = $this->db->get('xin_employees')->result();
 
-          <div class="col-md-2">
-            <label >Modify Salary</label>
-            <input type="number"  class="form-control" id="modify_salary" placeholder="00.00">
-          </div>
-          
-          <div class="modal-footer" >
-            <button type="button" name="btn" onclick="save_modify_salary()" class="btn btn-sm btn-success" style="margin-top:10px !important">Save</button>
-            <button type="button" class="btn btn-sm btn-danger" style="margin-top:10px !important" data-dismiss="modal">Close</button>
-          </div>
-          </form>
+         /*$sql= 'SELECT user_id, first_name,last_name FROM xin_employees';
+         $employees = $this->db->query($sql);
+         $emps=$employees->result();*/
+      ?>
+
+
+      <div class="modal-body">
+
+            <form >
+                <div id="total" class="col-md-12" style="display: inline-flex;"> 
+                  
+                 
+              
+              
+              </div>
+                <div class="col-md-12" style="display: inline-flex;margin-bottom: -16px;"> 
+                  <div class="form-group col-md-3">
+                    <label style="margin-left: -22px;">Employee name</label>
+                  </div>
+                  
+                  <div class="form-group col-md-2">
+                    <label>Date</label>
+                  </div>
+                  <!-- hh -->
+                  <div class="form-group col-md-2">
+                    <label>Basic Salary</label>
+                  </div>
+                  
+                  <div class="form-group col-md-2">
+                    <label style="margin-left: 16px;">Late Deduct</label>
+                  </div>
+                  <!-- hh -->
+                  <div class="form-group col-md-1">
+                    <label style="margin-left: 23px;">Late</label>
+                  </div>
+                  
+                  <div class="form-group col-md-2">
+                    <label style="margin-left: 14px;">Modify Salary</label>
+                  </div>
+                  
+                  
+                 
+              
+              
+              </div>
+                 <div id="empfrom"></div>
+            <div class="modal-footer" >
+                <button type="button" name="btn" onclick=save_modify_salary() class="btn btn-sm btn-success" style="margin-top:10px !important">Save</button>
+                <button type="button" class="btn btn-sm btn-danger" style="margin-top:10px !important" data-dismiss="modal">Close</button>
+            </div>
+        </form>
       </div>
 
     </div>
@@ -143,7 +165,7 @@
     <h3 class="box-title" id="report"> Salary Report
       <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
    </h3>
-     <button id="modify_salary" class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;" data-toggle="modal" data-target=".bd-example-modal-lg">Modify Salary</button>
+     <button onclick=modify_salary() id="modify_salary" class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;" data-toggle="modal" data-target=".bd-example-modal-lg">Modify Salary</button>
   </div>
 
   <div class="box-body" id="emp_report">
@@ -164,6 +186,7 @@
 
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel()">Salary Sheet</button>
+          <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="genarate_payslip()">Genarate Payslip</button>
 
       </div>
 
@@ -228,7 +251,9 @@
 
 
         success: function(response){
+      
           arr = response.employees;
+          console.log(arr);
           if (arr.length != 0) {
             var items = '';
             $.each(arr, function(index,value) {
@@ -252,75 +277,51 @@
         return $id= $(this).val() == $("#gross_salary").val();
     }).attr('selected', true);
 
-    $("#emp_name").on("change", function() {
-      
-        id= $(this).find("option:selected").attr("value");
-
-        if($('option value') == ''){
-          $("#gross_salary")[0].reset();
-          $("#reduct_salary")[0].reset();
-          return false;
-        }
-        
-        var url = "<?php echo base_url('admin/payroll/modify_salary/'); ?>"+id;
-        $.ajax({
-        url: url,
-        type: 'GET',
-        data: {"id":id},
-        contentType: "application/json",
-        dataType: "json",
-        success: function(response){
-
-          $("#gross_salary").val(response[0].basic_salary);
-          $("#deduct_salary").val(response[0].late_deduct);
-
-          $('.modal').on('hidden.bs.modal', function(){
-              $(this).find('form')[0].reset();
-              $("#modify_salary").attr('style', 'border: 1px solid #ccd6e6 !important');
-              $("#emp_name").attr('style', 'border: 1px solid #ccd6e6 !important');
-          });
-         
-        }
-      });
    
 
- });
+    function save_modify_salary() {
+  var temp = document.getElementById("temp").value;
+  var date = document.getElementById("date").value;
+  var sqld = document.getElementById("sql").value;
+  const sql = sqld.split(',');
+  const modifydata = [];
 
-function save_modify_salary(){
-  let basic_salary= $("#gross_salary").val();
-  let deduct_salary= $("#deduct_salary").val();
-  let modify_salary= $("#modify_salary").val();
-  let id= $("#emp_name").val();  
+  for(var i = 0; i < sql.length; i++) {
+    var data = document.getElementById(sql[i]).value;
+    modifydata.push(data)
+  };
+  
+  
+const mo = [];
 
-  if(id==''){
-        alert('Please Select Employee Name ');
-        $("#emp_name").attr('style', 'border: 1px solid red !important');
-        return false;
-  }
-  if(modify_salary ==''){
-        alert('Please Set Modify Salary');
-        $("#modify_salary").focus();
-        $("#modify_salary").attr('style', 'border: 1px solid red !important');
-        return false;
-  }
+for (let i = 0; i < sql.length; i++) {
+  const obj = {
+    userid: sql[i].toString(),
+    modifydata: modifydata[i]
+  };
+  mo.push(obj);
+}
+
+
+
+  var senddata = JSON.stringify(mo);
+  var data = "data=" + senddata+'&date='+date;
+
+  var url = "<?php echo base_url('admin/payroll/save_modify_salary_all');?>";
   
-  var url = "<?php echo base_url('admin/payroll/save_modify_salary');?>";
-        $.ajax({
-        url: url,
-        type: 'POST',
-        data: {
-                id:id,
-                gross_salary:basic_salary,
-                deduct_salary:deduct_salary,
-                modify_salary:modify_salary
-              },
-        success: function(response){
-					alert('Salary Modify Successfully !');
-          $('#my_modal').modal('hide');  
-        }
-      });
-  
- } 
+  $.ajax({
+    url: url,
+    type: 'POST',
+    data: data,
+    success: function(response) {
+      alert(response);
+      modify_salary();
+
+
+    }
+  });
+}
+
  $(document).ready(function(){
     $("#modify_salary").on('input',function(){
       $("#modify_salary").attr('style', 'border: 1px solid #ccd6e6 !important');

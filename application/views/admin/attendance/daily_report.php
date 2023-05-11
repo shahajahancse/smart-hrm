@@ -32,6 +32,9 @@
 			font-size: 14px;
 			padding: 3px !important;
 		}
+		body {
+			zoom: 80% !important;
+		}
 	}
 
 </style>
@@ -43,7 +46,7 @@
         <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
 
 	  <p>Report date: <?php echo $attendance_date; ?> </p>
-    <span class="box-tools"> A: Absent, P: Present, H: Holiday, L: Leave</span><br><br>
+    <span class="box-tools"> A: Absent, P: Present, H: Holiday, L: Leave, HP: HalfDay</span><br><br>
   </div>
 
   <div class="container">
@@ -62,9 +65,25 @@
             <?php $i=1; foreach($values as $row){?>
             <tbody >
             		<?php 
-            			$status = $row->attendance_status == "Present" && $row->late_status == 0 && ( $row->clock_in == "" || $row->clock_out =="") ? "P(ERROR)":
-                            (  $row->attendance_status == "Absent"  ? "A" :
-                            (  $row->attendance_status == "Leave"   ? "L" : ( $row->attendance_status == "Present" && $row->late_status == 1 ? "P(Late)":($row->attendance_status == "Present" && $row->late_status == 0  ? "P"  : ($row->attendance_status == "Meeting" && $row->late_status == 0  ? "M":"H") ))))
+            			// $status = $row->attendance_status == "Present" && $row->late_status == 0 && ( $row->clock_in == "" || $row->clock_out =="") ? "P(ERROR)":
+                  //           (  $row->attendance_status == "Absent"  ? "A" :
+                  //           (  $row->attendance_status == "Leave"   ? "L" : ( $row->attendance_status == "Present" && $row->late_status == 1 ? "P(Late)":($row->attendance_status == "Present" && $row->late_status == 0  ? "P"  : ($row->attendance_status == "Meeting" && $row->late_status == 0  ? "M":"H") ))))
+
+                  if ($row->attendance_status == "Absent") {
+                  	$status = "A";
+                  } else if (($row->attendance_status == "Present" && $row->late_status == 0) && ($row->clock_in == "" || $row->clock_out == "")) {
+                  	$status = "P(ERROR)";
+                  } else if ($row->attendance_status == "Present" && $row->late_status == 1) {
+                  	$status = "P(Late)";
+                  } else if ($row->attendance_status == "Present" && $row->late_status == 0) {
+                  	$status = "P";
+                  } else if ($row->attendance_status == "Meeting" && $row->late_status == 0) {
+                  	$status = "M";
+                  } else if ($row->attendance_status == "Holiday") {
+                  	$status = "H";
+                  } else {
+                  	$status = "HP";
+                  }
             		?>
                 <td><?php echo $i++;?></td>
                 <td><?php echo $row->first_name.' '.$row->last_name?></td>
