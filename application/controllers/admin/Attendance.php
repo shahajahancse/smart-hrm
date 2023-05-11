@@ -457,6 +457,41 @@ class Attendance extends MY_Controller {
    }
 
 
+
+   
+	public function movment_unpaid_report_excel() {
+		
+		$first_date = $this->input->post('first_date');
+		$second_date = $this->input->post('second_date');
+
+		$f1_date = date("Y-m-d", strtotime($first_date));
+		$f2_date = date("Y-m-d", strtotime($second_date));
+
+		
+	//    $sql = $this->input->post('sql');
+	//    $emp_id = explode(',', trim($sql));
+
+	  $data["values"] = $this->Attendance_model->movment_unpaid_report($f1_date, $f2_date);
+
+
+	   $data['first_date'] = $first_date;
+	   $data['second_date'] = $second_date;
+	//    $data['company_info'] = $this->Xin_model->get_company_info(1);
+	//    $data['all_employees'] = $this->Attendance_model->get_employee_information();
+			if(is_string($data["values"]))
+			{
+				echo $data["values"];
+			}
+			else
+			{	
+				echo $this->load->view("admin/attendance/movment_unpaid_report_excel", $data, TRUE);
+			}
+    
+		
+		 
+   }
+
+
 	public function monthly_report() {
 	 	$first_date = $this->input->post('first_date');
 	 
