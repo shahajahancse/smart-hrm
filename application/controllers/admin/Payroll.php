@@ -89,7 +89,7 @@ class Payroll extends MY_Controller {
 			
 			$data = $this->Xin_model->modify_salary($salary_month);
 			
-			echo $data;
+			echo json_encode($data);
 	
 
 	}
@@ -98,6 +98,17 @@ class Payroll extends MY_Controller {
 
 			$data = $this->Xin_model->update_salary($_POST['id'],$_POST['modify_salary']);
 			echo json_encode($data);
+	}
+	public function save_modify_salary_all(){
+		$data= $_POST['data'];
+		$date= $_POST['date'];
+		$sql=json_decode($data, true);
+	
+		foreach($sql as $index){
+
+		$data = $this->Xin_model->update_salaryall($index['userid'],$index['modifydata'],$date);
+	}
+		echo json_encode($data);
 	}
 
 	// generate salary excel sheet 

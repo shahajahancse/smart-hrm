@@ -220,11 +220,7 @@
  
      
 
-      //  var data = "salary_month="+salary_month;
-  
-      // console.log(data); return;
-      // url = base_url + "/modify_salary";
-      // var url = "<?php echo base_url('admin/payroll/modify_salary');?>";
+    
       $.ajax({
       url: 'modify_salary',
       type: 'POST',
@@ -233,7 +229,62 @@
              
             },
       success: function(response){
-       console.log(response);
+        $.ajax({
+          url: 'modify_salary',
+          type: 'POST',
+          data: {
+            salary_month: salary_month,
+          },
+          success: function(jsonArray){
+
+            $('#total').empty();
+            
+            $('#empfrom').empty();
+            const response = JSON.parse(jsonArray);
+          
+            const  sql = [];
+            
+            
+            
+            
+         
+            const count = response.length;
+            const salary_month = response[1].salary_month;
+
+
+            
+            $.each(response, function(index, employee) {
+              
+              sql.push(employee.user_id);
+
+             
+              var row = $('<div class="row" style="margin-top: 10px;"></div>');
+              var nameCol = $('<div class="col-md-3"><input type="text" readonly class="form-control" value="' + employee.first_name + ' ' + employee.last_name + '" disabled></div>');
+              var date = $('<div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.salary_month +'" disabled></div>');
+              var basicSalaryCol = $('<div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.basic_salary + '" id="basic_salary_' + employee.user_id + '"></div>');
+              var lateDeductCol = $('<div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.late_deduct + '" id="late_deduct_' + employee.user_id + '"></div>');
+              var lateCountCol = $('<div class="col-md-1"><input type="text" readonly class="form-control" value="' + employee.late_count + '" id="late_count_' + employee.user_id + '"></div>');
+              var modifySalaryCol = $('<div class="col-md-2"><input type="number" class="form-control" id="' + employee.user_id + '" value="' + employee.modify_salary + '"></div>');
+              row.append(nameCol);
+              row.append(date);
+              row.append(basicSalaryCol);
+              row.append(lateDeductCol);
+              row.append(lateCountCol);
+              row.append(modifySalaryCol);
+              $('#empfrom').append(row);
+            });
+            var sqld = sql.join(',');
+          
+            // Add count after the last row in #empfrom
+           
+            var countCol = $('<div class="col-md-12 " style="display: inline-flex;"><p style="color:#004cff;font-size: 17px;margin-left: -26px;font-weight: bold;">Total Employee ' + count + '</p><input id="temp" type="hidden" readonly class="form-control" value="' + count + '" name="total_emp"><p style="color:#004cff;font-size: 17px;font-weight: bold;right: 0;position: absolute;margin-left:5px;">Date ' + salary_month + '</p><input id="date" type="hidden" readonly class="form-control" value="' + salary_month + '" name="date"><input id="sql" type="hidden" readonly class="form-control" value="'+ sqld +'"></div>');
+           
+            $('#total').append(countCol);
+            
+          
+          }
+        });
+        
         
       }
     });
