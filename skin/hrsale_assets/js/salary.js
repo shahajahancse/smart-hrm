@@ -200,7 +200,7 @@
 
     // Define a function named "modify_salary"
   function modify_salary() {
-    $('#loader').fadeIn();
+   
     // Retrieve the values of two HTML input elements with IDs 'sal_month' and 'sal_year'
     const sal_month = document.getElementById('sal_month').value;
     const sal_year = document.getElementById('sal_year').value;
@@ -253,7 +253,7 @@
               
 
               $('#my_modal').modal('show');
-              $('#loader').fadeOut();
+            
             
             }
           });

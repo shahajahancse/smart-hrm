@@ -6,15 +6,7 @@
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <link rel="stylesheet" href="<?php echo base_url() ?>skin/hrsale_assets/css/loader.css">
-<div id="loader">
-    <div class="parentloader">
-        <div  class="typewriter">
-                <div class="slide"><i></i></div>
-                <div class="paper"></div>
-                <div class="keyboard"></div>
-          </div>
-    </div>
-</div>
+
 <div class="col-lg-8">
 <div class="box mb-4 <?php echo $get_animate;?>">
   <div class="box-body">
@@ -280,9 +272,6 @@
    
  function save_modify_salary() {
 
-  $('#my_modal').modal('hide');
-  $('#loader').fadeIn();
-
   
 
 
@@ -303,10 +292,9 @@
                 $('#empfrom').empty();
                  modify_salary()
                  $('#my_modal').modal('show');
-                 $('#loader').fadeOut();
-                 
-
-                }
+                 // Create alert
+                alert("Operation successful!");
+               }
             });
 
  }
