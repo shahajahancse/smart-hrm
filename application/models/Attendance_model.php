@@ -127,8 +127,8 @@ class Attendance_model extends CI_Model {
                 if (strtotime($in_time) < strtotime($half_morning) && $in_time != '') {
                     $astatus = 'HalfDay';
                 }
-                $half_evening = date('Y-m-d H:i:s', strtotime($early_out_time. ' -3 hours'));
-                if (strtotime($out_time) < strtotime($half_evening) && $out_time != '') {
+
+                if (strtotime($out_time) > strtotime($lunch_time) && $out_time != '') {
                     $astatus = 'HalfDay';
                 }
                 // half day calculation end

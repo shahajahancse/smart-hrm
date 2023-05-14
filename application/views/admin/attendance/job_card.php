@@ -35,6 +35,7 @@ foreach ($all_employees as $key => $value) {
 	$day_off_count = 0;
 	$holiday_count = 0;
 	$perror_count  = 0;
+	$att_status_check = false;
 
 	$this->load->view('admin/head_bangla');
 
@@ -110,53 +111,76 @@ foreach ($all_employees as $key => $value) {
 
 		foreach ($emp_data['emp_data'] as $key => $row) {
 
-			if(in_array($row->attendance_date,$emp_data['leave']))
+			// if(in_array($row->attendance_date,$emp_data['leave']))
+			if($row->status == 'leave')
 			{
 				$leave_type = $this->job_card_model->get_leave_type($row->attendance_date,$value->user_id);
-				$att_status_check = "Leave";
 				$att_status = $leave_type;
+				$leave_count++;
 				// $row->clock_in = "";
 				// $row->clock_out = "";
 			}
-			if($row->attendance_status == 'Hleave')
+			elseif($row->status == 'Hleave')
 			{
 				$leave_type = $this->job_card_model->get_leave_type($row->attendance_date,$value->user_id);
-				$att_status_check = "Hleave";
 				$att_status = $leave_type;
-				// $row->clock_in = "";
-				// $row->clock_out = "";
+				$leave_count = $leave_count + 0.5;
+
+				if ($row->attendance_status == 'HalfDay' && $row->status == 'Hleave') {
+					$att_status = $leave_type .'  + HalfDay';
+					$present_count = $present_count + 0.5;
+				}
 			}
-			elseif($row->attendance_status == 'Holiday')
+			elseif($row->status == 'Holiday')
 			// elseif(in_array($row->attendance_date,$emp_data['holiday']))
 			{
 				$att_status = "Holiday";
-				$att_status_count = "Holiday";
-				$row->clock_in = "";
-				$row->clock_out = "";
+				$holiday_count++;
+				if ($row->attendance_status == 'Present' && $row->status == 'Holiday') {
+					$extrap_count = $extrap_count + 1;
+					$att_status = '(Holiday + P)';
+				} else {
+					$row->clock_in = "";
+					$row->clock_out = "";
+				}
 				
 			} 
-			elseif(in_array($row->attendance_date,$emp_data['dayoff']))
+			// elseif(in_array($row->attendance_date,$emp_data['dayoff']))
+			elseif($row->status == 'Off Day')
 			{
 				$att_status = "Day Off";
-				$att_status_count = "Day Off";
-				$row->clock_in = "";
-				$row->clock_out = "";
+				$day_off_count++;
+				if ($row->attendance_status == 'Present' && $row->status == 'Off Day') {
+					$extrap_count = $extrap_count + 1;
+					$att_status = '(Off Day + P)';
+				} else {
+					$row->clock_in = "";
+					$row->clock_out = "";
+				}
 				
+			} 
+			else if ($row->attendance_status == 'HalfDay' && $row->status == 'HalfDay') {
+				$present_count = $present_count + 0.5;
+				$att_status = 'HalfDay';
+				$absent_count = $absent_count + 0.5;
 			}
 			elseif(($row->clock_in !='' && $row->clock_out !=''))
 			{
 				$att_status = "P";
-				$att_status_count = "P";
+				$present_count++;
+				if ($row->attendance_status == 'Meeting') {
+					$att_status = 'Meeting';
+				}
 			}
 			elseif($row->clock_in !='' || $row->clock_out !='')
 			{
 				$att_status = "P(Error)";
-				$att_status_count = "P(Error)";
+				$perror_count++;
 			}
 			else
 			{
 				$att_status = "A";
-				$att_status_count = "A";
+				$absent_count++;
 			}
 
 
@@ -188,49 +212,6 @@ foreach ($all_employees as $key => $value) {
 				}
 				echo "</td>";
 				
-
-				
-				if($att_status == "P")
-				{
-					if ($row->attendance_status == 'Present') {
-						$present_count++;
-					} else if ($row->attendance_status == 'Meeting') {
-						$present_count++;
-						$att_status = 'Meeting';
-					} else {
-						$present_count = $present_count + 0.5;
-						$att_status = 'HalfDay';
-						$absent_count = $absent_count + 0.5;
-					}
-				}
-				elseif($att_status == "A")
-				{
-					$absent_count++;
-				}
-				elseif($att_status_check == "Leave")
-				{
-					$leave_count++;
-				}
-				elseif($att_status_check == "Hleave")
-				{
-					$leave_count = $leave_count + 0.5;
-				}
-				elseif($att_status == "P(Error)")
-				{
-					$perror_count++;
-				}
-				elseif($att_status == "Work Off")
-				{
-					$wk_off_count++;
-				}
-				elseif($att_status == "Day Off")
-				{
-					$day_off_count++;
-				}
-				elseif($att_status == "Holiday")
-				{
-					$holiday_count++;
-				}
 
 				if($row->late_status == 1)
 				{
@@ -275,6 +256,10 @@ foreach ($all_employees as $key => $value) {
 	echo "</td>";
 			
 	echo "<td>";
+	echo "EXTRA PRESENT";
+	echo "</td>";
+			
+	echo "<td>";
 	echo "ABSENT";
 	echo "</td>";
 			
@@ -309,6 +294,10 @@ foreach ($all_employees as $key => $value) {
 		
 	echo "<td>";
 	echo $present_count;
+	echo "</td>";
+
+	echo "<td>";
+	echo $extrap_count;
 	echo "</td>";
 		
 	echo "<td>";

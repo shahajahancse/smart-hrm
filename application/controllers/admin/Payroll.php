@@ -106,8 +106,8 @@ class Payroll extends MY_Controller {
 	
 		foreach($sql as $index){
 
-		$data = $this->Xin_model->update_salaryall($index['userid'],$index['modifydata'],$date);
-	}
+			$data = $this->Xin_model->update_salaryall($index['userid'],$index['modifydata'],$date);
+		}
 		echo json_encode($data);
 	}
 

@@ -280,50 +280,51 @@
 
    
 
-    function save_modify_salary() {
-  var temp = document.getElementById("temp").value;
-  var date = document.getElementById("date").value;
-  var sqld = document.getElementById("sql").value;
-  const sql = sqld.split(',');
-  const modifydata = [];
+  function save_modify_salary() {
+    var temp = document.getElementById("temp").value;
+    var date = document.getElementById("date").value;
+    var sqld = document.getElementById("sql").value;
+    const sql = sqld.split(',');
+    const modifydata = [];
 
-  for(var i = 0; i < sql.length; i++) {
-    var data = document.getElementById(sql[i]).value;
-    modifydata.push(data)
-  };
+    for(var i = 0; i < sql.length; i++) {
+      var data = document.getElementById(sql[i]).value;
+      modifydata.push(data)
+    };
   
   
-const mo = [];
+    const mo = [];
 
-for (let i = 0; i < sql.length; i++) {
-  const obj = {
-    userid: sql[i].toString(),
-    modifydata: modifydata[i]
-  };
-  mo.push(obj);
-}
-
-
-
-  var senddata = JSON.stringify(mo);
-  var data = "data=" + senddata+'&date='+date;
-
-  var url = "<?php echo base_url('admin/payroll/save_modify_salary_all');?>";
-  
-  $.ajax({
-    url: url,
-    type: 'POST',
-    data: data,
-    success: function(response) {
-      alert(response);
-      modify_salary();
-
-
+    for (let i = 0; i < sql.length; i++) {
+      const obj = {
+        userid: sql[i].toString(),
+        modifydata: modifydata[i]
+      };
+      mo.push(obj);
     }
-  });
-}
 
- $(document).ready(function(){
+
+
+    var senddata = JSON.stringify(mo);
+    var data = "data=" + senddata+'&date='+date;
+
+    var url = "<?php echo base_url('admin/payroll/save_modify_salary_all');?>";
+    
+    $.ajax({
+      url: url,
+      type: 'POST',
+      data: data,
+      success: function(response) {
+        alert(response);
+        modify_salary();
+
+
+      }
+    });
+  }
+
+
+  $(document).ready(function(){
     $("#modify_salary").on('input',function(){
       $("#modify_salary").attr('style', 'border: 1px solid #ccd6e6 !important');
       if($("#modify_salary").val() ==''){
@@ -339,7 +340,7 @@ for (let i = 0; i < sql.length; i++) {
         return false;
       }
     });
-});
+  });
 </script>
 
 
