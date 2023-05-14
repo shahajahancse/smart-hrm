@@ -99,7 +99,7 @@
 			<th class="text-center px-2"><?=$grand_total?></th>
 		</tr>
 
-<tr><tr><tr></tr></tr></tr>
+		<tr><tr><tr></tr></tr></tr>
 		<tr height="85px">
 			<td colspan="5" style="text-align:center; font-size:16px; font-weight:bold; ">
 			  <div>Prepared By</div>

@@ -180,16 +180,9 @@ class Payroll extends MY_Controller {
         }
         else
         {	
-
         	if ($excel == 1) {
-				// dd($data["values"]);
-
-				
 	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
         	} else {
-
-
-	           
 	            $this->load->view('admin/payroll/Actual_salary_sheet_excel',$data);
         	}
         }
