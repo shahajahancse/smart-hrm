@@ -271,10 +271,7 @@
    
    
  function save_modify_salary() {
-
   
-
-
             // retrieve form data
             var formData = $('#salaryForm').serializeArray();
 
