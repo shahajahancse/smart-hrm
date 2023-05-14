@@ -5,6 +5,8 @@
 <?php $session = $this->session->userdata('username');?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
+<link rel="stylesheet" href="<?php echo base_url() ?>skin/hrsale_assets/css/loader.css">
+
 <div class="col-lg-8">
 <div class="box mb-4 <?php echo $get_animate;?>">
   <div class="box-body">
@@ -91,27 +93,14 @@
         <button  type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Modify Employee Salary</h4>
       </div>
-      <?php
-        $this->db->select('user_id, first_name, last_name');
-        $this->db->where_in('status', array(1,4));
-        $this->db->where('company_id',1);
-        $this->db->order_by('user_id', 'asc');
-        $emps = $this->db->get('xin_employees')->result();
-
-         /*$sql= 'SELECT user_id, first_name,last_name FROM xin_employees';
-         $employees = $this->db->query($sql);
-         $emps=$employees->result();*/
-      ?>
+  
 
 
       <div class="modal-body">
+      
 
-            <form >
+            <form  id="salaryForm">
                 <div id="total" class="col-md-12" style="display: inline-flex;"> 
-                  
-                 
-              
-              
               </div>
                 <div class="col-md-12" style="display: inline-flex;margin-bottom: -16px;"> 
                   <div class="form-group col-md-3">
@@ -135,7 +124,7 @@
                   </div>
                   
                   <div class="form-group col-md-2">
-                    <label style="margin-left: 14px;">Modify Salary</label>
+                    <label style="margin-left: 27px;">Modify</label>
                   </div>
                   
                   
@@ -165,7 +154,7 @@
     <h3 class="box-title" id="report"> Salary Report
       <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
    </h3>
-     <button onclick=modify_salary() id="modify_salary" class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;" data-toggle="modal" data-target=".bd-example-modal-lg">Modify Salary</button>
+     <button onclick=modify_salary()  class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;">Modify Salary</button>
   </div>
 
   <div class="box-body" id="emp_report">
@@ -272,54 +261,36 @@
         }
       });
     });
-  });
+   });
 
-  $("#emp_name option").filter(function() {
+   $("#emp_name option").filter(function() {
         return $id= $(this).val() == $("#gross_salary").val();
-    }).attr('selected', true);
+     }).attr('selected', true);
 
    
-
+   
+   
   function save_modify_salary() {
-    var temp = document.getElementById("temp").value;
-    var date = document.getElementById("date").value;
-    var sqld = document.getElementById("sql").value;
-    const sql = sqld.split(',');
-    const modifydata = [];
+    // retrieve form data
+    var formData = $('#salaryForm').serializeArray();
 
-    for(var i = 0; i < sql.length; i++) {
-      var data = document.getElementById(sql[i]).value;
-      modifydata.push(data)
-    };
-  
-  
-    const mo = [];
-
-    for (let i = 0; i < sql.length; i++) {
-      const obj = {
-        userid: sql[i].toString(),
-        modifydata: modifydata[i]
-      };
-      mo.push(obj);
-    }
-
-
-
-    var senddata = JSON.stringify(mo);
-    var data = "data=" + senddata+'&date='+date;
-
+    // define the URL for the server-side PHP script that will handle the AJAX request
     var url = "<?php echo base_url('admin/payroll/save_modify_salary_all');?>";
-    
+
+    // send an AJAX request to the server-side PHP script
     $.ajax({
-      url: url,
-      type: 'POST',
-      data: data,
-      success: function(response) {
-        alert(response);
-        modify_salary();
-
-
-      }
+      url: url, // specify the URL of the PHP script
+      type: 'POST', // specify the HTTP method (POST in this case)
+      data: formData, // include the form data in the request
+      success: function(response) { // define a function to handle the response from the server
+      
+        $('#total').empty();
+        $('#empfrom').empty();
+         modify_salary()
+         $('#my_modal').modal('show');
+         // Create alert
+        alert("Operation successful!");
+       }
     });
   }
 

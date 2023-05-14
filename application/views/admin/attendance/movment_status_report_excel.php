@@ -1,4 +1,15 @@
-
+<?php
+$statusText = "";
+if ($statusC == 1) {
+    $statusText = "Processing";
+} elseif ($statusC == 2) {
+    $statusText = "Approved";
+} elseif ($statusC == 3) {
+    $statusText = "Rejected";
+} elseif ($statusC == 4) {
+    $statusText = "Paid";
+}
+?>
 
 
 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
@@ -16,7 +27,7 @@
 <?php
 
 
-$filename = "Salary_$first_date.xls";
+$filename = "Salary_$first_date+to+$second_date.xls";
 header('Content-Type: application/vnd.ms-excel'); //mime type
 header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
 header('Cache-Control: max-age=0'); //no cache
@@ -26,9 +37,9 @@ header('Cache-Control: max-age=0'); //no cache
 <table width="900"width="900" align="center" height="auto" class="sal" border="1" cellspacing="0" cellpadding="2" style="font-size:12px; width:750px;">
 <tr width="900" align="center" style="height:100px;">
     <td colspan="9" style="text-align:center;">
-        <div style="font-size:30px; font-weight:bold; text-align:center;margin-top:3px"><?php echo xin_company_info(1)->company_name; ?></div>
+        <div style="font-size:30px; font-weight:bold; text-align:center;margin-top:3px;"><?php echo xin_company_info(1)->company_name; ?></div>
         <div style="font-size:20px; font-weight:bold; text-align:center;"><?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div> 
-        <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px">Movement Unpaid : <?php echo $first_date; ?> To  <?php echo $second_date; ?></div>
+        <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px"> <?php echo $statusText; ?> Report : <?php echo $first_date; ?> To  <?php echo $second_date; ?></div>
 
     </td>
 </tr>
@@ -71,6 +82,7 @@ header('Cache-Control: max-age=0'); //no cache
 
 
 <!-- e2 -->
+
 
 
 	</table>

@@ -624,7 +624,7 @@ class Attendance_model extends CI_Model {
 
 
 
-    public function movment_unpaid_report($f1_date, $f2_date)
+    public function movment_status_report($f1_date, $f2_date,$statusC)
     {
     $this->db->select('
         xin_employee_move_register.employee_id,
@@ -649,7 +649,7 @@ class Attendance_model extends CI_Model {
     $this->db->join('xin_employee_move_register', 'xin_employee_move_register.employee_id = xin_employees.user_id');
     $this->db->where('xin_employees.is_active', 1);
     $this->db->where("xin_employee_move_register.date BETWEEN '$f1_date' AND '$f2_date'");
-    $this->db->where('xin_employee_move_register.status',2);
+    $this->db->where('xin_employee_move_register.status', $statusC);
     $query = $this->db->get();
     $data = $query->result();
    

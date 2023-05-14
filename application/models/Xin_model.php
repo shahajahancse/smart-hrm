@@ -48,7 +48,7 @@ class Xin_model extends CI_Model {
 
 	
 		$this->db->query("UPDATE `xin_salary_payslips` SET `modify_salary`=".$modify_salary." WHERE `employee_id`=".$id." and `salary_month`='".$date."'");
-	return $msg="success";
+	
 	}
 		
 	// is logged in to system
