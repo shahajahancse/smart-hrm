@@ -270,32 +270,34 @@
    
    
    
-  function save_modify_salary() {
-    // retrieve form data
-    var formData = $('#salaryForm').serializeArray();
+ function save_modify_salary() {
+  
+            // retrieve form data
+            var formData = $('#salaryForm').serializeArray();
 
-    // define the URL for the server-side PHP script that will handle the AJAX request
-    var url = "<?php echo base_url('admin/payroll/save_modify_salary_all');?>";
+            // define the URL for the server-side PHP script that will handle the AJAX request
+            var url = "<?php echo base_url('admin/payroll/save_modify_salary_all');?>";
 
-    // send an AJAX request to the server-side PHP script
-    $.ajax({
-      url: url, // specify the URL of the PHP script
-      type: 'POST', // specify the HTTP method (POST in this case)
-      data: formData, // include the form data in the request
-      success: function(response) { // define a function to handle the response from the server
-      
-        $('#total').empty();
-        $('#empfrom').empty();
-         modify_salary()
-         $('#my_modal').modal('show');
-         // Create alert
-        alert("Operation successful!");
-       }
-    });
-  }
+            // send an AJAX request to the server-side PHP script
+            $.ajax({
+              url: url, // specify the URL of the PHP script
+              type: 'POST', // specify the HTTP method (POST in this case)
+              data: formData, // include the form data in the request
+              success: function(response) { // define a function to handle the response from the server
+              
+                $('#total').empty();
+                $('#empfrom').empty();
+                 modify_salary()
+                 $('#my_modal').modal('show');
+                 // Create alert
+                alert("Operation successful!");
+               }
+            });
+
+ }
 
 
-  $(document).ready(function(){
+ $(document).ready(function(){
     $("#modify_salary").on('input',function(){
       $("#modify_salary").attr('style', 'border: 1px solid #ccd6e6 !important');
       if($("#modify_salary").val() ==''){
