@@ -22,7 +22,7 @@ $holiday_count = 0;
 $perror_count  = 0;
 
 
-$this->load->model('job_card_model');
+$this->load->model('Job_card_model');
 
 foreach ($all_employees as $key => $value) { 
 
@@ -95,8 +95,7 @@ foreach ($all_employees as $key => $value) {
 		echo "</tr>";
 	echo "<table>";
 
-	$emp_data = $this->job_card_model->emp_job_card($first_date,$second_date, $value->user_id);
-		// echo "<pre>";	print_r($emp_data); exit;
+	$emp_data = $this->Job_card_model->emp_job_card($first_date,$second_date, $value->user_id);
 
 	
 	echo "<table class='table table-bordered table-sm   table-striped sal mt-2' style='text-align:center; font-size:13px; '> 
@@ -114,7 +113,7 @@ foreach ($all_employees as $key => $value) {
 			// if(in_array($row->attendance_date,$emp_data['leave']))
 			if($row->status == 'leave')
 			{
-				$leave_type = $this->job_card_model->get_leave_type($row->attendance_date,$value->user_id);
+				$leave_type = $this->Job_card_model->get_leave_type($row->attendance_date,$value->user_id);
 				$att_status = $leave_type;
 				$leave_count++;
 				// $row->clock_in = "";
@@ -122,7 +121,7 @@ foreach ($all_employees as $key => $value) {
 			}
 			elseif($row->status == 'Hleave')
 			{
-				$leave_type = $this->job_card_model->get_leave_type($row->attendance_date,$value->user_id);
+				$leave_type = $this->Job_card_model->get_leave_type($row->attendance_date,$value->user_id);
 				$att_status = $leave_type;
 				$leave_count = $leave_count + 0.5;
 
