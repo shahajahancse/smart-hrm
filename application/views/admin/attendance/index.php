@@ -113,6 +113,8 @@
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
         <!-- <button class="btn btn-sm btn-danger"> Button one</button>-->
         <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="monthly_report()">Monthly Register Report</button>
+        <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" data-toggle="modal" data-target="#requisitionModal">Open Requisition Modal</button>
+      
 
 
       </div>
@@ -129,13 +131,9 @@
 
   </div>
 
-
   <div  class="box-body" id="entry_form">
 
   </div>
-
-
-
 
 </div>
 </div>
@@ -151,6 +149,7 @@
 </table>
 </div>
 </div>
+
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 <script>
   $(document).ready(function(){
@@ -201,5 +200,8 @@
     });
   });
 </script>
+
+
+
 
 

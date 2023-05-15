@@ -239,6 +239,10 @@ if($theme[0]->sub_menu_icons != ''){
         <li class="sidenav-link <?php if(!empty($arr_mod['salary_active']))echo $arr_mod['salary_active'];?>"> <a href="<?php echo site_url('admin/payroll/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Generate Salary </a> </li>
         <?php } ?>        
 
+        <?php if(in_array('1022',$role_resources_ids)) { ?>
+        <li class="sidenav-link <?php if(!empty($arr_mod['requisition_active']))echo $arr_mod['requisition_active'];?>"> <a href="<?php echo site_url('admin/requisition/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Requisition Form </a> </li>
+        <?php } ?>      
+
         <?php if(in_array('36',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['pay_generate_active']))echo $arr_mod['pay_generate_active'];?>"> <a href="<?php echo site_url('admin/payroll/generate_payslip');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('left_generate_payslip');?> </a> </li>
         <?php } ?>
