@@ -114,10 +114,18 @@ class Profile extends MY_Controller {
 			);
 		$data['breadcrumbs'] = $this->lang->line('header_my_profile');
 		$data['path_url'] = 'profile';
+		// dd($data);
 		if(!empty($session)){ 
-			$data['subview'] = $this->load->view("admin/employees/profile", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
+			if($data['user_role_id']=='3'){
+				$data['subview'] = $this->load->view("admin/employees/employee_profile", $data, TRUE);
+				$this->load->view('admin/layout/layout_main', $data); //page load
+			}
+			else{
+				$data['subview'] = $this->load->view("admin/employees/profile", $data, TRUE);
+				$this->load->view('admin/layout/layout_main', $data); //page load
+			}
+		} 
+		else {
 			redirect('hr/');
 		}
 		// Datatables Variables

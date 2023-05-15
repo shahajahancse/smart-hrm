@@ -89,6 +89,7 @@ class Payroll extends MY_Controller {
 			
 			$data = $this->Xin_model->modify_salary($salary_month);
 			
+			
 			echo json_encode($data);
 	
 
@@ -99,17 +100,25 @@ class Payroll extends MY_Controller {
 			$data = $this->Xin_model->update_salary($_POST['id'],$_POST['modify_salary']);
 			echo json_encode($data);
 	}
-	public function save_modify_salary_all(){
-		$data= $_POST['data'];
-		$date= $_POST['date'];
-		$sql=json_decode($data, true);
-	
-		foreach($sql as $index){
 
-		$data = $this->Xin_model->update_salaryall($index['userid'],$index['modifydata'],$date);
+	
+	// Function to save and modify salary data for all employees
+	public function save_modify_salary_all(){
+	    // Get input data from form
+	    $modifydata = $this->input->post('modifydata'); // Array of modified salary data
+	    $modifydataid = $this->input->post('modifydataid'); // Array of employee IDs
+	    $date = $this->input->post('date'); // Date of salary modification
+
+	    // Loop through modifydata array and update salary data for each employee
+	    for ($i = 0; $i < count($modifydata); $i++) {
+	        $user_id = $modifydataid[$i]; // Get the ID of the employee
+	        $salary = $modifydata[$i]; // Get the new salary for the employee
+
+	        // Call the model function to update the salary data for the employee
+	        $result = $this->Xin_model->update_salaryall($user_id, $salary, $date);
+	    }
 	}
-		echo json_encode($data);
-	}
+
 
 	// generate salary excel sheet 
     public function salary_sheet_excel()
@@ -171,16 +180,9 @@ class Payroll extends MY_Controller {
         }
         else
         {	
-
         	if ($excel == 1) {
-				// dd($data["values"]);
-
-				
 	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
         	} else {
-
-
-	           
 	            $this->load->view('admin/payroll/Actual_salary_sheet_excel',$data);
         	}
         }

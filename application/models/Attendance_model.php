@@ -121,6 +121,18 @@ class Attendance_model extends CI_Model {
             if ($leave['leave'] == true && $leave['Hleave'] == true) {
                 $astatus = 'Hleave';
                 $status = 'Hleave';
+
+                // Half day calculation here 
+                $half_morning = date("Y-m-d H:i:s", strtotime($process_date.' '.'11:59:59'));
+                if (strtotime($in_time) < strtotime($half_morning) && $in_time != '') {
+                    $astatus = 'HalfDay';
+                }
+
+                if (strtotime($out_time) > strtotime($lunch_time) && $out_time != '') {
+                    $astatus = 'HalfDay';
+                }
+                // half day calculation end
+
             } else  if ($leave['leave'] == true) {
                 $astatus = 'Leave';
                 $status = 'Leave';
@@ -145,7 +157,7 @@ class Attendance_model extends CI_Model {
                     $astatus = 'Absent';
                     $status = 'Absent';
                 } else {
-                    $astatus = 'Present';
+                    $astatus = 'Absent';
                     $status = 'Present';
 
                     // Half day calculation here 

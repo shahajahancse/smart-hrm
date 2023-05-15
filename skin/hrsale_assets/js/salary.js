@@ -198,97 +198,63 @@
       }
     }
 
-    function modify_salary()
-    {
-     
+    // Define a function named "modify_salary"
+  function modify_salary() {
+    // Retrieve the values of two HTML input elements with IDs 'sal_month' and 'sal_year'
+    const sal_month = document.getElementById('sal_month').value;
+    const sal_year = document.getElementById('sal_year').value;
 
-      sal_month = document.getElementById('sal_month').value;
-      if(sal_month =='')
-      {
-        alert('Please select salary month');
-        return ;
-      }
+    // Concatenate the retrieved values into a single string variable named "salary_month"
+    const salary_month = sal_year + '-' + sal_month;
 
-      sal_year = document.getElementById('sal_year').value;
-      if(sal_year =='')
-      {
-        alert('Please select alary year');
-        return ;
-      }
-
-     var salary_month = sal_year +'-'+ sal_month
- 
-     
-
-    
-      $.ajax({
+    // Send an AJAX request to a server-side script named "modify_salary"
+    $.ajax({
       url: 'modify_salary',
       type: 'POST',
       data: {
-        salary_month:salary_month,
-             
-            },
-      success: function(response){
-        $.ajax({
-          url: 'modify_salary',
-          type: 'POST',
-          data: {
-            salary_month: salary_month,
-          },
-          success: function(jsonArray){
+        salary_month: salary_month,
+      },
+      // Handle the response from the server
+      success: function(jsonArray){
+        // Clear the contents of two HTML elements with IDs 'total' and 'empfrom'
+        $('#total').empty();
+        $('#empfrom').empty();
 
-            $('#total').empty();
-            
-            $('#empfrom').empty();
-            const response = JSON.parse(jsonArray);
-          
-            const  sql = [];
-            
-            
-            
-            
-         
-            const count = response.length;
-            const salary_month = response[1].salary_month;
+        // Parse the response from the server, which is expected to be a JSON array
+        const response = JSON.parse(jsonArray);
 
+        // Create an empty array named "sql" and a variable named "count"
+        const sql = [];
+        const count = response.length;
 
-            
-            $.each(response, function(index, employee) {
-              
-              sql.push(employee.user_id);
+        // Extract the salary month from the first element of the JSON array
+        const salary_month = response[0].salary_month;
 
-             
-              var row = $('<div class="row" style="margin-top: 10px;"></div>');
-              var nameCol = $('<div class="col-md-3"><input type="text" readonly class="form-control" value="' + employee.first_name + ' ' + employee.last_name + '" disabled></div>');
-              var date = $('<div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.salary_month +'" disabled></div>');
-              var basicSalaryCol = $('<div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.basic_salary + '" id="basic_salary_' + employee.user_id + '"></div>');
-              var lateDeductCol = $('<div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.late_deduct + '" id="late_deduct_' + employee.user_id + '"></div>');
-              var lateCountCol = $('<div class="col-md-1"><input type="text" readonly class="form-control" value="' + employee.late_count + '" id="late_count_' + employee.user_id + '"></div>');
-              var modifySalaryCol = $('<div class="col-md-2"><input type="number" class="form-control" id="' + employee.user_id + '" value="' + employee.modify_salary + '"></div>');
-              row.append(nameCol);
-              row.append(date);
-              row.append(basicSalaryCol);
-              row.append(lateDeductCol);
-              row.append(lateCountCol);
-              row.append(modifySalaryCol);
-              $('#empfrom').append(row);
-            });
-            var sqld = sql.join(',');
-          
-            // Add count after the last row in #empfrom
-           
-            var countCol = $('<div class="col-md-12 " style="display: inline-flex;"><p style="color:#004cff;font-size: 17px;margin-left: -26px;font-weight: bold;">Total Employee ' + count + '</p><input id="temp" type="hidden" readonly class="form-control" value="' + count + '" name="total_emp"><p style="color:#004cff;font-size: 17px;font-weight: bold;right: 0;position: absolute;margin-left:5px;">Date ' + salary_month + '</p><input id="date" type="hidden" readonly class="form-control" value="' + salary_month + '" name="date"><input id="sql" type="hidden" readonly class="form-control" value="'+ sqld +'"></div>');
-           
-            $('#total').append(countCol);
-            
-          
-          }
+        // Create a variable named "item" that will hold the HTML code for each row in the employee table
+        let item = '';
+
+        // Loop through each element in the JSON array and create HTML code for each row in the employee table
+        $.each(response, function(index, employee) {
+          const row = '<div class="row" style="margin-top: 10px;"><div class="col-md-3"> <input type="text" readonly class="form-control" value="' + employee.first_name + ' ' + employee.last_name + '" disabled> <input type="hidden" name="modifydataid[]" class="form-control" value=" ' + employee.user_id + '" ></div><div class="col-md-2"> <input type="text" readonly class="form-control" value="' + employee.salary_month +'" disabled></div><div class="col-md-2"> <input type="text" readonly class="form-control" value="' + employee.basic_salary + '" id="basic_salary_' + employee.user_id + '"></div><div class="col-md-2"> <input type="text" readonly class="form-control" value="' + employee.late_deduct + '" id="late_deduct_' + employee.user_id + '"></div><div class="col-md-1"> <input type="text" readonly class="form-control" value="' + employee.late_count + '" id="late_count_' + employee.user_id + '"></div><div class="col-md-2"> <input type="number" class="form-control" name="modifydata[]"  value="' + employee.modify_salary + '"></div></div>';
+          item += row;
         });
-        
-        
+
+        // Add the HTML code for each row to an HTML element with ID 'empfrom'
+        $('#empfrom').append(item);
+
+        // Concatenate the contents of the "sql" array into a single string variable named "sqld"
+        const sqld = sql.join(',');
+
+        // Add count after the last row in #empfrom
+        var countCol = $('<div class="col-md-12 " style="display: inline-flex;"><p style="color:#004cff;font-size: 17px;margin-left: -26px;font-weight: bold;">Total Employee ' + count + '</p><input id="temp" type="hidden" readonly class="form-control" value="' + count + '" name="total_emp"><p style="color:#004cff;font-size: 17px;font-weight: bold;right: 0;position: absolute;margin-left:5px;">Date ' + salary_month + '</p><input id="date" type="hidden" readonly class="form-control" value="' + salary_month + '" name="date"><input id="sql" type="hidden" readonly class="form-control" value="'+ sqld +'"></div>');
+            
+        $('#total').append(countCol);
+        $('#my_modal').modal('show');
       }
     });
-    }
+
+  }
+    
 
 
 

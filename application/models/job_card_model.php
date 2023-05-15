@@ -57,6 +57,7 @@ class Job_card_model extends CI_Model{
 				xin_attendance_time.lunch_out, 
 				xin_attendance_time.attendance_date, 
 				xin_attendance_time.attendance_status,
+				xin_attendance_time.status,
 				xin_attendance_time.late_status,
 			');
 		$this->db->from('xin_attendance_time');

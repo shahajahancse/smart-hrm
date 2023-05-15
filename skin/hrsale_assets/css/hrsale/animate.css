@@ -2736,3 +2736,23 @@
   -webkit-animation-name: rollOut;
   animation-name: rollOut;
 }
+
+.profileImage{
+  float: right;
+  padding: 0px 185px 0px 0px;;  
+}
+.labelmargin{
+  margin-top: 10px;
+}
+.content_alignment{
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+}
+.inputfield{
+  border-radius: 8px;
+}
+.header_content{
+  padding: 25px 0px 0px 194px;
+}
+
