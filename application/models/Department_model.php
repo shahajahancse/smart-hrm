@@ -83,11 +83,11 @@
 	}
 	
 	// get single record > company | locations
-	 public function ajax_location_departments_information($id) {
+	 public function ajax_location_departments_information($id = null) {
 	
-		$sql = 'SELECT * FROM xin_departments WHERE location_id = ?';
-		$binds = array($id);
-		$query = $this->db->query($sql, $binds);
+		$sql = 'SELECT * FROM xin_departments /*WHERE location_id = ?*/';
+		// $binds = array($id);
+		$query = $this->db->query($sql /*$binds*/);
 		
 		if ($query->num_rows() > 0) {
 			return $query->result();

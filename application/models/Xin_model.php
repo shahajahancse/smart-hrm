@@ -22,14 +22,20 @@ class Xin_model extends CI_Model {
 		}
 	}
 
-	public function modify_salary($id=NULL){
-		if($id==''){
-			return "null";
-		}
-		$sql = 'SELECT basic_salary,late_deduct FROM xin_salary_payslips WHERE employee_id ='.$id;
-		$query = $this->db->query($sql);
-		// dd($query->result());
-		return $query->result();
+	public function modify_salary($salary_month){
+		$first_date=$salary_month;
+		// $sql = 'SELECT basic_salary, late_deduct FROM xin_salary_payslips WHERE employee_id =' . $id . ' AND late_deduct > 0';
+		// $query = $this->db->query($sql);
+
+		$this->db->select('s.basic_salary, s.late_deduct, s.late_count, s.modify_salary,s.salary_month, e.first_name, e.last_name, e.user_id, ');
+		$this->db->from('xin_salary_payslips as s');
+		$this->db->from('xin_employees as e');
+		$this->db->where('e.user_id = s.employee_id');
+		$this->db->where('s.late_deduct !=', 0);
+		$this->db->where('s.salary_month =', $first_date );
+		$result = $this->db->get()->result();
+		
+		return $result;
 	}
 	public function update_salary($id=NULL,$modify_salary){
 
@@ -37,6 +43,12 @@ class Xin_model extends CI_Model {
 			return "null";
 		}
 		$this->db->query("UPDATE `xin_salary_payslips` SET `modify_salary`=".$modify_salary." WHERE `employee_id`=".$id);	
+	}
+	public function update_salaryall($id,$modify_salary,$date){
+
+	
+		$this->db->query("UPDATE `xin_salary_payslips` SET `modify_salary`=".$modify_salary." WHERE `employee_id`=".$id." and `salary_month`='".$date."'");
+	
 	}
 		
 	// is logged in to system
@@ -47,7 +59,7 @@ class Xin_model extends CI_Model {
 		return $is_logged_in;       
 	}
 	
-	// generate random string
+	// generate random strings
 	public function generate_random_string($length = 7) {
 		$characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$charactersLength = strlen($characters);

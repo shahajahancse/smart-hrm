@@ -112,14 +112,17 @@
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
         <!-- <button class="btn btn-sm btn-danger"> Button one</button>-->
-        <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="monthly_report()">Monthly Report</button>
+        <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="monthly_report()">Monthly Register Report</button>
 
 
       </div>
 
       <div class="tab-pane fade" id="continuously" role="tabpanel" aria-labelledby="continuously-tab" style="margin-top: 30px;">
         <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="jobCard()">Job Card</button>
-
+        <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="movReport(2)">Unpaid Movement</button>
+        <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="movReport(1)">Process Movement</button>
+        <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="movReport(3)">Reject Movement</button>
+        <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="movReport(4)">Paid Movement</button>
       </div>
 
     </div>

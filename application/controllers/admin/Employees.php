@@ -1920,9 +1920,10 @@ class Employees extends MY_Controller {
 		/*else if($this->input->post('email')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_email');
 		}*/
-		 else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
+		/* else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
 			$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
-		} else if($this->Employees_model->check_employee_email($this->input->post('email')) > 0) {
+		} */
+		else if($this->Employees_model->check_employee_email($this->input->post('email')) > 0) {
 			 $Return['error'] = $this->lang->line('xin_employee_email_already_exist');
 		} else if($this->input->post('date_of_birth')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_date_of_birth');
@@ -2010,13 +2011,14 @@ class Employees extends MY_Controller {
 			'sub_department_id' => $this->input->post('subdepartment_id'),
 			'designation_id' => $this->input->post('designation_id'),
 			'date_of_joining' => $date_of_joining,
-			'probation_end' => $probation_end,
+			'notify_incre_prob' => $probation_end,
 			'contact_no' => $contact_no,
 			'address' => $address,
 			'is_active' => 1,
 			'leave_categories' => $cat_ids,
 			'created_at' => date('Y-m-d h:i:s')
 		);
+		// dd($data);
 
 		$iresult = $this->Employees_model->add($data);
 		if ($iresult) {

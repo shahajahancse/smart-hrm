@@ -96,6 +96,15 @@ class Attendance extends MY_Controller {
 			// dd($in_time .' = '. $out_time);
 			foreach ($emp_id as $key => $row) {
 				$proxi_id = $this->db->where('emp_id', $row)->get('xin_proxi')->row()->proxi_id;
+				if ($proxi_id == null) {
+					$name = $this->db->where('user_id', $row)->get('xin_employees')->row();
+					echo "Required to Punch Id of $name->first_name $name->last_name";
+					exit;
+				} else if ($proxi_id == ' ') {
+					$name = $this->db->where('user_id', $row)->get('xin_employees')->row();
+					echo "Required to Punch Id of $name->first_name $name->last_name";
+					exit;
+				}
 
 				// insert in time
 				if ($in_time != '') {
@@ -211,7 +220,10 @@ class Attendance extends MY_Controller {
 
 		if($id != null){
 		    $data = $this->db->where('id',$id)->get('xin_employee_move_register')->result();
-			echo json_encode( $data );
+		    $emplyeedata = $this->db->where('user_id',$data[0]->employee_id)->get('xin_employees')->result();
+			$array=[$data,$emplyeedata];
+            
+			echo json_encode( $array);
 			exit;	   
 		}
 		
@@ -240,6 +252,7 @@ class Attendance extends MY_Controller {
 
     public function create_move_register()
     {	$session = $this->session->userdata('username');
+  
 		
      	if (!empty($_POST)) {
 			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
@@ -296,6 +309,15 @@ class Attendance extends MY_Controller {
 	}
 
 
+	//copy value input to another input field
+
+	public function copy_value() {
+		$request_amount = $this->input->post('request_amount');
+		echo $request_amount;
+	  }
+	  
+
+
 
 
 	// report section here
@@ -310,6 +332,11 @@ class Attendance extends MY_Controller {
     	$emp_id = explode(',', trim($sql));
 		$data['status']= $status;
 		$data['late_status']= $late_status;
+		if ($status == 'Present') {
+			$status = array('Present', 'HalfDay');
+		} else {
+			$status = array($status);
+		}
     	$data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id, $status,$late_status);
         $data["attendance_date"] = $attendance_date;
 		
@@ -412,6 +439,76 @@ class Attendance extends MY_Controller {
     }
 
 
+	public function movment_status_report() {
+		$first_date = $this->input->post('first_date');
+		$second_date = $this->input->post('second_date');
+
+		$f1_date = date("Y-m-d", strtotime($first_date));
+		$f2_date = date("Y-m-d", strtotime($second_date));
+		$statusC = $this->input->post('statusC');
+
+		
+	//    $sql = $this->input->post('sql');
+	//    $emp_id = explode(',', trim($sql));
+
+	  $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date, $statusC);
+
+	   $data['statusC']= $statusC;
+	   $data['first_date'] = $first_date;
+	   $data['second_date'] = $second_date;
+	//    $data['company_info'] = $this->Xin_model->get_company_info(1);
+	//    $data['all_employees'] = $this->Attendance_model->get_employee_information();
+			if(is_string($data["values"]))
+			{
+				echo $data["values"];
+			}
+			else
+			{	
+				echo $this->load->view("admin/attendance/movment_status_report", $data, TRUE);
+			}
+    
+		
+		 
+   }
+
+
+
+   
+	public function movment_status_report_excel() {
+		
+		$first_date = $this->input->post('first_date');
+		$second_date = $this->input->post('second_date');
+
+		$f1_date = date("Y-m-d", strtotime($first_date));
+		$f2_date = date("Y-m-d", strtotime($second_date));
+		$statusC = $this->input->post('statusC');
+
+		
+	//    $sql = $this->input->post('sql');
+	//    $emp_id = explode(',', trim($sql));
+
+	  $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date,$statusC);
+
+
+	   $data['first_date'] = $first_date;
+	   $data['second_date'] = $second_date;
+	   $data['statusC']= $statusC;
+	//    $data['company_info'] = $this->Xin_model->get_company_info(1);
+	//    $data['all_employees'] = $this->Attendance_model->get_employee_information();
+			if(is_string($data["values"]))
+			{
+				echo $data["values"];
+			}
+			else
+			{	
+				echo $this->load->view("admin/attendance/movment_status_report_excel", $data, TRUE);
+			}
+    
+		
+		 
+   }
+
+
 	public function monthly_report() {
 	 	$first_date = $this->input->post('first_date');
 	 
@@ -438,8 +535,9 @@ class Attendance extends MY_Controller {
 
 	// apply for ta / da
 	public function apply_for_ta_da(){
-		$data = $this->Attendance_model->apply_for_ta_da($_POST['form_id'],$_POST['request_amount'],$_POST['short_details']);
-	    echo json_encode($data);
+	
+	$data = $this->Attendance_model->apply_for_ta_da($_POST['form_id'],$_POST['request_amount'],$_POST['short_details']);
+	echo json_encode($data);
 	}
 
 	public function view_ta_da(){
@@ -455,7 +553,6 @@ class Attendance extends MY_Controller {
 
 	public function modify_for_ta_da($id){
 		$data = $this->Attendance_model->modify_for_ta_da($id);
-		// dd($id);
 		echo json_encode($data);
 		exit;
 	}

@@ -147,7 +147,7 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
         }
 
         var okyes;
-        okyes=confirm('Are you sure you want to leave?');
+        okyes=confirm('Are you sure you want to Insert?');
         if(okyes==false) return;
 
         var data = "date="+date+"&in_time="+in_time+"&out_time="+out_time+"&reason="+reason+"&sql="+sql+"&status="+status;
