@@ -57,7 +57,9 @@
 						->from("requisitions")
 						->from('xin_employees')
 						->where("xin_employees.user_id = requisitions.user_id")
-						->group_by('requisitions.user_id');
+						//search by accordinig to requisition id 
+						->group_by('requisitions.id');
+						// ->group_by('requisitions.user_id');
 		}
 		// dd($this->db->get()->result());
 		return	$this->db->get()->result();
@@ -67,6 +69,7 @@
 		// dd($id);
 			$this->db->select(" 
 								requisition_details.id,
+								requisition_details.requisition_id,
 								requisitions.user_id,
 								products_categories.category_name,
 								products_sub_categories.sub_cate_name,
@@ -84,7 +87,9 @@
 			->where("products.id 				= requisition_details.product_id")	
 			->where("requisitions.id 			= requisition_details.requisition_id")	
 			->where("xin_employees.user_id 		= requisitions.user_id")	
-			->where("requisitions.user_id 		= $id")
+			//razib
+			// ->where("requisitions.user_id 		= $id")
+			->where("requisitions.id 		= $id")
 			->group_by('requisition_details.id');
 			return $this->db->get()->result();
 	}

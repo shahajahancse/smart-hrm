@@ -6,7 +6,7 @@
     margin-bottom: 14px;
 }
 </style>
-<?php if($user_role_id !=1){?>
+<?php if($user_role_id !=3){?>
 <div class="box mb-4 <?php echo $get_animate;?>">
   <div id="accordion">
     <div class="box-header with-border">
@@ -95,7 +95,7 @@
                     ?>
               </td>
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
-                <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->user_id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td>
+                <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td>
               <?php } ?>
               <?php if($user_role_id==4){?>
                 <td class="text-center"><?php echo $rows->category_name; ?></td>
@@ -105,7 +105,7 @@
                     ?></td>
                 <td class="text-center"><?php echo $rows->created_at; ?></td>
                 <td class="text-center">
-                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->cat_id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
+                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
                 </td>
             </tr>
           <?php }} ?>

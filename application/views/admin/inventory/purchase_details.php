@@ -14,10 +14,10 @@ $get_animate = $this->Xin_model->get_content_animate();
   <div class="box-header with-border">
     <h3 class="box-title">Requisition List</h3>
 
-    <?php if($session['role_id']==1){ if($status == 1){?>
-    <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/purchase_approved/'.$user_id);?>"> Approved </a>
-    <a class="btn btn-sm btn-danger pull-right" href="<?php echo base_url('admin/inventory/purchase_rejected/'.$user_id);?>" style="margin-right: 10px;">Rejected</a>
-    <a class="btn btn-sm btn-warning pull-right" style="margin-right: 10px;" href="<?php echo base_url('admin/inventory/purchase_edit_approved/'.$user_id);?>">Edit & Approved</a>
+    <?php if($session['role_id']==1){ if($status == 4){?>
+    <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/purchase_approved/'.$results [0]->requisition_id);?>"> Approved </a>
+    <a class="btn btn-sm btn-danger pull-right" href="<?php echo base_url('admin/inventory/purchase_rejected/'.$results [0]->requisition_id);?>" style="margin-right: 10px;">Rejected</a>
+    <a class="btn btn-sm btn-warning pull-right" style="margin-right: 10px;" href="<?php echo base_url('admin/inventory/purchase_edit_approved/'.$results [0]->requisition_id);?>">Edit & Approved</a>
     <?php }}?>
 
     <button class="btn btn-sm btn-info pull-right" style="margin-right: 10px;" onclick="history.back()"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
@@ -37,6 +37,7 @@ $get_animate = $this->Xin_model->get_content_animate();
           </tr>
         </thead>
         <tbody>
+        
             <?php $i=1;foreach($results as $row){?>
             <tr class="text-center">
                 <td><?php echo $i++?></td>

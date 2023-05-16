@@ -52,7 +52,7 @@ class Inventory extends MY_Controller {
 	{
 
 		$session = $this->session->userdata('username');
-		// dd($session);
+		//  dd($session);
 		if(empty($session)){ 
 			redirect('admin/');
 		}
@@ -240,7 +240,7 @@ class Inventory extends MY_Controller {
 	}
 
 	public function sub_category($id = null)
-	{
+	{    
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -261,6 +261,7 @@ class Inventory extends MY_Controller {
 			);           
 
 			if ($hid = $this->input->post('hidden_id')) {
+				
 				$this->db->where('id', $hid)->update('products_sub_categories', $form_data);
 		        $this->session->set_flashdata('success', 'Successfully Updated Done');
 			} else {
@@ -274,7 +275,9 @@ class Inventory extends MY_Controller {
 		}
 
 		if ($id != null) {
+			
 			$data['row'] = $this->db->where('id',$id)->get("products_sub_categories")->row();
+		
 		}
 		// dd($data['row']);
 		$data['categorys'] = $this->db->order_by('id','DESC')->get("products_categories")->result();
@@ -305,39 +308,46 @@ class Inventory extends MY_Controller {
 	}
 
 	public function purchase_details($id)	{
-		// dd($id);
+		//  dd($id);
+		// dd($_SESSION);
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+		
 		$data['title'] 		 = 'Inventory | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Inventory';
 		$data['path_url'] 	 = 'inventory';
 		if($session['role_id']==1){
 		$data['results']	 = $this->Inventory_model->requisition_details($id);
 	    $data['status']      = $this->db->select('status')
-										->where('user_id',$id)
+										// ->where('user_id',$id)
+										->where('id',$id)
 										->get('requisitions')
 										->row()->status;
+										// dd($data['results']);
+										
 		}
 		else{
 			$data['results']	 = $this->Inventory_model->req_details_cat_wise($id);
 		}
-	    $data['user_id'] 	 = $id;
+	    // $data['user_id'] 	 = $id;
 		$data['subview'] 	 = $this->load->view("admin/inventory/purchase_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
 	public function purchase_approved($id){
-		$approved = $this->db->where('user_id',$id)->update('requisitions',['status'=>2]);
+		$approved = $this->db->where('id',$id)->update('requisitions',['status'=>2]);
 		if($approved){
 		 redirect("admin/inventory/purchase","refresh");
 		}
 	}
 
 	public function purchase_rejected($id){
-		$approved = $this->db->where('user_id',$id)->update('requisitions',['status'=>4]);
+		// dd($id);
+		$approved = $this->db->where('id',$id)->update('requisitions',['status'=>4]);
 		if($approved){
+			
 		 redirect("admin/inventory/purchase","refresh");
 		}
 	}
@@ -351,7 +361,10 @@ class Inventory extends MY_Controller {
 		$data['breadcrumbs'] = 'Inventory';
 		$data['path_url']    = 'inventory';
 	    $data['results'] 	 = $this->Inventory_model->requisition_details($id);
-	    $data['user_id'] 	 = $id;
+		// dd($data['results']);
+	    // $data['user_id'] 	 = $id;
+		 $data['requisition_id'] 	 = $data['results'][0]->requisition_id;
+
 		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data);
 	}
@@ -359,7 +372,7 @@ class Inventory extends MY_Controller {
 
 	public function persial_approved($id){
 		// dd($id);
-		$approved = $this->db->where('user_id',$id)->update('requisitions',['status'=>4]);
+		$approved = $this->db->where('id',$id)->update('requisitions',['status'=>2]);
 		if($approved){
 		 redirect("admin/inventory/purchase","refresh");
 		}
