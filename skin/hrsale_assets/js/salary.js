@@ -234,9 +234,11 @@
         let item = '';
 
         // Loop through each element in the JSON array and create HTML code for each row in the employee table
+        var j=1;
         $.each(response, function(index, employee) {
-          const row = '<div class="row" style="margin-top: 10px;"><div class="col-md-3"> <input type="text" readonly class="form-control" value="' + employee.first_name + ' ' + employee.last_name + '" disabled> <input type="hidden" name="modifydataid[]" class="form-control" value=" ' + employee.user_id + '" ></div><div class="col-md-2"> <input type="text" readonly class="form-control" value="' + employee.basic_salary + '" id="basic_salary_' + employee.user_id + '"></div><div class="col-md-2"> <input type="text" readonly class="form-control" value="' + employee.late_deduct + '" id="late_deduct_' + employee.user_id + '"></div><div class="col-md-1"> <input type="text" readonly class="form-control" value="' + employee.late_count + '" id="late_count_' + employee.user_id + '"></div><div class="col-md-2"> <input type="number" class="form-control" name="modifydata[]"  value="' + employee.modify_salary + '"></div></div>';
+          const row = '<div class="row" style="margin-top: 10px;"><div class="col-md-3"><input type="text" readonly class="form-control" value="' + employee.first_name + ' ' + employee.last_name + '" disabled><input type="hidden" name="modifydataid[]" class="form-control" value=" 12" ></div><div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.basic_salary + '" ></div><div class="col-md-1"><input type="number" readonly class="form-control" style="padding: 0;text-align-last: center;" value=87></div><div class="col-md-1"><input type="number"readonly class="form-control" style="padding: 0;text-align-last: center;" value=54 id="deductday"></div><div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.late_deduct + '"></div><div class="col-md-1"><input type="number"  class="form-control" name="modifyday[]" style="padding: 0;text-align-last: center;" value=0 id="mday'+j +'"></div><div class="col-md-2"><input type="number" class="form-control" name="modifydata[]" id="msday'+j+'"  value="' + employee.modify_salary + '"></div></div>';
           item += row;
+          j+=1;
         });
 
         // Add the HTML code for each row to an HTML element with ID 'empfrom'
