@@ -185,7 +185,7 @@ class Employees extends MY_Controller {
 			// if($r->user_id != '1') {
 			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
 				if(in_array('203',$role_resources_ids)) {
-					$del_opt = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fa fa-trash"></span></button></span><span data-toggle="tooltip" data-placement="top" title="p/p"><button type="button" onclick="incrementFun('. $r->user_id . ')"><span class="glyphicon glyphicon-edit"></span></button></span>';
+					$del_opt = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fa fa-trash"></span></button></span>';
 				} else {
 					$del_opt = '';
 				}
@@ -198,6 +198,9 @@ class Employees extends MY_Controller {
 				if($r->status==1 || $r->status==4){
 					$lr_opt = '<span onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign">
 									<button type="button" class="btn btn-xs btn-info"><span class="fa fa-arrow-circle-right"></span></button>
+								</span>
+								<span data-toggle="tooltip" data-placement="top" title="Increment/Promotion">
+									<button type="button" class="btn btn-xs btn-success" onclick="incrementFun('. $r->user_id . ')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
 								</span>';
 				} else {
 					$lr_opt = '';
@@ -6311,7 +6314,7 @@ class Employees extends MY_Controller {
 
 	// this function common function
 	public function fetch_user_info_ajax($id){
-		$data= $this->Employees_model->fetch_user_info($id);
+		$data = $this->Employees_model->fetch_user_info($id);
 		echo json_encode( $data );
 		exit();
 	}
