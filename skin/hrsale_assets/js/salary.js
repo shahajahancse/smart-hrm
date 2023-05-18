@@ -198,6 +198,38 @@
       }
     }
 
+    $(document).on('change', '.commonclass', function() {
+      // Get the data attributes
+      const mdayid = $(this).data('id'); // Retrieve 'data-id'
+      const bsid = $(this).data('bsid'); // Retrieve 'data-bsid'
+      const inputchangeid = $(this).attr('id'); // Retrieve 'id'
+    
+      // Get the values from input elements
+      const inputchange = $(`#${inputchangeid}`).val(); // Retrieve value based on 'inputchangeid'
+      const bs = $(`#${bsid}`).val(); // Retrieve value based on 'bsid'
+      const chengmodifydatain = $(`#${mdayid}`).val(); // Retrieve value based on 'mdayid'
+      const date = $('#date').val(); // Retrieve value based on 'date'
+    
+   
+      // Extract year and month from the date
+      const [year, month] = date.split('-').map(Number);
+    
+      // Get the last day of the current month
+      const nextMonth = new Date(year, month, 1);
+      const lastDayOfMonth = new Date(nextMonth.getTime() - 1);
+    
+      // Get the total number of days in the current month
+      const totalDays = lastDayOfMonth.getDate();
+    
+      // Calculate and log the value of l_inputdata
+      const l_inputdata = ((bs / totalDays) * inputchange).toFixed(2);
+      
+    
+      // Set the value of the element with 'mdayid' to l_inputdata
+      $(`#${mdayid}`).val(l_inputdata);
+    });
+    
+    
     // Define a function named "modify_salary"
   function modify_salary() {
     // Retrieve the values of two HTML input elements with IDs 'sal_month' and 'sal_year'
@@ -222,7 +254,7 @@
 
         // Parse the response from the server, which is expected to be a JSON array
         const response = JSON.parse(jsonArray);
-        console.log(response);
+      
 
         // Create an empty array named "sql" and a variable named "count"
         const sql = [];
@@ -235,12 +267,12 @@
         let item = '';
 
         // Loop through each element in the JSON array and create HTML code for each row in the employee table
-        var j=1;
+     
 
         $.each(response, function(index, employee) {
-          const row = '<div class="row" style="margin-top: 10px;"><div class="col-md-3"><input type="text" readonly class="form-control" value="' + employee.first_name + ' ' + employee.last_name + '" disabled><input type="hidden" name="modifydataid[]" class="form-control" value="' + employee.user_id+ '" ></div><div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.basic_salary + '" ></div><div class="col-md-1"><input type="number" readonly class="form-control" style="padding: 0;text-align-last: center;" value=87></div><div class="col-md-1"><input type="number"readonly class="form-control" style="padding: 0;text-align-last: center;" value=54 id="deductday"></div><div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.late_deduct + '"></div><div class="col-md-1"><input type="number"  class="form-control" name="modifyday[]" style="padding: 0;text-align-last: center;" value=0 id="mday'+j +'"></div><div class="col-md-2"><input type="number" class="form-control" name="modifydata[]" id="msday'+j+'"  value="' + employee.modify_salary + '"></div></div>';
+          const row = '<div class="row" style="margin-top: 10px;"><div class="col-md-3"><input type="text" readonly class="form-control" value="' + employee.first_name + ' ' + employee.last_name + '" disabled><input type="hidden" name="modifydataid[]" class="form-control" value="' + employee.user_id+ '" ></div><div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.basic_salary + '" id="bs' + employee.user_id+ '" ></div><div class="col-md-1"><input type="number" readonly class="form-control" style="padding: 0;text-align-last: center;" value="' + employee.late_count + '"></div><div class="col-md-1"><input type="number"readonly class="form-control" style="padding: 0;text-align-last: center;" value=54 id="deductday"></div><div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.late_deduct + '"></div><div class="col-md-1"><input type="number"  class="form-control commonclass" id="mid' + employee.user_id+ '" data-bsid="bs' + employee.user_id+ '" data-id="' + employee.user_id+ '" name="modifyday[]" value="' + employee.m_pay_day + '"  style="padding: 0;text-align-last: center;"></div><div class="col-md-2"><input type="number" class="form-control" id="' + employee.user_id+ '" name="modifydata[]"   value="' + employee.modify_salary + '"></div></div>';
           item += row;
-          j+=1;
+       
         });
 
         // Add the HTML code for each row to an HTML element with ID 'empfrom'

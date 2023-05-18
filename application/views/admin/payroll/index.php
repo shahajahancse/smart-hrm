@@ -283,9 +283,9 @@
               url: url, // specify the URL of the PHP script
               type: 'POST', // specify the HTTP method (POST in this case)
               data: formData, // include the form data in the request
-              success: function(response) { // define a function to handle the response from the server
+              success: function(response) {
               
-                $('#total').empty();
+                 $('#total').empty();
                 $('#empfrom').empty();
                  modify_salary()
                  $('#my_modal').modal('show');
@@ -294,7 +294,7 @@
                }
             });
 
- }
+  }
 
 
  $(document).ready(function(){

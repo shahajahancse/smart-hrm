@@ -27,7 +27,7 @@ class Xin_model extends CI_Model {
 		// $sql = 'SELECT basic_salary, late_deduct FROM xin_salary_payslips WHERE employee_id =' . $id . ' AND late_deduct > 0';
 		// $query = $this->db->query($sql);
 
-		$this->db->select('s.basic_salary, s.late_deduct, s.late_count, s.modify_salary,s.salary_month, e.first_name, e.last_name, e.user_id, ');
+		$this->db->select('s.basic_salary, s.late_deduct,s.m_pay_day, s.late_count, s.modify_salary,s.salary_month, e.first_name, e.last_name, e.user_id, ');
 		$this->db->from('xin_salary_payslips as s');
 		$this->db->from('xin_employees as e');
 		$this->db->where('e.user_id = s.employee_id');
@@ -44,10 +44,13 @@ class Xin_model extends CI_Model {
 		}
 		$this->db->query("UPDATE `xin_salary_payslips` SET `modify_salary`=".$modify_salary." WHERE `employee_id`=".$id);	
 	}
-	public function update_salaryall($id,$modify_salary,$date){
+	public function update_salaryall($id,$modify_salary,$date,$m_day){
 
 	
-		$this->db->query("UPDATE `xin_salary_payslips` SET `modify_salary`=".$modify_salary." WHERE `employee_id`=".$id." and `salary_month`='".$date."'");
+
+
+	
+		$this->db->query("UPDATE `xin_salary_payslips` SET `m_pay_day` = '".$m_day."', `modify_salary` = '".$modify_salary."' WHERE `employee_id` = '".$id."' AND `salary_month` = '".$date."'");
 	
 	}
 		

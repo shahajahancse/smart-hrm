@@ -104,6 +104,7 @@ class Payroll extends MY_Controller {
 	
 	// Function to save and modify salary data for all employees
 	public function save_modify_salary_all(){
+		$m_day_data=$this->input->post('modifyday');
 	    // Get input data from form
 	    $modifydata = $this->input->post('modifydata'); // Array of modified salary data
 	    $modifydataid = $this->input->post('modifydataid'); // Array of employee IDs
@@ -113,9 +114,10 @@ class Payroll extends MY_Controller {
 	    for ($i = 0; $i < count($modifydata); $i++) {
 	        $user_id = $modifydataid[$i]; // Get the ID of the employee
 	        $salary = $modifydata[$i]; // Get the new salary for the employee
+	        $m_day = $m_day_data[$i]; 
 
 	        // Call the model function to update the salary data for the employee
-	        $result = $this->Xin_model->update_salaryall($user_id, $salary, $date);
+	        $result = $this->Xin_model->update_salaryall($user_id, $salary, $date, $m_day);
 	    }
 	}
 
