@@ -185,7 +185,7 @@ class Employees extends MY_Controller {
 			// if($r->user_id != '1') {
 			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
 				if(in_array('203',$role_resources_ids)) {
-					$del_opt = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fa fa-trash"></span></button></span>';
+					$del_opt = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fa fa-trash"></span></button></span><span data-toggle="tooltip" data-placement="top" title="p/p"><button type="button" onclick="incrementFun('. $r->user_id . ')"><span class="glyphicon glyphicon-edit"></span></button></span>';
 				} else {
 					$del_opt = '';
 				}
