@@ -83,8 +83,8 @@
                   <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_employee_department');?>" name="last_name" type="text" value="<?php echo $department_name;?>">              
                 </div>
                 <div class="col-md-6">
-                  <label for="last_name" class="control-label labelmargin"><?php echo $this->lang->line('xin_select_designation');?></label>
-                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_select_designation');?>" name="last_name" type="text" value="<?php echo $designation_name;?>">              
+                  <label for="last_name" class="control-label labelmargin"><?php echo $this->lang->line('xin_employee_designation');?></label>
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_employee_designation');?>" name="last_name" type="text" value="<?php echo $designation_name;?>">              
                 </div>
 
                 <div class="col-md-12 labelmargin">
