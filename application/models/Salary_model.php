@@ -134,7 +134,7 @@ class Salary_model extends CI_Model {
                 'basic_salary' => $salary,
 
                 'present' => $present,
-                'extra_p' => $extra_attend,
+                'extra_p' => ($extra_attend != null) ? $extra_attend:0,
                 'absent' => $absent,
                 'holiday' => $rows->holiday,
                 'weekend' => $rows->weekend ,
