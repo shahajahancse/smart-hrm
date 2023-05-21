@@ -109,9 +109,10 @@ class Salary_model extends CI_Model {
 
             // late deduction
             $late_deduct = 0;
+            $late_day = 0;
             if ($rows->late_status > 2) {
-                $late = floor($rows->late_status / 3);
-                $late_deduct = $perday_salary / $late;
+                $late_day = floor($rows->late_status / 3);
+                $late_deduct = $perday_salary * $late_deduct;
             }
 
             // extra pay salary 
@@ -141,8 +142,10 @@ class Salary_model extends CI_Model {
                 'sick_leave' => ($leave->sl != null) ? $leave->sl:0,
 
                 'late_count' => $rows->late_status,
+                'd_day'   => $late_day,
                 'late_deduct' => $late_deduct,
                 'absent_deduct' => $absent_deduct,
+                'm_pay_day'    => 0,
                 'modify_salary' => 0,
                 'other_payment' => $extra_pay,
                 'net_salary' => $pay_salary,
@@ -167,6 +170,7 @@ class Salary_model extends CI_Model {
             $query = $this->db->where('salary_month',$salary_month)->where('employee_id',$emp_id)->get('xin_salary_payslips');
             if ($query->num_rows() > 0) {
                 $data['modify_salary'] = $query->row()->modify_salary;
+                $data['m_pay_day'] = $query->row()->m_pay_day;
                 
                 $this->db->where('payslip_id', $query->row()->payslip_id);
                 $this->db->update('xin_salary_payslips',$data);

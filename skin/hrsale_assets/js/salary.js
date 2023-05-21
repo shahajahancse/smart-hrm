@@ -207,10 +207,8 @@
       // Get the values from input elements
       const inputchange = $(`#${inputchangeid}`).val(); // Retrieve value based on 'inputchangeid'
       const bs = $(`#${bsid}`).val(); // Retrieve value based on 'bsid'
-      const chengmodifydatain = $(`#${mdayid}`).val(); // Retrieve value based on 'mdayid'
       const date = $('#date').val(); // Retrieve value based on 'date'
-    
-   
+
       // Extract year and month from the date
       const [year, month] = date.split('-').map(Number);
     

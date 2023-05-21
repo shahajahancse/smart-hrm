@@ -113,14 +113,14 @@
                           <label>Basic Salary</label>
                         </div>
                         <div class="form-group col-md-1" style="padding: 0;text-align-last: center;">
-                          <label style="margin-left: 23px;">Late</label>
+                          <label>Late</label>
                           </div>
                         <div class="form-group col-md-1" style="padding: 0;text-align-last: center;">
-                          <label style="margin-left: 23px;">d day</label>
+                          <label >d day</label>
                           </div>
                         
                         <div class="form-group col-md-2" style="padding: 0;text-align-last: center;">
-                          <label style="margin-left: 16px;">L Deduct</label>
+                          <label>L Deduct</label>
                         </div>
                         <div class="form-group col-md-1" style="padding: 0;text-align-last: center;">
                           <label style="margin-left: 16px;">m day</label>
