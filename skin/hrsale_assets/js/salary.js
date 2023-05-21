@@ -259,7 +259,8 @@
         const count = response.length;
 
         // Extract the salary month from the first element of the JSON array
-        const salary_month = response[0].salary_month;
+        if(count>0){
+        const salary_month = response[0].salary_month;}
 
         // Create a variable named "item" that will hold the HTML code for each row in the employee table
         let item = '';
