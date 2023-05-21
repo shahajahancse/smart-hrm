@@ -1,6 +1,14 @@
 <?php
-/* Profile view
-*/
+
+$bank_account = $this->Employees_model->set_employee_bank_account($user_id);
+
+if($bank_account->num_rows() > 0){
+  $bank_account = $bank_account->row();
+ 
+  
+
+}
+
 ?>
 <?php $session = $this->session->userdata('username');?>
 <?php $user = $this->Xin_model->read_user_info($session['user_id']);?>
@@ -155,13 +163,13 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="acc_number">Account Number</label><br />
-                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_acc_number');?>" name="acc_name" type="text" value="<?php echo $this->lang->line('xin_e_details_acc_number');?>">
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_acc_number');?>" name="acc_name" type="text" value="<?php echo $bank_account->account_number;?>">
                 </div>  
               </div>
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="acc_title"><?php echo $this->lang->line('xin_e_details_acc_title');?></label><br />
-                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="acc_title" type="text" value="<?php echo $this->lang->line('xin_e_details_acc_title');?>">
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="acc_title" type="text" value="<?php echo $bank_account->account_title;?>">
                 </div>
               </div>                                     
             </div>
@@ -169,13 +177,13 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="bank_name">Bank Name</label><br />
-                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_bank_name');?>" name="bank_name" type="text" value="">
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_bank_name');?>" name="bank_name" type="text"  value="<?php echo $bank_account->bank_name;?>">
                 </div>  
               </div>
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="bank_branch">Bank Branch</label><br />
-                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text" value="">
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text"  value="<?php echo $bank_account->bank_branch;?>">
                 </div>
               </div>
             </div>
