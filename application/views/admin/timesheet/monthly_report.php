@@ -6,73 +6,73 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <style>
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  margin: 0 auto;
-  max-width: 100%; /* Set max-width to 100% */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+		<style>
+				table {
+					border-collapse: collapse;
+					width: 100%;
+					margin: 0 auto;
+					max-width: 100%; /* Set max-width to 100% */
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+				}
 
 
-th {
-	background-color: #0177BC;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    /* border: 2px solid #4CAF50; */
-}
-.im{
-    background: #d5b2b2 !important;
-    color: currentcolor !important;
+				th {
+					background-color: #0177BC;
+					color: white;
+					font-size: 18px;
+					font-weight: bold;
+					text-align: center;
+					/* border: 2px solid #4CAF50; */
+				}
+					.im{
+						background: #d5b2b2 !important;
+						color: currentcolor !important;
 
-}
+					}
 
-td {
-	font-size: 15px;
-    text-align: center;
-    border: 2px solid #ddd;
-    width: 19px;
-}
+					td {
+						font-size: 15px;
+						text-align: center;
+						border: 2px solid #ddd;
+						width: 19px;
+					}
 
-tr:hover {
-  background-color: #f5f5f5;
-}
+					tr:hover {
+					background-color: #f5f5f5;
+					}
 
-.tdb {
-  background-color: cadetblue;
-}
-
-
-
-.btn {
-    background-color: #0890dd;
-    height: 30px;
-    width: 95;
-    font-size: 15px;
-	padding-right: 5px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    color: #fff;
-    font-family: Arial, sans-serif;
-    /* text-transform: uppercase; */
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease-in-out;
-    margin: 5px;
-}
-
-.btn:hover {
-    background-color: #0c69a5;
-    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
-    transform: translateY(-3px);
-}
+					.tdb {
+					background-color: cadetblue;
+					}
 
 
 
-</style>
+					.btn {
+						background-color: #0890dd;
+						height: 30px;
+						width: 95;
+						font-size: 15px;
+						padding-right: 5px;
+						border: none;
+						border-radius: 6px;
+						cursor: pointer;
+						color: #fff;
+						font-family: Arial, sans-serif;
+						/* text-transform: uppercase; */
+						box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+						transition: all 0.3s ease-in-out;
+						margin: 5px;
+					}
+
+					.btn:hover {
+						background-color: #0c69a5;
+						box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
+						transform: translateY(-3px);
+					}
+
+
+
+		</style>
   </head>
   <body >
 
