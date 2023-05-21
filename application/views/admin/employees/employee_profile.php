@@ -86,7 +86,7 @@
                   <label for="last_name" class="control-label labelmargin"><?php echo $this->lang->line('xin_employee_designation');?></label>
                   <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_employee_designation');?>" name="last_name" type="text" value="<?php echo $designation_name;?>">              
                 </div>
-
+<!-- hh -->
                 <div class="col-md-12 labelmargin">
                   <label for="email" class="control-label"><?php echo $this->lang->line('dashboard_email');?></label> <br>
                   <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('dashboard_email');?><?php echo $this->lang->line('dashboard_employee_id');?>" name="email" type="text" value="<?php echo $email;?>">
