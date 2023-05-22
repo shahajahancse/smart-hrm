@@ -337,18 +337,37 @@ class Inventory extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
-	public function purchase_approved($id){
-		$approved = $this->db->where('id',$id)->update('requisitions',['status'=>2]);
-		if($approved){
-		 redirect("admin/inventory/purchase","refresh");
-		}
+	public function purchase_approved($id,$id2){
+		
+         $all_detail=$this->db->where('requisition_id',$id)->get('requisition_details')->row();
+		 
+		  $d1=$this->db->where('id',$all_detail->product_id)->get('products')->row();
+        //   dd($d1->quantity);
+		  
+		  if($d1->quantity >= $all_detail->quantity){
+			// dd($all_detail->quantity);
+			 $approved = $this->db->where('id',$id)->update('requisitions',['status'=>2]);
+		      if($approved){
+				   $this->session->set_flashdata('success', 'Approved status updated successfully');
+		           redirect("admin/inventory/purchase","refresh");
+		      }
+
+
+		  }else{
+			  $this->session->set_flashdata('warning', 'Product Quantity is Biger.');
+			  redirect("admin/inventory/purchase","refresh");
+		  }
+		// dd($id2);
+
+		 
+		
 	}
 
 	public function purchase_rejected($id){
 		// dd($id);
 		$approved = $this->db->where('id',$id)->update('requisitions',['status'=>4]);
 		if($approved){
-			
+			$this->session->set_flashdata('warning', ' Requsition Status Rejected .');
 		 redirect("admin/inventory/purchase","refresh");
 		}
 	}
@@ -372,29 +391,93 @@ class Inventory extends MY_Controller {
 	}
 
 
+
+	
+	
+
 	public function persial_approved($id){
-		// dd($id);
-       $quantity=$this->input->post('qunatity[]');
-	   $r_did=$this->input->post('r_id[]');
-		// dd($p);	
-		foreach($quantity as $key=>$value){
-			$this->db->where('id',$r_did[$key])->update('requisition_details',['quantity'=>$value]);
+	
+		$all_detail=$this->db->where('requisition_id',$id)->get('requisition_details')->result();
+		foreach($all_detail as $key=>$value){
+			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
+			
 		}
-	    // $this->db->where('id',$p)->update('requisition_details',['quantity'=>$d]);
-		$approved = $this->db->where('id',$id)->update('requisitions',['status'=>2]);
-		if($approved){
-		 redirect("admin/inventory/purchase","refresh");
+		
+		$quantity=$this->input->post('qunatity[]');
+		$r_did=$this->input->post('r_id[]');
+		// dd($d1[1]->quantity);
+		foreach($d1 as $k=>$v){
+			
+			 if($d1[$k]->quantity >= $quantity[$k]) {
+				 foreach($quantity as $key=>$value){
+
+				   $this->db->where('id',$r_did[$key])->update('requisition_details',['quantity'=>$value]); }
+
+			 } else{
+				$this->session->set_flashdata('warning', 'Approved  Quantity is Biger');
+				redirect("admin/inventory/purchase");
+			 }
+
+			
 		}
+		 $approved = $this->db->where('id',$id)->update('requisitions',['status'=>2]);
+		 if($approved){
+					$this->session->set_flashdata('success', 'Updated Successfully.');
+				 redirect("admin/inventory/purchase","refresh");
+				}
+			
+	
+    //    $quantity=$this->input->post('qunatity[]');
+	//    $r_did=$this->input->post('r_id[]');
+	// 	dd($r_did);	
+	// 	foreach($quantity as $key=>$value){
+	// 		f
+	// 		    
+	// 		 $this->db->where('id',$r_did[$key])->update('requisition_details',['quantity'=>$value]);
+	// 				
+	// 		}
+	// 		// $this->db->where('id',$r_did[$key])->update('requisition_details',['quantity'=>$value]);
+	// 	}
+	// }
+	//     // $this->db->where('id',$p)->update('requisition_details',['quantity'=>$d]);
+	// 	$approved = $this->db->where('id',$id)->update('requisitions',['status'=>2]);
+	// 	if($approved){
+	// 		$this->session->set_flashdata('success', 'Updated Successfully.');
+	// 	 redirect("admin/inventory/purchase","refresh");
+	// 	}
+	// 	if(!$approved){
+    //      $this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+	// 	 redirect("admin/inventory/purchase","refresh");
+	// 	}
 	}
 
 	public function delete_requsiton_item($id){
 		
 		$approved = $this->db->where('id',$id)->delete('requisition_details');
 		if($approved){
+			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
 		 redirect("admin/inventory/purchase","refresh");
 		}
 	}
 
+
+	public function get_product_quantity($id) {
+		$data = $this->db->where('id', $id)->get('products')->row();
+		
+		if ($data) {
+			$response = array(
+				'quantity' => $data->quantity
+			);
+		} else {
+			$response = array(
+				'error' => 'Product not found'
+			);
+		}
+		
+		
+		echo json_encode($response);
+	}
+	
 
 
 }

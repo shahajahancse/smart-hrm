@@ -50,10 +50,13 @@
   $(function() {$("#flash_message").hide(1000);});
 </script>  
 <?php if($this->session->flashdata('warning')):?>
-  <div class="alert alert-warning">
+  <div class="alert alert-warning"id="flash_message1">
     <?php echo $this->session->flashdata('warning');?>
   </div>
 <?php endif; ?> 
+<script>
+  $(function() {$("#flash_message1").hide(1000);});
+</script> 
 <?php }?>
 
 
@@ -144,8 +147,8 @@
       items+= '<tr>';
       items+= '<td><select name="cat_id[]" class="form-control input-sm" id="category_'+sl+'" required><?php echo $category_data;?></select></td>';
       items+= '<td><select name="sub_cate_id[]"  id="subcategory_'+sl+'" class="sub_category_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
-      items+= '<td><select name="product_id[]" class="item_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
-      items+= '<td><input name="quantity[]" value="" type="text" class="form-control input-sm" required></td>';
+      items+= '<td><select name="product_id[]" class="item_val_'+sl+' form-control input-sm" required ><option value="">-- Select One --</option></select></td>';
+      items+= '<td><input name="quantity[]" id="quantity" value="" type="text" class="form-control input-sm" required></td>';
       items+= '<td> <a href="javascript:void();" class="label label-important text-danger" onclick="removeRow(this)"> <i class="fa fa-minus-circle text-danger"></i><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
       items+= '</tr>';
       $('#count').val(sl+parseInt(1));
@@ -202,6 +205,5 @@
          });
       });
    }
-
 
 </script>  
