@@ -299,12 +299,12 @@ if(!is_null($role_user)){
                 
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Avalavle Earn Leave : </p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Available Earn Leave : </p>
                   <p style="margin: 0;" class="col-md-4"><?php echo $earn_leave_have ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Avalavle Sick Leave : </p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Available Sick Leave : </p>
                   <p style="margin: 0;" class="col-md-4"><?php echo $sick_leave_have ?></p>
                 </div>
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
