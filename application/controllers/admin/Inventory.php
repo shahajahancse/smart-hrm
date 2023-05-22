@@ -23,6 +23,7 @@ class Inventory extends MY_Controller {
 		//load the models
 		$this->load->model("Inventory_model");
 		$this->load->model("Xin_model");
+		$this->load->helper('form');
 		// $this->load->library('Pdf');
 		// $this->load->helper('string');
 	}
@@ -363,6 +364,7 @@ class Inventory extends MY_Controller {
 	    $data['results'] 	 = $this->Inventory_model->requisition_details($id);
 		// dd($data['results']);
 	    // $data['user_id'] 	 = $id;
+		// dd($data['results']);
 		 $data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 
 		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
@@ -372,7 +374,22 @@ class Inventory extends MY_Controller {
 
 	public function persial_approved($id){
 		// dd($id);
+       $quantity=$this->input->post('qunatity[]');
+	   $r_did=$this->input->post('r_id[]');
+		// dd($p);	
+		foreach($quantity as $key=>$value){
+			$this->db->where('id',$r_did[$key])->update('requisition_details',['quantity'=>$value]);
+		}
+	    // $this->db->where('id',$p)->update('requisition_details',['quantity'=>$d]);
 		$approved = $this->db->where('id',$id)->update('requisitions',['status'=>2]);
+		if($approved){
+		 redirect("admin/inventory/purchase","refresh");
+		}
+	}
+
+	public function delete_requsiton_item($id){
+		
+		$approved = $this->db->where('id',$id)->delete('requisition_details');
 		if($approved){
 		 redirect("admin/inventory/purchase","refresh");
 		}

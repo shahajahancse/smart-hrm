@@ -28,6 +28,8 @@ $get_animate = $this->Xin_model->get_content_animate();
                 <th class="text-center" >Quantity</th>
           </tr>
         </thead>
+        <?php echo form_open('admin/inventory/persial_approved/'.$requisition_id)?>
+        
         <tbody>
             <?php $i=1;foreach($results as $row){?>
             <tr class="text-center">
@@ -36,13 +38,16 @@ $get_animate = $this->Xin_model->get_content_animate();
                 <td><?php echo $row->sub_cate_name?></td>
                 <td><?php echo $row->product_name?></td>
                 <td><input type="number" id="quantity" name="qunatity[]" min="1" style="width:20%" value="<?php echo $row->quantity?>"></td>
-                <td><a href="<?php echo  $row->id?>">Delete</a></td>
+                <td><a href="<?php echo base_url('admin/inventory/delete_requsiton_item/'.$row->id)?>">Delete</a></td>
+                <input type="hidden" name="r_id[]" value="<?php echo $row->id?>" >
 
             </tr>
             <?php }?>
         </tbody>
       </table>
-      <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/persial_approved/'.$requisition_id);?>">Approved</a>
+      <!-- <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/persial_approved/'.$requisition_id);?>">Approved</a> -->
+       <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
+      <?php echo form_close()?>
     </div>
   </div>
 </div>
