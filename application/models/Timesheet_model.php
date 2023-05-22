@@ -308,6 +308,17 @@
 
 		return $query->result();
 	}
+
+	
+	public function count_total_leaves_month($leave_type_id,$employee_id) {
+		
+		//$sql = 'SELECT * FROM xin_leave_applications WHERE employee_id = ? and leave_type_id = ? and status = ? and created_at >= DATE_SUB(NOW(),INTERVAL 1 YEAR)';
+		$sql = 'SELECT * FROM xin_leave_applications WHERE  employee_id = ? and leave_type_id = ? and status = ?';
+		$binds = array($employee_id,$leave_type_id,2);
+		$query = $this->db->query($sql, $binds);
+
+		return $query->result();
+	}
 	
 	
 	// get payroll templates > NOT USED
