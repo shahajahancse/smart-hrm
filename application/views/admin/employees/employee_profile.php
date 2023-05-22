@@ -1,12 +1,7 @@
 <?php
-
 $bank_account = $this->Employees_model->set_employee_bank_account($user_id);
-
 if($bank_account->num_rows() > 0){
   $bank_account = $bank_account->row();
- 
-  
-
 }
 
 ?>
