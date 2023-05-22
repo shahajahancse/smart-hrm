@@ -40,6 +40,7 @@ class Dashboard extends MY_Controller {
 		  $this->load->model('Announcement_model');
 		   $this->load->model('Clients_model');
 		   $this->load->model("Recruitment_model");
+		   $this->load->model("Salary_model");
      }
 	
 	/*Function to set JSON output*/
