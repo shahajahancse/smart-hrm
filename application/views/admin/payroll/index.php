@@ -102,35 +102,35 @@
             <form  id="salaryForm">
                 <div id="total" class="col-md-12" style="display: inline-flex;"> 
               </div>
-                <div class="col-md-12" style="display: inline-flex;margin-bottom: -16px;"> 
-                  <div class="form-group col-md-3">
-                    <label style="margin-left: -22px;">Employee name</label>
-                  </div>
-                  
-                  <div class="form-group col-md-2">
-                    <label>Date</label>
-                  </div>
-                  <!-- hh -->
-                  <div class="form-group col-md-2">
-                    <label>Basic Salary</label>
-                  </div>
-                  
-                  <div class="form-group col-md-2">
-                    <label style="margin-left: 16px;">Late Deduct</label>
-                  </div>
-                  <!-- hh -->
-                  <div class="form-group col-md-1">
-                    <label style="margin-left: 23px;">Late</label>
-                  </div>
-                  
-                  <div class="form-group col-md-2">
-                    <label style="margin-left: 27px;">Modify</label>
-                  </div>
-                  
-                  
-                 
-              
-              
+              <div class="col-md-12" style="display: inline-flex;margin-bottom: -16px;"> 
+                        <div class="form-group col-md-3">
+                          <label style="margin-left: -22px;">Employee name</label>
+                        </div>
+                        
+                        
+                        <!-- hh -->
+                        <div class="form-group col-md-2">
+                          <label>Basic Salary</label>
+                        </div>
+                        <div class="form-group col-md-1" style="padding: 0;text-align-last: center;">
+                          <label>Late</label>
+                          </div>
+                        <div class="form-group col-md-1" style="padding: 0;text-align-last: center;">
+                          <label >d day</label>
+                          </div>
+                        
+                        <div class="form-group col-md-2" style="padding: 0;text-align-last: center;">
+                          <label>L Deduct</label>
+                        </div>
+                        <div class="form-group col-md-1" style="padding: 0;text-align-last: center;">
+                          <label style="margin-left: 16px;">m day</label>
+                        </div>
+                        <!-- hh -->
+                        
+                        
+                        <div class="form-group col-md-2">
+                          <label style="margin-left: 27px;">Modify</label>
+                        </div>
               </div>
                  <div id="empfrom"></div>
             <div class="modal-footer" >
@@ -283,9 +283,9 @@
               url: url, // specify the URL of the PHP script
               type: 'POST', // specify the HTTP method (POST in this case)
               data: formData, // include the form data in the request
-              success: function(response) { // define a function to handle the response from the server
+              success: function(response) {
               
-                $('#total').empty();
+                 $('#total').empty();
                 $('#empfrom').empty();
                  modify_salary()
                  $('#my_modal').modal('show');
@@ -294,7 +294,7 @@
                }
             });
 
- }
+  }
 
 
  $(document).ready(function(){

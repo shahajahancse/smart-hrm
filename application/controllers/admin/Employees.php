@@ -198,6 +198,9 @@ class Employees extends MY_Controller {
 				if($r->status==1 || $r->status==4){
 					$lr_opt = '<span onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign">
 									<button type="button" class="btn btn-xs btn-info"><span class="fa fa-arrow-circle-right"></span></button>
+								</span>
+								<span data-toggle="tooltip" data-placement="top" title="Increment/Promotion">
+									<button type="button" class="btn btn-xs btn-success" onclick="incrementFun('. $r->user_id . ')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
 								</span>';
 				} else {
 					$lr_opt = '';
@@ -6311,7 +6314,7 @@ class Employees extends MY_Controller {
 
 	// this function common function
 	public function fetch_user_info_ajax($id){
-		$data= $this->Employees_model->fetch_user_info($id);
+		$data = $this->Employees_model->fetch_user_info($id);
 		echo json_encode( $data );
 		exit();
 	}

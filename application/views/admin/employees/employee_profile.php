@@ -1,6 +1,9 @@
 <?php
-/* Profile view
-*/
+$bank_account = $this->Employees_model->set_employee_bank_account($user_id);
+if($bank_account->num_rows() > 0){
+  $bank_account = $bank_account->row();
+}
+
 ?>
 <?php $session = $this->session->userdata('username');?>
 <?php $user = $this->Xin_model->read_user_info($session['user_id']);?>
@@ -15,6 +18,9 @@
 <?php } ?>
 <?php } ?>
 <?php $full_name = $user[0]->first_name.' '.$user[0]->last_name;?>
+<?php $department = $this->Department_model->read_department_information($user[0]->department_id);
+      $department_name = ($department[0]->department_name);
+?>
 <?php $designation = $this->Designation_model->read_designation_information($user[0]->designation_id);?>
 <?php #dd($user);
 	if(!is_null($designation)){
@@ -26,6 +32,12 @@
 ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
+<style>
+  .toph{
+       justify-content: center;
+       display: flex;
+      }
+</style>
 <div class="row">
   <!-- Navbar tab -->
   <div class="col-md-12">
@@ -41,14 +53,14 @@
   <!-- End of Navbar Tab -->
   <div class="tab-content">
     <!-- Basic Information Tab -->
-    <div class="tab-pane <?php echo $get_animate;?> active" id="xin_general">
+    <div class="tab-pane <?php echo $get_animate;?> active" style="margin-left: -36px;" id="xin_general">
         <div class="box-body box-profile col-md-12">
-          <h3 class="box-title col-md-6 header_content"> <?php echo $this->lang->line('xin_e_details_basic_info');?> </h3>
-          <a class="profileImage col-md-6" href="#profile-picture" data-profile="2" data-profile-block="profile_picture" data-toggle="tab" aria-expanded="true" id="user_profile_2"> 
+          <h3 class="box-title col-md-3 toph" > <?php echo $this->lang->line('xin_e_details_basic_info');?> </h3>
+          <a class="col-md-2" href="#profile-picture" data-profile="2" data-profile-block="profile_picture" data-toggle="tab" aria-expanded="true" id="user_profile_2"> 
             <img class="profile-user-img img-responsive img-circle" src="<?php echo $de_file;?>" alt="<?php echo $full_name;?>">
           </a>
         </div>
-        <div class="box-body form-alignment content_alignment">
+        <div class="box-body form-alignment ">
           <div class="col-md-8">
             <div class="">
               <div class="col-md-12">
@@ -68,6 +80,16 @@
                   <label for="last_name" class="control-label labelmargin"><?php echo $this->lang->line('xin_employee_last_name');?></label>
                   <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_employee_last_name');?>" name="last_name" type="text" value="<?php echo $last_name;?>">              
                 </div>
+
+                <div class="col-md-6">
+                  <label for="last_name" class="control-label labelmargin"><?php echo $this->lang->line('xin_employee_department');?></label>
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_employee_department');?>" name="last_name" type="text" value="<?php echo $department_name;?>">              
+                </div>
+                <div class="col-md-6">
+                  <label for="last_name" class="control-label labelmargin"><?php echo $this->lang->line('xin_employee_designation');?></label>
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_employee_designation');?>" name="last_name" type="text" value="<?php echo $designation_name;?>">              
+                </div>
+<!-- hh -->
                 <div class="col-md-12 labelmargin">
                   <label for="email" class="control-label"><?php echo $this->lang->line('dashboard_email');?></label> <br>
                   <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('dashboard_email');?><?php echo $this->lang->line('dashboard_employee_id');?>" name="email" type="text" value="<?php echo $email;?>">
@@ -136,13 +158,13 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="acc_number">Account Number</label><br />
-                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_acc_number');?>" name="acc_name" type="text" value="<?php echo $this->lang->line('xin_e_details_acc_number');?>">
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_acc_number');?>" name="acc_name" type="text" value="<?php echo $bank_account->account_number;?>">
                 </div>  
               </div>
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="acc_title"><?php echo $this->lang->line('xin_e_details_acc_title');?></label><br />
-                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="acc_title" type="text" value="<?php echo $this->lang->line('xin_e_details_acc_title');?>">
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="acc_title" type="text" value="<?php echo $bank_account->account_title;?>">
                 </div>
               </div>                                     
             </div>
@@ -150,13 +172,13 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="bank_name">Bank Name</label><br />
-                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_bank_name');?>" name="bank_name" type="text" value="">
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_bank_name');?>" name="bank_name" type="text"  value="<?php echo $bank_account->bank_name;?>">
                 </div>  
               </div>
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="bank_branch">Bank Branch</label><br />
-                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text" value="">
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text"  value="<?php echo $bank_account->bank_branch;?>">
                 </div>
               </div>
             </div>

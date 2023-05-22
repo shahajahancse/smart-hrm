@@ -511,6 +511,7 @@ $lang['xin_employee_document_number'] = 'Document Number';
 $lang['xin_employee_first_name'] = "First Name";
 $lang['xin_employee_last_name'] = "Last Name";
 $lang['xin_employee_department'] = "Department";
+$lang['xin_employee_designation'] = "Designation";
 $lang['xin_employee_dob'] = "Date of Birth";
 $lang['xin_employee_doj'] = "Date of Joining";
 $lang['xin_employee_role'] = "Role";
