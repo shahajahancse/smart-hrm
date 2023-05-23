@@ -1,196 +1,23 @@
-
-
-
-
-
-
 <?php
-    // Get the current month
-    $currentMonth = date( 'm' );
-    // Create a DateTime object for the current date
-    $datepass     = new DateTime();
-    // Set the date to the first day of the current month
-    $datepass->setDate( date( 'Y' ), $currentMonth, 1 );
-
-    if ( date( 'd' ) > 5 ) {
-        // Subtract one month from the date
-        $datepass->modify( '-1 month' );
-        // Get the name of the last month
-        // dd($date->format('Y-m-d'));
-    } else {
-        $datepass->modify( '-2 month' );
-        
-        
-    }
-    $founddate = $datepass->format( 'Y-m' );
-    
-
-
-    $lastMonthName = $datepass->format( 'F' );
+    $session = $this->session->userdata( 'username' );
+    $userid  = $session[ 'user_id' ];
+    $lastmonthsalarys  = $this->Salary_model->getpassedmonthsalary( $userid );
+    $lastmonthsalaryy =$lastmonthsalarys[1];
+    $lastmont=$lastmonthsalarys[1]->salary_month;
+    $lastmont = $lastmonthsalarys[1]->salary_month;
+    $date_object = DateTime::createFromFormat('Y-m', $lastmont);
+    $monthName = $date_object->format('F');     
 ?>
-
 <?php
-  // $currentDate = date('Y-m-d');
-  $session = $this->session->userdata( 'username' );
-  $userid  = $session[ 'user_id' ];
-  function count_leaves_in_month( $leaves, $month )
-  {
-      $totalLeaves = 0;
-      foreach ( $leaves as $leave ) {
-          $leaveDate = date( 'Y', strtotime( $leave->from_date ) );
-          if ( $leaveDate == $month ) {
-              $totalLeaves += $leave->qty;
-          }
-      }
-      return $totalLeaves;
-  }
-  // Usage example
-  $leavesel              = $this->Timesheet_model->count_total_leaves_month( 1, $userid );
-  $leavessl              = $this->Timesheet_model->count_total_leaves_month( 2, $userid );
-  $month                 = date( 'Y' ); // Specify the month for which you want to calculate the total leaves
-  $totalLeavesInMonth_el = count_leaves_in_month( $leavesel, $month );
-  $totalLeavesInMonth_sl = count_leaves_in_month( $leavessl, $month );
-  $earn_leave_have       = 12 - $totalLeavesInMonth_el;
-  $sick_leave_have       = 4 - $totalLeavesInMonth_sl;
+$leavecal=(leave_cal($userid));
+$leave_calel=$leavecal['leaves'][0];
+$leave_calsl=$leavecal['leaves'][1];  
 ?>
-
 <?php
-  $salar  = $this->Salary_model->salary_sheet_excel( $founddate, $userid, 1 );
-  $salary = $salar[ 0 ];
-  $datep = date( "Y-m" );
-  $salarp  = $this->Salary_model->salary_sheet_excel( '2023-05', $userid, 1 );
-  
-  $salaryp = $salarp[ 0 ];
-
-
-  
-
-?>
-
-
-
-
-<?php
-  $date        = strtotime( date( "Y-m-d" ) );
-  $day         = date( 'd', $date );
-  $month       = date( 'm', $date );
-  $year        = date( 'Y', $date );
-  // total days in month
-  $daysInMonth = cal_days_in_month( 0, $month, $year );
-  $dayhave     = $daysInMonth - $day;
-
-
-  $imonth = date( 'F', $date );
-  $r      = $this->Xin_model->read_user_info( $session[ 'user_id' ] );
-  $pcount = 0;
-  $acount = 0;
-  $lcount = 0;
-  $hcount = 0;
-  for ( $i = 1; $i <= $daysInMonth - $dayhave; $i++ ):
-      $i                 = str_pad( $i, 2, 0, STR_PAD_LEFT );
-  // get date <
-      $attendance_date   = $year . '-' . $month . '-' . $i;
-      $get_day           = strtotime( $attendance_date );
-      $day               = date( 'l', $get_day );
-      $user_id           = $r[ 0 ]->user_id;
-      $office_shift_id   = $r[ 0 ]->office_shift_id;
-      $attendance_status = '';
-  // get holiday
-      $h_date_chck       = $this->Timesheet_model->holiday_date_check( $attendance_date );
-      $holiday_arr       = array();
-      if ( $h_date_chck->num_rows() == 1 ) {
-          $h_date = $this->Timesheet_model->holiday_date( $attendance_date );
-          $begin  = new DateTime( $h_date[ 0 ]->start_date );
-          $end    = new DateTime( $h_date[ 0 ]->end_date );
-          $end    = $end->modify( '+1 day' );
-          
-          $interval  = new DateInterval( 'P1D' );
-          $daterange = new DatePeriod( $begin, $interval, $end );
-          
-          foreach ( $daterange as $date ) {
-              $holiday_arr[] = $date->format( "Y-m-d" );
-          }
-      } else {
-          $holiday_arr[] = '99-99-99';
-      }
-      // get leave/employee
-      $leave_date_chck = $this->Timesheet_model->leave_date_check( $user_id, $attendance_date );
-      $leave_arr       = array();
-      if ( $leave_date_chck->num_rows() == 1 ) {
-          $leave_date = $this->Timesheet_model->leave_date( $user_id, $attendance_date );
-          $begin1     = new DateTime( $leave_date[ 0 ]->from_date );
-          $end1       = new DateTime( $leave_date[ 0 ]->to_date );
-          $end1       = $end1->modify( '+1 day' );
-          
-          $interval1  = new DateInterval( 'P1D' );
-          $daterange1 = new DatePeriod( $begin1, $interval1, $end1 );
-          
-          foreach ( $daterange1 as $date1 ) {
-              $leave_arr[] = $date1->format( "Y-m-d" );
-          }
-      } else {
-          $leave_arr[] = '99-99-99';
-      }
-      $office_shift = $this->Timesheet_model->read_office_shift_information( $office_shift_id );
-      $check        = $this->Timesheet_model->attendance_first_in_check( $user_id, $attendance_date );
-      // get holiday>events
-      if ( $office_shift[ 0 ]->monday_in_time == '' && $day == 'Monday' ) {
-          $status = 'H';
-          $pcount += 0;
-          //$acount += 0;
-      } else if ( $office_shift[ 0 ]->tuesday_in_time == '' && $day == 'Tuesday' ) {
-          $status = 'H';
-          $pcount += 0;
-          //$acount += 0;
-      } else if ( $office_shift[ 0 ]->wednesday_in_time == '' && $day == 'Wednesday' ) {
-          $status = 'H';
-          $pcount += 0;
-          //$acount += 0;
-      } else if ( $office_shift[ 0 ]->thursday_in_time == '' && $day == 'Thursday' ) {
-          $status = 'H';
-          $pcount += 0;
-          //$acount += 0;
-      } else if ( $office_shift[ 0 ]->friday_in_time == '' && $day == 'Friday' ) {
-          $status = 'H';
-          $pcount += 0;
-          $hcount += 1;
-          //$acount += 0;
-      } else if ( $office_shift[ 0 ]->saturday_in_time == '' && $day == 'Saturday' ) {
-          $status = 'H';
-          $pcount += 0;
-          $hcount += 1;
-          //$acount -= 1;
-      } else if ( $office_shift[ 0 ]->sunday_in_time == '' && $day == 'Sunday' ) {
-          $status = 'H';
-          $pcount += 0;
-          //$acount -= 1;
-      } else if ( in_array( $attendance_date, $holiday_arr ) ) { // holiday
-          $status = 'H';
-          $pcount += 0;
-          $hcount += 1;
-          //$acount += 0;
-      } else if ( in_array( $attendance_date, $leave_arr ) ) { // on leave
-          $status = 'L';
-          $pcount += 0;
-          $lcount += 1;
-          //	$acount += 0;
-      } else if ( $check->num_rows() > 0 ) {
-          $pcount += 1;
-          //$acount -= 1;
-      } else {
-          $status = 'A';
-          //$acount += 1;
-          $pcount += 0;
-          // set to present date
-          $iattendance_date = strtotime( $attendance_date );
-          $icurrent_date    = strtotime( date( 'Y-m-d' ) );
-          if ( $iattendance_date <= $icurrent_date ) {
-              $acount += 1;
-          } else {
-              $acount += 0;
-          }
-      }
-  endfor;
+  $datep        = date( "Y-m-d");
+  $date        = date( "Y-m-01");
+  $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
+  $leave_stutas  = $this->Salary_model->leave_count_status($userid, $date , $datep);
 ?>
 <style>
 .info-box2 {
@@ -230,14 +57,8 @@
     font-weight: bold;
     border-radius: 0px 0px 10px 10px;
     border-top: 2px solid black;
-
-
 }
 </style>
-
-
-
-
 <?php 
 $session = $this->session->userdata('username');
 $user_info = $this->Exin_model->read_user_info($session['user_id']);
@@ -315,10 +136,6 @@ if(!is_null($role_user)){
   </div>
   <!-- /.col --> 
   <?php } ?>
-
-
-
-
   <!-- box start -->
           <div class="col-xl-6 col-md-4 col-12 hr-mini-state">
             <div class="info-box2 hrsalle-mini-stat"> 
@@ -329,28 +146,28 @@ if(!is_null($role_user)){
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Available Earn Leave : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $earn_leave_have ?></p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo $leave_calel['qty'] ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Available Sick Leave : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $sick_leave_have ?></p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo $leave_calsl['qty'] ?></p>
                 </div>
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Used Earn Leave : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $totalLeavesInMonth_el ?></p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo (12-($leave_calel['qty']))?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Used Sick Leave : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $totalLeavesInMonth_sl ?></p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo (4-($leave_calsl['qty'])) ?></p>
                 </div>
               </div>
                 <a  href="<?php echo site_url('admin/timesheet/leave/');?>">
                   <div class="col-md-12 box_footer" >
                       
-                      <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">Manage Leaves <span class="pull-right-container">  <i class="fa fa-angle-right"></i> </span></p>
+                      <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">Request Leave <span class="pull-right-container">  <i class="fa fa-angle-right"></i> </span></p>
                     
                   </div>
                 </a>
@@ -367,23 +184,23 @@ if(!is_null($role_user)){
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">(Present : Absent):</p>
-                  <p style="margin: 0;" class="col-md-4">(<?php echo $pcount;?>: <?php echo $acount;?>)</p>
+                  <p style="margin: 0;" class="col-md-4">(<?php echo $present_stutas->attend;?>: <?php echo $present_stutas->absent;?>)</p>
                 </div>
               
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Leave : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $lcount;?></p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo ($leave_stutas->el)+($leave_stutas->sl);?></p>
                 </div>
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Holiday : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $hcount ?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Holiday + weekend  : </p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo ($present_stutas->holiday)+($present_stutas->weekend) ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Late : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $salaryp->late_count ?></p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo $present_stutas->late_status ?></p>
                 </div>
               </div>
                 <a  href="<?php echo site_url('admin/timesheet/timecalendar/');?>">
@@ -400,35 +217,35 @@ if(!is_null($role_user)){
   <!-- box start -->
           <div class="col-xl-6 col-md-4 col-12 hr-mini-state">
             <div class="info-box2 hrsalle-mini-stat"> 
-              <p class="box_titel">Selary of <?=$lastMonthName?></p>
+              <p class="box_titel">Selary of <?=$monthName?></p>
               <div class="contentbox"> 
                 
                 
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Salary : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo ( $salary->basic_salary) ?></p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo ( $lastmonthsalaryy->basic_salary) ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Pay Salary : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo ( $salary->grand_net_salary + $salary->modify_salary) ?></p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo ( $lastmonthsalaryy->grand_net_salary + $lastmonthsalaryy->modify_salary) ?></p>
                 </div>
                
                 <div class="col-md-12" style=" background-color: #e3eaf1; margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Deduct : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo ( $salary->late_deduct + $salary->absent_deduct) ?></p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo ( $lastmonthsalaryy->late_deduct + $lastmonthsalaryy->absent_deduct) ?></p>
                   
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Working Day:</p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo ($salary->present)+($salary->holiday)+($salary->weekend) ?></p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo ($lastmonthsalaryy->present)+($lastmonthsalaryy->holiday)+($lastmonthsalaryy->weekend) ?></p>
                   
                 </div>
               </div>
-              <a onclick="payslip('<?=$founddate ?>','<?=$userid ?>','1')">
+              <a onclick="payslip('<?=$lastmont ?>','<?=$userid ?>','1')">
                   <div class="col-md-12 box_footer">
                       
                       <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">View Payslip <span class="pull-right-container">  <i class="fa fa-angle-right"></i> </span></p>
@@ -440,15 +257,6 @@ if(!is_null($role_user)){
           </div>
   <!-- box end -->
  
-
-
-
-
-
-
-
-
-
   <!-- <?php if(in_array('46',$role_resources_ids)) { ?>
   <div class="clearfix visible-sm-block"></div>
   <div class="col-xl-6 col-md-3 col-12 hr-mini-state"> <a class="text-muted" href="<?php echo site_url('admin/timesheet/leave/');?>">
