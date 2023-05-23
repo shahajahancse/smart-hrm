@@ -28,26 +28,84 @@ class Inventory extends MY_Controller {
 		// $this->load->helper('string');
 	}
 
-	public function index()
+	// add requisition for parches product
+	public function index($id = null)
 	{
+	
+	
+
 		$session = $this->session->userdata('username');
+		//  dd($session);
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
+		if(isset($_POST['btn'])){
 
-		$data['breadcrumbs'] = 'Inventory';
-		$data['path_url'] = 'inventory';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
+			$ids=$this->Inventory_model->save('products_requisitions', ['user_id'=>$session['user_id']]);
+			$last_id=$this->db->insert_id();
 
-		if(!empty($session)){ 
-			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/');
+			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
+				$requisition_data=[ 
+									'cat_id'		 => $_POST['cat_id'][$i],
+									'sub_cate_id'	 => $_POST['sub_cate_id'][$i],
+									'product_id'	 => $_POST['product_id'][$i],
+									'quantity'		 => $_POST['quantity'][$i],
+									'requisition_id' => $last_id,
+								  ];
+								  
+				if ($hid = $this->input->post('hidden_id')) {
+					$this->db->where('id', $hid)->update('products_requisition_details', $requisition_data);
+					$this->session->set_flashdata('success', 'Successfully Updated Done');
+				} else {
+					if($this->Inventory_model->save('products_requisition_details', $requisition_data)){
+						$this->session->set_flashdata('success', 'Successfully Insert Done');
+					} else {
+						$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+					}
+				}		
+		    }
+			redirect('admin/inventory/index');	
+		}				
+
+        //Dropdown
+		$data['title'] 			= 'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Inventory';
+		$data['path_url'] 		= 'inventory';
+	    $data['categorys']		= $this->db->get("products_categories")->result();
+	    $data['products'] 		= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		// dd($data['products']);
+	    $data['results'] 		= $this->Inventory_model->product_list();
+	    $data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
+	    $data['units'] 			= $this->db->get("product_unit")->result();
+	    $data['col'] 			= $id;
+	    $data['user_role_id'] 	= $session['role_id'];
+		if ($id != null) {
+			$data['row'] 		= $this->db->where('id',$id)->get("products")->row();
 		}
-
+		$data['subview'] 		= $this->load->view("admin/inventory/index", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
+	// public function index()
+	// {
+	// 	$session = $this->session->userdata('username');
+	// 	if(empty($session)){ 
+	// 		redirect('admin/');
+	// 	}
+	// 	$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
+
+	// 	$data['breadcrumbs'] = 'Inventory';
+	// 	$data['path_url'] = 'inventory';
+	// 	$role_resources_ids = $this->Xin_model->user_role_resource();
+
+	// 	if(!empty($session)){ 
+	// 		$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
+	// 		$this->load->view('admin/layout/layout_main', $data); //page load
+	// 	} else {
+	// 		redirect('admin/');
+	// 	}
+
+	// }
 
 	public function purchase($id = null)
 	{
@@ -322,6 +380,7 @@ class Inventory extends MY_Controller {
 		$data['path_url'] 	 = 'inventory';
 		if($session['role_id']==1){
 		$data['results']	 = $this->Inventory_model->requisition_details($id);
+		$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 	    $data['status']      = $this->db->select('status')
 										// ->where('user_id',$id)
 										->where('id',$id)
@@ -338,37 +397,38 @@ class Inventory extends MY_Controller {
 		$data['subview'] 	 = $this->load->view("admin/inventory/purchase_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
-
-	public function purchase_approved($id,$id2){
+// purchas aproved by 
+	// public function purchase_approved($id,$id2){
 		
 		
-         $all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->row();
+    //      $all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->row();
 		 
-		  $d1=$this->db->where('id',$all_detail->product_id)->get('products')->row();
-        //   dd($d1->quantity);
+		 
+	// 	  $d1=$this->db->where('id',$all_detail->product_id)->get('products')->row();
+    //     //   dd($d1->quantity);
 		  
-		  if($d1->quantity >= $all_detail->quantity){
-			// dd($all_detail->quantity);
-			  $log_user=$_SESSION['username']['user_id'];
-			// dd($log_user);
-			 $approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
-			 $approved = $this->db->where('requisition_id',$id)->update('products_requisition_details',['approved_qty'=>$id2]);
-			 $this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
-		      if($approved){
-				   $this->session->set_flashdata('success', 'Approved status updated successfully');
-		           redirect("admin/inventory/purchase","refresh");
-		      }
+	// 	  if($d1->quantity >= $all_detail->quantity){
+	// 		// dd($all_detail->quantity);
+	// 		  $log_user=$_SESSION['username']['user_id'];
+	// 		// dd($log_user);
+	// 		 $approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
+	// 		 $approved = $this->db->where('requisition_id',$id)->update('products_requisition_details',['approved_qty'=>$id2]);
+	// 		 $this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
+	// 	      if($approved){
+	// 			   $this->session->set_flashdata('success', 'Approved status updated successfully');
+	// 	           redirect("admin/inventory/purchase","refresh");
+	// 	      }
 
 
-		  }else{
-			  $this->session->set_flashdata('warning', 'Product Quantity is Biger.');
-			  redirect("admin/inventory/purchase","refresh");
-		  }
-		// dd($id2);
+	// 	  }else{
+	// 		  $this->session->set_flashdata('warning', 'Product Quantity is Biger.');
+	// 		  redirect("admin/inventory/purchase","refresh");
+	// 	  }
+	// 	// dd($id2);
 
 		 
 		
-	}
+	// }
 
 	public function purchase_rejected($id){
 		// dd($id);
@@ -401,10 +461,10 @@ class Inventory extends MY_Controller {
 
 
 
-	
-	
+	//this function we are using to approved direct and edit approved also
 
 	public function persial_approved($id){
+		
 	
 		$all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->result();
 		foreach($all_detail as $key=>$value){
