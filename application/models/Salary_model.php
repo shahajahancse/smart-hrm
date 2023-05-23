@@ -320,6 +320,7 @@ class Salary_model extends CI_Model {
             sp.sick_leave,
             sp.late_count,
             sp.late_deduct,
+            sp.d_day,
             sp.absent_deduct,
             sp.other_payment as extra_pay,
             sp.modify_salary,

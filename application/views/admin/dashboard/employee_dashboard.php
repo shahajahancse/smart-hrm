@@ -1,3 +1,9 @@
+
+
+
+
+
+
 <?php
     // Get the current month
     $currentMonth = date( 'm' );
@@ -17,6 +23,7 @@
         
     }
     $founddate = $datepass->format( 'Y-m' );
+    
 
 
     $lastMonthName = $datepass->format( 'F' );
@@ -50,6 +57,13 @@
 <?php
   $salar  = $this->Salary_model->salary_sheet_excel( $founddate, $userid, 1 );
   $salary = $salar[ 0 ];
+  $datep = date( "Y-m" );
+  $salarp  = $this->Salary_model->salary_sheet_excel( '2023-05', $userid, 1 );
+  
+  $salaryp = $salarp[ 0 ];
+
+
+  
 
 ?>
 
@@ -186,9 +200,11 @@
     margin-bottom: 20px;
     box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    padding: 0 !important;
     color: #333;
     font-family: Arial, sans-serif;
     transition: transform 0.3s ease;
+    border: 1px solid black;
 }
 .contentbox{
 
@@ -201,8 +217,21 @@
     padding: 4px;
     text-align: center;
     font-weight: bold;
-    background-color: #72b2d8;
+    
     border-radius: 10px 10px 0px 0px;
+    border-bottom: 2px solid black;
+}
+.box_footer{
+    font-size: 13px;
+    margin-bottom: 0;
+    color: #251e1e;
+    padding: 3px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 0px 0px 10px 10px;
+    border-top: 2px solid black;
+
+
 }
 </style>
 
@@ -319,7 +348,7 @@ if(!is_null($role_user)){
                 </div>
               </div>
                 <a  href="<?php echo site_url('admin/timesheet/leave/');?>">
-                  <div class="col-md-12" style="padding: 6px;background: #72b2d8;height: 35px;border-radius: 0px 0px 10px 10px;">
+                  <div class="col-md-12 box_footer" >
                       
                       <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">Manage Leaves <span class="pull-right-container">  <i class="fa fa-angle-right"></i> </span></p>
                     
@@ -337,27 +366,28 @@ if(!is_null($role_user)){
                 
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Present : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $pcount;?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8">(Present : Absent):</p>
+                  <p style="margin: 0;" class="col-md-4">(<?php echo $pcount;?>: <?php echo $acount;?>)</p>
                 </div>
+              
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Absent : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $acount;?></p>
-                </div>
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Leave : </p>
                   <p style="margin: 0;" class="col-md-4"><?php echo $lcount;?></p>
                 </div>
-                <div class="col-md-12" style="margin: 2px; padding: 2px;">
+                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Holiday : </p>
                   <p style="margin: 0;" class="col-md-4"><?php echo $hcount ?></p>
                 </div>
+                <div class="col-md-12" style="margin: 2px; padding: 2px;">
+                  
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Late : </p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo $salaryp->late_count ?></p>
+                </div>
               </div>
                 <a  href="<?php echo site_url('admin/timesheet/timecalendar/');?>">
-                  <div class="col-md-12" style="padding: 6px;background: #72b2d8;height: 35px;border-radius: 0px 0px 10px 10px;">
+                  <div class="col-md-12 box_footer">
                       
                       <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">View attendance calendar <span class="pull-right-container">  <i class="fa fa-angle-right"></i> </span></p>
                     
@@ -376,36 +406,35 @@ if(!is_null($role_user)){
                 
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Grand Salary : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo ( $salary->grand_net_salary + $salary->modify_salary) ?></p>
-                </div>
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Basic Salary : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $salary->basic_salary ?></p>
-                  
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Salary : </p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo ( $salary->basic_salary) ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
+                  
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Pay Salary : </p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo ( $salary->grand_net_salary + $salary->modify_salary) ?></p>
+                </div>
+               
+                <div class="col-md-12" style=" background-color: #e3eaf1; margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;" class="col-md-8">Deduct : </p>
                   <p style="margin: 0;" class="col-md-4"><?php echo ( $salary->late_deduct + $salary->absent_deduct) ?></p>
                   
                 </div>
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Net Salary : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $salary->net_salary ?></p>
-                  
-                </div>
-
-                
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8"> Modified salary : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $salary->modify_salary ?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Working Day:</p>
+                  <p style="margin: 0;" class="col-md-4"><?php echo ($salary->present)+($salary->holiday)+($salary->weekend) ?></p>
+                  
                 </div>
-               
               </div>
+              <a onclick="payslip('<?=$founddate ?>','<?=$userid ?>','1')">
+                  <div class="col-md-12 box_footer">
+                      
+                      <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">View Payslip <span class="pull-right-container">  <i class="fa fa-angle-right"></i> </span></p>
+                    
+                  </div>
+                </a>
                
             </div>
           </div>
@@ -946,3 +975,41 @@ if($attendances->num_rows() < 1) {
 	margin-top:5px !important;
 }
 </style>
+
+<script>
+  function payslip(date,userid,s){
+
+      // alert(csrf_token); return;
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+
+
+     var salary_month = date;
+
+      status = s;
+      
+
+      var sql = userid;
+
+       var data = "salary_month="+salary_month+"&status="+status+'&sql='+sql+"&excel="+0;
+  
+      // console.log(data); return;
+      url = base_url + "/payslip";
+      ajaxRequest.open("POST", url, true);
+      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+      ajaxRequest.send(data);
+
+      ajaxRequest.onreadystatechange = function(){
+        if(ajaxRequest.readyState == 4){
+          // console.log(ajaxRequest);
+          var resp = ajaxRequest.responseText;
+          console.log(resp);
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1200,height=800');
+          a.document.write(resp);
+        }
+      }
+    }
+
+
+
+</script>
