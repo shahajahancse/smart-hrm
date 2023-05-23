@@ -36,6 +36,7 @@ $get_animate = $this->Xin_model->get_content_animate();
                 <th class="text-center" >Sub Category</th>
                 <th class="text-center" >Product Name</th>
                 <th class="text-center" >Quantity</th>
+                <th class="text-center" > Apv Quantity</th>
           </tr>
         </thead>
         <tbody>
@@ -47,6 +48,7 @@ $get_animate = $this->Xin_model->get_content_animate();
                 <td><?php echo $row->sub_cate_name?></td>
                 <td><?php echo $row->product_name?></td>
                 <td><?php echo $row->quantity?></td>
+                <td><?php echo $row->approved_qty?></td>
             </tr>
             <?php }?>
         </tbody>

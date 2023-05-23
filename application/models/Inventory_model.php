@@ -75,6 +75,7 @@
 								products_sub_categories.sub_cate_name,
 								products.product_name,
 								products_requisition_details.quantity,
+								products_requisition_details.approved_qty,
 							")
 			->from("products_categories")
 			->from("products_sub_categories")

@@ -47,7 +47,7 @@
   </div>
 <?php endif; ?> 
 <script>
-  $(function() {$("#flash_message").hide(1000);});
+  $(function() {$("#flash_message").hide(2000);});
 </script>  
 <?php if($this->session->flashdata('warning')):?>
   <div class="alert alert-warning"id="flash_message1">
@@ -55,7 +55,7 @@
   </div>
 <?php endif; ?> 
 <script>
-  $(function() {$("#flash_message1").hide(1000);});
+  $(function() {$("#flash_message1").hide(2000);});
 </script> 
 <?php }?>
 

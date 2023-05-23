@@ -348,8 +348,11 @@ class Inventory extends MY_Controller {
 		  
 		  if($d1->quantity >= $all_detail->quantity){
 			// dd($all_detail->quantity);
+			  $log_user=$_SESSION['username']['user_id'];
+			// dd($log_user);
 			 $approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
 			 $approved = $this->db->where('requisition_id',$id)->update('products_requisition_details',['approved_qty'=>$id2]);
+			 $this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
 		      if($approved){
 				   $this->session->set_flashdata('success', 'Approved status updated successfully');
 		           redirect("admin/inventory/purchase","refresh");
@@ -368,6 +371,8 @@ class Inventory extends MY_Controller {
 
 	public function purchase_rejected($id){
 		// dd($id);
+		$log_user=$_SESSION['username']['user_id'];
+		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
 		$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>4]);
 		if($approved){
 			$this->session->set_flashdata('warning', ' Requsition Status Rejected .');
@@ -408,11 +413,14 @@ class Inventory extends MY_Controller {
 		
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
+		// dd($id);
 		// dd($d1[1]->quantity);
 		foreach($d1 as $k=>$v){
 			
 			 if($d1[$k]->quantity >= $quantity[$k]) {
 				 foreach($quantity as $key=>$value){
+					$log_user=$_SESSION['username']['user_id'];
+					$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
 
 				   $this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); }
 
