@@ -340,6 +340,7 @@ class Inventory extends MY_Controller {
 
 	public function purchase_approved($id,$id2){
 		
+		
          $all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->row();
 		 
 		  $d1=$this->db->where('id',$all_detail->product_id)->get('products')->row();
@@ -348,6 +349,7 @@ class Inventory extends MY_Controller {
 		  if($d1->quantity >= $all_detail->quantity){
 			// dd($all_detail->quantity);
 			 $approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
+			 $approved = $this->db->where('requisition_id',$id)->update('products_requisition_details',['approved_qty'=>$id2]);
 		      if($approved){
 				   $this->session->set_flashdata('success', 'Approved status updated successfully');
 		           redirect("admin/inventory/purchase","refresh");
@@ -412,7 +414,7 @@ class Inventory extends MY_Controller {
 			 if($d1[$k]->quantity >= $quantity[$k]) {
 				 foreach($quantity as $key=>$value){
 
-				   $this->db->where('id',$r_did[$key])->update('products_requisition_details',['quantity'=>$value]); }
+				   $this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); }
 
 			 } else{
 				$this->session->set_flashdata('warning', 'Approved  Quantity is Biger');
