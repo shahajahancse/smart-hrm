@@ -570,7 +570,7 @@ if($attendances->num_rows() < 1) {
 	$bgatt = 'bg-success';
 }
 ?>
-<div class="row <?php echo $get_animate;?>">
+<!-- <div class="row <?php echo $get_animate;?>">
   <div class="col-md-4">
     <div class="nav-tabs-custom">
       <ul class="nav nav-tabs">
@@ -580,7 +580,6 @@ if($attendances->num_rows() < 1) {
       <div class="tab-content">
         <div class="tab-pane active" id="tab_1">
           <div class="box-widget widget-user"> 
-            <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="widget-user-header <?php echo $bgatt;?> bg-darken-2">
               <h3 class="widget-user-username"><?php echo $user_info[0]->first_name. ' ' .$user_info[0]->last_name;?> </h3>
               <h5 class="widget-user-desc"><?php echo $designation_name;?></h5>
@@ -593,7 +592,7 @@ if($attendances->num_rows() < 1) {
                     <p class="text-muted pb-0-5"><?php echo $this->lang->line('dashboard_last_login');?>: <?php echo $this->Xin_model->set_date_format($user_info[0]->last_login_date).' '.$last_login->format('h:i a');?></p>
                     <p class="text-muted pb-0-5"><?php echo $office_shift;?></p>
                   </div>
-                  <!-- /.description-block --> 
+                  
                 </div>
               </div>
               <div class="row">
@@ -620,10 +619,8 @@ if($attendances->num_rows() < 1) {
                       <input type="hidden" value="<?php echo $dat[0]->time_attendance_id;?>" name="time_id" id="time_id">
                       <div class="row">
                         <div class="col-md-6">
-                          <!-- <button class="btn btn-success btn-block text-uppercase" disabled="disabled" type="submit" id="clock_btn"><i class="fa fa-arrow-circle-right"></i> <?php echo $this->lang->line('dashboard_clock_in');?></button> -->
                         </div>
                         <div class="col-md-6">
-                          <!-- <button class="btn btn-danger btn-block text-uppercase" type="submit" id="clock_btn"><i class="fa fa-arrow-circle-left"></i> <?php echo $this->lang->line('dashboard_clock_out');?></button> -->
                         </div>
                       </div>
                       <?php } ?>
@@ -641,10 +638,9 @@ if($attendances->num_rows() < 1) {
               </div>
               <?php } ?>
             </div>
-            <!-- /.row --> 
           </div>
         </div>
-        <!-- /.tab-pane -->
+    
         <div class="tab-pane" id="tab_2">
 
           <div class="">
@@ -679,13 +675,10 @@ if($attendances->num_rows() < 1) {
             </div>
           </div>
         </div>
-        <!-- /.tab-pane --> 
       </div>
-      <!-- /.tab-content --> 
     </div>
-    <!-- Widget: user widget style 1 --> 
   </div>
-  <!-- /.widget-user -->
+  
   <?php if(in_array('45',$role_resources_ids)) { ?>
   <?php //if($system[0]->module_projects_tasks=='true'){?>
   <div class="col-xl-8 col-lg-8">
@@ -852,10 +845,10 @@ if($attendances->num_rows() < 1) {
     </div>
   </div>
   <?php } ?>
-</div>
+</div> -->
 <!--/ Stats --> 
 <?php if(in_array('44',$role_resources_ids)) { ?>
-<div class="row match-height">
+<div style="margin-top: 15px;" class="row match-height">
   <?php if($system[0]->module_projects_tasks=='true'){?>
   <div class="col-xl-8 col-lg-8">
     <div class="box">
