@@ -59,7 +59,7 @@ class Inventory extends MY_Controller {
 		}
 		if(isset($_POST['btn'])){
 
-			$ids=$this->Inventory_model->save('requisitions', ['user_id'=>$session['user_id']]);
+			$ids=$this->Inventory_model->save('products_requisitions', ['user_id'=>$session['user_id']]);
 			$last_id=$this->db->insert_id();
 
 			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
@@ -72,10 +72,10 @@ class Inventory extends MY_Controller {
 								  ];
 								  
 				if ($hid = $this->input->post('hidden_id')) {
-					$this->db->where('id', $hid)->update('requisition_details', $requisition_data);
+					$this->db->where('id', $hid)->update('products_requisition_details', $requisition_data);
 					$this->session->set_flashdata('success', 'Successfully Updated Done');
 				} else {
-					if($this->Inventory_model->save('requisition_details', $requisition_data)){
+					if($this->Inventory_model->save('products_requisition_details', $requisition_data)){
 						$this->session->set_flashdata('success', 'Successfully Insert Done');
 					} else {
 						$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
@@ -324,7 +324,7 @@ class Inventory extends MY_Controller {
 	    $data['status']      = $this->db->select('status')
 										// ->where('user_id',$id)
 										->where('id',$id)
-										->get('requisitions')
+										->get('products_requisitions')
 										->row()->status;
 										// dd($data['results']);
 										
@@ -332,6 +332,7 @@ class Inventory extends MY_Controller {
 		else{
 			$data['results']	 = $this->Inventory_model->req_details_cat_wise($id);
 		}
+		
 	    // $data['user_id'] 	 = $id;
 		$data['subview'] 	 = $this->load->view("admin/inventory/purchase_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
@@ -339,14 +340,14 @@ class Inventory extends MY_Controller {
 
 	public function purchase_approved($id,$id2){
 		
-         $all_detail=$this->db->where('requisition_id',$id)->get('requisition_details')->row();
+         $all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->row();
 		 
 		  $d1=$this->db->where('id',$all_detail->product_id)->get('products')->row();
         //   dd($d1->quantity);
 		  
 		  if($d1->quantity >= $all_detail->quantity){
 			// dd($all_detail->quantity);
-			 $approved = $this->db->where('id',$id)->update('requisitions',['status'=>2]);
+			 $approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
 		      if($approved){
 				   $this->session->set_flashdata('success', 'Approved status updated successfully');
 		           redirect("admin/inventory/purchase","refresh");
@@ -365,7 +366,7 @@ class Inventory extends MY_Controller {
 
 	public function purchase_rejected($id){
 		// dd($id);
-		$approved = $this->db->where('id',$id)->update('requisitions',['status'=>4]);
+		$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>4]);
 		if($approved){
 			$this->session->set_flashdata('warning', ' Requsition Status Rejected .');
 		 redirect("admin/inventory/purchase","refresh");
@@ -397,7 +398,7 @@ class Inventory extends MY_Controller {
 
 	public function persial_approved($id){
 	
-		$all_detail=$this->db->where('requisition_id',$id)->get('requisition_details')->result();
+		$all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->result();
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
 			
@@ -411,7 +412,7 @@ class Inventory extends MY_Controller {
 			 if($d1[$k]->quantity >= $quantity[$k]) {
 				 foreach($quantity as $key=>$value){
 
-				   $this->db->where('id',$r_did[$key])->update('requisition_details',['quantity'=>$value]); }
+				   $this->db->where('id',$r_did[$key])->update('products_requisition_details',['quantity'=>$value]); }
 
 			 } else{
 				$this->session->set_flashdata('warning', 'Approved  Quantity is Biger');
@@ -420,7 +421,7 @@ class Inventory extends MY_Controller {
 
 			
 		}
-		 $approved = $this->db->where('id',$id)->update('requisitions',['status'=>2]);
+		 $approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
 		 if($approved){
 					$this->session->set_flashdata('success', 'Updated Successfully.');
 				 redirect("admin/inventory/purchase","refresh");
@@ -453,7 +454,7 @@ class Inventory extends MY_Controller {
 
 	public function delete_requsiton_item($id){
 		
-		$approved = $this->db->where('id',$id)->delete('requisition_details');
+		$approved = $this->db->where('id',$id)->delete('products_requisition_details');
 		if($approved){
 			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
 		 redirect("admin/inventory/purchase","refresh");

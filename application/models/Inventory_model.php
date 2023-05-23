@@ -37,28 +37,28 @@
 		if($role_id==4){
 			$this->db->select("products_categories.category_name,
 							   products_categories.id as cat_id,
-							   requisitions.user_id,
-							   requisitions.status,
-							   requisition_details.created_at,
+							   products_requisitions.user_id,
+							   products_requisitions.status,
+							   products_requisition_details.created_at,
 							   requisitions.created_at,
-							   requisitions.id")
+							   products_requisitions.id")
 					 ->from("products_categories")
-					 ->from("requisitions")
-					 ->from("requisition_details")
+					 ->from("products_requisitions")
+					 ->from("products_requisition_details")
 					 ->from("xin_employees")
-					 ->where("products_categories.id = requisition_details.cat_id")	
-					 ->where("requisitions.id = requisition_details.requisition_id")	
-					 ->where("requisitions.user_id = $id")
-					 ->group_by('requisition_details.cat_id');
+					 ->where("products_categories.id = products_requisition_details.cat_id")	
+					 ->where("products_requisitions.id = products_requisition_details.requisition_id")	
+					 ->where("products_requisitions.user_id = $id")
+					 ->group_by('products_requisition_details.cat_id');
 		}
 		if($role_id==1){
-			   $this->db->select("xin_employees.first_name,xin_employees.last_name,requisitions.id,requisitions.created_at,requisitions.status,requisition_details.created_at,requisitions.user_id")
-						->from("requisition_details")
-						->from("requisitions")
+			   $this->db->select("xin_employees.first_name,xin_employees.last_name,products_requisitions.id,products_requisitions.created_at,products_requisitions.status,products_requisition_details.created_at,products_requisitions.user_id")
+						->from("products_requisition_details")
+						->from("products_requisitions")
 						->from('xin_employees')
-						->where("xin_employees.user_id = requisitions.user_id")
+						->where("xin_employees.user_id = products_requisitions.user_id")
 						//search by accordinig to requisition id 
-						->group_by('requisitions.id');
+						->group_by('products_requisitions.id');
 						// ->group_by('requisitions.user_id');
 		}
 		// dd($this->db->get()->result());
@@ -68,29 +68,29 @@
 	public  function requisition_details($id){
 		// dd($id);
 			$this->db->select(" 
-								requisition_details.id,
-								requisition_details.requisition_id,
-								requisitions.user_id,
+			                    products_requisition_details.id,
+								products_requisition_details.requisition_id,
+								products_requisitions.user_id,
 								products_categories.category_name,
 								products_sub_categories.sub_cate_name,
 								products.product_name,
-								requisition_details.quantity,
+								products_requisition_details.quantity,
 							")
 			->from("products_categories")
 			->from("products_sub_categories")
 			->from("products")
-			->from("requisitions")
-			->from("requisition_details")
+			->from("products_requisitions")
+			->from("products_requisition_details")
 			->from("xin_employees")
-			->where("products_categories.id     = requisition_details.cat_id")	
-			->where("products_sub_categories.id = requisition_details.sub_cate_id")	
-			->where("products.id 				= requisition_details.product_id")	
-			->where("requisitions.id 			= requisition_details.requisition_id")	
-			->where("xin_employees.user_id 		= requisitions.user_id")	
+			->where("products_categories.id     = products_requisition_details.cat_id")	
+			->where("products_sub_categories.id = products_requisition_details.sub_cate_id")	
+			->where("products.id 				= products_requisition_details.product_id")	
+			->where("products_requisitions.id 			= products_requisition_details.requisition_id")	
+			->where("xin_employees.user_id 		= products_requisitions.user_id")	
 			//razib
 			// ->where("requisitions.user_id 		= $id")
-			->where("requisitions.id 		= $id")
-			->group_by('requisition_details.id');
+			->where("products_requisitions.id 		= $id")
+			->group_by('products_requisition_details.id');
 			return $this->db->get()->result();
 	}
 	public  function req_details_cat_wise($id){
@@ -99,20 +99,20 @@
 								products_categories.category_name,
 								products_sub_categories.sub_cate_name,
 								products.product_name,
-								requisition_details.quantity,
-								requisitions.user_id,
+								products_requisition_details.quantity,
+								products_requisitions.user_id,
 							")
 			->from("products_categories")
 			->from("products_sub_categories")
 			->from("products")
-			->from("requisitions")
-			->from("requisition_details")
-			->where("products_categories.id     = requisition_details.cat_id")	
-			->where("products_sub_categories.id = requisition_details.sub_cate_id")	
-			->where("products.id 				= requisition_details.product_id")	
-			->where("requisitions.id 			= requisition_details.requisition_id")
-			->where("requisition_details.cat_id = $id")
-			->group_by('requisition_details.id');
+			->from("products_requisitions")
+			->from("products_requisition_details")
+			->where("products_categories.id     = products_requisition_details.cat_id")	
+			->where("products_sub_categories.id = products_requisition_details.sub_cate_id")	
+			->where("products.id 				= products_requisition_details.product_id")	
+			->where("products_requisitions.id 			= products_requisition_details.requisition_id")
+			->where("products_requisition_details.cat_id = $id")
+			->group_by('products_requisition_details.id');
 			return $this->db->get()->result();
 	}
 
