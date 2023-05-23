@@ -91,6 +91,7 @@ class Inventory extends MY_Controller {
 		$data['path_url'] 		= 'inventory';
 	    $data['categorys']		= $this->db->get("products_categories")->result();
 	    $data['products'] 		= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		// dd($data['products']);
 	    $data['results'] 		= $this->Inventory_model->product_list();
 	    $data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
 	    $data['units'] 			= $this->db->get("product_unit")->result();

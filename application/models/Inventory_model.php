@@ -58,7 +58,9 @@
 						->from('xin_employees')
 						->where("xin_employees.user_id = products_requisitions.user_id")
 						//search by accordinig to requisition id 
-						->group_by('products_requisitions.id');
+						->group_by('products_requisitions.id')
+						->order_by('products_requisitions.id', 'desc');
+						
 						// ->group_by('requisitions.user_id');
 		}
 		// dd($this->db->get()->result());
