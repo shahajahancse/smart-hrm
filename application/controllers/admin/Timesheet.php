@@ -512,7 +512,7 @@ class Timesheet extends MY_Controller {
 	public function add_leave() {
 
 
-		if($this->input->post('add_type')=='leave') {		
+			
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
 			
@@ -626,7 +626,7 @@ class Timesheet extends MY_Controller {
 			'qty' => $no_of_days,
 			'leave_attachment' => '',
 			'status' => '1',
-			'is_notify' => '1',
+			'notify_leave' => '1',
 			'is_half_day' => $leave_half_day_opt,
 			'created_at' => date('Y-m-d h:i:s'),
 			'current_year' => date('Y'),
@@ -675,15 +675,14 @@ class Timesheet extends MY_Controller {
 			} else {
 				$Return['error'] = $this->lang->line('xin_error_msg');
 			}
-			$this->output($Return);
-			exit;
-		}
+			redirect('admin/timesheet/leave');
+		
 	}
 
 	// Validate and add info in database
 	public function update_leave_status() {
 	
-		if($this->input->post('update_type')=='leave') {
+		
 			
 		$id = $this->uri->segment(4);		
 		/* Define return | here result is used to return user data and error for error message */
@@ -694,7 +693,9 @@ class Timesheet extends MY_Controller {
 			
 		$data = array(
 		'status' => $this->input->post('status'),
-		'remarks' => $qt_remarks
+		'remarks' => $qt_remarks,
+		'notify_leave' => 1
+
 		);
 		
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
@@ -760,9 +761,8 @@ class Timesheet extends MY_Controller {
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
 		}
-		$this->output($Return);
-		exit;
-		}
+		redirect('admin/timesheet/leave');
+		
 	}
 	
 	
@@ -783,7 +783,7 @@ class Timesheet extends MY_Controller {
 			redirect('admin/timesheet/leave');
 		}
 		$edata = array(
-			'is_notify' => 0,
+			'notify_leave' => 0,
 		);
 		$this->Timesheet_model->update_leave_record($edata,$leave_id);
 		// get leave types
