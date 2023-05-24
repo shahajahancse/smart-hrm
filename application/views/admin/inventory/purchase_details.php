@@ -50,7 +50,7 @@ $get_animate = $this->Xin_model->get_content_animate();
           </tr>
         </thead>
         <tbody>
-       
+     
             <?php $i=1;foreach($results as $row){?>
             <tr class="text-center">
                 <td><?php echo $i++?></td>

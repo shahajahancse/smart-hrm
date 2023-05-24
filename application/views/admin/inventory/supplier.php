@@ -10,7 +10,7 @@
 <div class="box mb-4 <?php echo $get_animate;?>">
   <div id="accordion">
     <div class="box-header with-border">
-        <h3 class="box-title">Add Requisition For Purches Product</h3>
+        <h3 class="box-title">Add Supplier Information</h3>
       <div class="box-tools pull-right"> 
         <a class="text-dark collapsed" data-toggle="collapse" href="#add_form" aria-expanded="false">
           <button type="button" class="btn btn-xs btn-primary"> <span class="ion ion-md-add"></span> <?php echo $this->lang->line('xin_add_new');?></button>
@@ -22,42 +22,22 @@
         <div class="container pt-4">
           <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
             <?php $hidden = array('user_id' => $session['user_id']);?>
-            <?php echo form_open('admin/inventory/product_purchase', $attributes, $hidden);?>
+            <?php echo form_open('admin/inventory/supplier_create', $attributes, $hidden);?>
                 <table class="table table-bordered table-sm table-striped " id="appRowDiv">
-                  <tr>
-                    
-                        <th class="text-center">Comany Name</th>
-                        <th class="text-center">Supplier Name</th>
-                        
-                  </tr>
-                   <tr>
-                   <td>
-                        <select name="cmp_id" class="form-control" id="cmp_name" required>
-                            <option id="cmp" value="">Select Company Name</option>
-                            <?php foreach($company as $cmp): ?>
-                                <option value="<?php echo $cmp->company; ?>"><?php echo $cmp->company; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </td>
-                    <td>
-                        <select name="sp_id" class="form-control" id="spl_name" required>
-                            <option id="spl" value="">Select Supplier Name</option>
-                        </select>
-                    </td>
-                      
-                   </tr>
-
-                   <!-- <?php foreach($company as $cmp){?>
-                          <option value="<?php echo $cmp->company?>"><?php echo $cmp->company?></option>
-                          <?php }?> -->
                     <tr>
-                        <th class="text-center">Category Name</th>
-                        <th class="text-center">Sub Category Name</th>
-                        <th class="text-center">Product Name</th>
-                        <th class="text-center">Quantity</th>
-                        <th class="text-center"> <button type="button" id="addRow"  class="btn btn-sm btn-success">+ Add More</button></th>
+                        <th class="text-center"> Name</th>
+                        <th class="text-center">Company Name</th>
+                        <th class="text-center">Phone</th>
+                        <th class="text-center">Address</th>
+                        <!-- <th class="text-center"> <button type="button" id="addRow"  class="btn btn-sm btn-success">+ Add More</button></th> -->
                     </tr>
-                    <tr></tr>
+                    <tr>
+                        <td class="text-center"><input type="text" name="name" class="form-control" placeholder="Enter Name" required></td>
+                        <td class="text-center"><input type="text" name="company_name" class="form-control" placeholder="Enter Company Name" required></td>
+                        <td class="text-center"><input type="text" name="phone" class="form-control" placeholder="Enter Phone" required></td>
+                        <td class="text-center"><input type="text" name="address" class="form-control" placeholder="Enter Address"></td>
+                       
+                    </tr>
                 </table>
                 <!-- <input type="submit" name="btn" class="" value="Save"> -->
                 <button name="btn" type="submit" class="btn btn-primary btn-sm text-right" style="float: right;margin-right: 92px;margin-bottom: 20px;" > <i class="fa fa-check-square-o"></i><?php echo $this->lang->line('xin_save');?></button>
@@ -89,7 +69,7 @@
 
 <div class="box <?php echo $get_animate;?>" style="margin-top:20px">
   <div class="box-header with-border">
-    <h3 class="box-title">Requisition List</h3>
+    <h3 class="box-title">Supplier Information List</h3>
   </div>
   <div class="box-body">
     <div class="box-datatable table-responsive" >
@@ -99,15 +79,15 @@
           <tr>
               <th class="text-center" style="width:20px;">No.</th>
               <?php if($user_role_id==1){?>
-                <th class="text-center" style="width:100px;">Requisition By</th>
-                <th class="text-center" style="width:20px;">Status</th>
-                <th class="text-center" style="width:20px;">Request Date</th>
+                <th class="text-center" style="width:100px;">Supplier Name</th>
+                <th class="text-center" style="width:20px;">Company</th>
+                <th class="text-center" style="width:20px;">Phone</th>
                 <th class="text-center" style="width:50px;">Action</th>
               <?php }?> 
               <?php if($user_role_id==4){?>
-                <th class="text-center" style="width:100px;">Category Name</th>
-                <th class="text-center" style="width:20px;">Status</th>
-                <th class="text-center" style="width:20px;">Request Date</th>
+                <th class="text-center" style="width:100px;">Supplier Name</th>
+                <th class="text-center" style="width:20px;">Company</th>
+                <th class="text-center" style="width:20px;">Phone</th>
                 <th class="text-center" style="width:50px;">Action</th>
               <?php }?> 
           </tr>
@@ -117,24 +97,19 @@
             <tr>
               <td class="text-center"><?php echo ($key+1)."."; ?></td>
                 <?php if($user_role_id==1){?>
-                  <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
-                  <td class="text-center"><?php echo $rows->status==1?"
-                      <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
-                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
-                    ?>
-              </td>
-              <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
-                <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td>
+                  <td class="text-center"><?php echo $rows->name ?></td>
+                  <td class="text-center"><?php echo $rows->company ?></td>
+                  <td class="text-center"><?php echo $rows->phone ?></td>
+              
+                <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_detail/'.$rows->id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td>
               <?php } ?>
               <?php if($user_role_id==4){?>
-                <td class="text-center"><?php echo $rows->category_name; ?></td>
-                <td class="text-center"><?php echo $rows->status==1?"
-                      <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
-                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
-                    ?></td>
-                <td class="text-center"><?php echo $rows->created_at; ?></td>
+                
+                <td class="text-center"><?php echo $rows->name ?></td>
+                <td class="text-center"><?php echo $rows->company ?></td>
+                <td class="text-center"><?php echo $rows->phone ?></td>
                 <td class="text-center">
-                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
+                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_detail/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
                 </td>
             </tr>
           <?php }} ?>
@@ -143,15 +118,15 @@
     </div>
   </div>
 </div>
-<?php
+<!-- <?php
   $category_data = '';
   $category_data .= '<option value="">--Select One--</option>';
   $i=1;
   foreach ($categorys as $key => $value) {
     $category_data .= '<option value="'.$i++.'">'.$value->category_name.'</option>';
   }
-?>
-<script type="text/javascript">
+?> -->
+<!-- <script type="text/javascript">
    $(document).ready(function() {
       //Load First row
       addNewRow();
@@ -232,40 +207,4 @@
       });
    }
 
-    //Company Supplier
-    $(document).ready(function() {
-        // Handle change event of the company name select field
-        $('#cmp_name').change(function() {
-            var companyName = $(this).val();
-            // var url = 'fetch_suppliers.php'; // Replace with the URL to fetch suppliers based on the selected company
-            var url='<?php echo base_url('admin/inventory/get_supplier_ajax/');?>'
-            // Make an AJAX request to fetch the suppliers
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: { companyName: companyName },
-                dataType: 'json',
-                success: function(response) {
-                  // console.log(response[0]['name']);
-                    var options = '';
-                    $.each(response, function(index, supplier) {
-                    
-                        options += '<option value="' + supplier.id + '">' + supplier.name + '</option>';
-                    });
-                    $('#spl_name').html(options);
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
-                }
-            });
-        });
-    });
-
-
-   
-      //Sub Category Dropdown
-     
-
-   
-
-</script>  
+</script>   -->
