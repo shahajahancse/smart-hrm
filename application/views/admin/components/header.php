@@ -1,9 +1,15 @@
+
+
+
+
 <?php
+
   $session = $this->session->userdata('username');
   $system = $this->Xin_model->read_setting_info(1);
   $company_info = $this->Xin_model->read_company_setting_info(1);
   $user = $this->Xin_model->read_employee_info($session['user_id']);
   $theme = $this->Xin_model->read_theme_info(1);
+  
 ?>
 
 <?php $site_lang = $this->load->helper('language');?>
@@ -68,6 +74,31 @@
     }
   </style>
 
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Notification Details</h4>
+      </div>
+      <div class="modal-body">
+        <p>Name : <span id="emname"></span> </p>
+        <p>Leave Type : <span id="leaveType"></span></p>
+        <p>Applyed day : <span id="qty"></span></p>
+        <p>From Date  : <span id="fromDate"></span></p>
+        <p>To date  : <span id="toDate"></span></p>
+        <p>status  : <span id="statuss"></span></p>
+
+        <a href="" class="btn btn-primary" id="details">Details</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 <header class="main-header">
     <!-- Logo -->
     <a href="<?php echo site_url('admin/dashboard/');?>" class="logo">
@@ -91,7 +122,7 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav"> 
-          <?php  if(in_array('90',$role_resources_ids)) { 
+          <?php
             $fcount = 0;
               if($user[0]->user_role_id != 3){
                 $leaveapp = $this->Xin_model->get_notify_leave_applications();
@@ -118,7 +149,12 @@
                   <marquee>Leave : <?= count($leaveapp); ?>, Increment : <?= count($incrementapp); ?>,  Probation : <?= count($probationapp); ?> </marquee>
                 </p> -->
 
-            <?php }  ?>
+            <?php }elseif ($user[0]->user_role_id == 3) {
+              $leaveapp = $this->Xin_model->get_notify_leave_applications_by_userid($user[0]->user_id);
+              $incrementapp =[];
+              $probationapp =[];
+              $fcount = count($leaveapp) + count($incrementapp) + count($probationapp);
+            }  ?>
 
             <style>
               .lir {cursor: pointer !important;}
@@ -140,18 +176,36 @@
                     <div class="callout callout-hrsale-bg-leave callout-hrsale">
                       <p><?php echo $this->lang->line('xin_leave_notifications');?><span style="color: #d30505; padding: 4px; font-weight: bolder;"><?=count($leaveapp) ?></p>
                     </div>
+                  
                     <?php foreach($leaveapp as $row){?>
-    					        <?php $emp_info = $this->Xin_model->read_user_info($row->employee_id);?>
+
+    					        <?php 
+                         $emp_info = $this->Xin_model->read_user_info($row->employee_id);?>
                       <?php
                         if(!is_null($emp_info)){
                             $emp_name = $emp_info[0]->first_name. ' '.$emp_info[0]->last_name;
                         } else {
                             $emp_name = '--';	
                         }
+                        if($row->status==1){
+                          $statuss="Pending. Please wait";
+                        }elseif ($row->status==2) {
+                          $statuss="First Stage Approval. Please wait";
+                        }elseif ($row->status==3) {
+                          $statuss="Rejected";
+                        }elseif ($row->status==4) {
+                          $statuss="Approved";
+                        }else {
+                          $statuss="--";
+                        }
+                       
                       ?>
 
                       <li><!-- start message -->
+                      
                         <a href="<?php echo site_url('admin/timesheet/leave_details/id')?>/<?php echo $row->leave_id;?>/">
+                        <a data-toggle="modal" data-target="#myModal" data-leave_id = "<?php echo $row->leave_id ?>" data-emname = "<?php echo $emp_name ?>" data-company_id = "<?php echo $row->company_id ?>" data-employee_id = "<?php echo $row->employee_id ?>" data-department_id = "<?php echo $row->department_id ?>" data-leave_type_id = "<?php echo $row->leave_type_id ?>" data-leave_type = "<?php echo $row->leave_type ?>" data-qty = "<?php echo $row->qty ?>" data-from_date = "<?php echo $row->from_date ?>" data-to_date = "<?php echo $row->to_date ?>" data-applied_on = "<?php echo $row->applied_on ?>" data-reason = "<?php echo $row->reason ?>" data-remarks = "<?php echo $row->remarks ?>" data-status = "<?php echo $row->status ?>" data-is_half_day = "<?php echo $row->is_half_day ?>" data-notify_leave = "<?php echo $row->notify_leave ?>" data-leave_attachment = "<?php echo $row->leave_attachment ?>" data-created_at = "<?php echo $row->created_at ?>" data-current_year = "<?php echo $row->current_year ?>" >
+
                           <div class="pull-left">
                             <?php  if($emp_info[0]->profile_picture!='' && $emp_info[0]->profile_picture!='no file') {?>
                             <img src="<?php  echo base_url().'uploads/profile/'.$emp_info[0]->profile_picture;?>" alt="" id="user_avatar" 
@@ -167,6 +221,7 @@
                           </div>
                           <h4> <?php echo $emp_name;?> </h4>
                           <p>applied for leave <?php echo $this->Xin_model->set_date_format($row->applied_on);?></p>
+                          <p><?= $statuss ?></p>
                         </a>
                       </li>
                     <?php } ?>
@@ -245,7 +300,7 @@
               <?php } ?>
             </li> 
 
-          <?php } ?>
+          
 
 
 
@@ -632,4 +687,54 @@
       $('#new_desig').show();
     }
   })
+</script>
+<script>
+$(document).ready(function(){
+  $('#myModal').on('show.bs.modal', function (e) {
+    var button = $(e.relatedTarget);
+    var leaveId = button.data('leave_id');
+    var emname = button.data('emname');
+    var companyId = button.data('company_id');
+    var employeeId = button.data('employee_id');
+    var departmentId = button.data('department_id');
+    var leaveTypeId = button.data('leave_type_id');
+    var leaveType = button.data('leave_type');
+    var qty = button.data('qty');
+    var fromDate = button.data('from_date');
+    var toDate = button.data('to_date');
+    var appliedOn = button.data('applied_on');
+    var reason = button.data('reason');
+    var remarks = button.data('remarks');
+    var status = button.data('status');
+    var isHalfDay = button.data('is_half_day');
+    var notifyLeave = button.data('notify_leave');
+    var leaveAttachment = button.data('leave_attachment');
+    var createdAt = button.data('created_at');
+    var currentYear = button.data('current_year');
+    if (status == 1) {
+          statuss = "Pending";
+        } else if (status == 2) {
+          statuss = "First Stage Approval";
+        } else if (status == 3) {
+          statuss = "Rejected";
+        } else if (status == 4) {
+          statuss = "Approved";
+        } else {
+          statuss = "--";
+    }
+
+    $('#emname').text(emname);
+    $('#leaveType').text(leaveType);
+    $('#qty').text(qty);
+    $('#fromDate').text(fromDate);
+    $('#toDate').text(toDate);
+    $('#appliedOn').text(appliedOn);
+    $('#reason').text(reason);
+    $('#remarks').text(remarks);
+    $('#statuss').text(statuss);
+    var url = "<?php echo site_url('admin/timesheet/leave_details/id')?>/" + leaveId + "/";
+    var button = document.getElementById("details");
+    button.href = url; 
+  });
+});
 </script>
