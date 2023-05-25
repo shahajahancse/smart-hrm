@@ -365,8 +365,10 @@ console.log(user_roll);
 checkbox.addEventListener('change', function() {
   if (this.checked) {
     document.getElementById('day').value = 0.5;
+    day.setAttribute('disabled', 'disabled');
 } else{
   document.getElementById('day').value = 1;
+  day.removeAttribute('disabled', 'disabled');
 }
 });
 
