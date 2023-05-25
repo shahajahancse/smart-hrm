@@ -681,21 +681,34 @@ class Timesheet extends MY_Controller {
 
 	// Validate and add info in database
 	public function update_leave_status() {
+		
 	
 		
 			
-		$id = $this->uri->segment(4);		
+		$id = $this->uri->segment(4);
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		$remarks = $this->input->post('remarks');
 		$qt_remarks = htmlspecialchars(addslashes($remarks), ENT_QUOTES);
-			
+		$stutuss=$this->input->post('status');
+		if ($stutuss==4 ||$stutuss==3 ||$stutuss==2){
+			$notyfi_data=3;
+		}else{
+			$notyfi_data=1;
+		};
+
+
+	
+
 		$data = array(
 		'status' => $this->input->post('status'),
 		'remarks' => $qt_remarks,
-		'notify_leave' => 1
-
+		'notify_leave' => $notyfi_data,
+		'leave_type_id' => $this->input->post('leave_type'),
+		'from_date' => $this->input->post('start_date'),
+		'to_date' => $this->input->post('end_date'),
+		'qty' => $this->input->post('day')
 		);
 		
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
@@ -787,6 +800,7 @@ class Timesheet extends MY_Controller {
 		);
 		$this->Timesheet_model->update_leave_record($edata,$leave_id);
 		// get leave types
+
 		$type = $this->Timesheet_model->read_leave_type_information($result[0]->leave_type_id);
 		if(!is_null($type)){
 			$type_name = $type[0]->type_name;

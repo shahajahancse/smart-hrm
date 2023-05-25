@@ -79,7 +79,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Title</h4>
+        <h4 class="modal-title">Notification Details</h4>
       </div>
       <div class="modal-body">
         <p>Name : <span id="emname"></span> </p>
@@ -89,8 +89,7 @@
         <p>To date  : <span id="toDate"></span></p>
         <p>status  : <span id="statuss"></span></p>
 
-        <a href="" class="btn btn-primary" id="details">details</a>
-    
+        <a href="" class="btn btn-primary" id="details">Details</a>
       </div>
     </div>
   </div>
@@ -151,7 +150,7 @@
                 </p> -->
 
             <?php }elseif ($user[0]->user_role_id == 3) {
-              $leaveapp = $this->Xin_model->get_notify_leave_applications();
+              $leaveapp = $this->Xin_model->get_notify_leave_applications_by_userid($user[0]->user_id);
               $incrementapp =[];
               $probationapp =[];
               $fcount = count($leaveapp) + count($incrementapp) + count($probationapp);
