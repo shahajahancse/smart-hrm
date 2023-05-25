@@ -1,6 +1,5 @@
 <?php
-/* Leave Detail view
-*/
+
 ?>
 <?php $session = $this->session->userdata('username');?>
 <?php $user = $this->Xin_model->read_user_info($session['user_id']);?>
@@ -20,8 +19,9 @@ $leave_user = $this->Xin_model->read_user_info($employee_id);
 $department = $this->Department_model->read_department_information($user[0]->department_id);
 ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
+
 <div class="row m-b-1">
-  <div class="col-md-4">
+  <div class="col-md-5">
     <section id="decimal">
       <div class="row">
         <div class="col-md-12">
@@ -30,6 +30,9 @@ $department = $this->Department_model->read_department_information($user[0]->dep
                 <h3 class="box-title"> <?php echo $this->lang->line('xin_leave_detail');?> </h3>
               </div>
             <div class="box-body">
+            <?php $attributes = array('name' => 'update_status', 'id' => 'update_status', 'autocomplete' => 'off');?>
+				        <?php $hidden = array('user_id' => $session['user_id'], '_token_status' => $leave_id);?>
+                <?php echo form_open('admin/timesheet/update_leave_status/'.$leave_id, $attributes, $hidden);?>
                 <div class="table-responsive" data-pattern="priority-columns">
                   <table class="table table-striped m-md-b-0">
                     <tbody>
@@ -43,20 +46,37 @@ $department = $this->Department_model->read_department_information($user[0]->dep
                       </tr>
                       <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_leave_type');?></th>
-                        <td class="text-right"><?php echo $type;?></td>
+                        <td class="text-right"> 
+                          <select  id="leave_type" name="leave_type" data-plugin="select_hrm" data-placeholder="
+                            <?php echo $this->lang->line('xin_leave_type');?>">
+                            <option value="<?= $leave_type_id?> "><?php echo $type;?></option> 
+                             <?php $leaves = leave_cal($employee_id);?>
+                              <?php foreach($leaves['leaves'] as $key => $row) {  ?>
+                               <option value="<?php echo $row['id'];?>"><?php echo $row['leave_name'] .' ('.$row['qty'].' '.$this->lang->line('xin_remaining').')';?></option>
+                                <?php } ?> 
+                          </select>
+                        </td>
                       </tr>
+                     
                       <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_applied_on');?></th>
                         <td class="text-right"><?php echo $this->Xin_model->set_date_format($created_at);?></td>
                       </tr>
                       <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_start_date');?></th>
-                        <td class="text-right"><?php echo $this->Xin_model->set_date_format($from_date);?></td>
+                        <td class="text-right">
+                          <input type="date" name="start_date"  id="start_date" value="<?php echo date('Y-m-d', strtotime($this->Xin_model->set_date_format($from_date))); ?>" />
+                        </td>
                       </tr>
+
                       <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_end_date');?></th>
-                        <td class="text-right"><?php echo $this->Xin_model->set_date_format($to_date);?></td>
+                        <td class="text-right">
+                          <input type="date" name="end_date" id="end_date" value="<?php echo date('Y-m-d', strtotime($this->Xin_model->set_date_format($to_date))); ?>" />
+                        </td>
                       </tr>
+
+
                       <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_attachment');?></th>
                         <td class="text-right">
@@ -70,17 +90,18 @@ $department = $this->Department_model->read_department_information($user[0]->dep
                         <th scope="row"><?php echo $this->lang->line('xin_hrsale_total_days');?></th>
                         <td class="text-right">
                         <?php 
-						if($is_half_day == 1){
-							$leave_day_info = $this->lang->line('xin_hr_leave_half_day');
-						} else {
-							$leave_day_info = $no_of_days;
-						}
-						echo $leave_day_info;?>
+                            if($is_half_day == 1){
+                              $leave_day_info = $this->lang->line('xin_hr_leave_half_day');
+                            } else {
+                              $leave_day_info = $no_of_days;
+                            }
+                           ?>
+                           <input type="number" id="day" name="day" value="<?=$leave_day_info?>" style="width: 40px;">
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                  <div class="bs-callout-success callout-border-left callout-square callout-transparent mt-1 p-1"> <?php echo $reason;?> </div>
+                  <div style="margin: 6px;width: 90%;border: 1px solid black;padding: 5px;border-radius: 8px;" class="bs-callout-success callout-border-left callout-square callout-transparent mt-1 p-1"> <?php echo $reason;?> </div>
                 </div>
             </div>
           </div>
@@ -98,9 +119,7 @@ $department = $this->Department_model->read_department_information($user[0]->dep
               <h3 class="box-title"> <?php echo $this->lang->line('xin_update_status');?> </h3>
             </div>
             <div class="box-body">
-              <?php $attributes = array('name' => 'update_status', 'id' => 'update_status', 'autocomplete' => 'off');?>
-				        <?php $hidden = array('user_id' => $session['user_id'], '_token_status' => $leave_id);?>
-                <?php echo form_open('admin/timesheet/update_leave_status/'.$leave_id, $attributes, $hidden);?>
+             
                 <div class="row">
                   <div class="col-md-12">
                     <?php if($user[0]->user_role_id == 1) {?>
@@ -147,7 +166,7 @@ $department = $this->Department_model->read_department_information($user[0]->dep
     </section>
   </div>
 
-  <div class="col-md-4">
+  <div class="col-md-3">
     <section id="decimal">
       <div class="row">
         <div class="col-md-12">
@@ -271,3 +290,45 @@ $department = $this->Department_model->read_department_information($user[0]->dep
 <style type="text/css">
 .trumbowyg-editor { min-height:110px !important; }
 </style>
+
+<script>
+  function calculateDays() {
+    var startDate = new Date(document.getElementById('start_date').value);
+    var endDate = new Date(document.getElementById('end_date').value);
+
+    // Calculate the time difference in milliseconds
+    var timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+
+    // Calculate the number of days
+    var days = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    document.getElementById('day').value = days+1;
+
+  }
+
+  // Event listeners for date input changes
+  document.getElementById('start_date').addEventListener('change', calculateDays);
+  document.getElementById('end_date').addEventListener('change', calculateDays);
+</script>
+<script>
+
+function disableInput() {
+    var leave_type = document.getElementById('leave_type');
+    var start_date = document.getElementById('start_date');
+    var end_date = document.getElementById('end_date');
+    var day = document.getElementById('day');
+
+    leave_type.setAttribute('disabled', 'disabled');
+    start_date.setAttribute('disabled', 'disabled');
+    end_date.setAttribute('disabled', 'disabled');
+    day.setAttribute('disabled', 'disabled');
+  }
+
+var user_roll = <?= $session['role_id'] ?>;
+if (user_roll === 3) {
+      disableInput();
+    }
+
+console.log(user_roll);
+
+</script>
