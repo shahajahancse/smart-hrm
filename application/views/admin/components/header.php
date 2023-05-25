@@ -4,7 +4,9 @@
 
 <?php
 
+
   $session = $this->session->userdata('username');
+  
   $system = $this->Xin_model->read_setting_info(1);
   $company_info = $this->Xin_model->read_company_setting_info(1);
   $user = $this->Xin_model->read_employee_info($session['user_id']);
@@ -202,9 +204,17 @@
                       ?>
 
                       <li><!-- start message -->
-                      
+                      <?php
+                      $roolid=$session['role_id'];
+                      if($roolid==3){
+                      ?>
+                      <a data-toggle="modal" data-target="#myModal" data-leave_id = "<?php echo $row->leave_id ?>" data-emname = "<?php echo $emp_name ?>" data-company_id = "<?php echo $row->company_id ?>" data-employee_id = "<?php echo $row->employee_id ?>" data-department_id = "<?php echo $row->department_id ?>" data-leave_type_id = "<?php echo $row->leave_type_id ?>" data-leave_type = "<?php echo $row->leave_type ?>" data-qty = "<?php echo $row->qty ?>" data-from_date = "<?php echo $row->from_date ?>" data-to_date = "<?php echo $row->to_date ?>" data-applied_on = "<?php echo $row->applied_on ?>" data-reason = "<?php echo $row->reason ?>" data-remarks = "<?php echo $row->remarks ?>" data-status = "<?php echo $row->status ?>" data-is_half_day = "<?php echo $row->is_half_day ?>" data-notify_leave = "<?php echo $row->notify_leave ?>" data-leave_attachment = "<?php echo $row->leave_attachment ?>" data-created_at = "<?php echo $row->created_at ?>" data-current_year = "<?php echo $row->current_year ?>" >
+                        <?php
+                      }else{
+                        
+                        ?>
                         <a href="<?php echo site_url('admin/timesheet/leave_details/id')?>/<?php echo $row->leave_id;?>/">
-                        <a data-toggle="modal" data-target="#myModal" data-leave_id = "<?php echo $row->leave_id ?>" data-emname = "<?php echo $emp_name ?>" data-company_id = "<?php echo $row->company_id ?>" data-employee_id = "<?php echo $row->employee_id ?>" data-department_id = "<?php echo $row->department_id ?>" data-leave_type_id = "<?php echo $row->leave_type_id ?>" data-leave_type = "<?php echo $row->leave_type ?>" data-qty = "<?php echo $row->qty ?>" data-from_date = "<?php echo $row->from_date ?>" data-to_date = "<?php echo $row->to_date ?>" data-applied_on = "<?php echo $row->applied_on ?>" data-reason = "<?php echo $row->reason ?>" data-remarks = "<?php echo $row->remarks ?>" data-status = "<?php echo $row->status ?>" data-is_half_day = "<?php echo $row->is_half_day ?>" data-notify_leave = "<?php echo $row->notify_leave ?>" data-leave_attachment = "<?php echo $row->leave_attachment ?>" data-created_at = "<?php echo $row->created_at ?>" data-current_year = "<?php echo $row->current_year ?>" >
+                        <?php } ?>
 
                           <div class="pull-left">
                             <?php  if($emp_info[0]->profile_picture!='' && $emp_info[0]->profile_picture!='no file') {?>

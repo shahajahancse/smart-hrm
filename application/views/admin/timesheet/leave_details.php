@@ -30,7 +30,7 @@ $department = $this->Department_model->read_department_information($user[0]->dep
                 <h3 class="box-title"> <?php echo $this->lang->line('xin_leave_detail');?> </h3>
               </div>
             <div class="box-body">
-            <?php $attributes = array('name' => 'update_status', 'id' => 'update_status', 'autocomplete' => 'off');?>
+            <?php $attributes = array('name' => 'update_status', 'autocomplete' => 'off');?>
 				        <?php $hidden = array('user_id' => $session['user_id'], '_token_status' => $leave_id);?>
                 <?php echo form_open('admin/timesheet/update_leave_status/'.$leave_id, $attributes, $hidden);?>
                 <div class="table-responsive" data-pattern="priority-columns">
