@@ -690,11 +690,20 @@ class Timesheet extends MY_Controller {
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		$remarks = $this->input->post('remarks');
 		$qt_remarks = htmlspecialchars(addslashes($remarks), ENT_QUOTES);
-			
+		$stutuss=$this->input->post('status');
+		if ($stutuss==4 ||$stutuss==3 ||$stutuss==2){
+			$notyfi_data=3;
+		}else{
+			$notyfi_data=1;
+		};
+
+
+	
+
 		$data = array(
 		'status' => $this->input->post('status'),
 		'remarks' => $qt_remarks,
-		'notify_leave' => 1
+		'notify_leave' => $notyfi_data
 
 		);
 		
