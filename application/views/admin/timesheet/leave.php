@@ -12,14 +12,14 @@ $success = $this->session->flashdata('success');
       // dd($user);
 ?> 
 <?php
-if ($error) {
+if (isset($error)){
   ?>
   <div class="alert alert-danger" role="alert">
       <?php echo $error; ?>
   </div>
   <?php
 }
-if ($success) {
+if (isset($success)) {
   ?>
   <div class="alert alert-success" role="alert">
       <?php echo $success; ?>

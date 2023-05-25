@@ -19,7 +19,22 @@ $leave_user = $this->Xin_model->read_user_info($employee_id);
 $department = $this->Department_model->read_department_information($user[0]->department_id);
 ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
-
+<?php
+if (isset($error)) {
+  ?>
+  <div class="alert alert-danger" role="alert">
+      <?php echo $error; ?>
+  </div>
+  <?php
+}
+if (isset($success)) {
+  ?>
+  <div class="alert alert-success" role="alert">
+      <?php echo $success; ?>
+  </div>
+  <?php
+}
+?>
 <div class="row m-b-1">
   <div class="col-md-5">
     <section id="decimal">
@@ -96,7 +111,9 @@ $department = $this->Department_model->read_department_information($user[0]->dep
                               $leave_day_info = $no_of_days;
                             }
                            ?>
-                           <input type="number" id="day" name="day" value="<?=$leave_day_info?>" style="width: 40px;">
+                           <label for="leave_half_day">Leave Half Day</label>
+                            <input type="checkbox"  value="1" id="leave_half_day" name="leave_half_day">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                           <input type="number" id="day" name="day" value="<?=$leave_day_info?>" style="width: 60px;">
                         </td>
                       </tr>
                     </tbody>
@@ -295,6 +312,9 @@ $department = $this->Department_model->read_department_information($user[0]->dep
   function calculateDays() {
     var startDate = new Date(document.getElementById('start_date').value);
     var endDate = new Date(document.getElementById('end_date').value);
+    var checkpoint = document.getElementById('leave_half_day');
+    
+  
 
     // Calculate the time difference in milliseconds
     var timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
@@ -302,7 +322,13 @@ $department = $this->Department_model->read_department_information($user[0]->dep
     // Calculate the number of days
     var days = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-    document.getElementById('day').value = days+1;
+    document.getElementById('day').value = days + 1;
+
+    if (days+1 > 1) {
+      checkpoint.setAttribute('disabled', 'disabled');
+    } else {
+      checkpoint.removeAttribute('disabled');      
+    }
 
   }
 
@@ -310,6 +336,7 @@ $department = $this->Department_model->read_department_information($user[0]->dep
   document.getElementById('start_date').addEventListener('change', calculateDays);
   document.getElementById('end_date').addEventListener('change', calculateDays);
 </script>
+
 <script>
 
 function disableInput() {
@@ -332,3 +359,16 @@ if (user_roll === 3) {
 console.log(user_roll);
 
 </script>
+<script>
+ const checkbox = document.getElementById('leave_half_day');
+
+checkbox.addEventListener('change', function() {
+  if (this.checked) {
+    document.getElementById('day').value = 0.5;
+} else{
+  document.getElementById('day').value = 1;
+}
+});
+
+</script>
+

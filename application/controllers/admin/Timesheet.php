@@ -673,6 +673,7 @@ class Timesheet extends MY_Controller {
 		}else{
 			$notyfi_data=1;
 		};
+		
 
 
 	
@@ -684,13 +685,15 @@ class Timesheet extends MY_Controller {
 		'leave_type_id' => $this->input->post('leave_type'),
 		'from_date' => $this->input->post('start_date'),
 		'to_date' => $this->input->post('end_date'),
-		'qty' => $this->input->post('day')
+		'qty' => $this->input->post('day'),
+		'is_half_day' => $this->input->post('leave_half_day')
 		);
 		
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
 		
 		if ($result == TRUE) {
-			$Return['result'] = $this->lang->line('xin_success_leave__status_updated');
+			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
+
 			$setting = $this->Xin_model->read_setting_info(1);
 		if($setting[0]->enable_email_notification == 'yes') {
 					
@@ -747,10 +750,11 @@ class Timesheet extends MY_Controller {
 				
 				hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$user_info[0]->email,$subject,$message);
 			} }
+			redirect('admin/timesheet/leave');
 		} else {
-			$Return['error'] = $this->lang->line('xin_error_msg');
+			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
+			redirect('admin/timesheet/leave');
 		}
-		redirect('admin/timesheet/leave');
 		
 	}
 	
