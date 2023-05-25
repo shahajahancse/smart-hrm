@@ -22,7 +22,7 @@
       </div>
       <div id="add_form" class="collapse add-form 
   			<?php echo $get_animate;?>" data-parent="#accordion" style="">
-        <div class="box-body"> <?php $attributes = array('name' => 'add_leave', 'id' => 'xin-form', 'autocomplete' => 'off');?> 
+        <div class="box-body"> <?php $attributes = array('name' => 'add_leave', 'autocomplete' => 'off');?> 
           <?php $hidden = array('_user' => $session['user_id']);?> 
           <?php echo form_open('admin/timesheet/add_leave', $attributes, $hidden);?> 
             <div class="bg-white">
