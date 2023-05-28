@@ -107,13 +107,21 @@
           <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="lunch_report('Lunch in/out')">Lunch In/Out</button>
           <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="lunch_report('Lunch Late',1)">Lunch Late</button>
           <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="early_out_report('Early Out')">Early Out</button>
-          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="movement_report('Movement')">Movement</button>
+          <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="movement_report('Movement')">Movement</button><br>
+      
+<br>
+          <button class="btn btn-sm mr-5 mt-2" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="leavecal(1,[1,2,3,4])">Leave Applyed</button>
+
       </div>
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
         <!-- <button class="btn btn-sm btn-danger"> Button one</button>-->
         <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="monthly_report()">Monthly Register Report</button>
         <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" data-toggle="modal" data-target="#requisitionModal">Open Requisition Modal</button>
+        <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="leavecal(2,[1])">Leave Panding</button>
+        <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="leavecal(2,[2])">Leave Approved</button>
+        <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="leavecal(2,[3])">Leave Rejected</button>
+
       
 
 
@@ -125,6 +133,9 @@
         <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="movReport(1)">Process Movement</button>
         <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="movReport(3)">Reject Movement</button>
         <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="movReport(4)">Paid Movement</button>
+        <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="leavecal(3,[1])">Leave Panding</button>
+        <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="leavecal(3,[2])">Leave Approved</button>
+        <button class="btn btn-sm mr-5" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="leavecal(3,[3])">Leave Rejected</button>
       </div>
 
     </div>
@@ -200,7 +211,6 @@
     });
   });
 </script>
-
 
 
 
