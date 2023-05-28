@@ -471,9 +471,6 @@
    
     ajaxRequest.onreadystatechange = function(){
       if(ajaxRequest.readyState == 4){
-        console.log(ajaxRequest.responseText); return;
-        document.getElementById("loading").style.visibility = "hidden";
-
         var resp = ajaxRequest.responseText;
         a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
         a.document.write(resp);

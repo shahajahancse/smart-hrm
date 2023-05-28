@@ -533,8 +533,8 @@ class Attendance extends MY_Controller {
 		$stutuss = explode(',', trim($stutus));
 		
 		$data['xin_employees'] =  $this->Attendance_model->leaves($emp_id,$first_date,$second_date,$stutuss);
-		dd($data['xin_employees']);
-		echo $this->load->view("admin/timesheet/monthly_report", $data, TRUE);	  
+		
+		echo $this->load->view("admin/attendance/leave_report", $data, TRUE);	  
     }
 	public function monthly_report_excel() {
 		$first_date = $this->input->post('first_date');
