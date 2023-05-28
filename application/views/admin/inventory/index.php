@@ -22,7 +22,7 @@
         <div class="container pt-4">
           <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
             <?php $hidden = array('user_id' => $session['user_id']);?>
-            <?php echo form_open('admin/inventory/product_purchase', $attributes, $hidden);?>
+            <?php echo form_open('admin/inventory/index', $attributes, $hidden);?>
                 <table class="table table-bordered table-sm table-striped " id="appRowDiv">
                   <tr>
                     
@@ -32,7 +32,7 @@
                   </tr>
                    <tr>
                    <td>
-                        <select name="cmp_id" class="form-control" id="cmp_name" required>
+                        <select name="cmp_name" class="form-control" id="cmp_name" required>
                             <option id="cmp" value="">Select Company Name</option>
                             <?php foreach($company as $cmp): ?>
                                 <option value="<?php echo $cmp->company; ?>"><?php echo $cmp->company; ?></option>
@@ -40,7 +40,7 @@
                         </select>
                     </td>
                     <td>
-                        <select name="sp_id" class="form-control" id="spl_name" required>
+                        <select name="spl_name" class="form-control" id="spl_name" required>
                             <option id="spl" value="">Select Supplier Name</option>
                         </select>
                     </td>
@@ -89,7 +89,7 @@
 
 <div class="box <?php echo $get_animate;?>" style="margin-top:20px">
   <div class="box-header with-border">
-    <h3 class="box-title">Requisition List</h3>
+    <h3 class="box-title">Product Purches Requisition List</h3>
   </div>
   <div class="box-body">
     <div class="box-datatable table-responsive" >
@@ -105,7 +105,7 @@
                 <th class="text-center" style="width:50px;">Action</th>
               <?php }?> 
               <?php if($user_role_id==4){?>
-                <th class="text-center" style="width:100px;">Category Name</th>
+                <th class="text-center" style="width:100px;">Supplier</th>
                 <th class="text-center" style="width:20px;">Status</th>
                 <th class="text-center" style="width:20px;">Request Date</th>
                 <th class="text-center" style="width:50px;">Action</th>
@@ -124,17 +124,17 @@
                     ?>
               </td>
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
-                <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td>
+                <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td>
               <?php } ?>
               <?php if($user_role_id==4){?>
-                <td class="text-center"><?php echo $rows->category_name; ?></td>
+                <td class="text-center"><?php echo $rows->name ?></td>
                 <td class="text-center"><?php echo $rows->status==1?"
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
                      ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
                     ?></td>
                 <td class="text-center"><?php echo $rows->created_at; ?></td>
                 <td class="text-center">
-                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
+                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
                 </td>
             </tr>
           <?php }} ?>
