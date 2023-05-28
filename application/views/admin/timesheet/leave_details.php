@@ -304,6 +304,7 @@ if (isset($success)) {
     </section>
   </div>
 </div>
+
 <style type="text/css">
 .trumbowyg-editor { min-height:110px !important; }
 </style>
