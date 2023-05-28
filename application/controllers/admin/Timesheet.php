@@ -507,28 +507,7 @@ class Timesheet extends MY_Controller {
 			redirect('admin/dashboard');
 		}
      }
-	 public function emp_list() {
-		
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
 
-		$data['title'] = $this->lang->line('left_leave').' | '.$this->Xin_model->site_title();
-		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		$data['breadcrumbs'] =" Employee List";
-		$data['path_url'] = 'emplist';
-		// dd($user_info);
-		
-			if(!empty($session)){ 
-				// $data['subview'] = $this->load->view("admin/timesheet/leave_04_01_2023", $data, TRUE);
-				$data['subview'] = $this->load->view("admin/users/emp_list", $data, TRUE);
-				$this->load->view('admin/layout/layout_main', $data); //page load
-			} else {
-				redirect('admin/');
-			}
-		
-     }
 	 
 	// Validate and add info in database
 	public function add_leave() {
@@ -3082,79 +3061,8 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 public function emp_list_read() {
-
-		$data['title'] = $this->Xin_model->site_title();
-		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
-			$this->load->view("admin/timesheet/leave", $data);
-		} else {
-			redirect('admin/');
-		}
-		// Datatables Variables
-		$draw = intval($this->input->get("draw"));
-		$start = intval($this->input->get("start"));
-		$length = intval($this->input->get("length"));
-		
-		$data = array();
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-
-			
-		$employee = $this->Timesheet_model->get_emplist();
-			
-			
-		// }
-		// dd($leave->result());
-		foreach($employee->result() as $r) {
-			  
-			// get start date and end date
-			$user = $this->Xin_model->read_user_info($r->user_id);
-			if(!is_null($user)){
-				$full_name = $user[0]->first_name. ' '.$user[0]->last_name;
-				$email = $user[0]->email;
-				$contact_no = $user[0]->contact_no;
-			
-				// department
-				$department = $this->Department_model->read_department_information($user[0]->department_id);
-				$designation = $this->Designation_model->read_designation_information($user[0]->designation_id);
-				if(!is_null($department)){
-					$department_name = $department[0]->department_name;
-				} else {
-					$department_name = '--';	
-				}
-				if(!is_null($designation)){
-					$designation_name = $designation[0]->designation_name;
-				} else {
-					$designation_name = '--';	
-				}
-			} else {
-				$full_name = '--';	
-				$department_name = '--';
-				$designation_name = '--';
-				$contact_no = '--';
-				$email = '--';
-			}
-			 
-		
-			
-		
 	
-		   $data[] = array(
-				$full_name,
-				$department_name,
-				$designation_name,
-				$contact_no,
-				$email
-		   );
-	  }
-	  $output = array(
-		   "draw" => $draw,
-			 "data" => $data
-		);
-	  echo json_encode($output);
-	  exit();
-     }
+	//  end
 	 
 	// add attendance > modal form 
 	public function update_attendance_add()

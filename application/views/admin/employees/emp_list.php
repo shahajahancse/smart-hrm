@@ -41,7 +41,7 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : site_url+"timesheet/emp_list_read/",
+            url : site_url+"employees/emp_list_read/",
             type : 'GET'
         },
 		"fnDrawCallback": function(settings){
