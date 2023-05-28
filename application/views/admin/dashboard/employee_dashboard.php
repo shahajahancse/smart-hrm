@@ -47,6 +47,12 @@ $leave_calsl=$leavecal['leaves'][1];
     
     border-radius: 10px 10px 0px 0px;
     border-bottom: 2px solid black;
+    height: 34px;
+    overflow: hidden;
+}
+.overlayth{
+    height: 20px;
+    overflow: hidden;
 }
 .box_footer{
     font-size: 13px;
@@ -58,6 +64,7 @@ $leave_calsl=$leavecal['leaves'][1];
     border-radius: 0px 0px 10px 10px;
     border-top: 2px solid black;
 }
+
 </style>
 <?php 
 $session = $this->session->userdata('username');
@@ -145,23 +152,23 @@ if(!is_null($role_user)){
                 
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Available Earn Leave : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $leave_calel['qty'] ?></p>
+                  <p style="margin: 0; font-weight: bold;"  class="col-md-8 overlayth">Available Earn Leave : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $leave_calel['qty'] ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Available Sick Leave : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $leave_calsl['qty'] ?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Available Sick Leave : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $leave_calsl['qty'] ?></p>
                 </div>
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Used Earn Leave : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo (12-($leave_calel['qty']))?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Used Earn Leave : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo (12-($leave_calel['qty']))?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Used Sick Leave : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo (4-($leave_calsl['qty'])) ?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Used Sick Leave : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo (4-($leave_calsl['qty'])) ?></p>
                 </div>
               </div>
                 <a  href="<?php echo site_url('admin/timesheet/leave/');?>">
@@ -183,24 +190,24 @@ if(!is_null($role_user)){
                 
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">(Present : Absent):</p>
-                  <p style="margin: 0;" class="col-md-4">(<?php echo $present_stutas->attend;?>: <?php echo $present_stutas->absent;?>)</p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">(Present : Absent):</p>
+                  <p style="margin: 0;" class="col-md-4 overlayth">(<?php echo $present_stutas->attend;?>: <?php echo $present_stutas->absent;?>)</p>
                 </div>
               
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Leave : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo ($leave_stutas->el)+($leave_stutas->sl);?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Leave : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ($leave_stutas->el)+($leave_stutas->sl);?></p>
                 </div>
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Holiday + weekend  : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo ($present_stutas->holiday)+($present_stutas->weekend) ?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Holiday + weekend  : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ($present_stutas->holiday)+($present_stutas->weekend) ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Late : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo $present_stutas->late_status ?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Late : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $present_stutas->late_status ?></p>
                 </div>
               </div>
                 <a  href="<?php echo site_url('admin/timesheet/timecalendar/');?>">
@@ -223,25 +230,25 @@ if(!is_null($role_user)){
                 
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Salary : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo ( $lastmonthsalaryy->basic_salary) ?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Salary : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ( $lastmonthsalaryy->basic_salary) ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Pay Salary : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo ( $lastmonthsalaryy->grand_net_salary + $lastmonthsalaryy->modify_salary) ?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Pay Salary : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ( $lastmonthsalaryy->grand_net_salary + $lastmonthsalaryy->modify_salary) ?></p>
                 </div>
                
                 <div class="col-md-12" style=" background-color: #e3eaf1; margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Deduct : </p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo ( $lastmonthsalaryy->late_deduct + $lastmonthsalaryy->absent_deduct) ?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Deduct : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ( $lastmonthsalaryy->late_deduct + $lastmonthsalaryy->absent_deduct) ?></p>
                   
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8">Working Day:</p>
-                  <p style="margin: 0;" class="col-md-4"><?php echo ($lastmonthsalaryy->present)+($lastmonthsalaryy->holiday)+($lastmonthsalaryy->weekend) ?></p>
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Working Day:</p>
+                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ($lastmonthsalaryy->present)+($lastmonthsalaryy->holiday)+($lastmonthsalaryy->weekend) ?></p>
                   
                 </div>
               </div>
