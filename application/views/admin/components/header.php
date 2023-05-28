@@ -317,7 +317,7 @@
 
           <!-- Tasks: style can be found in dropdown.less -->
           <!-- User Account: style can be found in dropdown.less -->
-          	<?php  if(in_array('61',$role_resources_ids) || in_array('93',$role_resources_ids) || in_array('63',$role_resources_ids) || in_array('92',$role_resources_ids) || in_array('62',$role_resources_ids) || in_array('94',$role_resources_ids) || in_array('96',$role_resources_ids) || in_array('60',$role_resources_ids) || $user[0]->user_role_id==1 || $system[0]->module_recruitment=='true' || $system[0]->enable_job_application_candidates=='1' || in_array('50',$role_resources_ids) || in_array('393',$role_resources_ids) || in_array('118',$role_resources_ids)) { ?>
+          	<?php  if($user[0]->user_role_id == 1) { ?>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true" title="<?php echo $this->lang->line('header_configuration');?>">
                   <i class="fa fa-qrcode"></i>
@@ -333,11 +333,11 @@
                   <?php  } ?>
                   <?php  } ?>
                   <?php  } ?>
-				          <?php  if(in_array('61',$role_resources_ids)) { ?>
+				          <?php  if($user[0]->user_role_id == 1) { ?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/settings/constants');?>"> <i class="fa fa-align-justify"></i><?php echo $this->lang->line('left_constants');?></a></li>
                   <?php } ?>
-                  <?php  if(in_array('393',$role_resources_ids)) { ?>
+                  <?php  if($user[0]->user_role_id == 1) { ?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/custom_fields');?>"> <i class="fa fa-sliders"></i><?php echo $this->lang->line('xin_hrsale_custom_fields');?></a></li>
                   <?php } ?>
@@ -383,7 +383,7 @@
                 </ul>
               </li>
             <?php } ?>  
-          	<?php if($system[0]->module_language=='true'){?>
+          	<?php if($user[0]->user_role_id == 1){?>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true" title="<?php echo $this->lang->line('xin_languages');?>">
                   <?php echo $flg_icn;?>
@@ -410,28 +410,36 @@
               <i class="glyphicon glyphicon-user"></i>
             </a>
             <ul class="dropdown-menu <?php echo $animated;?>">
-              	<li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/profile');?>"> <i class="ion ion-person"></i><?php echo $this->lang->line('header_my_profile');?></a></li>
-                  <li role="presentation">
+              	  <li role="presentation">
+                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/profile');?>"> <i class="ion ion-person"></i><?php echo $this->lang->line('header_my_profile');?></a></li>
+                   <?php if($user[0]->user_role_id == 1) { ?>
+                   <li role="presentation">
                   <a data-toggle="modal" data-target=".policy" href="#"> <i class="fa fa-flag-o"></i><?php echo $this->lang->line('header_policies');?></a></li>
-                  <?php if(in_array('60',$role_resources_ids)) { ?>
+                 
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/settings');?>"> <i class="ion ion-settings"></i><?php echo $this->lang->line('left_settings');?></a></li>
-                  <?php } ?>
+               
                   
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/profile?change_password=true');?>"> <i class="fa fa-key"></i><?php echo $this->lang->line('header_change_password');?></a></li>
                   <li class="divider"></li>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/auth/lock');?>"> <i class="fa fa-lock"></i><?php echo $this->lang->line('xin_lock_user');?></a></li>
+                  <?php } ?>
                   <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="<?php echo site_url('admin/logout');?>"> <i class="fa fa-power-off text-red"></i><?php echo $this->lang->line('header_sign_out');?></a></li>
                 </ul>
           </li>
           <!-- Control Sidebar Toggle Button -->
+          <?php if ($user[0]->user_role_id == 1) {?>
+            
           <li>
-            <a href="#" data-toggle="control-sidebar" title="<?php echo $this->lang->line('xin_role_layout_settings');?>"><i class="fa fa-cog fa-spin"></i></a>
-          </li>
+          <a href="#" data-toggle="control-sidebar" title="<?php echo $this->lang->line('xin_role_layout_settings');?>"><i class="fa fa-cog fa-spin"></i></a>
+        </li>
+            
+          <?php }
+          ?>
+
         </ul>
       </div>
     </nav>
