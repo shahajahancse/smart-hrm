@@ -1,5 +1,10 @@
 <!-- < ?php dd($late_status);?> -->
-
+<?php
+if(count($xin_employees)<1){
+echo "<p style='text-align: center;font-weight: bold;color: red;font-size: xx-large;'>There is no data</p>";
+exit();
+}
+?>
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_hrsale_custom.css">
 
