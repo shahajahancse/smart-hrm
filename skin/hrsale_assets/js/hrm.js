@@ -461,7 +461,7 @@
       alert('Please select second date');
       return ;
     }
-    var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql+'&stutus='+stutus;
+    var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql+'&stutus='+stutus+'&type='+type;
 
     url = base_url + "/leave_report";
     ajaxRequest.open("POST", url, true);

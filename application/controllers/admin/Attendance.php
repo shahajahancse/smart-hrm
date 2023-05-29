@@ -523,6 +523,7 @@ class Attendance extends MY_Controller {
 		  
     }
 	public function leave_report() {
+
 	 	$first_date = $this->input->post('first_date');
 	 	$second_date = $this->input->post('second_date');
 	 	$sql = $this->input->post('sql');
@@ -531,6 +532,10 @@ class Attendance extends MY_Controller {
 		
 		$emp_id = explode(',', trim($sql));
 		$stutuss = explode(',', trim($stutus));
+		$data['stutuss'] = $stutuss;
+		$data['first_date'] = $first_date;
+		$data['second_date'] = $second_date;
+		$data['type'] = $this->input->post('type');
 		
 		$data['xin_employees'] =  $this->Attendance_model->leaves($emp_id,$first_date,$second_date,$stutuss);
 		
