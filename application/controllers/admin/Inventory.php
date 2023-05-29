@@ -199,7 +199,7 @@ public function supplier($id = null){
                    
 								 
 								  
-				if ($hid = $this->input->post('hidden_id')) {
+				if ($hid = $this->input->post('hid')) {
 					$this->db->where('id', $hid)->update('product_supplier', $supplier_data);
 					$this->session->set_flashdata('success', 'Successfully Updated Done');
 				} else {
@@ -248,6 +248,37 @@ public function supplier($id = null){
 		header('Content-Type: application/x-json; charset=utf-8');
 		echo (json_encode($result));
 	
+	}
+
+	public function get_supplier_details_ajax($id)
+	{   
+		
+		$this->db->where('id', $id);
+		$result = $this->db->get('product_supplier')->row();
+		
+		header('Content-Type: application/x-json; charset=utf-8');
+		echo (json_encode($result));
+	
+	}
+
+	public function supplier_detail($id){
+		//search supplier details
+		$this->db->where('id', $id);
+		$data['result'] = $this->db->get('product_supplier')->row();
+		dd($data['result']);
+
+		$data['title'] 			= 'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Inventory';
+		$data['path_url'] 		= 'inventory';
+	 
+		// dd($data['products']);
+
+		
+		$data['subview'] 		= $this->load->view("admin/inventory/supplier_details", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data);
+
+
+
 	}
 
 
@@ -757,7 +788,7 @@ public function supplier($id = null){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
 			
 		}
-		// dd($d1);
+		//  dd($d1);
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
 		// dd($r_did);
@@ -767,24 +798,21 @@ public function supplier($id = null){
 		
 		foreach($d1 as $k=>$v){
 			
-			 if($d1[$k]->quantity >= $quantity[$k]) {
+			
 				 foreach($quantity as $key=>$value){
 					$log_user=$_SESSION['username']['user_id'];
-					$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
+					$this->db->where('id',$id)->update('products_purches',['updated_by'=>$log_user]);
 
-				   $this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); }
+				   $this->db->where('id',$r_did[$key])->update('products_purches_requisitions',['ap_quantity'=>$value]); }
 
-			 } else{
-				$this->session->set_flashdata('warning', 'Approved  Quantity is Biger');
-				redirect("admin/inventory/purchase");
-			 }
+			
 
 			
 		}
-		 $approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
+		 $approved = $this->db->where('id',$id)->update('products_purches',['status'=>2]);
 		 if($approved){
 					$this->session->set_flashdata('success', 'Updated Successfully.');
-				 redirect("admin/inventory/purchase","refresh");
+				 redirect("admin/inventory/index","refresh");
 				}
 			
 	

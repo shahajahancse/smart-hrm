@@ -32,10 +32,11 @@
                         <!-- <th class="text-center"> <button type="button" id="addRow"  class="btn btn-sm btn-success">+ Add More</button></th> -->
                     </tr>
                     <tr>
-                        <td class="text-center"><input type="text" name="name" class="form-control" placeholder="Enter Name" required></td>
-                        <td class="text-center"><input type="text" name="company_name" class="form-control" placeholder="Enter Company Name" required></td>
-                        <td class="text-center"><input type="text" name="phone" class="form-control" placeholder="Enter Phone" required></td>
-                        <td class="text-center"><input type="text" name="address" class="form-control" placeholder="Enter Address"></td>
+                        <input type="hidden" name="hid" id="hid">
+                        <td class="text-center"><input type="text" id="name" name="name" class="form-control" placeholder="Enter Name" required></td>
+                        <td class="text-center"><input type="text" id="company_name" name="company_name" class="form-control" placeholder="Enter Company Name" required></td>
+                        <td class="text-center"><input type="text" id="phone" name="phone" class="form-control" placeholder="Enter Phone" required></td>
+                        <td class="text-center"><input type="text" id="address" name="address" class="form-control" placeholder="Enter Address"></td>
                        
                     </tr>
                 </table>
@@ -44,9 +45,10 @@
             <?php echo form_close(); ?> 
         </div>
     </div>
-
   </div>
 </div>
+
+
 <?php if($this->session->flashdata('success')):?>
   <div class="alert alert-success" id="flash_message">
     <?php echo $this->session->flashdata('success');?>
@@ -64,6 +66,7 @@
   $(function() {$("#flash_message1").hide(2000);});
 </script> 
 <?php }?>
+
 
 
 
@@ -97,11 +100,12 @@
             <tr>
               <td class="text-center"><?php echo ($key+1)."."; ?></td>
                 <?php if($user_role_id==1){?>
+                   <input type="hidden">
                   <td class="text-center"><?php echo $rows->name ?></td>
                   <td class="text-center"><?php echo $rows->company ?></td>
-                  <td class="text-center"><?php echo $rows->phone ?></td>
-              
-                <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_detail/'.$rows->id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td>
+                  <td class="text-center" ><?php echo $rows->phone ?></td>
+                  <td class="text-center"> <a onclick="edit(<?php echo $rows->id ?>)" class=" btn btn-sm btn-info text-dark collapsed" data-toggle="collapse" href="?<?php echo $rows->id; ?>#add_form" aria-expanded="false"><i class="fa fa-info" aria-hidden="true"></i>Edit</td>
+                  <!-- <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_detail/'.$rows->id);?>" onclick=""><i class="fa fa-info" aria-hidden="true"></i> Details</td> -->
               <?php } ?>
               <?php if($user_role_id==4){?>
                 
@@ -109,7 +113,7 @@
                 <td class="text-center"><?php echo $rows->company ?></td>
                 <td class="text-center"><?php echo $rows->phone ?></td>
                 <td class="text-center">
-                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_detail/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
+                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/supplier_detail/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
                 </td>
             </tr>
           <?php }} ?>
@@ -208,3 +212,35 @@
    }
 
 </script>   -->
+<script type="text/javascript">
+  function edit(id){
+
+      $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('admin/inventory/get_supplier_details_ajax/');?>" + id,
+      success: function(func_data)
+      {
+        console.log(func_data);
+        
+        $('#name').val(func_data.name);
+        $('#company_name').val(func_data.company);
+        $('#phone').val(func_data.phone);
+        $('#address').val(func_data.address);
+        $('#hid').val(func_data.id);
+        $('#add_form').show();
+
+        //if again click edit button then hide add_form
+        // $('#edit').click(function(){
+        //   $('#add_form').hide();
+        // });
+        //hide add_form after add button click after 2000second
+        // setTimeout(function(){ $('#add_form').hide(); }, 2000);
+        
+        
+      }
+    });
+    
+    
+ 
+  }
+</script>

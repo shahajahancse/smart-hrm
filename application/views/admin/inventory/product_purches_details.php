@@ -17,7 +17,7 @@ $get_animate = $this->Xin_model->get_content_animate();
     <?php if($session['role_id']==1){ if($status == 1 || $status == 4){?>
       <?php if(!empty($results)){?>
 
-         <?php echo form_open('admin/inventory/persial_approved/'.$purches_id)?>
+         <?php echo form_open('admin/inventory/product_persial_approved/'.$purches_id)?>
          <?php $i=1;foreach($results as $row){?>
             <input type="hidden" name="r_id[]" value="<?php echo $row->id?>" >
             <input type="hidden" id="quantity" name="qunatity[]" min="1" style="width:20%" value="<?php echo $row->quantity?>">
