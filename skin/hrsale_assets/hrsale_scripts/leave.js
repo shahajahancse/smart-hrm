@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	console.log('hello');
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {

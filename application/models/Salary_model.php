@@ -222,7 +222,7 @@ class Salary_model extends CI_Model {
         $this->db->where('employee_id',$emp_id);
         $this->db->where("attendance_date BETWEEN '$FS_on_date' AND '$FS_off_date'");
         $query = $this->db->get('xin_attendance_time');
-        // dd($query);
+        
         return $query->row();
     }
 
@@ -273,6 +273,19 @@ class Salary_model extends CI_Model {
         }
     }
 
+    function getpassedmonthsalary($emp_id)
+{
+    $this->db->select('*');
+    $this->db->from('xin_salary_payslips');
+    $this->db->where('employee_id', $emp_id);
+    $this->db->order_by('payslip_id', 'desc');
+    $this->db->limit(2); // Retrieve 1 row starting from the second-to-last row
+    return $this->db->get()->result();
+   
+
+}
+
+
     public function get_employee_info($emp_ids = null)
     {
         $this->db->select('
@@ -320,6 +333,7 @@ class Salary_model extends CI_Model {
             sp.sick_leave,
             sp.late_count,
             sp.late_deduct,
+            sp.d_day,
             sp.absent_deduct,
             sp.other_payment as extra_pay,
             sp.modify_salary,

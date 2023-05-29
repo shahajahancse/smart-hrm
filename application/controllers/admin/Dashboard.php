@@ -41,6 +41,7 @@ class Dashboard extends MY_Controller {
 		   $this->load->model('Clients_model');
 		   $this->load->model("Recruitment_model");
 		   $this->load->model("Salary_model");
+		   $this->load->helper('date');
      }
 	
 	/*Function to set JSON output*/
@@ -413,4 +414,37 @@ class Dashboard extends MY_Controller {
         redirect($_SERVER['HTTP_REFERER']);
         
     }
+
+
+
+
+
+	public function payslip(){
+
+		$excel = $this->input->post('excel');
+    	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
+		$status = $this->input->post('status');
+		$emp_id = $this->input->post('sql');
+    	
+    	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
+		$data['status']= $status;
+        $data["salary_month"] = $salary_month;
+        $data["emp_id"] = $emp_id;
+		if(is_string($data["values"]))
+        {
+					// dd($data["values"]);
+
+            echo $data["values"];
+        }
+        else
+        {	
+        	if ($excel == 1) {
+	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
+        	} else {
+	            $this->load->view('admin/dashboard/payslip',$data);
+        	}
+        }
+
+		
+	}
 }

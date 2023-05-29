@@ -1088,7 +1088,11 @@ class Xin_model extends CI_Model {
 	
 	// 1
 	public function get_notify_leave_applications() {
-	  $query = $this->db->query("SELECT * from xin_leave_applications where is_notify = '1' order by leave_id desc");
+	  $query = $this->db->query("SELECT * from xin_leave_applications where notify_leave = '1' order by leave_id desc");
+  	  return $query->result();
+	}
+	public function get_notify_leave_applications_by_userid($user_id) {
+	  $query = $this->db->query("SELECT * from xin_leave_applications where notify_leave = '3' and employee_id = $user_id  order by leave_id desc");
   	  return $query->result();
 	}
  	public function get_last_user_leave_applications($user_id) {

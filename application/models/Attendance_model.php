@@ -336,6 +336,16 @@ class Attendance_model extends CI_Model {
         $this->db->where_in('user_id',$emp_ids);
         return $this->db->get('xin_employees')->result();
     }
+    function leaves($emp_ids,$first_date,$second_date,$stutuss)
+    {
+        $this->db->select('*');
+        $this->db->where_in('employee_id', $emp_ids);
+        $this->db->where_in('status', $stutuss);
+        $this->db->where('from_date >=',$first_date);
+        $this->db->where('to_date <=', $second_date);
+        return $this->db->get('xin_leave_applications')->result();
+    }
+    
 
     function get_proxi($emp_id)
     {

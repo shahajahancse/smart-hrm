@@ -206,6 +206,11 @@
 		}
 		return $this->db->order_by("leave_id", "DESC")->get("xin_leave_applications");
 	}
+
+	public function get_emplist() {
+		
+		return $this->db->get("xin_employees");
+	}
 	// get company leaves
 	public function filter_company_leaves($company_id) {
 	
