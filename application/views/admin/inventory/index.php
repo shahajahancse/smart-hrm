@@ -146,22 +146,22 @@
 
                  
 
-                 <div class="dropdown">
+                 <div class="dropdown" >
 
                             <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               Action
                             </button>
 
-                            <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;"  aria-labelledby="dropdownMenuButton">
+                            <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                               
                             <?php 
                               if($session['role_id'] =1){ ?>
-                              <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>" >Details</a><hr>
+                              <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>" >Details</a><br>
                               
                               
                               <?php if($rows->status==4 || $rows->status==1){?> 
-                                <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a>
-                              <hr> <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Rejecte</a>
+                                <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a> <br>
+                              <a style="padding-left:5px; " href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Rejecte</a>
                               <?php }} ?>
                     </div>
 
