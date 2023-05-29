@@ -1,4 +1,22 @@
-<!-- < ?php dd($late_status);?> -->
+<?php 
+if ($type == 1){
+	$date = new DateTime($first_date);
+    $formattedDate = $date->format('d M Y');
+	$stype="Daily Leave Report for $formattedDate";
+}elseif ($type == 2) {
+
+		$date = new DateTime($first_date);
+		$formattedDate = $date->format('F Y');
+	    $stype="Monthly Leave Report for $formattedDate";
+
+}else{
+	$date1 = new DateTime($first_date);
+	$date2 = new DateTime($second_date);
+    $formattedDate1 = $date1->format('d M Y');
+    $formattedDate2 = $date2->format('d M Y');
+	$stype=" Leave report for $formattedDate1 to $formattedDate2";
+}
+?>
 <?php
 if(count($xin_employees)<1){
 echo "<p style='text-align: center;font-weight: bold;color: red;font-size: xx-large;'>There is no data</p>";
@@ -11,6 +29,9 @@ exit();
 <style type="text/css">
 	.box-tools {
 	    margin-right: -5px !important;
+	}
+	table{
+		margin-top: 15px !important;
 	}
 
 	table thead tr th {
@@ -49,7 +70,8 @@ exit();
 ?>
 <div class="box" id="print_area">
   <div style="text-align: center;">
-<?php  $this->load->view('admin/head_bangla'); ?>
+   <?php  $this->load->view('admin/head_bangla'); ?>
+   <h4><?= $stype ?></h4>
   </div>
 
   <div class="container">
@@ -65,8 +87,16 @@ exit();
                 <td>Qty</td>
                 <td>Status</td>
 	        </thead>
-            <?php foreach($xin_employees as $key=>$row){
-                
+			
+
+            <?php 
+						$total_leave=0;
+						$total_el_leave=0;
+						$total_si_leave=0;
+						$total_day=0;
+
+			foreach($xin_employees as $key=>$row){
+				$total_leave +=1;
                 $user_info = $this->Xin_model->read_employee_info($row->employee_id);
                 
                 ?>
@@ -76,8 +106,20 @@ exit();
                 <td><?php echo $user_info[0]->first_name.' '.$user_info[0]->last_name?></td>
                 <td><?php echo $row->from_date?></td>
                 <td><?php echo $row->to_date?></td>
-                <td><?php echo $row->leave_type?></td>
-                <td><?php echo $row->qty?></td>
+				<?php
+                if ($row->leave_type=='el') {
+					$total_el_leave +=1;
+                    echo "<td class='text' >Earn Leave</td>";
+                }else{
+					$total_si_leave +=1;
+
+					echo "<td class='text' >Sick Leave</td>";
+				}
+                ?>
+                <td><?php
+
+				$total_day += $row->qty;
+				echo $row->qty?></td>
                 <?php
                 if ($row->status==1) {
                     echo "<td class='text text-info' >Pending</td>";
@@ -89,7 +131,27 @@ exit();
                 ?>
             </tbody>
             <?php }?>
+
 	      </table>
+		  <table class="table">
+			<thead>
+				<tr>
+					<th>Total Employee</th>
+					<th>Total Earn Leave</th>
+					<th>Total Sick Leave</th>
+					<th>Total Day</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				   <td><?=$total_leave?></td>
+				   <td><?=$total_el_leave?></td>
+				   <td><?=$total_si_leave?></td>
+				   <td><?=$total_day?></td>
+					
+				</tr>
+			</tbody>
+		  </table>
 	    </div>
 	  </div>
   </div>
