@@ -48,6 +48,30 @@ class Inventory extends MY_Controller {
 		}
 
 	}
+	public function lunch()
+	{
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$total_emp = $this->Xin_model->all_employees();
+		
+
+
+
+		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
+
+		$data['breadcrumbs'] = 'lunch';
+		$data['path_url'] = 'lunch';
+		if(!empty($session)){ 
+			$data['subview'] = $this->load->view("admin/inventory/lunch", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+
+	}
 
 	public function purchase($id = null)
 	{
