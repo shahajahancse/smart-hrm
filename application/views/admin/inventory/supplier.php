@@ -22,7 +22,7 @@
         <div class="container pt-4">
           <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
             <?php $hidden = array('user_id' => $session['user_id']);?>
-            <?php echo form_open('admin/inventory/supplier_create', $attributes, $hidden);?>
+            <?php echo form_open(current_url(), $attributes, $hidden);?>
                 <table class="table table-bordered table-sm table-striped " id="appRowDiv">
                     <tr>
                         <th class="text-center"> Name</th>

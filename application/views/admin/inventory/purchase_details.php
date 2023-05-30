@@ -36,9 +36,9 @@ $get_animate = $this->Xin_model->get_content_animate();
     <br/>
   </div>
   <div class="box-body">
-    <div class="box-datatable table-responsive" >
-    <input type="hidden" value="1" id="count">
-      <table class="datatables-demo table table-striped table-bordered" id="" style="width:100%">
+    <div class="box-datatable table-responsive" id="details">
+      <input type="hidden" value="1" id="count">
+      <table class="datatables-demo table table-striped table-bordered" style="width:100%">
         <thead>
           <tr>
               <th class="text-center" >No.</th>
@@ -68,9 +68,9 @@ $get_animate = $this->Xin_model->get_content_animate();
 </div>
 
 <script>
-$(document).ready(function () {
-    $('#details').DataTable();
-});
+  /*$(document).ready(function () {
+      $('#details').DataTable();
+  });*/
 
 </script>
 
