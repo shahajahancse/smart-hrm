@@ -90,16 +90,21 @@ exit();
 			
 
             <?php 
-						$total_leave=0;
+						
 						$total_el_leave=0;
 						$total_si_leave=0;
 						$total_day=0;
+						$totalemp=[];
 
 			foreach($xin_employees as $key=>$row){
-				$total_leave +=1;
+				if(!in_array($row->employee_id,$totalemp)){
+					array_push($totalemp,$row->employee_id);
+
+				};
+
                 $user_info = $this->Xin_model->read_employee_info($row->employee_id);
                 
-                ?>
+                ?>.
 
             
                 <td><?php echo $key+1;?></td>
@@ -108,10 +113,11 @@ exit();
                 <td><?php echo $row->to_date?></td>
 				<?php
                 if ($row->leave_type=='el') {
-					$total_el_leave +=1;
+					$total_el_leave +=$row->qty;
+
                     echo "<td class='text' >Earn Leave</td>";
                 }else{
-					$total_si_leave +=1;
+					$total_si_leave +=$row->qty;
 
 					echo "<td class='text' >Sick Leave</td>";
 				}
@@ -130,24 +136,28 @@ exit();
                 }
                 ?>
             </tbody>
-            <?php }?>
+            <?php }
+			
+			?>
 
 	      </table>
 		  <table class="table">
 			<thead>
 				<tr>
 					<th>Total Employee</th>
+					<th>Total leave</th>
 					<th>Total Earn Leave</th>
 					<th>Total Sick Leave</th>
-					<th>Total Day</th>
+					
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-				   <td><?=$total_leave?></td>
+				   <td><?=count($totalemp)?></td>
+				   <td><?=$total_day?></td>
 				   <td><?=$total_el_leave?></td>
 				   <td><?=$total_si_leave?></td>
-				   <td><?=$total_day?></td>
+				  
 					
 				</tr>
 			</tbody>
@@ -156,7 +166,11 @@ exit();
 	  </div>
   </div>
 </div>
+<?php
+			
 
+
+?>
 <!-- jQuery 3 -->
 <script type="text/javascript" src="<?php echo base_url();?>skin/hrsale_assets/vendor/jquery/jquery-3.2.1.min.js"></script> 
 <script src="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/jquery/dist/jquery.min.js"></script>

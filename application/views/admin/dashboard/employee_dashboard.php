@@ -69,6 +69,7 @@ $leave_calsl=$leavecal['leaves'][1];
 <?php 
 $session = $this->session->userdata('username');
 $user_info = $this->Exin_model->read_user_info($session['user_id']);
+// dd($user_info[0]->status);
 $theme = $this->Xin_model->read_theme_info(1);
 if($user_info[0]->profile_picture!='' && $user_info[0]->profile_picture!='no file') {
 	$lde_file = base_url().'uploads/profile/'.$user_info[0]->profile_picture;
@@ -149,7 +150,7 @@ if(!is_null($role_user)){
               <p class="box_titel">Leave Managment</p>
               <div class="contentbox"> 
                 
-                
+                <?php if (!$user_info[0]->status==1){ ?>
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;"  class="col-md-8 overlayth">Available Earn Leave : </p>
@@ -170,6 +171,31 @@ if(!is_null($role_user)){
                   <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Used Sick Leave : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo (4-($leave_calsl['qty'])) ?></p>
                 </div>
+                <?php }else{
+                 ?>
+
+
+                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
+                  
+                  <p style="margin: 0; font-weight: bold;"  class="col-md-8 overlayth">Available Earn Leave : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth">0</p>
+                </div>
+                <div class="col-md-12" style="margin: 2px; padding: 2px;">
+                  
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Available Sick Leave : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth">0</p>
+                </div>
+                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
+                  
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Used Earn Leave : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth">0</p>
+                </div>
+                <div class="col-md-12" style="margin: 2px; padding: 2px;">
+                  
+                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Used Sick Leave : </p>
+                  <p style="margin: 0;" class="col-md-4 overlayth">0</p>
+                </div>
+                <?php } ?>
               </div>
                 <a  href="<?php echo site_url('admin/timesheet/leave/');?>">
                   <div class="col-md-12 box_footer" >
@@ -224,7 +250,7 @@ if(!is_null($role_user)){
   <!-- box start -->
           <div class="col-xl-6 col-md-4 col-12 hr-mini-state">
             <div class="info-box2 hrsalle-mini-stat"> 
-              <p class="box_titel">Selary of <?=$monthName?></p>
+              <p class="box_titel">Salary of <?=$monthName?></p>
               <div class="contentbox"> 
                 
                 
