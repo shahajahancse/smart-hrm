@@ -96,8 +96,8 @@ class Employees extends MY_Controller {
 
 		$data['title'] = $this->lang->line('left_leave').' | '.$this->Xin_model->site_title();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		$data['breadcrumbs'] =" Employee List";
-		$data['path_url'] = 'emplist';
+		$data['breadcrumbs'] = $this->lang->line('xin_employees');
+		$data['path_url'] = 'employees';
 		// dd($user_info);
 		
 			if(!empty($session)){ 

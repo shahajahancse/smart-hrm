@@ -480,8 +480,8 @@ class Timesheet extends MY_Controller {
 		}
      }
 	 
-	 // leave > timesheet
-	 public function leave() {
+	// leave > timesheet
+	public function leave() {
 		
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -506,7 +506,7 @@ class Timesheet extends MY_Controller {
 		} else {
 			redirect('admin/dashboard');
 		}
-     }
+    }
 
 	 
 	// Validate and add info in database
@@ -659,9 +659,7 @@ class Timesheet extends MY_Controller {
 	// Validate and add info in database
 	public function update_leave_status() {
 		
-	
 		
-			
 		$id = $this->uri->segment(4);
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -677,80 +675,93 @@ class Timesheet extends MY_Controller {
 		
 
 
-	
 
 		$data = array(
-		'status' => $this->input->post('status'),
-		'remarks' => $qt_remarks,
-		'notify_leave' => $notyfi_data,
-		'leave_type_id' => $this->input->post('leave_type'),
-		'from_date' => $this->input->post('start_date'),
-		'to_date' => $this->input->post('end_date'),
-		'qty' => $this->input->post('day'),
-		'is_half_day' => $this->input->post('leave_half_day')
+			'status' => $this->input->post('status'),
+			'remarks' => $qt_remarks,
+			'notify_leave' => $notyfi_data,
+			'leave_type_id' => $this->input->post('leave_type'),
+			'from_date' => $this->input->post('start_date'),
+			'to_date' => $this->input->post('end_date'),
+			'qty' => $this->input->post('day'),
+			'is_half_day' => $this->input->post('leave_half_day')
 		);
-		
+
+
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
-		
 		if ($result == TRUE) {
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
 
+			// automatically leave process start
+			if($data['qty'] > 0){
+				for ($i=0; $i < $data['qty']; $i++) { 
+					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
+					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+				}
+			} else {
+				$process_date = $data['from_date'];
+				$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+			}
+			// automatically leave process end
+
+
 			$setting = $this->Xin_model->read_setting_info(1);
-		if($setting[0]->enable_email_notification == 'yes') {
+			if($setting[0]->enable_email_notification == 'yes') {
+						
+				if($this->input->post('status') == 2){
 					
-			if($this->input->post('status') == 2){
+					$this->email->set_mailtype("html");
+					
+					//get leave info
+					$timesheet = $this->Timesheet_model->read_leave_information($id);
+					//get company info
+					$cinfo = $this->Xin_model->read_company_setting_info(1);
+					//get email template
+					$template = $this->Xin_model->read_email_template(6);
+					//get employee info
+					$user_info = $this->Xin_model->read_user_info($timesheet[0]->employee_id);
+					
+					$full_name = $user_info[0]->first_name.' '.$user_info[0]->last_name;
+					
+					$from_date = $this->Xin_model->set_date_format($timesheet[0]->from_date);
+					$to_date = $this->Xin_model->set_date_format($timesheet[0]->to_date);
 				
-				$this->email->set_mailtype("html");
+					$subject = $template[0]->subject.' - '.$cinfo[0]->company_name;
+					$logo = base_url().'uploads/logo/signin/'.$cinfo[0]->sign_in_logo;
+					
+					$message = '
+				<div style="background:#f6f6f6;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:12px;margin:0;padding:0;padding: 20px;">
+				<img src="'.$logo.'" title="'.$cinfo[0]->company_name.'"><br>'.str_replace(array("{var site_name}","{var site_url}","{var leave_start_date}","{var leave_end_date}"),array($cinfo[0]->company_name,site_url(),$from_date,$to_date),htmlspecialchars_decode(stripslashes($template[0]->message))).'</div>';
+					
+					hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$user_info[0]->email,$subject,$message);
+				} else if($this->input->post('status') == 3){ // rejected
+					
+					$this->email->set_mailtype("html");
+					
+					//get leave info
+					$timesheet = $this->Timesheet_model->read_leave_information($id);
+					//get company info
+					$cinfo = $this->Xin_model->read_company_setting_info(1);
+					//get email template
+					$template = $this->Xin_model->read_email_template(7);
+					//get employee info
+					$user_info = $this->Xin_model->read_user_info($timesheet[0]->employee_id);
+					
+					$full_name = $user_info[0]->first_name.' '.$user_info[0]->last_name;
+					
+					$from_date = $this->Xin_model->set_date_format($timesheet[0]->from_date);
+					$to_date = $this->Xin_model->set_date_format($timesheet[0]->to_date);
 				
-				//get leave info
-				$timesheet = $this->Timesheet_model->read_leave_information($id);
-				//get company info
-				$cinfo = $this->Xin_model->read_company_setting_info(1);
-				//get email template
-				$template = $this->Xin_model->read_email_template(6);
-				//get employee info
-				$user_info = $this->Xin_model->read_user_info($timesheet[0]->employee_id);
-				
-				$full_name = $user_info[0]->first_name.' '.$user_info[0]->last_name;
-				
-				$from_date = $this->Xin_model->set_date_format($timesheet[0]->from_date);
-				$to_date = $this->Xin_model->set_date_format($timesheet[0]->to_date);
-			
-				$subject = $template[0]->subject.' - '.$cinfo[0]->company_name;
-				$logo = base_url().'uploads/logo/signin/'.$cinfo[0]->sign_in_logo;
-				
-				$message = '
-			<div style="background:#f6f6f6;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:12px;margin:0;padding:0;padding: 20px;">
-			<img src="'.$logo.'" title="'.$cinfo[0]->company_name.'"><br>'.str_replace(array("{var site_name}","{var site_url}","{var leave_start_date}","{var leave_end_date}"),array($cinfo[0]->company_name,site_url(),$from_date,$to_date),htmlspecialchars_decode(stripslashes($template[0]->message))).'</div>';
-				
-				hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$user_info[0]->email,$subject,$message);
-			} else if($this->input->post('status') == 3){ // rejected
-				
-				$this->email->set_mailtype("html");
-				
-				//get leave info
-				$timesheet = $this->Timesheet_model->read_leave_information($id);
-				//get company info
-				$cinfo = $this->Xin_model->read_company_setting_info(1);
-				//get email template
-				$template = $this->Xin_model->read_email_template(7);
-				//get employee info
-				$user_info = $this->Xin_model->read_user_info($timesheet[0]->employee_id);
-				
-				$full_name = $user_info[0]->first_name.' '.$user_info[0]->last_name;
-				
-				$from_date = $this->Xin_model->set_date_format($timesheet[0]->from_date);
-				$to_date = $this->Xin_model->set_date_format($timesheet[0]->to_date);
-			
-				$subject = $template[0]->subject.' - '.$cinfo[0]->company_name;
-				$logo = base_url().'uploads/logo/signin/'.$cinfo[0]->sign_in_logo;
-				
-				$message = '
-			<div style="background:#f6f6f6;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:12px;margin:0;padding:0;padding: 20px;">
-			<img src="'.$logo.'" title="'.$cinfo[0]->company_name.'"><br>'.str_replace(array("{var site_name}","{var site_url}","{var leave_start_date}","{var leave_end_date}"),array($cinfo[0]->company_name,site_url(),$from_date,$to_date),htmlspecialchars_decode(stripslashes($template[0]->message))).'</div>';
-				
-				hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$user_info[0]->email,$subject,$message);
-			} }
+					$subject = $template[0]->subject.' - '.$cinfo[0]->company_name;
+					$logo = base_url().'uploads/logo/signin/'.$cinfo[0]->sign_in_logo;
+					
+					$message = '
+				<div style="background:#f6f6f6;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:12px;margin:0;padding:0;padding: 20px;">
+				<img src="'.$logo.'" title="'.$cinfo[0]->company_name.'"><br>'.str_replace(array("{var site_name}","{var site_url}","{var leave_start_date}","{var leave_end_date}"),array($cinfo[0]->company_name,site_url(),$from_date,$to_date),htmlspecialchars_decode(stripslashes($template[0]->message))).'</div>';
+					
+					hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$user_info[0]->email,$subject,$message);
+				} 
+			}
 			redirect('admin/timesheet/leave');
 		} else {
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
@@ -806,27 +817,28 @@ class Timesheet extends MY_Controller {
 		}			 
 		
 		$data = array(
-				'title' => $this->lang->line('xin_leave_detail').' | '.$this->Xin_model->site_title(),
-				'type' => $type_name,
-				'role_id' => $u_role_id,
-				'full_name' => $full_name,
-				'department_name' => $department_name,
-				'leave_id' => $result[0]->leave_id,
-				'employee_id' => $result[0]->employee_id,
-				'company_id' => $result[0]->company_id,
-				'leave_type_id' => $result[0]->leave_type_id,
-				'from_date' => $result[0]->from_date,
-				'to_date' => $result[0]->to_date,
-				'applied_on' => $result[0]->applied_on,
-				'reason' => $result[0]->reason,
-				'remarks' => $result[0]->remarks,
-				'status' => $result[0]->status,
-				'leave_attachment' => $result[0]->leave_attachment,
-				'is_half_day' => $result[0]->is_half_day,
-				'created_at' => $result[0]->created_at,
-				'all_employees' => $this->Xin_model->all_employees(),
-				'all_leave_types' => $this->Timesheet_model->all_leave_types(),
-				);
+			'title' => $this->lang->line('xin_leave_detail').' | '.$this->Xin_model->site_title(),
+			'type' => $type_name,
+			'role_id' => $u_role_id,
+			'full_name' => $full_name,
+			'department_name' => $department_name,
+			'leave_id' => $result[0]->leave_id,
+			'employee_id' => $result[0]->employee_id,
+			'day' => $result[0]->qty,
+			'company_id' => $result[0]->company_id,
+			'leave_type_id' => $result[0]->leave_type_id,
+			'from_date' => $result[0]->from_date,
+			'to_date' => $result[0]->to_date,
+			'applied_on' => $result[0]->applied_on,
+			'reason' => $result[0]->reason,
+			'remarks' => $result[0]->remarks,
+			'status' => $result[0]->status,
+			'leave_attachment' => $result[0]->leave_attachment,
+			'is_half_day' => $result[0]->is_half_day,
+			'created_at' => $result[0]->created_at,
+			'all_employees' => $this->Xin_model->all_employees(),
+			'all_leave_types' => $this->Timesheet_model->all_leave_types(),
+		);
 		$data['breadcrumbs'] = $this->lang->line('xin_leave_detail');
 		$data['path_url'] = 'leave_details';
 		$role_resources_ids = $this->Xin_model->user_role_resource();

@@ -11,11 +11,13 @@ class Attendance_model extends CI_Model {
     public function attn_process($process_date, $emp_ids, $status = null)
     {
 
-        /*$attn_file = $this->db->where('upload_date', $process_date)->get('xin_att_file_upload')->num_rows();
-        if ($attn_file == 0) {
-            echo 'Please upload attendance file to process';
-            exit;
+        /*$check_day = date("Y-m-d",strtotime("-1 day", strtotime($process_date)));
+        $att_check = $this->db->where('attendance_date',$check_day)->get('xin_attendance_time');
+        if($att_check->num_rows() < 1) {
+            echo 'Please first process '. $check_day;
+            exit; 
         }*/
+
         $off_day = $this->dayoff_check($process_date);
         $holiday_day = $this->holiday_check($process_date);
         $employees = $this->get_employees($emp_ids);
@@ -214,7 +216,6 @@ class Attendance_model extends CI_Model {
                 'lunch_late_status' => $lunch_late_status,
                 'early_out_status'  => $early_out_status,
             );
-            // dd($data);
 
             $query = $this->db->where('employee_id',$emp_id)->where('attendance_date',$process_date)->get('xin_attendance_time');
             if($query->num_rows() > 0 ){
@@ -225,7 +226,7 @@ class Attendance_model extends CI_Model {
                 $this->db->insert('xin_attendance_time', $data);
             }
         }
-        return 'Successfully Insert Done';
+        return 'Successfully Process Done';
     }
 
 
@@ -293,10 +294,13 @@ class Attendance_model extends CI_Model {
 
     function leave_chech($process_date, $emp_id)
     {
-        $this->db->where("from_date >=", $process_date);
-        $this->db->where("to_date <=", $process_date);
+        // dd($process_date .' = '. $emp_id);
+        $this->db->where("from_date <=", $process_date);
+        $this->db->where("to_date >=", $process_date);
         $this->db->where("employee_id", $emp_id);
+        $this->db->where("status", 2);
         $query = $this->db->get("xin_leave_applications");
+        // dd($query->result());
         if($query->num_rows() > 0 ){
             if ($query->row()->is_half_day == 1) {
                 $leave = array(

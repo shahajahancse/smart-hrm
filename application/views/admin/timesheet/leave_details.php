@@ -46,7 +46,7 @@ if (isset($success)) {
               </div>
             <div class="box-body">
             <?php $attributes = array('name' => 'update_status', 'autocomplete' => 'off');?>
-				        <?php $hidden = array('user_id' => $session['user_id'], '_token_status' => $leave_id);?>
+				        <?php $hidden = array('emp_id' => $employee_id, 'user_id' => $session['user_id'], '_token_status' => $leave_id);?>
                 <?php echo form_open('admin/timesheet/update_leave_status/'.$leave_id, $attributes, $hidden);?>
                 <div class="table-responsive" data-pattern="priority-columns">
                   <table class="table table-striped m-md-b-0">
@@ -104,16 +104,9 @@ if (isset($success)) {
                       <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_hrsale_total_days');?></th>
                         <td class="text-right">
-                        <?php 
-                            if($is_half_day == 1){
-                              $leave_day_info = $this->lang->line('xin_hr_leave_half_day');
-                            } else {
-                              $leave_day_info = $no_of_days;
-                            }
-                           ?>
                            <label for="leave_half_day">Leave Half Day</label>
-                            <input type="checkbox"  value="1" id="leave_half_day" name="leave_half_day">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                           <input type="number" id="day" name="day" value="<?=$leave_day_info?>" style="width: 60px;">
+                            <input type="checkbox" <?= ($is_half_day == 1)? 'checked':'';?>  value="<?= $is_half_day; ?>" id="leave_half_day" name="leave_half_day">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                           <input type="number" id="day" name="day" value="<?=$day?>" style="width: 60px;">
                         </td>
                       </tr>
                     </tbody>
@@ -196,31 +189,31 @@ if (isset($success)) {
               <div class="table-responsive" data-pattern="priority-columns">
                   <table class="table table-striped m-md-b-0">
                     <tbody>
-                <?php $show_last_leave = $this->Timesheet_model->employee_show_last_leave($employee_id,$leave_id); ?>
-                <?php foreach($show_last_leave as $last_leave) {?>   
-                <?php
-					// get leave types
-					$type = $this->Timesheet_model->read_leave_type_information($last_leave->leave_type_id);
-					if(!is_null($type)){
-						$type_name = $type[0]->type_name;
-					} else {
-						$type_name = '--';	
-					}
-					$datetime1 = new DateTime($last_leave->from_date);
-					$datetime2 = new DateTime($last_leave->to_date);
-					$interval = $datetime1->diff($datetime2);
-					
-					if(strtotime($last_leave->from_date) == strtotime($last_leave->to_date)){
-						$last_leave_no_of_days =1;
-					} else {
-						$last_leave_no_of_days = $interval->format('%a') +1;
-					}
-					if($last_leave->is_half_day == 1){
-						$last_leave_day_info = $this->lang->line('xin_hr_leave_half_day');
-					} else {
-						$last_leave_day_info = $last_leave_no_of_days;
-					}
-				?>            
+                      <?php $show_last_leave = $this->Timesheet_model->employee_show_last_leave($employee_id,$leave_id); ?>
+                      <?php foreach($show_last_leave as $last_leave) { 
+
+                					// get leave types
+                					$type = $this->Timesheet_model->read_leave_type_information($last_leave->leave_type_id);
+                					if(!is_null($type)){
+                						$type_name = $type[0]->type_name;
+                					} else {
+                						$type_name = '--';	
+                					}
+                					$datetime1 = new DateTime($last_leave->from_date);
+                					$datetime2 = new DateTime($last_leave->to_date);
+                					$interval = $datetime1->diff($datetime2);
+                					
+                					if(strtotime($last_leave->from_date) == strtotime($last_leave->to_date)){
+                						$last_leave_no_of_days =1;
+                					} else {
+                						$last_leave_no_of_days = $interval->format('%a') +1;
+                					}
+                					if($last_leave->is_half_day == 1){
+                						$last_leave_day_info = $this->lang->line('xin_hr_leave_half_day');
+                					} else {
+                						$last_leave_day_info = $last_leave_no_of_days;
+                					}
+                				?>            
                       <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_leave_type');?></th>
                         <td class="text-right"><?php echo $type_name;?></td>
