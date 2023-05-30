@@ -31,7 +31,42 @@
 
 	public function save($table, $data){
 	   return $this->db->insert($table, $data);
+	}
+	public function purchase_products_requisition($id,$role_id){
+
+		if($role_id==1){
+			$this->db->select('xin_employees.first_name,xin_employees.last_name, products_purches.id,products_purches.user_id,product_supplier.name,product_supplier.company,products_purches.status,products_purches.created_at,products_purches.updated_by')
+			->from('product_supplier')
+			->from('products_purches')
+			->from('xin_employees')
+			->where("products_purches.user_id = xin_employees.user_id")
+			->where("products_purches.supplier =product_supplier.id")
+			->order_by('products_purches.id', 'desc');
+
+		
+			
+			
+			
+			
+		}
+		if($role_id==4){
+			   $this->db->select("xin_employees.first_name,xin_employees.last_name, product_supplier.name,product_supplier.company,products_purches.status,products_purches_requisitions.id,")
+			            ->from('product_supplier')
+			            ->from('products_purches')
+			            ->from('products')
+						->where("xin_employees.user_id = products_requisitions.user_id")
+						//search by accordinig to requisition id 
+						->group_by('products_requisitions.id')
+						->order_by('products_requisitions.id', 'desc');
+						
+						// ->group_by('requisitions.user_id');
+		}
+		// dd($this->db->get()->result());
+		return	$this->db->get()->result();
 	} 
+
+
+
 	public function purchase_products($id,$role_id){
 
 		if($role_id==4){
@@ -66,6 +101,51 @@
 		// dd($this->db->get()->result());
 		return	$this->db->get()->result();
 	} 
+
+	
+	public  function product_purches_details($id){
+		// dd($id);
+		$this->db->select('xin_employees.first_name,xin_employees.last_name, product_supplier.name,product_supplier.company,products_purches.status,products.product_name,
+		products_purches_requisitions.quantity,products_purches_requisitions.ap_quantity,products_purches_requisitions.id ,products_purches_requisitions.amount,products_purches_requisitions.purches_id,products_purches_requisitions.created_at')
+		->from('product_supplier')
+		->from('products_purches')
+		->from('products')
+		->from('products_purches_requisitions')
+		->from('xin_employees')
+		->where("products_purches.user_id = xin_employees.user_id")
+		->where("products_purches.supplier =product_supplier.id")
+		->where("products_purches_requisitions.product_id = products.id")
+		->where("products_purches_requisitions.purches_id=products_purches.id")
+		->where("products_purches_requisitions.purches_id",$id)
+
+		->order_by('products_purches_requisitions.purches_id', 'desc');
+		
+		
+			
+			return $this->db->get()->result();
+	}
+
+	//purches requisition details
+	public  function product_requisition_details($id){
+		// dd($id);
+		$this->db->select('xin_employees.first_name,xin_employees.last_name, product_supplier.name,product_supplier.company,products_purches.status,products.product_name,
+		products_purches_requisitions.quantity,products_purches_requisitions.ap_quantity,products_purches_requisitions.id ,products_purches_requisitions.amount,products_purches_requisitions.purches_id,products_purches_requisitions.created_at')
+		->from('product_supplier')
+		->from('products_purches')
+		->from('products')
+		->from('products_purches_requisitions')
+		->from('xin_employees')
+		->where("products_purches.user_id = xin_employees.user_id")
+		->where("products_purches.supplier =product_supplier.id")
+		->where("products_purches_requisitions.product_id = products.id")
+		->where("products_purches_requisitions.purches_id=products_purches.id")
+		->where("products_purches_requisitions.purches_id",$id)
+
+		->order_by('products_purches_requisitions.purches_id', 'desc');
+		
+			return $this->db->get()->result();
+	}
+// requisition details for requisition id
 
 	public  function requisition_details($id){
 		// dd($id);

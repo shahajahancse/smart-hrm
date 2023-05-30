@@ -33,6 +33,7 @@ class Xin_model extends CI_Model {
 		$this->db->where('e.user_id = s.employee_id');
 		$this->db->where('s.late_deduct !=', 0);
 		$this->db->where('s.salary_month =', $first_date );
+		$this->db->order_by('s.basic_salary', 'desc');
 		$result = $this->db->get()->result();
 		
 		return $result;
