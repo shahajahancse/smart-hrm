@@ -278,7 +278,26 @@ class Xin_model extends CI_Model {
 			$arr['leave_active'] = 'active';
 			$arr['attnd_open'] = 'active';
 			return $arr;
-		} else if($mClass=='timesheet' && $mMethod=='index') {
+
+		// lunch
+		}  else if($mClass=='lunch' && $mMethod=='index') {
+			$arr['lunch_open'] = 'active';
+			$arr['lunch_active'] = 'active';
+			return $arr;
+		} else if($mClass=='lunch' && $mMethod=='report') {
+			$arr['lunch_open'] = 'active';
+			$arr['lureport_active'] = 'active';
+			return $arr;
+		} else if($mClass=='lunch' && $mMethod=='lunch_package') {
+			$arr['lunch_open'] = 'active';
+			$arr['lusetting_open'] = 'active';
+			$arr['lpackage_active'] = 'active';
+			return $arr;
+		}
+		// lunch
+
+
+		else if($mClass=='timesheet' && $mMethod=='index') {
 			$arr['timesheet_active'] = 'active';
 			$arr['attnd_open'] = 'active';
 			return $arr;
@@ -326,18 +345,29 @@ class Xin_model extends CI_Model {
 			$arr['pay_advn_rpt_active'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
+
+			// inventory
 		} else if($mClass=='inventory' && $mMethod=='index') {
-			$arr['requi_active'] = 'active';
 			$arr['invtry_open'] = 'active';
+			$arr['requi_active'] = 'active';
 			return $arr;
 		} else if($mClass=='inventory' && $mMethod=='purchase') {
-			$arr['purchase_active'] = 'active';
 			$arr['invtry_open'] = 'active';
+			$arr['purchase_active'] = 'active';
+			return $arr;
+		}  else if($mClass=='inventory' && $mMethod=='report') {
+			$arr['invtry_open'] = 'active';
+			$arr['inreport_active'] = 'active';
 			return $arr;
 		} else if($mClass=='inventory' && $mMethod=='products') {
 			$arr['invtry_open'] = 'active';
 			$arr['insetting_open'] = 'active';
 			$arr['product_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='supplier') {
+			$arr['invtry_open'] = 'active';
+			$arr['insetting_open'] = 'active';
+			$arr['supplier_open'] = 'active';
 			return $arr;
 		}  else if($mClass=='inventory' && $mMethod=='unit') {
 			$arr['invtry_open'] = 'active';
@@ -354,6 +384,8 @@ class Xin_model extends CI_Model {
 			$arr['insetting_open'] = 'active';
 			$arr['subcat_open'] = 'active';
 			return $arr;
+
+			// inventory
 		} else if($mClass=='performance_indicator') {
 			$arr['per_indi_active'] = 'active';
 			$arr['performance_open'] = 'active';
