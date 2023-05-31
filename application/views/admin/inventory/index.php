@@ -110,12 +110,12 @@
                         
                       <?php 
                         if($session['role_id'] =1){ ?>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>" >Details</a><br>
+                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
                         
                         
                         <?php if($rows->status==4 || $rows->status==1){?> 
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/purchase_edit_approved/'.$rows->id);?>">Edit</a> <br>
-                        <a style="padding-left:5px; " href="<?= base_url('admin/inventory/purchase_rejected/'.$rows->id);?>">Rejecte</a>
+                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
+                        <a style="padding-left:5px; " href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">Rejecte</a>
                         <?php }} ?>
                       </div>
               </td>
@@ -129,7 +129,7 @@
                     ?></td>
                 <td class="text-center"><?php echo $rows->created_at; ?></td>
                 <td class="text-center">
-                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
+                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
                 </td>
             </tr>
           <?php }} ?>
