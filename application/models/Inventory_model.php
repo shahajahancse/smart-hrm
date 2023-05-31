@@ -35,31 +35,41 @@
 	public function purchase_products_requisition($id,$role_id){
 
 		if($role_id==1){
-			$this->db->select('xin_employees.first_name,xin_employees.last_name, products_purches.id,products_purches.user_id,product_supplier.name,product_supplier.company,products_purches.status,products_purches.created_at,products_purches.updated_by')
+			$this->db->select('
+					xin_employees.first_name,
+					xin_employees.last_name, 
+					product_supplier.name,
+					product_supplier.company,
+					products_purches.id,
+					products_purches.user_id,
+					products_purches.status,
+					products_purches.created_at,
+					products_purches.updated_by
+				')
 			->from('product_supplier')
 			->from('products_purches')
 			->from('xin_employees')
 			->where("products_purches.user_id = xin_employees.user_id")
 			->where("products_purches.supplier =product_supplier.id")
 			->order_by('products_purches.id', 'desc');
-
-		
-			
-			
-			
-			
 		}
+
 		if($role_id==4){
-			   $this->db->select("xin_employees.first_name,xin_employees.last_name, product_supplier.name,product_supplier.company,products_purches.status,products_purches_requisitions.id,")
-			            ->from('product_supplier')
-			            ->from('products_purches')
-			            ->from('products')
-						->where("xin_employees.user_id = products_requisitions.user_id")
-						//search by accordinig to requisition id 
-						->group_by('products_requisitions.id')
-						->order_by('products_requisitions.id', 'desc');
-						
-						// ->group_by('requisitions.user_id');
+			$this->db->select("
+					xin_employees.first_name,
+					xin_employees.last_name, 
+					product_supplier.name,
+					product_supplier.company,
+					products_purches.status,
+					products_purches_requisitions.id,
+				")
+	        ->from('product_supplier')
+	        ->from('products_purches')
+	        ->from('products')
+			->where("xin_employees.user_id = products_requisitions.user_id")
+			//search by accordinig to requisition id 
+			->group_by('products_requisitions.id')
+			->order_by('products_requisitions.id', 'desc');
 		}
 		// dd($this->db->get()->result());
 		return	$this->db->get()->result();
@@ -70,33 +80,42 @@
 	public function purchase_products($id,$role_id){
 
 		if($role_id==4){
-			$this->db->select("products_categories.category_name,
-							   products_categories.id as cat_id,
-							   products_requisitions.user_id,
-							   products_requisitions.status,
-							   products_requisition_details.created_at,
-							   requisitions.created_at,
-							   products_requisitions.id")
-					 ->from("products_categories")
-					 ->from("products_requisitions")
-					 ->from("products_requisition_details")
-					 ->from("xin_employees")
-					 ->where("products_categories.id = products_requisition_details.cat_id")	
-					 ->where("products_requisitions.id = products_requisition_details.requisition_id")	
-					 ->where("products_requisitions.user_id = $id")
-					 ->group_by('products_requisition_details.cat_id');
+			$this->db->select("
+					products_categories.category_name,
+				    products_categories.id as cat_id,
+				    products_requisitions.user_id,
+				    products_requisitions.status,
+				    products_requisition_details.created_at,
+				    requisitions.created_at,
+				    products_requisitions.id
+				")
+			->from("products_categories")
+			->from("products_requisitions")
+			->from("products_requisition_details")
+			->from("xin_employees")
+			->where("products_categories.id = products_requisition_details.cat_id")	
+			->where("products_requisitions.id = products_requisition_details.requisition_id")	
+			->where("products_requisitions.user_id = $id")
+			->group_by('products_requisition_details.cat_id');
 		}
+
 		if($role_id==1){
-			   $this->db->select("xin_employees.first_name,xin_employees.last_name,products_requisitions.id,products_requisitions.created_at,products_requisitions.status,products_requisition_details.created_at,products_requisitions.user_id")
-						->from("products_requisition_details")
-						->from("products_requisitions")
-						->from('xin_employees')
-						->where("xin_employees.user_id = products_requisitions.user_id")
-						//search by accordinig to requisition id 
-						->group_by('products_requisitions.id')
-						->order_by('products_requisitions.id', 'desc');
-						
-						// ->group_by('requisitions.user_id');
+		   $this->db->select("
+			   		xin_employees.first_name,
+			   		xin_employees.last_name,
+			   		products_requisitions.id,
+			   		products_requisitions.created_at,
+			   		products_requisitions.status,
+			   		products_requisition_details.created_at,
+			   		products_requisitions.user_id
+			   	")
+			->from("products_requisition_details")
+			->from("products_requisitions")
+			->from('xin_employees')
+			->where("xin_employees.user_id = products_requisitions.user_id")
+			//search by accordinig to requisition id 
+			->group_by('products_requisitions.id')
+			->order_by('products_requisitions.id', 'desc');
 		}
 		// dd($this->db->get()->result());
 		return	$this->db->get()->result();
@@ -152,12 +171,13 @@
 			$this->db->select(" 
 			                    products_requisition_details.id,
 								products_requisition_details.requisition_id,
+								products_requisition_details.quantity,
+								products_requisition_details.approved_qty,
+								products_requisitions.status,
 								products_requisitions.user_id,
 								products_categories.category_name,
 								products_sub_categories.sub_cate_name,
 								products.product_name,
-								products_requisition_details.quantity,
-								products_requisition_details.approved_qty,
 							")
 			->from("products_categories")
 			->from("products_sub_categories")
