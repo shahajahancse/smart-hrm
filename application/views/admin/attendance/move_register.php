@@ -105,7 +105,7 @@
 </div>
 
 <!-- modal for TA DA -->
-<div class="modal fade bd-example-modal-lg" id='myModal' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id='myModal1' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -431,7 +431,7 @@ function edit(id){
 function showModal(id,role_id) {
   //  alert(id + ' '+ role_id); 
     $("#form_id").val(id);
-    $('#myModal').modal().show();
+    $('#myModal1').modal().show();
      
     var url = "<?php echo base_url('admin/attendance/modify_for_ta_da/')?>" + id;
     jQuery.ajax({
@@ -559,7 +559,7 @@ function manage_ta_da(role_id){
 
  $(document).ready(function(){
 
-  $('#myModal').on('hidden.bs.modal', function(){
+  $('#myModal1').on('hidden.bs.modal', function(){
               $(this).find('form')[0].reset();
               $("#request_amount").attr('style', 'border: 1px solid #ccd6e6 !important');
               $("#short_details").attr('style', 'border: 1px solid #ccd6e6 !important');
