@@ -79,7 +79,7 @@
                 <th class="text-center" style="width:50px;">Action</th>
               <?php }?> 
               <?php if($user_role_id==4){?>
-                <th class="text-center" style="width:100px;">Category Name</th>
+                <th class="text-center" style="width:100px;">Name</th>
                 <th class="text-center" style="width:20px;">Status</th>
                 <th class="text-center" style="width:20px;">Request Date</th>
                 <th class="text-center" style="width:50px;">Action</th>
@@ -122,7 +122,7 @@
              
                 <?php } ?>
               <?php if($user_role_id==4){?>
-                <td class="text-center"><?php echo $rows->category_name; ?></td>
+                <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                 <td class="text-center"><?php echo $rows->status==1?"
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
                      ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
