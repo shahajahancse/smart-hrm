@@ -46,16 +46,18 @@ $get_animate = $this->Xin_model->get_content_animate();
         </tbody>
       </table>
       <!-- <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/persial_approved/'.$requisition_id);?>">Approved</a> -->
-       <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-      <?php echo form_close()?>
+       <?php if(!empty($results)){?>
+        <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
+        <?php }?>
+        <?php echo form_close()?>
     </div>
   </div>
 </div>
 
 <script>
-$(document).ready(function () {
-    $('#details').DataTable();
-});
+// $(document).ready(function () {
+//     $('#details').DataTable();
+// });
 
 
 </script>

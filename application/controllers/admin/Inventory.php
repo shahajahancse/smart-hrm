@@ -140,7 +140,12 @@ class Inventory extends MY_Controller {
 		$data['breadcrumbs'] = 'Inventory';
 		$data['path_url']    = 'inventory';
 	    $data['results'] 	 = $this->Inventory_model->requisition_details($id);
-		$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
+		if(!empty($data['results'])){
+			$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
+		}else{
+			$data['requisition_id'] 	 = '';
+		}
+		
 		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data);
 	}
