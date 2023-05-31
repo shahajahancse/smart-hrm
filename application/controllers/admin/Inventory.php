@@ -408,7 +408,13 @@ public function purchase($id = null)
 		// dd($data['results']);
 	    // $data['user_id'] 	 = $id;
 		// dd($data['results']);
-		 $data['purches_id'] 	 = $data['results'][0]->purches_id;
+		 
+
+		 if(!empty($data['results'])){
+			$data['purches_id'] 	 = $data['results'][0]->purches_id;
+		}else{
+			$data['purches_id']  	 = '';
+		}
 	
 		 
 		$data['subview'] 	 = $this->load->view("admin/inventory/product_purches_edit_approve", $data, TRUE);
@@ -652,12 +658,21 @@ public function purchase($id = null)
         echo (json_encode($data));
 	}
 
-	public function delete_requsiton_item($id){
+	public function delete_requsiton_item($id,$rid){
 		
 		$approved = $this->db->where('id',$id)->delete('products_requisition_details');
 		if($approved){
 			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
-		 redirect("admin/inventory/index","refresh");
+		 redirect("admin/inventory/requsition_edit_approved/".$rid);
+		  
+		}
+	}
+	public function delete_purches_item($id,$pid){
+		
+		$approved = $this->db->where('id',$id)->delete('products_purches_requisitions');
+		if($approved){
+			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
+		 redirect("admin/inventory/product_purchase_edit_approved/".$pid);
 		}
 	}
 
