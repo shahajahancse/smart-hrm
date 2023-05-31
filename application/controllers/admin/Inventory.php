@@ -114,7 +114,8 @@ class Inventory extends MY_Controller {
 									
 	    } else {
 			  $data['results']	 = $this->Inventory_model->req_details_cat_wise($id);
-		}
+									
+	    }
 		$data['subview'] 	 = $this->load->view("admin/inventory/requsition_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
@@ -361,6 +362,7 @@ public function purchase($id = null)
 		 }
 		//  $data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 	          $data['status']      = $this->db->select('status')->where('id',$id)->get('products_purches')->row()->status;												    // dd($data['results']);
+	          $data['status']      = $this->db->select('status')->where('id',$id)->get('products_purches')->row()->status;												    // dd($data['results']);
 										
 		}
 		else{
@@ -418,6 +420,7 @@ public function purchase($id = null)
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
 			
 		}
+		
 		
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
