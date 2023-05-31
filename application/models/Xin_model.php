@@ -288,6 +288,10 @@ class Xin_model extends CI_Model {
 			$arr['lunch_open'] = 'active';
 			$arr['lureport_active'] = 'active';
 			return $arr;
+		} else if($mClass=='lunch' && $mMethod=='today_lunch') {
+			$arr['lunch_open'] = 'active';
+			$arr['today_active'] = 'active';
+			return $arr;
 		} else if($mClass=='lunch' && $mMethod=='lunch_package') {
 			$arr['lunch_open'] = 'active';
 			$arr['lusetting_open'] = 'active';

@@ -1,4 +1,3 @@
-<a href="<?=base_url('admin/lunch/today_lunch/')?>" class="btn btn-primary">Today Lunch r</a>
 
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
@@ -11,34 +10,39 @@ Update Lunch Package
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Update Lunch Package</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+     
       </div>
 
 
 
       <div class="modal-body">
-        <div class="form-group">
-          <label for="exampleFormControlFile1">Per mill TK</label>
-        <input type="number" class="common" name="" value=100 id="per_mil">
+     <form id="myForm">
+        <div class="col-md-12 text-center">
+            <div class="form-group col-md-12">
+              <label for="exampleFormControlFile1">Per mill TK</label><br>
+              <input type="number" class="common" name="" value=<?= $query[0]->permil ?> id="per_mil">
+            </div>
         </div>
-        <div class="form-group">
-          <label for="exampleFormControlFile1">Office Percentenc</label>
-          <input type="number" class="common" name="" value=50  id="office_give_percent">
-        </div>
-        <div class="form-group">
-          <label for="exampleFormControlFile1">Employee Percentenc</label>
-    <input type="number" class="common" name="" id="stuf_give_percent" value=50 disabled>
-        </div>
-        <div class="form-group">
-          <label for="exampleFormControlFile1">Office TK</label>
-    <input type="number" class="common" name="" id="office_give_tk" value=50 disabled>
-        </div>
-        <div class="form-group">
-          <label for="exampleFormControlFile1">Emplyee TK</label>
-    <input type="number" class="common" name="" id="stuf_give_tk" value=50 disabled>
-        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-6">
+              <label for="exampleFormControlFile1">Office Percentage</label>
+              <input type="number" class="common" name=""  value=<?= $query[0]->office_givepercent ?>  id="office_give_percent">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="exampleFormControlFile1">Employee Percentage</label>
+              <input type="number" class="common" name="" id="stuf_give_percent" value=<?= $query[0]->stuf_give_percent ?> disabled>
+            </div>
+         </div>
+         <div class="col-md-12">
+            <div class="form-group col-md-6">
+              <label for="exampleFormControlFile1">Office TK</label>
+              <input type="number" class="common" name="" id="office_give_tk" value=<?= $query[0]->office_give_tk ?> disabled>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="exampleFormControlFile1">Emplyee TK</label>
+              <input type="number" class="common" name="" id="stuf_give_tk" value=<?= $query[0]->stuf_give_tk ?> disabled>
+            </div>
+         </div>
             
 
 
@@ -47,8 +51,9 @@ Update Lunch Package
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
       </div>
+      </form>
     </div>
   </div>
 </div>
@@ -88,4 +93,42 @@ for (var i = 0; i < commonInputs.length; i++) {
 }
 
 
+</script>
+<script>
+ $(document).ready(function() {
+  $("#myForm").submit(function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    // Get form data
+    var perMilValue = document.getElementById("per_mil").value;
+    var officeGivePercentValue = document.getElementById("office_give_percent").value;
+    var stufGivePercentValue = document.getElementById("stuf_give_percent").value;
+    var officeGiveTkValue = document.getElementById("office_give_tk").value;
+    var stufGiveTkValue = document.getElementById("stuf_give_tk").value;
+
+    // Create data object
+    var data = {
+      per_mil: perMilValue,
+      office_give_percent: officeGivePercentValue,
+      stuf_give_percent: stufGivePercentValue,
+      office_give_tk: officeGiveTkValue,
+      stuf_give_tk: stufGiveTkValue
+    };
+    
+    $.ajax({
+      url: '<?php echo base_url("/admin/lunch/add_lunch_pak")?>',
+      type: "POST",
+      data: data,
+      success: function(response) {
+        // Handle the response from the controller\
+        alert('success');
+        console.log(response);
+      },
+      error: function(xhr, status, error) {
+        // Handle any errors that occurred during the AJAX request
+        console.error(error);
+      }
+    });
+  });
+});
 </script>

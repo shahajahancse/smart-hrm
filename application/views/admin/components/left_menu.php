@@ -238,7 +238,11 @@ if($theme[0]->sub_menu_icons != ''){
         <ul class="treeview-menu">
 
           <?php if(in_array('1051',$role_resources_ids)) { ?>
-          <li class="sidenav-link <?php if(!empty($arr_mod['lunch_active']))echo $arr_mod['lunch_active'];?>"> <a href="<?php echo site_url('admin/lunch/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Today Lunch  </a> </li>
+          <li class="sidenav-link <?php if(!empty($arr_mod['lunch_active']))echo $arr_mod['lunch_active'];?>"> <a href="<?php echo site_url('admin/lunch/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> 
+        Lunch list </a> </li>
+          <?php } ?> 
+          <?php if(in_array('1053',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['today_active']))echo $arr_mod['today_active'];?>"> <a href="<?php echo site_url('admin/lunch/today_lunch');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Today Lunch  </a> </li>
           <?php } ?> 
           <?php if(in_array('1052',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['lureport_active']))echo $arr_mod['lureport_active'];?>"> <a href="<?php echo site_url('admin/lunch/report');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Report  </a> </li>
