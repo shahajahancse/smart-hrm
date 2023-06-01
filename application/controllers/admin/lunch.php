@@ -130,7 +130,7 @@ public function today_lunch()
     } else {
         $total_emp = $this->lunch_model->all_employees();
         $attend_emp = $this->lunch_model->daily_report($currentDate);
-        dd($attend_emp);
+       
 
         $att_emp_id = array_map(function ($item) {
             return $item->employee_id;
