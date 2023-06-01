@@ -1,6 +1,6 @@
 <h3>Today Lunch</h3>
 
-<?php echo form_open('admin/lunch/add_lunch'); ?>
+<?= form_open('admin/lunch/add_lunch'); ?>
 <input type="hidden" name="date" value="<?= $date ?>">
 <table class="table table-hover" style="text-align-last: center;">
     <thead>
@@ -15,7 +15,7 @@
     <tbody>
         <?php foreach ($active as $key => $raw) { ?>
             <tr>
-                <input type="hidden" name="empid[]" value="<?= (isset($raw->emp_id)) ? $raw->emp_id : (isset($raw->user_id) ? $raw->user_id : null); ?>">
+                <input type="hidden" name="empid[]" value="<?= isset($raw->emp_id) ? $raw->emp_id : (isset($raw->user_id) ? $raw->user_id : null); ?>">
                 <th scope="row"><?= $key + 1 ?></th>
                 <?php
                 if (!isset($raw->emp_id)) {
@@ -44,7 +44,7 @@
 
         <tr>
             <td colspan="5">
-                <p style="font-size: 18px;color: black;background-color: aquamarine;">Inactive</p>
+                <p style="font-size: 18px; color: black; background-color: aquamarine;">Inactive</p>
             </td>
         </tr>
 
@@ -55,7 +55,7 @@
                 <?php
                 if (!isset($data->emp_id)) {
                 ?>
-                    <td><?= isset($data->first_name) ? $data->first_name : '' ?> <?= isset($data->last_name) ? $data->last_name : '' ?></td>
+                       <td><?= isset($data->first_name) ? $data->first_name : '' ?> <?= isset($data->last_name) ? $data->last_name : '' ?></td>
                 <?php
                 } else {
                     $empd = $this->Attendance_model->get_employee($data->emp_id);
@@ -79,7 +79,7 @@
 
         <tr>
             <td colspan="5">
-                <p style="font-size: 18px;color: black;background-color: aquamarine;">Guest</p>
+                <p style="font-size: 18px; color: black; background-color: aquamarine;">Guest</p>
             </td>
         </tr>
         <tr>
@@ -97,6 +97,4 @@
     <textarea name="bigcomment" class="form-control" id="exampleFormControlTextarea1" rows="3"><?= isset($bigcom) ? $bigcom : '0' ?></textarea>
 </div>
 <input type="submit" value="Save" class="btn btn-primary">
-<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-<?php echo form_close(); ?>
+<?= form_close(); ?>

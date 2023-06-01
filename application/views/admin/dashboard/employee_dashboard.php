@@ -2,9 +2,12 @@
     $session = $this->session->userdata( 'username' );
     $userid  = $session[ 'user_id' ];
     $lastmonthsalarys  = $this->Salary_model->getpassedmonthsalary( $userid );
-    $lastmonthsalaryy =$lastmonthsalarys[1];
-    $lastmont=$lastmonthsalarys[1]->salary_month;
-    $lastmont = $lastmonthsalarys[1]->salary_month;
+  
+    $lastmonthsalaryy =$lastmonthsalarys[0];
+  
+    $lastmont=$lastmonthsalarys[0]->salary_month;
+
+    $lastmont = $lastmonthsalarys[0]->salary_month;
     $date_object = DateTime::createFromFormat('Y-m', $lastmont);
     $monthName = $date_object->format('F');     
 ?>
@@ -150,7 +153,7 @@ if(!is_null($role_user)){
               <p class="box_titel">Leave Managment</p>
               <div class="contentbox"> 
                 
-                <?php if (!$user_info[0]->status==1){ ?>
+                <?php if ($user_info[0]->status==1){ ?>
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
                   <p style="margin: 0; font-weight: bold;"  class="col-md-8 overlayth">Available Earn Leave : </p>
