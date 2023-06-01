@@ -302,13 +302,12 @@ public function purchase($id = null)
 		$ids=$this->Inventory_model->save('products_purches', ['user_id'=>$session['user_id'],'	supplier'=>$supplier_id]);
 		$last_id=$this->db->insert_id();
 		
-	   
 		for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
 			$form_data[] = array( 
 				'product_id'	 => $_POST['product_id'][$i],
 				'quantity'		 => $_POST['quantity'][$i],
 				'purches_id' => $last_id,
-			);
+			);}
 			  
 			if ($hid = $this->input->post('hidden_id')) {
 				$this->db->where('id', $hid)->update_batch('products_requisition_details', $form_data);
@@ -320,7 +319,7 @@ public function purchase($id = null)
 					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
 				}
 			}		
-		}
+		
 		
 		return redirect('admin/inventory/purchase');
 	}
@@ -424,14 +423,13 @@ public function purchase($id = null)
 	//approved by prisal product purches edit
 	public function product_persial_approved($id){
 		
-	 
+	    $session = $this->session->userdata('username');
 		$all_detail=$this->db->where('purches_id',$id)->get('products_purches_requisitions')->result();
 		// dd($all_detail);
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
 			
 		}
-		
 		
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
@@ -440,15 +438,82 @@ public function purchase($id = null)
 			
 				 foreach($quantity as $key=>$value){
 					$log_user=$_SESSION['username']['user_id'];
+					if($session['role_id']==1){
 					$this->db->where('id',$id)->update('products_purches',['updated_by'=>$log_user]);
-                    $this->db->where('id',$r_did[$key])->update('products_purches_requisitions',['ap_quantity'=>$value]); }
+                    $this->db->where('id',$r_did[$key])->update('products_purches_requisitions',['ap_quantity'=>$value]);}else{
+						$this->db->where('id',$r_did[$key])->update('products_purches_requisitions',['quantity'=>$value]);
+					} }
 			 }
-		      $approved = $this->db->where('id',$id)->update('products_purches',['status'=>2]);
-		   if($approved){
-				        	$this->session->set_flashdata('success', 'Updated Successfully.');
-				            redirect("admin/inventory/purchase","refresh");
+			 if($session['role_id']==1){ $approved = $this->db->where('id',$id)->update('products_purches',['status'=>2]);
+				if($approved){
+					$this->session->set_flashdata('success', 'Updated Successfully.');
+					redirect("admin/inventory/purchase","refresh");
+		        }
+			}
+		  else{
+					$this->session->set_flashdata('success', ' product Updated Successfully.');
+				    redirect("admin/inventory/purchase","refresh");
 				 }
 	
+	}
+
+	public function product_purchase_delivered($id){
+    
+	   $this->db->select('p.product_name, p.quantity as  qty, pr.*');
+	   $this->db->from('products_purches_requisitions pr');
+	   $this->db->from('products p');
+	   $this->db->where('p.id = pr.product_id');
+	   $this->db->where('purches_id', $id);
+	   $array = $this->db->get()->result();
+	//    dd($array);
+
+		foreach ($array as $row) {
+			$ff = $row->qty + $row->ap_quantity;
+			$data = array(
+				'id' => $row->product_id,
+			   'product_name' => $row->product_name,
+			   'quantity' => $row->qty + $row->ap_quantity,
+			); 
+			echo "<pre>"; print_r($data);
+			$sql = "UPDATE products
+			SET quantity = '$ff' 
+			WHERE id = '$row->product_id'";
+			$this->db->query($sql);
+			echo $this->db->last_query();
+			// $deliver = $this->db->where('id',$row->product_id)->update('products', $data);
+		}
+		exit('ok');
+
+		// $deliver = $this->db->where('id',$id)->update('products_purches',['status'=>3]);
+
+
+		$d1 = array_values($mergedArray);
+		
+	
+
+         $d2=$this->db->get('products')->result();
+		
+		
+	
+				$result = array();
+
+
+			
+
+		// $result = array_unique($result, SORT_REGULAR);
+	
+
+		
+			$deliver=$this->db->where('id',$id)->update('products_purches',['status'=>3]);
+			if($deliver){
+				$this->session->set_flashdata('success', 'Delivered Successfully.');
+				redirect("admin/inventory/purchase","refresh");
+			}
+			
+
+		
+		
+
 	}
  
 

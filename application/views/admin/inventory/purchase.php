@@ -120,7 +120,7 @@
                   <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                   <td class="text-center"><?php echo $rows->status==1?"
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
-                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
+                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Deliver</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
                     ?>
               </td>
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
@@ -162,7 +162,9 @@
                               <?php if($rows->status==4 || $rows->status==1){?> 
                                 <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a> <br>
                               <a style="padding-left:5px; " href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Rejecte</a>
-                              <?php }} ?>
+                              <?php }?> <?php if($rows->status==2){?>
+                                <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_delivered/'.$rows->id);?>">Delivery</a> <br>
+                            <?php }} ?>
                     </div>
 
                    </td>
@@ -176,12 +178,34 @@
                 <td class="text-center"><?php echo $rows->name ?></td>
                 <td class="text-center"><?php echo $rows->status==1?"
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
-                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
+                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Deliver</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
                     ?></td>
                 <td class="text-center"><?php echo $rows->created_at; ?></td>
                 <td class="text-center">
-                    <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a>
-                </td>
+                    <!-- <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i>Edit</a> -->
+                   
+
+                    <div class="dropdown" >
+
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Action
+                    </button>
+
+                    <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
+                      
+                    <?php 
+                      if($session['role_id'] =2){ ?>
+                      <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>" >Details</a><br>
+                      
+                      
+                      <?php if($rows->status==1){?> 
+                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a> <br>
+                     
+                      <?php }} ?>
+                    </div>
+
+                
+                  </td>
             </tr>
           <?php }} ?>
         </tbody>

@@ -56,7 +56,7 @@ $get_animate = $this->Xin_model->get_content_animate();
                 <td><?php echo $i++?></td>
                 <td><?php echo $row->name?></td>
                 <td><?php echo $row->company?></td>
-                <td><?php echo $row->status?></td>
+                <td><?php echo $row->product_name?></td>
                 <td><?php echo $row->quantity?></td>
                 <td><?php echo $row->ap_quantity?></td>
             </tr>
@@ -68,9 +68,9 @@ $get_animate = $this->Xin_model->get_content_animate();
 </div>
 
 <script>
-$(document).ready(function () {
-    $('#details').DataTable();
-});
+// $(document).ready(function () {
+//     $('#details').DataTable();
+// });
 
 </script>
 
