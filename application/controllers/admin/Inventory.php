@@ -95,78 +95,8 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 	}
-	//================= Requisition end =======================
 
-	//================= Purchase here =======================
-	public function purchase($id = null)
-	{
-		$session = $this->session->userdata('username');
-		//   dd($session);
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		 
-
-		//   //Validation
-		  $this->form_validation->set_rules('spl_name', 'Sapplier name', 'required|trim');
-		  $this->form_validation->set_rules('cmp_name', 'select category', 'required|trim');
-		  $this->form_validation->set_rules('cat_id[]', 'select category', 'required|trim');
-		  $this->form_validation->set_rules('sub_cate_id[]', 'select category', 'required|trim');
-		  $this->form_validation->set_rules('product_id[]', 'item name', 'required|trim');
-		  $this->form_validation->set_rules('quantity[]', 'Quantity', 'required|trim');
-  
-		//   //Validate and input data
-		if ($this->form_validation->run() == true){
-            $supplier_id=$_POST['spl_name'];
-			$company=$_POST['cmp_name'];
-			$ids=$this->Inventory_model->save('products_purches', ['user_id'=>$session['user_id'],'	supplier'=>$supplier_id]);
-			$last_id=$this->db->insert_id();
-			
-           
-			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
-				$form_data[] = array( 
-					'product_id'	 => $_POST['product_id'][$i],
-					'quantity'		 => $_POST['quantity'][$i],
-					'purches_id' => $last_id,
-				);
-				  
-				if ($hid = $this->input->post('hidden_id')) {
-					$this->db->where('id', $hid)->update_batch('products_requisition_details', $form_data);
-					$this->session->set_flashdata('success', 'Successfully Updated Done');
-				} else {
-					if($this->db->insert_batch('products_purches_requisitions', $form_data)){
-						$this->session->set_flashdata('success', 'Successfully Insert Done');
-					} else {
-						$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
-					}
-				}		
-		    }
-			
-	    	return redirect('admin/inventory/purchase');
-		}
-	
-        //Dropdown
-		$data['title'] 			= 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs']	= 'Inventory';
-		$data['path_url'] 		= 'inventory';
-	    $data['categorys']		= $this->db->get("products_categories")->result();
-	    $data['products'] 		= $this->Inventory_model->purchase_products_requisition($session['user_id'],$session['role_id']);
-    
-		// dd($data['products']);
-	    $data['results'] 		= $this->Inventory_model->product_list();
-	    $data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-		$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
-	    $data['units'] 			= $this->db->get("product_unit")->result();
-	    $data['col'] 			= $id;
-	    $data['user_role_id'] 	= $session['role_id'];
-		if ($id != null) {
-			$data['row'] 		= $this->db->where('id',$id)->get("products")->row();
-		}
-		$data['subview'] 		= $this->load->view("admin/inventory/purchase", $data, TRUE);
-								  $this->load->view('admin/layout/layout_main', $data); //page load
-	}
-
-	public function purchase_details($id)	{
+	public function requsition_details($id)	{
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -184,13 +114,13 @@ class Inventory extends MY_Controller {
 									
 	    } else {
 			  $data['results']	 = $this->Inventory_model->req_details_cat_wise($id);
-		}
-		$data['subview'] 	 = $this->load->view("admin/inventory/purchase_details", $data, TRUE);
+									
+	    }
+		$data['subview'] 	 = $this->load->view("admin/inventory/requsition_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
-	
-	public function purchase_rejected($id){
+	public function requsition_rejected($id){
 		// dd($id);
 		$log_user=$_SESSION['username']['user_id'];
 		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
@@ -201,9 +131,7 @@ class Inventory extends MY_Controller {
 		}
 	}
 
-// requsion edit here
-
-	public function purchase_edit_approved($id){
+	public function requsition_edit_approved($id){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -212,7 +140,12 @@ class Inventory extends MY_Controller {
 		$data['breadcrumbs'] = 'Inventory';
 		$data['path_url']    = 'inventory';
 	    $data['results'] 	 = $this->Inventory_model->requisition_details($id);
-		$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
+		if(!empty($data['results'])){
+			$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
+		}else{
+			$data['requisition_id'] 	 = '';
+		}
+		
 		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data);
 	}
@@ -255,8 +188,7 @@ class Inventory extends MY_Controller {
 
 
 
-
-	//================= Purchase here =======================
+	//================= Requisition end =======================
 
 
 	//=============== suplier ========================
@@ -346,7 +278,74 @@ class Inventory extends MY_Controller {
 
 //================= Product requsition purches code here =======================
 
-	// detail for product purchase details
+public function purchase($id = null)
+{
+	$session = $this->session->userdata('username');
+	//   dd($session);
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	 
+
+	//   //Validation
+	  $this->form_validation->set_rules('spl_name', 'Sapplier name', 'required|trim');
+	  $this->form_validation->set_rules('cmp_name', 'select category', 'required|trim');
+	  $this->form_validation->set_rules('cat_id[]', 'select category', 'required|trim');
+	  $this->form_validation->set_rules('sub_cate_id[]', 'select category', 'required|trim');
+	  $this->form_validation->set_rules('product_id[]', 'item name', 'required|trim');
+	  $this->form_validation->set_rules('quantity[]', 'Quantity', 'required|trim');
+
+	//   //Validate and input data
+	if ($this->form_validation->run() == true){
+		$supplier_id=$_POST['spl_name'];
+		$company=$_POST['cmp_name'];
+		$ids=$this->Inventory_model->save('products_purches', ['user_id'=>$session['user_id'],'	supplier'=>$supplier_id]);
+		$last_id=$this->db->insert_id();
+		
+	   
+		for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
+			$form_data[] = array( 
+				'product_id'	 => $_POST['product_id'][$i],
+				'quantity'		 => $_POST['quantity'][$i],
+				'purches_id' => $last_id,
+			);
+			  
+			if ($hid = $this->input->post('hidden_id')) {
+				$this->db->where('id', $hid)->update_batch('products_requisition_details', $form_data);
+				$this->session->set_flashdata('success', 'Successfully Updated Done');
+			} else {
+				if($this->db->insert_batch('products_purches_requisitions', $form_data)){
+					$this->session->set_flashdata('success', 'Successfully Insert Done');
+				} else {
+					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+				}
+			}		
+		}
+		
+		return redirect('admin/inventory/purchase');
+	}
+
+	//Dropdown
+	$data['title'] 			= 'Inventory | '.$this->Xin_model->site_title();
+	$data['breadcrumbs']	= 'Inventory';
+	$data['path_url'] 		= 'inventory';
+	$data['categorys']		= $this->db->get("products_categories")->result();
+	$data['products'] 		= $this->Inventory_model->purchase_products_requisition($session['user_id'],$session['role_id']);
+
+	// dd($data['products']);
+	$data['results'] 		= $this->Inventory_model->product_list();
+	$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
+	$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
+	$data['units'] 			= $this->db->get("product_unit")->result();
+	$data['col'] 			= $id;
+	$data['user_role_id'] 	= $session['role_id'];
+	if ($id != null) {
+		$data['row'] 		= $this->db->where('id',$id)->get("products")->row();
+	}
+	$data['subview'] 		= $this->load->view("admin/inventory/purchase", $data, TRUE);
+							  $this->load->view('admin/layout/layout_main', $data); //page load
+}
+	
 	public function product_purchase_details($id)	{
 		//  dd($id);
 		// dd($_SESSION);
@@ -367,6 +366,7 @@ class Inventory extends MY_Controller {
 			// dd($data['requisition_id']);
 		 }
 		//  $data['requisition_id'] 	 = $data['results'][0]->requisition_id;
+	          $data['status']      = $this->db->select('status')->where('id',$id)->get('products_purches')->row()->status;												    // dd($data['results']);
 	          $data['status']      = $this->db->select('status')->where('id',$id)->get('products_purches')->row()->status;												    // dd($data['results']);
 										
 		}
@@ -408,7 +408,13 @@ class Inventory extends MY_Controller {
 		// dd($data['results']);
 	    // $data['user_id'] 	 = $id;
 		// dd($data['results']);
-		 $data['purches_id'] 	 = $data['results'][0]->purches_id;
+		 
+
+		 if(!empty($data['results'])){
+			$data['purches_id'] 	 = $data['results'][0]->purches_id;
+		}else{
+			$data['purches_id']  	 = '';
+		}
 	
 		 
 		$data['subview'] 	 = $this->load->view("admin/inventory/product_purches_edit_approve", $data, TRUE);
@@ -425,6 +431,7 @@ class Inventory extends MY_Controller {
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
 			
 		}
+		
 		
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
@@ -651,12 +658,21 @@ class Inventory extends MY_Controller {
         echo (json_encode($data));
 	}
 
-	public function delete_requsiton_item($id){
+	public function delete_requsiton_item($id,$rid){
 		
 		$approved = $this->db->where('id',$id)->delete('products_requisition_details');
 		if($approved){
 			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
-		 redirect("admin/inventory/index","refresh");
+		 redirect("admin/inventory/requsition_edit_approved/".$rid);
+		  
+		}
+	}
+	public function delete_purches_item($id,$pid){
+		
+		$approved = $this->db->where('id',$id)->delete('products_purches_requisitions');
+		if($approved){
+			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
+		 redirect("admin/inventory/product_purchase_edit_approved/".$pid);
 		}
 	}
 
