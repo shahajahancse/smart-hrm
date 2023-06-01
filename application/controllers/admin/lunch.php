@@ -39,6 +39,34 @@ public function index()
     if (empty($session)) {
         redirect('admin/');
     }
+
+    $this->load->library('pagination');
+    $this->load->model('lunch_model');
+
+    $config['base_url'] = base_url('admin/lunch/index');
+    $config['total_rows'] = $this->lunch_model->get_total_rows();
+    $config['per_page'] = 2; // Number of records per page
+    $config['uri_segment'] = 3; // Update the URI segment number to 2
+    
+    // Bootstrap 3 pagination style
+    $config['full_tag_open'] = '<ul class="pagination">';
+    $config['full_tag_close'] = '</ul>';
+    $config['num_tag_open'] = '<li>';
+    $config['num_tag_close'] = '</li>';
+    $config['cur_tag_open'] = '<li class="active"><a href="#">';
+    $config['cur_tag_close'] = '</a></li>';
+    $config['prev_link'] = '&laquo;';
+    $config['prev_tag_open'] = '<li>';
+    $config['prev_tag_close'] = '</li>';
+    $config['next_link'] = '&raquo;';
+    $config['next_tag_open'] = '<li>';
+    $config['next_tag_close'] = '</li>';
+
+    $this->pagination->initialize($config);
+
+    $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+    $data['results'] = $this->lunch_model->get_all_data($config['per_page'], $page);
+    $data['pagination'] = $this->pagination->create_links();
     $data['query'] = $this->db->get_where('lunch_package', array('id' => 1))->result();
 
     $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
@@ -60,7 +88,11 @@ public function today_lunch()
         redirect('admin/');
     }
 
-    $currentDate = '2023-01-01';
+
+    if(base_url()=='http://localhost/smart-hrm/'){
+        $currentDate = '2023-01-05';
+
+    }else{ $currentDate = date('Y-m-d');}
     $query = $this->db->get_where('lunch_details', array('date' => $currentDate))->result();
     if (count($query) > 0) {
         $activeArray = [];
@@ -193,7 +225,7 @@ public function add_lunch()
 
         if ($this->db->insert('lunch', $data)) {
             $luncid = $this->db->insert_id();
-            $this->lunch_model->add_lunch_update($luncid, $empid, $m_amount, $p_status, $comment, $guest_m, $guest_comment, $date);
+            $this->lunch_model->add_lunch_details($luncid, $empid, $m_amount, $p_status, $comment, $guest_m, $guest_comment, $date);
             redirect('admin/lunch/index');
         } else {
             exit('not inserted');
@@ -201,5 +233,73 @@ public function add_lunch()
     }
 }
 
+
+public function lunch_package(){
+    $session = $this->session->userdata('username');
+    if (empty($session)) {
+        redirect('admin/');
+    }
+
+
+    $data['query'] = $this->db->get_where('lunch_package', array('id' => 1))->result();
+
+    $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+
+    $data['breadcrumbs'] = 'Lunch Package';
+    $data['path_url'] = 'lunch';
+    if (!empty($session)) {
+        $data['subview'] = $this->load->view("admin/lunch/lunch_package", $data, TRUE);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+    } else {
+        redirect('admin/');
+    }
+
+
+}
+
+public function details($lunchid, $date){
+    $session = $this->session->userdata('username');
+    if (empty($session)) {
+        redirect('admin/');
+    }
+
+    $data['lunch_details'] = $this->db->get_where('lunch_details', array('lunch_id' => $lunchid, 'date' => $date, 'meal_amount >' => 0))->result();
+    $data['lunch'] = $this->db->get_where('lunch', array('id' =>$lunchid, 'date' =>$date ))->result();
+
+    $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+
+    $data['breadcrumbs'] = 'Lunch Details';
+    $data['path_url'] = 'details';
+    if (!empty($session)) {
+        $data['subview'] = $this->load->view("admin/lunch/lunch_details", $data, TRUE);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+    } else {
+        redirect('admin/');
+    }
+}
+
+public function report(){
+
+    $session = $this->session->userdata('username');
+    if (empty($session)) {
+        redirect('admin/');
+    }
+
+
+
+
+
+  $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+
+    $data['breadcrumbs'] = 'Lunch Report';
+    $data['path_url'] = 'report';
+    if (!empty($session)) {
+        $data['subview'] = $this->load->view("admin/lunch/lunch_report", $data, TRUE);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+    } else {
+        redirect('admin/');
+    }
+
+}
 }
 ?>

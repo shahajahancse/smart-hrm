@@ -55,7 +55,7 @@
                 <?php
                 if (!isset($data->emp_id)) {
                 ?>
-                    <td><?= isset($data->first_name) ? $data->first_name : '' ?> <?= isset($data->last_name) ? $data->last_name : '' ?></td>
+                       <td><?= isset($data->first_name) ? $data->first_name : '' ?> <?= isset($data->last_name) ? $data->last_name : '' ?></td>
                 <?php
                 } else {
                     $empd = $this->Attendance_model->get_employee($data->emp_id);
@@ -97,6 +97,4 @@
     <textarea name="bigcomment" class="form-control" id="exampleFormControlTextarea1" rows="3"><?= isset($bigcom) ? $bigcom : '0' ?></textarea>
 </div>
 <input type="submit" value="Save" class="btn btn-primary">
-<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
 <?= form_close(); ?>

@@ -72,7 +72,16 @@ class lunch_model extends CI_Model {
         } else {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
+    }  
+
+    public function get_all_data($limit, $offset) {
+        $this->db->limit($limit, $offset);
+        $query = $this->db->get('lunch');
+        return $query->result();
     }
-    
+
+    public function get_total_rows() {
+        return $this->db->count_all('lunch');
+    }
 }
 ?>
