@@ -48,7 +48,8 @@
             </td>
         </tr>
 
-        <?php foreach ($inactive as $key => $data) { ?>
+        <?php foreach ($inactive as $key => $data) { 
+            ?>
             <tr>
                 <input type="hidden" name="empid[]" value="<?= isset($data->emp_id) ? $data->emp_id : (isset($data->user_id) ? $data->user_id : '') ?>">
                 <th scope="row"><?= $key + 1 ?></th>
@@ -75,7 +76,10 @@
                 <td><input type="number" name="m_amount[]" value="<?= isset($data->meal_amount) ? $data->meal_amount : '0' ?>" style="width: 83px;"></td>
                 <td><input type="text" name="comment[]" value="<?= isset($data->comment) ? $data->comment : '' ?>"></td>
             </tr>
-        <?php } ?>
+        <?php } 
+        
+
+        ?>
 
         <tr>
             <td colspan="5">
@@ -83,18 +87,19 @@
             </td>
         </tr>
         <tr>
+
             <th scope="row">1</th>
             <td>Guest</td>
             <td>-</td>
             <td><input type="number" name="guest" value="<?= isset($guest[0]->meal_amount) ? $guest[0]->meal_amount : '0' ?>" style="width: 83px;"></td>
-            <td><input type="text" name="guest_comment" value="<?= isset($guest[0]->comment) ? $guest[0]->comment : '0' ?>"></td>
+            <td><input type="text" name="guest_comment" value="<?= isset($guest[0]->comment) ? $guest[0]->comment : '' ?>"></td>
         </tr>
     </tbody>
 </table>
 
 <div class="form-group">
     <label>Comment</label>
-    <textarea name="bigcomment" class="form-control" id="exampleFormControlTextarea1" rows="3"><?= isset($bigcom) ? $bigcom : '0' ?></textarea>
+    <textarea name="bigcomment" class="form-control" id="exampleFormControlTextarea1" rows="3"><?= isset($bigcom) ? $bigcom : '' ?></textarea>
 </div>
 <input type="submit" value="Save" class="btn btn-primary">
 <?= form_close(); ?>

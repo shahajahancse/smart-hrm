@@ -104,7 +104,7 @@ public function today_lunch()
                 $activeArray[] = $item;
             } elseif (in_array($item->p_stutus, ['absent'])) {
                 $inactiveArray[] = $item;
-            } elseif (in_array($item->p_stutus, ['guest'])) {
+            } elseif (in_array($item->emp_id, [1])) {
                 $guest[] = $item;
             }
         }
