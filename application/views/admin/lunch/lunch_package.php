@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label">Per mill TK</label>
                 <div class="col-md-8">
-                    <input type="number" class="form-control common" name="per_mil" value="<?= $query[0]->permil ?>" id="per_mil">
+                    <input type="number" class="form-control common" name="per_mil" value="<?= $query[0]->permeal ?>" id="per_mil">
                 </div>
             </div>
             <div class="form-group">

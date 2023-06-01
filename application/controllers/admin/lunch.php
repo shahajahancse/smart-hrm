@@ -130,6 +130,7 @@ public function today_lunch()
     } else {
         $total_emp = $this->lunch_model->all_employees();
         $attend_emp = $this->lunch_model->daily_report($currentDate);
+        dd($attend_emp);
 
         $att_emp_id = array_map(function ($item) {
             return $item->employee_id;
@@ -232,7 +233,37 @@ public function add_lunch()
         }
     }
 }
+public function add_lunch_pak()
+	{
+        $session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
 
+      // Get form data
+      $perMilValue = $this->input->post('per_mil');
+      $officeGivePercentValue = $this->input->post('office_give_percent');
+      $stufGivePercentValue = $this->input->post('stuf_give_percent');
+      $officeGiveTkValue = $this->input->post('office_give_tk');
+      $stufGiveTkValue = $this->input->post('stuf_give_tk');
+  
+      // Perform necessary operations with the data
+      // For example, update data in the database
+  
+      $data = array(
+          'permeal' => $perMilValue,
+          'office_givepercent' => $officeGivePercentValue,
+          'stuf_give_percent' => $stufGivePercentValue,
+          'office_give_tk' => $officeGiveTkValue,
+          'stuf_give_tk' => $stufGiveTkValue
+      );
+  
+      $this->db->where('id', 1); // Assuming you have an 'id' field in your database table to identify the record to update
+      $this->db->update('lunch_package', $data);
+  
+
+    
+	}
 
 public function lunch_package(){
     $session = $this->session->userdata('username');
