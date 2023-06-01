@@ -149,7 +149,6 @@ class Inventory extends MY_Controller {
 		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data);
 	}
-
 	
 	public function persial_approved($id){
 		
@@ -185,7 +184,6 @@ class Inventory extends MY_Controller {
 				}
 			
 	}
-
 
 
 	//================= Requisition end =======================

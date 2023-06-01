@@ -70,7 +70,7 @@
           // console.log(ajaxRequest);
           var resp = ajaxRequest.responseText;
           $("#loader").hide();
-          console.log(resp);
+          alert(resp);
         }
       }
     }

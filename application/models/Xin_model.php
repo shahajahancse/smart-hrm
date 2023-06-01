@@ -167,6 +167,10 @@ class Xin_model extends CI_Model {
 			$arr['importemp_active'] = 'active';
 			$arr['stff_open'] = 'active';
 			return $arr;
+		} else if($mClass=='employees' && $mMethod=='emp_list') {
+			$arr['eemp_active'] = 'active';
+			$arr['stff_open'] = 'active';
+			return $arr;
 		} else if($mClass=='employees') {
 			$arr['emp_active'] = 'active';
 			$arr['stff_open'] = 'active';
