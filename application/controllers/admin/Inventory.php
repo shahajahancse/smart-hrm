@@ -457,64 +457,116 @@ public function purchase($id = null)
 	
 	}
 
+	// public function product_purchase_delivered($id){
+    
+	//    $this->db->select('p.product_name, p.quantity as  qty, pr.*');
+	//    $this->db->from('products_purches_requisitions pr');
+	//    $this->db->from('products p');
+	//    $this->db->where('p.id = pr.product_id');
+	//    $this->db->where('purches_id', $id);
+	//    $array = $this->db->get()->result();
+	// //    dd($array);
+
+	// 	foreach ($array as $row) {
+	// 		$ff = $row->qty + $row->ap_quantity;
+	// 		$data = array(
+	// 			'id' => $row->product_id,
+	// 		   'product_name' => $row->product_name,
+	// 		   'quantity' => $row->qty + $row->ap_quantity,
+	// 		); 
+	// 		echo "<pre>"; print_r($data);
+	// 		$sql = "UPDATE products
+	// 		SET quantity = '$ff' 
+	// 		WHERE id = '$row->product_id'";
+	// 		$this->db->query($sql);
+	// 		echo $this->db->last_query();
+	// 		// $deliver = $this->db->where('id',$row->product_id)->update('products', $data);
+	// 	}
+	// 	exit('ok');
+
+	// 	// $deliver = $this->db->where('id',$id)->update('products_purches',['status'=>3]);
+
+
+	// 	$d1 = array_values($mergedArray);
+		
+	
+
+    //      $d2=$this->db->get('products')->result();
+		
+		
+	
+	// 			$result = array();
+
+
+			
+
+	// 	// $result = array_unique($result, SORT_REGULAR);
+	
+
+		
+	// 		$deliver=$this->db->where('id',$id)->update('products_purches',['status'=>3]);
+	// 		if($deliver){
+	// 			$this->session->set_flashdata('success', 'Delivered Successfully.');
+	// 			redirect("admin/inventory/purchase","refresh");
+	// 		}
+			
+
+		
+		
+
+	// }
+
 	public function product_purchase_delivered($id){
     
-	   $this->db->select('p.product_name, p.quantity as  qty, pr.*');
-	   $this->db->from('products_purches_requisitions pr');
-	   $this->db->from('products p');
-	   $this->db->where('p.id = pr.product_id');
-	   $this->db->where('purches_id', $id);
-	   $array = $this->db->get()->result();
-	//    dd($array);
-
-		foreach ($array as $row) {
-			$ff = $row->qty + $row->ap_quantity;
-			$data = array(
-				'id' => $row->product_id,
-			   'product_name' => $row->product_name,
-			   'quantity' => $row->qty + $row->ap_quantity,
-			); 
-			echo "<pre>"; print_r($data);
-			$sql = "UPDATE products
-			SET quantity = '$ff' 
-			WHERE id = '$row->product_id'";
-			$this->db->query($sql);
-			echo $this->db->last_query();
-			// $deliver = $this->db->where('id',$row->product_id)->update('products', $data);
-		}
-		exit('ok');
-
-		// $deliver = $this->db->where('id',$id)->update('products_purches',['status'=>3]);
-
-
-		$d1 = array_values($mergedArray);
-		
-	
-
-         $d2=$this->db->get('products')->result();
-		
-		
-	
-				$result = array();
-
-
-			
-
-		// $result = array_unique($result, SORT_REGULAR);
-	
-
-		
-			$deliver=$this->db->where('id',$id)->update('products_purches',['status'=>3]);
-			if($deliver){
-				$this->session->set_flashdata('success', 'Delivered Successfully.');
-				redirect("admin/inventory/purchase","refresh");
+         $pr1=$this->db->where('purches_id',$id)->get('products_purches_requisitions')->result();
+					$mergedArray = [];
+			foreach ($pr1 as $item) {
+				$productId = $item->product_id;
+				if (isset($mergedArray[$productId])) {
+					$mergedArray[$productId]->ap_quantity += $item->ap_quantity;
+				} else {
+					$mergedArray[$productId] = $item;
+				}
 			}
-			
 
-		
-		
+			$mergedArray = array_values($mergedArray);
+			 
+			$p1=$this->db->get('products')->result();
 
-	}
+			$result = array();
+			foreach ($p1 as $item1) {
+				foreach ($pr1 as $item2) {
+					if ($item1->id == $item2->product_id) {
+						$mergedItem = (object)array_merge((array)$item1, (array)$item2);
+						$mergedItem->total_quantity = $item1->quantity + $item2->ap_quantity;
+						$result[] = $mergedItem;
+						break;
+					}
+				}
+			}
+
+			foreach ($result as $row) {
+				
+				$data = array(
+					'id' => $row->product_id,
+				   'quantity' => $row->total_quantity,
+				); 
+				 $this->db->where('id',$row->product_id)->update('products', $data);
+			}		
+
+			 $deliver=$this->db->where('id',$id)->update('products_purches',['status'=>3]);
+			 if($deliver){
+				 $this->session->set_flashdata('success', 'Delivered Successfully.');
+				 redirect("admin/inventory/purchase","refresh");
+			 }
+			 
+ 
+		 
+		 
+ 
+	 }
+
+
  
 
 	// ================ default ====================
