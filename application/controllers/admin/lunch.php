@@ -387,6 +387,8 @@ if($status==1){
     $this->load->view('admin/lunch/lunch_report_view', $data); 
 }elseif($status==2){
     $this->load->view('admin/lunch/lunch_report_m', $data); 
+}elseif($status==3){
+    $this->load->view('admin/lunch/lunch_report_cont', $data); 
 }
 
 
