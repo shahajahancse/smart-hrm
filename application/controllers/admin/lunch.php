@@ -45,7 +45,7 @@ public function index()
 
     $config['base_url'] = base_url('admin/lunch/index');
     $config['total_rows'] = $this->lunch_model->get_total_rows();
-    $config['per_page'] = 2; // Number of records per page
+    $config['per_page'] = 10; // Number of records per page
     $config['uri_segment'] = 3; // Update the URI segment number to 2
     
     // Bootstrap 3 pagination style
@@ -90,7 +90,7 @@ public function today_lunch()
 
 
     if(base_url()=='http://localhost/smart-hrm/'){
-        $currentDate = '2023-01-06';
+        $currentDate = '2023-01-07';
 
     }else{ $currentDate = date('Y-m-d');}
     $query = $this->db->get_where('lunch_details', array('date' => $currentDate))->result();
@@ -379,9 +379,15 @@ public function lunch_reports(){
 
 
     $data['lunch_details']  = $this->lunch_model->get_lunch_details($first_date,$second_date,$emp_id);
-   
-
+    $data['first_date'] = $first_date;
+    $data['second_date'] = $first_date;
+    $data['emp_id'] = $emp_id;
+// dd($data['lunch_details']);
+if($status==1){
     $this->load->view('admin/lunch/lunch_report_view', $data); 
+}elseif($status==2){
+    $this->load->view('admin/lunch/lunch_report_m', $data); 
+}
 
 
 
