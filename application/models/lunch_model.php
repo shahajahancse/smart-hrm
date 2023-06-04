@@ -71,7 +71,7 @@ class lunch_model extends CI_Model {
         if ($data) {
             return $data;
         } else {
-            return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+            return 0;
         }
     }  
 
@@ -84,5 +84,23 @@ class lunch_model extends CI_Model {
     public function get_total_rows() {
         return $this->db->count_all('lunch');
     }
+
+    public function get_lunch_data($first_date,$second_date) {
+        $this->db->where('date >=', $first_date);
+        $this->db->where('date <=', $second_date);
+        $result = $this->db->get('lunch')->result();
+        return $result;
+        }
+
+        public function get_lunch_details($first_date, $second_date, $emp_ids) {
+            $this->db->select('lunch_details.id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date, xin_employees.first_name, xin_employees.last_name');
+            $this->db->from('lunch_details');
+            $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
+            $this->db->where_in('lunch_details.emp_id', $emp_ids);
+            $this->db->where('date >=', $first_date);
+            $this->db->where('date <=', $second_date);
+            return $this->db->get()->result();
+        }
+        
 }
 ?>

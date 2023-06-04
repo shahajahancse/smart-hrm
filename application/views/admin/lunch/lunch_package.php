@@ -88,11 +88,6 @@ function handleInputChange() {
   document.getElementById("stuf_give_percent").value=g_stufGivePercentValue;
   document.getElementById("office_give_tk").value=g_officeGiveTkValue;
   document.getElementById("stuf_give_tk").value=g_stufGiveTkValue;
-
-
-
-  // Call your custom function here or perform any other actions
-  // functionName();
 }
 
 // Attach event listener to all input fields with the class "common"

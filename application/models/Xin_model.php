@@ -793,10 +793,10 @@ class Xin_model extends CI_Model {
 		}		
 	}
 	
-	// get single employee
+
 	public function read_user_info($id) {
 	
-		$sql = 'SELECT * FROM xin_employees WHERE user_id = ?';
+		$sql = 'SELECT * FROM xin_employees WHERE user_id = ? ORDER BY basic_salary DESC';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		
@@ -807,6 +807,17 @@ class Xin_model extends CI_Model {
 		}
 		
 	}
+	public function redeuser($id) {
+	
+		$query = $this->db->select('*')->where('user_id', $id)->order_by('basic_salary','DESC')->get('xin_employees');
+    if ($query->num_rows() > 0) {
+      return $query->result();
+    }else{
+      return null;
+	}
+		
+	}
+
 	// get single user
 	public function read_user_xuinfo($id) {
 	

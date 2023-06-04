@@ -90,10 +90,11 @@ public function today_lunch()
 
 
     if(base_url()=='http://localhost/smart-hrm/'){
-        $currentDate = '2023-01-05';
+        $currentDate = '2023-01-06';
 
     }else{ $currentDate = date('Y-m-d');}
     $query = $this->db->get_where('lunch_details', array('date' => $currentDate))->result();
+
     if (count($query) > 0) {
         $activeArray = [];
         $inactiveArray = [];
@@ -130,8 +131,25 @@ public function today_lunch()
     } else {
         $total_emp = $this->lunch_model->all_employees();
         $attend_emp = $this->lunch_model->daily_report($currentDate);
-       
+     
+if ($attend_emp == 0) {
+    $activeArray = [];
+    $inactiveArray = [];
+    $att_emp_id = [];
 
+    foreach ($total_emp as $item) {
+        if (in_array($item->user_id, $att_emp_id)) {
+            $activeArray[] = $item;
+        } else {
+            $inactiveArray[] = $item;
+        }
+    }
+
+
+
+
+
+}else{
         $att_emp_id = array_map(function ($item) {
             return $item->employee_id;
         }, $attend_emp);
@@ -146,6 +164,7 @@ public function today_lunch()
                 $inactiveArray[] = $item;
             }
         }
+    }
 
         $data['active'] = $activeArray;
         $data['inactive'] = $inactiveArray;
@@ -294,7 +313,15 @@ public function details($lunchid, $date){
         redirect('admin/');
     }
 
-    $data['lunch_details'] = $this->db->get_where('lunch_details', array('lunch_id' => $lunchid, 'date' => $date, 'meal_amount >' => 0))->result();
+    $this->db->select('lunch_details.id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date, xin_employees.first_name, xin_employees.last_name');
+    $this->db->from('lunch_details');
+    $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
+    $this->db->where('lunch_details.lunch_id', $lunchid);
+    $this->db->where('lunch_details.date', $date);
+    $this->db->where('lunch_details.meal_amount >', 0);
+    $result = $this->db->get()->result();
+    $data['lunch_details'] = $result;
+  
     $data['lunch'] = $this->db->get_where('lunch', array('id' =>$lunchid, 'date' =>$date ))->result();
 
     $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
@@ -330,6 +357,39 @@ public function report(){
     } else {
         redirect('admin/');
     }
+
+}
+
+
+
+public function lunch_reports(){
+
+
+    $session = $this->session->userdata('username');
+    if (empty($session)) {
+        redirect('admin/');
+    }
+    $first_date = $this->input->post('first_date');
+    $second_date = $this->input->post('second_date');
+    $sql = $this->input->post('sql');
+    $status = $this->input->post('status');
+    $emp_id = explode(',', trim($sql));
+
+    $data['lunch_data'] = $this->lunch_model->get_lunch_data($first_date,$second_date);
+
+
+    $data['lunch_details']  = $this->lunch_model->get_lunch_details($first_date,$second_date,$emp_id);
+   
+
+    $this->load->view('admin/lunch/lunch_report_view', $data); 
+
+
+
+
+
+
+
+
 
 }
 }

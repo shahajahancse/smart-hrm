@@ -71,7 +71,6 @@ if($data->date==$currentDate){
             <thead>
               <tr>
                 <th>Serial No</th>
-                <th>Lunch ID</th>
                 <th>Employee ID</th>
                 <th>Meal Amount</th>
                 <th>Present Status</th>
@@ -82,8 +81,7 @@ if($data->date==$currentDate){
               <?php foreach ($lunch_details as $detail) { ?>
                 <tr>
                   <td><?= $detail->id ?></td>
-                  <td><?= $detail->lunch_id ?></td>
-                  <td><?= $detail->emp_id ?></td>
+                  <td><?= $detail->first_name ?> <?= $detail->last_name ?></td>
                   <td><?= $detail->meal_amount ?></td>
                   <td><?= $detail->p_stutus ?></td>
                   <td><?= $detail->date ?></td>

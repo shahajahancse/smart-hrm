@@ -57,6 +57,20 @@
               <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text" autocomplete="off">
             </div>
           </div>
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="upload_file">status</label>
+              <select class="form-control" name="status" id="status">
+                <option value="">Select one</option>
+                <option value="1">regular</option>
+                <option value="2">left</option>
+                <option value="3">resign</option>
+              </select>
+            </div>
+          </div>
+
+         
         </div>
       </div>
     </div>
@@ -67,62 +81,26 @@
 
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border" id="report_title">
-    <h3 class="box-title" id="report"> Employee Report
-      <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
+    <h3 class="box-title" id="report"> Lunch Report
    </h3>
-     <button id="manually_entry" class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;">Manually Entry</button>
   </div>
 
   <div class="box-body" id="emp_report">
     <ul class="nav nav-tabs " id="myTab" role="tablist">
         <li class="nav-item active">
-          <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily" aria-selected="true">Daily</a>
+          <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily" aria-selected="true">Report</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Monthly</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="continuously-tab" data-toggle="tab" href="#continuously" role="tab" aria-controls="continuously" aria-selected="false">Continuously</a>
-        </li>
+     
     </ul>
     
     <div class="tab-content" id="myTabContent">
 
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
-          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="daily_report('Present')">Present</button>
-          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="daily_report('Absent')">Absent</button>
-          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="daily_report('Present',1)">Late</button>
-          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="lunch_report('Lunch in/out')">Lunch In/Out</button>
-          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="lunch_report('Lunch Late',1)">Lunch Late</button>
-          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="early_out_report('Early Out')">Early Out</button>
-          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="movement_report('Movement')">Movement</button><br>
-          <button class="btn btn-sm mr-5 sbtn"  onclick="leavecal(1,[1,2,3,4])">Leave Applyed</button>
+          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(1)">Daily Report</button>
 
       </div>
-
-      <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
-        <!-- <button class="btn btn-sm btn-danger"> Button one</button>-->
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="monthly_report()">Monthly Register Report</button>
-        <button class="btn btn-sm mr-5 sbtn mt-2"  data-toggle="modal" data-target="#requisitionModal">Open Requisition Modal</button>
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="leavecal(2,[1,4])">Leave Panding</button>
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="leavecal(2,[2])">Leave Approved</button>
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="leavecal(2,[3])">Leave Rejected</button>
 
       
-
-
-      </div>
-
-      <div class="tab-pane fade" id="continuously" role="tabpanel" aria-labelledby="continuously-tab" style="margin-top: 30px;">
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="jobCard()">Job Card</button>
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="movReport(2)">Unpaid Movement</button>
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="movReport(1)">Process Movement</button>
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="movReport(3)">Reject Movement</button>
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="movReport(4)">Paid Movement</button>
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="leavecal(3,[1,4])">Leave Panding</button>
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="leavecal(3,[2])">Leave Approved</button>
-        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="leavecal(3,[3])">Leave Rejected</button>
-      </div>
 
     </div>
 
@@ -134,7 +112,20 @@
 
 </div>
 </div>
-<script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/lunch_report.js"></script>
+
+<div class="col-lg-4">
+<div class="box" style="height: 74vh;overflow-y: scroll;">
+<table class="table table-striped table-hover" id="fileDiv">
+  <tr style="position: sticky;top: 0;z-index:1">
+      <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox" name="select-all" /></th>
+      <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
+      <th class=" text-center" style="background:#0177bc;color:white">Name</th>
+  </tr>
+</table>
+</div>
+</div>
+
+<script type="text/javascript" src="<?php echo base_url()?>skin/hrsale_assets/js/lunch.js"></script>
 <script>
   $(document).ready(function(){
 
