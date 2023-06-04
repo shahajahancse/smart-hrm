@@ -23,11 +23,9 @@
         }
 
         .container {
-            margin: 20px auto;
+       
             padding: 20px;
-            background-color: #f7f7f7;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          
         }
         .totals-container {
             display: flex;
@@ -86,14 +84,14 @@
 
 <body>
     <div class="container">
-        <div style="font-size:20px; font-weight:bold; text-align:center; margin-top:10px">
+        <div style="font-size:18px; font-weight:bold; text-align:center; margin-top:10px">
             <?= xin_company_info(1)->company_name; ?>
         </div>
-        <div style="font-size:20px; font-weight:bold; text-align:center; height:0px;"></div>
-        <div style="font-size:18px; line-height:15px; font-weight:bold; text-align:center;">
+        <div style="font-size:16px; font-weight:bold; text-align:center; height:0px;"></div>
+        <div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;">
             <?= xin_company_info(1)->address_1 . " " . xin_company_info(1)->address_2; ?>
         </div>
-        <div style="font-size:18px; line-height:15px; font-weight:bold; text-align:center;">
+        <div style="font-size:15px; line-height:15px; font-weight:bold; text-align:center;">
             Monthly Lunch Report of <?= $imonth ?>
         </div>
 

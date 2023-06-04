@@ -46,6 +46,8 @@ function perday(status) {
   {
     alert('Please select second date');
     return ;
+  }else{
+    document.getElementById("loading").style.visibility = "visible";
   }
   
   var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql+'&status='+status;
@@ -59,6 +61,8 @@ function perday(status) {
 
   ajaxRequest.onreadystatechange = function(){
     if(ajaxRequest.readyState == 4){
+      document.getElementById("loading").style.visibility = "hidden";
+
       // console.log(ajaxRequest.responseText); return;
       var resp = ajaxRequest.responseText;
       a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');

@@ -30,8 +30,8 @@
         }
 
         .panel-heading {
-            background-color: #f8f9fa;
-            padding: 15px;
+            background-color: #c2c8ce;
+            padding: 6px;
             border-radius: 10px 10px 0 0;
         }
 
@@ -88,6 +88,13 @@
             </div>
         </div>
     <?php else : ?>
+        <div style="font-size:18px; font-weight:bold; text-align:center; margin-top:10px">
+            <?= xin_company_info(1)->company_name; ?>
+        </div>
+        <div style="font-size:16px; font-weight:bold; text-align:center; height:0px;"></div>
+        <div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;">
+            <?= xin_company_info(1)->address_1 . " " . xin_company_info(1)->address_2; ?>
+        </div>
         <?php $data=$lunch_data[0]  ?>
         <div class="container">
             <div class="row">

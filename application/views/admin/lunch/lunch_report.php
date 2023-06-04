@@ -31,6 +31,22 @@
  padding:6px 10px !important;
  margin-top: 13px;
 }
+#loading {
+  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3; /* set z-index higher than other elements */
+  background-color: rgba(255, 255, 255, 0.8); /* semi-transparent background */
+}
+
+#loading img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
 
 </style>
 <div id="loading">
@@ -96,7 +112,9 @@
     <div class="tab-content" id="myTabContent">
 
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
-          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(2)">Daily Report</button>
+          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(1)">Daily Report</button>
+          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(2)">Monthly Report</button>
+          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(3)">Continue  Report</button>
 
       </div>
 
