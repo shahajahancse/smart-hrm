@@ -10,12 +10,89 @@ class lunch_model extends CI_Model {
     
     public function all_employees()
     {
-        $query = $this->db->query("SELECT * FROM xin_employees WHERE user_role_id != 1");
+        $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)");
+
         return $query->result();
     }
+    
+    public function process($processmonth)
+    {
+        $paymonth = date('Y-m', strtotime($processmonth));
+        $emp = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
+    
+        foreach ($emp as $key => $value) {
+            $emp_id = $value->user_id;
+    
+            $query = $this->db->select('*')
+                ->from('lunch_payment')
+                ->where('emp_id', $emp_id)
+                ->where('pay_month', $paymonth)
+                ->get();
+    
+            if ($query->num_rows() > 0) {
+                $row = $query->row();
+                exit('already_exists');
+            } else {
+                list($year, $month) = explode("-", $paymonth);
+    
+                $second_date = date("$year-$month-12");
+                $first_date = date('Y-m-13', strtotime('-1 month', strtotime($second_date)));
+    
+                $lunchdet = $this->get_proccess_data($emp_id, $first_date, $second_date);
+                if (count($lunchdet) > 0) {
+                    $prev_meal = 0;
+    
+                    foreach ($lunchdet as $key => $value) {
+                        $prev_meal += $value->meal_amount;
+                    }
+                    $prev_cost = ($prev_meal * 45);
+                    $prevemonth = date('Y-m', strtotime('-1 month', strtotime($second_date)));
+    
+                    $q = $query = $this->db->query("SELECT * FROM `lunch_payment` WHERE `emp_id` = 2 AND `pay_month` LIKE '2023-01' ")->result();
+    
+                    if (count($q) > 0) {
+                        $prev_pay = $q[0]->pay_amount;
+                    } else {
+                        $prev_pay = 0;
+                    }
+    
+                    $prev_amount = $prev_pay - $prev_cost;
+                    $pay_amount = 0;
+                    $pay_month = $paymonth;
+                } else {
+                    $prev_meal = 0;
+                    $prev_cost = 0;
+                    $prev_pay = 0;
+                    $prev_amount = 0;
+                    $pay_amount = 0;
+                    $pay_month = $paymonth;
+                }
+                $data = array(
+                    'emp_id' => $emp_id,
+                    'prev_meal' => $prev_meal,
+                    'prev_cost' => $prev_cost,
+                    'prev_pay' => $prev_pay,
+                    'prev_amount' => $prev_amount,
+                    'pay_amount' => $pay_amount,
+                    'pay_month' => $pay_month,
+                );
+                $this->db->insert('lunch_payment', $data);
+            }
+        }
+        exit('success');
+    }
+    
+
+
     public function employees($id)
     {
         $query = $this->db->query("SELECT * FROM xin_employees WHERE user_id = $id ");
+        return $query->result();
+    }
+    
+    public function getpay($id)
+    {
+        $query = $this->db->query("SELECT * FROM lunch_payment WHERE user_id = $id ");
         return $query->result();
     }
     
@@ -113,6 +190,15 @@ class lunch_model extends CI_Model {
             $this->db->where('date ', $date);
             return $this->db->get()->result();
         }
+        public function get_proccess_data($emp_id,$first_date, $second_date) {
+            $this->db->select('lunch_details.id,lunch_details.emp_id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date');
+            $this->db->from('lunch_details');
+            $this->db->where('lunch_details.emp_id', $emp_id);
+            $this->db->where('date >=', $first_date);
+            $this->db->where('date <=', $second_date);
+            return $this->db->get()->result();
+        }
+
         
 }
 ?>

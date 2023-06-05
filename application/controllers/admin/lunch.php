@@ -90,7 +90,7 @@ public function today_lunch()
 
 
     if(base_url()=='http://localhost/smart-hrm/'){
-        $currentDate = '2023-01-07';
+        $currentDate = '2023-02-07';
 
     }else{ $currentDate = date('Y-m-d');}
     $query = $this->db->get_where('lunch_details', array('date' => $currentDate))->result();
@@ -399,6 +399,66 @@ if($status==1){
 
 
 
+}
+
+public function emp_pay_list(){
+
+    $session = $this->session->userdata('username');
+    if (empty($session)) {
+        redirect('admin/');
+    }
+
+
+    $data['total_emp'] = $this->lunch_model->all_employees();
+
+
+  $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+
+    $data['breadcrumbs'] = 'Prement Report';
+    $data['path_url'] = 'report';
+    if (!empty($session)) {
+        $data['subview'] = $this->load->view("admin/lunch/emp_pay_list", $data, TRUE);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+    } else {
+        redirect('admin/');
+    }
+
+}
+public function getfrom()
+{
+    $session = $this->session->userdata('username');
+    if (empty($session)) {
+        redirect('admin/');
+    }
+    $empid = $this->input->post('selectedValue');
+
+    $emp_details = $this->lunch_model->employees($empid);
+    
+
+    // Set the response header as JSON
+    $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($emp_details));
+}
+public function process()
+{
+    $session = $this->session->userdata('username');
+    if (empty($session)) {
+        redirect('admin/');
+    }
+    $currentDate = '2023-02-12';
+
+    $day = date('d', strtotime($currentDate));
+    $month = date('m', strtotime($currentDate));
+    $year = date('Y', strtotime($currentDate));
+    if ($day<12){
+        $processmonth = date('Y-m-d', strtotime('-1 month', strtotime($currentDate)));
+    }else{
+        $processmonth=$currentDate;
+    }
+    
+    return $this->lunch_model->proccess($processmonth);
+ 
 }
 }
 ?>
