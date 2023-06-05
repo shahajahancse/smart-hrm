@@ -407,6 +407,21 @@ public function emp_pay_list(){
     if (empty($session)) {
         redirect('admin/');
     }
+    $lunch_payment =$this->db->query("SELECT * FROM `lunch_payment`")->result();
+    $proccessdate=[];
+    foreach ($lunch_payment as $key => $value) {
+       if(!in_array($value->pay_month, $proccessdate)){
+        array_push($proccessdate,$value->pay_month);
+
+       }     
+    }
+    if(count($proccessdate)>0){
+        $data['lastdate'] =  max($proccessdate);;
+
+
+    }else{
+    $data['lastdate'] ="Not Prossecced";
+    }
 
 
     $data['total_emp'] = $this->lunch_model->all_employees();
@@ -457,7 +472,7 @@ public function process()
         $processmonth=$currentDate;
     }
     
-    return $this->lunch_model->proccess($processmonth);
+    return $this->lunch_model->process($processmonth);
  
 }
 }

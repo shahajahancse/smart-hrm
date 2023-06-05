@@ -7,20 +7,21 @@
   }
 </style>
 
-<div class="container">
-  <h2>Add prement</h2>
+      <div class="container">
+        <h2>Add prement</h2>
 
-  <select id="search-select">
-    <option>Select Employee</option>
-    <?php foreach($total_emp as $data){?>
-      <option value="<?= $data->user_id ?>"><?= $data->first_name ?> <?= $data->last_name ?></option>
-    <?php } ?>
-  </select>
-</div>
+        <select id="search-select">
+          <option>Select Employee</option>
+          <?php foreach($total_emp as $data){?>
+            <option value="<?= $data->user_id ?>"><?= $data->first_name ?> <?= $data->last_name ?></option>
+          <?php } ?>
+        </select>
+      </div>
 
-<div class="container" style="right: -508px;position: absolute;">
-  <a class="btn btn-primary" onclick="process()">Process</a>
-</div>
+      <div class="container" style="right: -508px;position: absolute;">
+      <p>last proccess month   <?=  $lastdate ?></p>
+        <a class="btn btn-primary" onclick="process()">Process</a>
+      </div>
 
 <div id="form-container"></div>
 
