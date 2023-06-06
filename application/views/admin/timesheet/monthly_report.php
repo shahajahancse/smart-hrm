@@ -82,6 +82,7 @@
 
   
 <?php
+
 $month_year=$first_date;
 
 $date = strtotime(date("Y-m-d"));

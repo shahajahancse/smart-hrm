@@ -19,7 +19,7 @@ $success = $this->session->flashdata('success');
   </div>
   <div class="box-body">
     <div class="box-datatable table-responsive">
-      <table class="datatables-demo table table-striped table-bordered" id="xin_table">
+      <table class="datatables-demo table table-striped table-bordered" id="emplist">
         <thead>
           <tr>
             <th>Name</th>
@@ -38,7 +38,7 @@ $success = $this->session->flashdata('success');
 
 $(document).ready(function() {
 	console.log('hello');
-   var xin_table = $('#xin_table').dataTable({
+   var xin_table = $('#emplist').dataTable({
         "bDestroy": true,
 		"ajax": {
             url : site_url+"employees/emp_list_read/",
