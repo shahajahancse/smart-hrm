@@ -22,8 +22,8 @@ $get_animate = $this->Xin_model->get_content_animate();
         <thead>
           <tr>
               <th class="text-center" >No.</th>
-                <th class="text-center" >Category</th>
-                <th class="text-center" >Sub Category</th>
+                <th class="text-center" >Supplier</th>
+                <th class="text-center" >Company</th>
                 <th class="text-center" >Product Name</th>
                 <th class="text-center" >Quantity</th>
           </tr>
@@ -38,7 +38,9 @@ $get_animate = $this->Xin_model->get_content_animate();
                 <td><?php echo $row->company?></td>
                 <td><?php echo $row->product_name?></td>
                 <td><input type="number" id="quantity" name="qunatity[]" min="1" style="width:20%" value="<?php echo $row->quantity?>"></td>
-                <!-- <td><a href="<?php echo base_url('admin/inventory/delete_requsiton_item/'.$row->id)?>">Delete</a></td> -->
+                <!-- <?php if($session['role_id']!=3) {?> -->
+                <td><a href="<?php echo base_url('admin/inventory/delete_purches_item/'.$row->id.'/'.$purches_id)?>">Delete</a></td>
+                <!-- <?php }?> -->
                 <input type="hidden" name="r_id[]" value="<?php echo $row->id?>" >
 
             </tr>
@@ -46,16 +48,22 @@ $get_animate = $this->Xin_model->get_content_animate();
         </tbody>
       </table>
       <!-- <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/persial_approved/'.$requisition_id);?>">Approved</a> -->
-       <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
+      <?php if(!empty($results)){?>
+        <?php if($session['role_id']==1) {?>
+      <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
+         
+      <?php }else{?>
+        <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="update">
+    <?php }}?>
       <?php echo form_close()?>
     </div>
   </div>
 </div>
 
 <script>
-$(document).ready(function () {
-    $('#details').DataTable();
-});
+// $(document).ready(function () {
+//     $('#details').DataTable();
+// });
 
 
 </script>

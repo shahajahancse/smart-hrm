@@ -28,8 +28,8 @@ $get_animate = $this->Xin_model->get_content_animate();
         <?php echo form_close()?>
     
     
-       <a class="btn btn-sm btn-danger pull-right" href="<?php echo base_url('admin/inventory/purchase_rejected/'.$results [0]->requisition_id);?>" style="margin-right: 10px;">Rejected</a>
-       <a class="btn btn-sm btn-warning pull-right" style="margin-right: 10px;" href="<?php echo base_url('admin/inventory/purchase_edit_approved/'.$results [0]->requisition_id);?>">Edit & Approved</a>
+       <a class="btn btn-sm btn-danger pull-right" href="<?php echo base_url('admin/inventory/requsition_rejected/'.$results [0]->requisition_id);?>" style="margin-right: 10px;">Rejected</a>
+       <a class="btn btn-sm btn-warning pull-right" style="margin-right: 10px;" href="<?php echo base_url('admin/inventory/requsition_edit_approved/'.$results [0]->requisition_id);?>">Edit & Approved</a>
     <?php }}}?>
 
     <button class="btn btn-sm btn-info pull-right" style="margin-right: 10px;" onclick="history.back()"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
