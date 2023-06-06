@@ -144,11 +144,6 @@ if ($attend_emp == 0) {
             $inactiveArray[] = $item;
         }
     }
-
-
-
-
-
 }else{
         $att_emp_id = array_map(function ($item) {
             return $item->employee_id;
@@ -252,8 +247,7 @@ public function add_lunch()
         }
     }
 }
-public function add_lunch_pak()
-	{
+public function add_lunch_pak(){
         $session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -282,7 +276,7 @@ public function add_lunch_pak()
   
 
     
-	}
+}
 
 public function lunch_package(){
     $session = $this->session->userdata('username');
@@ -347,7 +341,7 @@ public function report(){
 
 
 
-  $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+    $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
 
     $data['breadcrumbs'] = 'Lunch Report';
     $data['path_url'] = 'report';
@@ -383,22 +377,13 @@ public function lunch_reports(){
     $data['second_date'] = $first_date;
     $data['emp_id'] = $emp_id;
 // dd($data['lunch_details']);
-if($status==1){
-    $this->load->view('admin/lunch/lunch_report_view', $data); 
-}elseif($status==2){
-    $this->load->view('admin/lunch/lunch_report_m', $data); 
-}elseif($status==3){
-    $this->load->view('admin/lunch/lunch_report_cont', $data); 
-}
-
-
-
-
-
-
-
-
-
+        if($status==1){
+            $this->load->view('admin/lunch/lunch_report_view', $data); 
+        }elseif($status==2){
+            $this->load->view('admin/lunch/lunch_report_m', $data); 
+        }elseif($status==3){
+            $this->load->view('admin/lunch/lunch_report_cont', $data); 
+        }
 }
 
 public function emp_pay_list(){
@@ -408,6 +393,7 @@ public function emp_pay_list(){
         redirect('admin/');
     }
     $lunch_payment =$this->db->query("SELECT * FROM `lunch_payment`")->result();
+
     $proccessdate=[];
     foreach ($lunch_payment as $key => $value) {
        if(!in_array($value->pay_month, $proccessdate)){
@@ -416,7 +402,7 @@ public function emp_pay_list(){
        }     
     }
     if(count($proccessdate)>0){
-        $data['lastdate'] =  max($proccessdate);;
+        $data['lastdate'] =  max($proccessdate);
 
 
     }else{
@@ -446,14 +432,19 @@ public function getfrom()
         redirect('admin/');
     }
     $empid = $this->input->post('selectedValue');
+    $paymonth = $this->input->post('paymonth');
+  
 
-    $emp_details = $this->lunch_model->employees($empid);
-    
+    $lunch_payment = $this->db->query("SELECT lp.*, e.first_name, e.last_name 
+    FROM `lunch_payment` lp 
+    JOIN `xin_employees` e ON lp.emp_id = e.user_id
+    WHERE lp.`emp_id` = $empid AND lp.`pay_month` = '$paymonth'")->result();
+   
 
     // Set the response header as JSON
     $this->output
         ->set_content_type('application/json')
-        ->set_output(json_encode($emp_details));
+        ->set_output(json_encode($lunch_payment));
 }
 public function process()
 {
@@ -461,7 +452,11 @@ public function process()
     if (empty($session)) {
         redirect('admin/');
     }
-    $currentDate = '2023-02-12';
+  
+    if(base_url()=='http://localhost/smart-hrm/'){
+        $currentDate = '2023-02-07';
+
+    }else{ $currentDate = date('Y-m-d');}
 
     $day = date('d', strtotime($currentDate));
     $month = date('m', strtotime($currentDate));
@@ -475,5 +470,27 @@ public function process()
     return $this->lunch_model->process($processmonth);
  
 }
+
+public function submit_payment() {
+    // Retrieve the form data from the POST request
+    $empid = $this->input->post('empid');
+    $pay_month = $this->input->post('pay_month');
+    $p_month_pay = $this->input->post('p_month_pay');
+    $status = $this->input->post('status');
+
+    $data = array(
+        'pay_amount' => $p_month_pay,
+        'status' => $status,
+    );
+    $this->db->where('pay_month', $pay_month);
+    $this->db->where('emp_id', $empid);
+    $this->db->update('lunch_payment', $data);
+
+
+    $response ='operation Successfull.';
+    
+    echo json_encode($response);
+  }
+  
 }
 ?>
