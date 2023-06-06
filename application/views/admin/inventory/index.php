@@ -188,7 +188,7 @@
       items+= '<tr>';
       items+= '<td><select name="cat_id[]" class="form-control input-sm" id="category_'+sl+'" required><?php echo $category_data;?></select></td>';
       items+= '<td><select name="sub_cate_id[]"  id="subcategory_'+sl+'" class="sub_category_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
-      items+= '<td><select name="product_id[]" class="item_val_'+sl+' form-control input-sm" required ><option value="">-- Select One --</option></select></td>';
+      items+= '<td><select name="product_id[]" class="item_val_'+sl+' selection-menu form-control input-sm" required   onchange="handleSelectionChange(this)"><option value="">-- Select One --</option></select></td>';
       items+= '<td><input name="quantity[]" id="quantity" value="" type="text" class="form-control input-sm" required></td>';
       items+= '<td> <a href="javascript:void();" class="label label-important text-danger" onclick="removeRow(this)"> <i class="fa fa-minus-circle text-danger"></i><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
       items+= '</tr>';
@@ -226,7 +226,7 @@
    function subcategory_dd(sl){
       //Sub Category Dropdown
       $('#subcategory_'+sl).on('change',function(){
-         $('.item_val_'+sl).addClass('form-control input-sm');
+         $('.item_val_'+sl).addClass('forcontrolm- input-sm');
          $(".item_val_"+sl+"> option").remove();
          var id = $('#subcategory_'+sl).val();
 
@@ -237,14 +237,59 @@
             {
                $.each(func_data,function(id,name)
                {
+
                   var opt = $('<option />');
                   opt.val(id);
                   opt.text(name);
                   $('.item_val_'+sl).append(opt);
                });
+               handleSelectionChange(this)
+           
+
+
             }
          });
       });
    }
+  
 
-</script>  
+
+    function handleSelectionChange(selectedMenu) {
+      var selectionMenus = document.getElementsByClassName("selection-menu");
+      
+
+      // Disable all options
+      for (var i = 0; i < selectionMenus.length; i++) {
+        var options = selectionMenus[i].options;
+        console.log(options);
+        for (var j = 0; j < options.length; j++) {console.log(options[j]);
+          options[j].disabled = false;
+        }
+      }
+
+      // Iterate over all selection menus
+      for (var i = 0; i < selectionMenus.length; i++) {
+        var options = selectionMenus[i].options;
+        var selectedValues = [];
+
+        // Get the selected values from each selection menu
+        for (var j = 0; j < options.length; j++) {
+          if (options[j].selected) {
+            selectedValues.push(options[j].value);
+          }
+        }
+
+        // Disable selected options in other selection menus
+        for (var j = 0; j < selectionMenus.length; j++) {
+          if (selectionMenus[j] !== selectedMenu) {
+            var otherOptions = selectionMenus[j].options;
+            for (var k = 0; k < otherOptions.length; k++) {
+              if (selectedValues.includes(otherOptions[k].value)) {
+                otherOptions[k].disabled = true;
+              }
+            }
+          }
+        }
+      }
+    }
+  </script>

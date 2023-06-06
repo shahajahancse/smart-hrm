@@ -59,8 +59,8 @@ class Inventory extends MY_Controller {
 					'quantity'		 => $_POST['quantity'][$i],
 					'requisition_id' => $last_id,
 				);
-			}
-
+			}  
+			
 			if ($hid != null && !empty($hid)) {
 				$this->db->where('id', $hid)->update_batch('products_requisition_details', $form_data);
 				$this->session->set_flashdata('success', 'Successfully Updated Done');
@@ -161,7 +161,7 @@ class Inventory extends MY_Controller {
 		
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
-		// dd($id);
+		// dd($d1);
 		// dd($d1[1]->quantity);
 		foreach($d1 as $k=>$v){
 			if($session['role_id']==1){
@@ -173,6 +173,7 @@ class Inventory extends MY_Controller {
 				    $this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); }
 
 			 } else{
+				// dd($d1[$k]->product_name);
 				$this->session->set_flashdata('warning', 'Approved  Quantity is Biger');
 				redirect("admin/inventory/index");
 			 }
@@ -768,6 +769,7 @@ public function purchase($id = null)
 	{
         $this->db->where('sub_cate_id',$sub_cate_id);
         $result = $this->db->get('products')->result_array();
+		$data[0]= 'Select Product';
         foreach ($result as $rows) {
             $data[$rows['id']] = $rows['product_name'];
         }
