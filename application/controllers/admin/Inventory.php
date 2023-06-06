@@ -174,8 +174,13 @@ class Inventory extends MY_Controller {
 
 			 } else{
 				// dd($d1[$k]->product_name);
-				$this->session->set_flashdata('warning', 'Approved  Quantity is Biger');
-				redirect("admin/inventory/index");
+				$variable = $d1[$k]->product_name;
+				$variable1= $d1[$k]->quantity;
+                $this->session->set_flashdata('flash_data', $variable);
+				$this->session->set_flashdata('flash_data1', $variable1);
+
+				$this->session->set_flashdata('warning', 'Approved  Quantity is Biger ');
+				redirect("admin/inventory/requsition_details/$id","refresh");
 			 }
 			}else{
 
@@ -367,7 +372,7 @@ public function purchase($id = null)
 				'quantity'		 => $_POST['quantity'][$i],
 				'purches_id' => $last_id,
 			);}
-			  
+			//   dd($form_data);
 			if ($hid = $this->input->post('hidden_id')) {
 				$this->db->where('id', $hid)->update_batch('products_requisition_details', $form_data);
 				$this->session->set_flashdata('success', 'Successfully Updated Done');
