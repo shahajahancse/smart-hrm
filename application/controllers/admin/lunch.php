@@ -383,6 +383,8 @@ public function lunch_reports(){
             $this->load->view('admin/lunch/lunch_report_m', $data); 
         }elseif($status==3){
             $this->load->view('admin/lunch/lunch_report_cont', $data); 
+        }elseif($status==4){
+            $this->load->view('admin/lunch/lunch_report_vendor', $data); 
         }
 }
 

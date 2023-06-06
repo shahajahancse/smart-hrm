@@ -88,12 +88,13 @@
             </div>
         </div>
     <?php else : ?>
-        <div style="font-size:18px; font-weight:bold; text-align:center; margin-top:10px">
-            <?= xin_company_info(1)->company_name; ?>
-        </div>
-        <div style="font-size:16px; font-weight:bold; text-align:center; height:0px;"></div>
-        <div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;">
-            <?= xin_company_info(1)->address_1 . " " . xin_company_info(1)->address_2; ?>
+        <div style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px"><?php echo xin_company_info(1)->company_name; ?></div>
+				<div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
+				<div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;"> <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
+				<div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;" >Lunch Date: <?php echo $lunch_data[0]->date ; ?></div>
+			
+				<div style="font-size:18px; font-weight:bold; text-align:center;">Daily Lunch Report</div>
+            
         </div>
         <?php $data=$lunch_data[0]  ?>
         <div class="container">

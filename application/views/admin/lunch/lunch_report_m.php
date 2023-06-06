@@ -84,65 +84,11 @@
 
 <body>
     <div class="container">
-        <div style="font-size:18px; font-weight:bold; text-align:center; margin-top:10px">
-            <?= xin_company_info(1)->company_name; ?>
+    <div style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px"><?php echo xin_company_info(1)->company_name; ?></div>
+				<div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
+				<div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;"> <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
+				<div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;" >Monthly Lunch Report of <?= $imonth?> </div>
         </div>
-        <div style="font-size:16px; font-weight:bold; text-align:center; height:0px;"></div>
-        <div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;">
-            <?= xin_company_info(1)->address_1 . " " . xin_company_info(1)->address_2; ?>
-        </div>
-        <div style="font-size:15px; line-height:15px; font-weight:bold; text-align:center;">
-            Monthly Lunch Report of <?= $imonth ?>
-        </div>
-
-        <?php
-        // Assuming you have the 'lunch_data' and 'lunch_details' variables available
-        $lunchData = $lunch_data;
-
-        // Initialize merged totals
-        $mergedTotals = array(
-            'total_m' => 0,
-            'emp_m' => 0,
-            'guest_m' => 0,
-            'total_cost' => 0,
-            'emp_cost' => 0,
-            'guest_cost' => 0
-        );
-
-        // Extract month name and calculate merged totals
-        foreach ($lunchData as $data) {
-            $date = date_create($data->date);
-            $monthName = date_format($date, 'F');
-
-            $mergedTotals['total_m'] += $data->total_m;
-            $mergedTotals['emp_m'] += $data->emp_m;
-            $mergedTotals['guest_m'] += $data->guest_m;
-            $mergedTotals['total_cost'] += $data->total_cost;
-            $mergedTotals['emp_cost'] += $data->emp_cost;
-            $mergedTotals['guest_cost'] += $data->guest_cost;
-
-            $lunchDataByMonth[$monthName][] = $data;
-        }
-        ?>  
-        
-        <div class="totals-container">
-            <div class="col">
-                <strong>Employee Meals:</strong> <?= $mergedTotals['emp_m'] ?><br>
-                <strong>Guest Meal:</strong>  <?= $mergedTotals['guest_m'] ?><br>
-                <strong>Total Meals:</strong> <?= $mergedTotals['total_m'] ?><br>
-            </div>
-            <div class="col">
-                <strong>Employee Cost:</strong><?= $mergedTotals['emp_cost'] ?><br>
-                <strong>Guest Cost:</strong><?= $mergedTotals['guest_cost'] ?><br>
-                <strong>Total Cost:</strong> <?= $mergedTotals['total_cost'] ?><br>
-            </div>
-        </div>
-
-
-
-
-
-
         <h2>Lunch Details</h2>
         <table>
             <thead>
@@ -190,6 +136,48 @@
                 <?php } ?>
             </tbody>
         </table>
+        <?php
+        // Assuming you have the 'lunch_data' and 'lunch_details' variables available
+        $lunchData = $lunch_data;
+
+        // Initialize merged totals
+        $mergedTotals = array(
+            'total_m' => 0,
+            'emp_m' => 0,
+            'guest_m' => 0,
+            'total_cost' => 0,
+            'emp_cost' => 0,
+            'guest_cost' => 0
+        );
+
+        // Extract month name and calculate merged totals
+        foreach ($lunchData as $data) {
+            $date = date_create($data->date);
+            $monthName = date_format($date, 'F');
+
+            $mergedTotals['total_m'] += $data->total_m;
+            $mergedTotals['emp_m'] += $data->emp_m;
+            $mergedTotals['guest_m'] += $data->guest_m;
+            $mergedTotals['total_cost'] += $data->total_cost;
+            $mergedTotals['emp_cost'] += $data->emp_cost;
+            $mergedTotals['guest_cost'] += $data->guest_cost;
+
+            $lunchDataByMonth[$monthName][] = $data;
+        }
+        ?>  
+        
+        <div class="totals-container">
+            <div class="col">
+                <strong>Employee Meals:</strong> <?= $mergedTotals['emp_m'] ?><br>
+                <strong>Guest Meal:</strong>  <?= $mergedTotals['guest_m'] ?><br>
+                <strong>Total Meals:</strong> <?= $mergedTotals['total_m'] ?><br>
+            </div>
+            <div class="col">
+                <strong>Employee Cost:</strong><?= $mergedTotals['emp_cost'] ?><br>
+                <strong>Guest Cost:</strong><?= $mergedTotals['guest_cost'] ?><br>
+                <strong>Total Cost:</strong> <?= $mergedTotals['total_cost'] ?><br>
+            </div>
+        </div>
 
         <script>
             // Add any JavaScript code you need here

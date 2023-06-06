@@ -115,6 +115,7 @@
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(1)">Daily Report</button>
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(2)">Monthly Report</button>
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(3)">Continue  Report</button>
+          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(4)">Vendor Voucher</button>
 
       </div>
 
