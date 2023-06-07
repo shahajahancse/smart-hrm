@@ -247,6 +247,7 @@ class lunch extends MY_Controller {
             }
         }
     }
+
     public function add_lunch_pak(){
         $session = $this->session->userdata('username');
         if(empty($session)){ 
@@ -282,7 +283,6 @@ class lunch extends MY_Controller {
             redirect('admin/');
         }
 
-
         $data['query'] = $this->db->get_where('lunch_package', array('id' => 1))->result();
 
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
@@ -297,6 +297,16 @@ class lunch extends MY_Controller {
         }
 
 
+        $data['query'] = $this->db->get_where('lunch_package', array('id' => 1))->result();
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch Package';
+        $data['path_url'] = 'lunch';
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/lunch_package", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
     }
 
     public function details($lunchid, $date){
@@ -336,9 +346,6 @@ class lunch extends MY_Controller {
         }
 
 
-
-
-
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
 
         $data['breadcrumbs'] = 'Lunch Report';
@@ -351,8 +358,6 @@ class lunch extends MY_Controller {
         }
 
     }
-
-
 
     public function lunch_reports(){
 
@@ -374,14 +379,94 @@ class lunch extends MY_Controller {
         $data['first_date'] = $first_date;
         $data['second_date'] = $first_date;
         $data['emp_id'] = $emp_id;
+        // dd($data['lunch_details']);      
+        if($status==1){
+            $this->load->view('admin/lunch/lunch_report_view', $data); 
+        }elseif($status==2){
+            $this->load->view('admin/lunch/lunch_report_m', $data); 
+        }elseif($status==3){
+            $this->load->view('admin/lunch/lunch_report_cont', $data); 
+        }elseif($status==4){
+            $this->load->view('admin/lunch/lunch_report_vendor', $data); 
+        }
+    }
+
+    public function details($lunchid, $date){
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+
+        $this->db->select('lunch_details.id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date, xin_employees.first_name, xin_employees.last_name');
+        $this->db->from('lunch_details');
+        $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
+        $this->db->where('lunch_details.lunch_id', $lunchid);
+        $this->db->where('lunch_details.date', $date);
+        $this->db->where('lunch_details.meal_amount >', 0);
+        $result = $this->db->get()->result();
+        $data['lunch_details'] = $result;
+      
+        $data['lunch'] = $this->db->get_where('lunch', array('id' =>$lunchid, 'date' =>$date ))->result();
+
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+
+        $data['breadcrumbs'] = 'Lunch Details';
+        $data['path_url'] = 'details';
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/lunch_details", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+    }
+
+    public function report(){
+
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+
+        $data['breadcrumbs'] = 'Lunch Report';
+        $data['path_url'] = 'report';
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/lunch_report", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+
+    }
+
+    public function lunch_reports(){
+
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $sql = $this->input->post('sql');
+        $status = $this->input->post('status');
+        $emp_id = explode(',', trim($sql));
+
+        $data['lunch_data'] = $this->lunch_model->get_lunch_data($first_date,$second_date);
+
+
+        $data['lunch_details']  = $this->lunch_model->get_lunch_details($first_date,$second_date,$emp_id);
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $first_date;
+        $data['emp_id'] = $emp_id;
         // dd($data['lunch_details']);
-            if($status==1){
-                $this->load->view('admin/lunch/lunch_report_view', $data); 
-            }elseif($status==2){
-                $this->load->view('admin/lunch/lunch_report_m', $data); 
-            }elseif($status==3){
-                $this->load->view('admin/lunch/lunch_report_cont', $data); 
-            }
+        if($status==1){
+            $this->load->view('admin/lunch/lunch_report_view', $data); 
+        }elseif($status==2){
+            $this->load->view('admin/lunch/lunch_report_m', $data); 
+        }elseif($status==3){
+            $this->load->view('admin/lunch/lunch_report_cont', $data); 
+        }
     }
 
     public function emp_pay_list(){
@@ -421,8 +506,8 @@ class lunch extends MY_Controller {
         } else {
             redirect('admin/');
         }
-
     }
+
     public function getfrom()
     {
         $session = $this->session->userdata('username');
@@ -465,7 +550,6 @@ class lunch extends MY_Controller {
         }
         
         return $this->lunch_model->process($processmonth);
-     
     }
 
     public function submit_payment() {

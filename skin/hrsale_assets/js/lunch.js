@@ -3,6 +3,9 @@ function perday(status) {
 {
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest = new XMLHttpRequest();
+  var checkboxes = document.getElementsByName('select_emp_id[]');
+
+  var sql = get_checked_value(checkboxes);
   if(status == 1){
     first_date = document.getElementById('process_date').value;
     second_date=first_date;
@@ -25,11 +28,13 @@ function perday(status) {
       }else if(status == 3){
         first_date = document.getElementById('process_date').value;
         second_date = document.getElementById('second_date').value;
+      }else if(status == 4){
+        first_date = document.getElementById('process_date').value;
+        second_date = first_date ;
+        sql=1111;
       }
 
-  var checkboxes = document.getElementsByName('select_emp_id[]');
 
-  var sql = get_checked_value(checkboxes);
   if(sql =='')
   {
     alert('Please select employee Id');
