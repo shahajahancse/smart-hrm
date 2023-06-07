@@ -61,7 +61,7 @@
 					product_supplier.name,
 					product_supplier.company,
 					products_purches.status,
-					products_purches_requisitions.id,
+					products_purches_details.id,
 				")
 	        ->from('product_supplier')
 	        ->from('products_purches')
@@ -125,19 +125,19 @@
 	public  function product_purches_details($id){
 		// dd($id);
 		$this->db->select('xin_employees.first_name,xin_employees.last_name, product_supplier.name,product_supplier.company,products_purches.status,products.product_name,
-		products_purches_requisitions.quantity,products_purches_requisitions.ap_quantity,products_purches_requisitions.id ,products_purches_requisitions.amount,products_purches_requisitions.purches_id,products_purches_requisitions.created_at')
+		products_purches_details.quantity,products_purches_details.ap_quantity,products_purches_details.id ,products_purches_details.amount,products_purches_details.purches_id,products_purches_details.created_at')
 		->from('product_supplier')
 		->from('products_purches')
 		->from('products')
-		->from('products_purches_requisitions')
+		->from('products_purches_details')
 		->from('xin_employees')
 		->where("products_purches.user_id = xin_employees.user_id")
 		->where("products_purches.supplier =product_supplier.id")
-		->where("products_purches_requisitions.product_id = products.id")
-		->where("products_purches_requisitions.purches_id=products_purches.id")
-		->where("products_purches_requisitions.purches_id",$id)
+		->where("products_purches_details.product_id = products.id")
+		->where("products_purches_details.purches_id=products_purches.id")
+		->where("products_purches_details.purches_id",$id)
 
-		->order_by('products_purches_requisitions.purches_id', 'desc');
+		->order_by('products_purches_details.purches_id', 'desc');
 		
 		
 			
@@ -148,19 +148,19 @@
 	public  function product_requisition_details($id){
 		// dd($id);
 		$this->db->select('xin_employees.first_name,xin_employees.last_name, product_supplier.name,product_supplier.company,products_purches.status,products.product_name,
-		products_purches_requisitions.quantity,products_purches_requisitions.ap_quantity,products_purches_requisitions.id ,products_purches_requisitions.amount,products_purches_requisitions.purches_id,products_purches_requisitions.created_at')
+		products_purches_details.quantity,products_purches_details.ap_quantity,products_purches_details.id ,products_purches_details.amount,products_purches_details.purches_id,products_purches_details.created_at')
 		->from('product_supplier')
 		->from('products_purches')
 		->from('products')
-		->from('products_purches_requisitions')
+		->from('products_purches_details')
 		->from('xin_employees')
 		->where("products_purches.user_id = xin_employees.user_id")
 		->where("products_purches.supplier =product_supplier.id")
-		->where("products_purches_requisitions.product_id = products.id")
-		->where("products_purches_requisitions.purches_id=products_purches.id")
-		->where("products_purches_requisitions.purches_id",$id)
+		->where("products_purches_details.product_id = products.id")
+		->where("products_purches_details.purches_id=products_purches.id")
+		->where("products_purches_details.purches_id",$id)
 
-		->order_by('products_purches_requisitions.purches_id', 'desc');
+		->order_by('products_purches_details.purches_id', 'desc');
 		
 			return $this->db->get()->result();
 	}
