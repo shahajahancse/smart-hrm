@@ -1627,7 +1627,7 @@ class Xin_model extends CI_Model {
 	  }
 
 	  if ($status != null && $status != 0) {
-	  	$query->where('status', $status);
+	  	$query->where_in('status', $status);
 	  }
 
 	  $query->where('status !=', 0);

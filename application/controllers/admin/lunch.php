@@ -461,7 +461,7 @@ public function process()
     if (empty($session)) {
         redirect('admin/');
     }
-    $currentDate = '2023-02-12';
+    $currentDate = '2023-06-12';
 
     $day = date('d', strtotime($currentDate));
     $month = date('m', strtotime($currentDate));

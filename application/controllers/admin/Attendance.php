@@ -431,7 +431,7 @@ class Attendance extends MY_Controller {
 		$data['first_date'] = $first_date;
 		$data['second_date'] = $second_date;
 		$data['company_info'] = $this->Xin_model->get_company_info(1);
-		$data['all_employees'] = $this->Attendance_model->get_employee_infos($emp_id);
+		$data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
 		
 
 	 	echo $this->load->view("admin/attendance/job_card", $data, TRUE);
@@ -456,16 +456,14 @@ class Attendance extends MY_Controller {
 	   $data['statusC']= $statusC;
 	   $data['first_date'] = $first_date;
 	   $data['second_date'] = $second_date;
-	//    $data['company_info'] = $this->Xin_model->get_company_info(1);
-	//    $data['all_employees'] = $this->Attendance_model->get_employee_information();
-			if(is_string($data["values"]))
-			{
-				echo $data["values"];
-			}
-			else
-			{	
-				echo $this->load->view("admin/attendance/movment_status_report", $data, TRUE);
-			}
+		if(is_string($data["values"]))
+		{
+			echo $data["values"];
+		}
+		else
+		{	
+			echo $this->load->view("admin/attendance/movment_status_report", $data, TRUE);
+		}
     
 		
 		 
@@ -493,16 +491,14 @@ class Attendance extends MY_Controller {
 	   $data['first_date'] = $first_date;
 	   $data['second_date'] = $second_date;
 	   $data['statusC']= $statusC;
-	//    $data['company_info'] = $this->Xin_model->get_company_info(1);
-	//    $data['all_employees'] = $this->Attendance_model->get_employee_information();
-			if(is_string($data["values"]))
-			{
-				echo $data["values"];
-			}
-			else
-			{	
-				echo $this->load->view("admin/attendance/movment_status_report_excel", $data, TRUE);
-			}
+		if(is_string($data["values"]))
+		{
+			echo $data["values"];
+		}
+		else
+		{	
+			echo $this->load->view("admin/attendance/movment_status_report_excel", $data, TRUE);
+		}
     
 		
 		 

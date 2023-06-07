@@ -31,6 +31,8 @@ class Timesheet extends MY_Controller {
 		$this->load->model("Project_model");
 		$this->load->model("Location_model");
 		$this->load->model("Attendance_model");
+		$this->load->model('Salary_model');
+		// $this->load->model('Job_card_model');
 	}
 	
 	/*Function to set JSON output*/
@@ -326,7 +328,7 @@ class Timesheet extends MY_Controller {
 		$data['title'] = $this->lang->line('xin_attendance_timecalendar').' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_attendance_timecalendar');
 		$data['path_url'] = 'timesheet_calendar';
-		$data['get_all_companies'] = $this->Xin_model->get_companies();
+		$data['company'] = $this->db->where('company_id', 1)->get('xin_companies')->row();
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('261',$role_resources_ids)) {
@@ -2161,6 +2163,7 @@ class Timesheet extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	}
+
 	// get company > employees
 	 public function get_update_employees() {
 
@@ -2182,6 +2185,7 @@ class Timesheet extends MY_Controller {
 		$length = intval($this->input->get("length"));
 	
 	 }
+
 	 // get company > employees
 	 public function get_timesheet_employees() {
 
