@@ -144,13 +144,41 @@ if($out>0){
         $location='Out Side';
 
       } ?> 
-      <div>
-        <p>Your Current Location is:<?=$location?></p> 
-        <p>Outime:<?=$outtimedata?></p> 
-       </div>
-      <button type="submit" class="btn btn-primary">In</button>
+  <style>
+    .boxm {
+        padding: 20px;
+        border: 2px solid #3F51B5;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        background-color: #F5F5F5;
+        margin: 18px;
+    }
+
+    p {
+        margin: 0;
+        font-size: 18px;
+        color: #333;
+    }
+
+    #location {
+        font-weight: bold;
+        color: #3F51B5;
+    }
+
+    #outtime {
+        font-style: italic;
+    }
+</style>
+
+<div class="boxm">
+    <p>Your Current Location is: <span id="location"><?= $location ?></span></p>
+    <p>Outime: <span id="outtime"><?= $outtimedata ?></span></p>
+</div>
+
+      
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">In</button>
       
       </div>
 
