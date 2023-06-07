@@ -96,6 +96,107 @@
     </div>
   </div>
 </div>
+<?php
+  $current_date=date('Y-m-d');
+  $session = $this->session->userdata('username');
+  $emppid = $session['user_id'];
+       
+  $this->db->select("*");
+  $this->db->where("user_id", $emppid);
+  $this->db->where("date", $current_date);
+  $this->db->limit("1");
+  $user_movement = $this->db->get('movement')->result();
+
+  if (count($user_movement) >0){
+    $out=$user_movement[0]->inout;
+   
+    $outarray=json_decode($user_movement[0]->location);
+    $outdata = $outarray[count($outarray) - 1];
+    $outtimedataarray=json_decode($user_movement[0]->out_time);
+    $outtimedata = $outtimedataarray[count($outtimedataarray) - 1];
+
+  }else{
+    $out=0;
+  }
+if($out>0){
+  ?>
+<div class="modal fade" id="movement" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Movement</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="movementinform">
+      <?php
+    
+
+
+      
+      
+      if($outdata==1){
+        $location='5th Floor';
+      }elseif ($outdata==2) {
+         $location='3rd Floor';
+      }else{
+        $location='Out Side';
+
+      } ?> 
+      <div>
+        <p>Your Current Location is:<?=$location?></p> 
+        <p>Outime:<?=$outtimedata?></p> 
+       </div>
+      <button type="submit" class="btn btn-primary">In</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      
+      </div>
+
+    </div>
+    </form>
+  </div>
+</div>
+
+
+<?php
+}else{
+?>
+<div class="modal fade" id="movement" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Movement</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="movementform">
+      <div class="modal-body">
+      <div class="form-group">
+          <select name="area" class="custom-select form-control" required>
+            <option value="">Select Area</option>
+            <option value="1">5th Floor</option>
+            <option value="2">3rd Floor</option>
+            <option value="3">Out Side</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlTextarea1">Reason</label>
+          <textarea name="reason" class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Out</button>
+      </div>
+
+    </div>
+    </form>
+  </div>
+</div>
+<?php } ?>
 
 
 
@@ -124,6 +225,20 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav"> 
+
+        <li>
+          <a data-toggle="modal" data-target="#movement">
+            
+             <i class="fa fa-arrows" aria-hidden="true"></i>
+             <?php if($out>0){?>
+             <span class="label" style="font-size: 12px !important; background: #fb0202 !important"><?php echo $out;?></span>
+         <?php } ?>
+            </a>
+        </li>
+
+
+
+
           <?php
             $fcount = 0;
               if($user[0]->user_role_id != 3){
@@ -309,6 +424,7 @@
               </ul>
               <?php } ?>
             </li> 
+           
 
           
 
@@ -435,7 +551,7 @@
             
           <li>
           <a href="#" data-toggle="control-sidebar" title="<?php echo $this->lang->line('xin_role_layout_settings');?>"><i class="fa fa-cog fa-spin"></i></a>
-        </li>
+         </li>
             
           <?php }
           ?>
@@ -559,6 +675,66 @@
 
 <script>
     $(document).ready(function() {
+              $('#movementform').on('submit', function(event) {
+              event.preventDefault(); // Prevent the default form submission
+
+          // Get the form data
+          var formData = $(this).serialize();
+
+          // Make an AJAX post request to the controller
+          $.ajax({
+            url: '<?= base_url('admin/floor_movement/outformsub') ?>', // Replace 'controller/method' with your actual controller and method
+            method: 'POST',
+            data: formData,
+            success: function(response) {
+              // Handle the success response
+              
+              alert(response);
+              location.reload();
+              // Process the response data returned from the controller
+            },
+            error: function(xhr, status, error) {
+              // Handle any errors that occur during the request
+           
+              alert(error);
+              location.reload();
+            }
+          });
+        });
+              $('#movementinform').on('submit', function(event) {
+              event.preventDefault(); // Prevent the default form submission
+
+          // Get the form data
+          var formData = $(this).serialize();
+
+          // Make an AJAX post request to the controller
+          $.ajax({
+            url: '<?= base_url('admin/floor_movement/informsub') ?>', // Replace 'controller/method' with your actual controller and method
+            method: 'POST',
+            data: formData,
+            success: function(response) {
+              // Handle the success response
+              
+              alert(response);
+              location.reload();
+              // Process the response data returned from the controller
+            },
+            error: function(xhr, status, error) {
+              // Handle any errors that occur during the request
+           
+              alert(error);
+              location.reload();
+            }
+          });
+        });
+
+
+
+
+
+
+
+
       // Month & Year
       $('.attendance_date').datepicker({
         changeMonth: true,

@@ -64,9 +64,9 @@
             echo '<tr><th>Total Meal</th><td>' . $item->total_m . '</td></tr>';
             echo '<tr><th>Employee Meal</th><td>' . $item->emp_m . '</td></tr>';
             echo '<tr><th>Guest Meal</th><td>' . $item->guest_m . '</td></tr>';
-            echo '<tr><th>Total Cost</th><td>' .$item->total_cost. '</td></tr>';
-            echo '<tr><th>Employee Cost</th><td>' . $item->emp_cost . '</td></tr>';
-            echo '<tr><th>Guest Cost</th><td>' . $item->guest_cost . '</td></tr>';
+            echo '<tr><th>Total Cost</th><td>' .$item->total_cost*2 . '</td></tr>';
+            echo '<tr><th>Employee Cost</th><td>' . $item->emp_cost*2 . '</td></tr>';
+            echo '<tr><th>Guest Cost</th><td>' . $item->guest_cost*2 . '</td></tr>';
             echo '<tr><th>Comments</th><td>' . $item->bigcomment . '</td></tr>';
             echo '<tr><th>Date</th><td>' . $item->date . '</td></tr>';
             echo '</table>';

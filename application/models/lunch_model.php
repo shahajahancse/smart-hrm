@@ -48,6 +48,7 @@ class lunch_model extends CI_Model {
                         $prev_meal += $value->meal_amount;
                     }
                     $prev_cost = ($prev_meal * 45);
+                  
                     $prevemonth = date('Y-m', strtotime('-1 month', strtotime($second_date)));
     
                     $q = $query = $this->db->query("SELECT * FROM `lunch_payment` WHERE `emp_id` = 2 AND `pay_month` = '$prevemonth' ")->result();
@@ -99,14 +100,16 @@ class lunch_model extends CI_Model {
 
                     $pay_month = $paymonth;
                 }
+                
                 $data = array(
                     'emp_id' => $emp_id,
                     'prev_meal' => $prev_meal,
-                    'prev_cost' => $prev_cost,
+                   
                     'prev_pay' => $prev_pay,
                     'prev_amount' => $prev_amount,
                     'pay_amount' => $pay_amount,
                     'pay_month' => $pay_month,
+                    'prev_cost' => $prev_cost,
                 );
                 $this->db->insert('lunch_payment', $data);
             }
