@@ -47,8 +47,12 @@ $get_animate = $this->Xin_model->get_content_animate();
       </table>
       <!-- <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/persial_approved/'.$requisition_id);?>">Approved</a> -->
        <?php if(!empty($results)){?>
-        <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-        <?php }?>
+        <?php if($session['role_id']==1) {?>
+      <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
+         
+      <?php }else{?>
+        <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="update">
+    <?php }}?>
         <?php echo form_close()?>
     </div>
   </div>

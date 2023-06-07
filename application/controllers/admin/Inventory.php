@@ -152,7 +152,7 @@ class Inventory extends MY_Controller {
 	
 	public function persial_approved($id){
 		
-	
+		$session = $this->session->userdata('username');
 		$all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->result();
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
@@ -164,8 +164,9 @@ class Inventory extends MY_Controller {
 		// dd($id);
 		// dd($d1[1]->quantity);
 		foreach($d1 as $k=>$v){
-			
+			if($session['role_id']==1){
 			 if($d1[$k]->quantity >= $quantity[$k]) {
+				
 				 foreach($quantity as $key=>$value){
 					$log_user=$_SESSION['username']['user_id'];
 					$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
@@ -175,14 +176,73 @@ class Inventory extends MY_Controller {
 				$this->session->set_flashdata('warning', 'Approved  Quantity is Biger');
 				redirect("admin/inventory/index");
 			 }
+			}else{
+
+				foreach($quantity as $key=>$value){
+
+				    $this->db->where('id',$r_did[$key])->update('products_requisition_details',['quantity'=>$value]); 
+				}
+					$this->session->set_flashdata('success', 'Product Updated Successfully.');
+				    redirect("admin/inventory/index","refresh");
+			}
 
 		}
+		  if($session['role_id'] == 1){
 		   $approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
-		 if($approved){
-					$this->session->set_flashdata('success', 'Updated Successfully.');
-				    redirect("admin/inventory/index","refresh");
-				}
+			if($approved){
+						$this->session->set_flashdata('success', 'Updated Successfully.');
+						redirect("admin/inventory/index","refresh");
+					}
+			}
 			
+	}
+
+	public function hand_over($id=null){
+		
+					$pr1=$this->db->where('requisition_id',$id)->get('products_requisition_details')->result();
+					
+					$mergedArray = [];
+			foreach ($pr1 as $item) {
+				$productId = $item->product_id;
+				if (isset($mergedArray[$productId])) {
+					$mergedArray[$productId]->approved_qty += $item->approved_qty;
+				} else {
+					$mergedArray[$productId] = $item;
+				}
+			}
+
+			$mergedArray = array_values($mergedArray);
+			
+			
+			$p1=$this->db->get('products')->result();
+
+			$result = array();
+			foreach ($p1 as $item1) {
+				foreach ($pr1 as $item2) {
+					if ($item1->id == $item2->product_id) {
+						$mergedItem = (object)array_merge((array)$item1, (array)$item2);
+						$mergedItem->total_quantity = $item1->quantity - $item2->approved_qty;
+						$result[] = $mergedItem;
+						break;
+					}
+				}
+			}
+
+			foreach ($result as $row) {
+				
+				$data = array(
+					'id' => $row->product_id,
+				'quantity' => $row->total_quantity,
+				); 
+				$this->db->where('id',$row->product_id)->update('products', $data);
+			}		
+
+			$deliver=$this->db->where('id',$id)->update('products_requisitions',['status'=>3]);
+			if($deliver){
+				$this->session->set_flashdata('success', 'Handover Successfully.');
+				redirect("admin/inventory/index","refresh");
+			}
+		
 	}
 
 
@@ -300,13 +360,12 @@ public function purchase($id = null)
 		$ids=$this->Inventory_model->save('products_purches', ['user_id'=>$session['user_id'],'	supplier'=>$supplier_id]);
 		$last_id=$this->db->insert_id();
 		
-	   
 		for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
 			$form_data[] = array( 
 				'product_id'	 => $_POST['product_id'][$i],
 				'quantity'		 => $_POST['quantity'][$i],
 				'purches_id' => $last_id,
-			);
+			);}
 			  
 			if ($hid = $this->input->post('hidden_id')) {
 				$this->db->where('id', $hid)->update_batch('products_requisition_details', $form_data);
@@ -318,7 +377,7 @@ public function purchase($id = null)
 					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
 				}
 			}		
-		}
+		
 		
 		return redirect('admin/inventory/purchase');
 	}
@@ -422,14 +481,13 @@ public function purchase($id = null)
 	//approved by prisal product purches edit
 	public function product_persial_approved($id){
 		
-	 
+	    $session = $this->session->userdata('username');
 		$all_detail=$this->db->where('purches_id',$id)->get('products_purches_requisitions')->result();
 		// dd($all_detail);
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
 			
 		}
-		
 		
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
@@ -438,16 +496,77 @@ public function purchase($id = null)
 			
 				 foreach($quantity as $key=>$value){
 					$log_user=$_SESSION['username']['user_id'];
+					if($session['role_id']==1){
 					$this->db->where('id',$id)->update('products_purches',['updated_by'=>$log_user]);
-                    $this->db->where('id',$r_did[$key])->update('products_purches_requisitions',['ap_quantity'=>$value]); }
+                    $this->db->where('id',$r_did[$key])->update('products_purches_requisitions',['ap_quantity'=>$value]);}else{
+						$this->db->where('id',$r_did[$key])->update('products_purches_requisitions',['quantity'=>$value]);
+					} }
 			 }
-		      $approved = $this->db->where('id',$id)->update('products_purches',['status'=>2]);
-		   if($approved){
-				        	$this->session->set_flashdata('success', 'Updated Successfully.');
-				            redirect("admin/inventory/purchase","refresh");
+			 if($session['role_id']==1){ $approved = $this->db->where('id',$id)->update('products_purches',['status'=>2]);
+				if($approved){
+					$this->session->set_flashdata('success', 'Updated Successfully.');
+					redirect("admin/inventory/purchase","refresh");
+		        }
+			}
+		  else{
+					$this->session->set_flashdata('success', ' product Updated Successfully.');
+				    redirect("admin/inventory/purchase","refresh");
 				 }
 	
 	}
+
+
+	public function product_purchase_delivered($id){
+    
+         $pr1=$this->db->where('purches_id',$id)->get('products_purches_requisitions')->result();
+					$mergedArray = [];
+			foreach ($pr1 as $item) {
+				$productId = $item->product_id;
+				if (isset($mergedArray[$productId])) {
+					$mergedArray[$productId]->ap_quantity += $item->ap_quantity;
+				} else {
+					$mergedArray[$productId] = $item;
+				}
+			}
+
+			$mergedArray = array_values($mergedArray);
+			 
+			$p1=$this->db->get('products')->result();
+
+			$result = array();
+			foreach ($p1 as $item1) {
+				foreach ($pr1 as $item2) {
+					if ($item1->id == $item2->product_id) {
+						$mergedItem = (object)array_merge((array)$item1, (array)$item2);
+						$mergedItem->total_quantity = $item1->quantity + $item2->ap_quantity;
+						$result[] = $mergedItem;
+						break;
+					}
+				}
+			}
+
+			foreach ($result as $row) {
+				
+				$data = array(
+					'id' => $row->product_id,
+				   'quantity' => $row->total_quantity,
+				); 
+				 $this->db->where('id',$row->product_id)->update('products', $data);
+			}		
+
+			 $deliver=$this->db->where('id',$id)->update('products_purches',['status'=>3]);
+			 if($deliver){
+				 $this->session->set_flashdata('success', 'Delivered Successfully.');
+				 redirect("admin/inventory/purchase","refresh");
+			 }
+			 
+ 
+		 
+		 
+ 
+	 }
+
+
  
 
 	// ================ default ====================
