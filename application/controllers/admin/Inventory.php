@@ -377,7 +377,7 @@ public function purchase($id = null)
 				$this->db->where('id', $hid)->update_batch('products_requisition_details', $form_data);
 				$this->session->set_flashdata('success', 'Successfully Updated Done');
 			} else {
-				if($this->db->insert_batch('products_purches_requisitions', $form_data)){
+				if($this->db->insert_batch('products_purches_details', $form_data)){
 					$this->session->set_flashdata('success', 'Successfully Insert Done');
 				} else {
 					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
@@ -488,7 +488,7 @@ public function purchase($id = null)
 	public function product_persial_approved($id){
 		
 	    $session = $this->session->userdata('username');
-		$all_detail=$this->db->where('purches_id',$id)->get('products_purches_requisitions')->result();
+		$all_detail=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
 		// dd($all_detail);
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
@@ -504,8 +504,8 @@ public function purchase($id = null)
 					$log_user=$_SESSION['username']['user_id'];
 					if($session['role_id']==1){
 					$this->db->where('id',$id)->update('products_purches',['updated_by'=>$log_user]);
-                    $this->db->where('id',$r_did[$key])->update('products_purches_requisitions',['ap_quantity'=>$value]);}else{
-						$this->db->where('id',$r_did[$key])->update('products_purches_requisitions',['quantity'=>$value]);
+                    $this->db->where('id',$r_did[$key])->update('products_purches_details',['ap_quantity'=>$value]);}else{
+						$this->db->where('id',$r_did[$key])->update('products_purches_details',['quantity'=>$value]);
 					} }
 			 }
 			 if($session['role_id']==1){ $approved = $this->db->where('id',$id)->update('products_purches',['status'=>2]);
@@ -526,7 +526,7 @@ public function purchase($id = null)
     
 
 			$this->db->select('p.product_name, p.quantity as  qty, pr.*');
-			$this->db->from('products_purches_requisitions pr');
+			$this->db->from('products_purches_details pr');
 			$this->db->from('products p');
 			$this->db->where('p.id = pr.product_id');
 			$this->db->where('purches_id', $id);
@@ -776,7 +776,7 @@ public function purchase($id = null)
 	}
 	public function delete_purches_item($id,$pid){
 		
-		$approved = $this->db->where('id',$id)->delete('products_purches_requisitions');
+		$approved = $this->db->where('id',$id)->delete('products_purches_details');
 		if($approved){
 			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
 		 redirect("admin/inventory/product_purchase_edit_approved/".$pid);

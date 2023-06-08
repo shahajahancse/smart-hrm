@@ -10,7 +10,7 @@
 <div class="box mb-4 <?php echo $get_animate;?>">
   <div id="accordion">
     <div class="box-header with-border">
-        <h3 class="box-title">Add Requisition For Purches Product</h3>
+        <h3 class="box-title">Purches Products Requisition </h3>
       <div class="box-tools pull-right"> 
         <a class="text-dark collapsed" data-toggle="collapse" href="#add_form" aria-expanded="false">
           <button type="button" class="btn btn-xs btn-primary"> <span class="ion ion-md-add"></span> <?php echo $this->lang->line('xin_add_new');?></button>
