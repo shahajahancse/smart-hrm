@@ -96,6 +96,7 @@ foreach ($all_employees as $key => $value) {
 	echo "<table>";
 
 	$emp_data = $this->Job_card_model->emp_job_card($first_date,$second_date, $value->user_id);
+	// dd($emp_data);
 
 	
 	echo "<table class='table table-bordered table-sm   table-striped sal mt-2' style='text-align:center; font-size:13px; '> 
@@ -111,7 +112,7 @@ foreach ($all_employees as $key => $value) {
 		foreach ($emp_data['emp_data'] as $key => $row) {
 
 			// if(in_array($row->attendance_date,$emp_data['leave']))
-			if($row->status == 'leave')
+			if($row->status == 'Leave')
 			{
 				$leave_type = $this->Job_card_model->get_leave_type($row->attendance_date,$value->user_id);
 				$att_status = $leave_type;

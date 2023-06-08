@@ -14,6 +14,7 @@ class MY_Controller extends CI_Controller
 		$this->load->database();
 		$this->load->helper('security');
 		$this->load->library('form_validation');
+		ini_set('session.cookie_lifetime', 0);
 		
 		// set default timezone  
 		$system = $this->read_setting_info(1);

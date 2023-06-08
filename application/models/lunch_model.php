@@ -48,6 +48,7 @@ class lunch_model extends CI_Model {
                         $prev_meal += $value->meal_amount;
                     }
                     $prev_cost = ($prev_meal * 45);
+                  
                     $prevemonth = date('Y-m', strtotime('-1 month', strtotime($second_date)));
     
                     $q = $query = $this->db->query("SELECT * FROM `lunch_payment` WHERE `emp_id` = 2 AND `pay_month` = '$prevemonth' ")->result();
@@ -99,14 +100,16 @@ class lunch_model extends CI_Model {
 
                     $pay_month = $paymonth;
                 }
+                
                 $data = array(
                     'emp_id' => $emp_id,
                     'prev_meal' => $prev_meal,
-                    'prev_cost' => $prev_cost,
+                   
                     'prev_pay' => $prev_pay,
                     'prev_amount' => $prev_amount,
                     'pay_amount' => $pay_amount,
                     'pay_month' => $pay_month,
+                    'prev_cost' => $prev_cost,
                 );
                 $this->db->insert('lunch_payment', $data);
             }
@@ -213,6 +216,26 @@ class lunch_model extends CI_Model {
             $this->db->where_in('lunch_details.emp_id', $emp_ids);
             $this->db->where('date >=', $first_date);
             $this->db->where('date <=', $second_date);
+            return $this->db->get()->result();
+    }
+    public function get_lunch_details_active($first_date, $second_date, $emp_ids) {
+            $this->db->select('lunch_details.id,lunch_details.emp_id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date, xin_employees.first_name, xin_employees.last_name');
+            $this->db->from('lunch_details');
+            $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
+            $this->db->where_in('lunch_details.emp_id', $emp_ids);
+            $this->db->where('date >=', $first_date);
+            $this->db->where('date <=', $second_date);
+            $this->db->where('meal_amount >=', 1);
+            return $this->db->get()->result();
+    }
+    public function get_lunch_details_inactive($first_date, $second_date, $emp_ids) {
+            $this->db->select('lunch_details.id,lunch_details.emp_id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date, xin_employees.first_name, xin_employees.last_name');
+            $this->db->from('lunch_details');
+            $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
+            $this->db->where_in('lunch_details.emp_id', $emp_ids);
+            $this->db->where('date >=', $first_date);
+            $this->db->where('date <=', $second_date);
+            $this->db->where('meal_amount<=', 0);
             return $this->db->get()->result();
     }
     public function get_meal($emp_id,$date) {

@@ -21,7 +21,6 @@
 	} 
 
 	public function sub_category_list(){
-
 	   $this->db->select('psc.*, pc.category_name');
 	   $this->db->from('products_sub_categories as psc');
 	   $this->db->join('products_categories as pc', 'pc.id = psc.cate_id');
@@ -32,6 +31,7 @@
 	public function save($table, $data){
 	   return $this->db->insert($table, $data);
 	}
+
 	public function purchase_products_requisition($id,$role_id){
 
 		if($role_id==1){
@@ -76,9 +76,7 @@
 	} 
 
 
-
 	public function purchase_products($id,$role_id){
-
 		if($role_id==4){
 			$this->db->select("
 					products_categories.category_name,
@@ -123,9 +121,21 @@
 
 	
 	public  function product_purches_details($id){
-		// dd($id);
-		$this->db->select('xin_employees.first_name,xin_employees.last_name, product_supplier.name,product_supplier.company,products_purches.status,products.product_name,
-		products_purches_details.quantity,products_purches_details.ap_quantity,products_purches_details.id ,products_purches_details.amount,products_purches_details.purches_id,products_purches_details.created_at')
+		$this->db->select('
+		            xin_employees.first_name,
+		            xin_employees.last_name,
+					product_supplier.name,
+					product_supplier.company,
+					products_purches.status,
+					products.product_name,
+					products_purches_requisitions.quantity,
+					products_purches_requisitions.ap_quantity,
+					products_purches_requisitions.id,
+					products_purches_requisitions.amount,
+					products_purches_requisitions.purches_id,
+					products_purches_requisitions.created_at
+				')
+
 		->from('product_supplier')
 		->from('products_purches')
 		->from('products')
@@ -146,9 +156,23 @@
 
 	//purches requisition details
 	public  function product_requisition_details($id){
-		// dd($id);
-		$this->db->select('xin_employees.first_name,xin_employees.last_name, product_supplier.name,product_supplier.company,products_purches.status,products.product_name,
-		products_purches_details.quantity,products_purches_details.ap_quantity,products_purches_details.id ,products_purches_details.amount,products_purches_details.purches_id,products_purches_details.created_at')
+
+
+		$this->db->select('
+					xin_employees.first_name,
+					xin_employees.last_name,
+					product_supplier.name,
+					product_supplier.company,
+					products_purches.status,
+					products.product_name,
+					products_purches_requisitions.quantity,
+					products_purches_requisitions.ap_quantity,
+				    products_purches_requisitions.id,
+				    products_purches_requisitions.amount,
+					products_purches_requisitions.purches_id,
+					products_purches_requisitions.created_at
+				')
+
 		->from('product_supplier')
 		->from('products_purches')
 		->from('products')
@@ -164,20 +188,20 @@
 		
 			return $this->db->get()->result();
 	}
-// requisition details for requisition id
 
+	// requisition details for requisition id
 	public  function requisition_details($id){
 		// dd($id);
 			$this->db->select(" 
-			                    products_requisition_details.id,
-								products_requisition_details.requisition_id,
-								products_requisition_details.quantity,
-								products_requisition_details.approved_qty,
-								products_requisitions.status,
-								products_requisitions.user_id,
-								products_categories.category_name,
-								products_sub_categories.sub_cate_name,
-								products.product_name,
+			         products_requisition_details.id,
+					 products_requisition_details.requisition_id,
+				     products_requisition_details.quantity,
+					 products_requisition_details.approved_qty,
+					 products_requisitions.status,
+					 products_requisitions.user_id,
+					 products_categories.category_name,
+					 products_sub_categories.sub_cate_name,
+					 products.product_name,
 							")
 			->from("products_categories")
 			->from("products_sub_categories")
@@ -196,14 +220,15 @@
 			->group_by('products_requisition_details.id');
 			return $this->db->get()->result();
 	}
+
 	public  function req_details_cat_wise($id){
 		// dd($id);
 			$this->db->select(" 
-								products_categories.category_name,
-								products_sub_categories.sub_cate_name,
-								products.product_name,
-								products_requisition_details.quantity,
-								products_requisitions.user_id,
+						products_categories.category_name,
+						products_sub_categories.sub_cate_name,
+						products.product_name,
+						products_requisition_details.quantity,
+						products_requisitions.user_id,
 							")
 			->from("products_categories")
 			->from("products_sub_categories")

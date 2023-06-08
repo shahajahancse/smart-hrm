@@ -93,41 +93,10 @@
 				<div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;"> <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
 				<div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;" >Lunch Date: <?php echo $lunch_data[0]->date ; ?></div>
 			
-				<div style="font-size:18px; font-weight:bold; text-align:center;">Daily Active Lunch Report</div>
+				<div style="font-size:18px; font-weight:bold; text-align:center;">Daily Inactive Lunch Report</div>
             
         </div>
         <?php $data=$lunch_data[0]  ?>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="panel">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Lunch Summary</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <strong>Total Meal:</strong> <?= $data->total_m ?><br>
-                                    <strong>Emp Meal:</strong> <?= $data->emp_m ?><br>
-                                    <strong>Guest Meal:</strong> <?= $data->guest_m ?><br>
-                                    <strong>Date:</strong> <?= $data->date ?><br>
-                                </div>
-                                <div class="col-sm-6">
-                                    <strong>Total Cost:</strong> <?= $data->total_cost ?><br>
-                                    <strong>Employee Cost:</strong> <?= $data->emp_cost ?><br>
-                                    <strong>Guest Cost:</strong> <?= $data->guest_cost ?><br>
-                                </div>
-                                <div class="col-sm-12">
-                                    <strong>Comment:</strong><br>
-                                    <section class="comment-section"><?= $data->bigcomment ?></section>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -147,7 +116,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($lunch_details_active as $detail) : ?>
+                                    <?php foreach ($lunch_details_inactive as $detail) : ?>
                                         <tr>
                                             <td><?= $detail->id ?></td>
                                             <td><?= $detail->first_name ?> <?= $detail->last_name ?></td>

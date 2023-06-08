@@ -67,12 +67,12 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Serial No</th>
+                    <th>Sl</th>
                     <th>Total Meal</th>
-                    <th>Emp Meal</th>
+                    <th>Employee Meal</th>
                     <th>Guest Meal</th>
                     <th>Total Cost</th>
-                    <th>Emp Cost</th>
+                    <th>Employee Cost</th>
                     <th>Guest Cost</th>
                     <th>Action</th>
                 </tr>

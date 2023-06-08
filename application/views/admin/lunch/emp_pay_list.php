@@ -1,4 +1,3 @@
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
 
 <style>
   /* Custom CSS to increase the width of the select box */
@@ -6,6 +5,9 @@
     width: 194px;
     height: 35px;
     border-radius: 5px;
+  }
+  .select2-container--default, .select2-container--open{
+    z-index: 1500 !important;
   }
 
   /* Style for the container */
@@ -107,7 +109,29 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
+#loading {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3; /* set z-index higher than other elements */
+  background-color: rgba(255, 255, 255, 0.8); /* semi-transparent background */
+}
+
+#loading img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
+<div id="loading">
+
+  <img src="<?php echo base_url()?>skin/hrsale_assets/img/loding.gif">
+
+</div>
 
 <div class="container">
   <div class="row">
@@ -139,11 +163,16 @@
 <script>
   // Define the process function in the global scope
   function process() {
+    document.getElementById("loading").style.visibility = "visible";
+
+
     $.ajax({
       url: '<?= base_url('admin/lunch/process') ?>',
       method: 'POST',
       data: { selectedValue: 'selectedValue' },
       success: function(response) {
+        document.getElementById("loading").style.visibility = "hidden";
+
         alert(response); // Print the response to the console for debugging
       },
       error: function(xhr, status, error) {
@@ -182,44 +211,44 @@
             return; // Exit the success callback
           }
         }
-        var pay_m=responseData[0].pay_amount;
+        var pay_m=parseInt(responseData[0].pay_amount)-parseInt(responseData[0].prev_amount);
        
 
         // Generate the form dynamically
         var formHtml = '';
-        formHtml += '<form id="payment_form">';
-        formHtml += '<div class="form-group">';
+        formHtml += '<form id="payment_form" style="overflow: auto;">';
+        formHtml += '<div class="form-group col-md-12">';
         formHtml += '<label for="employeeId">Employee Name</label>';
         formHtml += '<input type="hidden" class="form-control" id="employeeId" name="empid" value="' + responseData[0].emp_id +'">';
         formHtml += '<input type="hidden" class="form-control" id="pay_month"  name="pay_month" value="' + responseData[0].pay_month +'">';
 
         formHtml += '<input type="text" class="form-control" id="employeeId" value="' + responseData[0].first_name + ' ' + responseData[0].last_name + ' " readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="firstName">Previous Month Meal</label>';
         formHtml += '<input type="text" class="form-control" id="firstName" value="' + responseData[0].prev_meal + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="lastName">Previous Month Cost</label>';
         formHtml += '<input type="text" class="form-control" id="lastName" value="' + responseData[0].prev_cost + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="email">Previous Month Payment</label>';
         formHtml += '<input type="number" class="form-control" id="email" value="' + responseData[0].prev_pay + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="dateOfBirth">Previous Month Balance</label>';
         formHtml += '<input type="number" class="form-control" id="prev_balance" value="' + responseData[0].prev_amount + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-6">';
         formHtml += '<label for="gender">Present Month day (probable)</label>';
         formHtml += '<input type="number" class="form-control" id="p_month_day" onchange="calculatePayment()" value="' + (responseData[0].pay_amount/45) + '" >';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-6">';
         formHtml += '<label for="gender">Present Month pay (probable)</label>';
         formHtml += '<input type="text" class="form-control" id="p_month_pay" name="p_month_pay" value="' + pay_m + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="gender">Prement Status</label>';
         formHtml += '<select name="status" id="status">';       
           // Set the selected option based on responseData[0].status
@@ -236,7 +265,7 @@
           }
         formHtml += '</select>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-12 float-right" style="justify-content: right;display: flex;">';
         formHtml += '<button type="submit" class="btn btn-primary">Submit</button>';
         formHtml += '</div>';
         // Add more fields as needed
@@ -259,6 +288,7 @@
 // Submit event handler for the form
 $('#form-container').on('submit', '#payment_form', function(event) {
   event.preventDefault(); // Prevent the default form submission
+  document.getElementById("loading").style.visibility = "visible";
 
   // Get the form data
   var formData = $(this).serialize();
@@ -270,7 +300,11 @@ $('#form-container').on('submit', '#payment_form', function(event) {
     data: formData,
     success: function(response) {
       // Handle the success response
+      document.getElementById("loading").style.visibility = "hidden";
+
       alert(response);
+
+      
     },
     error: function(xhr, status, error) {
       // Handle any errors that occur during the request
@@ -286,12 +320,18 @@ function calculatePayment() {
   var p_month_day = document.getElementById('p_month_day').value;
   var p_month_pay = document.getElementById('p_month_pay').value;
   var prev_balance = document.getElementById('prev_balance').value;
-  // Do something with the retrieved values
-  console.log('p_month_day:', p_month_day);
-  console.log('p_month_pay:', p_month_pay);
-  console.log('p_month_pay:', prev_balance);
-  var pmonthpay = (parseInt(p_month_day) * 45);
- document.getElementById("p_month_pay").value=pmonthpay;
+  console.log(prev_balance);
+  console.log(p_month_day);
+
+
+  
+  
+
+
+
+
+  
+ document.getElementById("p_month_pay").value=parseInt(p_month_day*45)-parseInt(prev_balance);
 }
 
 
