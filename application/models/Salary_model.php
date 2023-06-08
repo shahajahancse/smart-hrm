@@ -325,6 +325,7 @@ class Salary_model extends CI_Model {
 
             sp.salary_month,
             sp.basic_salary,
+            sp.m_pay_day,
             sp.present,
             sp.extra_p,
             sp.absent,
