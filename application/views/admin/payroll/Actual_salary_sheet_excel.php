@@ -85,13 +85,14 @@
                         <th  class='bnb'>Name</th>
                         <th  class='bnb'>Degi  </th>
                         <th  class='bnb'>Join.d</th>
-                        <th  class='bnb'>B.Salary</th>
+                        <th  class='bnb'>Salary</th>
                         <th style='width: 160px;'>Status</th>
                         <th style='width: 92px;'>Leave</th>
                         <th  style='width:90px;'>Late</th>
                         <th style='width: 139px;'>Deduction</th>
                         <th  class='bnb'>Net Salary</th>
                         <th  class='bnb'>Extra Pay</th>
+                        <th  class='bnb'>D.A.Day</th>
                         <th  class='bnb'>D.A Salary</th>
                        
                         <th  class='bnb '>Grand Net Salary</th>
@@ -125,7 +126,7 @@
                             <th> 
                                <table>
                                     <tr>
-                                        <th  class=''>Count</th>
+                                        <th  class=''>Day</th>
                                         <th  class=''>D.Day</th>
                                     </tr>
                                 </table>
@@ -144,11 +145,12 @@
                             <th  class='bnt'></th>
                             <th  class='bnt'></th>
                             <th  class='bnt'></th>
+                            <th  class='bnt'></th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php
-                      
+                
 
                         $j=1;
                         // print the rows for all pages
@@ -201,6 +203,7 @@
                         </td>
                         <td><?=$values[$i]->net_salary?></td>
                         <td><?=$values[$i]->extra_pay?></td>
+                        <td><?=$values[$i]->m_pay_day?></td>
                         <td><?=$values[$i]->modify_salary?></td>
                         
                         <td class='colors4'><?=$values[$i]->grand_net_salary+$values[$i]->modify_salary?></td>
@@ -245,6 +248,7 @@
                                 </td>
                                 <td colspan='1'><?=$total_net_salary?></td>
                                 <td  colspan='1'><?=$total_extra_pay?></td>
+                                <td  colspan='1'></td>
                                 <td colspan='1'><?=$total_modify_salary?></td>
                                 
                                 <td class='colors4' colspan='1'><?=$total_grand_net_salary?></td>
@@ -286,13 +290,14 @@
                                     <th  class='bnb'>Name</th>
                                     <th  class='bnb'>Degi  </th>
                                     <th  class='bnb'>Join.d</th>
-                                    <th  class='bnb'>B.Salary</th>
+                                    <th  class='bnb'>Salary</th>
                                     <th style='width: 160px;'>Status</th>
                                     <th style='width: 92px;'>Leave</th>
                                     <th   style='width:90px;'>Late</th>
                                     <th style='width: 139px;'>Deduction</th>
                                     <th  class='bnb'>Net Salary</th>
                                     <th  class='bnb'>Extra Pay</th>
+                                    <th  class='bnb'>D.A.Day</th>
                                     <th  class='bnb'>Modify Salary</th>
                                     
                                     <th  class='bnb '>Grand Net Salary</th>
@@ -327,7 +332,7 @@
                                 <th>
                                     <table>
                                         <tr>
-                                            <th  class=''>Count</th>
+                                            <th  class=''>Day</th>
                                             <th  class=''>D.Day</th>
                                         </tr>
                                     </table>
@@ -341,6 +346,7 @@
                                         </tr>
                                     </table>
                                 </th>
+                                <th  class='bnt'></th>
                                 <th  class='bnt'></th>
                                 <th  class='bnt'></th>
                                 <th  class='bnt'></th>
@@ -369,6 +375,7 @@
                         </td>
                         <td colspan='1'><?=$total_net_salary?></td>
                         <td  colspan='1'><?=$total_extra_pay?></td>
+                        <td  colspan='1'></td>
                         <td colspan='1'><?=$total_modify_salary?></td>
                         
                         <td colspan='1'><?=$total_grand_net_salary?></td>
@@ -389,6 +396,8 @@
                         </td>
                         <td colspan='1'><?=$grand_total_net_salary?></td>
                         <td  colspan='1'><?=$grand_total_extra_pay?></td>
+                        <td  colspan='1'></td>
+                    
                         <td colspan='1'><?=$grand_total_modify_salary?></td>
                         
                         <td colspan='1'><?=$grand_total_grand_net_salary?></td>
