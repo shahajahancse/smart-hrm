@@ -6,7 +6,7 @@ function perday(status) {
   var checkboxes = document.getElementsByName('select_emp_id[]');
 
   var sql = get_checked_value(checkboxes);
-  if(status == 1){
+  if(status == 1 || status == 5){
     first_date = document.getElementById('process_date').value;
     second_date=first_date;
     // second_date = document.getElementById('second_date').value;
@@ -32,9 +32,6 @@ function perday(status) {
         first_date = document.getElementById('process_date').value;
         second_date = first_date ;
         sql=1111;
-      }else if(status == 5){
-        first_date = document.getElementById('process_date').value;
-        second_date=first_date;
       }
 
 

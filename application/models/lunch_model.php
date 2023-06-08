@@ -218,6 +218,26 @@ class lunch_model extends CI_Model {
             $this->db->where('date <=', $second_date);
             return $this->db->get()->result();
     }
+    public function get_lunch_details_active($first_date, $second_date, $emp_ids) {
+            $this->db->select('lunch_details.id,lunch_details.emp_id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date, xin_employees.first_name, xin_employees.last_name');
+            $this->db->from('lunch_details');
+            $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
+            $this->db->where_in('lunch_details.emp_id', $emp_ids);
+            $this->db->where('date >=', $first_date);
+            $this->db->where('date <=', $second_date);
+            $this->db->where('meal_amount >=', 1);
+            return $this->db->get()->result();
+    }
+    public function get_lunch_details_inactive($first_date, $second_date, $emp_ids) {
+            $this->db->select('lunch_details.id,lunch_details.emp_id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date, xin_employees.first_name, xin_employees.last_name');
+            $this->db->from('lunch_details');
+            $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
+            $this->db->where_in('lunch_details.emp_id', $emp_ids);
+            $this->db->where('date >=', $first_date);
+            $this->db->where('date <=', $second_date);
+            $this->db->where('meal_amount<=', 0);
+            return $this->db->get()->result();
+    }
     public function get_meal($emp_id,$date) {
             $this->db->select('lunch_details.id,lunch_details.emp_id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date');
             $this->db->from('lunch_details');

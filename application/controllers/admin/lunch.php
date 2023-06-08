@@ -376,10 +376,12 @@ class lunch extends MY_Controller {
 
 
         $data['lunch_details']  = $this->lunch_model->get_lunch_details($first_date,$second_date,$emp_id);
+        $data['lunch_details_active']  = $this->lunch_model->get_lunch_details_active($first_date,$second_date,$emp_id);
+        $data['lunch_details_inactive']  = $this->lunch_model->get_lunch_details_inactive($first_date,$second_date,$emp_id);
+    
         $data['first_date'] = $first_date;
         $data['second_date'] = $first_date;
         $data['emp_id'] = $emp_id;
-        // dd($data['lunch_details']);      
         if($status==1){
             $this->load->view('admin/lunch/lunch_report_view', $data); 
         }elseif($status==2){
@@ -388,6 +390,8 @@ class lunch extends MY_Controller {
             $this->load->view('admin/lunch/lunch_report_cont', $data); 
         }elseif($status==4){
             $this->load->view('admin/lunch/lunch_report_vendor', $data); 
+        }elseif($status==5){
+            $this->load->view('admin/lunch/lunch_report_view_adsent', $data); 
         }
     }
 

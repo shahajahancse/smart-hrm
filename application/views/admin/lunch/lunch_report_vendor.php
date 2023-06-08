@@ -46,7 +46,7 @@
 <body>
     <div class="pay-slip-container">
         <div class="pay-slip-header">
-        <div style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px"><?php echo xin_company_info(1)->company_name; ?></div>
+                <div style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px"><?php echo xin_company_info(1)->company_name; ?></div>
 				<div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
 				<div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;"> <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
 				<div>Lunch Date: <?php echo $paySlipData[0]->date; ?></div>
@@ -54,6 +54,7 @@
 				<div style="font-size:18px; font-weight:bold; text-align:center;">Vendor Voucher</div>
             
         </div>
+        
         <?php
         // Assuming you are using PHP to generate the HTML
 
@@ -64,14 +65,21 @@
             echo '<tr><th>Total Meal</th><td>' . $item->total_m . '</td></tr>';
             echo '<tr><th>Employee Meal</th><td>' . $item->emp_m . '</td></tr>';
             echo '<tr><th>Guest Meal</th><td>' . $item->guest_m . '</td></tr>';
-            echo '<tr><th>Total Cost</th><td>' .$item->total_cost*2 . '</td></tr>';
-            echo '<tr><th>Employee Cost</th><td>' . $item->emp_cost*2 . '</td></tr>';
+            echo '<tr><th>Employee Cost</th><td>' . $item->emp_cost . '</td></tr>';
             echo '<tr><th>Guest Cost</th><td>' . $item->guest_cost*2 . '</td></tr>';
-            echo '<tr><th>Comments</th><td>' . $item->bigcomment . '</td></tr>';
-            echo '<tr><th>Date</th><td>' . $item->date . '</td></tr>';
+            echo '<tr><th>Office Employee Cost</th><td>' . $item->emp_cost . '</td></tr>';
+            echo '<tr><th>Total Cost</th><td>' .$item->total_cost*2 . '</td></tr>';
             echo '</table>';
         }
         ?>
+       <?php if (!$paySlipData[0]->bigcomment=="") {?>
+        <div style="padding:5px;">
+            <span style="font-weight: bold;">Comment:</span>
+            <p style="border: 2px solid black;padding: 5px;border-radius: 5px;margin: 0;">
+       <?= $paySlipData[0]->bigcomment ?>
+       </p>
+        </div>
+        <?php } ?>
     </div>
 </body>
 </html>
