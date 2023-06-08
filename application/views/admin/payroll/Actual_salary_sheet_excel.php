@@ -88,11 +88,11 @@
                         <th  class='bnb'>B.Salary</th>
                         <th style='width: 160px;'>Status</th>
                         <th style='width: 92px;'>Leave</th>
-                        <th  class='bnb'>Late</th>
+                        <th  style='width:90px;'>Late</th>
                         <th style='width: 139px;'>Deduction</th>
                         <th  class='bnb'>Net Salary</th>
                         <th  class='bnb'>Extra Pay</th>
-                        <th  class='bnb'>Modify Salary</th>
+                        <th  class='bnb'>D.A Salary</th>
                        
                         <th  class='bnb '>Grand Net Salary</th>
                         <th  class='bnb'>Account Number</th>
@@ -122,7 +122,15 @@
                                     </tr>
                                 </table>
                             </th>
-                            <th  class='bnt'> </th>
+                            <th> 
+                               <table>
+                                    <tr>
+                                        <th  class=''>Count</th>
+                                        <th  class=''>D.Day</th>
+                                    </tr>
+                                </table>
+                            </th>
+                            
                             <th>
                                 <table>
                                     <tr>
@@ -140,6 +148,7 @@
                         </thead>
                         <tbody>
                         <?php
+                      
 
                         $j=1;
                         // print the rows for all pages
@@ -172,8 +181,16 @@
                             </table>
                         </td>
                         <td>
-                        <?=$values[$i]->late_count?>
+                           <table>
+                                <tr>
+                                    <td  class='colors3'><?=$values[$i]->late_count?></td>
+                                    <td  class='colors3'><?=$values[$i]->d_day ?></td>
+                                </tr>
+                            </table>
+
+                        <!--  -->
                         </td>
+                       
                         <td>
                             <table>
                                 <tr>
@@ -272,7 +289,7 @@
                                     <th  class='bnb'>B.Salary</th>
                                     <th style='width: 160px;'>Status</th>
                                     <th style='width: 92px;'>Leave</th>
-                                    <th  class='bnb'>Late</th>
+                                    <th   style='width:90px;'>Late</th>
                                     <th style='width: 139px;'>Deduction</th>
                                     <th  class='bnb'>Net Salary</th>
                                     <th  class='bnb'>Extra Pay</th>
@@ -307,7 +324,15 @@
                                         </tr>
                                     </table>
                                 </th>
-                                <th  class='bnt'> </th>
+                                <th>
+                                    <table>
+                                        <tr>
+                                            <th  class=''>Count</th>
+                                            <th  class=''>D.Day</th>
+                                        </tr>
+                                    </table>
+                                        
+                               </th>
                                 <th>
                                     <table>
                                         <tr>

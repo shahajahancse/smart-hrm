@@ -220,7 +220,8 @@
       const totalDays = lastDayOfMonth.getDate();
     
       // Calculate and log the value of l_inputdata
-      const l_inputdata = ((bs / totalDays) * inputchange).toFixed(2);
+      const l_inputdata = parseInt(((bs / totalDays) * inputchange).toFixed(2));
+      console.log(l_inputdata);
       
     
       // Set the value of the element with 'mdayid' to l_inputdata
