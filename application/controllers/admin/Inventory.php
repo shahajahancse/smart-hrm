@@ -517,19 +517,16 @@ class Inventory extends MY_Controller {
 
 	public function product_purchase_delivered($id){
     
-<<<<<<< HEAD
-=======
-         $pr1=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
-					$mergedArray = [];
-			foreach ($pr1 as $item) {
-				$productId = $item->product_id;
-				if (isset($mergedArray[$productId])) {
-					$mergedArray[$productId]->ap_quantity += $item->ap_quantity;
-				} else {
-					$mergedArray[$productId] = $item;
-				}
-			}
->>>>>>> cba46575034b4591be6bb06ddb5bdec29c553d6d
+        //  $pr1=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
+		// 			$mergedArray = [];
+		// 	foreach ($pr1 as $item) {
+		// 		$productId = $item->product_id;
+		// 		if (isset($mergedArray[$productId])) {
+		// 			$mergedArray[$productId]->ap_quantity += $item->ap_quantity;
+		// 		} else {
+		// 			$mergedArray[$productId] = $item;
+		// 		}
+		// 	}
 
 			$this->db->select('p.product_name, p.quantity as  qty, pr.*');
 			$this->db->from('products_purches_details pr');

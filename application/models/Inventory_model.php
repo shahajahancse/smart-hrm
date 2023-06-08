@@ -128,12 +128,12 @@
 					product_supplier.company,
 					products_purches.status,
 					products.product_name,
-					products_purches_requisitions.quantity,
-					products_purches_requisitions.ap_quantity,
-					products_purches_requisitions.id,
-					products_purches_requisitions.amount,
-					products_purches_requisitions.purches_id,
-					products_purches_requisitions.created_at
+					products_purches_details.quantity,
+					products_purches_details.ap_quantity,
+					products_purches_details.id,
+					products_purches_details.amount,
+					products_purches_details.purches_id,
+					products_purches_details.created_at
 				')
 
 		->from('product_supplier')
@@ -165,12 +165,12 @@
 					product_supplier.company,
 					products_purches.status,
 					products.product_name,
-					products_purches_requisitions.quantity,
-					products_purches_requisitions.ap_quantity,
-				    products_purches_requisitions.id,
-				    products_purches_requisitions.amount,
-					products_purches_requisitions.purches_id,
-					products_purches_requisitions.created_at
+					products_purches_details.quantity,
+					products_purches_details.ap_quantity,
+				    products_purches_details.id,
+				    products_purches_details.amount,
+					products_purches_details.purches_id,
+					products_purches_details.created_at
 				')
 
 		->from('product_supplier')
