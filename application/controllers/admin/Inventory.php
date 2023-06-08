@@ -27,6 +27,58 @@ class Inventory extends MY_Controller {
 		// $this->load->library('Pdf');
 		// $this->load->helper('string');
 	}
+	//======================Report=============================
+	public function report(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		
+		$data['title'] 		 = 'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Inventory';
+		$data['path_url'] 	 = 'inventory';
+	
+		$data['subview'] 	 = $this->load->view("admin/inventory/report", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	
+	}
+
+      //requsition report status and excel file generator same function
+	public function inventory_status_report($exc=null)
+	{
+				$first_date = $this->input->post('first_date');
+				$second_date = $this->input->post('second_date');
+
+				$f1_date = date("Y-m-d", strtotime($first_date));
+				$f2_date = date("Y-m-d", strtotime($second_date));
+				$statusC = $this->input->post('statusC');
+				$data["values"] = $this->Inventory_model->requsition_status_report($f1_date, $f2_date, $statusC);
+
+				$data['statusC']= $statusC;
+				$data['first_date'] = $first_date;
+				$data['second_date'] = $second_date;
+			
+				if($exc == 1)
+				{
+					$this->load->view("admin/inventory/inventory_req_status_report_excil", $data);
+				}else{
+					if(is_string($data["values"]))
+					{
+						echo $data["values"];
+					}
+					else
+					{	
+						echo $this->load->view("admin/inventory/inventory_req_status_report", $data, TRUE);
+					}
+
+
+				}
+   	 
+   }
+
+   
+
+	//======================Report=============================
 	
 	//================= Requisition here =======================
 	public function index($id = null)
@@ -59,8 +111,8 @@ class Inventory extends MY_Controller {
 					'quantity'		 => $_POST['quantity'][$i],
 					'requisition_id' => $last_id,
 				);
-			}
-
+			}  
+			
 			if ($hid != null && !empty($hid)) {
 				$this->db->where('id', $hid)->update_batch('products_requisition_details', $form_data);
 				$this->session->set_flashdata('success', 'Successfully Updated Done');
@@ -161,39 +213,45 @@ class Inventory extends MY_Controller {
 		
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
-		// dd($id);
+		// dd($d1);
 		// dd($d1[1]->quantity);
 		foreach($d1 as $k=>$v){
 			if($session['role_id']==1){
-			 if($d1[$k]->quantity >= $quantity[$k]) {
-				
-				 foreach($quantity as $key=>$value){
-					$log_user=$_SESSION['username']['user_id'];
-					$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
-				    $this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); }
+					if($d1[$k]->quantity >= $quantity[$k]) {
+						
+						foreach($quantity as $key=>$value){
+							$log_user=$_SESSION['username']['user_id'];
+							$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
+							$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); }
 
-			 } else{
-				$this->session->set_flashdata('warning', 'Approved  Quantity is Biger');
-				redirect("admin/inventory/index");
-			 }
+					} else{
+						// dd($d1[$k]->product_name);
+						$variable = $d1[$k]->product_name;
+						$variable1= $d1[$k]->quantity;
+						$this->session->set_flashdata('flash_data', $variable);
+						$this->session->set_flashdata('flash_data1', $variable1);
+
+						$this->session->set_flashdata('warning', 'Approved  Quantity is Biger ');
+						redirect("admin/inventory/requsition_details/$id","refresh");
+					}
 			}else{
 
 				foreach($quantity as $key=>$value){
 
-				    $this->db->where('id',$r_did[$key])->update('products_requisition_details',['quantity'=>$value]); 
-				}
+				     $this->db->where('id',$r_did[$key])->update('products_requisition_details',['quantity'=>$value]); 
+				 }
 					$this->session->set_flashdata('success', 'Product Updated Successfully.');
 				    redirect("admin/inventory/index","refresh");
 			}
 
 		}
-		  if($session['role_id'] == 1){
-		   $approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
-			if($approved){
-						$this->session->set_flashdata('success', 'Updated Successfully.');
-						redirect("admin/inventory/index","refresh");
-					}
-			}
+			if($session['role_id'] == 1){
+			$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
+				if($approved){
+							$this->session->set_flashdata('success', 'Updated Successfully.');
+							redirect("admin/inventory/index","refresh");
+						}
+				}
 			
 	}
 
@@ -292,7 +350,7 @@ class Inventory extends MY_Controller {
 		
 		$data['subview'] 		= $this->load->view("admin/inventory/supplier", $data, TRUE);
 								  $this->load->view('admin/layout/layout_main', $data); //page load
-	}
+}
 
 	public function supplier_detail($id){
 		//search supplier details
@@ -306,7 +364,7 @@ class Inventory extends MY_Controller {
 		$data['subview'] 		= $this->load->view("admin/inventory/supplier_details", $data, TRUE);
 								  $this->load->view('admin/layout/layout_main', $data);
 
-	}
+}
 
 	public function get_supplier_ajax()
 	{
@@ -348,20 +406,22 @@ class Inventory extends MY_Controller {
 		  $this->form_validation->set_rules('product_id[]', 'item name', 'required|trim');
 		  $this->form_validation->set_rules('quantity[]', 'Quantity', 'required|trim');
 
-		//   //Validate and input data
-		if ($this->form_validation->run() == true){
-			$supplier_id=$_POST['spl_name'];
-			$this->Inventory_model->save('products_purches', ['user_id'=>$session['user_id'],'supplier'=>$supplier_id]);
-			$last_id=$this->db->insert_id();
-			
-			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
-				$form_data[] = array( 
-					'product_id'	 => $_POST['product_id'][$i],
-					'quantity'		 => $_POST['quantity'][$i],
-					'purches_id' => $last_id,
-				);
-			}
-				  
+
+	//   //Validate and input data
+	if ($this->form_validation->run() == true){
+		$supplier_id=$_POST['spl_name'];
+		$company=$_POST['cmp_name'];
+		$ids=$this->Inventory_model->save('products_purches', ['user_id'=>$session['user_id'],'	supplier'=>$supplier_id]);
+		$last_id=$this->db->insert_id();
+		
+		for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
+			$form_data[] = array( 
+				'product_id'	 => $_POST['product_id'][$i],
+				'quantity'		 => $_POST['quantity'][$i],
+				'purches_id' => $last_id,
+			);}
+			//   dd($form_data);
+
 			if ($hid = $this->input->post('hidden_id')) {
 				$this->db->where('id', $hid)->update_batch('products_purches_details', $form_data);
 				$this->session->set_flashdata('success', 'Successfully Updated Done');
@@ -519,9 +579,8 @@ class Inventory extends MY_Controller {
 					$mergedArray[$productId] = $item;
 				}
 			}
+		$mergedArray = array_values($mergedArray);
 
-			$mergedArray = array_values($mergedArray);
-			 
 			$p1=$this->db->get('products')->result();
 
 			$result = array();
@@ -537,25 +596,44 @@ class Inventory extends MY_Controller {
 			}
 
 			foreach ($result as $row) {
-				
+
 				$data = array(
 					'id' => $row->product_id,
 				   'quantity' => $row->total_quantity,
 				); 
 				 $this->db->where('id',$row->product_id)->update('products', $data);
-			}		
+			}
+		
+            //another way to solve this problems easily
+			// $this->db->select('p.product_name, p.quantity as  qty, pr.*');
+			// $this->db->from('products_purches_details pr');
+			// $this->db->from('products p');
+			// $this->db->where('p.id = pr.product_id');
+			// $this->db->where('purches_id', $id);
+			// $array = $this->db->get()->result();
+		
+	 
+			//  foreach ($array as $row) {
+			// 	 $ff = $row->qty + $row->ap_quantity;
+			// 	 $data = array(
+			// 		 'id' => $row->product_id,
+			// 		'product_name' => $row->product_name,
+			// 		'quantity' => $row->qty + $row->ap_quantity,
+			// 	 ); 
+				 
+			// 	 $deliver = $this->db->where('id',$row->product_id)->update('products', $data);
+			//  }
+		
+	 
 
 			 $deliver=$this->db->where('id',$id)->update('products_purches',['status'=>3]);
 			 if($deliver){
 				 $this->session->set_flashdata('success', 'Delivered Successfully.');
 				 redirect("admin/inventory/purchase","refresh");
 			 }
-			 
+	 
  
-		 
-		 
- 
-	 }
+}
 
 
  
@@ -759,6 +837,7 @@ class Inventory extends MY_Controller {
 	{
         $this->db->where('sub_cate_id',$sub_cate_id);
         $result = $this->db->get('products')->result_array();
+		$data[0]= 'Select Product';
         foreach ($result as $rows) {
             $data[$rows['id']] = $rows['product_name'];
         }

@@ -226,7 +226,7 @@
    function subcategory_dd(sl){
       //Sub Category Dropdown
       $('#subcategory_'+sl).on('change',function(){
-         $('.item_val_'+sl).addClass('form-control input-sm');
+         $('.item_val_'+sl).addClass('forcontrolm- input-sm');
          $(".item_val_"+sl+"> option").remove();
          var id = $('#subcategory_'+sl).val();
 
@@ -237,14 +237,59 @@
             {
                $.each(func_data,function(id,name)
                {
+
                   var opt = $('<option />');
                   opt.val(id);
                   opt.text(name);
                   $('.item_val_'+sl).append(opt);
                });
+              //  handleSelectionChange(this)
+           
+
+
             }
          });
       });
    }
+  
 
-</script>  
+
+    function handleSelectionChange(selectedMenu) {
+      var selectionMenus = document.getElementsByClassName("selection-menu");
+      
+
+      // Disable all options
+      for (var i = 0; i < selectionMenus.length; i++) {
+        var options = selectionMenus[i].options;
+        console.log(options);
+        for (var j = 0; j < options.length; j++) {console.log(options[j]);
+          options[j].disabled = false;
+        }
+      }
+
+      // Iterate over all selection menus
+      for (var i = 0; i < selectionMenus.length; i++) {
+        var options = selectionMenus[i].options;
+        var selectedValues = [];
+
+        // Get the selected values from each selection menu
+        for (var j = 0; j < options.length; j++) {
+          if (options[j].selected) {
+            selectedValues.push(options[j].value);
+          }
+        }
+
+        // Disable selected options in other selection menus
+        for (var j = 0; j < selectionMenus.length; j++) {
+          if (selectionMenus[j] !== selectedMenu) {
+            var otherOptions = selectionMenus[j].options;
+            for (var k = 0; k < otherOptions.length; k++) {
+              if (selectedValues.includes(otherOptions[k].value)) {
+                otherOptions[k].disabled = true;
+              }
+            }
+          }
+        }
+      }
+    }
+  </script>
