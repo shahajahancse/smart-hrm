@@ -517,35 +517,60 @@ class Inventory extends MY_Controller {
 
 	public function product_purchase_delivered($id){
     
-        //  $pr1=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
-		// 			$mergedArray = [];
-		// 	foreach ($pr1 as $item) {
-		// 		$productId = $item->product_id;
-		// 		if (isset($mergedArray[$productId])) {
-		// 			$mergedArray[$productId]->ap_quantity += $item->ap_quantity;
-		// 		} else {
-		// 			$mergedArray[$productId] = $item;
-		// 		}
-		// 	}
+         $pr1=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
+					$mergedArray = [];
+			foreach ($pr1 as $item) {
+				$productId = $item->product_id;
+				if (isset($mergedArray[$productId])) {
+					$mergedArray[$productId]->ap_quantity += $item->ap_quantity;
+				} else {
+					$mergedArray[$productId] = $item;
+				}
+			}
+		$mergedArray = array_values($mergedArray);
 
-			$this->db->select('p.product_name, p.quantity as  qty, pr.*');
-			$this->db->from('products_purches_details pr');
-			$this->db->from('products p');
-			$this->db->where('p.id = pr.product_id');
-			$this->db->where('purches_id', $id);
-			$array = $this->db->get()->result();
+			$p1=$this->db->get('products')->result();
+
+			$result = array();
+			foreach ($p1 as $item1) {
+				foreach ($pr1 as $item2) {
+					if ($item1->id == $item2->product_id) {
+						$mergedItem = (object)array_merge((array)$item1, (array)$item2);
+						$mergedItem->total_quantity = $item1->quantity + $item2->ap_quantity;
+						$result[] = $mergedItem;
+						break;
+					}
+				}
+			}
+
+			foreach ($result as $row) {
+
+				$data = array(
+					'id' => $row->product_id,
+				   'quantity' => $row->total_quantity,
+				); 
+				 $this->db->where('id',$row->product_id)->update('products', $data);
+			}
+		
+            //another way to solve this problems easily
+			// $this->db->select('p.product_name, p.quantity as  qty, pr.*');
+			// $this->db->from('products_purches_details pr');
+			// $this->db->from('products p');
+			// $this->db->where('p.id = pr.product_id');
+			// $this->db->where('purches_id', $id);
+			// $array = $this->db->get()->result();
 		
 	 
-			 foreach ($array as $row) {
-				 $ff = $row->qty + $row->ap_quantity;
-				 $data = array(
-					 'id' => $row->product_id,
-					'product_name' => $row->product_name,
-					'quantity' => $row->qty + $row->ap_quantity,
-				 ); 
+			//  foreach ($array as $row) {
+			// 	 $ff = $row->qty + $row->ap_quantity;
+			// 	 $data = array(
+			// 		 'id' => $row->product_id,
+			// 		'product_name' => $row->product_name,
+			// 		'quantity' => $row->qty + $row->ap_quantity,
+			// 	 ); 
 				 
-				 $deliver = $this->db->where('id',$row->product_id)->update('products', $data);
-			 }
+			// 	 $deliver = $this->db->where('id',$row->product_id)->update('products', $data);
+			//  }
 		
 	 
 
