@@ -151,7 +151,7 @@ class Attendance_model extends CI_Model {
                         $status = 'Holiday';
                     }
                 } else if ($off_day == true) {
-                    if (($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>strtotime($early_out_time))) {
+                    if (($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>=strtotime($early_out_time))) {
                         $astatus = 'Present';
                         $status = 'Off Day';
                     } else {
@@ -193,6 +193,12 @@ class Attendance_model extends CI_Model {
                 $astatus = 'Meeting';
             }
 
+            // get extra present of off day
+            if (($off_day == true) && ($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>=strtotime($early_out_time))) {
+                $astatus = 'Present';
+                $status = 'Off Day';
+            }
+
             // scheck late and early out status
             if (strtotime($in_time) > strtotime($late_start_time)) {
                 $late_status = 1; 
@@ -228,10 +234,35 @@ class Attendance_model extends CI_Model {
             } else {
                 $this->db->insert('xin_attendance_time', $data);
             }
+
+            // checking before after absent of holiday or off day
+            if ($status == 'Absent') {
+                $query = $this->db->where('employee_id',$emp_id)->where('attendance_date',$check_day)->get('xin_attendance_time');
+                if($query->row()->status == 'Holiday') {
+                    $this->checking_absent_after_offday_holiday($emp_id, $check_day, array($check_day), 'Holiday');
+                } else if($query->row()->status == 'Off Day') {
+                    $this->checking_absent_after_offday_holiday($emp_id, $check_day, array($check_day), 'Off Day');
+                }
+            }
         }
         return 'Successfully Process Done';
     }
 
+
+    function checking_absent_after_offday_holiday($emp_id, $check_day, $where, $status) {
+        $check_day = date("Y-m-d",strtotime("-1 day", strtotime($check_day)));
+        $query = $this->db->where('employee_id',$emp_id)->where('attendance_date',$check_day)->get('xin_attendance_time');
+
+        if($query->row()->status == $status) {
+            array_push($where, $check_day);
+            $this->checking_absent_after_offday_holiday($emp_id, $check_day, $where, $status);
+        } else if ($query->row()->status == 'Absent') {            
+            $this->db->where_in('attendance_date', $where);
+            $this->db->where('employee_id', $emp_id);
+            $this->db->update('xin_attendance_time', array('status' => 'Absent', 'attendance_status' => 'Absent'));
+        }
+        return true;
+    }
 
 
     function get_shift_schedule($emp_id, $process_date = null, $shift_id = null)
