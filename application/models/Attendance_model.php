@@ -11,12 +11,15 @@ class Attendance_model extends CI_Model {
     public function attn_process($process_date, $emp_ids, $status = null)
     {
 
-        /*$check_day = date("Y-m-d",strtotime("-1 day", strtotime($process_date)));
+        $check_day = date("Y-m-d",strtotime("-1 day", strtotime($process_date)));
         $att_check = $this->db->where('attendance_date',$check_day)->get('xin_attendance_time');
         if($att_check->num_rows() < 1) {
             echo 'Please first process '. $check_day;
             exit; 
-        }*/
+        } elseif (strtotime("+1 day", strtotime(date('Y-m-d'))) < strtotime($process_date)) {
+            echo 'Sorry! advanced process not allowed, Please first process '. date('Y-m-d');
+            exit; 
+        }
 
         $off_day = $this->dayoff_check($process_date);
         $holiday_day = $this->holiday_check($process_date);
@@ -369,7 +372,7 @@ class Attendance_model extends CI_Model {
 
 
 
-    public function get_employee_infos($emp_ids = null)
+    public function get_emp_info($emp_ids = null)
     {
         $this->db->select('
                 xin_employees.user_id, 
@@ -381,6 +384,7 @@ class Attendance_model extends CI_Model {
                 xin_employees.date_of_joining, 
                 xin_employees.department_id,  
                 xin_employees.designation_id,
+                xin_employees.company_id,
                 xin_departments.department_name,
                 xin_designations.designation_name,
             ');
@@ -392,34 +396,6 @@ class Attendance_model extends CI_Model {
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
         $this->db->where_in('xin_employees.user_id',$emp_ids);
-        return $this->db->get()->result();
-        
-    }
-
-
-    public function get_employee_information()
-    {
-        $this->db->select('
-                xin_employees.user_id, 
-                xin_employees.employee_id, 
-                xin_employees.office_shift_id as shift_id, 
-                xin_employees.first_name, 
-                xin_employees.last_name, 
-                xin_employees.date_of_birth, 
-                xin_employees.date_of_joining, 
-                xin_employees.department_id,  
-                xin_employees.designation_id,
-                xin_departments.department_name,
-                xin_designations.designation_name,
-            ');
-
-        $this->db->from('xin_employees');
-        $this->db->from('xin_departments');
-        $this->db->from('xin_designations');
-        $this->db->where('xin_employees.company_id',1);
-        $this->db->where('xin_employees.department_id = xin_departments.department_id');
-        $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
-        // $this->db->where_in('xin_employees.user_id',$emp_ids);
         return $this->db->get()->result();
         
     }
@@ -459,6 +435,7 @@ class Attendance_model extends CI_Model {
             xin_attendance_time.clock_in,
             xin_attendance_time.clock_out,
             xin_attendance_time.attendance_status,
+            xin_attendance_time.status,
             xin_attendance_time.late_status,
         ');
 

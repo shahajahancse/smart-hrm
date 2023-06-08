@@ -90,7 +90,7 @@ class Salary_model extends CI_Model {
             $extra_p = $this->attendance_count_status($emp_id,"Present",$first_date,$end_date,'attendance_status');
             $meeting = $this->attendance_count_status($emp_id,"Meeting",$first_date,$end_date,'attendance_status');*/
             $rows = $this->count_attendance_status_wise($emp_id,$first_date,$end_date);
-            $leave = $this->leave_count_status($emp_id, $first_date,$end_date);
+            $leave = $this->leave_count_status($emp_id, $first_date,$end_date, 2);
 
             $present = $rows->attend + $rows->HalfDay;
             $leaves = $leave->el + $leave->sl;
@@ -182,7 +182,7 @@ class Salary_model extends CI_Model {
     }
 
 
-    function leave_count_status($emp_id,$start_date,$end_date)
+    function leave_count_status($emp_id,$start_date,$end_date, $status)
     {
 
         $this->db->select("
@@ -192,6 +192,7 @@ class Salary_model extends CI_Model {
         $this->db->where("employee_id",$emp_id);
         $this->db->where("from_date >=", $start_date);
         $this->db->where("to_date <=", $end_date);
+        $this->db->where("status", $status);
         $query = $this->db->get('xin_leave_applications');
         return $query->row();
     }

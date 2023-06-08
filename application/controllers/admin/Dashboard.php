@@ -61,6 +61,7 @@ class Dashboard extends MY_Controller {
 			redirect('admin/');
 		}
 		$system = $this->Xin_model->read_setting_info(1);
+
 		if($system[0]->module_projects_tasks=='true'){
 			// get user > added by
 			$user = $this->Xin_model->read_user_info($session['user_id']);
@@ -71,6 +72,7 @@ class Dashboard extends MY_Controller {
 			} else {
 				$des_emp = '--';
 			}
+			
 			// get designation
 			$department = $this->Department_model->read_department_information($user[0]->department_id);
 			if(!is_null($department)){
@@ -78,6 +80,7 @@ class Dashboard extends MY_Controller {
 			} else {
 				$dep_emp = '--';
 			}
+
 			$data = array(
 				'title' => $this->lang->line('dashboard_title').' | '.$this->Xin_model->site_title(),
 				'path_url' => 'dashboard',
