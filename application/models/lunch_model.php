@@ -182,7 +182,7 @@ class lunch_model extends CI_Model {
         $this->db->select('xin_attendance_time.employee_id, xin_attendance_time.attendance_date');
         $this->db->from('xin_attendance_time');
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
-        $this->db->where("xin_attendance_time.attendance_status", 'Present');
+        $this->db->where("xin_attendance_time.status", 'Present');
         $data = $this->db->get()->result();
     
         if ($data) {
