@@ -1,3 +1,5 @@
+<a href="<?= base_url('admin/lunch/emp_pay_list') ?>" class="btn btn-primary float-right">Get Payment</a>
+
 <h3>Today Lunch</h3>
 
 <?= form_open('admin/lunch/add_lunch'); ?>

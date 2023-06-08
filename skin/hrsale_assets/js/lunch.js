@@ -32,6 +32,9 @@ function perday(status) {
         first_date = document.getElementById('process_date').value;
         second_date = first_date ;
         sql=1111;
+      }else if(status == 5){
+        first_date = document.getElementById('process_date').value;
+        second_date=first_date;
       }
 
 

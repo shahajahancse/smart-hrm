@@ -376,7 +376,7 @@ public function lunch_reports(){
     $data['first_date'] = $first_date;
     $data['second_date'] = $first_date;
     $data['emp_id'] = $emp_id;
-// dd($data['lunch_details']);
+      // dd($data['lunch_details']);
         if($status==1){
             $this->load->view('admin/lunch/lunch_report_view', $data); 
         }elseif($status==2){

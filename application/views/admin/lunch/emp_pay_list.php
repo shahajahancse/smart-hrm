@@ -216,39 +216,39 @@
 
         // Generate the form dynamically
         var formHtml = '';
-        formHtml += '<form id="payment_form">';
-        formHtml += '<div class="form-group">';
+        formHtml += '<form id="payment_form" style="overflow: auto;">';
+        formHtml += '<div class="form-group col-md-12">';
         formHtml += '<label for="employeeId">Employee Name</label>';
         formHtml += '<input type="hidden" class="form-control" id="employeeId" name="empid" value="' + responseData[0].emp_id +'">';
         formHtml += '<input type="hidden" class="form-control" id="pay_month"  name="pay_month" value="' + responseData[0].pay_month +'">';
 
         formHtml += '<input type="text" class="form-control" id="employeeId" value="' + responseData[0].first_name + ' ' + responseData[0].last_name + ' " readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="firstName">Previous Month Meal</label>';
         formHtml += '<input type="text" class="form-control" id="firstName" value="' + responseData[0].prev_meal + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="lastName">Previous Month Cost</label>';
         formHtml += '<input type="text" class="form-control" id="lastName" value="' + responseData[0].prev_cost + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="email">Previous Month Payment</label>';
         formHtml += '<input type="number" class="form-control" id="email" value="' + responseData[0].prev_pay + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="dateOfBirth">Previous Month Balance</label>';
         formHtml += '<input type="number" class="form-control" id="prev_balance" value="' + responseData[0].prev_amount + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-6">';
         formHtml += '<label for="gender">Present Month day (probable)</label>';
         formHtml += '<input type="number" class="form-control" id="p_month_day" onchange="calculatePayment()" value="' + (responseData[0].pay_amount/45) + '" >';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-6">';
         formHtml += '<label for="gender">Present Month pay (probable)</label>';
         formHtml += '<input type="text" class="form-control" id="p_month_pay" name="p_month_pay" value="' + pay_m + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="gender">Prement Status</label>';
         formHtml += '<select name="status" id="status">';       
           // Set the selected option based on responseData[0].status
@@ -265,7 +265,7 @@
           }
         formHtml += '</select>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group">';
+        formHtml += '<div class="form-group col-md-12 float-right" style="justify-content: right;display: flex;">';
         formHtml += '<button type="submit" class="btn btn-primary">Submit</button>';
         formHtml += '</div>';
         // Add more fields as needed
