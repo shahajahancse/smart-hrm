@@ -27,6 +27,58 @@ class Inventory extends MY_Controller {
 		// $this->load->library('Pdf');
 		// $this->load->helper('string');
 	}
+	//======================Report=============================
+	public function report(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		
+		$data['title'] 		 = 'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Inventory';
+		$data['path_url'] 	 = 'inventory';
+	
+		$data['subview'] 	 = $this->load->view("admin/inventory/report", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	
+	}
+
+      //requsition report status and excel file generator same function
+	public function inventory_status_report($exc=null)
+	{
+				$first_date = $this->input->post('first_date');
+				$second_date = $this->input->post('second_date');
+
+				$f1_date = date("Y-m-d", strtotime($first_date));
+				$f2_date = date("Y-m-d", strtotime($second_date));
+				$statusC = $this->input->post('statusC');
+				$data["values"] = $this->Inventory_model->requsition_status_report($f1_date, $f2_date, $statusC);
+
+				$data['statusC']= $statusC;
+				$data['first_date'] = $first_date;
+				$data['second_date'] = $second_date;
+			
+				if($exc == 1)
+				{
+					$this->load->view("admin/inventory/inventory_req_status_report_excil", $data);
+				}else{
+					if(is_string($data["values"]))
+					{
+						echo $data["values"];
+					}
+					else
+					{	
+						echo $this->load->view("admin/inventory/inventory_req_status_report", $data, TRUE);
+					}
+
+
+				}
+   	 
+   }
+
+   
+
+	//======================Report=============================
 	
 	//================= Requisition here =======================
 	public function index($id = null)

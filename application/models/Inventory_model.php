@@ -75,7 +75,7 @@
 		return	$this->db->get()->result();
 	} 
 
-
+     //requisition show role id
 	public function purchase_products($id,$role_id){
 		if($role_id==4){
 			$this->db->select("
@@ -243,6 +243,98 @@
 			->group_by('products_requisition_details.id');
 			return $this->db->get()->result();
 	}
+
+
+
+			
+	public function requsition_status_report($f1_date, $f2_date,$statusC)
+				{
+
+					$this->db->select(" 
+					products_requisition_details.id,
+					products_requisitions.created_at,
+					products_requisition_details.requisition_id,
+					products_requisition_details.quantity,
+					products_requisition_details.approved_qty,
+					products_requisitions.status,
+					products_requisitions.user_id,
+					products_categories.category_name,
+					products_sub_categories.sub_cate_name,
+					products.product_name,
+					xin_departments.department_name,
+					xin_designations.designation_name,
+				    xin_employees.first_name,
+					xin_employees.last_name
+					")
+		   ->from("products_categories")
+		   ->from("products_sub_categories")
+		   ->from("products")
+		   ->from("products_requisitions")
+		   ->from("products_requisition_details")
+		   ->from("xin_employees")
+		   ->from("xin_departments")
+		   ->from("xin_designations")
+		   ->where("xin_designations.designation_id = xin_employees.designation_id")
+		   ->where("xin_departments.department_id = xin_employees.department_id")
+		   ->where("products_categories.id     = products_requisition_details.cat_id")	
+		   ->where("products_sub_categories.id = products_requisition_details.sub_cate_id")	
+		   ->where("products.id 				= products_requisition_details.product_id")	
+		   ->where("products_requisitions.id 			= products_requisition_details.requisition_id")	
+		   ->where("xin_employees.user_id 		= products_requisitions.user_id")	
+		   ->where("products_requisitions.created_at BETWEEN '$f1_date' AND '$f2_date'")
+		   ->where("products_requisitions.status 		= $statusC")
+			
+		   ->group_by('products_requisition_details.id');
+		   $query= $this->db->get();
+		   $data = $query->result();
+		   
+		   if ($query->num_rows() > 0) {
+			return $data;
+		
+		} else {
+			return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+		}
+	}
+					
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			// $this->db->select('
+			//     products_requisitions.id,
+			// 	products_requisition_details.requisition_id,
+			// 	xin_employees.department_id,
+			// 	xin_employees.designation_id,
+			// 	xin_departments.department_name,
+			// 	xin_designations.designation_name,
+			// 	xin_employees.employee_id,
+			// 	xin_employees.first_name,
+			// 	xin_employees.last_name
+			// ');
+
+			// $this->db->from('xin_employees');
+			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+			// $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+			// $this->db->join('xin_employee_move_register', 'xin_employee_move_register.employee_id = xin_employees.user_id');
+			// $this->db->where('xin_employees.is_active', 1);
+			// $this->db->where("xin_employee_move_register.date BETWEEN '$f1_date' AND '$f2_date'");
+			// $this->db->where('xin_employee_move_register.status', $statusC);
+			// $query = $this->db->get();
+			// $data = $query->result();
+		
+		
+
+			
 
 }
 ?>
