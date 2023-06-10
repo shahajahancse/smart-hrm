@@ -107,7 +107,7 @@ class Inventory extends MY_Controller {
 		$data['title'] 		 = 'Inventory | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Inventory';
 		$data['path_url'] 	 = 'inventory';
-		if($session['role_id']==1){
+		if($session['role_id']==1 || $session['role_id']==3){
 			$data['results']	 = $this->Inventory_model->requisition_details($id);
 			if(!empty($data['results'])){
 				$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
@@ -901,6 +901,18 @@ class Inventory extends MY_Controller {
 		  
 		}
 	}
+   public function delete_requsiton($id){
+	
+	$approved=$this->db->where('id',$id)->delete('products_requisitions');
+	 $this->db->where('requisition_id',$id)->delete('products_requisition_details');
+	if($approved){
+		$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
+	 redirect("admin/inventory/index");
+	  
+	}
+   }
+
+
 	public function delete_purches_item($id,$pid){
 		
 		$approved = $this->db->where('id',$id)->delete('products_purches_details');
