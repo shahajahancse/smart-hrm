@@ -39,7 +39,8 @@
                         </div>
                 </div>
 
-            <div id="print-content">   
+            <div id="print-content">  
+
 
                 <?php
                     $total_basic_salary=0;
@@ -82,13 +83,17 @@
                     $total_absent_deduct=0;
                     $total_extra_pay=0;
                     $total_modify_salary=0;
+                   
                 ?>
+              
 
                 <div style='font-size:18px; font-weight:bold; text-align:center;margin-top:10px'><?=xin_company_info(1)->company_name ?></div>
                 <div style='font-size:14px; font-weight:bold; text-align:center;margin-top:10px'><?=xin_company_info(1)->address_1 ?></div>
                 <div style='font-size:12px;align-items: center;text-align: center;'>Salary Month :<?=$salary_month ?></div>
 
                 </div>
+                <p style="display: contents;margin: 0;padding: 0;">Page Number : 1</p>
+
                 <div class='fullt'>
                     <table>
 
@@ -291,6 +296,11 @@
                             <section style='width: 33%;'>Aproved By(Managing Director)</section>
                     </div>
                 </div>
+                <?php
+                        
+                        // add page number
+                        $page_number = ($i+1)/$rows_per_page + 1 ?>
+                        
 
             <div style='margin-top: 132px;'>
                 <div style='font-size:18px; font-weight:bold; text-align:center;margin-top:10px'><?=xin_company_info(1)->company_name ?></div>
@@ -298,12 +308,10 @@
                 <div style='font-size:12px;align-items: center;text-align: center;'>Salary Month :<?=$salary_month ?></div>
 
                     </div>
+                    <p style="display: contents;margin: 0;padding: 0;">Page Number : <?=  $page_number  ?></p>
                 <div class='fullt'>
                     <table>
-                        <?php
-                        
-                        // add page number
-                        $page_number = ($i+1)/$rows_per_page + 1 ?>
+                      
                         <thead>
                             <tr>
                                     <th class='bnb'>SL</th>
