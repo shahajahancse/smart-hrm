@@ -90,7 +90,7 @@ class Salary_model extends CI_Model {
             $leaves = $leave->el + $leave->sl;
             $extra_attend = $rows->extra_p;
             // $extra_attend = ($rows->extra_p + $rows->meeting) - $rows->attend;
-            $absent = $num_of_days - ($leaves + $rows->weekend + $rows->holiday + $present);
+            $absent = $num_of_days - ($leaves + $rows->weekend + $rows->holiday + $present + $ba_absent);
             // dd($rows);
             //=======PRESENT STATUS END======
 
