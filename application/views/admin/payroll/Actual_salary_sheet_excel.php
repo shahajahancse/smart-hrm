@@ -7,6 +7,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="<?php echo base_url() ?>skin/hrsale_assets/css/ac_s.css">
+    <style>
+        .colors1 {
+     background-color: #0177bc3b;
+     color: black !important;
+     width: 15%;
+     border-left: 1px solid black;
+}
+.colors3 {
+    background-color: #97eff347 !important;
+    color: black !important;
+    width: 37%;
+}
+    </style>
 
   </head>
     <body>
@@ -86,7 +99,7 @@
                         <th  class='bnb'>Degi  </th>
                         <th  class='bnb'>Join.d</th>
                         <th  class='bnb'>Salary</th>
-                        <th style='width: 160px;'>Status</th>
+                        <th style='width: 190px;'>Status</th>
                         <th style='width: 92px;'>Leave</th>
                         <th  style='width:90px;'>Late</th>
                         <th style='width: 139px;'>Deduction</th>
@@ -112,7 +125,10 @@
                                         <th class=''>A</th>
                                         <th class=''>W</th>
                                         <th class=''>H</th>
-                                        <th class=''><p style="width: 9px;">E.P</p></th>                                    </tr>
+                                        <th class=''><p style="width: 9px;">E.P</p></th>
+                                        <th class=''><p style="width: 9px;">ABA</p></th>
+                                        
+                                    </tr>
                                 </table>
                             </th>
                             <th>
@@ -137,6 +153,7 @@
                                     <tr>
                                         <th  class=''>Late</th>
                                         <th  class=''>Abse</th>
+                                        <th  class=''>BA</th>
                                     </tr>
                                 </table>
                             </th>
@@ -171,6 +188,7 @@
                                     <td class='colors1'><?=$values[$i]->weekend?></td>
                                     <td class='colors1'><?=$values[$i]->holiday?></td>
                                     <td class='colors1'><?=$values[$i]->extra_p?></td>
+                                    <td class='colors1'><?=$values[$i]->ba_absent?></td>
                                 </tr>
                             </table>
                         </td>
@@ -198,6 +216,7 @@
                                 <tr>
                                     <td  class='colors3'><?=$values[$i]->late_deduct?></td>
                                     <td  class='colors3'><?=$values[$i]->absent_deduct?></td>
+                                    <td  class='colors3'><?=$values[$i]->aba_deduct?></td>
                                 </tr>
                             </table>
                         </td>
@@ -241,8 +260,9 @@
                                 <td colspan='1'>
                                     <table>
                                         <tr>
-                                        <td style='width: 50%' colspan='1'><?=$total_late_deduct?></td>
-                                        <td style='width: 50%' colspan='1'><?=$total_absent_deduct?></td>
+                                        <td style='width: 37%' colspan='1'><?=$total_late_deduct?></td>
+                                        <td style='width: 37%' colspan='1'><?=$total_absent_deduct?></td>
+                                        <td style='width: 37%' colspan='1'></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -318,6 +338,9 @@
                                             <th class='r5'>W</th>
                                             <th class='r5'>H</th>
                                             <th class='r5'><p style="width: 9px;">E.P</p></th>
+                                            <th class='r5'><p style="width: 9px;">ABA</p></th>
+
+
                                         </tr>
                                     </table>
                                 </th>
@@ -343,6 +366,8 @@
                                         <tr>
                                             <th  class=''>Late</th>
                                             <th  class=''>Abse</th>
+                                            <th  class=''>BA</th>
+
                                         </tr>
                                     </table>
                                 </th>
@@ -368,8 +393,9 @@
                         <td colspan='1'>
                             <table>
                                 <tr>
-                                <td style='width: 50%' colspan='1'><?=$total_late_deduct?></td>
-                                <td style='width: 50%' colspan='1'><?=$total_absent_deduct?></td>
+                                <td style='width: 37%' colspan='1'><?=$total_late_deduct?></td>
+                                <td style='width: 37%' colspan='1'><?=$total_absent_deduct?></td>
+                                <td style='width: 37%' colspan='1'></td>
                                 </tr>
                             </table>
                         </td>
@@ -389,8 +415,9 @@
                         <td colspan='1'>
                             <table>
                                 <tr>
-                                <td style='width: 50%' colspan='1'><?=$grand_total_late_deduct?></td>
-                                <td style='width: 50%' colspan='1'><?=$grand_total_absent_deduct?></td>
+                                <td style='width: 37%' colspan='1'><?=$grand_total_late_deduct?></td>
+                                <td style='width: 37%' colspan='1'><?=$grand_total_absent_deduct?></td>
+                                <td style='width: 37%' colspan='1'></td>
                                 </tr>
                             </table>
                         </td>

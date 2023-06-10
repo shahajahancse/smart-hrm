@@ -328,6 +328,8 @@ class Salary_model extends CI_Model {
             sp.m_pay_day,
             sp.present,
             sp.extra_p,
+            sp.ba_absent,
+            sp.aba_deduct,
             sp.absent,
             sp.holiday,
             sp.weekend,
