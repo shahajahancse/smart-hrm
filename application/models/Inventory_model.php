@@ -249,7 +249,7 @@
 			
 	public function requsition_status_report($f1_date, $f2_date,$statusC)
 				{
-
+                    $f2_date = date('Y-m-d 23:59:59', strtotime($f2_date));
 					$this->db->select(" 
 					products_requisition_details.id,
 					products_requisitions.created_at,
@@ -280,8 +280,8 @@
 		   ->where("products_sub_categories.id = products_requisition_details.sub_cate_id")	
 		   ->where("products.id 				= products_requisition_details.product_id")	
 		   ->where("products_requisitions.id 			= products_requisition_details.requisition_id")	
-		   ->where("xin_employees.user_id 		= products_requisitions.user_id")	
-		   ->where("products_requisitions.created_at BETWEEN '$f1_date' AND '$f2_date'")
+		   ->where("xin_employees.user_id 		= products_requisitions.user_id")
+           ->where("products_requisitions.created_at BETWEEN '$f1_date' AND '$f2_date'")
 		   ->where("products_requisitions.status 		= $statusC")
 			
 		   ->group_by('products_requisition_details.id');
