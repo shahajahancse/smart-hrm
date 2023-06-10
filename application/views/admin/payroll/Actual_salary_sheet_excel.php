@@ -17,9 +17,21 @@
 .colors3 {
     background-color: #97eff347 !important;
     color: black !important;
-    width: 37%;
+    width: 50%;
 }
-    </style>
+.cat4{
+    background-color: #dd8b8c47 !important;
+    color: black !important;
+    width: 37%;
+
+}
+thead{
+    font-size: 12px!important;
+}
+tbody{
+    font-size: 10px!important;
+}
+</style>
 
   </head>
     <body>
@@ -219,9 +231,9 @@
                         <td>
                             <table>
                                 <tr>
-                                    <td  class='colors3'><?=$values[$i]->late_deduct?></td>
-                                    <td  class='colors3'><?=$values[$i]->absent_deduct?></td>
-                                    <td  class='colors3'><?=$values[$i]->aba_deduct?></td>
+                                    <td  class='cat4'><?=$values[$i]->late_deduct?></td>
+                                    <td  class='cat4'><?=$values[$i]->absent_deduct?></td>
+                                    <td  class='cat4'><?=$values[$i]->aba_deduct?></td>
                                 </tr>
                             </table>
                         </td>
