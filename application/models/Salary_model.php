@@ -95,30 +95,30 @@ class Salary_model extends CI_Model {
             //=======PRESENT STATUS END======
 
             //======= salary calculation here ==========//
-            $perday_salary = round($salary / $num_of_days);
+            $perday_salary = round(($salary / $num_of_days), 2);
 
             // before after absent deduction
             $aba_deduct = 0;
-            $aba_deduct = $ba_absent * $perday_salary; 
+            $aba_deduct = round(($ba_absent * $perday_salary), 2); 
             // absent deduction
             $absent_deduct = 0; 
-            $absent_deduct = $perday_salary * $absent;
+            $absent_deduct = round(($perday_salary * $absent), 2);
 
             // late deduction
             $late_deduct = 0;
             $late_day = 0;
             if ($rows->late_status > 2) {
                 $late_day = floor($rows->late_status / 3);
-                $late_deduct = $perday_salary * $late_day;
+                $late_deduct = round(($perday_salary * $late_day), 2);
             }
 
             // extra pay salary 
             $extra_pay = 0;
-            $extra_pay = $perday_salary * $extra_attend;
+            $extra_pay = round(($perday_salary * $extra_attend), 2);
 
 
             // pay salary 
-            $pay_salary = $salary - ($late_deduct + $absent_deduct);
+            $pay_salary = round(($salary - ($late_deduct + $absent_deduct)), 2);
 
 
             $data = array(

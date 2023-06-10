@@ -243,8 +243,8 @@ class Attendance_model extends CI_Model {
 
             // checking before after absent of holiday or off day
             // dd($query->row());
-            $day = date('D', strtotime($process_date));
-            if ($status == 'Absent' && in_array($day, array('Sun','Mon'))) {
+            // $day = date('D', strtotime($process_date));
+            if ($status == 'Absent') {
                 $query = $this->db->where('employee_id',$emp_id)->where('attendance_date',$check_day)->get('xin_attendance_time');
                 if($query->row() != null) {
                     if($query->row()->status == 'Holiday') {
