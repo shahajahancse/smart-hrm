@@ -115,10 +115,10 @@
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
                     <!-- <button class="btn btn-sm btn-danger"> Button one</button>-->
-                    <!-- <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(1)">Panding parches</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(1)">Approved parches</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(3)">Reject reject parches</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(4)">Delivered Parches</button> -->
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(1)">Panding parches</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(2)">Approved parches</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(4)">Reject parches</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(3)">Delivered Parches</button>
 
       
 
