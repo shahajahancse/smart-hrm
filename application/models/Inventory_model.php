@@ -249,7 +249,7 @@
 			
 	public function requsition_status_report($f1_date, $f2_date,$statusC)
 				{
-
+                    $f2_date = date('Y-m-d 23:59:59', strtotime($f2_date));
 					$this->db->select(" 
 					products_requisition_details.id,
 					products_requisitions.created_at,
@@ -280,14 +280,64 @@
 		   ->where("products_sub_categories.id = products_requisition_details.sub_cate_id")	
 		   ->where("products.id 				= products_requisition_details.product_id")	
 		   ->where("products_requisitions.id 			= products_requisition_details.requisition_id")	
-		   ->where("xin_employees.user_id 		= products_requisitions.user_id")	
-		   ->where("products_requisitions.created_at BETWEEN '$f1_date' AND '$f2_date'")
+		   ->where("xin_employees.user_id 		= products_requisitions.user_id")
+           ->where("products_requisitions.created_at BETWEEN '$f1_date' AND '$f2_date'")
 		   ->where("products_requisitions.status 		= $statusC")
 			
 		   ->group_by('products_requisition_details.id');
 		   $query= $this->db->get();
 		   $data = $query->result();
 		   
+		   if ($query->num_rows() > 0) {
+			return $data;
+		
+		} else {
+			return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+		}
+	}
+	
+	public function perches_status_report($f1_date, $f2_date,$statusC)
+				{
+					
+                    $f2_date = date('Y-m-d 23:59:59', strtotime($f2_date));
+					$this->db->select(" 
+					products_purches_details.id,
+					products_purches.created_at,
+					products_purches_details.purches_id,
+					products_purches_details.quantity,
+					products_purches_details.ap_quantity,
+					products_purches.status,
+					products_purches.user_id,
+					products_categories.category_name,
+					products_sub_categories.sub_cate_name,
+					products.product_name,
+					xin_departments.department_name,
+					xin_designations.designation_name,
+				    xin_employees.first_name,
+					xin_employees.last_name
+					")
+		   ->from("products_categories")
+		   ->from("products_sub_categories")
+		   ->from("products")
+		   ->from("products_purches")
+		   ->from("products_purches_details")
+		   ->from("xin_employees")
+		   ->from("xin_departments")
+		   ->from("xin_designations")
+		   ->where("xin_designations.designation_id = xin_employees.designation_id")
+		   ->where("xin_departments.department_id = xin_employees.department_id")
+		   ->where("products_categories.id     = products.cat_id")	
+		   ->where("products_sub_categories.id = products.sub_cate_id")	
+		   ->where("products.id 				= products_purches_details.product_id")	
+		   ->where("products_purches.id 			= products_purches_details.purches_id")	
+		   ->where("xin_employees.user_id 		= products_purches.user_id")
+           ->where("products_purches.created_at BETWEEN '$f1_date' AND '$f2_date'")
+		   ->where("products_purches.status 		= $statusC")
+			
+		   ->group_by('products_purches_details.id');
+		   $query= $this->db->get();
+		   $data = $query->result();
+            
 		   if ($query->num_rows() > 0) {
 			return $data;
 		

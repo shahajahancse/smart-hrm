@@ -5,7 +5,7 @@ if ($statusC == 1) {
 } elseif ($statusC == 2) {
     $statusText = "Approved";
 } elseif ($statusC == 3) {
-    $statusText = "Handover";
+    $statusText = "Delivered";
 } elseif ($statusC == 4) {
     $statusText = "Rejected";
 }
@@ -27,7 +27,7 @@ if ($statusC == 1) {
 <?php
 
 
-$filename = "Requisition_$first_date+to+$second_date.xls";
+$filename = "Purchese_$first_date+to+$second_date.xls";
 header('Content-Type: application/vnd.ms-excel'); //mime type
 header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
 header('Cache-Control: max-age=0'); //no cache
@@ -39,7 +39,7 @@ header('Cache-Control: max-age=0'); //no cache
     <td colspan="9" style="text-align:center;">
         <div style="font-size:30px; font-weight:bold; text-align:center;margin-top:3px;"><?php echo xin_company_info(1)->company_name; ?></div>
         <div style="font-size:20px; font-weight:bold; text-align:center;"><?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div> 
-        <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px"> <?php echo $statusText; ?> Report : <?php echo $first_date; ?> To  <?php echo $second_date; ?></div>
+        <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px"> <?php echo $statusText; ?> Purchese Report : <?php echo $first_date; ?> To  <?php echo $second_date; ?></div>
 
     </td>
 </tr>
@@ -66,7 +66,7 @@ header('Cache-Control: max-age=0'); //no cache
                                  <td><?php echo $row->sub_cate_name ?></td>
                                 <td><?php echo $row->product_name ?></td>
                                 <td><?php echo $row->quantity ?></td>
-                                <td><?php echo $row->approved_qty ?></td>
+                                <td><?php echo $row->ap_quantity ?></td>
                                 <td><?php echo !empty($row->created_at) ? date('h:i:s a', strtotime($row->created_at)) : '' ?></td>
                             </tr>
                         </tbody>

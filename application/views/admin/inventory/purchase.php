@@ -317,14 +317,21 @@
                 type: 'POST',
                 data: { companyName: companyName },
                 dataType: 'json',
-                success: function(response) {
-                  // console.log(response[0]['name']);
+                success: function(func_data) {
+                    // console.log(response[0]['name']);
                     var options = '';
-                    $.each(response, function(index, supplier) {
-                    
-                        options += '<option value="' + supplier.id + '">' + supplier.name + '</option>';
-                    });
-                    $('#spl_name').html(options);
+                    // $.each(response, function(index, supplier) {
+                       
+                    //     options += '<option value="' + supplier.id + '">' + supplier.name + '</option>';
+                    // });
+
+                    $.each(func_data,function(id,name)
+                {
+
+                  options += '<option value="' + id + '">' + name + '</option>';
+                  
+                });
+                      $('#spl_name').html(options);
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);
