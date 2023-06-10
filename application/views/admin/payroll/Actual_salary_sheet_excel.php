@@ -111,22 +111,21 @@ tbody{
 
                         <thead>
                         <tr>
-                        <th class='bnb'>SL</th>
-                        <th  class='bnb'>Name</th>
-                        <th  class='bnb'>Degi  </th>
-                        <th  class='bnb'>Join.d</th>
-                        <th  class='bnb'>Salary</th>
+                        <th class='bnb' style="width: 17px;">SL</th>
+                        <th  class='bnb' style="width: 67px;">Name</th>
+                        <th  class='bnb' style="width: 70px;">Degi  </th>
+                        <th  class='bnb' style='width: 70px;'>Join.d</th>
+                        <th  class='bnb' style="width: 60px;">Salary</th>
                         <th style='width: 190px;'>Status</th>
-                        <th style='width: 92px;'>Leave</th>
-                        <th  style='width:90px;'>Late</th>
+                        <th style='width: 55px;'>Leave</th>
+                        <th  style='width:55px;'>Late</th>
                         <th style='width: 139px;'>Deduction</th>
-                        <th  class='bnb'>Net Salary</th>
-                        <th  class='bnb'>Extra Pay</th>
-                        <th  class='bnb'>D.A.Day</th>
-                        <th  class='bnb'>D.A Salary</th>
-                       
-                        <th  class='bnb '>Grand Net Salary</th>
-                        <th  class='bnb'>Account Number</th>
+                        <th  class='bnb' style="width: 37px;">Net Salary</th>
+                        <th  class='bnb' style="width: 37px;">Extra Pay</th>
+                         <th  class='bnb' style="width: 28px;">D.A Day</th>
+                         <th  class='bnb' style="width: 42px;">D.A Salary</th>
+                         <th  class='bnb ' style="width: 60px;">Grand Net Salary</th>
+                           <th  class='bnb' style="width: 37px;">Account Number</th>
                         </tr>
                         <tr>
                             <th  class='bnt'></th>
@@ -325,24 +324,23 @@ tbody{
                     <table>
                       
                         <thead>
-                            <tr>
-                                    <th class='bnb'>SL</th>
-                                    <th  class='bnb'>Name</th>
-                                    <th  class='bnb'>Degi  </th>
-                                    <th  class='bnb'>Join.d</th>
-                                    <th  class='bnb'>Salary</th>
-                                    <th style='width: 160px;'>Status</th>
-                                    <th style='width: 92px;'>Leave</th>
-                                    <th   style='width:90px;'>Late</th>
-                                    <th style='width: 139px;'>Deduction</th>
-                                    <th  class='bnb'>Net Salary</th>
-                                    <th  class='bnb'>Extra Pay</th>
-                                    <th  class='bnb'>D.A.Day</th>
-                                    <th  class='bnb'>Modify Salary</th>
-                                    
-                                    <th  class='bnb '>Grand Net Salary</th>
-                                    <th  class='bnb'>Account Number</th>
-                            </tr>
+                        <tr>
+                            <th class='bnb' style="width: 17px;">SL</th>
+                            <th  class='bnb' style="width: 67px;">Name</th>
+                            <th  class='bnb' style="width: 70px;">Degi  </th>
+                            <th  class='bnb' style='width: 70px;'>Join.d</th>
+                            <th  class='bnb' style="width: 60px;">Salary</th>
+                            <th style='width: 190px;'>Status</th>
+                            <th style='width: 55px;'>Leave</th>
+                            <th  style='width:55px;'>Late</th>
+                            <th style='width: 139px;'>Deduction</th>
+                            <th  class='bnb' style="width: 37px;">Net Salary</th>
+                            <th  class='bnb' style="width: 37px;">Extra Pay</th>
+                            <th  class='bnb' style="width: 28px;">D.A Day</th>
+                            <th  class='bnb' style="width: 42px;">D.A Salary</th>
+                            <th  class='bnb ' style="width: 60px;">Grand Net Salary</th>
+                            <th  class='bnb' style="width: 37px;">Account Number</th>
+                        </tr>
                             <tr>
                                 <th  class='bnt'></th>
                                 <th  class='bnt'></th>
