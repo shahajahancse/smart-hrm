@@ -77,24 +77,28 @@
 
      //requisition show role id
 	public function purchase_products($id,$role_id){
-		if($role_id==4){
+		if($role_id==3){
 			$this->db->select("
+						xin_employees.first_name,
+						xin_employees.last_name,
 					products_categories.category_name,
 				    products_categories.id as cat_id,
 				    products_requisitions.user_id,
 				    products_requisitions.status,
 				    products_requisition_details.created_at,
-				    requisitions.created_at,
+				    products_requisitions.created_at,
 				    products_requisitions.id
 				")
 			->from("products_categories")
 			->from("products_requisitions")
 			->from("products_requisition_details")
 			->from("xin_employees")
+			->where("xin_employees.user_id = products_requisitions.user_id")
 			->where("products_categories.id = products_requisition_details.cat_id")	
 			->where("products_requisitions.id = products_requisition_details.requisition_id")	
 			->where("products_requisitions.user_id = $id")
-			->group_by('products_requisition_details.cat_id');
+			->order_by('products_requisitions.id', 'desc');
+			
 		}
 
 		if($role_id==1){
@@ -115,7 +119,7 @@
 			->group_by('products_requisitions.id')
 			->order_by('products_requisitions.id', 'desc');
 		}
-		// dd($this->db->get()->result());
+		//  dd($this->db->get()->result());
 		return	$this->db->get()->result();
 	} 
 
@@ -191,7 +195,7 @@
 
 	// requisition details for requisition id
 	public  function requisition_details($id){
-		// dd($id);
+		        //    dd($id);
 			$this->db->select(" 
 			         products_requisition_details.id,
 					 products_requisition_details.requisition_id,
