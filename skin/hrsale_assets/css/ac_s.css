@@ -32,6 +32,7 @@
      background-color: #0177bc3b;
      color: black !important;
      width: 20%;
+     border-left: 1px solid black;
 }
  .colors4 {
      background-color: #dff0d8bd;;
@@ -90,7 +91,7 @@
 }
  td {
      text-align: center;
-     border: 1px solid #ddd;
+     border: 1px solid #000000;
      margin: 0;
      padding: 0;
 }
