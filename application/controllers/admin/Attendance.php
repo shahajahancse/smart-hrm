@@ -76,6 +76,38 @@ class Attendance extends MY_Controller {
 
     }
 
+
+    // public function attendance_process($process_date, $status)
+	public function attn_process_auto()
+    {
+    	exit('this function only for admin');
+        $num_of_days = date("t", strtotime(date("Y-05")));
+        $result = $this->db->select('user_id')->where_in('status', array(1,4,5))->get('xin_employees')->result();
+        $emp_id = array();
+        foreach ($result as $key => $value) {
+        	$emp_id[$key] = $value->user_id;
+        }
+
+        $process_date  = date("Y-05-01");
+        for ($i=0; $i < $num_of_days; $i++) { 
+	        $process_date = date("Y-m-d",strtotime("+1 day", strtotime($process_date)));
+	        echo "<pre> $process_date";
+			$this->Attendance_model->attn_process($process_date, $emp_id);
+        }
+
+		$this->db->trans_complete();
+		if ($this->db->trans_status() === FALSE)
+		{
+			$this->db->trans_rollback();
+			echo "Process failed";
+		}
+		else
+		{
+			echo "Process completed sucessfully";
+		}
+
+    }
+
 	// manual entry system
 	public function manual_attendance()
 	{

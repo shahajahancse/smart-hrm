@@ -164,20 +164,10 @@ class Employees_model extends CI_Model {
 	}
 	
 	// Function to update record in table > basic_info
-	public function basic_info($data, $id,$proxi_id){
+	public function basic_info($data, $id){
 		$this->db->where('user_id', $id);
-		if( $this->db->update('xin_employees',$data)) {
-
-			$query = $this->db->query('SELECT * FROM xin_proxi WHERE emp_id ='.$id);
-			if ($query->num_rows() > 0) {
-				$data=['proxi_id'=>$proxi_id];
-				$this->db->where('emp_id', $id)->update('xin_proxi',$data);
-				return true;
-			} else {
-				$this->db->query("INSERT INTO `xin_proxi`( `emp_id`, `proxi_id`, `status`) VALUES ('$id','$proxi_id',1)");
-				return true;
-			}
-			
+		if($this->db->update('xin_employees',$data)) {
+			return true;
 		} else {
 			return false;
 		}		
