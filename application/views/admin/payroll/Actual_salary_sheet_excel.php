@@ -52,8 +52,6 @@ tbody{
   </head>
     <body>
                 <div  style="float: right;">
-
-            
                         <div style="position:absolute;display: flex;right:0;">
                                 <form action="<?php echo base_url();?>admin/payroll/salary_sheet_excel" method="post">
                                     <input type="hidden" name="salary_month" value="<?php echo $salary_month; ?>"></input>
@@ -63,8 +61,6 @@ tbody{
                                     <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS</button>
                                 </form>
                                 <button class="btn" onclick="printPage()">Print</button></div>
-                                <p class='pagenumber' style="margin: 0;padding: 0;">Page: 1</p>
-
                         </div>
                 </div>
 
