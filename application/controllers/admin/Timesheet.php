@@ -514,11 +514,6 @@ class Timesheet extends MY_Controller {
 	// Validate and add info in database
 	public function add_leave() {
 
-
-			
-		
-			
-			
 			$start_date = $this->input->post('start_date');
 			$end_date = $this->input->post('end_date');
 			$remarks = $this->input->post('remarks');
@@ -549,6 +544,17 @@ class Timesheet extends MY_Controller {
 				$this->session->set_flashdata('error',  $this->lang->line('xin_error_leave_type_reason'));
 				redirect('admin/timesheet/leave');
 			}
+			//get leave date of a employee ... 
+			$leave_date = $this->db->select('from_date,to_date')->where('employee_id',$_POST['employee_id'])->get('xin_leave_applications')->result();
+			
+			//check duplicate leave date 
+			foreach($leave_date as $date){
+				if($date->from_date == $start_date && $date->to_date == $end_date) {
+					$this->session->set_flashdata('error',  'Leave Already Exist');
+					redirect('admin/timesheet/leave');
+				}
+			}
+			
 			$datetime1 = new DateTime($this->input->post('start_date'));
 			$datetime2 = new DateTime($this->input->post('end_date'));
 			$interval = $datetime1->diff($datetime2);

@@ -172,6 +172,7 @@ class Payroll extends MY_Controller {
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;
+
 		
 		// dd($data["values"]);
         if(is_string($data["values"]))
@@ -179,6 +180,7 @@ class Payroll extends MY_Controller {
 					// dd($data["values"]);
 
             echo $data["values"];
+
         }
         else
         {	

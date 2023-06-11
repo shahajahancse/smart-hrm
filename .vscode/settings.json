@@ -1,0 +1,10 @@
+{
+    "window.autoDetectColorScheme": true,
+    "vsicons.presets.jsonOfficial": true,
+    "workbench.settings.useSplitJSON": true,
+    "json.schemas": [
+
+    ],
+    "workbench.editor.showTabs": true,
+    "workbench.editor.enablePreview": false
+}

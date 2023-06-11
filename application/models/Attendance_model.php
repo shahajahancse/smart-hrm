@@ -407,7 +407,8 @@ class Attendance_model extends CI_Model {
         $proxi = $this->db->select('proxi_id')->where('emp_id',$emp_id)->get('xin_proxi');
 
         if ($proxi->num_rows() < 1) {
-            exit("Sorry! $emp_id  This Employee ID does not assign to Punch ID");
+            "Sorry! $emp_id  This Employee ID does not assign to Punch ID";
+            // continue;
         } else {
             return $proxi->row()->proxi_id;
         }
