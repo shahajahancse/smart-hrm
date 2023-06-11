@@ -22,7 +22,7 @@ class Lunch_model extends CI_Model {
                 ');
             $this->db->from('xin_employees as u')->from('lunch_details as ld');
             $this->db->where('u.user_id = ld.emp_id')->where('ld.date', date('Y-m-d'))->group_by('ld.emp_id');
-            return $this->db->order_by('ld.p_stutus', 'DESC')->get()->result();
+            return $this->db->order_by('ld.p_stutus', 'ASC')->get()->result();
         } else {
             $this->db->select('
                     u.user_id as emp_id, 

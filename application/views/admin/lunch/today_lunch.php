@@ -2,7 +2,7 @@
 
 <h3>Today Lunch</h3>
 
-<?= form_open('admin/lunch/today_lunch'); ?>
+<?= form_open(current_url()); ?>
     <input type="hidden" name="date" value="<?= date('d-m-Y'); ?>">
     <table class="table table-hover" style="text-align-last: center;">
         <thead>
@@ -18,7 +18,7 @@
             <?php $st = true; //dd($results); ?>
 
             <?php foreach ($results as $key => $raw) { 
-                if ($raw->p_stutus == 'Absent' && $st == true) { ?>
+                if (($raw->p_stutus == 'Absent' && $st == true) || $raw->p_stutus == 'absent' && $st == true) { ?>
                     <tr>
                         <td colspan="5">
                             <p style="font-size: 18px; color: black; background-color: aquamarine;">Inactive</p>

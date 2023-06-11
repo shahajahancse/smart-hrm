@@ -16,7 +16,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class lunch extends MY_Controller {
+class Lunch extends MY_Controller {
 	
     public function __construct()
     {
@@ -113,7 +113,7 @@ class lunch extends MY_Controller {
                 $luncid = $id;
             } else if (!empty($query->row())) {
                  $luncid = $query->row()->id;
-            } else {
+            } else {                
                 $data = array(
                     'total_m'    => $total_m,
                     'emp_m'      => $emp_m,
@@ -126,25 +126,31 @@ class lunch extends MY_Controller {
                 );
                 $this->db->insert('lunch', $data);
                 $luncid = $this->db->insert_id();
-            }
+            } 
 
-            for ($i=0; $i<sizeof($empid); $i++) {
-                $emp_m += $m_amount[$i]; 
-
-                $form_data[] = array(
-                    'lunch_id'      => $luncid,
-                    'emp_id'        => $empid[$i],
-                    'meal_amount'   => $m_amount[$i],
-                    'p_stutus'      => $p_status[$i],
-                    'comment'       => $comment[$i],
-                    'date'          => date('Y-m-d'),
-                );
-            }  
-
-            $row = $this->db->get_where('lunch_details', array('lunch_id' => $luncid));
+            $row = $this->db->where('lunch_id', $luncid)->get('lunch_details');
             if ($row->num_rows() > 0) {
-                $this->db->where('lunch_id', $luncid)->update_batch('lunch_details', $form_data);
+                for ($i=0; $i<sizeof($empid); $i++) {
+                    $emp_m += $m_amount[$i]; 
+                    $form_data = array(
+                        'meal_amount'   => $m_amount[$i],
+                        'p_stutus'      => $p_status[$i],
+                        'comment'       => $comment[$i],
+                    );
+                    $this->db->where('emp_id', $empid[$i])->update('lunch_details', $form_data);
+                } 
             } else {
+                for ($i=0; $i<sizeof($empid); $i++) {
+                    $emp_m += $m_amount[$i]; 
+                    $form_data[] = array(
+                        'lunch_id'      => $luncid,
+                        'emp_id'        => $empid[$i],
+                        'meal_amount'   => $m_amount[$i],
+                        'p_stutus'      => $p_status[$i],
+                        'comment'       => $comment[$i],
+                        'date'          => date('Y-m-d'),
+                    );
+                } 
                 $this->db->insert_batch('lunch_details', $form_data);
             }
 
@@ -157,6 +163,7 @@ class lunch extends MY_Controller {
             $data2 = array(
                 'total_m' => $total_m,
                 'emp_m' => $emp_m,
+                'guest_m'    => $guest_m,
                 'total_cost' => $total_cost,
                 'emp_cost' => $emp_cost,
                 'guest_cost' => $guest_cost,
