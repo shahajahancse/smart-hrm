@@ -324,6 +324,7 @@ tbody{
                             <section style='width: 33%;'>Aproved By(Managing Director)</section>
                     </div>
                 </div>
+           
                 <?php
                         
                         // add page number

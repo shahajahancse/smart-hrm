@@ -189,6 +189,37 @@ class Payroll extends MY_Controller {
         	}
         }
     }
+	// generate salary excel sheet 
+    public function Actual_salary_sheet_excel_bank()
+    {  
+		
+    	$excel = $this->input->post('excel');
+    	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
+		$status = $this->input->post('status');
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+    	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
+		$data['status']= $status;
+        $data["salary_month"] = $salary_month;
+        $data["emp_id"] = $emp_id;
+		
+		// dd($data["values"]);
+        if(is_string($data["values"]))
+        {
+					// dd($data["values"]);
+
+            echo $data["values"];
+        }
+        else
+        {	
+			
+        	if ($excel == 1) {
+	            $this->load->view('admin/payroll/Actual_salary_sheet_excel_bank_e',$data);
+        	} else {
+	            $this->load->view('admin/payroll/Actual_salary_sheet_excel_bank',$data);
+        	}
+        }
+    }
 
 	
 	 // payroll templates
