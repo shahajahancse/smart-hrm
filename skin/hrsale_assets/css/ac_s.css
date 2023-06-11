@@ -13,20 +13,15 @@
     transition: all 0.3s ease-in-out;
     margin: 5px;
 }
-@media print {
-    .btn{
 
-        display: none;
-    }
- }
  .btn:hover {
      background-color: #0c69a5;
      box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
      transform: translateY(-3px);
 }
  .fullt{
-     height: 500px;
-     margin: 20px;
+     height: 520px;
+     margin: 0px;
 }
  .colors1 {
      background-color: #0177bc3b;

@@ -31,6 +31,22 @@ thead{
 tbody{
     font-size: 10px!important;
 }
+.pagenumber{
+        display: none;
+    }
+@media print {
+    .btn{
+
+        display: none;
+    }
+    .pagenumber{
+        display: contents;
+    }
+ }
+ .fullt{
+     height: 540px;
+     margin: 0px;
+}
 </style>
 
   </head>
@@ -47,6 +63,7 @@ tbody{
                                     <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS</button>
                                 </form>
                                 <button class="btn" onclick="printPage()">Print</button></div>
+                                <p class='pagenumber' style="margin: 0;padding: 0;">Page: 1</p>
 
                         </div>
                 </div>
@@ -104,7 +121,7 @@ tbody{
                 <div style='font-size:12px;align-items: center;text-align: center;'>Salary Month :<?=$salary_month ?></div>
 
                 </div>
-                <p style="display: contents;margin: 0;padding: 0;">Page Number : 1</p>
+                
 
                 <div class='fullt'>
                     <table>
@@ -268,7 +285,7 @@ tbody{
                                         
                                 ?>
                         </tbody>
-                            <tfoot style='font-size: 12px;'>
+                            <tfoot style="font-size: 12px;font-weight: bold;">
                                 <tr>
                                 <td colspan='4'>Total:</td>
                                 <td  colspan='1'><?=$total_basic_salary?></td>
@@ -276,9 +293,9 @@ tbody{
                                 <td colspan='1'>
                                     <table>
                                         <tr>
-                                        <td style='width: 37%' colspan='1'><?=$total_late_deduct?></td>
-                                        <td style='width: 37%' colspan='1'><?=$total_absent_deduct?></td>
-                                        <td style='width: 37%' colspan='1'></td>
+                                        <td style="width: 37%;font-weight: bold;font-size: 12px;"colspan='1'><?=$total_late_deduct?></td>
+                                        <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?=$total_absent_deduct?></td>
+                                        <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -307,6 +324,7 @@ tbody{
                             <section style='width: 33%;'>Aproved By(Managing Director)</section>
                     </div>
                 </div>
+           
                 <?php
                         
                         // add page number
@@ -315,11 +333,12 @@ tbody{
 
             <div style='margin-top: 132px;'>
                 <div style='font-size:18px; font-weight:bold; text-align:center;margin-top:10px'><?=xin_company_info(1)->company_name ?></div>
+                <p style="margin: 0;padding: 0;float: right;">Page: <?=  $page_number  ?></p>
+
                 <div style='font-size:14px; font-weight:bold; text-align:center;margin-top:10px'><?=xin_company_info(1)->address_1 ?></div>
                 <div style='font-size:12px;align-items: center;text-align: center;'>Salary Month :<?=$salary_month ?></div>
 
                     </div>
-                    <p style="display: contents;margin: 0;padding: 0;">Page Number : <?=  $page_number  ?></p>
                 <div class='fullt'>
                     <table>
                       
@@ -403,7 +422,7 @@ tbody{
                 ?>
 
 
-                <tfoot style='font-size: 12px;'>
+                <tfoot style="font-size: 12px;font-weight: bold;">
                     <tr>
                         <td colspan='4'>Total:</td>
                         <td  colspan='1'><?=$total_basic_salary?></td>
@@ -411,9 +430,9 @@ tbody{
                         <td colspan='1'>
                             <table>
                                 <tr>
-                                <td style='width: 37%' colspan='1'><?=$total_late_deduct?></td>
-                                <td style='width: 37%' colspan='1'><?=$total_absent_deduct?></td>
-                                <td style='width: 37%' colspan='1'></td>
+                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?=$total_late_deduct?></td>
+                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?=$total_absent_deduct?></td>
+                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'></td>
                                 </tr>
                             </table>
                         </td>
@@ -433,9 +452,9 @@ tbody{
                         <td colspan='1'>
                             <table>
                                 <tr>
-                                <td style='width: 37%' colspan='1'><?=$grand_total_late_deduct?></td>
-                                <td style='width: 37%' colspan='1'><?=$grand_total_absent_deduct?></td>
-                                <td style='width: 37%' colspan='1'></td>
+                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?=$grand_total_late_deduct?></td>
+                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?=$grand_total_absent_deduct?></td>
+                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'></td>
                                 </tr>
                             </table>
                         </td>
@@ -467,18 +486,12 @@ tbody{
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
                 
                     <script>function printPage() {
-                    var printContents = document.getElementById("print-content").innerHTML;
-                    var originalContents = document.body.innerHTML;
-
-                    // set custom layout, page size, page margin, and page heading
-                    var printCSS = '<style>@page { size: A4 landscape; margin: 1cm;}</style>';
-                                
                     
-                    document.body.innerHTML = printCSS + '<div id="print-content">' + printContents + '</div>';
+                  
 
                     window.print();
 
-                    document.body.innerHTML = originalContents;
+                  
                 }
 
 

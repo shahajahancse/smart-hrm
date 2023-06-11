@@ -214,6 +214,7 @@ $leave_calsl=$leavecal['leaves'][1];
 
 
 
+
 <?php 
 $session = $this->session->userdata('username');
 $user_info = $this->Exin_model->read_user_info($session['user_id']);
@@ -334,40 +335,39 @@ if(!is_null($role_user)){
   <!-- box end -->
    <!-- box start -->
    <div class="col-xl-6 col-md-3 col-12 hr-mini-state">
-            <div class="info-box2 hrsalle-mini-stat"> 
-              <p class="box_titel">Lunch Overview For <?= $user_lunch->pay_month  ?></p>
-              <div class="contentbox"> 
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Previous Cost:</p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $user_lunch->prev_cost;?></p>
-                </div>
-              
-                <div class="col-md-12" style="margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Previous Pay </p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $user_lunch->prev_pay?></p>
-                </div>
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Pay Amount : </p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $user_lunch->pay_amount?></p>
-                </div>
-                <div class="col-md-12" style="margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Present Meal</p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?= $total_meal_p ?></p>
-                </div>
-              </div>
-                <a data-toggle="modal" data-target="#lunchmidal">
-                  <div class="col-md-12 box_footer">
-                      
-                      <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">View Details  <span class="pull-right-container">  <i class="fa fa-angle-right"></i> </span></p>
-                    
-                  </div>
-                </a>
-            </div>
+      <div class="info-box2 hrsalle-mini-stat">
+        <p class="box_titel">Lunch Overview For <?= isset($user_lunch->pay_month) ? $user_lunch->pay_month : '0' ?></p>
+        <div class="contentbox">
+          <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
+            <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Previous Cost:</p>
+            <p style="margin: 0;" class="col-md-4 overlayth"><?= isset($user_lunch->prev_cost) ? $user_lunch->prev_cost : '0' ?></p>
           </div>
+          <div class="col-md-12" style="margin: 2px; padding: 2px;">
+            <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Previous Pay</p>
+            <p style="margin: 0;" class="col-md-4 overlayth"><?= isset($user_lunch->prev_pay) ? $user_lunch->prev_pay : '0' ?></p>
+          </div>
+          <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
+            <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Pay Amount:</p>
+            <p style="margin: 0;" class="col-md-4 overlayth"><?= isset($user_lunch->pay_amount) ? $user_lunch->pay_amount : '0' ?></p>
+          </div>
+          <div class="col-md-12" style="margin: 2px; padding: 2px;">
+            <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Present Meal</p>
+            <p style="margin: 0;" class="col-md-4 overlayth"><?= isset($total_meal_p) ? $total_meal_p : '0' ?></p>
+          </div>
+        </div>
+        <a data-toggle="modal" data-target="#lunchmidal">
+          <div class="col-md-12 box_footer">
+            <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">
+              View Details
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right"></i>
+              </span>
+            </p>
+          </div>
+        </a>
+      </div>
+  </div>
+
   <!-- box end -->
 
   <!-- box start -->
