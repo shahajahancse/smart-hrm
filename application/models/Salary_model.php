@@ -41,8 +41,8 @@ class Salary_model extends CI_Model {
                 $resign_after_absent = $this->get_days($resign_check['resign_date'],$end_date);
                 $doj_before_absent = $this->get_days($first_date, $doj);
 
-                $before_after_absent = ($resign_after_absent-1)+($doj_before_absent-1);
-                $join_left_resign = $num_of_days - $before_after_absent;
+                $ba_absent = ($resign_after_absent - 1) + ($doj_before_absent - 1);
+                $join_left_resign = $num_of_days - $ba_absent;
             }
             elseif($left_check != false and $salary_month == $join_month)
             {
@@ -50,39 +50,33 @@ class Salary_model extends CI_Model {
                 $doj_before_absent = $this->get_days($first_date, $doj);
                 $resign_after_absent = $this->get_days($left_check['left_date'],$end_date);
 
-                $before_after_absent = ($doj_before_absent-1)+($resign_after_absent-1);
-                $join_left_resign = $num_of_days - $before_after_absent;
+                $ba_absent = ($doj_before_absent - 1) + ($resign_after_absent - 1);
+                $join_left_resign = $num_of_days - $ba_absent;
             }
             elseif($resign_check != false)
             {
                 $total_days = $resign_check['resign_day'];
                 $resign_after_absent = $this->get_days($resign_check['resign_date'],$end_date);
 
-                $before_after_absent = $resign_after_absent-1;
-                $join_left_resign = $num_of_days - $before_after_absent;
+                $ba_absent = $resign_after_absent - 1;
+                $join_left_resign = $num_of_days - $ba_absent;
             }
             elseif($left_check != false)
             {
                 $total_days = $left_check['left_day'];
                 $resign_after_absent = $this->get_days($left_check['left_date'],$end_date);
 
-                $before_after_absent = $resign_after_absent-1;
-                $join_left_resign = $num_of_days - $before_after_absent;
+                $ba_absent = $resign_after_absent - 1;
+                $join_left_resign = $num_of_days - $ba_absent;
             }
             elseif($salary_month == $join_month)
             {
-                $search_date = $doj;
-                $doj_before_absent = $this->get_days($first_date, $doj);
-
-                $before_after_absent = $doj_before_absent -1;
-                $join_left_resign = $num_of_days - $before_after_absent;
-                $total_days = $num_of_days;
+                $ba_absent = $this->get_days($first_date, $doj) - 1;
+                $first_date = $doj;
             }
             else
             {
-                $search_date = $first_date;
-                $before_after_absent = 0;
-                $total_days = $num_of_days;
+                $ba_absent = 0;
             }
 
             //=======PRESENT STATUS ======
@@ -101,27 +95,30 @@ class Salary_model extends CI_Model {
             //=======PRESENT STATUS END======
 
             //======= salary calculation here ==========//
-            $perday_salary = round($salary / $num_of_days);
+            $perday_salary = round(($salary / $num_of_days), 2);
 
+            // before after absent deduction
+            $aba_deduct = 0;
+            $aba_deduct = round(($ba_absent * $perday_salary), 2); 
             // absent deduction
             $absent_deduct = 0; 
-            $absent_deduct = $perday_salary * $absent;
+            $absent_deduct = round(($perday_salary * $absent), 2);
 
             // late deduction
             $late_deduct = 0;
             $late_day = 0;
             if ($rows->late_status > 2) {
                 $late_day = floor($rows->late_status / 3);
-                $late_deduct = $perday_salary * $late_day;
+                $late_deduct = round(($perday_salary * $late_day), 2);
             }
 
             // extra pay salary 
             $extra_pay = 0;
-            $extra_pay = $perday_salary * $extra_attend;
+            $extra_pay = round(($perday_salary * $extra_attend), 2);
 
 
             // pay salary 
-            $pay_salary = $salary - ($late_deduct + $absent_deduct);
+            $pay_salary = round(($salary - ($late_deduct + $absent_deduct)), 2);
 
 
             $data = array(
@@ -135,6 +132,7 @@ class Salary_model extends CI_Model {
 
                 'present' => $present,
                 'extra_p' => ($extra_attend != null) ? $extra_attend:0,
+                'ba_absent' => $ba_absent,
                 'absent' => $absent,
                 'holiday' => $rows->holiday,
                 'weekend' => $rows->weekend ,
@@ -144,6 +142,7 @@ class Salary_model extends CI_Model {
                 'late_count' => $rows->late_status,
                 'd_day'   => $late_day,
                 'late_deduct' => $late_deduct,
+                'aba_deduct' => $aba_deduct,
                 'absent_deduct' => $absent_deduct,
                 'm_pay_day'    => 0,
                 'modify_salary' => 0,

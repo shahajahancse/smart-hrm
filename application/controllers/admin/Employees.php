@@ -2370,7 +2370,17 @@ class Employees extends MY_Controller {
 		// dd($data);
 		$id = $this->input->post('user_id');
 		$proxi_id= $this->input->post('proxi_id');
-		$result = $this->Employees_model->basic_info($data,$id,$proxi_id);
+		$result = $this->Employees_model->basic_info($data,$id);
+		if($result == true) {
+			$query = $this->db->query('SELECT * FROM xin_proxi WHERE emp_id ='.$id);
+			if ($query->num_rows() > 0) {
+				$data=['proxi_id'=>$proxi_id];
+				$this->db->where('emp_id', $id)->update('xin_proxi',$data);
+				return true;
+			} else {
+				$this->db->query("INSERT INTO `xin_proxi`( `emp_id`, `proxi_id`, `status`) VALUES ('$id','$proxi_id',1)");
+			}
+		}
 
 		if($count_module_attributes > 0){
 			foreach($module_attributes as $mattribute) {
@@ -5122,8 +5132,8 @@ class Employees extends MY_Controller {
 			$this->output($Return);
 		}
 		$data = array(
-		'wages_type' => $this->input->post('wages_type'),
-		'basic_salary' => $this->input->post('basic_salary')
+			'wages_type' => $this->input->post('wages_type'),
+			'basic_salary' => $this->input->post('basic_salary')
 		);
 		$id = $this->input->post('user_id');
 		$result = $this->Employees_model->basic_info($data,$id);

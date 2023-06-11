@@ -10,7 +10,7 @@
 <div class="box mb-4 <?php echo $get_animate;?>">
   <div id="accordion">
     <div class="box-header with-border">
-        <h3 class="box-title">Add Requisition For Purches Product</h3>
+        <h3 class="box-title">Purches Products Requisition </h3>
       <div class="box-tools pull-right"> 
         <a class="text-dark collapsed" data-toggle="collapse" href="#add_form" aria-expanded="false">
           <button type="button" class="btn btn-xs btn-primary"> <span class="ion ion-md-add"></span> <?php echo $this->lang->line('xin_add_new');?></button>
@@ -243,7 +243,7 @@
       items+= '<tr>';
       items+= '<td><select name="cat_id[]" class="form-control input-sm" id="category_'+sl+'" required><?php echo $category_data;?></select></td>';
       items+= '<td><select name="sub_cate_id[]"  id="subcategory_'+sl+'" class="sub_category_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
-      items+= '<td><select name="product_id[]" class="item_val_'+sl+' form-control input-sm" required ><option value="">-- Select One --</option></select></td>';
+      items+= '<td><select name="product_id[]" class="item_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
       items+= '<td><input name="quantity[]" id="quantity" value="" type="text" class="form-control input-sm" required></td>';
       items+= '<td> <a href="javascript:void();" class="label label-important text-danger" onclick="removeRow(this)"> <i class="fa fa-minus-circle text-danger"></i><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
       items+= '</tr>';
@@ -297,6 +297,8 @@
                   opt.text(name);
                   $('.item_val_'+sl).append(opt);
                });
+
+              //  handleSelectionChange(this)
             }
          });
       });
@@ -315,14 +317,21 @@
                 type: 'POST',
                 data: { companyName: companyName },
                 dataType: 'json',
-                success: function(response) {
-                  // console.log(response[0]['name']);
+                success: function(func_data) {
+                    // console.log(response[0]['name']);
                     var options = '';
-                    $.each(response, function(index, supplier) {
-                    
-                        options += '<option value="' + supplier.id + '">' + supplier.name + '</option>';
-                    });
-                    $('#spl_name').html(options);
+                    // $.each(response, function(index, supplier) {
+                       
+                    //     options += '<option value="' + supplier.id + '">' + supplier.name + '</option>';
+                    // });
+
+                    $.each(func_data,function(id,name)
+                {
+
+                  options += '<option value="' + id + '">' + name + '</option>';
+                  
+                });
+                      $('#spl_name').html(options);
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);
@@ -334,6 +343,46 @@
 
    
       //Sub Category Dropdown
+
+      
+    function handleSelectionChange(selectedMenu) {
+      var selectionMenus = document.getElementsByClassName("selection-menu");
+      
+
+      // Disable all options
+      for (var i = 0; i < selectionMenus.length; i++) {
+        var options = selectionMenus[i].options;
+        console.log(options);
+        for (var j = 0; j < options.length; j++) {console.log(options[j]);
+          options[j].disabled = false;
+        }
+      }
+
+      // Iterate over all selection menus
+      for (var i = 0; i < selectionMenus.length; i++) {
+        var options = selectionMenus[i].options;
+        var selectedValues = [];
+
+        // Get the selected values from each selection menu
+        for (var j = 0; j < options.length; j++) {
+          if (options[j].selected) {
+            selectedValues.push(options[j].value);
+          }
+        }
+
+        // Disable selected options in other selection menus
+        for (var j = 0; j < selectionMenus.length; j++) {
+          if (selectionMenus[j] !== selectedMenu) {
+            var otherOptions = selectionMenus[j].options;
+            for (var k = 0; k < otherOptions.length; k++) {
+              if (selectedValues.includes(otherOptions[k].value)) {
+                otherOptions[k].disabled = true;
+              }
+            }
+          }
+        }
+      }
+    }
      
 
    

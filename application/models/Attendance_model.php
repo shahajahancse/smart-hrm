@@ -26,6 +26,7 @@ class Attendance_model extends CI_Model {
         $employees = $this->get_employees($emp_ids);
 
         foreach ($employees as $key => $row) {
+            $oining_date = $row->date_of_joining;
             $emp_id      = $row->user_id;
             $shift_id = $row->shift_id;
             $in_time  = '';
@@ -34,8 +35,13 @@ class Attendance_model extends CI_Model {
             $late_status = 0;
             $lunch_late_status = 0;
             $early_out_status = 0;
-            
 
+            //IF ANY CONDITION IS FALSE THEN ID WILL NOT GO TO THE CORE PROCESS
+            if($oining_date > $process_date) {
+                $attn_delete = $this->attn_delete_for_eligibility_failed($emp_id, $process_date);
+                continue;
+            }
+            
             $proxi_id   = $this->get_proxi($emp_id);
             if (strtotime('2023-04-29') >= strtotime($process_date)) {
                 $shift_schedule = (object) array(
@@ -236,12 +242,16 @@ class Attendance_model extends CI_Model {
             }
 
             // checking before after absent of holiday or off day
+            // dd($query->row());
+            // $day = date('D', strtotime($process_date));
             if ($status == 'Absent') {
                 $query = $this->db->where('employee_id',$emp_id)->where('attendance_date',$check_day)->get('xin_attendance_time');
-                if($query->row()->status == 'Holiday') {
-                    $this->checking_absent_after_offday_holiday($emp_id, $check_day, array($check_day), 'Holiday');
-                } else if($query->row()->status == 'Off Day') {
-                    $this->checking_absent_after_offday_holiday($emp_id, $check_day, array($check_day), 'Off Day');
+                if($query->row() != null) {
+                    if($query->row()->status == 'Holiday') {
+                        $this->checking_absent_after_offday_holiday($emp_id, $check_day, array($check_day), 'Holiday');
+                    } else if($query->row()->status == 'Off Day') {
+                        $this->checking_absent_after_offday_holiday($emp_id, $check_day, array($check_day), 'Off Day');
+                    }
                 }
             }
         }
@@ -262,6 +272,13 @@ class Attendance_model extends CI_Model {
             $this->db->update('xin_attendance_time', array('status' => 'Absent', 'attendance_status' => 'Absent'));
         }
         return true;
+    }
+
+    function attn_delete_for_eligibility_failed($emp_id, $att_date){
+        $this->db->where('employee_id',$emp_id);
+        $this->db->where('attendance_date',$att_date); 
+        $this->db->delete('xin_attendance_time'); 
+        return true;     
     }
 
 
@@ -366,7 +383,7 @@ class Attendance_model extends CI_Model {
 
     function get_employees($emp_ids, $status = null)
     {
-        $this->db->select('user_id, office_shift_id as shift_id');
+        $this->db->select('user_id, office_shift_id as shift_id, date_of_joining');
         /*if ($status != null) {
             $this->db->where('status',$status);
         }*/

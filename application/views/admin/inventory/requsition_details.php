@@ -10,6 +10,26 @@ $get_animate = $this->Xin_model->get_content_animate();
     margin-bottom: 14px;
 }
 </style>
+            
+        <?php if($this->session->flashdata('success')):?>
+          <div class="alert alert-success" id="flash_message">
+            <?php echo $this->session->flashdata('success');?>
+          </div>
+        <?php endif; ?> 
+        <script>
+          $(function() {$("#flash_message").hide(2000);});
+        </script>  
+        <?php if($this->session->flashdata('warning')):?>
+          <div class="alert alert-warning"id="flash_message1">
+            <?php echo $this->session->flashdata('warning');?>
+            <?php echo ", Name = ".$this->session->flashdata('flash_data')?>
+            <?php echo " Available Quantity = ".$this->session->flashdata('flash_data1')?>
+          </div>
+        <?php endif; ?> 
+        <script>
+          $(function() {$("#flash_message1").hide(4000);});
+        </script> 
+
 <div class="box <?php echo $get_animate;?>" style="margin-top:20px">
   <div class="box-header with-border">
     <h3 class="box-title">Requisition List</h3>
