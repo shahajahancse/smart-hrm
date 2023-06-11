@@ -27,7 +27,7 @@ class lunch extends MY_Controller {
         }
 
         $this->load->model("Xin_model");
-        $this->load->model("lunch_model");
+        $this->load->model("Lunch_model");
         $this->load->model("Attendance_model");
         $this->load->model("Salary_model");
         $this->load->helper('form');
@@ -41,10 +41,10 @@ class lunch extends MY_Controller {
         }
 
         $this->load->library('pagination');
-        $this->load->model('lunch_model');
+        $this->load->model('Lunch_model');
 
         $config['base_url'] = base_url('admin/lunch/index');
-        $config['total_rows'] = $this->lunch_model->get_total_rows();
+        $config['total_rows'] = $this->Lunch_model->get_total_rows();
         $config['per_page'] = 10; // Number of records per page
         $config['uri_segment'] = 3; // Update the URI segment number to 2
         
@@ -65,7 +65,7 @@ class lunch extends MY_Controller {
         $this->pagination->initialize($config);
 
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['results'] = $this->lunch_model->get_all_data($config['per_page'], $page);
+        $data['results'] = $this->Lunch_model->get_all_data($config['per_page'], $page);
         $data['pagination'] = $this->pagination->create_links();
         $data['query'] = $this->db->get_where('lunch_package', array('id' => 1))->result();
 
@@ -81,171 +81,111 @@ class lunch extends MY_Controller {
         }
     }
 
-    public function today_lunch()
+    public function today_lunch($id = null)
     {
         $session = $this->session->userdata('username');
         if (empty($session)) {
             redirect('admin/');
         }
+        $query = $this->db->get_where('lunch', array('date' => date('Y-m-d')));
+        // dd($_POST['empid']);
+        //Validation
+        $this->form_validation->set_rules('empid[]', 'Employee name', 'required|trim');
+        $this->form_validation->set_rules('m_amount[]', 'Meal Quantity', 'required|trim');
 
+        //Validate and input data
+        if ($this->form_validation->run() == true){
 
-        if(base_url()=='http://localhost/smart-hrm/'){
-            $currentDate = '2023-02-07';
+            $empid = $this->input->post('empid');
+            $m_amount = $this->input->post('m_amount');
+            $comment = $this->input->post('comment');
+            $p_status = $this->input->post('p_status');
+            $bigcomment = $this->input->post('bigcomment');
+            $guest_m = $this->input->post('guest');
+            $guest_comment = $this->input->post('guest_comment');
+            $total_m = 0;
+            $emp_m = 0;
+            $total_cost = 0; 
+            $emp_cost = 0; 
+            $guest_cost = 0; 
 
-        }else{ $currentDate = date('Y-m-d');}
-        $query = $this->db->get_where('lunch_details', array('date' => $currentDate))->result();
-
-        if (count($query) > 0) {
-            $activeArray = [];
-            $inactiveArray = [];
-            $guest = [];
-
-            foreach ($query as $item) {
-                if (in_array($item->p_stutus, ['present'])) {
-                    $activeArray[] = $item;
-                } elseif (in_array($item->p_stutus, ['absent'])) {
-                    $inactiveArray[] = $item;
-                } elseif (in_array($item->emp_id, [1])) {
-                    $guest[] = $item;
-                }
-            }
-
-            $querybig = $this->db->get_where('lunch', array('id' => $query[0]->lunch_id))->result();
-
-            $data['active'] = $activeArray;
-            $data['inactive'] = $inactiveArray;
-            $data['guest'] = $guest;
-            $data['date'] = $currentDate;
-            $data['bigcom'] = $querybig[0]->bigcomment;
-
-            $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
-
-            $data['breadcrumbs'] = 'Lunch';
-            $data['path_url'] = 'lunch';
-            if (!empty($session)) {
-                $data['subview'] = $this->load->view("admin/lunch/today_lunch", $data, TRUE);
-                $this->load->view('admin/layout/layout_main', $data); //page load
+            if($id != null) {
+                $luncid = $id;
+            } else if (!empty($query->row())) {
+                 $luncid = $query->row()->id;
             } else {
-                redirect('admin/');
-            }
-        } else {
-            $total_emp = $this->lunch_model->all_employees();
-            $attend_emp = $this->lunch_model->daily_report($currentDate);
-         
-        if ($attend_emp == 0) {
-            $activeArray = [];
-            $inactiveArray = [];
-            $att_emp_id = [];
-
-            foreach ($total_emp as $item) {
-                if (in_array($item->user_id, $att_emp_id)) {
-                    $activeArray[] = $item;
-                } else {
-                    $inactiveArray[] = $item;
-                }
-            }
-        }else{
-                $att_emp_id = array_map(function ($item) {
-                    return $item->employee_id;
-                }, $attend_emp);
-
-                $activeArray = [];
-                $inactiveArray = [];
-
-                foreach ($total_emp as $item) {
-                    if (in_array($item->user_id, $att_emp_id)) {
-                        $activeArray[] = $item;
-                    } else {
-                        $inactiveArray[] = $item;
-                    }
-                }
-            }
-
-            $data['active'] = $activeArray;
-            $data['inactive'] = $inactiveArray;
-            $data['date'] = $currentDate;
-
-            $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
-
-            $data['breadcrumbs'] = 'Lunch';
-            $data['path_url'] = 'lunch';
-            if (!empty($session)) {
-                $data['subview'] = $this->load->view("admin/lunch/today_lunch", $data, TRUE);
-                $this->load->view('admin/layout/layout_main', $data); //page load
-            } else {
-                redirect('admin/');
-            }
-        }
-    }
-
-    public function add_lunch()
-    {
-        $session = $this->session->userdata('username');
-        if (empty($session)) {
-            redirect('admin/');
-        }
-
-        $empid = $this->input->post('empid');
-        $m_amount = $this->input->post('m_amount');
-        $comment = $this->input->post('comment');
-        $guest_m = $this->input->post('guest');
-        $guest_comment = $this->input->post('guest_comment');
-        $bigcomment = $this->input->post('bigcomment');
-        $date = $this->input->post('date');
-        $p_status = $this->input->post('p_status');
-
-        $emp_m = 0;
-        foreach ($m_amount as $value) {
-            $emp_m += $value;
-        }
-
-        $total_m = $emp_m + $guest_m;
-        $permilltk = 45;
-        $total_cost = $total_m * $permilltk;
-        $emp_cost = $emp_m * $permilltk;
-        $guest_cost = $guest_m * $permilltk;
-
-        $query = $this->db->get_where('lunch', array('date' => $date))->result();
-
-        if (count($query) > 0) {
-            $data = array(
-                'total_m' => $total_m,
-                'emp_m' => $emp_m,
-                'guest_m' => $guest_m,
-                'total_cost' => $total_cost,
-                'emp_cost' => $emp_cost,
-                'guest_cost' => $guest_cost,
-                'bigcomment' => $bigcomment,
-            );
-            $luncid = $query[0]->id;
-
-            $this->db->where('id', $query[0]->id);
-            if ($this->db->update('lunch', $data)) {
-                $this->lunch_model->add_lunch_update($luncid, $empid, $m_amount, $p_status, $comment, $guest_m, $guest_comment, $date);
-                redirect('admin/lunch/index');
-            } else {
-                exit('not updated');
-            }
-        } else {
-            $data = array(
-                'total_m' => $total_m,
-                'emp_m' => $emp_m,
-                'guest_m' => $guest_m,
-                'total_cost' => $total_cost,
-                'emp_cost' => $emp_cost,
-                'guest_cost' => $guest_cost,
-                'bigcomment' => $bigcomment,
-                'date' => $date,
-            );
-
-            if ($this->db->insert('lunch', $data)) {
+                $data = array(
+                    'total_m'    => $total_m,
+                    'emp_m'      => $emp_m,
+                    'guest_m'    => $guest_m,
+                    'total_cost' => $total_cost,
+                    'emp_cost'   => $emp_cost,
+                    'guest_cost' => $guest_cost,
+                    'bigcomment' => $bigcomment,
+                    'date'       => date('Y-m-d'),
+                );
+                $this->db->insert('lunch', $data);
                 $luncid = $this->db->insert_id();
-                $this->lunch_model->add_lunch_details($luncid, $empid, $m_amount, $p_status, $comment, $guest_m, $guest_comment, $date);
-                redirect('admin/lunch/index');
-            } else {
-                exit('not inserted');
             }
+
+            for ($i=0; $i<sizeof($empid); $i++) {
+                $emp_m += $m_amount[$i]; 
+
+                $form_data[] = array(
+                    'lunch_id'      => $luncid,
+                    'emp_id'        => $empid[$i],
+                    'meal_amount'   => $m_amount[$i],
+                    'p_stutus'      => $p_status[$i],
+                    'comment'       => $comment[$i],
+                    'date'          => date('Y-m-d'),
+                );
+            }  
+
+            $row = $this->db->get_where('lunch_details', array('lunch_id' => $luncid));
+            if ($row->num_rows() > 0) {
+                $this->db->where('lunch_id', $luncid)->update_batch('lunch_details', $form_data);
+            } else {
+                $this->db->insert_batch('lunch_details', $form_data);
+            }
+
+
+            $total_m = $emp_m + $guest_m;
+            $total_cost = $total_m * 45;
+            $emp_cost = $emp_m * 45;
+            $guest_cost = $guest_m * 45;
+
+            $data2 = array(
+                'total_m' => $total_m,
+                'emp_m' => $emp_m,
+                'total_cost' => $total_cost,
+                'emp_cost' => $emp_cost,
+                'guest_cost' => $guest_cost,
+            );
+
+            $this->db->where('id', $luncid)->update('lunch', $data2);
+            redirect('admin/lunch/index');
         }
+
+        if ($query->num_rows() > 0) {
+            $data['results'] = $this->Lunch_model->get_lunch_info(1);
+            $data['guest'] = $query->row();
+            $data['ps'] ='yes';
+        } else {
+            $data['results'] = $this->Lunch_model->get_lunch_info(false);
+            $data['guest'] = '';
+            $data['ps'] ='no';
+        }
+
+        $data['title'] = 'Lunch | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch';
+        $data['path_url'] = 'lunch';
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/today_lunch", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+ 
     }
 
     public function add_lunch_pak(){
@@ -372,12 +312,12 @@ class lunch extends MY_Controller {
         $status = $this->input->post('status');
         $emp_id = explode(',', trim($sql));
 
-        $data['lunch_data'] = $this->lunch_model->get_lunch_data($first_date,$second_date);
+        $data['lunch_data'] = $this->Lunch_model->get_lunch_data($first_date,$second_date);
 
 
-        $data['lunch_details']  = $this->lunch_model->get_lunch_details($first_date,$second_date,$emp_id);
-        $data['lunch_details_active']  = $this->lunch_model->get_lunch_details_active($first_date,$second_date,$emp_id);
-        $data['lunch_details_inactive']  = $this->lunch_model->get_lunch_details_inactive($first_date,$second_date,$emp_id);
+        $data['lunch_details']  = $this->Lunch_model->get_lunch_details($first_date,$second_date,$emp_id);
+        $data['lunch_details_active']  = $this->Lunch_model->get_lunch_details_active($first_date,$second_date,$emp_id);
+        $data['lunch_details_inactive']  = $this->Lunch_model->get_lunch_details_inactive($first_date,$second_date,$emp_id);
     
         $data['first_date'] = $first_date;
         $data['second_date'] = $first_date;
@@ -420,7 +360,7 @@ class lunch extends MY_Controller {
         }
 
 
-        $data['total_emp'] = $this->lunch_model->all_employees();
+        $data['total_emp'] = $this->Lunch_model->all_employees();
 
 
       $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
@@ -476,7 +416,7 @@ class lunch extends MY_Controller {
             $processmonth=$currentDate;
         }
         
-        return $this->lunch_model->process($processmonth);
+        return $this->Lunch_model->process($processmonth);
     }
 
     public function submit_payment() {
