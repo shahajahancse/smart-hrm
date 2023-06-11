@@ -643,11 +643,12 @@ class Inventory extends MY_Controller {
 
 				}
    	 
-        }
+  }
 
    
    public function perches_status_report($exc=null)
-	 {
+	 {            
+		       
 				$first_date = $this->input->post('first_date');
 				$second_date = $this->input->post('second_date');
 
@@ -659,6 +660,8 @@ class Inventory extends MY_Controller {
 				$data['statusC']= $statusC;
 				$data['first_date'] = $first_date;
 				$data['second_date'] = $second_date;
+
+				
 			
 				if($exc == 1)
 				{
@@ -676,13 +679,23 @@ class Inventory extends MY_Controller {
 
 				}
    	 
-     }
+ }
 
-   
-
-	//====================== Requisition EndReport=============================
+    //====================== Requisition EndReport=============================
 
 
+
+      //====================== Low inventory and  Stack product report Report=============================
+
+ public function low_inv_all_product_status_report(){
+           $statusC=$this->input->post('statusC');
+		   if($statusC==7){
+			$data['values'] = $this->Inventory_model->low_inv_status_report();
+		   }
+ }
+
+
+      //====================== End Low inventory and  Stack product report Report=============================
  
 
 	// ================ default ====================
