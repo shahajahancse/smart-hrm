@@ -667,7 +667,7 @@ class Timesheet extends MY_Controller {
 	// Validate and add info in database
 	public function update_leave_status() {
 		
-		
+		// dd( $this->input->post());
 		$id = $this->uri->segment(4);
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -680,8 +680,13 @@ class Timesheet extends MY_Controller {
 		}else{
 			$notyfi_data=1;
 		};
-		
-
+		$qnty= $this->input->post('day');
+		if( $this->input->post('leave_half_day')==null){
+			$hulfday=0;
+		}else{
+			$hulfday=1;
+			$qnty=0.5;
+		}
 
 
 		$data = array(
@@ -691,8 +696,8 @@ class Timesheet extends MY_Controller {
 			'leave_type_id' => $this->input->post('leave_type'),
 			'from_date' => $this->input->post('start_date'),
 			'to_date' => $this->input->post('end_date'),
-			'qty' => $this->input->post('day'),
-			'is_half_day' => $this->input->post('leave_half_day')
+			'qty' => $qnty,
+			'is_half_day' => $hulfday
 		);
 
 
