@@ -6473,4 +6473,22 @@ class Employees extends MY_Controller {
 	   }
 exit();
 	}
+		public function device(){
+			$session = $this->session->userdata('username');
+		
+		if(empty($session) && !is_array($session)){ 
+			redirect('admin/');
+		}
+
+		$data = array(
+				'title' => $this->lang->line('dashboard_title').' | '.$this->Xin_model->site_title(),
+				'path_url' => 'dashboard',
+				'breadcrumbs' => 'Device',
+				'result' =>$this->Employees_model->read_employee_information(($session['user_id']))
+
+			);
+			$data['subview'] = $this->load->view('admin/employees/device', $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+	
+	}
 }
