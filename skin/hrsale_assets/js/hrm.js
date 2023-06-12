@@ -451,16 +451,9 @@ function Per1_Report(statusC)
  
   function LP_AlP_Report (statusC)
 {
-
           var ajaxRequest;  // The variable that makes Ajax possible!
           ajaxRequest = new XMLHttpRequest();
-
-        
-
-          
-          
-          
-          var data = "statusC="+statusC;;
+          var data = "statusC="+statusC;
 
           url = base_url + "/low_inv_all_product_status_report";
           ajaxRequest.open("POST", url, true);

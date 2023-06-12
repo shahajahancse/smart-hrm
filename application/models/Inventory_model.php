@@ -350,80 +350,72 @@
 		}
 	}
 
-	public function low_inv_status_report(){
+	// public function low_inv_allProduct_status_report($statusC=null){
+       
+	// 	$this->db->select(" 
+	// 	products.id,
+	// 	products.product_name,
+	// 	products.quantity,
+	// 	products.order_level,
+	// 	product_unit.unit_name,
+	// 	products_categories.category_name,
+	// 	products_sub_categories.sub_cate_name,
+	// 	")
+    //   ->from("products_categories")
+	//   ->from("products_sub_categories")
+	//   ->from("product_unit")
+	//   ->from("products")
+	//   ->where("product_unit.id     = products.unit_id")
+	//   ->where("products_categories.id     = products.cat_id")
+	//   ->where("products_sub_categories.id = products.sub_cate_id")
+	// if($statusC==null){
+	//     ->where("products.quantity < products.order_level")
+	// } 
+	//   ->order_by('products.quantity','ASC');
+	 
+	// 	$query= $this->db->get();
+	// 	$data = $query->result();
 
-		$this->db->select(" 
-		products.id,
-		products.product_name,
-		products.quantity,
-		products.order_level,
-		product_unit.unit_name,
-		products_categories.category_name,
-		products_sub_categories.sub_cate_name,
+	//    dd($data);
+	// 	if ($query->num_rows() > 0) {
+	// 		return $data;
+		
+	// 	} else {
+	// 		return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+	// 	}
+	 
+	// }
+	public function low_inv_allProduct_status_report($statusC = null) {
+		$this->db->select("
+			products.id,
+			products.product_name,
+			products.quantity,
+			products.order_level,
+			product_unit.unit_name,
+			products_categories.category_name,
+			products_sub_categories.sub_cate_name
 		")
-      ->from("products_categories")
-	  ->from("products_sub_categories")
-	  ->from("product_unit")
-	  ->from("products")
-	  ->where("product_unit.id     = products.unit_id")
-	  ->where("products_categories.id     = products.cat_id")
-	  ->where("products_sub_categories.id = products.sub_cate_id")
-	  ->where("products.quantity < products.order_level")
-	  ->order_by('products.quantity','ASC');
-	   $query= $this->db->get();
-	   $data = $query->result();
-	  
+		->from("products")
+		->join("products_categories", "products_categories.id = products.cat_id")
+		->join("products_sub_categories", "products_sub_categories.id = products.sub_cate_id")
+		->join("product_unit", "product_unit.id = products.unit_id");
+	
+		if ($statusC == null) {
+			$this->db->where("products.quantity < products.order_level");
+		}
+	
+		$this->db->order_by('products.quantity', 'ASC');
+		$query = $this->db->get();
+		$data = $query->result();
+	
 		if ($query->num_rows() > 0) {
 			return $data;
-		
 		} else {
 			return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
 		}
-	 
 	}
-
-
-
-					
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			// $this->db->select('
-			//     products_requisitions.id,
-			// 	products_requisition_details.requisition_id,
-			// 	xin_employees.department_id,
-			// 	xin_employees.designation_id,
-			// 	xin_departments.department_name,
-			// 	xin_designations.designation_name,
-			// 	xin_employees.employee_id,
-			// 	xin_employees.first_name,
-			// 	xin_employees.last_name
-			// ');
-
-			// $this->db->from('xin_employees');
-			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
-			// $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
-			// $this->db->join('xin_employee_move_register', 'xin_employee_move_register.employee_id = xin_employees.user_id');
-			// $this->db->where('xin_employees.is_active', 1);
-			// $this->db->where("xin_employee_move_register.date BETWEEN '$f1_date' AND '$f2_date'");
-			// $this->db->where('xin_employee_move_register.status', $statusC);
-			// $query = $this->db->get();
-			// $data = $query->result();
-		
-		
-
-			
+	
+	
 
 }
 ?>

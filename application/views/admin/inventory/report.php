@@ -120,6 +120,7 @@
                     <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(4)">Reject parches</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(3)">Delivered Parches</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="LP_AlP_Report(7)">Low inventory</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="LP_AlP_Report(8)">All Products</button>
 
       
 

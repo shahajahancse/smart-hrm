@@ -3,14 +3,12 @@
 $statusText = "";
 if ($statusC == 7) {
     $statusText = "Low Inventory";
-} elseif ($statusC == 2) {
-    $statusText = "Approved";
-} elseif ($statusC == 3) {
-    $statusText = "Delivered";
-} elseif ($statusC == 4) {
-    $statusText = "Rejected";
-}
     $exc=1;
+} elseif ($statusC == 8) {
+    $statusText = "All Products";
+    $exc=2;
+} 
+
 ?>
 
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -83,7 +81,7 @@ if ($statusC == 7) {
 
 <button class="btn" onclick="printPageMove()">Print</button>   </div>
 <div>
-<form style="float: right;"  action="<?php echo base_url('admin/inventory/perches_status_report/'.$exc); ?>" method="post">
+<form style="float: right;"  action="<?php echo base_url('admin/inventory/low_inv_all_product_status_report/'.$exc); ?>" method="post">
   <!-- <input type="hidden" name="first_date" value="<?php echo $first_date; ?>">
   <input type="hidden" name="second_date" value="<?php echo $second_date; ?>"> -->
   <input type="hidden" name="statusC" value="<?php echo $statusC; ?>">
@@ -98,7 +96,6 @@ if ($statusC == 7) {
   <?php  $this->load->view('admin/head_bangla'); ?>
 	  <!-- <h5 class="box-title ti1">Daily Unpaid Report</h4> -->
       <h4 class="box-title  ti1">Daily <?php echo $statusText; ?> Report</h4>
-        <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
 	  <!-- <p>Report date: <?php echo $first_date; ?> To <?php echo $second_date; ?> </p> -->
   </div>
   
@@ -110,8 +107,8 @@ if ($statusC == 7) {
                                             <thead>
                                 <th>Sl. No.</th>
                                 <th>Product Name</th>
-                                <th>Catagory</th>
-                                <th>Sub Catagory</th>
+                                <th>Category</th>
+                                <th>Sub Category</th>
                                 <th>Unit</th>
                                 <th>Available Quantity </th>
                                 <th>Oder Level</th>

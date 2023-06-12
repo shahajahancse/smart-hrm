@@ -687,22 +687,43 @@ class Inventory extends MY_Controller {
 
       //====================== Low inventory and  Stack product report Report=============================
 
- public function low_inv_all_product_status_report(){
-           $statusC=$this->input->post('statusC');
-		   if($statusC==7){
-			  $data['values'] = $this->Inventory_model->low_inv_status_report();
-			//   dd($data['values']);
-			  $data['statusC']= $statusC;
-					if(is_string($data["values"]))
-					{
-						echo $data["values"];
-					}
-					else
-					{	
-						echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
-					}
-
-		   }
+ public function low_inv_all_product_status_report($exc=null){
+             $statusC=$this->input->post('statusC');
+			 if($statusC==7){
+					$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report();
+					$data['statusC']= $statusC;
+					
+					if($exc == 1){
+						$this->load->view("admin/inventory/low_in_status_report_excel", $data);
+					}else{
+					
+							if(is_string($data["values"]))
+							{
+								echo $data["values"];
+							}
+							else
+							{	
+								echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
+							}
+						}
+			  }else{
+				    $data['statusC']= $statusC;
+					$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report($statusC);
+						
+					if($exc == 2){
+						$this->load->view("admin/inventory/low_in_status_report_excel", $data);
+					 }else{
+							if(is_string($data["values"]))
+									{
+										echo $data["values"];
+									}
+									else
+									{	
+										echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
+									}			
+								}
+			  }
+		   
  }
 
 
