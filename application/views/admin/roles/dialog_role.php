@@ -446,7 +446,13 @@ dataSource: [
 
 	// Inventory part //
 	{ id: "", class: "role-checkbox-modal", text: "Inventory",  add_info: "", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1030',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>", value: "1030",  items: [
-
+		{ id: "", class: "role-checkbox-modal", text: "Accessories",  add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", value: "1141", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1141',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>", items: [
+			{ id: "", class: "role-checkbox-modal", text: "User uses list",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1142", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1142',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"}, 
+			{ id: "", class: "role-checkbox-modal", text: "Manage accessories",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1146", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1146',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},  
+			// { id: "", class: "role-checkbox-modal", text: "Unit",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1043", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1043',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+			// { id: "", class: "role-checkbox-modal", text: "Category",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1044", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1044',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+			{ id: "", class: "role-checkbox-modal", text: "Sub Category",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1045", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1045',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+		]},
 		{ id: "", class: "role-checkbox-modal", text: "Item Requisition",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1031", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1031',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 
 		{ id: "", class: "role-checkbox-modal", text: "Purchase",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1032", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1032',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},

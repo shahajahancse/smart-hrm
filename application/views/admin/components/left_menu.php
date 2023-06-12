@@ -298,6 +298,31 @@ if($theme[0]->sub_menu_icons != ''){
       <li class="<?php if(!empty($arr_mod['invtry_open']))echo $arr_mod['invtry_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> Inventory <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
 
+
+        <?php if(in_array('1141',$role_resources_ids)) { ?>
+          <li class="<?php if(!empty($arr_mod['accessory_open']))echo $arr_mod['accessory_open'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Accessories <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+            <ul class="treeview-menu">
+              <?php if(in_array('1142',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['user_list_open']))echo $arr_mod['user_list_open'];?>"> <a href="<?php echo site_url('admin/inventory/user_uses_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> User uses list </a> </li>
+              <?php } ?>
+              <?php if(in_array('1146',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['manage_accessories_open']))echo $arr_mod['manage_accessories_open'];?>"> <a href="<?php echo site_url('admin/inventory/mamange_accessories');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Manage accessories </a> </li>
+              <?php } ?>
+
+              <!-- <?php if(in_array('1143',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['unit_open']))echo $arr_mod['unit_open'];?>"> <a href="<?php echo site_url('admin/inventory/unit');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Unit </a> </li>
+              <?php } ?>
+              <?php if(in_array('1144',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['cat_open']))echo $arr_mod['cat_open'];?>"> <a href="<?php echo site_url('admin/inventory/category');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Category </a> </li>
+              <?php } ?>
+              <?php if(in_array('1145',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['subcat_open']))echo $arr_mod['subcat_open'];?>"> <a href="<?php echo site_url('admin/inventory/sub_category');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Sub Category </a> </li>
+              <?php } ?> -->
+
+            </ul>
+          </li>
+          <?php } ?>
+
           <?php if(in_array('1031',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['requi_active']))echo $arr_mod['requi_active'];?>"> <a href="<?php echo site_url('admin/inventory/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Item Requisition </a> </li>
           <?php } ?>    
@@ -309,7 +334,6 @@ if($theme[0]->sub_menu_icons != ''){
           <?php if(in_array('1033',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['inreport_active']))echo $arr_mod['inreport_active'];?>"> <a href="<?php echo site_url('admin/inventory/report');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Report </a> </li>
           <?php } ?>        
-
           <?php if(in_array('1041',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['insetting_open']))echo $arr_mod['insetting_open'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Settings <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
@@ -319,18 +343,15 @@ if($theme[0]->sub_menu_icons != ''){
               <?php if(in_array('1046',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['supplier_open']))echo $arr_mod['supplier_open'];?>"> <a href="<?php echo site_url('admin/inventory/supplier');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Supplier </a> </li>
               <?php } ?>
-
               <?php if(in_array('1043',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['unit_open']))echo $arr_mod['unit_open'];?>"> <a href="<?php echo site_url('admin/inventory/unit');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Unit </a> </li>
               <?php } ?>
-
               <?php if(in_array('1044',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['cat_open']))echo $arr_mod['cat_open'];?>"> <a href="<?php echo site_url('admin/inventory/category');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Category </a> </li>
               <?php } ?>
               <?php if(in_array('1045',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['subcat_open']))echo $arr_mod['subcat_open'];?>"> <a href="<?php echo site_url('admin/inventory/sub_category');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Sub Category </a> </li>
               <?php } ?>
-
             </ul>
           </li>
           <?php } ?>

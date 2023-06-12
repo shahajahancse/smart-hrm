@@ -393,8 +393,24 @@ class Xin_model extends CI_Model {
 			$arr['subcat_open'] = 'active';
 			return $arr;
 
-			// inventory
-		} else if($mClass=='performance_indicator') {
+		
+		} else if($mClass=='inventory' && $mMethod=='mamange_accessories') {
+			$arr['accessory_open'] = 'active';
+			$arr['invtry_open'] = 'active';
+			$arr['manage_accessories_open'] = 'active';
+			return $arr;
+		}  else if($mClass=='inventory' && $mMethod=='user_uses_list') {
+			$arr['accessory_open'] = 'active';
+			$arr['invtry_open'] = 'active';
+			$arr['user_list_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='category') {
+			$arr['invtry_open'] = 'active';
+			$arr['insetting_open'] = 'active';
+			$arr['cat_open'] = 'active';
+			return $arr;
+		} 	// inventory
+		else if($mClass=='performance_indicator') {
 			$arr['per_indi_active'] = 'active';
 			$arr['performance_open'] = 'active';
 			return $arr;
