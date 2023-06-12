@@ -176,6 +176,7 @@
 
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel()">Salary Sheet</button>
+          <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel_bank(2)">Bank Salary Sheet</button>
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="genarate_payslip()">Genarate Payslip</button>
 
       </div>

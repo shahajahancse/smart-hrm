@@ -14,7 +14,7 @@
  * @author-email  hrsalesoft@gmail.com
  * @copyright  Copyright © hrsale.com. All Rights Reserved
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script accesapplication/controllers/Employer.phps allowed');
 
 class download extends CI_Controller {
 

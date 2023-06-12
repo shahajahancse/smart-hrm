@@ -52,7 +52,7 @@ if(base_url()=='http://localhost/smart-hrm/'){
 if($data->date==$currentDate){
 
     ?>
-    <a href="<?=  base_url('admin/lunch/today_lunch')?>" class="btn btn-info">Edit</a>
+    <a href="<?=  base_url('admin/lunch/today_lunch/'.$data->id)?>" class="btn btn-info">Edit</a>
 <?php } ?>
   </div>
 

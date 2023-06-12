@@ -126,6 +126,7 @@ $leave_calsl=$leavecal['leaves'][1];
     overflow: hidden;
     height: max-content;
     display: inline-block;
+    width: 100%;
 
 }
 .modalboxheader{
@@ -159,52 +160,44 @@ $leave_calsl=$leavecal['leaves'][1];
       </div>
       <div class="modal-body">
              <span class="modalboxheader">Previous</span>
-              <div class="modalbox">
-              
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Previous Meal:</p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $user_lunch->prev_meal;?></p>
+             <div class="modalbox">
+                <div class="col-md-12" style="background-color: #e3eaf1; margin: 2px; padding: 2px;">
+                    <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Previous Meal:</p>
+                    <p style="margin: 0;" class="col-md-4 overlayth"><?php echo isset($user_lunch->prev_meal) ? $user_lunch->prev_meal : '0'; ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Previous Cost:</p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $user_lunch->prev_cost;?></p>
+                    <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Previous Cost:</p>
+                    <p style="margin: 0;" class="col-md-4 overlayth"><?php echo isset($user_lunch->prev_cost) ? $user_lunch->prev_cost : '0'; ?></p>
                 </div>
-              
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Previous Pay </p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $user_lunch->prev_pay?></p>
+                <div class="col-md-12" style="background-color: #e3eaf1; margin: 2px; padding: 2px;">
+                    <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Previous Pay </p>
+                    <p style="margin: 0;" class="col-md-4 overlayth"><?php echo isset($user_lunch->prev_pay) ? $user_lunch->prev_pay : '0'; ?></p>
                 </div>
-              </div>
-              <span class="modalboxheader">Present</span>
-              <div class="modalbox">
-              
-
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Present meal:</p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $total_meal_p;?></p>
+            </div>
+            <span class="modalboxheader">Present</span>
+            <div class="modalbox">
+                <div class="col-md-12" style="background-color: #e3eaf1; margin: 2px; padding: 2px;">
+                    <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Present meal:</p>
+                    <p style="margin: 0;" class="col-md-4 overlayth"><?php echo isset($total_meal_p) ? $total_meal_p : '0'; ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Pay Amount : </p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $user_lunch->pay_amount?></p>
+                    <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Pay Amount :</p>
+                    <p style="margin: 0;" class="col-md-4 overlayth"><?php echo isset($user_lunch->pay_amount) ? $user_lunch->pay_amount : '0'; ?></p>
                 </div>
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Paid Status</p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?= ($user_lunch->status==1)?  "Paid":"Unpaid";  ?></p>
+                <div class="col-md-12" style="background-color: #e3eaf1; margin: 2px; padding: 2px;">
+                    <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Paid Status</p>
+                    <p style="margin: 0;" class="col-md-4 overlayth"><?= isset($user_lunch->status) ? ($user_lunch->status == 1 ? "Paid" : "Unpaid") : '0'; ?></p>
                 </div>
-              </div>
-              <div class="modal-footer">
+            </div>
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                
-              </div>
-      </div>
+            </div>
+        </div>
+
     </div>
   </div>
 </div>
+
 
 
 
@@ -296,29 +289,29 @@ if(!is_null($role_user)){
   <!-- box start -->
           <div class="col-xl-6 col-md-3 col-12 hr-mini-state">
             <div class="info-box2 hrsalle-mini-stat"> 
-              <p class="box_titel">Attendance Overview For This Month</p>
+              <p class="box_titel">Attendance Overview For <?=date( "M-Y")?> </p>
               <div class="contentbox"> 
                 
                 
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">(Present : Absent):</p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">(Present : Absent):</p>
                   <p style="margin: 0;" class="col-md-4 overlayth">(<?php echo $present_stutas->attend;?>: <?php echo $present_stutas->absent;?>)</p>
                 </div>
               
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Leave : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Leave : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ($leave_stutas->el)+($leave_stutas->sl);?></p>
                 </div>
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Holiday + weekend  : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Holiday + weekend: </p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ($present_stutas->holiday)+($present_stutas->weekend) ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Late : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Late : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $present_stutas->late_status ?></p>
                 </div>
               </div>
@@ -334,40 +327,39 @@ if(!is_null($role_user)){
   <!-- box end -->
    <!-- box start -->
    <div class="col-xl-6 col-md-3 col-12 hr-mini-state">
-            <div class="info-box2 hrsalle-mini-stat"> 
-              <p class="box_titel">Lunch Overview For <?= $user_lunch->pay_month  ?></p>
-              <div class="contentbox"> 
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Previous Cost:</p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $user_lunch->prev_cost;?></p>
-                </div>
-              
-                <div class="col-md-12" style="margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Previous Pay </p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $user_lunch->prev_pay?></p>
-                </div>
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Pay Amount : </p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $user_lunch->pay_amount?></p>
-                </div>
-                <div class="col-md-12" style="margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Present Meal</p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?= $total_meal_p ?></p>
-                </div>
-              </div>
-                <a data-toggle="modal" data-target="#lunchmidal">
-                  <div class="col-md-12 box_footer">
-                      
-                      <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">View Details  <span class="pull-right-container">  <i class="fa fa-angle-right"></i> </span></p>
-                    
-                  </div>
-                </a>
-            </div>
+      <div class="info-box2 hrsalle-mini-stat">
+        <p class="box_titel">Lunch Overview For <?= isset($user_lunch->pay_month) ? $user_lunch->pay_month : '0' ?></p>
+        <div class="contentbox">
+          <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
+            <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Previous Cost:</p>
+            <p style="margin: 0;" class="col-md-4 overlayth"><?= isset($user_lunch->prev_cost) ? $user_lunch->prev_cost : '0' ?></p>
           </div>
+          <div class="col-md-12" style="margin: 2px; padding: 2px;">
+            <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Previous Pay</p>
+            <p style="margin: 0;" class="col-md-4 overlayth"><?= isset($user_lunch->prev_pay) ? $user_lunch->prev_pay : '0' ?></p>
+          </div>
+          <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
+            <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Pay Amount:</p>
+            <p style="margin: 0;" class="col-md-4 overlayth"><?= isset($user_lunch->pay_amount) ? $user_lunch->pay_amount : '0' ?></p>
+          </div>
+          <div class="col-md-12" style="margin: 2px; padding: 2px;">
+            <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Present Meal</p>
+            <p style="margin: 0;" class="col-md-4 overlayth"><?= isset($total_meal_p) ? $total_meal_p : '0' ?></p>
+          </div>
+        </div>
+        <a data-toggle="modal" data-target="#lunchmidal">
+          <div class="col-md-12 box_footer">
+            <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">
+              View Details
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right"></i>
+              </span>
+            </p>
+          </div>
+        </a>
+      </div>
+  </div>
+
   <!-- box end -->
 
   <!-- box start -->
@@ -379,24 +371,24 @@ if(!is_null($role_user)){
                 
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Salary : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Salary : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ( $lastmonthsalaryy->basic_salary) ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Pay Salary : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Pay Salary : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ( $lastmonthsalaryy->grand_net_salary + $lastmonthsalaryy->modify_salary) ?></p>
                 </div>
                
                 <div class="col-md-12" style=" background-color: #e3eaf1; margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Deduct : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Deduct : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ( $lastmonthsalaryy->late_deduct + $lastmonthsalaryy->absent_deduct) ?></p>
                   
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Working Day:</p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Working Day:</p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ($lastmonthsalaryy->present)+($lastmonthsalaryy->holiday)+($lastmonthsalaryy->weekend) ?></p>
                   
                 </div>
@@ -422,22 +414,22 @@ if(!is_null($role_user)){
                 <?php if ($user_info[0]->status==1){ ?>
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;"  class="col-md-8 overlayth">Available Earn Leave : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;"  class="col-md-8 overlayth">Available Earn Leave : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $leave_calel['qty'] ?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Available Sick Leave : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Available Sick Leave : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $leave_calsl['qty'] ?></p>
                 </div>
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Used Earn Leave : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Used Earn Leave : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo (12-($leave_calel['qty']))?></p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Used Sick Leave : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Used Sick Leave : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth"><?php echo (4-($leave_calsl['qty'])) ?></p>
                 </div>
                 <?php }else{
@@ -446,22 +438,22 @@ if(!is_null($role_user)){
 
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;"  class="col-md-8 overlayth">Available Earn Leave : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;"  class="col-md-8 overlayth">Available Earn Leave : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth">0</p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Available Sick Leave : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Available Sick Leave : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth">0</p>
                 </div>
                 <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Used Earn Leave : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Used Earn Leave : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth">0</p>
                 </div>
                 <div class="col-md-12" style="margin: 2px; padding: 2px;">
                   
-                  <p style="margin: 0; font-weight: bold;" class="col-md-8 overlayth">Used Sick Leave : </p>
+                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Used Sick Leave : </p>
                   <p style="margin: 0;" class="col-md-4 overlayth">0</p>
                 </div>
                 <?php } ?>

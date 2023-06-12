@@ -1,11 +1,40 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class lunch_model extends CI_Model {
+class Lunch_model extends CI_Model {
  
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function get_lunch_info($status)
+    {
+        if ($status == true) {
+            $this->db->select('
+                    u.first_name, 
+                    u.last_name, 
+                    ld.lunch_id, 
+                    ld.emp_id, 
+                    ld.meal_amount, 
+                    ld.p_stutus, 
+                    ld.comment
+                ');
+            $this->db->from('xin_employees as u')->from('lunch_details as ld');
+            $this->db->where('u.user_id = ld.emp_id')->where('ld.date', date('Y-m-d'))->group_by('ld.emp_id');
+            return $this->db->order_by('ld.p_stutus', 'ASC')->get()->result();
+        } else {
+            $this->db->select('
+                    u.user_id as emp_id, 
+                    u.first_name, 
+                    u.last_name, 
+                    at.status as p_stutus
+                ');
+            $this->db->from('xin_employees as u');
+            $this->db->join('xin_attendance_time as at', 'u.user_id = at.employee_id', 'left');
+            $this->db->where_in('u.status', array(1,4,5))->group_by('u.user_id');
+            return $this->db->order_by('at.status', 'DESC')->get()->result();
+        }
     }
     
     public function all_employees()

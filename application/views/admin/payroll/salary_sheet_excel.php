@@ -38,15 +38,19 @@
 			<th>Absent</th>
 			<th>Holiday</th>
 			<th>Weekend</th>
+			<th>ABA</th>
 			<th>Earn leave</th>
 			<th>Sick leave</th>
-			<th>Late count</th>
+			<th>Late Day</th>
+			<th>Late D.Day</th>
 			<th>Late deduct</th>
 			<th>Absent deduct</th>
-			<th>Extra P. Pay</th>
-			<th>Modify salary</th>
-			<th>Net salary</th>
-			<th>Total net salary</th>
+			<th>BA Deduct</th>
+			<th>Net Salary</th>
+			<th>Extra Pay</th>
+			<th>D.A Day</th>
+			<th>D.A Salary</th>
+			<th>Grand Net Salary</th>
 		</tr>
 
 		<?php  $grand_total = $net_total = $modify_total = $etra_pay = $ab_deduct = $late_deduct = 0;
@@ -74,27 +78,32 @@
 				<td class="text-center px-2"><?=$row->absent?></td>
 				<td class="text-center px-2"><?=$row->holiday?></td>
 				<td class="text-center px-2"><?=$row->weekend?></td>
+				<td class="text-center px-2"><?=$row->ba_absent?></td>
 				<td class="text-center px-2"><?=$row->earn_leave?></td>
 				<td class="text-center px-2"><?=$row->sick_leave?></td>
 				<td class="text-center px-2"><?=$row->late_count?></td>
+				<td class="text-center px-2"><?=$row->d_day?></td>
 				<td class="text-center px-2"><?=$row->late_deduct?></td>
 				<td class="text-center px-2"><?=$row->absent_deduct?></td>
-				<td class="text-center px-2"><?=$row->extra_pay?></td>
-				<td class="text-center px-2"><?=$row->modify_salary?></td>
+				<td class="text-center px-2"><?=$row->aba_deduct?></td>
 				<td class="text-center px-2"><?=$row->net_salary?></td>
+				<td class="text-center px-2"><?=$row->extra_pay?></td>
+				<td class="text-center px-2"><?=$row->m_pay_day?></td>
+				<td class="text-center px-2"><?=$row->modify_salary?></td>
 				<td class="text-center px-2"><?=$row->grand_net_salary + ($row->modify_salary)?></td>
 			</tr>
 		<?php } ?>
 		<tr>
-			<th colspan="17" class="text-left px-2">Total : </th>
+			<th colspan="19" class="text-left px-2">Total : </th>
 			<th class="text-center px-2"><?=$late_deduct?></th>
 			<th class="text-center px-2"><?=$ab_deduct?></th>
-			<th class="text-center px-2"><?=$etra_pay?></th>
-			<th class="text-center px-2"><?=$modify_total?></th>
+			<th class="text-center px-2">-</th>
 			<th class="text-center px-2"><?=$net_total?></th>
+			<th class="text-center px-2"><?=$etra_pay?></th>
+			<th class="text-center px-2">-</th>
+			<th class="text-center px-2"><?=$modify_total?></th>
 			<th class="text-center px-2"><?=$grand_total?></th>
 		</tr>
-
 		
 	
 
