@@ -349,26 +349,37 @@
 			return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
 		}
 	}
-// here have work to do 10-06-2023
+
 	public function low_inv_status_report(){
 
 		$this->db->select(" 
 		products.id,
 		products.product_name,
-		
 		products.quantity,
+		products.order_level,
+		product_unit.unit_name,
 		products_categories.category_name,
 		products_sub_categories.sub_cate_name,
 		")
       ->from("products_categories")
 	  ->from("products_sub_categories")
+	  ->from("product_unit")
 	  ->from("products")
+	  ->where("product_unit.id     = products.unit_id")
 	  ->where("products_categories.id     = products.cat_id")
 	  ->where("products_sub_categories.id = products.sub_cate_id")
 	  ->where("products.quantity < products.order_level")
-	  ->group_by('products.id');
-	  $query= $this->db->get();
-	  dd($query);
+	  ->order_by('products.quantity','ASC');
+	   $query= $this->db->get();
+	   $data = $query->result();
+	  
+		if ($query->num_rows() > 0) {
+			return $data;
+		
+		} else {
+			return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+		}
+	 
 	}
 
 

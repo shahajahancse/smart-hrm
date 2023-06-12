@@ -690,7 +690,18 @@ class Inventory extends MY_Controller {
  public function low_inv_all_product_status_report(){
            $statusC=$this->input->post('statusC');
 		   if($statusC==7){
-			$data['values'] = $this->Inventory_model->low_inv_status_report();
+			  $data['values'] = $this->Inventory_model->low_inv_status_report();
+			//   dd($data['values']);
+			  $data['statusC']= $statusC;
+					if(is_string($data["values"]))
+					{
+						echo $data["values"];
+					}
+					else
+					{	
+						echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
+					}
+
 		   }
  }
 
