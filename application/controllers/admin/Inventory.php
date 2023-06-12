@@ -959,7 +959,6 @@ class Inventory extends MY_Controller {
 
 
 	public function delete_purches_item($id,$pid){
-		
 		$approved = $this->db->where('id',$id)->delete('products_purches_details');
 		if($approved){
 			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
@@ -968,8 +967,115 @@ class Inventory extends MY_Controller {
 	}
 
 
-	
+	//  accessories 
 
+	public function mamange_accessories($id = null)
+	{
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+      //Validation
+		//   $this->form_validation->set_rules('cat_id', 'select category', 'required|trim');
+		//   $this->form_validation->set_rules('sub_cate_id', 'select sub category', 'required|trim');
+		//   $this->form_validation->set_rules('unit_id', 'select unit', 'required|trim');
+		//   $this->form_validation->set_rules('product_name', 'item name', 'required|trim');
+
+		//Validate and input data
+		if ($this->form_validation->run() == true){
+			$form_data = array(
+			    'cat_id'        => $this->input->post('cat_id'),
+			    'sub_cate_id'   => $this->input->post('sub_cate_id'),
+			    'product_name'  => $this->input->post('product_name'),
+			    'unit_id'       => $this->input->post('unit_id'),
+			    'quantity'      => $this->input->post('quantity'),
+			    'order_level'   => $this->input->post('order_level')
+			);           
+
+			if ($hid = $this->input->post('hidden_id')) {
+				$this->db->where('id', $hid)->update('products', $form_data);
+		        $this->session->set_flashdata('success', 'Successfully Updated Done');
+			} else {
+				if($this->Inventory_model->save('products', $form_data)){
+			        $this->session->set_flashdata('success', 'Successfully Insert Done');
+				} else {
+					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+				}
+			}
+			redirect('admin/inventory/products');
+		}
+
+        //Dropdown
+		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Inventory';
+		$data['path_url'] = 'inventory';
+	    $data['results'] = $this->Inventory_model->product_list();
+	    $data['categorys'] = $this->db->get("products_categories")->result();
+	    $data['sub_categorys'] = $this->db->get("products_sub_categories")->result();
+	    $data['units'] = $this->db->get("product_unit")->result();
+	    $data['col'] = $id;
+		if ($id != null) {
+			$data['row'] = $this->db->where('id',$id)->get("products")->row();
+		}
+
+		$data['subview'] = $this->load->view("admin/inventory/manage_accessories", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+	public function user_uses_list($id = null)
+	{
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+      //Validation
+		//   $this->form_validation->set_rules('cat_id', 'select category', 'required|trim');
+		//   $this->form_validation->set_rules('sub_cate_id', 'select sub category', 'required|trim');
+		//   $this->form_validation->set_rules('unit_id', 'select unit', 'required|trim');
+		//   $this->form_validation->set_rules('product_name', 'item name', 'required|trim');
+
+		//Validate and input data
+		if ($this->form_validation->run() == true){
+			$form_data = array(
+			    'cat_id'        => $this->input->post('cat_id'),
+			    'sub_cate_id'   => $this->input->post('sub_cate_id'),
+			    'product_name'  => $this->input->post('product_name'),
+			    'unit_id'       => $this->input->post('unit_id'),
+			    'quantity'      => $this->input->post('quantity'),
+			    'order_level'   => $this->input->post('order_level')
+			);           
+
+			if ($hid = $this->input->post('hidden_id')) {
+				$this->db->where('id', $hid)->update('products', $form_data);
+		        $this->session->set_flashdata('success', 'Successfully Updated Done');
+			} else {
+				if($this->Inventory_model->save('products', $form_data)){
+			        $this->session->set_flashdata('success', 'Successfully Insert Done');
+				} else {
+					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+				}
+			}
+			redirect('admin/inventory/products');
+		}
+
+        //Dropdown
+		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Inventory';
+		$data['path_url'] = 'inventory';
+	    $data['results'] = $this->Inventory_model->product_list();
+	    $data['categorys'] = $this->db->get("products_categories")->result();
+	    $data['sub_categorys'] = $this->db->get("products_sub_categories")->result();
+	    $data['units'] = $this->db->get("product_unit")->result();
+	    $data['col'] = $id;
+		if ($id != null) {
+			$data['row'] = $this->db->where('id',$id)->get("products")->row();
+		}
+
+		$data['subview'] = $this->load->view("admin/inventory/user_uses_list", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
 
 }
 ?>
