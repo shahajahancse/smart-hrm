@@ -86,7 +86,7 @@
 
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border" id="report_title">
-    <h3 class="box-title" id="report"> Inventory Report
+    <h3 class="box-title" id="report">  Report
       <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
    </h3>
      
@@ -119,6 +119,7 @@
                     <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(2)">Approved parches</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(4)">Reject parches</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(3)">Delivered Parches</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="LP_AlP_Report(7)">Low inventory</button>
 
       
 

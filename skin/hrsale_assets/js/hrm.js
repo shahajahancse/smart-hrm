@@ -316,47 +316,47 @@
   }
 
   function movReport(statusC){
-    var ajaxRequest;  // The variable that makes Ajax possible!
-    ajaxRequest = new XMLHttpRequest();
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
 
-    first_date = document.getElementById('process_date').value;
-    second_date = document.getElementById('second_date').value;
-    // var checkboxes = document.getElementsByName('select_emp_id[]');
-    // var sql = get_checked_value(checkboxes);
-    // if(sql =='')
-    // {
-    //   alert('Please select employee Id');
-    //   return ;
-    // }
-    
-    if(first_date =='')
-    {
-      alert('Please select first date');
-      return ;
-    }
-    if(second_date =='')
-    {
-      alert('Please select second date');
-      return ;
-    }
-    
-    
-    var data = "first_date="+first_date+"&second_date="+second_date+"&statusC="+statusC;
-    url = base_url + "/movment_status_report";
-    ajaxRequest.open("POST", url, true);
-    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-     ajaxRequest.send(data);
-      // alert(url); return;
-
-    ajaxRequest.onreadystatechange = function(){
-      if(ajaxRequest.readyState == 4){
-        // console.log(ajaxRequest.responseText); return;
-        var resp = ajaxRequest.responseText;
-        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
-        a.document.write(resp);
-        // a.close();
+      first_date = document.getElementById('process_date').value;
+      second_date = document.getElementById('second_date').value;
+      // var checkboxes = document.getElementsByName('select_emp_id[]');
+      // var sql = get_checked_value(checkboxes);
+      // if(sql =='')
+      // {
+      //   alert('Please select employee Id');
+      //   return ;
+      // }
+      
+      if(first_date =='')
+      {
+        alert('Please select first date');
+        return ;
       }
-    }
+      if(second_date =='')
+      {
+        alert('Please select second date');
+        return ;
+      }
+      
+      
+      var data = "first_date="+first_date+"&second_date="+second_date+"&statusC="+statusC;
+      url = base_url + "/movment_status_report";
+      ajaxRequest.open("POST", url, true);
+      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+      ajaxRequest.send(data);
+        // alert(url); return;
+
+      ajaxRequest.onreadystatechange = function(){
+        if(ajaxRequest.readyState == 4){
+          // console.log(ajaxRequest.responseText); return;
+          var resp = ajaxRequest.responseText;
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+          a.document.write(resp);
+          // a.close();
+        }
+      }
 }
 
 function Inv_Report(statusC){
@@ -406,45 +406,78 @@ function Inv_Report(statusC){
 }
 
 
-function Per1_Report(statusC){
+function Per1_Report(statusC)
+{
 
-  var ajaxRequest;  // The variable that makes Ajax possible!
-  ajaxRequest = new XMLHttpRequest();
+          var ajaxRequest;  // The variable that makes Ajax possible!
+          ajaxRequest = new XMLHttpRequest();
 
-  first_date = document.getElementById('process_date').value;
-  second_date = document.getElementById('second_date').value;
+          first_date = document.getElementById('process_date').value;
+          second_date = document.getElementById('second_date').value;
 
-  
-  if(first_date =='')
-  {
-    alert('Please select first date');
-    return ;
+          
+          if(first_date =='')
+          {
+            alert('Please select first date');
+            return ;
+          }
+          if(second_date =='')
+          {
+            alert('Please select second date');
+            return ;
+          }
+          
+          
+          var data = "first_date="+first_date+"&second_date="+second_date+"&statusC="+statusC;
+
+          url = base_url + "/perches_status_report";
+          ajaxRequest.open("POST", url, true);
+          ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+          ajaxRequest.send(data);
+            // alert(url); return;
+
+          ajaxRequest.onreadystatechange = function(){
+            if(ajaxRequest.readyState == 4){
+              // console.log(ajaxRequest.responseText); return;
+              var resp = ajaxRequest.responseText;
+              a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+              a.document.write(resp);
+              // a.close();
+            }
+          }
   }
-  if(second_date =='')
-  {
-    alert('Please select second date');
-    return ;
-  }
-  
-  
-  var data = "first_date="+first_date+"&second_date="+second_date+"&statusC="+statusC;
 
-  url = base_url + "/perches_status_report";
-  ajaxRequest.open("POST", url, true);
-  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-  ajaxRequest.send(data);
-    // alert(url); return;
+  //low inventory report js function
+ 
+  function LP_AlP_Report (statusC)
+{
 
-  ajaxRequest.onreadystatechange = function(){
-    if(ajaxRequest.readyState == 4){
-      // console.log(ajaxRequest.responseText); return;
-      var resp = ajaxRequest.responseText;
-      a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
-      a.document.write(resp);
-      // a.close();
-    }
+          var ajaxRequest;  // The variable that makes Ajax possible!
+          ajaxRequest = new XMLHttpRequest();
+
+        
+
+          
+          
+          
+          var data = "statusC="+statusC;;
+
+          url = base_url + "/low_inv_all_product_status_report";
+          ajaxRequest.open("POST", url, true);
+          ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+          ajaxRequest.send(data);
+            // alert(url); return;
+
+          ajaxRequest.onreadystatechange = function(){
+            if(ajaxRequest.readyState == 4){
+              // console.log(ajaxRequest.responseText); return;
+              var resp = ajaxRequest.responseText;
+              a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+              a.document.write(resp);
+              // a.close();
+            }
+          }
   }
-}
 
   
 
