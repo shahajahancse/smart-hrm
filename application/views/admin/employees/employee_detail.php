@@ -19,7 +19,9 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 <?php $view_companies_ids = explode(',',$view_companies_id);?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
 <div class="row">
+
   <div class="col-md-12">
     <div class="nav-tabs-custom mb-4">
       <ul class="nav nav-tabs">
@@ -29,9 +31,10 @@ $leave_user = $this->Xin_model->read_user_info($eid);
         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_employee_set_salary"><?php echo $this->lang->line('xin_employee_set_salary');?></a> </li>
         <?php }?>
         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_leaves"><?php echo $this->lang->line('left_leaves');?></a> </li>
-        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_core_hr"><?php echo $this->lang->line('xin_hr');?></a> </li>
-        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_projects"><?php echo $this->lang->line('xin_hr_m_project_task');?></a> </li>
-        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_payslips"><?php echo $this->lang->line('left_payslips');?></a> </li>      
+        <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_core_hr"><?php echo $this->lang->line('xin_hr');?></a> </li> -->
+        <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_projects"><?php echo $this->lang->line('xin_hr_m_project_task');?></a> </li> -->
+        <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_payslips"><?php echo $this->lang->line('left_payslips');?></a> </li>       -->
+        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#device">Device</a> </li>      
      </ul>
       <div class="tab-content">
         <div class="tab-pane <?php echo $get_animate;?> active" id="xin_general">
@@ -2964,7 +2967,105 @@ $leave_user = $this->Xin_model->read_user_info($eid);
             </div>
           </div>
         </div>
+        <div class="tab-pane <?php echo $get_animate;?>" id="device">
+          <div class="box-body">
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-12">
+                     <div class="box <?php echo $get_animate;?>">
+                      <div class="box-header with-border">
+                        <h3 class="box-title"> <?php echo $this->lang->line('xin_list_all');?> <?php echo $this->lang->line('left_payment_history');?> </h3>
+                      </div>
+                      <?php $history = $this->Payroll_model->get_payroll_slip($user_id); ?>
+                      <div class="box-body">
+                        <div class="box-datatable table-responsive" style="display: flex;justify-content: center;">
+                         <?php
+                      if($device==''){
+                        $devicearray=[];
+
+                      }else{
+                         $devicearray=json_decode($device);
+                      }
+                         ?>
+                         <div class="col-md-6" style="border-radius: 7px;background: #ffffff;box-shadow: inset 1px 0px 3px #cbcbcb, inset -2px -1px 5px #cdc3c3;padding: 14px;">
+                                     <div class="col-md-6" style="text-align: center;">
+                                     <form id="devicein" >
+                                      <input type="hidden" name="emp_id" value="<?= $user_id ?>">
+                                            <table class="table">
+                                              <tbody>
+                                                <tr><th><input type="checkbox" name="laptop" id="" <?= in_array(1,$devicearray)?'checked':'' ?>></th><td>Laptop</td></tr>
+                                                <tr><th><input type="checkbox" name="laptop_cherger" id="" <?= in_array(2,$devicearray)?'checked':'' ?>></th><td>Laptop Cherger</td></tr>
+                                                <tr><th><input type="checkbox" name="mouse" id="" <?= in_array(3,$devicearray)?'checked':'' ?>></th><td>Mouse</td></tr>
+                                                <tr><th><input type="checkbox" name="converter" id="" <?= in_array(4,$devicearray)?'checked':'' ?>></th><td>Converter</td></tr>
+                                                <tr><th><input type="checkbox" name="Headphone" id="" <?= in_array(5,$devicearray)?'checked':'' ?>></th><td> Headphone</td></tr>
+                                                <tr><th><input type="checkbox" name="extra_monitor" id="" <?= in_array(6,$devicearray)?'checked':'' ?>></th><td>Extra-monitor</td></tr>
+                                   
+                                              </tbody>
+
+                                            </table>
+                                        
+                                        </div>
+                                          <div class="col-md-6" style="text-align: center;">
+                                                <table class="table">
+                                                     <tbody>
+                                                         <tr><th><input type="checkbox" name="cpu" id="" <?= in_array(7,$devicearray)?'checked':'' ?>></th><td>CPU</td></tr>
+                                                         <tr><th><input type="checkbox" name="ups" id="" <?= in_array(8,$devicearray)?'checked':'' ?>></th><td>UPS</td></tr>
+                                                         <tr><th><input type="checkbox" name="power_cable" id="" <?= in_array(9,$devicearray)?'checked':'' ?>></th><td>Power Cable</td></tr>
+                                                         <tr><th><input type="checkbox" name="vga_cable" id="" <?= in_array(10,$devicearray)?'checked':'' ?>></th><td>VGA Cable</td></tr>
+                                                         <tr><th><input type="checkbox" name="smart_phone" id="" <?= in_array(11,$devicearray)?'checked':'' ?>></th><td>Smart Phone</td></tr>
+                                                         <tr><th><input type="checkbox" name="bpws" id="" <?= in_array(12,$devicearray)?'checked':'' ?>></th><td>Botton Phone With Sim</td></tr>
+                                                       
+                                                      </tbody>
+
+                                              </table>
+                                              <button type="submit" class="btn btn-primary">Submit</button>
+                                              
+                                          </form>
+                                      </div>
+                            </div>
+                        </div>
+                      </div>                                        
+                </div>  
+                </div> 
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<!-- Include SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        // Bind submit event of the form
+        $('#devicein').submit(function(e) {
+            e.preventDefault(); // Prevent form submission
+
+            // Get the form data
+            var formData = $(this).serialize();
+
+            // Send AJAX request
+            $.ajax({
+                url: '<?php echo site_url("admin/Employees/add_device"); ?>',
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    // Handle the response from the server
+                    console.log(response);
+                     Swal.fire({
+                        title: 'Success!',
+                        text: response,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
