@@ -5,6 +5,8 @@
 <?php $session = $this->session->userdata('username');?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
 <style>
 
 #loading {
@@ -38,6 +40,31 @@
   <img src="<?php echo base_url()?>skin/hrsale_assets/img/loding.gif">
 
 </div>
+
+<div class="modal fade bd-example-modal-lg" id="latecommentm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+   
+    <div class="modal-content" style="padding: 18px;border: 1px solid black;margin: 5px;overflow: auto;">
+        <div class="col-md-12">
+          <p class="col-md-6" style="font-weight: bold;font-size: 20px;text-align: left;">Late comment</p>
+          <p class="col-md-6" style="font-weight: bold;font-size: 20px;text-align: right;">Date <span id="date"></span></p>
+        </div>
+
+        <form id="lateform">
+          <input type="hidden" id="datein" name="date" value="">
+         <div id="latecommentform" ></div>
+
+         <div class="col-md-12" style="margin-top: 10px;text-align-last: right;">
+          <input class="btn btn-primary" type="submit" value="Save">
+         </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 <div class="col-lg-8">
 <div class="box mb-4 <?php echo $get_animate;?>">
@@ -116,6 +143,7 @@
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="early_out_report('Early Out')">Early Out</button>
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="movement_report('Movement')">Movement</button><br>
           <button class="btn btn-sm mr-5 sbtn"  onclick="leavecal(1,[1,2,3,4])">Leave Applyed</button>
+          <button class="btn btn-sm mr-5 sbtn"  onclick="latecomment('latecomment')">Daily Late comment</button>
 
       </div>
 
@@ -173,7 +201,6 @@
     // $('#manu_form').hide();
     $("#manually_entry").click(function(){
       $('#emp_report').hide();
-   
       $('#report_title').hide();
       $("#entry_form").load("<?php echo base_url()?>"+"admin/attendance/manually");
     });
@@ -215,6 +242,43 @@
       });
     });
   });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Bind submit event of the form
+        $('#lateform').submit(function(e) {
+          e.preventDefault();
+          $('#latecommentm').modal('hide');
+          $('#loading').css({ visibility: 'visible'});
+            // Prevent form submission
+
+
+            // Get the form data
+            var formData = $(this).serialize();
+
+            // Send AJAX request
+            $.ajax({
+                url: '<?php echo site_url("admin/attendance/add_latecomment"); ?>',
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                  $('#loading').css({ visibility: 'hidden'});
+                    // Handle the response from the server
+                    Swal.fire({
+                        title: 'Success!',
+                        text: response,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    });
 </script>
 
 
