@@ -293,35 +293,10 @@ if($theme[0]->sub_menu_icons != ''){
     <?php } ?>
 
 
-    <!-- Inventory -->
+    <!-- Store -->
     <?php  if(in_array('1030',$role_resources_ids)) {?>
-      <li class="<?php if(!empty($arr_mod['invtry_open']))echo $arr_mod['invtry_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> Inventory <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>
+      <li class="<?php if(!empty($arr_mod['invtry_open']))echo $arr_mod['invtry_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> Store <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
-
-
-        <?php if(in_array('1141',$role_resources_ids)) { ?>
-          <li class="<?php if(!empty($arr_mod['accessory_open']))echo $arr_mod['accessory_open'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Accessories <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
-            <ul class="treeview-menu">
-              <?php if(in_array('1142',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['user_list_open']))echo $arr_mod['user_list_open'];?>"> <a href="<?php echo site_url('admin/inventory/user_uses_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> User uses list </a> </li>
-              <?php } ?>
-              <?php if(in_array('1146',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['manage_accessories_open']))echo $arr_mod['manage_accessories_open'];?>"> <a href="<?php echo site_url('admin/inventory/mamange_accessories');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Manage accessories </a> </li>
-              <?php } ?>
-
-              <!-- <?php if(in_array('1143',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['unit_open']))echo $arr_mod['unit_open'];?>"> <a href="<?php echo site_url('admin/inventory/unit');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Unit </a> </li>
-              <?php } ?>
-              <?php if(in_array('1144',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['cat_open']))echo $arr_mod['cat_open'];?>"> <a href="<?php echo site_url('admin/inventory/category');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Category </a> </li>
-              <?php } ?>
-              <?php if(in_array('1145',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['subcat_open']))echo $arr_mod['subcat_open'];?>"> <a href="<?php echo site_url('admin/inventory/sub_category');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Sub Category </a> </li>
-              <?php } ?> -->
-
-            </ul>
-          </li>
-          <?php } ?>
 
           <?php if(in_array('1031',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['requi_active']))echo $arr_mod['requi_active'];?>"> <a href="<?php echo site_url('admin/inventory/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Item Requisition </a> </li>
@@ -359,7 +334,43 @@ if($theme[0]->sub_menu_icons != ''){
         </ul>
       </li>
     <?php } ?>
-    <!-- Inventory -->
+    <!-- Store -->
+
+    <!-- Inventory / Accessories  -->
+    <?php  if(in_array('1100',$role_resources_ids)) {?>
+      <li class="<?php if(!empty($arr_mod['access_open']))echo $arr_mod['access_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> Inventory <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>
+        <ul class="treeview-menu">
+          <?php if(in_array('1101',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['item_active']))echo $arr_mod['item_active'];?>"> <a href="<?php echo site_url('admin/accessories/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Item List </a> </li>
+          <?php } ?>    
+
+          <?php if(in_array('1102',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['item_add_active']))echo $arr_mod['item_add_active'];?>"> <a href="<?php echo site_url('admin/accessories/item_add');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Item Add </a> </li>
+          <?php } ?>  
+
+          <?php if(in_array('1103',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['acc_repo_active']))echo $arr_mod['acc_repo_active'];?>"> <a href="<?php echo site_url('admin/accessories/reports');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Reports </a> </li>
+          <?php } ?>  
+
+       
+          <?php if(in_array('1110',$role_resources_ids)) { ?>
+          <li class="<?php if(!empty($arr_mod['accsetting_open']))echo $arr_mod['accsetting_open'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Settings <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+            <ul class="treeview-menu">
+              <?php if(in_array('1111',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['category_open']))echo $arr_mod['category_open'];?>"> <a href="<?php echo site_url('admin/accessories/category');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Category </a> </li>
+              <?php } ?>
+
+              <?php if(in_array('1112',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['device_open']))echo $arr_mod['device_open'];?>"> <a href="<?php echo site_url('admin/accessories/device_model');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Device Model </a> </li>
+              <?php } ?>
+            </ul>
+          </li>
+          <?php } ?>
+
+        </ul>
+      </li>
+    <?php } ?>
+    <!-- Inventory / Accessories -->
 
 
     <?php //if($system[0]->module_projects_tasks=='true'){?>

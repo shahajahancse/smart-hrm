@@ -354,7 +354,7 @@ class Xin_model extends CI_Model {
 			$arr['payrl_open'] = 'active';
 			return $arr;
 
-			// inventory
+			// Store
 		} else if($mClass=='inventory' && $mMethod=='index') {
 			$arr['invtry_open'] = 'active';
 			$arr['requi_active'] = 'active';
@@ -409,7 +409,34 @@ class Xin_model extends CI_Model {
 			$arr['insetting_open'] = 'active';
 			$arr['cat_open'] = 'active';
 			return $arr;
+		} 	// Store 
+ 
+			// inventory
+		else if($mClass=='accessories' && $mMethod=='index') {
+			$arr['access_open'] = 'active';
+			$arr['item_active'] = 'active';
+			return $arr;
+		} else if($mClass=='accessories' && $mMethod=='item_add') {
+			$arr['access_open'] = 'active';
+			$arr['item_add_active'] = 'active';
+			return $arr;
+		}  else if($mClass=='accessories' && $mMethod=='reports') {
+			$arr['access_open'] = 'active';
+			$arr['acc_repo_active'] = 'active'; 
+			return $arr;
+
+		} else if($mClass=='accessories' && $mMethod=='category') { 
+			$arr['access_open'] = 'active';
+			$arr['accsetting_open'] = 'active';
+			$arr['category_open'] = 'active';
+			return $arr;
+		} else if($mClass=='accessories' && $mMethod=='device_model') {
+			$arr['access_open'] = 'active';
+			$arr['accsetting_open'] = 'active';
+			$arr['device_open'] = 'active';
+			return $arr;
 		} 	// inventory
+
 		else if($mClass=='performance_indicator') {
 			$arr['per_indi_active'] = 'active';
 			$arr['performance_open'] = 'active';
