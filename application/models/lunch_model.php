@@ -36,118 +36,65 @@ class Lunch_model extends CI_Model {
             return $this->db->order_by('at.status', 'DESC')->get()->result();
         }
     }
-    
+
     public function all_employees()
     {
         $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)");
 
         return $query->result();
     }
-    
-    public function process($processmonth)
+
+    public function process($firstDate,$secondDate)
     {
 
-        $paymonth = date('Y-m', strtotime($processmonth));
-        $emp = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
-    
-        foreach ($emp as $key => $value) {
-            $emp_id = $value->user_id;
-    
-            $query = $this->db->select('*')
-                ->from('lunch_payment')
-                ->where('emp_id', $emp_id)
-                ->where('pay_month', $paymonth)
-                ->get();
-    
-            if ($query->num_rows() > 0) {
-                $row = $query->row();
-                exit('already_exists');
-            } else {
-                list($year, $month) = explode("-", $paymonth);
-    
-                $second_date = date("$year-$month-12");
-                $first_date = date('Y-m-13', strtotime('-1 month', strtotime($second_date)));
-              
-    
-                $lunchdet = $this->get_proccess_data($emp_id, $first_date, $second_date);
-                if (count($lunchdet) > 0) {
-                    $prev_meal = 0;
-    
-                    foreach ($lunchdet as $key => $value) {
-                        $prev_meal += $value->meal_amount;
-                    }
-                    $prev_cost = ($prev_meal * 45);
-                  
-                    $prevemonth = date('Y-m', strtotime('-1 month', strtotime($second_date)));
-    
-                    $q = $query = $this->db->query("SELECT * FROM `lunch_payment` WHERE `emp_id` = 2 AND `pay_month` = '$prevemonth' ")->result();
-                    
-                     if (count($q) > 0) {
-                        if($q[0]->status==1){
-                        $prev_pay = $q[0]->pay_amount;}else{$prev_pay = 0;}
-                    } else {
-                        $prev_pay = 0;
-                    }
-    
-                    $prev_amount = $prev_pay - $prev_cost;
-                    $ffmonth = date('Y-m-13', strtotime('+0 month', strtotime($second_date)));
-                    $fsmonth = date('Y-m-12', strtotime('+1 month', strtotime($second_date)));
-                
-                    $holyday = count($this->holiday_check($ffmonth, $fsmonth));
-                    $date1 = new DateTime($ffmonth);
-                    $date2 = new DateTime($fsmonth);
-                    $interval = $date1->diff($date2);
-                    $totalDays = $interval->days;
-                    
-                    $pay_amount =  (($totalDays-($holyday+8))*45);
-                    $pay_month = $paymonth;
-                } else {
-                    $prev_meal = 0;
-                    $prev_cost = 0;
-                    $prevemonth = date('Y-m', strtotime('-1 month', strtotime($second_date)));
-    
-                    $q = $query = $this->db->query("SELECT * FROM `lunch_payment` WHERE `emp_id` = 2 AND `pay_month` = '$prevemonth' ")->result();
-                     
-                    if (count($q) > 0) {
-                        if($q[0]->status==1){
-                        $prev_pay = $q[0]->pay_amount;}else{$prev_pay = 0;}
-                    } else {
-                        $prev_pay = 0;
-                    }
-                    $prev_amount = $prev_pay - $prev_cost;
-                    $ffmonth = date('Y-m-13', strtotime('+0 month', strtotime($second_date)));
-                    $fsmonth = date('Y-m-12', strtotime('+1 month', strtotime($second_date)));
-                
-                    $holyday = count($this->holiday_check($ffmonth, $fsmonth));
-                    
-                    $date1 = new DateTime($ffmonth);
-                    $date2 = new DateTime($fsmonth);
-                    $interval = $date1->diff($date2);
-                    $totalDays = $interval->days;
-                    
-                    $pay_amount =  (($totalDays-($holyday+8))*45);
+      $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
+      foreach($query as $row){
 
-                    $pay_month = $paymonth;
-                }
-                
-                $data = array(
-                    'emp_id' => $emp_id,
-                    'prev_meal' => $prev_meal,
-                   
-                    'prev_pay' => $prev_pay,
-                    'prev_amount' => $prev_amount,
-                    'pay_amount' => $pay_amount,
-                    'pay_month' => $pay_month,
-                    'prev_cost' => $prev_cost,
-                );
-                $this->db->insert('lunch_payment', $data);
-            }
-        }
-        exit('success');
+        $this->db->where('date >=', $firstDate);
+        $this->db->where('date <=', $secondDate);
+        $this->db->where('emp_id', $row->user_id);
+        $result = $this->db->get('lunch_details')->result();
+        $emp_id=$row->user_id;
+
+        $prev_meal=0;
+        foreach($result as $data){
+            $prev_meal+=$data->meal_amount;
+        };
+        $prev_cost=$prev_meal*45;
+        $prev_pay=0;
+
+        $this->db->where('emp_id', $row->user_id);
+        $this->db->where('end_date', $firstDate);
+        $preepay= $this->db->get('lunch_payment')->result();
+        if (count($preepay)>0){
+            if($preepay[0]->status==1){
+
+                $prev_pay+=$preepay[0]->pay_amount;
+            };
+        };
+
+        $prev_amount=$prev_pay-$prev_cost;
+        
+        $pay_amount=990;
+        $from_date=$firstDate;
+        $end_date=$secondDate;
+        $status=0;
+
+         $data = array(
+            'emp_id' => $emp_id,
+            'prev_meal' => $prev_meal,
+            'prev_cost' => $prev_cost,
+            'prev_pay' => $prev_pay,
+            'prev_amount' => $prev_amount,
+            'pay_amount' => $pay_amount,
+            'from_date' => $from_date,
+            'end_date' => $end_date,
+            'status' => $status
+        );
+        $this->db->insert('lunch_payment', $data);
+      }
     }
     
-
-
     public function employees($id)
     {
         $query = $this->db->query("SELECT * FROM xin_employees WHERE user_id = $id ");

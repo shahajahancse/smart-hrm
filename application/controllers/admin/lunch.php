@@ -349,31 +349,14 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-        $lunch_payment =$this->db->query("SELECT * FROM `lunch_payment`")->result();
 
-        $proccessdate=[];
-        foreach ($lunch_payment as $key => $value) {
-           if(!in_array($value->pay_month, $proccessdate)){
-            array_push($proccessdate,$value->pay_month);
-
-           }     
-        }
-        if(count($proccessdate)>0){
-            $data['lastdate'] =  max($proccessdate);
+        $data['emplist'] = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
 
 
-        }else{
-        $data['lastdate'] ="Not Prossecced";
-        }
+       $data['last_prement'] = $this->db->query("SELECT * FROM `lunch_payment` ORDER BY id DESC LIMIT 1")->row();
+       $data['breadcrumbs'] ='Payment';
+       $data['titel'] ='Payment';
 
-
-        $data['total_emp'] = $this->Lunch_model->all_employees();
-
-
-      $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
-
-        $data['breadcrumbs'] = 'Prement Report';
-        $data['path_url'] = 'report';
         if (!empty($session)) {
             $data['subview'] = $this->load->view("admin/lunch/emp_pay_list", $data, TRUE);
             $this->load->view('admin/layout/layout_main', $data); //page load
@@ -390,13 +373,12 @@ class Lunch extends MY_Controller {
         }
         $empid = $this->input->post('selectedValue');
         $paymonth = $this->input->post('paymonth');
-      
+        // dd($empid.''.$paymonth);
 
-        $lunch_payment = $this->db->query("SELECT lp.*, e.first_name, e.last_name 
-        FROM `lunch_payment` lp 
-        JOIN `xin_employees` e ON lp.emp_id = e.user_id
-        WHERE lp.`emp_id` = $empid AND lp.`pay_month` = '$paymonth'")->result();
-       
+        $lunch_payment = $this->db->query("SELECT lp.*, e.first_name, e.last_name
+                        FROM `lunch_payment` lp
+                        JOIN `xin_employees` e ON lp.emp_id = e.user_id
+                        WHERE lp.`emp_id` = $empid AND lp.`end_date` = '$paymonth'")->result();
 
         // Set the response header as JSON
         $this->output
@@ -410,22 +392,11 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-      
-        if(base_url()=='http://localhost/smart-hrm/'){
-            $currentDate = '2023-02-07';
-        }else{ $currentDate = date('Y-m-d');}
-            $day = date('d', strtotime($currentDate));
-            $month = date('m', strtotime($currentDate));
-            $year = date('Y', strtotime($currentDate));
-        if ($day<12){
-            $processmonth = date('Y-m-d', strtotime('-1 month', strtotime($currentDate)));
-        }else{
-            $processmonth=$currentDate;
-        }
-        
-        return $this->Lunch_model->process($processmonth);
+       $firstDate = $this->input->post('firstDate');
+       $secondDate = $this->input->post('secondDate');
+       $data['lunch_data'] = $this->Lunch_model->process($firstDate,$secondDate);
+       echo json_encode('success');
     }
-
     public function submit_payment() {
         // Retrieve the form data from the POST request
         $empid = $this->input->post('empid');
@@ -437,15 +408,13 @@ class Lunch extends MY_Controller {
             'pay_amount' => $p_month_pay,
             'status' => $status,
         );
-        $this->db->where('pay_month', $pay_month);
+        $this->db->where('end_date', $pay_month);
         $this->db->where('emp_id', $empid);
         $this->db->update('lunch_payment', $data);
 
 
         $response ='operation Successfull.';
-        
         echo json_encode($response);
     }
-  
 }
 ?>
