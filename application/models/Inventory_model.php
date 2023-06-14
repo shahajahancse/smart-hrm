@@ -368,8 +368,42 @@
 	  ->where("products.quantity < products.order_level")
 	  ->group_by('products.id');
 	  $query= $this->db->get();
-	  dd($query);
+	//   dd($query);
 	}
+
+
+	function user_uses_list(){
+		 $this->db->select('xin_employees.user_id,
+		 					xin_employees.employee_id,
+							xin_employees.first_name,
+							xin_employees.last_name,
+							xin_employees.date_of_birth,
+							xin_departments.department_name,
+							xin_designations.designation_name,
+							device_uses_list.id,
+							device_uses_list.tag,
+							device_uses_list.desk_no,
+							device_uses_list.details,
+							products_categories.category_name,
+							
+						 ');
+		 $this->db->from('xin_employees');
+		 $this->db->from('xin_departments');
+		 $this->db->from('xin_designations');
+		 $this->db->from('device_uses_list');
+		 $this->db->from('products_categories');
+		 $this->db->where('xin_employees.user_id = device_uses_list.emp_id');
+		 $this->db->where('xin_employees.department_id  = xin_departments.department_id');
+		 $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
+		 $this->db->where('products_categories.id = device_uses_list.cat_id');
+		$data = $this->db->get();
+		if ($data->num_rows() > 0) {   
+          		dd($data->result());
+
+        }
+		// dd($data);
+	}
+
 
 
 

@@ -143,8 +143,7 @@
                           <?php 
                             // if($session['role_id'] =1){ ?>
                             <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                            
-                            
+
                             <?php if($rows->status==1){?> 
                               <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
                              <a style="padding-left:5px; " href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">Delete</a>
