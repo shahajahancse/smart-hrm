@@ -62,6 +62,12 @@
 </style>
 
 <div class="container">
+            <?php if($this->session->flashdata('message')):?>
+                <div class="alert alert-success">
+                  <?php echo $this->session->flashdata('message');?>
+                </div>
+            <?php endif; ?>  
+
     <div class="table-container">
         <h2>Lunch Records</h2>
         <table class="table table-hover">
