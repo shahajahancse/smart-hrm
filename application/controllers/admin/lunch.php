@@ -355,7 +355,7 @@ class Lunch extends MY_Controller {
 
        $data['last_prement'] = $this->db->query("SELECT * FROM `lunch_payment` ORDER BY id DESC LIMIT 1")->row();
        $data['breadcrumbs'] ='Payment';
-       $data['titel'] ='Payment';
+       $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
 
         if (!empty($session)) {
             $data['subview'] = $this->load->view("admin/lunch/emp_pay_list", $data, TRUE);

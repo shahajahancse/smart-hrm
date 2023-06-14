@@ -145,17 +145,18 @@
   <div class="row">
     <div class="col-md-12" style="display: flex;">
       <div class="container col-md-5">
+        <h4 style="display: inline-block;">Last Process:</h4> <span style="color: blue;"><?php echo date('Y-m-d', strtotime($last_prement->from_date));?></span> to <span style="color: blue;"> <?php echo date('Y-m-d', strtotime($last_prement->end_date));?></span>
         <h2>Add Payment</h2>
         <select id="search-select">
           <option>Select Employee</option>
-          
+
           <?php foreach($emplist as $data){?>
             <option value="<?= $data->user_id ?>"><?= $data->first_name ?> <?= $data->last_name ?></option>
           <?php } ?>
         </select>
       </div>
 
-      <div class="container col-md-7 form-container proccess_container" style="width: 500px;padding: 0px;border-radius: 10px;margin: 0;height: fit-content;">
+      <div class="container col-md-7 form-container proccess_container" style="width: 500px;padding: 0px;border-radius: 10px;margin: 0;height: fit-content;margin-top: 60px;">
         <form id="process_form" class="col-md-12" style="padding: 9px;margin: 0px;">
           <div class="form-group col-md-5" style="padding: 0px;margin: 0px;">
             <label for="process_date">First Date</label>
