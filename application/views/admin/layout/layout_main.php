@@ -97,7 +97,7 @@ if(!is_null($role_user)){
             </div>
       </h1>
       <img id="hrload-img" src="<?php echo base_url()?>skin/img/loading.gif" style="">
-      	 <style type="text/css">
+      	<style type="text/css">
             #hrload-img {
               display: none;
               z-index: 87896969;
