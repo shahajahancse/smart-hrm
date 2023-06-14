@@ -57,5 +57,10 @@
         <label>Comment</label>
         <textarea name="bigcomment" class="form-control" id="exampleFormControlTextarea1" rows="3"><?= isset($guest->bigcomment) ? $guest->bigcomment : ''; ?></textarea>
     </div>
-    <input type="submit" value="Save" class="btn btn-primary">
+    <div class="row">
+        <div class="col-md-12">
+        <input type="submit" value="Save" class="btn btn-primary pull-right">
+        </div>
+    </div>
+   
 <?= form_close(); ?>
