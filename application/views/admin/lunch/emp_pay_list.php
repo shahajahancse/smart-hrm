@@ -1,4 +1,10 @@
 
+<?php
+// dd($emplist);
+
+?>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
 <style>
   /* Custom CSS to increase the width of the select box */
   #status {
@@ -127,6 +133,8 @@
   transform: translate(-50%, -50%);
 }
 </style>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 <div id="loading">
 
   <img src="<?php echo base_url()?>skin/hrsale_assets/img/loding.gif">
@@ -136,19 +144,34 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12" style="display: flex;">
-      <div class="container col-md-6">
+      <div class="container col-md-5">
+        <h4 style="display: inline-block;">Last Process:</h4> <span style="color: blue;"><?php echo date('Y-m-d', strtotime($last_prement->from_date));?></span> to <span style="color: blue;"> <?php echo date('Y-m-d', strtotime($last_prement->end_date));?></span>
         <h2>Add Payment</h2>
         <select id="search-select">
           <option>Select Employee</option>
-          <?php foreach($total_emp as $data){?>
+
+          <?php foreach($emplist as $data){?>
             <option value="<?= $data->user_id ?>"><?= $data->first_name ?> <?= $data->last_name ?></option>
           <?php } ?>
         </select>
       </div>
 
-      <div class="container col-md-6 form-container proccess_container" style="border: 2px solid black;width: 233px;padding: 11px;border-radius: 10px;">
-        <p>Last Process Month: <?=  $lastdate ?></p>
-        <a class="btn btn-primary" onclick="process()">Process</a>
+      <div class="container col-md-7 form-container proccess_container" style="width: 500px;padding: 0px;border-radius: 10px;margin: 0;height: fit-content;margin-top: 60px;">
+        <form id="process_form" class="col-md-12" style="padding: 9px;margin: 0px;">
+          <div class="form-group col-md-5" style="padding: 0px;margin: 0px;">
+            <label for="process_date">First Date</label>
+            <input class="form-control attendance_date" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d', strtotime($last_prement->end_date . ' +1 day'));?>" disabled>
+          </div>
+          <div class="form-group col-md-5">
+            <label for="process_date">Second Date</label>
+            <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text" autocomplete="off">
+          </div>
+           <div class="form-group col-md-2" style="margin: 0px;padding: 0px;">
+            <label for="" style="color: whitesmoke!important;">.</label>
+            <a class="btn btn-primary" style="margin: 0px;padding: 4px;" id="process_button">Process</a>
+          </div>
+          
+        </form>
       </div>
     </div>
   </div>
@@ -161,34 +184,13 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script>
-  // Define the process function in the global scope
-  function process() {
-    document.getElementById("loading").style.visibility = "visible";
-
-
-    $.ajax({
-      url: '<?= base_url('admin/lunch/process') ?>',
-      method: 'POST',
-      data: { selectedValue: 'selectedValue' },
-      success: function(response) {
-        document.getElementById("loading").style.visibility = "hidden";
-
-        alert(response); // Print the response to the console for debugging
-      },
-      error: function(xhr, status, error) {
-        // Handle any errors that occur during the request
-        console.error(error);
-      }
-    });
-  }
+ 
 
   $(document).ready(function() {
-  $('#search-select').select2();
-
   // Event handler for the select box change event
   $('#search-select').on('change', function() {
     var selectedValue = $(this).val(); // Get the selected value
-    var paymonth = '<?= $lastdate ?>'; // Get the selected value
+    var paymonth = '<?php echo date('Y-m-d', strtotime($last_prement->end_date));?>'; // Get the selected value
 
     // Make an AJAX post request to the controller
     $.ajax({
@@ -220,7 +222,7 @@
         formHtml += '<div class="form-group col-md-12">';
         formHtml += '<label for="employeeId">Employee Name</label>';
         formHtml += '<input type="hidden" class="form-control" id="employeeId" name="empid" value="' + responseData[0].emp_id +'">';
-        formHtml += '<input type="hidden" class="form-control" id="pay_month"  name="pay_month" value="' + responseData[0].pay_month +'">';
+        formHtml += '<input type="hidden" class="form-control" id="pay_month"  name="pay_month" value="' + responseData[0].end_date +'">';
 
         formHtml += '<input type="text" class="form-control" id="employeeId" value="' + responseData[0].first_name + ' ' + responseData[0].last_name + ' " readonly>';
         formHtml += '</div>';
@@ -309,6 +311,7 @@ $('#form-container').on('submit', '#payment_form', function(event) {
     error: function(xhr, status, error) {
       // Handle any errors that occur during the request
       alert(error);
+       document.getElementById("loading").style.visibility = "hidden";
     }
   });
 });
@@ -335,4 +338,49 @@ function calculatePayment() {
 }
 
 
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#search-select').select2();
+});
+</script>
+<script>
+  $(document).ready(function() {
+    $('#process_button').click(function() {
+     
+      // Get the values of the input fields
+      var firstDate = $('#process_date').val();
+      var secondDate = $('#second_date').val();
+       if(secondDate =='')
+      {
+        alert('Please select Second date');
+        return ;
+      }
+      // Create the AJAX request
+      $.ajax({
+        url: '<?= base_url('admin/lunch/process') ?>', // Replace with the URL to send the request
+        method: 'POST', // Replace with the desired HTTP method (POST, GET, etc.)
+        data: {
+          firstDate: firstDate,
+          secondDate: secondDate
+        },
+        success: function(response) {
+          // Handle the success response from the server
+          console.log(response);
+           Swal.fire({
+                        title: 'Success!',
+                        text: response,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+        },
+        error: function(xhr, status, error) {
+          // Handle the error response from the server
+          console.log(error);
+        }
+      });
+    });
+  });
 </script>
