@@ -32,7 +32,7 @@ class Lunch_model extends CI_Model {
                 ');
             $this->db->from('xin_employees as u');
             $this->db->join('xin_attendance_time as at', 'u.user_id = at.employee_id', 'left');
-            $this->db->where_in('u.status', array(1,4,5))->group_by('u.user_id');
+            $this->db->where_in('u.status', array(1,4,5))->where('at.attendance_date', date('Y-m-d'))->group_by('u.user_id');
             return $this->db->order_by('at.status', 'DESC')->get()->result();
         }
     }

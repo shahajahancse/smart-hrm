@@ -86,7 +86,7 @@
 
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border" id="report_title">
-    <h3 class="box-title" id="report"> Inventory Report
+    <h3 class="box-title" id="report">  Report
       <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
    </h3>
      
@@ -98,7 +98,7 @@
           <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily" aria-selected="true">Requsition</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Purches</a>
+          <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Purchase</a>
         </li>
         
     </ul>
@@ -115,10 +115,12 @@
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
                     <!-- <button class="btn btn-sm btn-danger"> Button one</button>-->
-                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(1)">Panding parches</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(2)">Approved parches</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(4)">Reject parches</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(3)">Delivered Parches</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(1)">Panding purchase</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(2)">Approved purchase</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(4)">Reject purchase</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(3)">Delivered purchase</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="LP_AlP_Report(7)">Low inventory</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="LP_AlP_Report(8)">All Products</button>
 
       
 

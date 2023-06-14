@@ -26,7 +26,7 @@
           <div class="row">
             <div class="col-md-5">
               <div class="form-group">
-                <label>Category<i class="hrsale-asterisk">*</i></label>
+                <label>Category<i class="hrsale-asterisk" style="color:red !important">*</i></label>
                 <select class="form-control" name="cat_id" id="cat_id" required>
                   <option value="">select category</option>
                   <?php foreach ($categorys as $rows) { ?>
@@ -38,7 +38,7 @@
 
             <div class="col-md-5"> 
               <div class="form-group">
-                <label>Sub Category<i class="hrsale-asterisk">*</i></label>
+                <label>Sub Category<i class="hrsale-asterisk" style="color:red !important">*</i></label>
                 <?php echo form_error('sub_cate_id');?>
                 <select class="form-control" name="sub_cate_id" id="sub_cate_id" required>
                   <option value="">Select Sub Category</option>
@@ -51,7 +51,7 @@
 
             <div class="col-md-2">
               <div class="form-group">
-                <label for="order_level">Order Level<i class="hrsale-asterisk">*</i></label>
+                <label for="order_level">Order Level<i class="hrsale-asterisk" style="color:red !important">*</i></label>
                 <input class="form-control" placeholder="order level..." name="order_level" type="text" required value="<?php echo !empty($row->order_level)? $row->order_level:''; ?>">
               </div>
             </div>
@@ -59,15 +59,15 @@
           <div class="row">
             <div class="col-md-7">  
               <div class="form-group">
-                <label for="product_name">Product Name<i class="hrsale-asterisk">*</i></label>
-                <input class="form-control" placeholder="product name..." name="product_name" required value="<?php echo !empty($row->product_name)? $row->product_name:''; ?>">
+                <label for="product_name">Product Name<i class="hrsale-asterisk" style="color:red !important">*</i></label>
+                <input class="form-control" placeholder="Product name" name="product_name" required value="<?php echo !empty($row->product_name)? $row->product_name:''; ?>">
               </div>
             </div>
             <input type="hidden" name="hidden_id" value="<?php echo !empty($row->id)? $row->id:''; ?>">
 
             <div class="col-md-3">      
               <div class="form-group">
-                <label for="unit_id">Select Unit<i class="hrsale-asterisk">*</i></label>
+                <label for="unit_id">Select Unit<i class="hrsale-asterisk" style="color:red !important">*</i></label>
                 <select class="form-control" name="unit_id" required>
                   <option value="">select category</option>
                   <?php foreach ($units as $rows) { ?>
@@ -79,14 +79,35 @@
 
             <div class="col-md-2">      
               <div class="form-group">
-                <label for="quantity">Quantity<i class="hrsale-asterisk">*</i></label>
-                <input class="form-control" placeholder="quantity..." name="quantity" type="text" value="<?php echo !empty($row->quantity)? $row->quantity:''; ?>">
+                <label for="quantity">Quantity<i class="hrsale-asterisk" style="color:red !important">*</i></label>
+                <input class="form-control" placeholder="Quantity" name="quantity" type="text" value="<?php echo !empty($row->quantity)? $row->quantity:''; ?>">
               </div>
             </div>
           </div>
+
+          <div class="row">
+            <div class="col-md-9">      
+              <div class="form-group">
+                <label for="quantity">Product Description<i class="hrsale-asterisk" style="color:red !important">*</i></label>
+                <textarea class="form-control" placeholder="Product description" name="quantity" type="text" value="<?php echo !empty($row->quantity)? $row->quantity:''; ?>"></textarea>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="form-group">
+                <label>Product Type<i class="hrsale-asterisk" style="color:red !important">*</i></label>
+                <select class="form-control" name="cat_id" id="cat_id" required>
+                  <option value="">Select Type</option>
+                  <option value="inventory">Inventory</option>
+                  <option value="store">Store</option>    
+                </select>
+              </div>
+            </div>
+
+          </div>
         </div>
 
-        <div class="form-actions box-footer">
+        <div class="form-actions box-footer" style="margin-top :20px">
           <button type="submit" class="btn btn-primary"> <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
         </div>
         <?php echo form_close(); ?> </div>
@@ -142,8 +163,6 @@
     </div>
   </div>
 </div>
-
- 
 <script>
 
   $(document).ready(function() {
@@ -156,9 +175,7 @@
       pt.text('Select Sub Category');
       $('#sub_cate_id').append(pt);
       cat_id = document.getElementById('cat_id').value;
-
       var url = "<?php echo base_url('admin/inventory/get_sub_category_ajax/');?>" + cat_id;
-
       $.ajax({
         url: url,
         contentType: "application/json",
@@ -174,15 +191,9 @@
             $('#sub_cate_id').append(opt);
           });
         }
-
       });
-
     });
-
-
     $('#example').DataTable();
-
-
   });
 
 </script>
