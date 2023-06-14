@@ -31,6 +31,7 @@ class Lunch extends MY_Controller {
         $this->load->model("Attendance_model");
         $this->load->model("Salary_model");
         $this->load->helper('form');
+        $this->load->library('form_validation');
     }
 
     public function index()
@@ -296,7 +297,7 @@ class Lunch extends MY_Controller {
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
 
         $data['breadcrumbs'] = 'Lunch Report';
-        $data['path_url'] = 'report';
+        $data['path_url'] = 'lunch';
         if (!empty($session)) {
             $data['subview'] = $this->load->view("admin/lunch/lunch_report", $data, TRUE);
             $this->load->view('admin/layout/layout_main', $data); //page load
@@ -350,10 +351,47 @@ class Lunch extends MY_Controller {
             redirect('admin/');
         }
 
+        // dd($_POST);
+        $this->form_validation->set_rules('empid[]', 'Employee name', 'required|trim');
+        $this->form_validation->set_rules('pay_amount[]', 'Pay meal Amount', 'required|trim');
+        $this->form_validation->set_rules('cost_meal[]', 'Cost meal Quantity', 'required|trim');
+        $this->form_validation->set_rules('cost_amount[]', 'Cost meal Amount', 'required|trim');
+        $this->form_validation->set_rules('balance[]', 'Balance Amount', 'required|trim');
+
+        //Validate and input data
+        if ($this->form_validation->run() == true){
+            $empid       = $this->input->post('empid');
+            $pay_amount  = $this->input->post('pay_amount');
+            $cost_meal   = $this->input->post('cost_meal');
+            $cost_amount = $this->input->post('cost_amount');
+            $balance     = $this->input->post('balance');
+            $p_meal      = $this->input->post('probability_meal');
+
+            for ($i=0; $i<sizeof($empid); $i++) {
+                $data[] = array(
+                    'emp_id'      => $empid[$i],
+                    'prev_meal'   => $cost_meal[$i],
+                    'prev_cost'   => $cost_amount[$i],
+                    'prev_pay'    => $pay_amount[$i],
+                    'prev_amount' => $balance[$i],
+                    'pay_amount'  => ($p_meal * 45),
+                    'from_date'   => $this->input->post('from_date'),
+                    'end_date'    => $this->input->post('end_date'),
+                    'status'      => 0,
+                );
+            } 
+            $this->db->insert_batch('lunch_payment', $data);
+            $this->session->set_flashdata('message', 'Successfully insert done');
+            return redirect('admin/lunch/index');
+        }
+
+
+
+
         $data['employees'] = $this->Lunch_model->all_employees();
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Manual Lunch Entry';
-        $data['path_url'] = 'manual_lunch_entry';
+        $data['path_url'] = 'lunch';
         if (!empty($session)) {
             $data['subview'] = $this->load->view("admin/lunch/manual_lunch_entry", $data, TRUE);
             $this->load->view('admin/layout/layout_main', $data); //page load
@@ -365,64 +403,64 @@ class Lunch extends MY_Controller {
     // manually data insert for process
 
     public function process_form()
-{
-    // Load form validation library
-    $this->load->library('form_validation');
+    {
+        // Load form validation library
+        $this->load->library('form_validation');
 
-    // Set validation rules
-    $this->form_validation->set_rules('emp_id', 'Employee ID', 'required');
-    $this->form_validation->set_rules('prev_meal', 'Previous Meal', 'required');
-    $this->form_validation->set_rules('prev_cost', 'Previous Cost', 'required');
-    $this->form_validation->set_rules('prev_pay', 'Previous Pay', 'required');
-    $this->form_validation->set_rules('prev_amount', 'Previous Amount', 'required');
-    $this->form_validation->set_rules('pay_amount', 'Pay Amount', 'required');
-    $this->form_validation->set_rules('from_date', 'From Date', 'required');
-    $this->form_validation->set_rules('end_date', 'End Date', 'required');
-    $this->form_validation->set_rules('status', 'Status', 'required');
+        // Set validation rules
+        $this->form_validation->set_rules('emp_id', 'Employee ID', 'required');
+        $this->form_validation->set_rules('prev_meal', 'Previous Meal', 'required');
+        $this->form_validation->set_rules('prev_cost', 'Previous Cost', 'required');
+        $this->form_validation->set_rules('prev_pay', 'Previous Pay', 'required');
+        $this->form_validation->set_rules('prev_amount', 'Previous Amount', 'required');
+        $this->form_validation->set_rules('pay_amount', 'Pay Amount', 'required');
+        $this->form_validation->set_rules('from_date', 'From Date', 'required');
+        $this->form_validation->set_rules('end_date', 'End Date', 'required');
+        $this->form_validation->set_rules('status', 'Status', 'required');
 
-    if ($this->form_validation->run() == false) {
-        // Form validation failed, display error messages
-        $errors = validation_errors();
-        echo $errors;
-    } else {
-        // Form validation passed, process the form data
-        $data = array(
-            'prev_meal' => $this->input->post('prev_meal'),
-            'prev_cost' => $this->input->post('prev_cost'),
-            'prev_pay' => $this->input->post('prev_pay'),
-            'prev_amount' => $this->input->post('prev_amount'),
-            'pay_amount' => $this->input->post('pay_amount'),
-            'from_date' => $this->input->post('from_date'),
-            'end_date' => $this->input->post('end_date'),
-            'status' => $this->input->post('status')
-        );
-
-        // Check if employee ID exists in the database
-        $emp_id = $this->input->post('emp_id');
-        $employee = $this->db->where('user_id', $emp_id)->get('xin_employees')->row();
-        if ($employee) {
-            $data['emp_id'] = $emp_id;
-
-            // Check if the record already exists
-            $existingRecord = $this->db->where('emp_id', $emp_id)->get('lunch_payment')->row();
-            if ($existingRecord) {
-                // Update existing record
-                $this->db->where('emp_id', $emp_id)->update('lunch_payment', $data);
-                flash_message('success', 'Update Successfully');
-             
-            } else {
-                // Insert new record
-                flash_message('success', 'Insert Successfully');
-                $this->db->insert('lunch_payment', $data);
-                
-            }
-
-           return redirect('admin/lunch/manual_lunch_entry');
+        if ($this->form_validation->run() == false) {
+            // Form validation failed, display error messages
+            $errors = validation_errors();
+            echo $errors;
         } else {
-            return redirect('admin/lunch/manual_lunch_entry');
+            // Form validation passed, process the form data
+            $data = array(
+                'prev_meal' => $this->input->post('prev_meal'),
+                'prev_cost' => $this->input->post('prev_cost'),
+                'prev_pay' => $this->input->post('prev_pay'),
+                'prev_amount' => $this->input->post('prev_amount'),
+                'pay_amount' => $this->input->post('pay_amount'),
+                'from_date' => $this->input->post('from_date'),
+                'end_date' => $this->input->post('end_date'),
+                'status' => $this->input->post('status')
+            );
+
+            // Check if employee ID exists in the database
+            $emp_id = $this->input->post('emp_id');
+            $employee = $this->db->where('user_id', $emp_id)->get('xin_employees')->row();
+            if ($employee) {
+                $data['emp_id'] = $emp_id;
+
+                // Check if the record already exists
+                $existingRecord = $this->db->where('emp_id', $emp_id)->get('lunch_payment')->row();
+                if ($existingRecord) {
+                    // Update existing record
+                    $this->db->where('emp_id', $emp_id)->update('lunch_payment', $data);
+                    flash_message('success', 'Update Successfully');
+                 
+                } else {
+                    // Insert new record
+                    flash_message('success', 'Insert Successfully');
+                    $this->db->insert('lunch_payment', $data);
+                    
+                }
+
+               return redirect('admin/lunch/manual_lunch_entry');
+            } else {
+                return redirect('admin/lunch/manual_lunch_entry');
+            }
         }
     }
-}
 
 
 
