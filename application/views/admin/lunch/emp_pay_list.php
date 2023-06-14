@@ -7,24 +7,16 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
 <style>
   /* Custom CSS to increase the width of the select box */
-  #status {
-    width: 194px;
-    height: 35px;
-    border-radius: 5px;
-  }
+
   .select2-container--default, .select2-container--open{
     z-index: 1500 !important;
   }
 
-  /* Style for the container */
-  .container {
-    margin: 20px;
-  }
 
   /* Style for the form */
   form {
-    max-width: 700px;
-    margin: 0 auto;
+    max-width: 1096px;
+   
     padding: 20px;
     background-color: #f5f5f5;
     border-radius: 5px;
@@ -142,10 +134,14 @@
 </div>
 
 <div class="container">
-  <div class="row">
-    <div class="col-md-12" style="display: flex;">
+  <div class="content" style="padding: 0;margin: 0;min-height: 180px;">
+    <!-- <div class="col-md-12" style="display: flex;"> -->
       <div class="container col-md-5">
         <h4 style="display: inline-block;">Last Process:</h4> <span style="color: blue;"><?php echo date('Y-m-d', strtotime($last_prement->from_date));?></span> to <span style="color: blue;"> <?php echo date('Y-m-d', strtotime($last_prement->end_date));?></span>
+        <?php if (date('Y-m-d') == '2023-06-14' OR date('Y-m-d') == '2023-06-15') { ?>
+          <span>&nbsp;&nbsp;&nbsp;  <a class="btn-primary" style="padding: 5px;" href="<?= base_url(); ?>">Manual Entry</a></span>
+        <?php } ?>
+
         <h2>Add Payment</h2>
         <select id="search-select">
           <option>Select Employee</option>
@@ -173,7 +169,7 @@
           
         </form>
       </div>
-    </div>
+    <!-- </div> -->
   </div>
 </div>
 
@@ -219,13 +215,18 @@
         // Generate the form dynamically
         var formHtml = '';
         formHtml += '<form id="payment_form" style="overflow: auto;">';
-        formHtml += '<div class="form-group col-md-12">';
-        formHtml += '<label for="employeeId">Employee Name</label>';
+
+       
+      
+      
         formHtml += '<input type="hidden" class="form-control" id="employeeId" name="empid" value="' + responseData[0].emp_id +'">';
         formHtml += '<input type="hidden" class="form-control" id="pay_month"  name="pay_month" value="' + responseData[0].end_date +'">';
 
-        formHtml += '<input type="text" class="form-control" id="employeeId" value="' + responseData[0].first_name + ' ' + responseData[0].last_name + ' " readonly>';
-        formHtml += '</div>';
+        formHtml += '<h4>'+ responseData[0].first_name + ' ' + responseData[0].last_name + '</h4>';
+       
+        
+
+        formHtml += '<div class="row">';
         formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="firstName">Previous Month Meal</label>';
         formHtml += '<input type="text" class="form-control" id="firstName" value="' + responseData[0].prev_meal + '" readonly>';
@@ -242,17 +243,21 @@
         formHtml += '<label for="dateOfBirth">Previous Month Balance</label>';
         formHtml += '<input type="number" class="form-control" id="prev_balance" value="' + responseData[0].prev_amount + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group col-md-6">';
-        formHtml += '<label for="gender">Present Month day (probable)</label>';
+        formHtml += '</div>'; 
+
+        formHtml += '<div class="row">';
+        formHtml += '<div class="form-group col-md-4">';
+        formHtml += '<label for="gender">Pay Meal (probable)</label>';
         formHtml += '<input type="number" class="form-control" id="p_month_day" onchange="calculatePayment()" value="' + (responseData[0].pay_amount/45) + '" >';
         formHtml += '</div>';
-        formHtml += '<div class="form-group col-md-6">';
-        formHtml += '<label for="gender">Present Month pay (probable)</label>';
+        formHtml += '<div class="form-group col-md-4">';
+        formHtml += '<label for="gender">Pay Amount (probable)</label>';
         formHtml += '<input type="text" class="form-control" id="p_month_pay" name="p_month_pay" value="' + pay_m + '" readonly>';
         formHtml += '</div>';
-        formHtml += '<div class="form-group col-md-3">';
-        formHtml += '<label for="gender">Prement Status</label>';
-        formHtml += '<select name="status" id="status">';       
+
+        formHtml += '<div class="form-group col-md-4">';
+        formHtml += '<label for="gender">Pay Status</label>';
+        formHtml += '<select class="form-control" name="status" id="status">';       
           // Set the selected option based on responseData[0].status
           if (responseData[0].status === '0') {
             formHtml += '<option value="0" selected>Unpaid</option>';
@@ -267,10 +272,15 @@
           }
         formHtml += '</select>';
         formHtml += '</div>';
+
+        formHtml += '</div>'; 
+
+
         formHtml += '<div class="form-group col-md-12 float-right" style="justify-content: right;display: flex;">';
         formHtml += '<button type="submit" class="btn btn-primary">Submit</button>';
         formHtml += '</div>';
         // Add more fields as needed
+
         formHtml += '</form>';
 
         // Append the generated form HTML to the form-container div
