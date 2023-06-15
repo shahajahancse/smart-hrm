@@ -106,12 +106,15 @@
   $this->db->where("date", $current_date);
   $this->db->limit("1");
   $user_movement = $this->db->get('movement')->result();
+ 
 
   if (count($user_movement) >0){
     $out=$user_movement[0]->inout;
    
     $outarray=json_decode($user_movement[0]->location);
     $outdata = $outarray[count($outarray) - 1];
+    $outResonArray=json_decode($user_movement[0]->reason);
+    $outReson = $outResonArray[count($outResonArray) - 1];
     $outtimedataarray=json_decode($user_movement[0]->out_time);
     $outtimedata = $outtimedataarray[count($outtimedataarray) - 1];
 
@@ -165,7 +168,7 @@ if($out>0){
         color: #3F51B5;
     }
 
-    #outtime {
+    #outtime, #outreason {
         font-style: italic;
     }
 </style>
@@ -173,6 +176,7 @@ if($out>0){
 <div class="boxm">
     <p>Your Current Location is: <span id="location"><?= $location ?></span></p>
     <p>Outime: <span id="outtime"><?= $outtimedata ?></span></p>
+    <p>Reason: <span id="outreason"><?= $outReson ?></span></p>
 </div>
 
       

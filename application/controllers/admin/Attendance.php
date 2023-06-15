@@ -382,9 +382,47 @@ class Attendance extends MY_Controller {
             $this->load->view('admin/attendance/daily_report',$data);
         }
     }
+    public function latecomment()
+    {
+		$report_date = $this->input->post('attendance_date');
+    	$attendance_date = date("Y-m-d", strtotime($report_date));
+		$status = $this->input->post('status');
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+		$data['status']= $status;
+    	$data["values"] = $this->Attendance_model->latecomment($attendance_date, $emp_id);
+        $data["attendance_date"] = $attendance_date;
+        if(is_string($data["values"]))
+        {
+           echo json_encode(['error' => "Not Available"]);
+
+        }
+        else
+        {
+			echo json_encode($data);
+		    exit;
+        }
+    }
+    public function add_latecomment()
+    {
+		$date = $this->input->post('date');
+		$emp_id = $this->input->post('empi_id');
+		$comment = $this->input->post('comment');
+		foreach($emp_id as $key=>$user_id){
+            $data = array(
+                'comment'       => $comment[$key],
+            );
+
+			    $this->db->where('attendance_date', $date);
+                $this->db->where('employee_id', $user_id);
+                $this->db->update('xin_attendance_time', $data);
+		}
+		echo json_encode("Success");
+		exit;
+    }
 
 	public function lunch_report()
-    {  
+    {
 		$report_date = $this->input->post('attendance_date');
     	$attendance_date = date("Y-m-d", strtotime($report_date));
 		$status = $this->input->post('status');

@@ -109,8 +109,23 @@ exit();
             
                 <td><?php echo $key+1;?></td>
                 <td><?php echo $user_info[0]->first_name.' '.$user_info[0]->last_name?></td>
-                <td><?php echo $row->from_date?></td>
-                <td><?php echo $row->to_date?></td>
+				  
+				<?php
+				  $toDateString = $row->from_date;
+				  $dayName = date('l', strtotime($toDateString));
+				  
+				 
+			     ?>
+                <td><?php echo $row->from_date. ' ('.$dayName. ')'?></td>
+				
+				  <?php
+				  $toDateString = $row->to_date;
+				  $dayName = date('l', strtotime($toDateString));
+				  
+				 
+			     ?>
+				
+                <td><?php echo $row->to_date . ' ('.$dayName.')'?></td>
 				<?php
                 if ($row->leave_type=='el') {
 					$total_el_leave +=$row->qty;

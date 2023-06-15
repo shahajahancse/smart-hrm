@@ -1274,6 +1274,7 @@ class Employees extends MY_Controller {
 			'youtube_link' => $result[0]->youtube_link,
 			'leave_categories' => $result[0]->leave_categories,
 			'view_companies_id' => $result[0]->view_companies_id,
+			'device' => $result[0]->device,
 			'all_countries' => $this->Xin_model->get_countries(),
 			'all_document_types' => $this->Employees_model->all_document_types(),
 			'all_education_level' => $this->Employees_model->all_education_level(),
@@ -6417,6 +6418,77 @@ class Employees extends MY_Controller {
 		echo json_encode( $data );
 		exit();
 	}
+	public function add_device(){
+		$divicein=$this->input->post();
+		$divicearray=[] ;
+			if(isset($divicein['laptop'])){
+				$divicearray[]=1;
+			}
+			if(isset($divicein['laptop_cherger'])){
+				$divicearray[]=2;
+			}
+			if(isset($divicein['mouse'])){
+				$divicearray[]=3;
+			}
+			if(isset($divicein['converter'])){
+				$divicearray[]=4;
+			}
+			if(isset($divicein['Headphone'])){
+				$divicearray[]=5;
+			}
+			if(isset($divicein['extra_monitor'])){
+				$divicearray[]=6;
+			}
+			if(isset($divicein['cpu'])){
+				$divicearray[]=7;
+			}
+			if(isset($divicein['ups'])){
+				$divicearray[]=8;
+			}
+			if(isset($divicein['power_cable'])){
+				$divicearray[]=9;
+			}
+			if(isset($divicein['vga_cable'])){
+				$divicearray[]=10;
+			}
+			if(isset($divicein['smart_phone'])){
+				$divicearray[]=11;
+			}
+			if(isset($divicein['bpws'])){
+				$divicearray[]=12;
+			}
+	$device=json_encode($divicearray);
+		
 
 
+		 $data = array(
+            'device' => $device,
+        );
+    
+        $this->db->where('user_id', $divicein['emp_id']);
+       if( $this->db->update('xin_employees', $data)){
+		echo ( json_encode("Success"));
+	   }else {
+		echo (json_encode("Success"));
+	   }
+exit();
+	}
+		public function device(){
+			$session = $this->session->userdata('username');
+		
+		if(empty($session) && !is_array($session)){ 
+			redirect('admin/');
+		}
+
+		$data = array(
+				'title' => $this->lang->line('dashboard_title').' | '.$this->Xin_model->site_title(),
+				'path_url' => 'dashboard',
+				'breadcrumbs' => 'Device',
+				'result' =>$this->Employees_model->read_employee_information(($session['user_id']))
+
+			);
+			$data['subview'] = $this->load->view('admin/employees/device', $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+	
+	}
 }

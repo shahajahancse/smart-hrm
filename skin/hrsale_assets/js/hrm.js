@@ -114,6 +114,69 @@
         }
       }
     }
+      function latecomment(status,late_status=null)
+    {
+      $('#latecommentform').empty();
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+      attendance_date = document.getElementById('process_date').value;
+      if(process_date =='')
+      {
+        alert('Please select attendance date');
+        return ;
+      }
+
+      emp_status = document.getElementById('status').value;
+      if(emp_status =='')
+      {
+        alert('Please select employee status');
+        return ;
+      }
+
+     var emp_id = document.getElementsByName('select_emp_id[]');
+     var sql = get_checked_value(emp_id);
+     
+     if(sql == ''){
+      alert('Please select employee Id');
+      return ;
+     }
+     document.getElementById('datein').value=attendance_date;
+     document.getElementById('date').innerHTML=attendance_date;
+
+
+      // var queryString="month_year="+month_year+"&company="+company+"&employee_id="+employee_id;
+
+      var data = "attendance_date="+attendance_date+"&status="+status+"&sql="+sql+"&late_status="+late_status;
+      
+      // console.log(data); return;
+      url = base_url + "/latecomment";
+      ajaxRequest.open("POST", url, true);
+      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+      ajaxRequest.send(data);
+
+      ajaxRequest.onreadystatechange = function(){
+        if(ajaxRequest.readyState == 4){
+           
+          const res = JSON.parse(ajaxRequest.response);
+          console.log(res);
+         if(res.error){
+          alert(res.error)
+         }else{
+              $('#latecommentm').modal('show');
+              const data = res['values'];
+              let item = '';
+              $.each(data, function(index, employee) {
+              const row = ' <div class="row" style="margin: 4px;"> <div class="col-md-3"> <input type="text" readonly class="form-control" value="' + employee.first_name + ' ' + employee.last_name + '" disabled><input type="hidden" name="empi_id[]" class="form-control" value="' + employee.emp_id+ '"> </div> <div class="col-md-4"> <input type="text" readonly class="form-control" value="' + employee.designation_name + '" disabled> </div> <div class="col-md-2"> <input type="text" readonly class="form-control" value="' + employee.status + '" disabled> </div> <div class="col-md-3"> <input type="text"  class="form-control" name="comment[]" value="' + employee.comment + '" > </div> </div>';
+              item += row;
+            });
+
+            // Add the HTML code for each row to an HTML element with ID 'empfrom'
+            $('#latecommentform').append(item);
+         }
+        }
+      }
+    }
+
 
     // daily lunch In/Out/Late report
     function lunch_report(status,late_status=null)
@@ -165,6 +228,7 @@
       }
 
     }
+    
 
      // daily Early Out report  
     function early_out_report(status)
@@ -451,16 +515,9 @@ function Per1_Report(statusC)
  
   function LP_AlP_Report (statusC)
 {
-
           var ajaxRequest;  // The variable that makes Ajax possible!
           ajaxRequest = new XMLHttpRequest();
-
-        
-
-          
-          
-          
-          var data = "statusC="+statusC;;
+          var data = "statusC="+statusC;
 
           url = base_url + "/low_inv_all_product_status_report";
           ajaxRequest.open("POST", url, true);

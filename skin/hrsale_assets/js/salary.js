@@ -342,7 +342,6 @@ function Actual_salary_sheet_excel_bank(s)
 
         // Add count after the last row in #empfrom
         var countCol = $('<div class="col-md-12 " style="display: inline-flex;"><p style="color:#004cff;font-size: 17px;margin-left: -26px;font-weight: bold;">Total Employee ' + count + '</p><input id="temp" type="hidden" readonly class="form-control" value="' + count + '" name="total_emp"><p style="color:#004cff;font-size: 17px;font-weight: bold;right: 0;position: absolute;margin-left:5px;">Date ' + salary_month + '</p><input id="date" type="hidden" readonly class="form-control" value="' + salary_month + '" name="date"><input id="sql" type="hidden" readonly class="form-control" value="'+ sqld +'"></div>');
-            
         $('#total').append(countCol);
         $('#my_modal').modal('show');
       }
