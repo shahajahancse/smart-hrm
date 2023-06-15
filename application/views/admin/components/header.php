@@ -58,7 +58,6 @@
   	$animated = 'animated '.$theme[0]->animation_style;
   }
 ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-xxx" crossorigin="anonymous" />
 
 <style type="text/css">
   .main-header .sidebar-toggle-hrsale-chat:before {
@@ -75,6 +74,75 @@
       color: #fff;
       font-family: sans-serif;
     }
+    .switch {
+ position: relative;
+ display: inline-block;
+ width: 120px;
+ height: 34px;
+}
+
+.switch input {
+ display: none;
+}
+
+.slider {
+ position: absolute;
+ cursor: pointer;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background-color: #3C3C3C;
+ -webkit-transition: .4s;
+ transition: .4s;
+ border-radius: 34px;
+}
+
+.slider:before {
+ position: absolute;
+ content: "";
+ height: 26px;
+ width: 26px;
+ left: 4px;
+ bottom: 4px;
+ background-color: white;
+ -webkit-transition: .4s;
+ transition: .4s;
+ border-radius: 50%;
+}
+
+input:checked + .slider {
+ background-color: #0E6EB8;
+}
+
+input:focus + .slider {
+ box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+ -webkit-transform: translateX(26px);
+ -ms-transform: translateX(26px);
+ transform: translateX(85px);
+}
+
+/*------ ADDED CSS ---------*/
+.slider:after {
+ content: 'Floor';
+ color: white;
+ display: block;
+ position: absolute;
+ transform: translate(-50%,-50%);
+ top: 50%;
+ left: 50%;
+ font-size: 10px;
+ font-family: Verdana, sans-serif;
+}
+
+input:checked + .slider:after {
+ content: 'Meeting';
+}
+
+/*--------- END --------*/
   </style>
 
 <div id="myModal" class="modal fade" role="dialog">
@@ -128,7 +196,7 @@ if($out>0){
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Movement</h5>
+        <h5 class="modal-title" style="float: left;margin-right: 8px;" id="exampleModalLabel">Movement</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -196,37 +264,125 @@ if($out>0){
 <?php
 }else{
 ?>
+
 <div class="modal fade" id="movement" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Movement</h5>
+        <div style="float: left;margin-right: 8px;">
+          <p style="float: left;margin-right: 8px;" id="fp">Floor</p>
+          <label class="switch">
+            <input type="checkbox" onclick=movetype()>
+            <span class="slider"></span>
+          </label>
+          <p style="float: right;margin-left: 8px;" id="mp">Meeting</p>
+        </div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <form id="movementform">
-      <div class="modal-body">
-      <div class="form-group">
-          <select name="area" class="custom-select form-control" required>
-            <option value="">Select Area</option>
-            <option value="1">5th Floor</option>
-            <option value="2">3rd Floor</option>
-            <option value="3">Out Side</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="exampleFormControlTextarea1">Reason</label>
-          <textarea name="reason" class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
-        </div>
+       <div class="modal-body">
+        <!-- floor Movement -->
+         <div id="floorform" >
+          <h4>Floor Movement </h4>
+            <div class="form-group">
+                <select name="area" class="custom-select form-control" required>
+                  <option value="">Select Area</option>
+                  <option value="1">5th Floor</option>
+                  <option value="2">3rd Floor</option>
+                  <option value="3">Out Side</option>
+                </select>
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Reason</label>
+              <textarea name="reason" class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" id="sub" class="btn btn-primary">Out</button>
+          </div>
+          </form>
+          <!-- floor Movement -->
+        <!-- Meeting Movement -->
+         <div id="meetingform" style="display: none;">
+          <h4>Meeting Movement</h4>
+          <?php $attributes = array('id' => 'move_register', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
+                    <!-- < ?php $hidden = array('user_id' => $session['user_id']);?> -->
+                    <?php echo form_open('admin/attendance/create_move_register', $attributes);?>
+                    <div class="bg-white">
+                        <div class="box-block">
+                            <div class="row">
+                                <?php
+                                  $sql= 'SELECT user_id,first_name,last_name FROM xin_employees';
+                                  $employees = $this->db->query($sql);
+                                  $emps=$employees->result();
+                                  if($session['role_id']!=3){?>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="date">Employee Name</label>
+                                        <select name="emp_id" class="form-control" id="emp_name">
+                                            <option id="emp" value="">Select Employee Name</option>
+                                            <?php foreach($emps as $emp){?>
+                                            <option value="<?php echo $emp->user_id?>">
+                                                <?php echo $emp->first_name.' '.$emp->last_name?></option>
+                                            <?php }?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <?php }
+                                  else{?>
+                                <input type="hidden" name="emp_id" value="<?php echo $session['user_id']?>" id="emp_id">
+                                <?php }?>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="date">Date</label>
+                                        <input class="form-control date" placeholder="date..." name="date" type="text"
+                                            value="" id="m_date">
+                                        <input name="id" type="hidden" value="" id="id">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="out_time">Office out time</label>
+                                        <input class="form-control  timepicker clear-1" placeholder="Office out time"
+                                            name="out_time" type="text" value="" id="m_out_time">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="in_time">Office in time</label>
+                                        <input class="form-control  timepicker clear-2" placeholder="Office in time"
+                                            name="in_time" type="text" value="" id="m_in_time">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="summary">Reason</label>
+                                        <textarea class="form-control" placeholder="reason" name="reason" cols="30"
+                                            rows="3" id="m_reason"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions box-footer">
+                                <button type="submit" class="btn btn-primary"> <i class="fa fa-check-square-o"></i>
+                                    <?php echo $this->lang->line('xin_save');?> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <?php echo form_close(); ?>
+
+
+         
+          </div>
+          <!-- Meeting Movement -->
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Out</button>
-      </div>
+     
 
     </div>
-    </form>
+   
   </div>
 </div>
 <?php } ?>
@@ -258,7 +414,7 @@ if($out>0){
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav"> 
-
+<?php if($user[0]->user_role_id != 1){?>
         <li>
           <a data-toggle="modal" data-target="#movement">
             
@@ -268,7 +424,7 @@ if($out>0){
          <?php } ?>
             </a>
         </li>
-
+<?php } ?>
 
 
 
@@ -964,4 +1120,13 @@ $(document).ready(function(){
     button.href = url; 
   });
 });
+</script>
+<script>
+  function movetype(){
+  
+     $("#floorform").toggle();
+     $("#meetingform").toggle();
+     $("#sub").toggle();
+     
+  }
 </script>
