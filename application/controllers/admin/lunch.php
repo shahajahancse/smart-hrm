@@ -157,9 +157,9 @@ class Lunch extends MY_Controller {
 
 
             $total_m = $emp_m + $guest_m;
-            $total_cost = $total_m * 45;
+            $total_cost = ($emp_m*45) + ($guest_m* 90);
             $emp_cost = $emp_m * 45;
-            $guest_cost = $guest_m * 45;
+            $guest_cost = $guest_m * 90;
 
             $data2 = array(
                 'total_m' => $total_m,
