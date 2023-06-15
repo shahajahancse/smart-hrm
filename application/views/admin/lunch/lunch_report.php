@@ -106,6 +106,7 @@
         <li class="nav-item active">
           <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily" aria-selected="true">Report</a>
         </li>
+      
      
     </ul>
     
@@ -117,6 +118,9 @@
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(2)">Monthly Report</button>
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(3)">Continue  Report</button>
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(4)">Vendor Voucher</button>
+          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="paymentreport(1)">Paid Report</button>
+          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="paymentreport(0)">Unpaid Report</button>
+          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="paymentreport(2)">Payment Report</button>
 
       </div>
 

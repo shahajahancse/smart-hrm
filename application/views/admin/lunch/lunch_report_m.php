@@ -110,7 +110,7 @@
             </thead>
             <tbody>
                 <?php foreach ($emp_id as $empid) {
-                    $emp = $this->lunch_model->employees($empid);
+                    $emp = $this->Lunch_model->employees($empid);
                 ?>
                     <tr>
                         <td><?= $emp[0]->first_name ?> <?= $emp[0]->last_name ?></td>
@@ -118,7 +118,7 @@
                         $totalmeal = 0;
                         for ($i = 1; $i <= $daysInMonth; $i++) {
                             $ddate = $year . '-' . $nummonth . '-' . $i;
-                            $getmeal =  $this->lunch_model->get_meal($emp[0]->user_id, $ddate);
+                            $getmeal =  $this->Lunch_model->get_meal($emp[0]->user_id, $ddate);
                         ?>
                             <td>
                                 <?php

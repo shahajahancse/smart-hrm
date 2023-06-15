@@ -342,6 +342,19 @@ class Lunch extends MY_Controller {
             $this->load->view('admin/lunch/lunch_report_view_adsent', $data); 
         }
     }
+    public function paymentreport(){
+
+
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $status = $this->input->post('status');
+        $data['status'] = $status;
+        $data['lunch_data'] = $this->Lunch_model->paymentreport($status);
+       
+        $this->load->view('admin/lunch/payment_report_page', $data); 
+    }
 
     //manually lunch data entry
     public function manual_lunch_entry(){

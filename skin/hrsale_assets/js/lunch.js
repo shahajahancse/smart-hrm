@@ -77,6 +77,32 @@ function perday(status) {
   }
 }
 }
+function paymentreport(status) {
+{
+  var ajaxRequest;  // The variable that makes Ajax possible!
+  ajaxRequest = new XMLHttpRequest();
+  var data = '&status='+status;
+  console.log(data);
+
+  url = base_url + "/paymentreport/";
+  ajaxRequest.open("POST", url, true);
+  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+   ajaxRequest.send(data);
+    // console.log(url); return;
+
+  ajaxRequest.onreadystatechange = function(){
+    if(ajaxRequest.readyState == 4){
+      document.getElementById("loading").style.visibility = "hidden";
+
+      // console.log(ajaxRequest.responseText); return;
+      var resp = ajaxRequest.responseText;
+      a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+      a.document.write(resp);
+      // a.close();
+    }
+  }
+}
+}
 function get_checked_value(checkboxes) {
   var vals = "";
   for (var i=0, n=checkboxes.length;i<n;i++) 

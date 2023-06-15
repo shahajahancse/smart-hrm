@@ -100,6 +100,24 @@ class Lunch_model extends CI_Model {
         $query = $this->db->query("SELECT * FROM xin_employees WHERE user_id = $id ");
         return $query->result();
     }
+    public function paymentreport($status)
+    {
+
+        $last_prement= $this->db->query("SELECT * FROM `lunch_payment` ORDER BY id DESC LIMIT 1")->row();
+        
+
+       
+        $this->db->select('xin_employees.first_name, xin_employees.last_name, lunch_payment.*');
+        $this->db->join('xin_employees', 'lunch_payment.emp_id = xin_employees.user_id');
+        $this->db->where('lunch_payment.end_date', $last_prement->end_date);
+        if ($status == 0 || $status == 1) {
+            $this->db->where('lunch_payment.status', $status);
+        }
+        $result = $this->db->get('lunch_payment')->result();
+        return $result;
+        
+       
+    }
     
     public function getpay($id)
     {
