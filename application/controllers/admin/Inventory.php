@@ -752,7 +752,9 @@ class Inventory extends MY_Controller {
 			    'product_name'  => $this->input->post('product_name'),
 			    'unit_id'       => $this->input->post('unit_id'),
 			    'quantity'      => $this->input->post('quantity'),
-			    'order_level'   => $this->input->post('order_level')
+			    'order_level'   => $this->input->post('order_level'),
+			    'p_type'   => $this->input->post('p_type'),
+			    'short_details'   => $this->input->post('short_details')
 			);           
 
 			if ($hid = $this->input->post('hidden_id')) {
@@ -1057,14 +1059,14 @@ class Inventory extends MY_Controller {
 					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
 				}
 			}
-			redirect('admin/inventory/products');
+			redirect('admin/inventory/user_uses_list');
 		}
 
         //Dropdown
 		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Inventory';
 		$data['path_url'] = 'inventory';
-	    $data['results'] = $this->Inventory_model->product_list();
+	    $data['user_uses_list'] = $this->Inventory_model->user_uses_list();
 	    $data['categorys'] = $this->db->get("products_categories")->result();
 	    $data['sub_categorys'] = $this->db->get("products_sub_categories")->result();
 	    $data['units'] = $this->db->get("product_unit")->result();
@@ -1076,6 +1078,7 @@ class Inventory extends MY_Controller {
 		$data['subview'] = $this->load->view("admin/inventory/user_uses_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
 
 }
 ?>
