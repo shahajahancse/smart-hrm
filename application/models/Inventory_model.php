@@ -439,24 +439,6 @@
 		// dd($data);
 		}
 
-
-
-
-					
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			// $this->db->select('
 			//     products_requisitions.id,
 			// 	products_requisition_details.requisition_id,
@@ -477,29 +459,9 @@
 			// $this->db->where("xin_employee_move_register.date BETWEEN '$f1_date' AND '$f2_date'");
 			// $this->db->where('xin_employee_move_register.status', $statusC);
 			// $query = $this->db->get();
-			// $data = $query->result();
-		
-		
+			// $data = $query->result();	
 
-			
-		->from("products")
-		->join("products_categories", "products_categories.id = products.cat_id")
-		->join("products_sub_categories", "products_sub_categories.id = products.sub_cate_id")
-		->join("product_unit", "product_unit.id = products.unit_id");
-	
-		if ($statusC == null) {
-			$this->db->where("products.quantity < products.order_level");
-		}
-	
-		$this->db->order_by('products.quantity', 'ASC');
-		$query = $this->db->get();
-		$data = $query->result();
-	
-		if ($query->num_rows() > 0) {
-			return $data;
-		} else {
-			return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
-		}
+ 
 	}
 	
 	
