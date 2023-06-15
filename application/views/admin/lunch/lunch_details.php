@@ -45,10 +45,7 @@ $data=$lunch[0]
     </div>
     <?php
 
-if(base_url()=='http://localhost/smart-hrm/'){
-  $currentDate = '2023-01-05';
-
-}else{ $currentDate = date('Y-m-d');}
+ $currentDate = date('Y-m-d');
 if($data->date==$currentDate){
 
     ?>

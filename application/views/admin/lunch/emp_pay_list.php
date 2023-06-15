@@ -368,6 +368,7 @@ function calculatePayment() {
         alert('Please select Second date');
         return ;
       }
+      document.getElementById("loading").style.visibility = "visible";
       // Create the AJAX request
       $.ajax({
         url: '<?= base_url('admin/lunch/process') ?>', // Replace with the URL to send the request
@@ -378,17 +379,26 @@ function calculatePayment() {
         },
         success: function(response) {
           // Handle the success response from the server
+          document.getElementById("loading").style.visibility = "hidden";
+
           console.log(response);
-           Swal.fire({
-                        title: 'Success!',
-                        text: response,
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
+          Swal.fire({
+                    title: 'Success!',
+                    text: response,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
+
         },
         error: function(xhr, status, error) {
           // Handle the error response from the server
           console.log(error);
+          document.getElementById("loading").style.visibility = "hidden";
+
         }
       });
     });
