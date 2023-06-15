@@ -115,8 +115,8 @@ hr {
                     </div>
 
         <?php 
-           $role_id =$session['role_id'];
-        if ($role_id == 3) { ?>
+        $role_id =$session['role_id'];
+        if ($role_id == 1) { ?>
                     <div class="form-group col-lg-6" id="ta_da_div" style="display: none;">
                         <label id="manage_ta_da">Manage TA/DA</label>
                         <select class="form-control" id="status">
@@ -126,9 +126,7 @@ hr {
                         </select>
                     </div>
                     <?php }
-           $role_id1 =$session['role_id'];
-            // dd($session['role_id']);
-        if ($role_id1 == 3) { ?>
+        if ($role_id == 1) { ?>
                     <div class="form-group col-lg-6" id="set_ta_da_amount" style="display: none;">
                         <label>Set Amount</label>
                         <input type="text" class="form-control" id="payable_amount" placeholder="Set Amount">

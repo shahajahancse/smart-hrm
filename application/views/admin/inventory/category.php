@@ -69,23 +69,23 @@
   <div class="box-body">
     <div class="box-datatable table-responsive">
       <table class="datatables-demo table table-striped table-bordered" id="example">
-        <thead>
-          <tr>
-            <th style="width:120px;">No.</th>
-            <th style="width:100px;">Category Name</th>
-            <th style="width:100px;">description</th>
-            <th style="width:100px;">Status</th>
-            <th style="width:100px;">Action</th>
+        <thead class="text-center">
+          <tr >
+            <th class="text-center" style="width:20px;">No.</th>
+            <th class="text-center" style="width:100px;">Name</th>
+            <th class="text-center" style="width:100px;">Description</th>
+            <th class="text-center" style="width:100px;">Status</th>
+            <th class="text-center" style="width:100px;">Action</th>
           </tr>
         </thead>
         <tbody>
           <?php foreach ($results as $key => $row) { ?>
-            <tr>
+            <tr class="text-center">
               <td><?= $key + 1; ?></td>
               <td><?= $row->category_name; ?></td>
               <td><?= $row->description; ?></td>
-              <td><?= $row->status; ?></td>
-              <td><a href="<?= base_url('admin/inventory/category/'.$row->id);?>">Edit</a></td>
+              <td><?= $row->status=='Enable'?"<span class='label label-success'>Active</span>":"<span class='label label-danger'>Inctive</span>"; ?></td>
+              <td><a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/category/'.$row->id);?>">Edit</a></td>
             </tr>
           <?php } ?>
         </tbody>

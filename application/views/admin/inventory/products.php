@@ -86,22 +86,20 @@
           </div>
 
           <div class="row">
-            <div class="col-md-9">      
+            <div class="col-md-8">      
               <div class="form-group">
                 <label for="quantity">Product Description<i class="hrsale-asterisk" style="color:red !important">*</i></label>
-                <textarea class="form-control" placeholder="Product description" name="quantity" type="text" value="<?php echo !empty($row->quantity)? $row->quantity:''; ?>"></textarea>
+                <textarea class="form-control" placeholder="Product description" name="short_details" type="text"><?php echo !empty($row->short_details)? $row->short_details:''; ?></textarea>
               </div>
             </div>
 
-            <div class="col-md-3">
-              <div class="form-group">
-                <label>Product Type<i class="hrsale-asterisk" style="color:red !important">*</i></label>
-                <select class="form-control" name="cat_id" id="cat_id" required>
-                  <option value="">Select Type</option>
-                  <option value="inventory">Inventory</option>
-                  <option value="store">Store</option>    
-                </select>
-              </div>
+            <div class="col-md-4">
+              
+                <label for="p_type">Product Type<i class="hrsale-asterisk" style="color:red !important">*</i></label><br>
+                <label class="radio-inline"><input type="radio" name="p_type" value="1"<?php echo (!empty($row) && $row->p_type == 1)? 'checked':'' ?> >Inventory</label>
+                <label class="radio-inline"><input type="radio" name="p_type" value="0"<?php echo (!empty($row) && $row->p_type == 0)? 'checked':'' ?> >Store</label>
+
+           
             </div>
 
           </div>
@@ -115,18 +113,18 @@
   </div>
 </div>
 
-            <?php echo validation_errors(); ?>
-            <?php if($this->session->flashdata('success')):?>
-              <div class="alert alert-success">
-                <?php echo $this->session->flashdata('success');?>
-              </div>
-            <?php endif; ?> 
+<?php echo validation_errors(); ?>
+<?php if($this->session->flashdata('success')):?>
+  <div class="alert alert-success alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <?php echo $this->session->flashdata('success');?>
+  </div>
+<?php endif; ?> 
 
-            <?php if($this->session->flashdata('warning')):?>
-              <div class="alert alert-warning">
-                <?php echo $this->session->flashdata('warning');?>
-              </div>
-            <?php endif; ?> 
+<?php if($this->session->flashdata('warning')):?>
+  <div class="alert alert-warning alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <?php echo $this->session->flashdata('warning');?>
+  </div>
+<?php endif; ?> 
 
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border">

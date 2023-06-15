@@ -26,23 +26,13 @@ class floor_movement extends MY_Controller {
 			redirect('admin/');
 		}
 		//load the model
-		$this->load->model('Attendance_model');
-		$this->load->model("Xin_model");
-		$this->load->model("Job_card_model");
-		$this->load->model("Timesheet_model");
-
-		// $this->load->model("Employees_model");
-		// $this->load->library('email');
-		$this->load->model("Department_model");
-		$this->load->model("Designation_model");
-		// $this->load->model("Roles_model");
 		// $this->load->model("Project_model");
 		// $this->load->model("Location_model");
 	}
 
 	public function outformsub()
     {
-        $session = $this->session->userdata('username');
+        $session = $this->session->userdata('username'); 
 		$user_id = $session['user_id'];
         $current_date=date('Y-m-d');
        
@@ -50,7 +40,7 @@ class floor_movement extends MY_Controller {
         $this->db->where("user_id", $user_id);
         $this->db->where("date", $current_date);
         $this->db->limit("1");
-        $user_movement = $this->db->get('movement')->result();
+        $user_movement = $this->db->get('xin_employee_floor_move')->result();
         if(count($user_movement)>0){
             $input_location=$this->input->post('area');
             $input_reason=$this->input->post('reason');
@@ -76,7 +66,7 @@ class floor_movement extends MY_Controller {
                 'inout' => 1,
             );
             $this->db->where('id', $movementid);
-            if($this->db->update('movement', $data)){
+            if($this->db->update('xin_employee_floor_move', $data)){
                 echo "success";
             }else{
                 echo "unable to insert";
@@ -123,7 +113,7 @@ class floor_movement extends MY_Controller {
                 'reason' => $reason,
                 'date' => $current_date,
             );
-            if($this->db->insert('movement', $data)){
+            if($this->db->insert('xin_employee_floor_move', $data)){
                 echo "success";
             }else{
                 echo "unable to insert";
@@ -144,7 +134,7 @@ class floor_movement extends MY_Controller {
         $this->db->where("user_id", $user_id);
         $this->db->where("date", $current_date);
         $this->db->limit("1");
-        $user_movement = $this->db->get('movement')->result();
+        $user_movement = $this->db->get('xin_employee_floor_move')->result();
 
         $in_time_array=json_decode($user_movement[0]->in_time);
         $currentDateTime = date('Y-m-d H:i:s'); 
@@ -156,7 +146,7 @@ class floor_movement extends MY_Controller {
             'inout' => 0,
         );
          $this->db->where('id', $movementid);
-            if($this->db->update('movement', $data)){
+            if($this->db->update('xin_employee_floor_move', $data)){
                 echo "success";
             }else{
                 echo "unable to insert";
