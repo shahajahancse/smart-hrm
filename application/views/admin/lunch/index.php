@@ -130,7 +130,7 @@
                         <td>
                             <?php if ($result->date == date('Y-m-d')) : ?>
                                <div class="dropdown">
-                                    <a class="">Action <i class="fa-regular fa-caret-down"></i> </a>
+                                    <a class="">Action <span><i class="fa fa-sort-desc" aria-hidden="true"></i></span> </a>
                                     <div class="dropdown-content">
                                        <a href="<?= base_url('admin/lunch/details/'.$result->id.'/'.$result->date) ?>">Details</a>
                                         <a href="<?=  base_url('admin/lunch/today_lunch/'.$result->id)?>">Edit</a>
