@@ -174,7 +174,7 @@ input:checked + .slider:after {
   $this->db->where("user_id", $emppid);
   $this->db->where("date", $current_date);
   $this->db->limit("1");
-  $user_movement = $this->db->get('movement')->result();
+  $user_movement = $this->db->get('xin_employee_floor_move')->result();
  
 
   if (count($user_movement) >0){

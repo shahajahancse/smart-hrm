@@ -532,28 +532,22 @@ class Attendance_model extends CI_Model {
             xin_employees.date_of_joining,
             xin_departments.department_name,
             xin_designations.designation_name,
-            xin_attendance_time.attendance_date,
-            xin_attendance_time.clock_in,
-            xin_attendance_time.clock_out,
-            xin_attendance_time.attendance_status,
-            xin_attendance_time.status,
-            xin_attendance_time.late_status,
-            xin_attendance_time.comment,
+            xin_employee_floor_move.*,
+        
         ');
 
         $this->db->from('xin_employees');
         $this->db->from('xin_departments');
         $this->db->from('xin_designations');
-        $this->db->from('xin_attendance_time');
+        $this->db->from('xin_employee_floor_move');
         $this->db->where("xin_employees.is_active", 1);
-        $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
-        $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
+        $this->db->where("xin_employee_floor_move.date", $attendance_date);
+        $this->db->where_in("xin_employee_floor_move.user_id", $emp_id);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
-        $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
-        $this->db->order_by('xin_attendance_time.clock_in', "ASC");
+        $this->db->where('xin_employees.user_id = xin_employee_floor_move.user_id');
         $data = $this->db->get()->result();
-    
+dd($data);
         if($data)
         {
             return $data;

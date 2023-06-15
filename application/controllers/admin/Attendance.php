@@ -397,7 +397,7 @@ class Attendance extends MY_Controller {
         else
         {	
 			// dd($data["values"]);
-            $this->load->view('admin/attendance/daily_report',$data);
+            $this->load->view('admin/attendance/floor_movement',$data);
         }
     }
     public function latecomment()
