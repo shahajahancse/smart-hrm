@@ -382,6 +382,24 @@ class Attendance extends MY_Controller {
             $this->load->view('admin/attendance/daily_report',$data);
         }
     }
+    public function floor_movement()
+    {  
+		$report_date = $this->input->post('attendance_date');
+    	$attendance_date = date("Y-m-d", strtotime($report_date));
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+    	$data["values"] = $this->Attendance_model->floor_movement($attendance_date, $emp_id);
+        $data["attendance_date"] = $attendance_date;
+        if(is_string($data["values"]))
+        {
+            echo $data["values"];
+        }
+        else
+        {	
+			// dd($data["values"]);
+            $this->load->view('admin/attendance/daily_report',$data);
+        }
+    }
     public function latecomment()
     {
 		$report_date = $this->input->post('attendance_date');

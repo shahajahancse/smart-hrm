@@ -519,6 +519,50 @@ class Attendance_model extends CI_Model {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
+    public function floor_movement($attendance_date, $emp_id)
+    {   
+
+        $this->db->select('
+            xin_employees.user_id as emp_id,
+            xin_employees.employee_id,
+            xin_employees.first_name,
+            xin_employees.last_name,
+            xin_employees.department_id,
+            xin_employees.designation_id,
+            xin_employees.date_of_joining,
+            xin_departments.department_name,
+            xin_designations.designation_name,
+            xin_attendance_time.attendance_date,
+            xin_attendance_time.clock_in,
+            xin_attendance_time.clock_out,
+            xin_attendance_time.attendance_status,
+            xin_attendance_time.status,
+            xin_attendance_time.late_status,
+            xin_attendance_time.comment,
+        ');
+
+        $this->db->from('xin_employees');
+        $this->db->from('xin_departments');
+        $this->db->from('xin_designations');
+        $this->db->from('xin_attendance_time');
+        $this->db->where("xin_employees.is_active", 1);
+        $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
+        $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
+        $this->db->where('xin_employees.department_id = xin_departments.department_id');
+        $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
+        $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
+        $this->db->order_by('xin_attendance_time.clock_in', "ASC");
+        $data = $this->db->get()->result();
+    
+        if($data)
+        {
+            return $data;
+        }
+        else
+        {
+            return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+        }
+    }
     public function latecomment($attendance_date, $emp_id)
     {
 

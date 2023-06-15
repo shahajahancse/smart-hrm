@@ -146,6 +146,7 @@
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="lunch_report('Lunch Late',1)">Lunch Late</button>
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="movement_report('Movement')">Movement</button>
           <button class="btn btn-sm mr-5 sbtn"  onclick="leavecal(1,[1,2,3,4])">Leave Applyed</button>
+          <button class="btn btn-sm mr-5 sbtn"  onclick="floor_movement()">Floor Movement</button>
 
       </div>
 
