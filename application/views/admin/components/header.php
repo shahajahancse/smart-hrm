@@ -4,6 +4,7 @@
 
 <?php
 
+ $all_policies = $this->db->select('*')->from('xin_company_policy')->order_by('policy_id', 'DESC')->get()->result_array();
 
   $session = $this->session->userdata('username');
   
@@ -266,6 +267,15 @@ if($out>0){
              <span class="label" style="font-size: 12px !important; background: #fb0202 !important"><?php echo $out;?></span>
          <?php } ?>
             </a>
+        </li>
+
+        <li>
+
+            <a data-toggle="modal" data-target="#companyPolicyModal">
+                <i class="fa fa-file-text" aria-hidden="true"></i>
+                <span class="label" style="font-size: 12px !important; background: #fb0202 !important">nt</span>
+            </a>
+         
         </li>
 
 
@@ -592,6 +602,44 @@ if($out>0){
       </div>
     </nav>
   </header>
+
+
+<!-- policy modal -->
+
+<div class="modal fade" id="companyPolicyModal" tabindex="-1" role="dialog" aria-labelledby="companyPolicyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="companyPolicyModalLabel">Company Policy</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+      <?php foreach($all_policies as $key => $policy){ ?>
+        
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card shadow">
+              <div class="card-body">
+                <h3 class="card-title"><?= $policy['title']?></h2>
+                <p class="card-text">
+                  <?= $policy['description']?>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <?php } ?>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- Increment modal -->
