@@ -367,6 +367,69 @@ class Events extends MY_Controller
 			$this->output($Return);
 		}
 	}
+
+
+	public function company_policy(){
+
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+
+        
+        $this->form_validation->set_rules('editor', 'Policy name', 'required|trim');
+		$this->form_validation->set_rules('title', 'title name', 'required|trim');
+      
+        //Validate and input data
+        if ($this->form_validation->run() == true){
+			$use_id=$session['user_id'];
+			$title=$this->input->post('title');
+			
+            $policy       = $this->input->post('editor');
+        
+                $data[] = array(
+					
+					'company_id' => 1,
+                    'title' => $title, 
+                    'description' => $policy,
+					'added_by' => $use_id,
+				   
+				);
+			
+
+				
+        
+            $this->db->insert_batch('xin_company_policy', $data);
+            $this->session->set_flashdata('success', 'Successfully insert done');
+            return redirect('admin/events/company_policy');
+        }
+
+
+		// $data['employees'] = $this->Lunch_model->all_employees();
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Policy Entry';
+        $data['path_url'] = 'Company Policy';
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/dashboard/company_policy", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+
+    }
+
+	// get record of event
+	public function get_policy($id){
+	 $result =$this->db->select('*')->where('policy_id',$id)->from('xin_company_policy');
+	 $this->db->where('policy_id',$id);
+	 $data= $this->db->get('products')->result_array();
+	 
+	 header('Content-Type: application/x-json; charset=utf-8');
+	 echo (json_encode($data));
+	
+	
+
+	}
 	 
 	 
 	 

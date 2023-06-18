@@ -42,6 +42,7 @@ class Dashboard extends MY_Controller {
 		   $this->load->model("Recruitment_model");
 		   $this->load->model("Salary_model");
 		   $this->load->helper('date');
+		   $this->load->model("Lunch_model");
      }
 	
 	/*Function to set JSON output*/
@@ -450,5 +451,9 @@ class Dashboard extends MY_Controller {
 
 		
 	}
+
+	
+
+
 
 }
