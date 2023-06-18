@@ -547,7 +547,7 @@ class Attendance_model extends CI_Model {
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
         $this->db->where('xin_employees.user_id = xin_employee_floor_move.user_id');
         $data = $this->db->get()->result();
-dd($data);
+
         if($data)
         {
             return $data;

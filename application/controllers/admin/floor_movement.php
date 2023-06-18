@@ -44,7 +44,7 @@ class floor_movement extends MY_Controller {
         if(count($user_movement)>0){
             $input_location=$this->input->post('area');
             $input_reason=$this->input->post('reason');
-            $currentDateTime = date('Y-m-d H:i:s'); 
+            $currentDateTime = date('g:i A'); 
            $movementid=$user_movement[0]->id;
            $out_time_array=json_decode($user_movement[0]->out_time);
            $location_array=json_decode($user_movement[0]->location);
@@ -92,7 +92,7 @@ class floor_movement extends MY_Controller {
             $in_time_array=[];
             $location_array=[];
             $reason_array=[];
-            $currentDateTime = date('Y-m-d H:i:s');
+            $currentDateTime = date('g:i A');
             array_push($out_time_array,$currentDateTime);
             array_push($location_array,$input_location);
             array_push($reason_array,$input_reason);
@@ -137,7 +137,7 @@ class floor_movement extends MY_Controller {
         $user_movement = $this->db->get('xin_employee_floor_move')->result();
 
         $in_time_array=json_decode($user_movement[0]->in_time);
-        $currentDateTime = date('Y-m-d H:i:s'); 
+        $currentDateTime = date('g:i A'); 
         array_push($in_time_array,$currentDateTime);
         $in_time=json_encode($in_time_array);
         $movementid=$user_movement[0]->id;
