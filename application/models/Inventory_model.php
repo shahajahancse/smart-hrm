@@ -1,7 +1,7 @@
 <?php
-	defined('BASEPATH') OR exit('No direct script access allowed');
-	class inventory_model extends CI_Model
-	{
+defined('BASEPATH') OR exit('No direct script access allowed');
+class inventory_model extends CI_Model
+{
  
     public function __construct()
     {
@@ -417,84 +417,8 @@
 	}
 	
 
-
-	function user_uses_list(){
-		 $this->db->select('xin_employees.user_id,
-		 					xin_employees.employee_id,
-							xin_employees.first_name,
-							xin_employees.last_name,
-							xin_employees.date_of_birth,
-							xin_departments.department_name,
-							xin_designations.designation_name,
-							device_uses_list.id,
-							device_uses_list.tag,
-							device_uses_list.desk_no,
-							device_uses_list.details,
-							products_categories.category_name,
-							
-						 ');
-		 $this->db->from('xin_employees');
-		 $this->db->from('xin_departments');
-		 $this->db->from('xin_designations');
-		 $this->db->from('device_uses_list');
-		 $this->db->from('products_categories');
-		 $this->db->where('xin_employees.user_id = device_uses_list.emp_id');
-		 $this->db->where('xin_employees.department_id  = xin_departments.department_id');
-		 $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
-		 $this->db->where('products_categories.id = device_uses_list.cat_id');
-		$data = $this->db->get();
-		if ($data->num_rows() > 0) {   
-          		dd($data->result());
-
-        }
-		// dd($data);
-	}
-
-
-
-
-					
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			// $this->db->select('
-			//     products_requisitions.id,
-			// 	products_requisition_details.requisition_id,
-			// 	xin_employees.department_id,
-			// 	xin_employees.designation_id,
-			// 	xin_departments.department_name,
-			// 	xin_designations.designation_name,
-			// 	xin_employees.employee_id,
-			// 	xin_employees.first_name,
-			// 	xin_employees.last_name
-			// ');
-
-			// $this->db->from('xin_employees');
-			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
-			// $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
-			// $this->db->join('xin_employee_move_register', 'xin_employee_move_register.employee_id = xin_employees.user_id');
-			// $this->db->where('xin_employees.is_active', 1);
-			// $this->db->where("xin_employee_move_register.date BETWEEN '$f1_date' AND '$f2_date'");
-			// $this->db->where('xin_employee_move_register.status', $statusC);
-			// $query = $this->db->get();
-			// $data = $query->result();
-		
-		
-
-			
->>>>>>> 9d5be9e6f2e70553a8315553e510f7b5358f7983
-
 }
+
+
 ?>
  
