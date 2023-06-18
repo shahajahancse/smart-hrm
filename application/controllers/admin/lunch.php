@@ -28,9 +28,6 @@ class Lunch extends MY_Controller {
 
         $this->load->model("Xin_model");
         $this->load->model("Lunch_model");
-        $this->load->model("Attendance_model");
-        $this->load->model("Salary_model");
-        $this->load->helper('form');
         $this->load->library('form_validation');
     }
 

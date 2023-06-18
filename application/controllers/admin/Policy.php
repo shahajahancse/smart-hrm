@@ -161,6 +161,7 @@ class Policy extends MY_Controller {
 	
 	// Validate and add info in database
 	public function add_policy() {
+		
 	
 		if($this->input->post('add_type')=='policy') {		
 		/* Define return | here result is used to return user data and error for error message */

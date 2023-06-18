@@ -110,7 +110,9 @@ $(document).ready(function(){
 <script type="text/javascript" src="<?php echo base_url();?>skin/hrsale_assets/js/vfs_fonts.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>skin/hrsale_assets/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>skin/hrsale_assets/js/buttons.print.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url().'skin/hrsale_assets/hrsale_scripts/'.$path_url.'.js'; ?>"></script>
+<?php if (isset($path_url)) { ?>
+	<script type="text/javascript" src="<?php echo base_url().'skin/hrsale_assets/hrsale_scripts/'.$path_url.'.js'; ?>"></script>
+<?php } ?>
 <?php if($this->router->fetch_class() =='dashboard') { ?>
 	<?php if($system[0]->is_ssl_available=='yes'){?>
 	<script src="<?php echo base_url();?>skin/hrsale_assets/hrsale_scripts/user/set_clocking_ssl.js"></script>
