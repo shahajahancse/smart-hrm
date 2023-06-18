@@ -114,6 +114,53 @@
         }
       }
     }
+    // daily presnt/absent/late report
+    function floor_movement()
+    {
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+      attendance_date = document.getElementById('process_date').value;
+      if(process_date =='')
+      {
+        alert('Please select attendance date');
+        return ;
+      }
+
+      emp_status = document.getElementById('status').value;
+      if(emp_status =='')
+      {
+        alert('Please select employee status');
+        return ;
+      }
+
+     var emp_id = document.getElementsByName('select_emp_id[]');
+     var sql = get_checked_value(emp_id);
+     
+     if(sql == ''){
+      alert('Please select employee Id');
+      return ;
+     }
+
+
+      // var queryString="month_year="+month_year+"&company="+company+"&employee_id="+employee_id;
+
+      var data = "attendance_date="+attendance_date+"&sql="+sql;
+      
+      // console.log(data); return;
+      url = base_url + "/floor_movement";
+      ajaxRequest.open("POST", url, true);
+      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+      ajaxRequest.send(data);
+
+      ajaxRequest.onreadystatechange = function(){
+        if(ajaxRequest.readyState == 4){
+          console.log(ajaxRequest);
+          var resp = ajaxRequest.responseText;
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1000,height=800');
+          a.document.write(resp);
+        }
+      }
+    }
       function latecomment(status,late_status=null)
     {
       $('#latecommentform').empty();
