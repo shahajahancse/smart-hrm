@@ -78,7 +78,7 @@ class Inventory extends MY_Controller {
 
 
 		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
+		$data['breadcrumbs'] = 'Store';
 		$data['path_url'] = 'inventory';
 		//Dropdown
 		$data['categorys']		= $this->db->get("products_categories")->result();
@@ -291,8 +291,8 @@ class Inventory extends MY_Controller {
 						
 
         //Dropdown
-		$data['title'] 			= 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs']	= 'Inventory';
+		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Store';
 		$data['path_url'] 		= 'inventory';
 	    $data['products']		= $this->db->get("product_supplier")->result();
 	    $data['col'] 			= $id;
@@ -394,8 +394,8 @@ class Inventory extends MY_Controller {
 			}
 
 			//Dropdown
-			$data['title'] 			= 'Inventory | '.$this->Xin_model->site_title();
-			$data['breadcrumbs']	= 'Inventory';
+			$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
+			$data['breadcrumbs']	= 'Store';
 			$data['path_url'] 		= 'inventory';
 			$data['categorys']		= $this->db->get("products_categories")->result();
 			$data['products'] 		= $this->Inventory_model->purchase_products_requisition($session['user_id'],$session['role_id']);
@@ -422,8 +422,8 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 		
-		$data['title'] 		 = 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
+		$data['title'] 		 = 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store';
 		$data['path_url'] 	 = 'inventory';
 		if($session['role_id']==1){
 			$data['results']	 = $this->Inventory_model->product_purches_details($id);
@@ -603,8 +603,8 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 		
-		$data['title'] 		 = 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
+		$data['title'] 		 = 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store';
 		// $data['path_url'] 	 = 'inventory';
 	
 		$data['subview'] 	 = $this->load->view("admin/inventory/report", $data, TRUE);
@@ -709,7 +709,7 @@ class Inventory extends MY_Controller {
 			  }else{
 				    $data['statusC']= $statusC;
 					$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report($statusC);
-						
+					
 					if($exc == 2){
 						$this->load->view("admin/inventory/low_in_status_report_excel", $data);
 					 }else{
@@ -771,8 +771,8 @@ class Inventory extends MY_Controller {
 		}
 
         //Dropdown
-		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
+		$data['title'] = 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store';
 		$data['path_url'] = 'inventory';
 	    $data['results'] = $this->Inventory_model->product_list();
 	    $data['categorys'] = $this->db->get("products_categories")->result();
@@ -794,7 +794,7 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
+		$data['breadcrumbs'] = 'Store';
 		$data['path_url'] = 'inventory';
 
 		//Validate and input data
@@ -835,7 +835,7 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
+		$data['breadcrumbs'] = 'Store';
 		$data['path_url'] = 'inventory';
 
 		//Validate and input data
@@ -876,7 +876,7 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
+		$data['breadcrumbs'] = 'Store';
 		$data['path_url'] = 'inventory';
 
 		//Validate and input data

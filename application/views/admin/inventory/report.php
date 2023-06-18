@@ -106,19 +106,19 @@
     <div class="tab-content" id="myTabContent">
 
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
-                <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(1)">Panding Requsition</button>
-                <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(2)">Approved Requsition</button>
-                <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(4)">Reject Requsition</button>
-                <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(3)">Delivered Requsition</button>
+                <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(1)">Panding</button>
+                <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(2)">Approved</button>
+                <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(4)">Reject</button>
+                <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Inv_Report(3)">Delivered Item</button>
 
       </div>
 
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
                     <!-- <button class="btn btn-sm btn-danger"> Button one</button>-->
-                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(1)">Panding purchase</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(2)">Approved purchase</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(4)">Reject purchase</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(3)">Delivered purchase</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(1)">Panding</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(2)">Approved</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(4)">Reject</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="Per1_Report(3)">Receive</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="LP_AlP_Report(7)">Low inventory</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="LP_AlP_Report(8)">All Products</button>
 
