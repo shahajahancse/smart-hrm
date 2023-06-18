@@ -605,7 +605,7 @@ class Inventory extends MY_Controller {
 		
 		$data['title'] 		 = 'Inventory | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Inventory';
-		$data['path_url'] 	 = 'inventory';
+		// $data['path_url'] 	 = 'inventory';
 	
 		$data['subview'] 	 = $this->load->view("admin/inventory/report", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
