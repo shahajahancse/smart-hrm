@@ -350,10 +350,14 @@ class Lunch extends MY_Controller {
             redirect('admin/');
         }
         $status = $this->input->post('status');
+        $excel = $this->input->post('excel');
         $data['status'] = $status;
         $data['lunch_data'] = $this->Lunch_model->paymentreport($status);
-       
-        $this->load->view('admin/lunch/payment_report_page', $data); 
+       if($excel==1){
+        $this->load->view('admin/lunch/payment_report_page_exel', $data);
+
+       }else{
+        $this->load->view('admin/lunch/payment_report_page', $data); }
     }
 
     //manually lunch data entry
