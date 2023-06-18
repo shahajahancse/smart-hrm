@@ -224,7 +224,7 @@
 <script type="text/javascript">
    $(document).ready(function() {
       //Load First row
-      addNewRow();
+      
       $('#purchase_table').DataTable();
    });   
 

@@ -186,9 +186,8 @@ class Lunch_model extends CI_Model {
         }
     }  
 
-    public function get_all_data($limit, $offset) {
+    public function get_all_data() {
         $this->db->order_by('id', 'DESC');
-        $this->db->limit($limit, $offset);
         $query = $this->db->get('lunch');
         return $query->result();
     }

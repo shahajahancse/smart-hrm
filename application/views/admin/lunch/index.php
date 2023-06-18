@@ -15,7 +15,7 @@
     background-color: #f9f9f9;
     min-width: 120px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+    z-index: 999909;
     right: 25px;
 }
 
@@ -35,63 +35,7 @@
   display: block;
 }
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
 
-    .table-hover {
-        font-size: 14px;
-    }
-
-    .table-hover thead th {
-        background-color:#6f7c8b;
-        color: #fff;
-        font-weight: bold;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f8f9fa;
-        cursor: pointer;
-    }
-
-    .table-hover tbody td {
-        border-top: 1px solid #dee2e6;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .table-hover tbody td:first-child {
-        font-weight: bold;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-    }
-
-    .pagination li {
-        display: inline;
-        margin: 0 5px;
-    }
-
-    .pagination li a,
-    .pagination li span {
-        color: #007bff;
-        padding: 5px 10px;
-        text-decoration: none;
-        border: 1px solid #007bff;
-        border-radius: 5px;
-    }
-
-    .pagination li.active span {
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    .pagination li a:hover {
-        background-color: #f8f9fa;
-    }
 </style>
 
 <div class="container-fluid">
@@ -102,7 +46,7 @@
     <?php endif; ?>  
 
     <div class="table-responsive">
-        <table class="table table-hover">
+        <table class="table table-hover" id="Lunch_table">
             <thead>
                 <tr>
                     <th>Sl</th>
@@ -146,10 +90,11 @@
             </tbody>
         </table>
     </div>
-
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            <?= $pagination ?>
-        </ul>
-    </nav>
 </div>
+<script>
+     $(document).ready(function() {
+      //Load First row
+      
+      $('#Lunch_table').DataTable();
+   }); 
+</script>

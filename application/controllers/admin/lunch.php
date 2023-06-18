@@ -41,34 +41,8 @@ class Lunch extends MY_Controller {
         $this->load->library('pagination');
         $this->load->model('Lunch_model');
 
-        $config['base_url'] = base_url('admin/lunch/index');
-        $config['total_rows'] = $this->Lunch_model->get_total_rows();
-        $config['per_page'] = 10; // Number of records per page
-        $config['uri_segment'] = 3; // Update the URI segment number to 2
-        
-        // Bootstrap 3 pagination style
-        $config['full_tag_open'] = '<ul class="pagination">';
-        $config['full_tag_close'] = '</ul>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li class="active"><a href="#">';
-        $config['cur_tag_close'] = '</a></li>';
-        $config['prev_link'] = '&laquo;';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_link'] = '&raquo;';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-
-        $this->pagination->initialize($config);
-
-        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['results'] = $this->Lunch_model->get_all_data($config['per_page'], $page);
-        $data['pagination'] = $this->pagination->create_links();
-        $data['query'] = $this->db->get_where('lunch_package', array('id' => 1))->result();
-
+        $data['results'] = $this->Lunch_model->get_all_data();
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
-
         $data['breadcrumbs'] = 'Lunch';
         $data['path_url'] = 'lunch';
         if (!empty($session)) {
