@@ -98,35 +98,35 @@ class Employees extends MY_Controller {
 
 	//password get 
 	// this code used to short time
-	/*function password_get(){
-		date_default_timezone_set('Asia/Dhaka');
+	// function password_get(){
+	// 	date_default_timezone_set('Asia/Dhaka');
 
-		$infos = array();
-		$file_name = "resources/Usersp.txt";
-		if (file_exists($file_name)){
-			$lines = file($file_name);
-			$out = array();
-			$id = $ps = 0;
-			foreach(array_values($lines) as $key => $line) {
-				// dd(preg_split('/\s+/', trim($line)));
-				if (!empty(strlen(chop($line)))) {
-					list($id, $ps) = preg_split('/\s+/', trim($line));
+	// 	$infos = array();
+	// 	$file_name = "resources/Usersp.txt";
+	// 	if (file_exists($file_name)){
+	// 		$lines = file($file_name);
+	// 		$out = array();
+	// 		$id = $ps = 0;
+	// 		foreach(array_values($lines) as $key => $line) {
+	// 			// dd(preg_split('/\s+/', trim($line)));
+	// 			if (!empty(strlen(chop($line)))) {
+	// 				list($id, $ps) = preg_split('/\s+/', trim($line));
 
-					$this->db->select('user_id, employee_id, first_name, last_name, username');
-					$this->db->where("employee_id", $id);
-					$query = $this->db->get("xin_employees");
-					$infos[$key] = $query->row();
-					$infos[$key]->password = $ps;
-				}
-			}
-			$data['results'] = $infos;
+	// 				$this->db->select('user_id, employee_id, first_name, last_name, username');
+	// 				$this->db->where("employee_id", $id);
+	// 				$query = $this->db->get("xin_employees");
+	// 				$infos[$key] = $query->row();
+	// 				$infos[$key]->password = $ps;
+	// 			}
+	// 		}
+	// 		$data['results'] = $infos;
 
-			$this->load->view('admin/employees/password_get', $data);
-			exit();
-		}else{
-			exit('Please Put the Data File.');
-		}
-	}*/
+	// 		$this->load->view('admin/employees/password_get', $data);
+	// 		exit();
+	// 	}else{
+	// 		exit('Please Put the Data File.');
+	// 	}
+	// }
 
 
 	
@@ -1346,7 +1346,6 @@ class Employees extends MY_Controller {
 			'youtube_link' => $result[0]->youtube_link,
 			'leave_categories' => $result[0]->leave_categories,
 			'view_companies_id' => $result[0]->view_companies_id,
-			'device' => $result[0]->device,
 			'all_countries' => $this->Xin_model->get_countries(),
 			'all_document_types' => $this->Employees_model->all_document_types(),
 			'all_education_level' => $this->Employees_model->all_education_level(),
