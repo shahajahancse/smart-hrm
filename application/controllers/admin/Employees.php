@@ -57,6 +57,78 @@ class Employees extends MY_Controller {
 		/*Final JSON response*/
 		exit(json_encode($Return));
 	}
+
+
+	//password set/ change
+	// this code used to short time
+	/*function password_set(){
+		date_default_timezone_set('Asia/Dhaka');
+
+		$file_name = "resources/Usersp.txt";
+		if (file_exists($file_name)){
+			$lines = file($file_name);
+			$out = array();
+			$id = $ps = 0;
+			foreach(array_values($lines)  as $line) {
+				// dd(preg_split('/\s+/', trim($line)));
+				if (!empty(strlen(chop($line)))) {
+					list($id, $ps) = preg_split('/\s+/', trim($line));
+
+					$this->db->select('user_id, employee_id, first_name, last_name, username');
+					$this->db->where("employee_id", $id);
+					$query = $this->db->get("xin_employees");
+					// dd($query->row());
+
+					$options = array('cost' => 12);
+					$password_hash = password_hash($ps, PASSWORD_BCRYPT, $options);
+					$data = array(
+						'password' => $password_hash
+					);
+
+					$result = $this->Employees_model->change_password($data,$query->row()->user_id);
+
+				}
+			}
+			exit('Done');
+			return true;
+		}else{
+			exit('Please Put the Data File.');
+		}
+	}*/
+
+	//password get 
+	// this code used to short time
+	/*function password_get(){
+		date_default_timezone_set('Asia/Dhaka');
+
+		$infos = array();
+		$file_name = "resources/Usersp.txt";
+		if (file_exists($file_name)){
+			$lines = file($file_name);
+			$out = array();
+			$id = $ps = 0;
+			foreach(array_values($lines) as $key => $line) {
+				// dd(preg_split('/\s+/', trim($line)));
+				if (!empty(strlen(chop($line)))) {
+					list($id, $ps) = preg_split('/\s+/', trim($line));
+
+					$this->db->select('user_id, employee_id, first_name, last_name, username');
+					$this->db->where("employee_id", $id);
+					$query = $this->db->get("xin_employees");
+					$infos[$key] = $query->row();
+					$infos[$key]->password = $ps;
+				}
+			}
+			$data['results'] = $infos;
+
+			$this->load->view('admin/employees/password_get', $data);
+			exit();
+		}else{
+			exit('Please Put the Data File.');
+		}
+	}*/
+
+
 	
 	 public function index()
      {
