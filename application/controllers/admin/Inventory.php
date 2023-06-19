@@ -95,21 +95,17 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		
-		$data['title'] 		 = 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Create Requisition';
-		$data['path_url'] 	 = 'inventory';
-		$data['categorys']		= $this->db->get("products_categories")->result();
-		$data['products'] 		= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-		// dd($data['products']);
-		$data['results'] 		= $this->Inventory_model->product_list();
-		$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-		$data['units'] 			= $this->db->get("product_unit")->result();
-		
-		$data['user_role_id'] 	= $session['role_id'];
-
-		$data['subview'] 	 = $this->load->view("admin/inventory/create", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
+		$data['title'] 		    =     'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']    =     'Store Create Requisition';
+		$data['path_url'] 	    =     'inventory';
+		$data['categorys']		=     $this->db->get("products_categories")->result();
+		$data['products'] 		=     $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		$data['results'] 		=     $this->Inventory_model->product_list();
+		$data['sub_categorys']  =     $this->db->get("products_sub_categories")->result();
+		$data['units'] 			=     $this->db->get("product_unit")->result();
+		$data['user_role_id'] 	=     $session['role_id'];
+		$data['subview'] 	    =     $this->load->view("admin/inventory/create", $data, TRUE);
+		                              $this->load->view('admin/layout/layout_main', $data); //page load
 	}
 	public function pending_list(){
 		$session = $this->session->userdata('username');
@@ -117,14 +113,12 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 
-		$data['products'] 		= $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],1);
-		
-		$data['title'] 		 = 'Store Pending List | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Pending List';
-		$data['user_role_id'] 	= $session['role_id'];
-
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
+		$data['products'] 		=     $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],1);
+		$data['title'] 		    =     'Store Pending List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']    =     'Store Pending List';
+		$data['user_role_id'] 	=      $session['role_id'];
+		$data['subview'] 	    =      $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
+		                               $this->load->view('admin/layout/layout_main', $data); //page load
 	}
 	public function aproved_list(){
 		$session = $this->session->userdata('username');
@@ -132,14 +126,12 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 
-		$data['products'] 		= $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],2);
-		
-		$data['title'] 		 = 'Store Aproved List | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Aproved List';
-		$data['user_role_id'] 	= $session['role_id'];
-
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
+		$data['products'] 		=     $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],2);
+		$data['title'] 		    =     'Store Aproved List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']    =     'Store Aproved List';
+		$data['user_role_id'] 	=     $session['role_id'];
+		$data['subview'] 	    =     $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
+		                              $this->load->view('admin/layout/layout_main', $data); //page load
 	}
 	public function hand_over_list(){
 		$session = $this->session->userdata('username');
@@ -147,13 +139,12 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 
-		$data['products'] 		= $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],3);
-		$data['title'] 		 = 'Store Handover List | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Handover List';
-		$data['user_role_id'] 	= $session['role_id'];
-
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
+		$data['products'] 		=    $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],3);
+		$data['title'] 		    =    'Store Handover List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']    =    'Store Handover List';
+		$data['user_role_id'] 	=    $session['role_id'];
+		$data['subview'] 	    =    $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
+		                             $this->load->view('admin/layout/layout_main', $data); //page load
 	}
 	public function reject_list(){
 		$session = $this->session->userdata('username');
@@ -161,14 +152,12 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 
-		$data['products'] 		= $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],4);
-
-		$data['title'] 		 = 'Store Reject List | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Reject List';
-		$data['user_role_id'] 	= $session['role_id'];
-
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
+		$data['products'] 		=    $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],4);
+		$data['title'] 		    =    'Store Reject List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']    =    'Store Reject List';
+		$data['user_role_id'] 	=    $session['role_id'];
+		$data['subview'] 	    =    $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
+		                             $this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
 
