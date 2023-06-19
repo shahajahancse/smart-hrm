@@ -29,7 +29,7 @@
     <h3 class="box-title">Product Purches Requisition List</h3>
   </div>
   <div class="box-body">
-    <div class="box-datatable table-responsive" >
+    <div class="box-datatable" >
     <input type="hidden" value="1" id="count">
       <table class="datatables-demo table table-striped table-bordered" id="purchase_table" style="width:100%">
         <thead>
@@ -150,178 +150,11 @@
     </div>
   </div>
 </div>
-<?php
-  $category_data = '';
-  $category_data .= '<option value="">--Select One--</option>';
-  $i=1;
-  foreach ($categorys as $key => $value) {
-    $category_data .= '<option value="'.$i++.'">'.$value->category_name.'</option>';
-  }
-?>
 <script type="text/javascript">
    $(document).ready(function() {
       //Load First row
       
       $('#purchase_table').DataTable();
    });   
-
-   $("#addRow").click(function(e) {
-      addNewRow();
-   }); 
-   //remove row
-   function removeRow(id){ 
-      $(id).closest("tr").remove();
-   }
-   //add row function
-   function addNewRow(){
-      // id="category_'+sl+'"
-      let sl=$('#count').val();
-      let items = '';
-      items+= '<tr>';
-      items+= '<td><select name="cat_id[]" class="form-control input-sm" id="category_'+sl+'" required><?php echo $category_data;?></select></td>';
-      items+= '<td><select name="sub_cate_id[]"  id="subcategory_'+sl+'" class="sub_category_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
-      items+= '<td><select name="product_id[]" class="item_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
-      items+= '<td><input name="quantity[]" id="quantity" value="" type="text" class="form-control input-sm" required></td>';
-      items+= '<td> <a href="javascript:void();" class="label label-important text-danger" onclick="removeRow(this)"> <i class="fa fa-minus-circle text-danger"></i><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
-      items+= '</tr>';
-      $('#count').val(sl+parseInt(1));
-      $('#appRowDiv tr:last').after(items);
-      category_dd(sl);
-      subcategory_dd(sl);
-   } 
-
-   function category_dd(sl){
-      //Category Dropdown
-      $('#category_'+sl).change(function(){
-         $('.sub_category_val_'+sl).addClass('form-control input-sm');
-         $('.sub_category_val_'+sl+' > option').remove();
-         var id = $('#category_'+sl).val();
-
-         $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('admin/inventory/get_sub_category_ajax/');?>" + id,
-            success: function(func_data)
-            {
-               // console.log(func_data);
-               $.each(func_data,function(id,name)
-               {
-                  var opt = $('<option />');
-                  opt.val(id);
-                  opt.text(name);
-                  $('.sub_category_val_'+sl).append(opt);
-               });
-            }
-         });
-      });
-   }
-
-   function subcategory_dd(sl){
-      //Sub Category Dropdown
-      $('#subcategory_'+sl).on('change',function(){
-         $('.item_val_'+sl).addClass('form-control input-sm');
-         $(".item_val_"+sl+"> option").remove();
-         var id = $('#subcategory_'+sl).val();
-
-         $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('admin/inventory/get_product_ajax/');?>" + id,
-            success: function(func_data)
-            {
-               $.each(func_data,function(id,name)
-               {
-                  var opt = $('<option />');
-                  opt.val(id);
-                  opt.text(name);
-                  $('.item_val_'+sl).append(opt);
-               });
-
-              //  handleSelectionChange(this)
-            }
-         });
-      });
-   }
-
-    //Company Supplier
-    $(document).ready(function() {
-        // Handle change event of the company name select field
-        $('#cmp_name').change(function() {
-            var companyName = $(this).val();
-            // var url = 'fetch_suppliers.php'; // Replace with the URL to fetch suppliers based on the selected company
-            var url='<?php echo base_url('admin/inventory/get_supplier_ajax/');?>'
-            // Make an AJAX request to fetch the suppliers
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: { companyName: companyName },
-                dataType: 'json',
-                success: function(func_data) {
-                    // console.log(response[0]['name']);
-                    var options = '';
-                    // $.each(response, function(index, supplier) {
-                       
-                    //     options += '<option value="' + supplier.id + '">' + supplier.name + '</option>';
-                    // });
-
-                    $.each(func_data,function(id,name)
-                {
-
-                  options += '<option value="' + id + '">' + name + '</option>';
-                  
-                });
-                      $('#spl_name').html(options);
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
-                }
-            });
-        });
-    });
-
-
-   
-      //Sub Category Dropdown
-
-      
-    function handleSelectionChange(selectedMenu) {
-      var selectionMenus = document.getElementsByClassName("selection-menu");
-      
-
-      // Disable all options
-      for (var i = 0; i < selectionMenus.length; i++) {
-        var options = selectionMenus[i].options;
-        console.log(options);
-        for (var j = 0; j < options.length; j++) {console.log(options[j]);
-          options[j].disabled = false;
-        }
-      }
-
-      // Iterate over all selection menus
-      for (var i = 0; i < selectionMenus.length; i++) {
-        var options = selectionMenus[i].options;
-        var selectedValues = [];
-
-        // Get the selected values from each selection menu
-        for (var j = 0; j < options.length; j++) {
-          if (options[j].selected) {
-            selectedValues.push(options[j].value);
-          }
-        }
-
-        // Disable selected options in other selection menus
-        for (var j = 0; j < selectionMenus.length; j++) {
-          if (selectionMenus[j] !== selectedMenu) {
-            var otherOptions = selectionMenus[j].options;
-            for (var k = 0; k < otherOptions.length; k++) {
-              if (selectedValues.includes(otherOptions[k].value)) {
-                otherOptions[k].disabled = true;
-              }
-            }
-          }
-        }
-      }
-    }
-     
-
-   
 
 </script>  

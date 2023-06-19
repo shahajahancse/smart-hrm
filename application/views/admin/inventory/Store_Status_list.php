@@ -31,7 +31,7 @@
     <h3 class="box-title">Requisition List</h3>
   </div>
   <div class="box-body">
-    <div class="box-datatable" >
+    <div class="box-datatable " >
     <input type="hidden" value="1" id="count">
       <table class="datatables-demo table table-striped table-bordered" id="purchase_table" style="width:100%">
         <thead>
@@ -125,9 +125,6 @@
 </div>
 <script type="text/javascript">
    $(document).ready(function() {
-      //Load First row
-    
       $('#purchase_table').DataTable();
    });   
-
   </script>
