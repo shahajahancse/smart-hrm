@@ -100,6 +100,7 @@ class Lunch_model extends CI_Model {
         $query = $this->db->query("SELECT * FROM xin_employees WHERE user_id = $id ");
         return $query->result();
     }
+
     public function paymentreport($status)
     {
 
@@ -213,6 +214,7 @@ class Lunch_model extends CI_Model {
             $this->db->where('date <=', $second_date);
             return $this->db->get()->result();
     }
+
     public function get_lunch_details_active($first_date, $second_date, $emp_ids) {
             $this->db->select('lunch_details.id,lunch_details.emp_id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date, xin_employees.first_name, xin_employees.last_name');
             $this->db->from('lunch_details');
@@ -223,6 +225,7 @@ class Lunch_model extends CI_Model {
             $this->db->where('meal_amount >=', 1);
             return $this->db->get()->result();
     }
+
     public function get_lunch_details_inactive($first_date, $second_date, $emp_ids) {
             $this->db->select('lunch_details.id,lunch_details.emp_id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date, xin_employees.first_name, xin_employees.last_name');
             $this->db->from('lunch_details');
@@ -233,6 +236,7 @@ class Lunch_model extends CI_Model {
             $this->db->where('meal_amount<=', 0);
             return $this->db->get()->result();
     }
+
     public function get_meal($emp_id,$date) {
             $this->db->select('lunch_details.id,lunch_details.emp_id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date');
             $this->db->from('lunch_details');
@@ -240,6 +244,7 @@ class Lunch_model extends CI_Model {
             $this->db->where('date ', $date);
             return $this->db->get()->result();
     }
+
     public function get_proccess_data($emp_id,$first_date, $second_date) {
             $this->db->select('lunch_details.id,lunch_details.emp_id, lunch_details.lunch_id, lunch_details.meal_amount, lunch_details.p_stutus, lunch_details.comment, lunch_details.date');
             $this->db->from('lunch_details');
@@ -248,6 +253,7 @@ class Lunch_model extends CI_Model {
             $this->db->where('date <=', $second_date);
             return $this->db->get()->result();
     }
+    
     public  function holiday_check($first_date,$second_date)
     {
             $this->db->where("start_date <=", $first_date);

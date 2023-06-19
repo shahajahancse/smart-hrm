@@ -313,6 +313,7 @@ class Lunch extends MY_Controller {
             $this->load->view('admin/lunch/lunch_report_view_adsent', $data); 
         }
     }
+
     public function paymentreport(){
 
 
@@ -444,6 +445,7 @@ class Lunch extends MY_Controller {
        $data['lunch_data'] = $this->Lunch_model->process($firstDate,$secondDate);
        echo json_encode('success');
     }
+    
     public function submit_payment() {
         // Retrieve the form data from the POST request
         $empid = $this->input->post('empid');
