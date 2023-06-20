@@ -57,19 +57,20 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
 <?php echo validation_errors(); ?>
 <?php if($this->session->flashdata('success')):?>
-    <div class="alert alert-success">
+    <div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <?php echo $this->session->flashdata('success');?>
     </div>
 <?php endif; ?> 
 
 <?php if($this->session->flashdata('warning')):?>
-    <div class="alert alert-warning">
+    <div class="alert alert-warning"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <?php echo $this->session->flashdata('warning');?>
     </div>
 <?php endif; ?> 
 
 
 <div class="box <?php echo $get_animate;?>">
+    
   <div class="box-header with-border">
     <h3 class="box-title">Category list</h3>
   </div>

@@ -33,15 +33,15 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
           <?php foreach ($results as $key => $row) { ?>
             <tr class="text-center">
               <td><?= $key + 1; ?></td>
-              <td><?= $row->cat_id; ?></td>
-              <td><?= $row->device_name_id; ?></td>
-              <td><?= $row->device_model; ?></td>
+              <td><?= $row->cat_name; ?></td>
+              <td><?= "MHL ".$row->cat_short_name.'-'.$row->device_name_id; ?></td>
+              <td><?= $row->model_name?></td>
               <td><?= $row->description; ?></td>
               <td><?= $row->remark; ?></td>
-              <td><?= $row->image; ?></td>
-              <td><?= $row->user_id; ?></td>
+              <td><img src="<?= base_url("uploads/accessory_images/".$row->image);  ?>"> </td>
+              <td><?= $row->first_name.' '.$row->last_name; ?></td>
               <td><?= $row->status=='1'?"<span class='label label-success'>Active</span>":"<span class='label label-danger'>Inctive</span>"; ?></td>
-              <td><a class="btn btn-sm btn-info" href="<?= base_url('admin/accessories/category/'.$row->id);?>">Edit</a></td>
+              <td><a class="btn btn-sm btn-info" type="button" href="<?= base_url('admin/accessories/item_add/'.$row->id);?>">Edit</a></td>
             </tr>
           <?php } ?>
         </tbody>
