@@ -1007,7 +1007,9 @@ if($attendances->num_rows() < 1) {
        var data = "salary_month="+salary_month+"&status="+status+'&sql='+sql+"&excel="+0;
   
       // console.log(data); return;
+
       url = base_url + "/payslip";
+      
       ajaxRequest.open("POST", url, true);
       ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
       ajaxRequest.send(data);
