@@ -111,6 +111,7 @@ class Inventory extends MY_Controller {
 		$data['subview'] 	 = $this->load->view("admin/inventory/create", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
 	public function pending_list(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -123,9 +124,10 @@ class Inventory extends MY_Controller {
 		$data['breadcrumbs'] = 'Store Pending List';
 		$data['user_role_id'] 	= $session['role_id'];
 
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
 	public function aproved_list(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -138,10 +140,11 @@ class Inventory extends MY_Controller {
 		$data['breadcrumbs'] = 'Store Aproved List';
 		$data['user_role_id'] 	= $session['role_id'];
 
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
-	public function hand_over_list(){
+
+	public function delivery_list(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -152,9 +155,10 @@ class Inventory extends MY_Controller {
 		$data['breadcrumbs'] = 'Store Handover List';
 		$data['user_role_id'] 	= $session['role_id'];
 
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
 	public function reject_list(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -167,7 +171,7 @@ class Inventory extends MY_Controller {
 		$data['breadcrumbs'] = 'Store Reject List';
 		$data['user_role_id'] 	= $session['role_id'];
 
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
