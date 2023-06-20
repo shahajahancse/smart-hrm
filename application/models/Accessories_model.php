@@ -47,9 +47,7 @@ public function get_product_info($id=null){
     $this->db->from('xin_employees');
     $this->db->where('product_accessory_categories.id = product_accessories_model.cat_id');
     $this->db->where('product_accessories_model.id    = product_accessories.device_model');
-
     $this->db->where('product_accessories.user_id     = xin_employees.user_id');
-    
     if($id !=null){
         $this->db->where('product_accessories_model.id =', $id);
         $data=$this->db->get()->row();
