@@ -43,7 +43,7 @@
               <div class="col-md-2">
                 <div class="form-group">
                   <label for="first_name"><?php echo $this->lang->line('xin_e_details_date');?></label>
-                  <input class="form-control d_month_year" value="<?php if(!isset($month_year)): echo date('Y-m'); else: echo $month_year; endif;?>" name="month_year" type="text">
+                  <input class="form-control d_month_year" id='date' value="<?php if(!isset($month_year)): echo date('Y-m'); else: echo date('Y-m',strtotime($month_year)); endif;?>" name="month_year" type="text">
                 </div>
               </div>
 
@@ -65,6 +65,7 @@
               <?php } else { ?>
                 <div class="col-md-3">
                   <div class="form-group" id="employee_ajax">
+                  
                     <label for="employee"><?php echo $this->lang->line('xin_employee');?></label>
                     <select name="employee_id" id="employee_id" class="form-control employee-data" required>
                       <option value="<?php echo $user_info[0]->user_id;?>"> <?php echo $user_info[0]->first_name.' '.$user_info[0]->last_name;?></option>
@@ -89,6 +90,7 @@
   <div class="row <?php echo $get_animate;?>">
     <div class="col-md-4">
       <div class="box">
+      
         <div class="box-header with-border">
           <h3 class="box-title"> <?php echo $user_info[0]->first_name.' '.$user_info[0]->last_name;?> - <?php echo $month_year;?></h3>
         </div>
@@ -132,7 +134,9 @@
     </div>
     <div class="col-md-8">
       <div class="box">
+     
         <div class="box-body">
+        <a onclick=empjobCard() class="btn btn-primary" style="float: left;margin-top: 25px;">Job card</a>
           <div id='calendar_hr'></div>
         </div>
       </div>
@@ -429,3 +433,52 @@
 .hide-calendar .ui-datepicker-calendar { display:none !important; }
 .hide-calendar .ui-priority-secondary { display:none !important; }
 </style>
+<script>
+  
+  function empjobCard()
+    {
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+      var month = document.getElementById('date').value;  // Extract the year and month from the input string
+      var [year, monthNumber] = month.split('-');
+
+      // Create the first and last dates of the month
+      var firstDate = new Date(year, monthNumber - 1, 2);
+      var lastDate = new Date(year, monthNumber, 1);
+
+      // Format the first and last dates as 'YYYY-MM-DD'
+      var first_date = `${year}-${monthNumber}-01`;
+      var second_date = lastDate.toISOString().split('T')[0];
+      var sql = <?= $session['user_id'] ?>;
+      if(first_date =='')
+      {
+        alert('Please select first date');
+        return ;
+      }
+      if(second_date =='')
+      {
+        alert('Please select second date');
+        return ;
+      }
+      
+      var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql;
+      var url= '<?=base_url('admin/attendance/job_card')?>'
+
+      // url = base_url + "/job_card";
+      ajaxRequest.open("POST", url, true);
+      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+       ajaxRequest.send(data);
+        // alert(url); return;
+
+      ajaxRequest.onreadystatechange = function(){
+        if(ajaxRequest.readyState == 4){
+          // console.log(ajaxRequest.responseText); return;
+          var resp = ajaxRequest.responseText;
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+          a.document.write(resp);
+          // a.close();
+        }
+      }
+  }
+
+</script>

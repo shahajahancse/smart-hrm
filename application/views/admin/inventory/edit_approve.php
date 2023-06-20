@@ -49,6 +49,7 @@ $get_animate = $this->Xin_model->get_content_animate();
        <?php if(!empty($results)){?>
         <?php if($session['role_id']==1) {?>
       <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
+      <input type="submit" name="first_step" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="first_step">
          
       <?php }else{?>
         <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="update">

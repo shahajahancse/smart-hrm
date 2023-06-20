@@ -24,22 +24,22 @@
             <div class="text-center lh-1" style="font-weight: bold;">
                 <h5 style="font-weight: bold;" >Payslip</h5> <span class="fw-normal">Payment slip for the month of <?= $salary_month ?></span>
             </div>
-            <div class="row">
+            <div class="row" style="font-size: 14px;">
                 <div class="col-md-12" >
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6" style="padding:0;margin:0;overflow: hidden;">
                             <div> <span  style="font-weight: bold;"> EMP ID :</span> <?= $values[0]->employee_id?></div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" style="padding:0;margin:0;overflow: hidden;">
                             <div> <span  style="font-weight: bold;">EMP Name :</span> <?= $values[0]->first_name?> <?= $values[0]->last_name?>   </div>
                         </div>
                     </div>
                    
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6" style="padding:0;margin:0;overflow: hidden;">
                             <div> <span  style="font-weight: bold;">Desg : </span> <?= $values[0]->designation_name?></div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" style="padding:0;margin:0;overflow: hidden;">
                             <div> <span  style="font-weight: bold;">Ac No:</span>  <?= $values[0]->account_number?></div>
                         </div>
                     </div>

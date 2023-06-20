@@ -1,4 +1,4 @@
-<?php
+l<?php
  /**
  * NOTICE OF LICENSE
  *
@@ -24,21 +24,36 @@ class Inventory extends MY_Controller {
 		$this->load->model("Inventory_model");
 		$this->load->model("Xin_model");
 		$this->load->helper('form');
-		// $this->load->library('Pdf');
-		// $this->load->helper('string');
+		
 	}
 
 	
 	//================= Requisition here =======================
-	public function index($id = null)
+	public function index()
 	{
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		
+		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store';
+		$data['path_url'] = 'inventory';
+		$data['products'] 		= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		$data['user_role_id'] 	= $session['role_id'];
+		if(!empty($session)){ 
+			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
 
-        //Validation
+	public function create($id = null) {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		//Validation
         $this->form_validation->set_rules('cat_id[]', 'select category', 'required|trim');
         $this->form_validation->set_rules('product_id[]', 'item name', 'required|trim');
         $this->form_validation->set_rules('quantity[]', 'Quantity', 'required|trim');
@@ -76,72 +91,52 @@ class Inventory extends MY_Controller {
 			return redirect('admin/inventory');
 		}
 
-
-		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store';
-		$data['path_url'] = 'inventory';
-		$data['products'] 		= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-		$data['user_role_id'] 	= $session['role_id'];
-		if(!empty($session)){ 
-			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/');
-		}
-	}
-
-	public function create() {
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		
-		$data['title'] 		 = 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Create Requisition';
-		$data['path_url'] 	 = 'inventory';
-		$data['categorys']		= $this->db->get("products_categories")->result();
-		$data['products'] 		= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-		// dd($data['products']);
-		$data['results'] 		= $this->Inventory_model->product_list();
-		$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-		$data['units'] 			= $this->db->get("product_unit")->result();
-		
-		$data['user_role_id'] 	= $session['role_id'];
-
-		$data['subview'] 	 = $this->load->view("admin/inventory/create", $data, TRUE);
+		$data['title'] 		    =     'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']    =     'Store Create Requisition';
+		$data['path_url'] 	    =     'inventory';
+		$data['categorys']		=     $this->db->get("products_categories")->result();
+		$data['products'] 		=     $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		$data['results'] 		=     $this->Inventory_model->product_list();
+		$data['sub_categorys']  =     $this->db->get("products_sub_categories")->result();
+		$data['units'] 			=     $this->db->get("product_unit")->result();
+		$data['user_role_id'] 	=     $session['role_id'];
+		$data['subview'] 	    =     $this->load->view("admin/inventory/create", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
 	public function pending_list(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
 
+
 		$data['products'] 		= $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],1);
-		
 		$data['title'] 		 = 'Store Pending List | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store Pending List';
 		$data['user_role_id'] 	= $session['role_id'];
 
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
 	public function aproved_list(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
 
+
 		$data['products'] 		= $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],2);
-		
 		$data['title'] 		 = 'Store Aproved List | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store Aproved List';
 		$data['user_role_id'] 	= $session['role_id'];
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
 
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
-	public function hand_over_list(){
+
+	public function delivery_list(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -152,9 +147,10 @@ class Inventory extends MY_Controller {
 		$data['breadcrumbs'] = 'Store Handover List';
 		$data['user_role_id'] 	= $session['role_id'];
 
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
 	public function reject_list(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -167,9 +163,10 @@ class Inventory extends MY_Controller {
 		$data['breadcrumbs'] = 'Store Reject List';
 		$data['user_role_id'] 	= $session['role_id'];
 
-		$data['subview'] 	 = $this->load->view("admin/inventory/Store_Status_list", $data, TRUE);
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
 
 
 	public function requsition_details($id)	{
@@ -186,11 +183,9 @@ class Inventory extends MY_Controller {
 			if(!empty($data['results'])){
 				$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 			}
-		    $data['status'] = $this->db->select('status')->where('id',$id)->get('products_requisitions')->row()->status;
-									
+		    $data['status'] = $this->db->select('status')->where('id',$id)->get('products_requisitions')->row()->status;								
 	    } else {
-			  $data['results']	 = $this->Inventory_model->req_details_cat_wise($id);
-									
+			  $data['results']	 = $this->Inventory_model->req_details_cat_wise($id);							
 	    }
 		$data['subview'] 	 = $this->load->view("admin/inventory/requsition_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
@@ -207,6 +202,7 @@ class Inventory extends MY_Controller {
 		}
 	}
 
+	// reqisition change status
 	public function requsition_edit_approved($id){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -226,13 +222,14 @@ class Inventory extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data);
 	}
 	
+	
 	public function persial_approved($id){
-		
+	
+
 		$session = $this->session->userdata('username');
 		$all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->result();
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
-			
 		}
 		
 		$quantity=$this->input->post('qunatity[]');
@@ -240,6 +237,18 @@ class Inventory extends MY_Controller {
 		// dd($d1);
 		// dd($d1[1]->quantity);
 		foreach($d1 as $k=>$v){
+			if(isset($_POST['first_step'])){
+				$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user,'status'=>5]);
+
+				foreach($quantity as $key=>$value){
+
+
+					$this->db->where('id',$r_did[$key])->update('products_requisition_details',['quantity'=>$value]); 
+				}
+				   $this->session->set_flashdata('success', 'Product Updated Successfully.');
+				   redirect("admin/inventory/index","refresh");
+
+			}else{
 			if($session['role_id']==1){
 					if($d1[$k]->quantity >= $quantity[$k]) {
 						
@@ -267,6 +276,7 @@ class Inventory extends MY_Controller {
 					$this->session->set_flashdata('success', 'Product Updated Successfully.');
 				    redirect("admin/inventory/index","refresh");
 			}
+		}
 
 		}
 			if($session['role_id'] == 1){
@@ -329,98 +339,10 @@ class Inventory extends MY_Controller {
 	//================= Requisition end =======================
 
 
-	//=============== suplier ========================
-	public function supplier($id = null){
-
-		$session = $this->session->userdata('username');
-		//  dd($session);
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-
-		$this->form_validation->set_rules('name', 'Sapplier name', 'required|trim');
-		$this->form_validation->set_rules('company_name', 'company', 'required|trim');
-		$this->form_validation->set_rules('phone', 'Phone', 'required|trim');
-		$this->form_validation->set_rules('address', 'address', 'required|trim');
-
-		if ($this->form_validation->run() == true){
-			$supplier_data = array( 
-					'name'		 => $_POST['name'],
-					'company'	 => $_POST['company_name'],
-					'phone'	     => $_POST['phone'],
-					'address'	 => $_POST['address'],
-				);				 
-									
-			if ($hid = $this->input->post('hid')) {
-				$this->db->where('id', $hid)->update('product_supplier', $supplier_data);
-				$this->session->set_flashdata('success', 'Successfully Updated Done');
-			} else {
-				if($this->Inventory_model->save('product_supplier', $supplier_data)){
-					$this->session->set_flashdata('success', 'Successfully Insert Done');
-				} else {
-					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
-				}
-			}
-	    }
-						
-
-        //Dropdown
-		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
-		$data['breadcrumbs']	= 'Store';
-		$data['path_url'] 		= 'inventory';
-	    $data['products']		= $this->db->get("product_supplier")->result();
-	    $data['col'] 			= $id;
-	    $data['user_role_id'] 	= $session['role_id'];
-		
-		$data['subview'] 		= $this->load->view("admin/inventory/supplier", $data, TRUE);
-								  $this->load->view('admin/layout/layout_main', $data); //page load
-}
-
-	public function supplier_detail($id){
-		//search supplier details
-		
-		$data['result'] = $this->db->where('id', $id)->get('product_supplier')->row();
-		$data['title'] 			= 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs']	= 'Inventory';
-		$data['path_url'] 		= 'inventory';
-	 
-		// dd($data['products']);
-		$data['subview'] 		= $this->load->view("admin/inventory/supplier_details", $data, TRUE);
-								  $this->load->view('admin/layout/layout_main', $data);
-
-}
-
-	public function get_supplier_ajax()
-	{
-		 $name_company= $_POST['companyName'];
-		 $this->db->like('company', $name_company);
-        $result = $this->db->get('product_supplier')->result_array();
-		 $data[0]= 'Select Supplier Name';
-        foreach ($result as $rows) {
-            $data[$rows['id']] = $rows['name'];
-        }
-		
-		
-		header('Content-Type: application/x-json; charset=utf-8');
-		echo (json_encode($data));
-	}
-
-	public function get_supplier_details_ajax($id)
-	{   
-		$this->db->where('id', $id);
-		$result = $this->db->get('product_supplier')->row();
-		header('Content-Type: application/x-json; charset=utf-8');
-		echo (json_encode($result));
-	}
-	//==================== suplier part end ========================
-
-
-
-
 	//================= Product requsition purches code here =======================
 
 	public function purchase($id = null)
-	 {
+	{
 			$session = $this->session->userdata('username');
 			//   dd($session);
 			if(empty($session)){ 
@@ -486,10 +408,10 @@ class Inventory extends MY_Controller {
 			}
 			$data['subview'] 		= $this->load->view("admin/inventory/purchase", $data, TRUE);
 									$this->load->view('admin/layout/layout_main', $data); //page load
-  }
+    }
 
 	public function purchase_create($id = null)
-	 {
+	{
 			$session = $this->session->userdata('username');
 			//   dd($session);
 			if(empty($session)){ 
@@ -513,10 +435,10 @@ class Inventory extends MY_Controller {
 			}
 			$data['subview'] 		= $this->load->view("admin/inventory/purchase_create", $data, TRUE);
 									$this->load->view('admin/layout/layout_main', $data); //page load
-  }
+    }
 
-	public function purchase_panding()
-	 {
+	public function purchase_panding_list()
+	{
 			$session = $this->session->userdata('username');
 			//   dd($session);
 			if(empty($session)){ 
@@ -536,8 +458,9 @@ class Inventory extends MY_Controller {
 			$data['user_role_id'] 	= $session['role_id'];
 			$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
 									$this->load->view('admin/layout/layout_main', $data); //page load
-  }
-	public function purchase_aproved()
+    }
+
+	public function purchase_aproved_list()
 	{
 			$session = $this->session->userdata('username');
 			//   dd($session);
@@ -558,7 +481,8 @@ class Inventory extends MY_Controller {
 			$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
 									$this->load->view('admin/layout/layout_main', $data); //page load
 	}
-	public function purchase_delivered()
+
+	public function purchase_received_list()
 	{
 			$session = $this->session->userdata('username');
 			//   dd($session);
@@ -579,7 +503,8 @@ class Inventory extends MY_Controller {
 			$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
 									$this->load->view('admin/layout/layout_main', $data); //page load
 	}
-	public function purchase_reject()
+
+	public function purchase_reject_list()
 	{
 			$session = $this->session->userdata('username');
 			//   dd($session);
@@ -601,6 +526,8 @@ class Inventory extends MY_Controller {
 									$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 	
+
+
 	public function product_purchase_details($id)	{
 		//  dd($id);
 		// dd($_SESSION);
@@ -629,8 +556,6 @@ class Inventory extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
-
-
     //product purches rejected by specific user
 	public function product_purchase_rejected($id){
 		// dd($id);
@@ -645,7 +570,6 @@ class Inventory extends MY_Controller {
 
 
 	//product purches edit form load here
-	
 	public function product_purchase_edit_approved($id){
 		
 		$session = $this->session->userdata('username');
@@ -709,7 +633,6 @@ class Inventory extends MY_Controller {
 	
 	}
 
-
 	public function product_purchase_delivered($id){
     
          $pr1=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
@@ -769,14 +692,101 @@ class Inventory extends MY_Controller {
 		
 	 
 
-			 $deliver=$this->db->where('id',$id)->update('products_purches',['status'=>3]);
-			 if($deliver){
+			$deliver=$this->db->where('id',$id)->update('products_purches',['status'=>3]);
+			if($deliver){
 				 $this->session->set_flashdata('success', 'Delivered Successfully.');
 				 redirect("admin/inventory/purchase","refresh");
-			 }
+			}
 	 
  
-}
+	}
+
+
+
+	//=============== suplier ========================
+	public function supplier($id = null){
+
+		$session = $this->session->userdata('username');
+		//  dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$this->form_validation->set_rules('name', 'Sapplier name', 'required|trim');
+		$this->form_validation->set_rules('company_name', 'company', 'required|trim');
+		$this->form_validation->set_rules('phone', 'Phone', 'required|trim');
+		$this->form_validation->set_rules('address', 'address', 'required|trim');
+
+		if ($this->form_validation->run() == true){
+			$supplier_data = array( 
+					'name'		 => $_POST['name'],
+					'company'	 => $_POST['company_name'],
+					'phone'	     => $_POST['phone'],
+					'address'	 => $_POST['address'],
+				);				 
+									
+			if ($hid = $this->input->post('hid')) {
+				$this->db->where('id', $hid)->update('product_supplier', $supplier_data);
+				$this->session->set_flashdata('success', 'Successfully Updated Done');
+			} else {
+				if($this->Inventory_model->save('product_supplier', $supplier_data)){
+					$this->session->set_flashdata('success', 'Successfully Insert Done');
+				} else {
+					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+				}
+			}
+		}
+						
+
+		//Dropdown
+		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Store';
+		$data['path_url'] 		= 'inventory';
+		$data['products']		= $this->db->get("product_supplier")->result();
+		$data['col'] 			= $id;
+		$data['user_role_id'] 	= $session['role_id'];
+		
+		$data['subview'] 		= $this->load->view("admin/inventory/supplier", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+	public function supplier_detail($id){
+		//search supplier details
+		
+		$data['result'] = $this->db->where('id', $id)->get('product_supplier')->row();
+		$data['title'] 			= 'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Inventory';
+		$data['path_url'] 		= 'inventory';
+	 
+		// dd($data['products']);
+		$data['subview'] 		= $this->load->view("admin/inventory/supplier_details", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data);
+
+	}
+
+	public function get_supplier_ajax()
+	{
+		 $name_company= $_POST['companyName'];
+		 $this->db->like('company', $name_company);
+		$result = $this->db->get('product_supplier')->result_array();
+		 $data[0]= 'Select Supplier Name';
+		foreach ($result as $rows) {
+			$data[$rows['id']] = $rows['name'];
+		}
+		
+		
+		header('Content-Type: application/x-json; charset=utf-8');
+		echo (json_encode($data));
+	}
+
+	public function get_supplier_details_ajax($id)
+	{   
+		$this->db->where('id', $id);
+		$result = $this->db->get('product_supplier')->row();
+		header('Content-Type: application/x-json; charset=utf-8');
+		echo (json_encode($result));
+	}
+	//==================== suplier part end ========================
 
 
 
