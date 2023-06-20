@@ -1,4 +1,4 @@
-l<?php
+<?php
  /**
  * NOTICE OF LICENSE
  *
@@ -31,6 +31,7 @@ class Inventory extends MY_Controller {
 	//================= Requisition here =======================
 	public function index()
 	{
+		
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -237,7 +238,9 @@ class Inventory extends MY_Controller {
 		// dd($d1);
 		// dd($d1[1]->quantity);
 		foreach($d1 as $k=>$v){
+
 			if(isset($_POST['first_step'])){
+				$log_user=$_SESSION['username']['user_id'];
 				$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user,'status'=>5]);
 
 				foreach($quantity as $key=>$value){
