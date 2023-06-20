@@ -34,7 +34,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
         <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_core_hr"><?php echo $this->lang->line('xin_hr');?></a> </li> -->
         <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_projects"><?php echo $this->lang->line('xin_hr_m_project_task');?></a> </li> -->
         <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_payslips"><?php echo $this->lang->line('left_payslips');?></a> </li>       -->
-        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#device">Device</a> </li>      
+        <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#device">Device</a> </li>       -->
      </ul>
       <div class="tab-content">
         <div class="tab-pane <?php echo $get_animate;?> active" id="xin_general">
