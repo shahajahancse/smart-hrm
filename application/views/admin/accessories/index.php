@@ -18,13 +18,13 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
         <thead class="text-center">
           <tr >
             <th class="text-center" style="width:20px;">No.</th>
+            <th class="text-center" style="width:100px;">User</th>
             <th class="text-center" style="width:100px;">Category</th>
             <th class="text-center" style="width:100px;">Device</th>
             <th class="text-center" style="width:100px;">Model</th>
             <th class="text-center" style="width:100px;">Details</th>
-            <th class="text-center" style="width:100px;">Coments</th>
+            <th class="text-center" style="width:100px;">Purpose</th>
             <th class="text-center" style="width:100px;">Image</th>
-            <th class="text-center" style="width:100px;">User</th>
             <th class="text-center" style="width:100px;">Status</th>
             <th class="text-center" style="width:100px;">Action</th>
           </tr>
@@ -33,15 +33,15 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
           <?php foreach ($results as $key => $row) { ?>
             <tr class="text-center">
               <td><?= $key + 1; ?></td>
-              <td><?= $row->cat_id; ?></td>
-              <td><?= $row->device_name_id; ?></td>
-              <td><?= $row->device_model; ?></td>
+              <td><?= $row->first_name.' '.$row->last_name; ?></td>
+              <td><?= $row->cat_name; ?></td>
+              <td><?= "MHL ".$row->cat_short_name.'-'.$row->device_name_id; ?></td>
+              <td><?= $row->model_name?></td>
               <td><?= $row->description; ?></td>
               <td><?= $row->remark; ?></td>
-              <td><?= $row->image; ?></td>
-              <td><?= $row->user_id; ?></td>
+              <td><img src="<?= base_url("uploads/accessory_images/".$row->image);  ?>"> </td>
               <td><?= $row->status=='1'?"<span class='label label-success'>Active</span>":"<span class='label label-danger'>Inctive</span>"; ?></td>
-              <td><a class="btn btn-sm btn-info" href="<?= base_url('admin/accessories/category/'.$row->id);?>">Edit</a></td>
+              <td><a class="btn btn-sm btn-info" type="button" href="<?= base_url('admin/accessories/item_add/'.$row->id);?>">Edit</a></td>
             </tr>
           <?php } ?>
         </tbody>
