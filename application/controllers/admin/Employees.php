@@ -2306,6 +2306,7 @@ class Employees extends MY_Controller {
 	
 	// Validate and update info in database // basic info
 	public function basic_info() {
+		// dd($this->input->post());
 		if($this->input->post('type')=='basic_info') {		
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');

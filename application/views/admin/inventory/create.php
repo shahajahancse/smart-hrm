@@ -15,7 +15,7 @@
         <div class="container pt-4">
           <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
             <?php $hidden = array('user_id' => $session['user_id']);?>
-            <?php echo form_open('admin/inventory/index', $attributes, $hidden);?>
+            <?php echo form_open('admin/inventory/create', $attributes, $hidden);?>
                 <table class="table table-bordered table-sm table-striped " id="appRowDiv">
                     <tr>
                         <th class="text-center">Category Name</th>
