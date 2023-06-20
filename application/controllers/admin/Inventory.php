@@ -468,7 +468,7 @@ class Inventory extends MY_Controller {
 									$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
-	public function purchase_received_list()
+	public function purchase_order_received_list()
 	{
 			$session = $this->session->userdata('username');
 			//   dd($session);

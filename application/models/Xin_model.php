@@ -357,12 +357,60 @@ class Xin_model extends CI_Model {
 			// Store
 		} else if($mClass=='inventory' && $mMethod=='index') {
 			$arr['invtry_open'] = 'active';
-			$arr['requi_active'] = 'active';
+			$arr['my_requi_active'] = 'active';
 			return $arr;
-		} else if($mClass=='inventory' && $mMethod=='purchase') {
+		} else if($mClass=='inventory' && $mMethod=='create') {
 			$arr['invtry_open'] = 'active';
-			$arr['purchase_active'] = 'active';
+			$arr['requi_active'] = 'active';
+			$arr['iqcreate_open'] = 'active';
 			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='pending_list') {
+			$arr['invtry_open'] = 'active';
+			$arr['requi_active'] = 'active';
+			$arr['iqpending_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='aproved_list') {
+			$arr['invtry_open'] = 'active';
+			$arr['requi_active'] = 'active';
+			$arr['iqapprove_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='delivery_list') {
+			$arr['invtry_open'] = 'active';
+			$arr['requi_active'] = 'active';
+			$arr['iqdelivery_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='reject_list') {
+			$arr['invtry_open'] = 'active';
+			$arr['requi_active'] = 'active';
+			$arr['reject_open'] = 'active';
+			return $arr;
+
+		} else if($mClass=='inventory' && $mMethod=='purchase_create') {
+			$arr['invtry_open'] = 'active';
+			$arr['puiqu_active'] = 'active';
+			$arr['purchase_open'] = 'active';
+			
+		} else if($mClass=='inventory' && $mMethod=='purchase_panding_list') {
+			$arr['invtry_open'] = 'active';
+			$arr['puiqu_active'] = 'active';
+			$arr['purchase_panding_list'] = 'active';
+			
+		} else if($mClass=='inventory' && $mMethod=='purchase_aproved_list') {
+			$arr['invtry_open'] = 'active';
+			$arr['puiqu_active'] = 'active';
+			$arr['purchase_aproved_list'] = 'active';
+			
+		} else if($mClass=='inventory' && $mMethod=='purchase_order_received_list') {
+			$arr['invtry_open'] = 'active';
+			$arr['puiqu_active'] = 'active';
+			$arr['order_received_list'] = 'active';
+			
+		} else if($mClass=='inventory' && $mMethod=='purchase_reject_list') {
+			$arr['invtry_open'] = 'active';
+			$arr['puiqu_active'] = 'active';
+			$arr['purchase_reject_list'] = 'active';
+			return $arr;
+			
 		}  else if($mClass=='inventory' && $mMethod=='report') {
 			$arr['invtry_open'] = 'active';
 			$arr['inreport_active'] = 'active';
