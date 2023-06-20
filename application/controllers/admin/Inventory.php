@@ -128,8 +128,8 @@ class Inventory extends MY_Controller {
 
 
 		$data['products'] 		= $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],5);
-		$data['title'] 		 = 'Store Pending List | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Pending List';
+		$data['title'] 		 = 'Store First Step Aproved | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store First Step Aproved';
 		$data['user_role_id'] 	= $session['role_id'];
 
 		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
