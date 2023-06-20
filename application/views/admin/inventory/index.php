@@ -57,11 +57,10 @@
               <td class="text-center"><?php echo ($key+1)."."; ?></td>
                 <?php if($user_role_id==1){?>
                   <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
-                  <td class="text-center"><?php echo $rows->status==1?"
-                      <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
-                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Handover</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
-                    ?>
-              </td>
+                  <td class="text-center">
+                    <?php echo $rows->status == 5 ? "<span class='badge' style='background-color:#28a745'><b>First Step Approved</b></span>" : ($rows->status == 1 ? "<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" : ($rows->status == 2 ? "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>" : ($rows->status == 3 ? "<span class='badge' style='background-color:#28a745'><b>Handover</b></span>" : "<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"))); ?>
+                  </td>
+
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
                 <!-- <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td> -->
                 <td class="text-center">
@@ -72,27 +71,25 @@
 
                       <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                         
-                      <?php 
-                        if($session['role_id'] =1){ ?>
+                
                         <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                        <?php if($rows->status==2){?> 
-                           <a style="padding-left:5px;" href="<?= base_url('admin/inventory/hand_over/'.$rows->id);?>">Handover</a> <br>
+                        <?php if($rows->status==2||$rows->status==5){?> 
+                           <a style="padding-left:5px;" href="<?= base_url('admin/inventory/hand_over/'.$rows->id);?>">Delivered</a> <br>
                        
                          
-                        <?php } if($rows->status==4 || $rows->status==1){?> 
+                        <?php } if($rows->status==4 || $rows->status==1 ||  $rows->status==5 ){?> 
                           <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
                         <a style="padding-left:5px; " href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">Reject</a>
-                        <?php }} ?>
+                        <?php } ?>
                       </div>
               </td>
              
                 <?php } ?>
               <?php if($user_role_id==3){?>
                 <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
-                <td class="text-center"><?php echo $rows->status==1?"
-                      <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
-                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Persial Approved</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
-                    ?></td>
+                <td class="text-center">
+                    <?php echo $rows->status == 5 ? "<span class='badge' style='background-color:#28a745'><b>First Step Approved</b></span>" : ($rows->status == 1 ? "<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" : ($rows->status == 2 ? "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>" : ($rows->status == 3 ? "<span class='badge' style='background-color:#28a745'><b>Handover</b></span>" : "<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"))); ?>
+                  </td>
                 <td class="text-center"><?php echo $rows->created_at; ?></td>
                 <td class="text-center">
                     <!-- <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a> -->

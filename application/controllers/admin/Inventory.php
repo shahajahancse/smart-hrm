@@ -31,6 +31,7 @@ class Inventory extends MY_Controller {
 	//================= Requisition here =======================
 	public function index()
 	{
+		
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -112,6 +113,21 @@ class Inventory extends MY_Controller {
 
 
 		$data['products'] 		= $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],1);
+		$data['title'] 		 = 'Store Pending List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store Pending List';
+		$data['user_role_id'] 	= $session['role_id'];
+
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+	public function first_step_aproved_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+
+		$data['products'] 		= $this->Inventory_model->purchase_products_pending($session['user_id'],$session['role_id'],5);
 		$data['title'] 		 = 'Store Pending List | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store Pending List';
 		$data['user_role_id'] 	= $session['role_id'];
@@ -237,7 +253,9 @@ class Inventory extends MY_Controller {
 		// dd($d1);
 		// dd($d1[1]->quantity);
 		foreach($d1 as $k=>$v){
+
 			if(isset($_POST['first_step'])){
+				$log_user=$_SESSION['username']['user_id'];
 				$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user,'status'=>5]);
 
 				foreach($quantity as $key=>$value){

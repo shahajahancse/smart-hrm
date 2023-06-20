@@ -31,7 +31,8 @@ $get_animate = $this->Xin_model->get_content_animate();
         <?php echo form_open('admin/inventory/persial_approved/'.$requisition_id)?>
         
         <tbody>
-            <?php $i=1;foreach($results as $row){?>
+          
+            <?php  $i=1;foreach($results as $row){?>
             <tr class="text-center">
                 <td><?php echo $i++?></td>
                 <td><?php echo $row->category_name?></td>
@@ -49,8 +50,9 @@ $get_animate = $this->Xin_model->get_content_animate();
        <?php if(!empty($results)){?>
         <?php if($session['role_id']==1) {?>
       <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-      <input type="submit" name="first_step" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="first_step">
-         
+<?php if($row->status!=5){?>
+      <input type="submit" name="first_step" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="First Step Approved">
+         <?php } ?>
       <?php }else{?>
         <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="update">
     <?php }}?>
