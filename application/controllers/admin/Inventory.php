@@ -222,13 +222,14 @@ class Inventory extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data);
 	}
 	
+	
 	public function persial_approved($id){
-		
+	
+
 		$session = $this->session->userdata('username');
 		$all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->result();
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
-			
 		}
 		
 		$quantity=$this->input->post('qunatity[]');
@@ -236,6 +237,18 @@ class Inventory extends MY_Controller {
 		// dd($d1);
 		// dd($d1[1]->quantity);
 		foreach($d1 as $k=>$v){
+			if(isset($_POST['first_step'])){
+				$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user,'status'=>5]);
+
+				foreach($quantity as $key=>$value){
+
+
+					$this->db->where('id',$r_did[$key])->update('products_requisition_details',['quantity'=>$value]); 
+				}
+				   $this->session->set_flashdata('success', 'Product Updated Successfully.');
+				   redirect("admin/inventory/index","refresh");
+
+			}else{
 			if($session['role_id']==1){
 					if($d1[$k]->quantity >= $quantity[$k]) {
 						
@@ -263,6 +276,7 @@ class Inventory extends MY_Controller {
 					$this->session->set_flashdata('success', 'Product Updated Successfully.');
 				    redirect("admin/inventory/index","refresh");
 			}
+		}
 
 		}
 			if($session['role_id'] == 1){
