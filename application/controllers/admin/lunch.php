@@ -451,9 +451,11 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-       $firstDate = $this->input->post('firstDate');
+       $firstDate =date('Y-m-d', strtotime($this->input->post('firstDate') . ' -1 day'));
+
        $secondDate = $this->input->post('secondDate');
-       $data['lunch_data'] = $this->Lunch_model->process($firstDate,$secondDate);
+       $probable_date = $this->input->post('probable_date');
+       $data['lunch_data'] = $this->Lunch_model->process($firstDate,$secondDate,$probable_date);
        echo json_encode('success');
     }
     

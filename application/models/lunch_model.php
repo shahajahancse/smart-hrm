@@ -44,7 +44,7 @@ class Lunch_model extends CI_Model {
         return $query->result();
     }
 
-    public function process($firstDate,$secondDate)
+    public function process($firstDate,$secondDate,$probable_date)
     {
 
       $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
@@ -54,6 +54,19 @@ class Lunch_model extends CI_Model {
         $this->db->where('date <=', $secondDate);
         $this->db->where('emp_id', $row->user_id);
         $result = $this->db->get('lunch_details')->result();
+    
+// id
+// emp_id
+// prev_meal
+// prev_cost
+// prev_pay
+// prev_amount
+// probable_meal
+// pay_amount
+// from_date
+// end_date Descending 1
+// updated_at
+// status
         $emp_id=$row->user_id;
 
         $prev_meal=0;
@@ -66,6 +79,8 @@ class Lunch_model extends CI_Model {
         $this->db->where('emp_id', $row->user_id);
         $this->db->where('end_date', $firstDate);
         $preepay= $this->db->get('lunch_payment')->result();
+
+    //   dd( $preepay);
         if (count($preepay)>0){
             if($preepay[0]->status==1){
 
@@ -74,8 +89,8 @@ class Lunch_model extends CI_Model {
         };
 
         $prev_amount=$prev_pay-$prev_cost;
-        
-        $pay_amount=990;
+        $probable_meal=$this->chackprobalemeal($secondDate,$probable_date);
+        $pay_amount=$probable_meal*45;
         $from_date=$firstDate;
         $end_date=$secondDate;
         $status=0;
@@ -87,12 +102,38 @@ class Lunch_model extends CI_Model {
             'prev_pay' => $prev_pay,
             'prev_amount' => $prev_amount,
             'pay_amount' => $pay_amount,
+            'probable_meal' => $probable_meal,
             'from_date' => $from_date,
             'end_date' => $end_date,
             'status' => $status
         );
         $this->db->insert('lunch_payment', $data);
       }
+    }
+
+    public function chackprobalemeal($first_date,$second_date ) {
+        $date1 = new DateTime($first_date);
+        $date2 = new DateTime($second_date );
+        $interval = $date1->diff($date2);
+        $count = $interval->days;
+        $total_day = 0;
+        $off_day = array('Friday','Saturday');
+        for ($i=0; $i < $count; $i++) { 
+            $process_date = date("Y-m-d", strtotime("+{$i} day", strtotime($first_date)));
+            $day = date("l", strtotime($process_date));
+
+            if (in_array($day, $off_day)) {
+                $total_day = $total_day + 1;
+            }else{
+                $this->db->where("start_date <=", $process_date);
+                $this->db->where("end_date >=", $process_date);
+                $query = $this->db->get("xin_holidays")->num_rows();
+                if ($query > 0) { 
+                    $total_day = $total_day + 1;
+                }
+            }
+        }
+        return $count - $total_day;
     }
     
     public function employees($id)
@@ -194,10 +235,7 @@ class Lunch_model extends CI_Model {
     }
     
 
-    public function get_total_rows() {
-        return $this->db->count_all('lunch');
-    }
-
+  
     public function get_lunch_data($first_date,$second_date) {
         $this->db->where('date >=', $first_date);
         $this->db->where('date <=', $second_date);

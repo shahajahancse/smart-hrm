@@ -155,17 +155,21 @@
         </select>
       </div>
 
-      <div class="container col-md-7 form-container proccess_container" style="width: 500px;padding: 0px;border-radius: 10px;margin: 0;height: fit-content;margin-top: 60px;">
+      <div class="container col-md-7 form-container proccess_container" style="width: 599px;padding: 0px;border-radius: 10px;margin: 0;height: fit-content;margin-top: 8px;">
         <form id="process_form" class="col-md-12" style="padding: 9px;margin: 0px;">
-          <div class="form-group col-md-5" style="padding: 0px;margin: 0px;">
+          <div class="form-group col-md-4" style="padding: 0px;margin: 0px;">
             <label for="process_date">First Date</label>
             <input class="form-control attendance_date" id="process_date" name="process_date" type="text" value="<?php echo isset($last_prement->from_date)? date('Y-m-d', strtotime($last_prement->end_date . ' +1 day')):'';?>" disabled>
           </div>
-          <div class="form-group col-md-5">
+          <div class="form-group col-md-4">
             <label for="process_date">Second Date</label>
             <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text" autocomplete="off">
           </div>
-           <div class="form-group col-md-2" style="margin: 0px;padding: 0px;">
+          <div class=" col-md-4">
+            <label for="process_date">Next Probable Date</label>
+            <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="probable_date" name="probable_date" type="text" autocomplete="off">
+          </div>
+           <div class="form-group col-md-2" style="margin: 0px;padding: 0px;float:right;">
             <label for="" style="color: whitesmoke!important;">.</label>
             <a class="btn btn-primary" style="margin: 0px;padding: 4px;" id="process_button">Process</a>
           </div>
@@ -190,14 +194,13 @@
   $('#search-select').on('change', function() {
     var selectedValue = $(this).val(); // Get the selected value
     var paymonth = '<?php echo date('Y-m-d', strtotime($last_prement->end_date));?>'; // Get the selected value
-
     // Make an AJAX post request to the controller
     $.ajax({
       url: '<?= base_url('admin/lunch/getfrom') ?>',
       method: 'POST',
       data: { selectedValue: selectedValue, paymonth: paymonth },
       success: function(response) {
-        console.log(response); // Print the response to the console for debugging
+        // console.log(response); return;// Print the response to the console for debugging
 
         // Check if the response is already an object
         if (typeof response === 'object') {
@@ -249,16 +252,20 @@
         formHtml += '</div>'; 
 
         formHtml += '<div class="row">';
-        formHtml += '<div class="form-group col-md-4">';
-        formHtml += '<label for="gender">Pay Meal (probable)</label>';
-        formHtml += '<input type="number" class="form-control" id="p_month_day" onchange="calculatePayment()" value="' + (responseData[0].pay_amount/45) + '" >';
+        formHtml += '<div class="form-group col-md-3">';
+        formHtml += '<label for="gender">Current M. Lunch day</label>';
+        formHtml += '<input type="number" class="form-control"  value="' + responseData[0].probable_meal+ '" >';
         formHtml += '</div>';
-        formHtml += '<div class="form-group col-md-4">';
-        formHtml += '<label for="gender">Pay Amount (probable)</label>';
+        formHtml += '<div class="form-group col-md-3">';
+        formHtml += '<label for="gender">Collection Day</label>';
+        formHtml += '<input type="number" class="form-control" id="p_month_day" onchange="calculatePayment()" value="' + responseData[0].probable_meal+ '" >';
+        formHtml += '</div>';
+        formHtml += '<div class="form-group col-md-3">';
+        formHtml += '<label for="gender">Collection Amount</label>';
         formHtml += '<input type="text" class="form-control" id="p_month_pay" name="p_month_pay" value="' + pay_m + '" readonly>';
         formHtml += '</div>';
 
-        formHtml += '<div class="form-group col-md-4">';
+        formHtml += '<div class="form-group col-md-3">';
         formHtml += '<label for="gender">Pay Status</label>';
         formHtml += '<select class="form-control" name="status" id="status">';       
           // Set the selected option based on responseData[0].status
@@ -366,11 +373,18 @@ function calculatePayment() {
       // Get the values of the input fields
       var firstDate = $('#process_date').val();
       var secondDate = $('#second_date').val();
+      var probable_date = $('#probable_date').val();
        if(secondDate =='')
       {
         alert('Please select Second date');
         return ;
       }
+       if(probable_date =='')
+      {
+        alert('Please select probable_date');
+        return ;
+      }
+      alert('done');
       document.getElementById("loading").style.visibility = "visible";
       // Create the AJAX request
       $.ajax({
@@ -378,7 +392,8 @@ function calculatePayment() {
         method: 'POST', // Replace with the desired HTTP method (POST, GET, etc.)
         data: {
           firstDate: firstDate,
-          secondDate: secondDate
+          secondDate: secondDate,
+          probable_date: probable_date
         },
         success: function(response) {
           // Handle the success response from the server
