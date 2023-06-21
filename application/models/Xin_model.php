@@ -288,13 +288,21 @@ class Xin_model extends CI_Model {
 			$arr['lunch_open'] = 'active';
 			$arr['lunch_active'] = 'active';
 			return $arr;
-		} else if($mClass=='lunch' && $mMethod=='report') {
-			$arr['lunch_open'] = 'active';
-			$arr['lureport_active'] = 'active';
-			return $arr;
 		} else if($mClass=='lunch' && $mMethod=='today_lunch') {
 			$arr['lunch_open'] = 'active';
 			$arr['today_active'] = 'active';
+			return $arr;
+		} else if($mClass=='lunch' && $mMethod=='emp_pay_list') {
+			$arr['lunch_open'] = 'active';
+			$arr['emp_pay_active'] = 'active';
+			return $arr;
+		} else if($mClass=='lunch' && $mMethod=='vendor_payment') {
+			$arr['lunch_open'] = 'active';
+			$arr['vendor_active'] = 'active';
+			return $arr;
+		} else if($mClass=='lunch' && $mMethod=='report') {
+			$arr['lunch_open'] = 'active';
+			$arr['lureport_active'] = 'active';
 			return $arr;
 		} else if($mClass=='lunch' && $mMethod=='lunch_package') {
 			$arr['lunch_open'] = 'active';
@@ -388,27 +396,27 @@ class Xin_model extends CI_Model {
 		} else if($mClass=='inventory' && $mMethod=='purchase_create') {
 			$arr['invtry_open'] = 'active';
 			$arr['puiqu_active'] = 'active';
-			$arr['purchase_open'] = 'active';
+			$arr['puscreate_open'] = 'active';
 			
 		} else if($mClass=='inventory' && $mMethod=='purchase_panding_list') {
 			$arr['invtry_open'] = 'active';
 			$arr['puiqu_active'] = 'active';
-			$arr['purchase_panding_list'] = 'active';
+			$arr['puspending_open'] = 'active';
 			
 		} else if($mClass=='inventory' && $mMethod=='purchase_aproved_list') {
 			$arr['invtry_open'] = 'active';
 			$arr['puiqu_active'] = 'active';
-			$arr['purchase_aproved_list'] = 'active';
+			$arr['pusaproved_open'] = 'active';
 			
 		} else if($mClass=='inventory' && $mMethod=='purchase_order_received_list') {
 			$arr['invtry_open'] = 'active';
 			$arr['puiqu_active'] = 'active';
-			$arr['order_received_list'] = 'active';
+			$arr['pusreceived_open'] = 'active';
 			
 		} else if($mClass=='inventory' && $mMethod=='purchase_reject_list') {
 			$arr['invtry_open'] = 'active';
 			$arr['puiqu_active'] = 'active';
-			$arr['purchase_reject_list'] = 'active';
+			$arr['pusreject_open'] = 'active';
 			return $arr;
 			
 		}  else if($mClass=='inventory' && $mMethod=='report') {
@@ -439,23 +447,6 @@ class Xin_model extends CI_Model {
 			$arr['invtry_open'] = 'active';
 			$arr['insetting_open'] = 'active';
 			$arr['subcat_open'] = 'active';
-			return $arr;
-
-		
-		} else if($mClass=='inventory' && $mMethod=='mamange_accessories') {
-			$arr['accessory_open'] = 'active';
-			$arr['invtry_open'] = 'active';
-			$arr['manage_accessories_open'] = 'active';
-			return $arr;
-		}  else if($mClass=='inventory' && $mMethod=='user_uses_list') {
-			$arr['accessory_open'] = 'active';
-			$arr['invtry_open'] = 'active';
-			$arr['user_list_open'] = 'active';
-			return $arr;
-		} else if($mClass=='inventory' && $mMethod=='category') {
-			$arr['invtry_open'] = 'active';
-			$arr['insetting_open'] = 'active';
-			$arr['cat_open'] = 'active';
 			return $arr;
 		} 	// Store 
  
