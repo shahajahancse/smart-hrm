@@ -302,6 +302,22 @@ class Lunch_model extends CI_Model {
             } else {
                 return false;
             }
-    }    
+    } 
+    public function chack_meal($first_date,$second_date){
+        $this->db->select('*');
+        $this->db->where('date >=', $first_date);
+        $this->db->where('date <=', $second_date);
+        $data = $this->db->get('lunch')->result();
+        if (count($data) > 0) {
+            $total_m=0;
+            foreach($data as $m){
+                $total_m+=$m->total_m;
+            }
+            return $total_m;
+          
+        }else{
+            return 0;
+        }
+    }   
 }
 ?>

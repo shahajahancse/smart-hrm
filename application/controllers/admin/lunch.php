@@ -478,5 +478,30 @@ class Lunch extends MY_Controller {
         $response ='operation Successfull.';
         echo json_encode($response);
     }
+    public function vendor_payment() {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $data['breadcrumbs'] ='Payment';
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/vendor_payment", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+
+
+
+    }
+    public function get_payment_data() {
+       echo $total_m= $this->Lunch_model->chack_meal($this->input->post('first_date'),$this->input->post('second_date'));
+   
+    }
+    public function make_payment() {
+        dd($this->input->post());
+   
+    }
 }
 ?>
