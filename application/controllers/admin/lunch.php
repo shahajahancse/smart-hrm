@@ -314,7 +314,7 @@ class Lunch extends MY_Controller {
         }
     }
 
-    public function paymentreport(){
+    public function paymentreport($r=null){
 
 
         $session = $this->session->userdata('username');
@@ -325,11 +325,22 @@ class Lunch extends MY_Controller {
         $excel = $this->input->post('excel');
         $data['status'] = $status;
         $data['lunch_data'] = $this->Lunch_model->paymentreport($status);
-       if($excel==1){
-        $this->load->view('admin/lunch/payment_report_page_exel', $data);
+        $data['r'] = $r;
+        if($r==1){
+            
+            if($excel==1){
+                $this->load->view('admin/lunch/previous_report_page_exel', $data);
 
-       }else{
-        $this->load->view('admin/lunch/payment_report_page', $data); }
+            }else{
+                $this->load->view('admin/lunch/previous_report_page', $data); }
+        }else{
+
+
+            if($excel==1){
+                $this->load->view('admin/lunch/payment_report_page_exel', $data);
+
+            }else{
+                $this->load->view('admin/lunch/payment_report_page', $data); }}
     }
 
     //manually lunch data entry

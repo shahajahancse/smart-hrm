@@ -77,14 +77,15 @@ function perday(status) {
   }
 }
 }
-function paymentreport(status) {
+function paymentreport(status,r=null) {
 {
+  
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest = new XMLHttpRequest();
   var data = '&status='+status;
   console.log(data);
 
-  url = base_url + "/paymentreport/";
+  url = base_url + "/paymentreport/"+r;
   ajaxRequest.open("POST", url, true);
   ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
    ajaxRequest.send(data);

@@ -106,6 +106,9 @@
         <li class="nav-item active">
           <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily" aria-selected="true">Report</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false">Payment</a>
+        </li>
       
      
     </ul>
@@ -118,15 +121,17 @@
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(2)">Monthly Report</button>
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(3)">Continue  Report</button>
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="perday(4)">Vendor Voucher</button>
+          <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="paymentreport(2,1)">Previous Report</button>
+       
+
+      </div>
+      <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab" style="margin-top: 30px;">
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="paymentreport(1)">Paid Report</button>
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="paymentreport(0)">Unpaid Report</button>
           <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="paymentreport(2)">Payment Report</button>
-
       </div>
-
-      
-
     </div>
+  
 
   </div>
 
@@ -149,7 +154,6 @@
 </div>
 </div>
 
-<script type="text/javascript" src="<?php echo base_url()?>skin/hrsale_assets/js/lunch.js"></script>
 <script>
   $(document).ready(function(){
 
