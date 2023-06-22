@@ -142,6 +142,7 @@
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(1)">Paid Report</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(0)">Unpaid Report</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2)">Payment Report</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="vendor_Report()">Vendor Report</button>
                 </div>
             </div>
 
@@ -167,6 +168,7 @@
         </table>
     </div>
 </div>
+<script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 
 <script>
 $(document).ready(function() {
