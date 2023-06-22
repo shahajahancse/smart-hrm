@@ -2,6 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Accessories extends MY_Controller {
+
+    public $category = "<script>window.location.replace('category')</script>";
+    public $model = "<script>window.location.replace('device_model')</script>";
+    public $item = "<script>window.location.replace('index')</script>";
+    public $number = "<script>window.location.replace('number_add')</script>";
 	
 	public function __construct() {
         parent::__construct();
@@ -9,28 +14,27 @@ class Accessories extends MY_Controller {
 		$this->load->model("Accessories_model");
 		$this->load->model("Xin_model");
 		$this->load->helper('form');
+        
 	}
     public function page_loads(){
         $data = $this->session->userdata('username');
 		if(empty($data)){ 
 			redirect('admin/');
 		}
-
         return $data;
     }
 
-    public function index(){
+public function index(){
      $data = $this->page_loads();
      $data['title'] = 'Item List'.' | '.$this->Xin_model->site_title();
      $data['breadcrumbs'] = "Item List";
-     $data['path_url'] = "Item";    
+     $data['path_url'] = "Index";    
      $data['results'] = $this->Accessories_model->get_product_info();
-
      $datas['subview']= $this->load->view('admin/accessories/index',$data,TRUE);  
      $this->load->view('admin/layout/layout_main', $datas); 
 
 
-    }
+}
 
 public function category($id = null){
      $data = $this->page_loads();
@@ -49,11 +53,14 @@ public function category($id = null){
         if ($hid = $this->input->post('hidden_id')) {
         $this->db->where('id', $hid)->update('product_accessory_categories', $form_data);
         $this->session->set_flashdata('success', 'Successfully Updated Done');
+        echo $this->category;
         } else {
             if($this->Accessories_model->add_category('product_accessory_categories', $form_data)){
                 $this->session->set_flashdata('success', 'Successfully Insert Done');
+                echo $this->category;
             } else {
-                $this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+                $this->session->set_flashdata('success', 'Sorry Something Wrong.');
+                echo $this->category;
             }
         }
     }
@@ -76,7 +83,7 @@ public function device_model($id = null){
      $this->form_validation->set_rules('status', 'Status ', 'required|trim');
     if ($this->form_validation->run() == true){
         $form_data = array(
-                        'cat_id'       => $this->input->post('cat_id'),
+                        'cat_id'           => $this->input->post('cat_id'),
                         'model_name'       => $this->input->post('model_name'),
                         'details'          => $this->input->post('details'),
                         'status'           => $this->input->post('status'),
@@ -84,11 +91,14 @@ public function device_model($id = null){
         if ($hid = $this->input->post('hidden_id')) {
             $this->db->where('id', $hid)->update('product_accessories_model', $form_data);
             $this->session->set_flashdata('success', 'Successfully Updated Done');
+             echo $this->model;
         } else {
             if($this->Accessories_model->add_device('product_accessories_model', $form_data)){
                 $this->session->set_flashdata('success', 'Successfully Insert Done');
+                 echo $this->model;
             } else {
-                $this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+                $this->session->set_flashdata('success', 'Sorry Something Wrong.');
+                 echo $this->model;
             }
         }
     }
@@ -102,19 +112,52 @@ public function device_model($id = null){
                           $this->load->view('admin/layout/layout_main', $datas); 
 }
 
+public function number_add($id = null){
+    $data = $this->page_loads();
+    $data['title'] = 'Add Number'.' | '.$this->Xin_model->site_title();
+    $data['breadcrumbs'] = "Add Number";
+    $data['path_url'] = "Number";
+    $this->form_validation->set_rules('number', 'Number', 'required|trim');
+    $this->form_validation->set_rules('status', 'Number', 'required|trim');
+    if ($this->form_validation->run() == true){
+    $form_data = array(
+                        'number'   => $this->input->post('number'),
+                        'status'   => $this->input->post('status'),
+			          );    
+        if ($hid = $this->input->post('hidden_id')) {
+        $this->db->where('id', $hid)->update('mobile_numbers', $form_data);
+        $this->session->set_flashdata('success', 'Successfully Updated Done');
+         echo $this->number;
+        } else {
+            if($this->Accessories_model->add_category('mobile_numbers', $form_data)){
+                $this->session->set_flashdata('success', 'Successfully Insert Done');
+                 echo $this->number;
+            } else {
+                $this->session->set_flashdata('success', 'Sorry Something Wrong.');
+                 echo $this->number;
+            }
+        }
+    }
+    if($id != null) {
+      $data['row'] = $this->db->where('id',$id)->get("mobile_numbers")->row();
+    }   
+     $data['results']=$this->db->select('*')->get('mobile_numbers')->result();
+     $datas['subview']= $this->load->view('admin/accessories/number_add',$data,TRUE);  
+     $this->load->view('admin/layout/layout_main', $datas); 
+}
+
 public function item_add($id = null){
-    // dd("ok");
+
     $data = $this->page_loads();
     $data['title']         = 'Add Device Model'.' | '.$this->Xin_model->site_title();
 	$data['breadcrumbs']   = "Add Item";
-	$data['path_url']      = "Model";
+	$data['path_url']      = "Item";
   
     $this->form_validation->set_rules('cat_id', 'Category Name', 'required|trim');
     $this->form_validation->set_rules('device_name_id', 'Device Name', 'required|trim');
     $this->form_validation->set_rules('device_model', 'Device Model', 'required|trim');
     $this->form_validation->set_rules('description', 'Description', 'required|trim');
     $this->form_validation->set_rules('remark', 'Remark', 'required|trim');
-    //  $this->form_validation->set_rules('image', 'Image', 'required|trim');
     $this->form_validation->set_rules('status', 'Status ', 'required|trim');
 
     if ($this->form_validation->run() == true){
@@ -150,31 +193,54 @@ public function item_add($id = null){
                             'image'          => $picture,
                             'user_id'        => $user_id,
                             'status'         => $this->input->post('status'),
+                            'use_number'     => $this->input->post('use_number'),
+                            'number'         => $this->input->post('number'),
         );    
 
         if ($hid = $this->input->post('hidden_id')) {
             $this->db->where('id', $hid)->update('product_accessories', $form_data);
             $this->session->set_flashdata('success', 'Successfully Updated Done');
+             echo $this->item;
         } else {
             if($this->Accessories_model->add_device('product_accessories', $form_data)){
                 $this->session->set_flashdata('success', 'Successfully Insert Done');
+                 echo $this->item;
             } else {
-                $this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+                $this->session->set_flashdata('success', 'Sorry Something Wrong.');
+                 echo $this->item;
             }
         }
     }
+
     if($id != null) {
         $data['row']  = $this->Accessories_model->get_product_info($id); // get id wise data  
     }   
     $data['categories'] = $this->db->select('*')->get('product_accessory_categories')->result(); //showing category list
     $data['models']     = $this->db->select('*')->get('product_accessories_model')->result(); //showing model list
     $data['users']      = $this->db->select('*')->where_in('status',[1,4])->get('xin_employees')->result(); //showing model list
+    $data['numbers']     = $this->db->select('*')->get('mobile_numbers')->result(); //showing number list
     $data['results']    = $this->Accessories_model->get_cat_model_info(); //showing data 
     // dd($dat);
     $datas['subview']   = $this->load->view('admin/accessories/item_add',$data,TRUE);  
                           $this->load->view('admin/layout/layout_main', $datas); 
 
 } 
+
+
+
+function delete($id,$table,$url){
+    $delete= $this->db->where('id',$id)->delete($table);
+    if($delete){
+        $this->session->set_flashdata('success', 'Successfully Delete Done');
+        redirect('admin/accessories/'.$url,['msg'=>1]);
+    } else {
+        $this->session->set_flashdata('success', 'Sorry Something Wrong.');
+        redirect('admin/accessories/'.$url);
+
+    }
+
+}
+
 
 }
 
