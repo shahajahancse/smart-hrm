@@ -981,7 +981,7 @@ if($attendances->num_rows() < 1) {
 </div>
 <?php } ?>
 <?php if($theme[0]->dashboard_calendar == 'true'):?>
-<?php $this->load->view('admin/calendar/calendar_hr');?>
+<!-- <?php $this->load->view('admin/calendar/calendar_hr');?> -->
 <?php endif; ?>
 <style type="text/css">
 .btn-group {
