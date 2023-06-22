@@ -72,7 +72,7 @@
     background: #fffcf9;
     box-shadow: 3px 8px 9px 3px rgb(0 0 0 / 10%);
     font-family: Arial, sans-serif;
-    font-size: 18px;
+  
     color: #333;
   }
   .levels{
@@ -137,7 +137,6 @@
                 <p class="levels">Payable Amount</p>
                 <input type="text" class="form-control" id="payable_amount" style="border-radius: 6px;" disabled>
             </div>
-
     </div>
     <div class="col-md-12" style="justify-content: right;display: inline-flex;">
             <div class="form-group col-md-2">
@@ -173,9 +172,46 @@
  
 </div>
 <div class="list_box">
+    <table id="myTable">
+      <tr>
+        <th>SL</th>
+        <th>Previous Due</th>
+        <th>From Date</th>
+        <th>To Date</th>
+        <th>Total Meal</th>
+        <th>Pay Amount</th>
+        <th>Net Payment</th>
+        <th>Paid Amount</th>
+        <th>Due</th>
+        <th>Date</th>
+        <th>Remarks</th>
+      </tr>
+      <?php foreach ($payment_data as $key=>$row): ?>
+      <tr>
+        <td><?php echo $key+1 ?></td>
+        <td><?php echo $row->previous_due; ?></td>
+        <td><?php echo $row->from_date; ?></td>
+        <td><?php echo $row->to_date; ?></td>
+        <td><?php echo $row->total_meal; ?></td>
+        <td><?php echo $row->pay_amount; ?></td>
+        <td><?php echo $row->net_payment; ?></td>
+        <td><?php echo $row->paid_amount; ?></td>
+        <td><?php echo $row->due; ?></td>
+        <td><?php echo $row->date; ?></td>
+        <td><?php echo $row->Remarks; ?></td>
+        
+      </tr>
+      <?php endforeach; ?>
+    </table>
+
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+  <script>
+   $(document).ready(function() {
+      $('#myTable').DataTable();
+   });
+  </script>
 
 <script>
     function togglePaymentBox() {

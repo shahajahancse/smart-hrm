@@ -37,10 +37,6 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-
-        $this->load->library('pagination');
-        $this->load->model('Lunch_model');
-
         $data['results'] = $this->Lunch_model->get_all_data();
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch';
@@ -483,10 +479,13 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-        $data['result'] = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row();
-
-        $data['breadcrumbs'] ='Payment';
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch';
+        $data['path_url'] = 'lunch';
+        $data['result'] = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row();
+        $data['payment_data'] = $this->db->get('lunch_payment_vendor')->result();
+       
+     
         if (!empty($session)) {
             $data['subview'] = $this->load->view("admin/lunch/vendor_payment", $data, TRUE);
             $this->load->view('admin/layout/layout_main', $data); //page load
