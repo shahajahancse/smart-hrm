@@ -51,24 +51,9 @@
 	      <table class="table table-striped table-bordered">
 	        <thead>
                 <td>Sl. No.</td>
-                <td>Employee Name</td>
-                <td>Department Name</td>
-                <td>Designation Name</td>
-                <td>In Time</td>
-                <td>Out Time</td>
-                <td>Status</td>
-                <td>Comment</td>
 	        </thead>
-            
             <tbody >
-                <td>< ?php echo $i++;?></td>
-                <td>< ?php echo $row->first_name.' '.$row->last_name?></td>
-                <td>< ?php echo $row->department_name?></td>
-                <td>< ?php echo $row->designation_name?></td>
-                <td>< ?php echo $row->clock_in==""? "": date('H:i:s a',strtotime($row->clock_in))?></td>
-                <td>< ?php echo $row->clock_out==""? "": date('h:i:s a',strtotime($row->clock_out))?></td>
-                <td>< ?php echo $status;?></td>
-                <td>< ?php echo $row->comment;?></td>
+                <td>test</td>
             </tbody>
            
 	      </table>
