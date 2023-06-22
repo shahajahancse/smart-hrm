@@ -34,6 +34,7 @@ public function get_cat_model_info($id=null){
 
 
 public function get_product_info($id=null){
+
     $this->db->select(' 
                         product_accessories.*,
                         product_accessory_categories.cat_name,
@@ -53,6 +54,7 @@ public function get_product_info($id=null){
 
 
     if($id !=null){
+        $this->db->where('product_accessories.id',$id);
         $data=$this->db->get()->row();
     } else {
 
@@ -79,6 +81,7 @@ public function get_product_infos($id=null){
     $this->db->join('mobile_numbers','product_accessories.number       = mobile_numbers.id','left');
 
     if($id !=null){
+        $this->db->where('product_accessories.id',$id);
         $data=$this->db->get()->row();
     } else {
 

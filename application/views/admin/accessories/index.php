@@ -8,7 +8,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 ?>
 
 <?php if($this->session->flashdata('success')):?>
-    <div class="alert alert-success" style="width: 235px;">
+    <div class="alert alert-success" style="width: 250px;">
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>  
       <?php echo $this->session->flashdata('success');?>
     </div>
@@ -47,7 +47,8 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
               <td><?= $row->number?></td>
               <td><?= $row->description; ?></td>
               <td><?= $row->remark; ?></td>
-              <td><img src="<?= base_url("uploads/accessory_images/".$row->image);  ?>"> </td>
+              <td><img src="<?php echo (empty($row->image)) ? base_url("uploads/no_image.png"): base_url("uploads/accessory_images/".$row->image)?>"> 
+              </td>
               <td>
                  <?= $row->status=='1'?"<span class='label label-success'>On Working</span>":"<span class='label label-danger'>Stocked</span>"; ?></td>
               <td>
@@ -58,6 +59,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
           <?php } ?>
         </tbody>
       </table>
+      
     </div>
   </div>
 </div>

@@ -147,18 +147,16 @@ public function number_add($id = null){
 }
 
 public function item_add($id = null){
-
     $data = $this->page_loads();
     $data['title']         = 'Add Device Model'.' | '.$this->Xin_model->site_title();
 	$data['breadcrumbs']   = "Add Item";
 	$data['path_url']      = "Item";
-  
     $this->form_validation->set_rules('cat_id', 'Category Name', 'required|trim');
-    $this->form_validation->set_rules('device_name_id', 'Device Name', 'required|trim');
-    $this->form_validation->set_rules('device_model', 'Device Model', 'required|trim');
-    $this->form_validation->set_rules('description', 'Description', 'required|trim');
-    $this->form_validation->set_rules('remark', 'Remark', 'required|trim');
-    $this->form_validation->set_rules('status', 'Status ', 'required|trim');
+    // $this->form_validation->set_rules('device_name_id', 'Device Name', 'required|trim');
+    // $this->form_validation->set_rules('device_model', 'Device Model', 'required|trim');
+    // $this->form_validation->set_rules('description', 'Description', 'required|trim');
+    // $this->form_validation->set_rules('remark', 'Remark', 'required|trim');
+    // $this->form_validation->set_rules('status', 'Status ', 'required|trim');
 
     if ($this->form_validation->run() == true){
             if(!empty($_FILES['image']['name'])){
@@ -213,7 +211,8 @@ public function item_add($id = null){
     }
 
     if($id != null) {
-        $data['row']  = $this->Accessories_model->get_product_info($id); // get id wise data  
+        $data['row']  = $this->Accessories_model->get_product_info($id); // get id wise data 
+        // dd($data['row']); 
     }   
     $data['categories'] = $this->db->select('*')->get('product_accessory_categories')->result(); //showing category list
     $data['models']     = $this->db->select('*')->get('product_accessories_model')->result(); //showing model list
@@ -228,7 +227,7 @@ public function item_add($id = null){
 
 
 
-function delete($id,$table,$url){
+public function delete($id,$table,$url){
     $delete= $this->db->where('id',$id)->delete($table);
     if($delete){
         $this->session->set_flashdata('success', 'Successfully Delete Done');
@@ -239,6 +238,29 @@ function delete($id,$table,$url){
 
     }
 
+}
+
+
+public function reports(){
+    $data = $this->page_loads();
+    $data['title'] = 'Report'.' | '.$this->Xin_model->site_title();
+    $data['breadcrumbs'] = "Report";
+    $data['path_url'] = "Report";    
+    $datas['subview'] = $this->load->view('admin/accessories/reports',$data,TRUE);  
+                        $this->load->view('admin/layout/layout_main', $datas); 
+}
+
+public function inventory_report(){
+    	$data['values'] = $this->db->get('product_accessories'); 	
+        if(is_string($data["values"]))
+        {
+            echo $data["values"];
+        }
+        else
+        {	
+			// dd($data["values"]);
+            $this->load->view('admin/accessories/inventory_report',$data);
+        }
 }
 
 
