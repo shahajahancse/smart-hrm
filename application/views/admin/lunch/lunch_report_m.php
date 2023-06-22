@@ -2,15 +2,19 @@
     $month_year = $first_date;
     $date = strtotime(date("Y-m-d"));
     $imonth_year = explode('-', $month_year);
+    // dd($imonth_year);
     $day = date('d', $date);
     $month = date($imonth_year[1], $date);
+
     $nummonth = date($imonth_year[1], $date);
     $year = date($imonth_year[0], $date);
 
     // Total days in month
     $daysInMonth = cal_days_in_month(0, $month, $year);
 
-    $imonth = date('F', $month);
+    $monthName = date('F', mktime(0, 0, 0, $month, 1));
+   
+   
 ?>
 
 <!DOCTYPE html>
@@ -87,7 +91,7 @@
     <div style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px"><?php echo xin_company_info(1)->company_name; ?></div>
 				<div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
 				<div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;"> <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
-				<div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;" >Monthly Lunch Report of <?= $imonth?> </div>
+				<div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;" >Monthly Lunch Report of <?= $monthName?> </div>
         </div>
         <h2>Lunch Details</h2>
         <table>
