@@ -235,9 +235,10 @@ class Lunch extends MY_Controller {
         $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
         $this->db->where('lunch_details.lunch_id', $lunchid);
         $this->db->where('lunch_details.date', $date);
-        $this->db->where('lunch_details.meal_amount >', 0);
+        // $this->db->where('lunch_details.meal_amount >', 0);
         $result = $this->db->get()->result();
         $data['lunch_details'] = $result;
+        // dd($data['lunch_details']);
       
         $data['lunch'] = $this->db->get_where('lunch', array('id' =>$lunchid, 'date' =>$date ))->result();
 

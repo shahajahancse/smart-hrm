@@ -125,7 +125,7 @@ $newDate = $date->format('Y-m-d');
                     ?>
             <tr>
                 <td><?php echo $key+1 ?></td>
-                <td><?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
+                <td style="text-align: left;">&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
                 <td><?php echo $employee->probable_meal;?></td>
                 <td><?php echo $pbm;?></td>
                 <td><?php echo $employee->probable_meal-$pbm;?></td>
