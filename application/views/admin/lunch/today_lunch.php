@@ -5,7 +5,7 @@
 if($session['role_id']==1){?>
 <div style="float: left;margin-left: 29px;margin-top: 22px;">
     <label for="date"> Enter Date</label>
-    <input type="date" onchange="submitForm()" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>">
+    <input type="date" onchange="submitForm()" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>" style="border-radius: 5px;">
     <input type='hidden' id="ischange" name="change" value= 0>
 </div>
 <?php }else{?>
