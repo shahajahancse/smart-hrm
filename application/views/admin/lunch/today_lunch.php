@@ -1,9 +1,17 @@
 <a href="<?= base_url('admin/lunch/emp_pay_list') ?>" class="btn btn-primary float-right">Get Payment</a>
+<?= form_open(current_url(), array('id' => 'dateForm')); ?>
+<h3 style="float: left;">Today Lunch</h3>
+<?php $session = $this->session->userdata('username');
+if($session['role_id']==1){?>
+<div style="float: left;margin-left: 29px;margin-top: 22px;">
+    <label for="date"> Enter Date</label>
+    <input type="date" onchange="submitForm()" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>">
+    <input type='hidden' id="ischange" name="change" value= 0>
+</div>
+<?php }else{?>
 
-<h3>Today Lunch</h3>
-
-<?= form_open(current_url()); ?>
 <input type="hidden" name="date" value="<?= date('d-m-Y'); ?>">
+<?php } ?>
 <table class="table table-hover" style="text-align-last: center;">
     <thead>
         <tr>
@@ -67,3 +75,10 @@
 </div>
 
 <?= form_close(); ?>
+
+<script>
+  function submitForm() {
+    document.getElementById('ischange').value=1;
+    document.getElementById('dateForm').submit();
+  }
+</script>
