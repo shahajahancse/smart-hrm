@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
 <style>
   .addbox {
     min-height: 49px;
@@ -91,23 +93,23 @@
        
         <div class="form-group col-md-4">
            <p class="levels">Last Calculet Date</p>
-            <input type="date" class="form-control" id="email" style="border-radius: 6px;" disabled>
+            <input type="date" class="form-control" style="border-radius: 6px;" value="<?=($result->to_date)?$result->to_date:'0'?>" disabled>
         </div>
         <div class="form-group col-md-2">
             <p class="levels">Total Meal</p>
-            <input type="number" class="form-control" id="email" style="border-radius: 6px;" disabled>
+            <input type="number" class="form-control"  style="border-radius: 6px;" value="<?=($result->total_meal)?$result->total_meal:'0'?>" disabled>
         </div>
         <div class="form-group col-md-2">
             <p class="levels">Total Amount</p>
-            <input type="number" class="form-control" id="email" style="border-radius: 6px;" disabled>
+            <input type="number" class="form-control"  style="border-radius: 6px;"  value="<?=($result->net_payment)?$result->net_payment:'0'?>" disabled>
         </div>
         <div class="form-group col-md-2">
             <p class="levels">Pay Amount</p>
-            <input type="number" class="form-control" id="email" style="border-radius: 6px;" disabled>
+            <input type="number" class="form-control" style="border-radius: 6px;"  value="<?=($result->paid_amount)?$result->paid_amount:'0'?>" disabled>
         </div>
         <div class="form-group col-md-2">
             <p class="levels">Due</p>
-            <input type="text" class="form-control" id="pre_due" style="border-radius: 6px;" value="0" >
+            <input type="text" class="form-control" id="pre_due" style="border-radius: 6px;"  value="<?=($result->due)?$result->due:'0'?>" disabled>
         </div>
 
     </div>
@@ -116,7 +118,7 @@
     <div class="col-md-12">
             <div class="form-group col-md-3">
             <p class="levels"> From Date</p>
-                <input type="date" class="form-control" id="from_date" style="border-radius: 6px;" >
+                <input type="date" class="form-control" id="from_date" value="<?=($result->to_date)?$result->to_date:'0'?>" style="border-radius: 6px;" >
             </div>
             <div class="form-group col-md-3">
               <p class="levels"> To Date</p>
@@ -137,7 +139,21 @@
             </div>
 
     </div>
-       <div  style="float: right;">
+    <div class="col-md-12" style="justify-content: right;display: inline-flex;">
+            <div class="form-group col-md-2">
+                <p class="levels">Pay Amount</p>
+                <input type="number" class="form-control" onchange=caldue() id="pay_amount" style="border-radius: 6px;"  >
+            </div>
+            <div class="form-group col-md-2">
+                <p class="levels">Due Amount</p>
+                <input type="number" class="form-control" id="due_amount" style="border-radius: 6px;" disabled>
+            </div>
+            <div class="form-group col-md-4">
+                <p class="levels">Remarks</p>
+                <input type="text" class="form-control" id="remarks" style="border-radius: 6px;" >
+            </div>
+    </div>
+       <!-- <div  style="float: right;">
             <div class="form-group"  >
                 <p class="col-md-6" style="float: left;">Due Amount</p>
                 <input class="col-md-6" type="number" class="form-control" id="due_amount" style="border-radius: 6px;" >
@@ -146,7 +162,8 @@
                 <p class="col-md-6" style="float: left;"> Pay Amount</p>
                 <input class="col-md-6" type="number" class="form-control" onchange=caldue() id="pay_amount" style="border-radius: 6px;" >
             </div>
-        </div>
+        </div> -->
+      
     
       <div class="col-md-12">
          <a onclick=submit() class="btn btn-primary" style="float: right;margin-right: 19px;">Submit</a> 
@@ -158,6 +175,7 @@
 <div class="list_box">
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 
 <script>
     function togglePaymentBox() {
@@ -218,6 +236,7 @@
   var payableAmount = document.getElementById('payable_amount').value;
   var dueAmount = document.getElementById('due_amount').value;
   var payAmount = document.getElementById('pay_amount').value;
+  var remarks = document.getElementById('remarks').value;
 
   // Create an object with the input data
   var inputData = {
@@ -228,7 +247,8 @@
     totalAmount: totalAmount,
     payableAmount: payableAmount,
     dueAmount: dueAmount,
-    payAmount: payAmount
+    payAmount: payAmount,
+    remarks: remarks
   };
   url='<?= base_url('/admin/lunch/make_payment/')?>'
 
@@ -239,9 +259,16 @@
     type: 'POST',
     data: inputData,
     success: function(response) {
-      // Handle the response from the server
-      console.log('AJAX request successful');
-      console.log(response);
+      Swal.fire({
+                    title: 'Success!',
+                    text: response,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
     },
     error: function(xhr, status, error) {
       // Handle the error

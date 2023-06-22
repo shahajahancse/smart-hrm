@@ -384,7 +384,7 @@ function calculatePayment() {
         alert('Please select probable_date');
         return ;
       }
-      alert('done');
+      
       document.getElementById("loading").style.visibility = "visible";
       // Create the AJAX request
       $.ajax({
