@@ -33,13 +33,14 @@ $data=$lunch[0]
                             <strong>Guest Cost:</strong> <?= $data->guest_cost ?><br>
 
                         </div>
-
+                        <?php if($data->bigcomment){?>
                         <div class="col-sm-12">
                             <strong>Comment:</strong><br>
                             <section
                                 style="width: 100%;border: 1px solid black;padding: 6px;border-radius: 7px;margin-top: 7px;">
                                 <?= $data->bigcomment ?></section>
                         </div>
+                        <?php } ?>
 
                     </div>
 
@@ -67,24 +68,34 @@ if($data->date==$currentDate){
                     <h3 class="panel-title">Lunch Details</h3>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-hover">
+                    <table class="table table-border table-hover">
                         <thead>
                             <tr>
-                                <th>Serial No</th>
-                                <th>Employee ID</th>
-                                <th>Meal Amount</th>
-                                <th>Present Status</th>
-                                <th>Date</th>
+                                <th>S.N</th>
+                                <th width="150px">Date</th>
+                                <th width="150px">Days</th>
+                                <th width="250px">Employee Name</th>
+                                <th width="150px" style="text-align: center;">Meal Quantity</th>
+                                <th style="text-align: center;">Remarks</th>
+                               
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($lunch_details as $detail) { ?>
                             <tr>
                                 <td><?= $detail->id ?></td>
-                                <td><?= $detail->first_name ?> <?= $detail->last_name ?></td>
-                                <td><?= $detail->meal_amount ?></td>
-                                <td><?= $detail->p_stutus ?></td>
                                 <td><?= $detail->date ?></td>
+                                <?php   $dateStr = $detail->date;
+                                $date = strtotime($dateStr);
+                                $dayName = date("l", $date); ?>
+                                <td> <?= $dayName?></td>
+
+                                <td><?= $detail->first_name ?> <?= $detail->last_name ?></td>
+                                <td style="text-align: center;"><?= $detail->meal_amount ?></td>
+
+
+                                <td><?= $detail->comment ?></td>
+                               
                             </tr>
                             <?php } ?>
                         </tbody>

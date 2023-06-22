@@ -164,25 +164,25 @@ input[type="email"] {
         <div class="container col-md-7 form-container proccess_container"
             style="width: 599px;padding: 0px;border-radius: 10px;margin: 0;height: fit-content;margin-top: 8px;">
             <form id="process_form" class="col-md-12" style="padding: 9px;margin: 0px;">
-                <div class="form-group col-md-4" style="padding: 0px;margin: 0px;">
+                <div class="form-group col-md-3" style="padding: 0px;margin: 0px;">
                     <label for="process_date">First Date</label>
                     <input class="form-control attendance_date" id="process_date" name="process_date" type="text"
                         value="<?php echo isset($last_prement->from_date)? date('Y-m-d', strtotime($last_prement->end_date . ' +1 day')):'';?>"
                         disabled>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="process_date">Second Date</label>
                     <input class="form-control attendance_date"
                         placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date"
                         name="second_date" type="text" autocomplete="off">
                 </div>
-                <div class=" col-md-4">
-                    <label for="process_date">Next Probable Date</label>
+                <div class=" col-md-3">
+                    <label for="process_date">Next Pay Date</label>
                     <input class="form-control attendance_date"
                         placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="probable_date"
                         name="probable_date" type="text" autocomplete="off">
                 </div>
-                <div class="form-group col-md-2" style="margin: 0px;padding: 0px;float:right;">
+                <div class="form-group col-md-3" style="margin: 0px;padding: 0px;float:right;">
                     <label for="" style="color: whitesmoke!important;">.</label>
                     <a class="btn btn-primary" style="margin: 0px;padding: 4px;" id="process_button">Process</a>
                 </div>

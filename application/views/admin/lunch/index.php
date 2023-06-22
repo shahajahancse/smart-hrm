@@ -47,13 +47,15 @@
             <thead>
                 <tr>
                     <th>Sl</th>
-                    <th>Total Meal</th>
+                    <th>Date</th>
+                    <th>Days</th>
                     <th>Employee Meal</th>
                     <th>Guest Meal</th>
-                    <th>Total Cost</th>
+                    <th>Total Meal</th>
                     <th>Employee Cost</th>
                     <th>Guest Cost</th>
-                    <th>Date</th>
+                    <th>Total Cost</th>
+              
                     <th>Action</th>
                 </tr>
             </thead>
@@ -61,13 +63,21 @@
                 <?php foreach ($results as $key => $result) { ?>
                 <tr>
                     <td><?= $key + 1 ?></td>
-                    <td><?= $result->total_m ?></td>
+                    <td><?= $result->date ?></td>
+                    <?php   $dateStr = $result->date;
+                        $date = strtotime($dateStr);
+                        $dayName = date("l", $date); ?>
+
+                    <td> <?= $dayName?></td>
                     <td><?= $result->emp_m ?></td>
                     <td><?= $result->guest_m ?></td>
-                    <td><?= $result->total_cost ?></td>
+                    <td><?= $result->total_m ?></td>
                     <td><?= $result->emp_cost ?></td>
                     <td><?= $result->guest_cost ?></td>
-                    <td><?= $result->date ?></td>
+                   <td><?= $result->total_cost ?></td>
+                    
+                   
+                   
                     <td>
                         <?php if ($result->date == date('Y-m-d')) : ?>
                         <div class="dropdown">
