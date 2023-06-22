@@ -37,10 +37,6 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-
-        $this->load->library('pagination');
-        $this->load->model('Lunch_model');
-
         $data['results'] = $this->Lunch_model->get_all_data();
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch';
@@ -483,8 +479,13 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-        $data['breadcrumbs'] ='Payment';
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch';
+        $data['path_url'] = 'lunch';
+        $data['result'] = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row();
+        $data['payment_data'] = $this->db->get('lunch_payment_vendor')->result();
+       
+     
         if (!empty($session)) {
             $data['subview'] = $this->load->view("admin/lunch/vendor_payment", $data, TRUE);
             $this->load->view('admin/layout/layout_main', $data); //page load
@@ -500,8 +501,40 @@ class Lunch extends MY_Controller {
    
     }
     public function make_payment() {
-        dd($this->input->post());
-   
+        // [pre_due] => 3
+        // [fromDate] => 2023-06-01
+        // [toDate] => 2023-06-30
+        // [totalMeal] => 41
+        // [totalAmount] => 3690
+        // [payableAmount] => 3693
+        // [dueAmount] => 3633
+        // [payAmount] => 60
+        $pre_due=$this->input->post('pre_due');
+        $fromDate=$this->input->post('fromDate');
+        $toDate=$this->input->post('toDate');
+        $totalMeal=$this->input->post('totalMeal');
+        $totalAmount=$this->input->post('totalAmount');
+        $payableAmount=$this->input->post('payableAmount');
+        $dueAmount=$this->input->post('dueAmount');
+        $paid_amount=$this->input->post('payAmount');
+        $remarks=$this->input->post('remarks');
+        $data = array(
+            'previous_due' => $pre_due,
+            'from_date' => $fromDate,
+            'to_date' => $toDate,
+            'total_meal' => $totalMeal,
+            'pay_amount' => $totalAmount,
+            'net_payment' => $payableAmount,
+            'paid_amount' => $paid_amount,
+            'due' => $dueAmount,
+            'date' => date('Y-m-d'),
+            'Remarks' => $remarks,
+        );
+        if($this->db->insert('lunch_payment_vendor', $data)){
+            echo 'success';
+        }else{
+            echo 'there was an error';
+        };
     }
 }
 ?>

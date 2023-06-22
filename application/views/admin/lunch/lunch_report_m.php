@@ -15,113 +15,120 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Monthly Lunch Report</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+    body {
+        font-family: Arial, sans-serif;
+    }
 
-        .container {
-       
-            padding: 20px;
-          
-        }
-        .totals-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            padding: 5px;
-            border: 1px solid #908c96;
-            border-radius: 11px;
-        }
-        .pf{
-          
-        }
+    .container {
 
-        .totals-container .col {
-            flex-basis: 45%;
-            font-size: 18px;
-            line-height: 25px;
-        }
+        padding: 20px;
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            padding: 0;
-            margin: 0;
-            border: 1px solid #ddd; /* Add border to the table */
-        }
+    .totals-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding: 5px;
+        border: 1px solid #908c96;
+        border-radius: 11px;
+    }
 
-        th,
-        td {
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            padding: 8px; /* Add padding to cells */
-            margin: 0;
-        }
+    .pf {}
 
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
+    .totals-container .col {
+        flex-basis: 45%;
+        font-size: 18px;
+        line-height: 25px;
+    }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-        tr:hover { /* Apply hover effect to rows */
-            background-color: #d1d8df;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        padding: 0;
+        margin: 0;
+        border: 1px solid #ddd;
+        /* Add border to the table */
+    }
+
+    th,
+    td {
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        padding: 8px;
+        /* Add padding to cells */
+        margin: 0;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        /* Apply hover effect to rows */
+        background-color: #d1d8df;
+    }
     </style>
 </head>
 
 <body>
     <div class="container">
-    <div style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px"><?php echo xin_company_info(1)->company_name; ?></div>
-				<div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
-				<div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;"> <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
-				<div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;" >Monthly Lunch Report of <?= $imonth?> </div>
-        </div>
-        <h2>Lunch Details</h2>
-        <table>
-            <thead>
-                <tr class="tdb">
-                    <th class="mastering">Name</th>
-                    <?php for ($i = 1; $i <= $daysInMonth; $i++) : ?>
-                        <?php $i = str_pad($i, 2, 0, STR_PAD_LEFT); ?>
-                        <?php
+        <div style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px">
+            <?php echo xin_company_info(1)->company_name; ?></div>
+        <div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
+        <div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;">
+            <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
+        <div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;">Monthly Lunch Report of
+            <?= $imonth?> </div>
+    </div>
+    <h2>Lunch Details</h2>
+    <table>
+        <thead>
+            <tr class="tdb">
+                <th class="mastering">Name</th>
+                <?php for ($i = 1; $i <= $daysInMonth; $i++) : ?>
+                <?php $i = str_pad($i, 2, 0, STR_PAD_LEFT); ?>
+                <?php
                         $tdate = $year . '-' . $month . '-' . $i;
                         // Convert the date string into a Unix timestamp.
                         $unixTimestamp = strtotime($tdate);
                         // Get the day of the week.
                         $dayOfWeek = date('D', $unixTimestamp);
                         ?>
-                        <th><strong><?= '<div>' . $i . ' </div>'; ?></strong></th>
-                    <?php endfor; ?>
-                    <th>Total Meal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($emp_id as $empid) {
+                <th><strong><?= '<div>' . $i . ' </div>'; ?></strong></th>
+                <?php endfor; ?>
+                <th>Total Meal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($emp_id as $empid) {
                     $emp = $this->Lunch_model->employees($empid);
                 ?>
-                    <tr>
-                        <td><?= $emp[0]->first_name ?> <?= $emp[0]->last_name ?></td>
-                        <?php
+            <tr>
+                <td><?= $emp[0]->first_name ?> <?= $emp[0]->last_name ?></td>
+                <?php
                         $totalmeal = 0;
                         for ($i = 1; $i <= $daysInMonth; $i++) {
                             $ddate = $year . '-' . $nummonth . '-' . $i;
                             $getmeal =  $this->Lunch_model->get_meal($emp[0]->user_id, $ddate);
                         ?>
-                            <td>
-                                <?php
+                <td>
+                    <?php
                                 if (count($getmeal) > 0) {
                                     $totalmeal += $getmeal[0]->meal_amount;
                                     echo ($getmeal[0]->meal_amount);
@@ -129,14 +136,14 @@
                                     echo '-';
                                 }
                                 ?>
-                            </td>
-                        <?php } ?>
-                        <td><?= $totalmeal ?></td>
-                    </tr>
+                </td>
                 <?php } ?>
-            </tbody>
-        </table>
-        <?php
+                <td><?= $totalmeal ?></td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <?php
         // Assuming you have the 'lunch_data' and 'lunch_details' variables available
         $lunchData = $lunch_data;
 
@@ -164,24 +171,25 @@
 
             $lunchDataByMonth[$monthName][] = $data;
         }
-        ?>  
-        
-        <div class="totals-container">
-            <div class="col">
-                <strong>Employee Meals:</strong> <?= $mergedTotals['emp_m'] ?><br>
-                <strong>Guest Meal:</strong>  <?= $mergedTotals['guest_m'] ?><br>
-                <strong>Total Meals:</strong> <?= $mergedTotals['total_m'] ?><br>
-            </div>
-            <div class="col">
-                <strong>Employee Cost:</strong><?= $mergedTotals['emp_cost'] ?><br>
-                <strong>Guest Cost:</strong><?= $mergedTotals['guest_cost'] ?><br>
-                <strong>Total Cost:</strong> <?= $mergedTotals['total_cost'] ?><br>
-            </div>
-        </div>
+        ?>
 
-        <script>
-            // Add any JavaScript code you need here
-        </script>
+    <div class="totals-container">
+        <div class="col">
+            <strong>Employee Meals:</strong> <?= $mergedTotals['emp_m'] ?><br>
+            <strong>Guest Meal:</strong> <?= $mergedTotals['guest_m'] ?><br>
+            <strong>Total Meals:</strong> <?= $mergedTotals['total_m'] ?><br>
+        </div>
+        <div class="col">
+            <strong>Employee Cost:</strong><?= $mergedTotals['emp_cost'] ?><br>
+            <strong>Guest Cost:</strong><?= $mergedTotals['guest_cost'] ?><br>
+            <strong>Total Cost:</strong> <?= $mergedTotals['total_cost'] ?><br>
+        </div>
+    </div>
+
+    <script>
+    // Add any JavaScript code you need here
+    </script>
     </div>
 </body>
+
 </html>
