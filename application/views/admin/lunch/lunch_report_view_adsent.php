@@ -92,10 +92,15 @@
     <div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
     <div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;">
         <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
-    <div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;">Lunch Date:
-        <?php echo $lunch_data[0]->date ; ?></div>
+        <div style="font-size:15px; font-weight:bold; text-align:center;">Daily Inactive Lunch Report</div>
+    <div style="font-size:17px; line-height:15px;  text-align:center;">Lunch Date:
+         <?php   $dateStr = $lunch_data[0]->date;
+                  $date = strtotime($dateStr);
+                 $dayName = date("l", $date);
+           ?>
+        <?php echo $lunch_data[0]->date ." (" .$dayName .")" ; ?></div>
 
-    <div style="font-size:18px; font-weight:bold; text-align:center;">Daily Inactive Lunch Report</div>
+    
 
     </div>
     <?php $data=$lunch_data[0]  ?>
@@ -103,32 +108,80 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Lunch Details</h3>
-                    </div>
-                    <div class="panel-body">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Serial No</th>
-                                    <th>Employee ID</th>
-                                    <th>Meal Amount</th>
-                                    <th>Present Status</th>
-                                    <th>Date</th>
+                   
+                    <div class="">
+                         <table class="table table-border table-hover">
+                        <thead>
+                            <tr>
+                                <th width="50px">S.N</th>
+                                <!-- <th width="150px">Date</th>
+                                <th width="150px">Days</th> -->
+                                <th width="250px">Employee Name</th>
+                                <th width="150px" style="text-align: center;">Quantity</th>
+                                <th width="150px" style="text-align: center;">Employee-Cost</th>
+                            
+                                <th width="150px" style="text-align: center;">Office-Cost</th>
+
+                                <th style="text-align: center;">Remarks</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $numKey=0; ?>
+                            <?php foreach ($lunch_details_inactive as $key => $detail) { ?>
+                            <tr>
+                                <td><?= $key+1 ?></td>
+                                <?php $numKey=$key+1; ?>
+                                <td><?= $detail->first_name ?> <?= $detail->last_name ?></td>
+                                <td style="text-align: center;"><?= $detail->meal_amount ?></td>
+                                <td style="text-align: center;"><?= $detail->meal_amount*45 ?></td>
+                                <td style="text-align: center;"><?= $detail->meal_amount*45 ?></td>
+                                <!-- <td><?= $detail->comment ?></td> -->
+                                <td style="text-align: center;" title="<?php echo $detail->comment; ?>"><?php echo implode(' ', array_slice(explode(' ', $detail->comment ), 0, 4)); ?></td>
+                            </tr>
+                           
+                            <?php } if($data->guest_m >0){ ?>
+                                <tr style="color:blue;">
+                                    <td><?= $numKey+1 ?></td>
+                                    <td><?= " Guest Meals"?></td>
+                                    <td style="text-align: center;"><?= $data->guest_m*0?></td>
+                                    <td style="text-align: center;"><?=$data->guest_m*0   ?></td>
+                                    <td style="text-align: center;"><?= $data->guest_m*90*0  ?></td>
+                                    <td style="text-align: center;" title="<?php echo $detail->comment; ?>"><?php echo implode(' ', array_slice(explode(' ', $detail->comment ), 0, 4)); ?></td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($lunch_details_inactive as $detail) : ?>
-                                <tr>
-                                    <td><?= $detail->id ?></td>
-                                    <td><?= $detail->first_name ?> <?= $detail->last_name ?></td>
-                                    <td><?= $detail->meal_amount ?></td>
-                                    <td><?= $detail->p_stutus ?></td>
-                                    <td><?= $detail->date ?></td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                            <?php } ?>
+
+                            <tr>
+                                <td colspan="2" style="text-align: center;"><strong>Total</strong></td>
+                                <td style="text-align: center;"><strong><?= $data->emp_m*0 + $data->guest_m*0  ?></strong></td>
+                                <td style="text-align: center;"><strong><?= $data->emp_cost*0 ?></strong></td>
+                                <td style="text-align: center;"><strong><?= $data->total_cost*0 ?></strong></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <br>
+
+
+                    <table class="table table-border table-hover">
+                        <tr >
+                            <th style="text-align:center">Total Meals</th>
+                            <th style="text-align:center">Employee Meals</th>
+                            <th style="text-align:center">Guest Meals</th>
+                            <th style="text-align:center">Total Employee Cost</th>
+                            <th style="text-align:center">Total Office Cost</th>
+                            <th style="text-align:center">Toatal Cost</th>
+                        </tr>
+                        <tr >
+                            <td style="text-align:center"><?php echo $data->emp_m*0 + $data->guest_m*0; ?></td>
+                            <td style="text-align:center"><?php echo $data->emp_m*0 ?></td>
+                            <td style="text-align:center"><?php echo $data->guest_m*0; ?></td>
+                            <td style="text-align:center"><?php echo $data->emp_cost*0 ?></td>
+                            <td style="text-align:center"><?php echo  $data->total_cost*0  ?></td>
+                            <td style="text-align:center"><?php echo $data->emp_cost*0  + $data->total_cost*0 ?></td>
+                        </tr>
+                    </table>
                     </div>
                 </div>
             </div>

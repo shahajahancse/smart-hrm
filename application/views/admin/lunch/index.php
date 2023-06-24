@@ -48,42 +48,42 @@
         <table class="table table-hover" id="Lunch_table">
             <thead>
                 <tr>
-                    <th>Sl</th>
-                    <th>Date</th>
-                    <th>Days</th>
-                    <th>Employee Meal</th>
-                    <th>Guest Meal</th>
-                    <th>Total Meal</th>
-                    <th>Employee Cost</th>
-                    <th>Guest Cost</th>
-                    <th>Total Cost</th>
-                    <th>Remarks</th>
+                    <th style="text-align:center">Sl</th>
+                    <th style="text-align:center">Date</th>
+                    <th style="text-align:center">Days</th>
+                    <th style="text-align:center">Emp.Meal</th>
+                    <th style="text-align:center">G.Meal</th>
+                    <th style="text-align:center">Total Meal</th>
+                    <th style="text-align:center">Emp.Cost</th>
+                    <th style="text-align:center">G.Cost</th>
+                    <th style="text-align:center">Total Cost</th>
+                    <th style="text-align:center">Remarks</th>
               
-                    <th>Action</th>
+                    <th style="text-align:center">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($results as $key => $result) { ?>
                 <tr>
-                    <td><?= $key + 1 ?></td>
-                    <td><?= $result->date ?></td>
+                    <td style="text-align:center"><?= $key + 1 ?></td>
+                    <td style="text-align:center"><?= $result->date ?></td>
                     <?php   $dateStr = $result->date;
                         $date = strtotime($dateStr);
                         $dayName = date("l", $date); ?>
 
-                    <td> <?= $dayName?></td>
-                    <td><?= $result->emp_m ?></td>
-                    <td><?= $result->guest_m ?></td>
-                    <td><?= $result->total_m ?></td>
-                    <td><?= $result->emp_cost ?></td>
-                    <td><?= $result->guest_cost ?></td>
-                    <td><?= $result->total_cost ?></td>
+                    <td style="text-align:center"> <?= $dayName?></td>
+                    <td style="text-align:center"><?= $result->emp_m ?></td>
+                    <td style="text-align:center"><?= $result->guest_m ?></td>
+                    <td style="text-align:center"><?= $result->total_m ?></td>
+                    <td style="text-align:center"><?= $result->emp_cost ?></td>
+                    <td style="text-align:center"><?= $result->guest_cost ?></td>
+                    <td style="text-align:center"><?= $result->total_cost ?></td>
                     <?php if ($result->bigcomment != null) : ?>
-                    <td title="<?php echo $result->bigcomment; ?>">
+                    <td title="<?php echo $result->bigcomment; ?> " style="text-align:center">
                        <?php echo implode(' ', array_slice(explode(' ', $result->bigcomment), 0, 3)); ?>
                    </td>
                  <?php else : ?>
-                    <td>
+                    <td style="text-align:center">
                        <?php echo "No Comment" ?>
                     </td>
                 <?php endif; ?>
