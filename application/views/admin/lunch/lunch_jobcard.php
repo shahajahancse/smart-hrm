@@ -1,5 +1,5 @@
-<!DOCTYPE >
-<html >
+<!DOCTYPE html>
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>Job Card</title>
@@ -20,8 +20,10 @@ $total_cost    = 0;
 $this->load->model('lunch_model');
 
 foreach ($all_employees as $key => $value) { 
+?>
 
-	echo "<div style='min-height:700px; overflow:hidden;'>";
+	<div style='min-height:700px; overflow:hidden;'>
+    <?php
     $active_meal = 0;
     $inactive_meal  = 0;
     $total_emp_cost  = 0;
@@ -29,188 +31,174 @@ foreach ($all_employees as $key => $value) {
     $total_cost    = 0;
 
 	$this->load->view('admin/head_bangla');
+	?>
 
+	<span style='font-size:13px; font-weight:bold;'>
+	<?php echo "lunch Report from  $first_date -TO- $second_date"; ?>
+	</span>
+	<br /><br />
 
-	echo "<span style='font-size:13px; font-weight:bold;'>";
-	echo "lunch Report from  $first_date -TO- $second_date";
-	echo "</span>";
-	echo "<br /><br />";
-	
-	echo "<table border='0' style='font-size:13px;' width='480'>";
-		echo "<tr>";
-		echo "<td width='70'>";
-		echo "<strong>Emp ID:</strong>";
-		echo "</td>";
-		echo "<td width='200'>";
-		echo $value->employee_id;
-		echo "</td>";
+	<table border='0' style='font-size:13px;' width='480'>
+		<tr>
+			<td width='70'>
+				<strong>Emp ID:</strong>
+			</td>
+			<td width='200'>
+				<?php echo $value->employee_id; ?>
+			</td>
+			
+			<td width='55'>
+				<strong>Name :</strong>
+			</td>
+			<td width='150'>
+				<?php echo $value->first_name ." ". $value->last_name; ?>
+			</td>
+		</tr>
 		
-		echo "<td width='55'>";
-		echo "<strong>Name :</strong>";
-		echo "</td>";
-		echo "<td width='150'>";
-		echo $value->first_name ." ". $value->last_name;
-		echo "</td>";
-		echo "</tr>";
-		
+		<tr>
+			<td>
+				<strong>Dept :</strong>
+			</td>
+			<td>
+				<?php echo $value->department_name; ?>
+			</td>
+			<td>
+				<strong>Desig :</strong>
+			</td>
+			<td>
+				<?php echo $value->designation_name; ?>
+			</td>
+		</tr>
 
-		echo "<tr>";
-		echo "<td>";
-		echo "<strong>Dept :</strong>";
-		echo "</td>";
-		echo "<td>";
-		echo $value->department_name;
-		echo "</td>";
-		echo "<td>";
-		echo "<strong>Desig :</strong>";
-		echo "</td>";
-		echo "<td>";
-		echo $value->designation_name;
-		echo "</td>";
-		echo "</tr>";
+		<tr>
+			<td>
+				<strong>DOJ :</strong>
+			</td>
+			<td>
+				<?php echo date("d-M-Y", strtotime($value->date_of_joining)); ?>
+			</td>
+			
+			<td >
+				<strong>DOB :</strong>
+			</td>
+			<td >
+				<?php echo date("d-M-Y", strtotime($value->date_of_birth)); ?>
+			</td>
+		</tr>
+	</table>
 
-		echo "<tr>";
-		echo "<td>";
-		echo "<strong>DOJ :</strong>";
-		echo "</td>";
-		echo "<td>";
-		echo date("d-M-Y", strtotime($value->date_of_joining));
-		echo "</td>";
-		
-		echo "<td >";
-		echo "<strong>DOB :</strong>";
-		echo "</td>";
-		echo "<td >";
-		echo date("d-M-Y", strtotime($value->date_of_birth));
-		echo "</td>";
-		echo "</tr>";
-	echo "<table>";
-
+	<?php
 	$emp_data = $this->lunch_model->get_data_date_wise($first_date,$second_date, $value->user_id);
 	//  dd($emp_data['emp_data'] );
+	?>
 
-	
-	echo "<table class='table table-bordered table-sm   table-striped sal mt-2' style='text-align:center; font-size:13px; '> 
-		  <th>Date</th>
-		  <th>Day</th>
-		  <th>Quantity</th>
-		  <th>Employee-Cost</th>
-		  <th>Office-Cost</th>
-		  <th>Total</th>
-		  <th>Remarks</th>
-		  ";
+	<table class='table table-bordered table-sm   table-striped sal mt-2' style='text-align:center; font-size:13px; '> 
+		<th>Date</th>
+		<th>Day</th>
+		<th>Quantity</th>
+		<th>Employee-Cost</th>
+		<th>Office-Cost</th>
+		<th>Total</th>
+		<th>Remarks</th>
 
-		foreach ($emp_data['emp_data'] as $key => $row) {
-			echo "<tr>";
-			
-				echo "<td>&nbsp;";
-				echo $row->date;
-				echo "</td>";
+		<?php foreach ($emp_data['emp_data'] as $key => $row) { ?>
+			<tr>
+				<td>&nbsp;
+					<?php echo $row->date; ?>
+				</td>
 						
-				echo "<td>&nbsp;";
-				if($row->date =="")
-				{
-					echo "&nbsp;";
-				}
-				else
-				{
-					echo date('l',strtotime($row->date));
-				}
-				echo "</td>";
+				<td>&nbsp;
+					<?php
+					if($row->date == "")
+					{
+						echo "&nbsp;";
+					}
+					else
+					{
+						echo date('l',strtotime($row->date));
+					}
+					?>
+				</td>
 				
-				echo "<td>&nbsp;";
-				echo $row->meal_amount;
-				if($row->meal_amount>0){
-                    $active_meal+=$row->meal_amount;
-                }else{
-                    $inactive_meal+=1;
-                };
-				echo "</td>";
+				<td>&nbsp;
+					<?php echo $row->meal_amount;
+					if($row->meal_amount>0){
+						$active_meal+=$row->meal_amount;
+					}else{
+						$inactive_meal+=1;
+					};
+					?>
+				</td>
 
-				echo "<td>&nbsp;";
-				echo $row->meal_amount*45;
-                $total_emp_cost+=$row->meal_amount*45;
-				echo "</td>";
+				<td>&nbsp;
+					<?php echo $row->meal_amount*45;
+					$total_emp_cost+=$row->meal_amount*45;
+					?>
+				</td>
 
-				echo "<td>&nbsp;";
-				echo $row->meal_amount*45;
-                $total_offic_cost+=$row->meal_amount*45;
-				echo "</td>";
+				<td>&nbsp;
+					<?php echo $row->meal_amount*45;
+					$total_offic_cost+=$row->meal_amount*45;
+					?>
+				</td>
 
-				echo "<td>&nbsp;";
-				echo $row->meal_amount*90;
-                $total_cost+=$row->meal_amount*90;
-				echo "</td>";
+				<td>&nbsp;
+					<?php echo $row->meal_amount*90;
+					$total_cost+=$row->meal_amount*90;
+					?>
+				</td>
 
-				echo "<td>&nbsp;";
-				echo $row->comment;
-				echo "</td>";
-				
-				
-				
-			echo "</tr>";
-		}
+				<td>&nbsp;
+					<?php echo $row->comment; ?>
+				</td>
+			</tr>
+		<?php } ?>
 
+	</table>
 	
-
-	echo "</table>";
-	
-	echo "<br>";
-	echo "<table class='table table-bordered table-sm' style='font-size:13px;'>";
-	echo "<tr align='center'>";
+	<br>
+	<table class='table table-bordered table-sm' style='font-size:13px;'>
+		<tr align='center'>
+			<td>
+				ACTIVE MEAL
+			</td>
+			<td>
+				INACTIVE MEAL
+			</td>
+			<td>
+				TOTAL EMPLOYEE COST
+			</td>
+			<td>
+				TOTAL OFFICE COST
+			</td>
+			<td>
+				TOTAL COST
+			</td>
+		</tr>
 			
-	echo "<td>";
-	echo "ACTIVE MEAL";
-	echo "</td>";
-			
-	echo "<td>";
-	echo "INACTIVE MEAL";
-	echo "</td>";
-			
-	echo "<td>";
-	echo "TOTAL EMPLOYEE COST ";
-	echo "</td>";
-			
-	echo "<td>";
-	echo "TOTAL OFFICE COST ";
-	echo "</td>";
-			
+		<tr align='center'>
+			<td>
+				<?php echo $active_meal; ?>
+			</td>
+			<td>
+				<?php echo $inactive_meal; ?>
+			</td>
+			<td>
+				<?php echo $total_emp_cost; ?>
+			</td>
+			<td>
+				<?php echo $total_offic_cost; ?>
+			</td>
+			<td>
+				<?php echo $total_cost; ?>
+			</td>
+		</tr>
+	</table>
+	<br /><br />
 	
-	echo "<td>";
-	echo "TOTAL COST";
-	echo "</td>";	
-	echo "</tr>";
-	
-	echo "<tr align='center'>";
-		
-	echo "<td>";
-	echo $active_meal;
-	echo "</td>";
-
-	echo "<td>";
-	echo $inactive_meal;
-	echo "</td>";
-		
-	echo "<td>";
-	echo $total_emp_cost;
-	echo "</td>";
-	
-	echo "<td>";
-	echo $total_offic_cost;
-	echo "</td>";
-	
-	echo "<td>";
-	echo $total_cost;
-	echo "</td>";
-	
-	echo "</tr>";
-	echo "</table>";
-	echo "<br /><br />";
-	
-	echo "</div>";
-	echo "<br>";
-}
-?>
+	</div>
+	<br>
+<?php } ?>
 
 </div>
 </body>
