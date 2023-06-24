@@ -180,12 +180,7 @@ foreach ($all_employees as $key => $value) {
 	echo "TOTAL COST";
 	echo "</td>";	
 	echo "</tr>";
-			
-    // $active_meal = 0;
-    // $inactive_meal  = 0;
-    // $total_emp_cost  = 0;
-    // $total_offic_cost   = 0;
-    // $total_cost    = 0;
+	
 	echo "<tr align='center'>";
 		
 	echo "<td>";
