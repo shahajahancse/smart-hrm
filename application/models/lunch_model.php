@@ -11,6 +11,7 @@ class Lunch_model extends CI_Model {
     public function get_lunch_info($status,$date)
     {
         if ($status == true) {
+            // dd($status .' = '. $date);
             $this->db->select('
                     u.first_name, 
                     u.last_name, 
@@ -21,9 +22,8 @@ class Lunch_model extends CI_Model {
                     ld.comment
                 ');
             $this->db->from('xin_employees as u')->from('lunch_details as ld');
-
             $this->db->where('u.user_id = ld.emp_id')->where('ld.date', $date)->group_by('ld.emp_id');
-            return $this->db->order_by('ld.p_stutus', 'ASC')->get()->result();
+            $data = $this->db->order_by('ld.p_stutus', 'ASC')->get()->result();
         } else {
             $this->db->select('
                     u.user_id as emp_id, 
@@ -34,8 +34,9 @@ class Lunch_model extends CI_Model {
             $this->db->from('xin_employees as u');
             $this->db->join('xin_attendance_time as at', 'u.user_id = at.employee_id', 'left');
             $this->db->where_in('u.status', array(1,4,5))->where('at.attendance_date', $date)->group_by('u.user_id');
-            return $this->db->order_by('at.status', 'DESC')->get()->result();
+            $data = $this->db->order_by('at.status', 'DESC')->get()->result();
         }
+        return $data;
     }
 
     public function all_employees()

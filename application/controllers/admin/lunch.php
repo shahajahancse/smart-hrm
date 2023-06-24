@@ -54,42 +54,17 @@ class Lunch extends MY_Controller {
         $session = $this->session->userdata('username');
         if (empty($session)) {
             redirect('admin/');
-        }
-         $date= date('Y-m-d',strtotime($this->input->post('date')));
-        // if ( $this->input->post('change')==1) {
-        //     $query = $this->db->get_where('lunch', array('date' =>$date));
-           
-           
-        //     if ($query->num_rows() > 0) {
-        //         $lid=$query->result()[0]->id;
-        //         redirect('admin/lunch/today_lunch/'.$lid);
-        //     } else {
-                
-        //         $data['results'] = $this->Lunch_model->get_lunch_info(false,$date);
-        //         $data['guest'] = '';
-        //         $data['ps'] ='no';
-        //         $data['date'] = $date;
-        //         $data['subview'] = $this->load->view("admin/lunch/today_lunch", $data, TRUE);
-        //     }
-          
-
-            
-        //     $data['title'] = 'Lunch | ' . $this->Xin_model->site_title();
-        //     $data['breadcrumbs'] = 'Lunch';
-        //     $data['path_url'] = 'lunch';
-        //     if (!empty($session)) {
-        //         $data['date'] = $date;
-              
-        //         $this->load->view('admin/layout/layout_main', $data); //page load
-        //     } else {
-        //         redirect('admin/');
-        //     }
-          
-        // }else {
-        //    if($this->input->post('date')) {
-        //     $date = $this->input->post('date');
-
-        //    }
+        };
+        
+      if ($this->input->post('date')==null) {
+        $date= date('Y-m-d');
+      }else {
+        $date= date('Y-m-d',strtotime($this->input->post('date')));
+      }
+    
+         $data['date'] =$date;
+        
+     
         $query = $this->db->get_where('lunch', array('date' => $date));
         // dd($_POST['empid']);
         //Validation
@@ -97,8 +72,9 @@ class Lunch extends MY_Controller {
         $this->form_validation->set_rules('m_amount[]', 'Meal Quantity', 'required|trim');
 
         //Validate and input data
-        if ($this->form_validation->run() == true){
-
+    
+        if ($this->form_validation->run() == true && $this->input->post('change')==0){
+          
             $empid = $this->input->post('empid');
             $m_amount = $this->input->post('m_amount');
             $comment = $this->input->post('comment');
@@ -106,8 +82,11 @@ class Lunch extends MY_Controller {
             $bigcomment = $this->input->post('bigcomment');
             $guest_m = $this->input->post('guest');
             $guest_comment = $this->input->post('guest_comment');
-         
-            
+            if($this->input->post('status')==1){
+                $status=2; 
+            }else{
+                $status=1;  
+            }  
             $total_m = 0;
             $emp_m = 0;
             $total_cost = 0; 
@@ -127,6 +106,7 @@ class Lunch extends MY_Controller {
                     'guest_cost' => $guest_cost,
                     'bigcomment' => $bigcomment,
                     'date'       => $date,
+                    'status'       => $status,
                 );
                 $this->db->insert('lunch', $data);
                 $luncid = $this->db->insert_id();
@@ -158,7 +138,7 @@ class Lunch extends MY_Controller {
                 } 
                 $this->db->insert_batch('lunch_details', $form_data);
             }
-
+// dd($form_data);
 
             $total_m = $emp_m + $guest_m;
             $total_cost = ($emp_m*45) + ($guest_m* 90);
@@ -172,24 +152,23 @@ class Lunch extends MY_Controller {
                 'total_cost' => $total_cost,
                 'emp_cost' => $emp_cost,
                 'guest_cost' => $guest_cost,
+                'status' => $status,
             );
 
             $this->db->where('id', $luncid)->update('lunch', $data2);
             redirect('admin/lunch/index');
         }
-
+        
         if ($query->num_rows() > 0) {
             $data['results'] = $this->Lunch_model->get_lunch_info(1,$date);
             $data['guest'] = $query->row();
             $data['ps'] ='yes';
-            $data['date'] =$date;
-
         } else {
+
             $data['results'] = $this->Lunch_model->get_lunch_info(false,$date);
             $data['guest'] = '';
             $data['ps'] ='no';
         }
-
         $data['title'] = 'Lunch | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch';
         $data['path_url'] = 'lunch';

@@ -1168,7 +1168,6 @@ $(document).ready(function(){
 </script>
 <script>
   function movetype(){
-  
      $("#floorform").toggle();
      $("#meetingform").toggle();
      $("#sub").toggle();
