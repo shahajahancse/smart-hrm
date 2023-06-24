@@ -139,9 +139,9 @@
                 </div>
                 <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab"
                     style="margin-top: 30px;">
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(1)">Paid Report</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(0)">Unpaid Report</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2)">Payment Report</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(1)">Paid Employees</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(0)">Unpaid Employees</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2)">Employees Collection Sheets</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="vendor_Report()">Vendor Report</button>
                 </div>
             </div>

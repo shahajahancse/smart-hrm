@@ -33,6 +33,8 @@
 .dropdown:hover .dropdown-content {
     display: block;
 }
+
+
 </style>
 
 <div class="container-fluid">
@@ -55,6 +57,7 @@
                     <th>Employee Cost</th>
                     <th>Guest Cost</th>
                     <th>Total Cost</th>
+                    <th>Remarks</th>
               
                     <th>Action</th>
                 </tr>
@@ -74,9 +77,23 @@
                     <td><?= $result->total_m ?></td>
                     <td><?= $result->emp_cost ?></td>
                     <td><?= $result->guest_cost ?></td>
-                   <td><?= $result->total_cost ?></td>
-                    
+                    <td><?= $result->total_cost ?></td>
+                    <?php if ($result->bigcomment != null) : ?>
+                    <td title="<?php echo $result->bigcomment; ?>">
+                       <?php echo implode(' ', array_slice(explode(' ', $result->bigcomment), 0, 3)); ?>
+                   </td>
+                 <?php else : ?>
+                    <td>
+                       <?php echo "No Comment" ?>
+                    </td>
+                <?php endif; ?>
+                  
+
+                
+
                    
+
+               
                    
                     <td>
                         <?php if ($result->date == date('Y-m-d')) : ?>

@@ -666,30 +666,6 @@ class Attendance extends MY_Controller {
         echo json_encode($data);
     }
 
-//working here razibul 22-06-2023
-	public function vendor_status_report(){
 
-		        $first_date = $this->input->post('first_date');
-				$second_date = $this->input->post('second_date');
-
-				$f1_date = date("Y-m-d", strtotime($first_date));
-				$f2_date = date("Y-m-d", strtotime($second_date));
-				
-
-				$data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date, $statusC);
-
-				$data['statusC']= $statusC;
-				$data['first_date'] = $first_date;
-				$data['second_date'] = $second_date;
-				if(is_string($data["values"]))
-				{
-					echo $data["values"];
-				}
-				else
-				{	
-					echo $this->load->view("admin/attendance/movment_status_report", $data, TRUE);
-				}
-    
-	}
 
 }
