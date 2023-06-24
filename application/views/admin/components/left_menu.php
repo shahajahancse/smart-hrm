@@ -239,15 +239,19 @@ if($theme[0]->sub_menu_icons != ''){
     <?php  if(in_array('1050',$role_resources_ids)) {?>
       <li class="<?php if(!empty($arr_mod['lunch_open']))echo $arr_mod['lunch_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> Lunch <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
+ 
+          <?php if(in_array('1052',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['today_active']))echo $arr_mod['today_active'];?>"> <a href="<?php echo site_url('admin/lunch/today_lunch');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Today Lunch  </a> </li>
+          <?php } ?>  
+
+          <?php if(in_array('1059',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['lemp_list_active']))echo $arr_mod['lemp_list_active'];?>"> <a href="<?php echo site_url('admin/lunch/employee_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Today Lunch  </a> </li>
+          <?php } ?> 
 
           <?php if(in_array('1051',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['lunch_active']))echo $arr_mod['lunch_active'];?>"> <a href="<?php echo site_url('admin/lunch/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> 
         Lunch list </a> </li>
-          <?php } ?> 
-          <?php if(in_array('1052',$role_resources_ids)) { ?>
-          <li class="sidenav-link <?php if(!empty($arr_mod['today_active']))echo $arr_mod['today_active'];?>"> <a href="<?php echo site_url('admin/lunch/today_lunch');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Today Lunch  </a> </li>
-          <?php } ?> 
-
+          <?php } ?>
           <?php if(in_array('1053',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['emp_pay_active']))echo $arr_mod['emp_pay_active'];?>"> <a href="<?php echo site_url('admin/lunch/emp_pay_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Employee Pay  </a> </li>
           <?php } ?> 
@@ -265,6 +269,9 @@ if($theme[0]->sub_menu_icons != ''){
             <ul class="treeview-menu">
               <?php if(in_array('1057',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['lpackage_active']))echo $arr_mod['lpackage_active'];?>"> <a href="<?php echo site_url('admin/lunch/lunch_package');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Lunch Package </a> </li>
+              <?php } ?>
+              <?php if(in_array('1058',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['lmenu_active']))echo $arr_mod['lmenu_active'];?>"> <a href="<?php echo site_url('admin/lunch/lunch_menu');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Lunch Package </a> </li>
               <?php } ?>
             </ul>
           </li>

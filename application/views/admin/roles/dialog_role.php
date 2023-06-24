@@ -35,12 +35,12 @@ $role_resources_ids = explode(',',$role_resources);
           </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+          <div class="col-md-12">
             <p><strong><?php echo $this->lang->line('xin_role_note_title');?></strong></p>
             <p><?php echo $this->lang->line('xin_role_note1');?></p>
             <p><?php echo $this->lang->line('xin_role_note2');?></p>
-            </div>
           </div>
+        </div>
       </div>
       <div class="col-md-4">
         <div class="row">
@@ -398,9 +398,11 @@ dataSource: [
 		// Lunch part //
 	{ id: "", class: "role-checkbox-modal", text: "Lunch",  add_info: "", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1050',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>", value: "1050",  items: [
 
+		{ id: "", class: "role-checkbox-modal", text: "Today Lunch",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1052", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1052',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},  
+
 		{ id: "", class: "role-checkbox-modal", text: "lunch list",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1051", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1051',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"}, 
 
-		{ id: "", class: "role-checkbox-modal", text: "Today Lunch",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1052", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1052',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},  
+		{ id: "", class: "role-checkbox-modal", text: "Employee List",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1059", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1059',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},  
 
 		{ id: "", class: "role-checkbox-modal", text: "Employee Pay",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1053", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1053',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},  
 		{ id: "", class: "role-checkbox-modal", text: "Vendor Pay",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1054", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1054',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},  
@@ -410,6 +412,7 @@ dataSource: [
 		{ id: "", class: "role-checkbox-modal", text: "Settings",  add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", value: "1056", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1056',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>", items: [
 
 				{ id: "", class: "role-checkbox-modal", text: "Lunch Packag",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1057", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1057',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"}, 
+				{ id: "", class: "role-checkbox-modal", text: "Lunch Menu",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1058", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1058',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"}, 
 
 			]},
 
