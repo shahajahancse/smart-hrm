@@ -222,7 +222,13 @@ function togglePaymentBox() {
 function calmeal() {
     var first_date = $('#from_date').val();
     var second_date = $('#to_date').val();
-
+    if (first_date>second_date) 
+        {
+        alert('Please select valid Date');
+        document.getElementById('to_date').value = first_date;
+        return false;
+     }
+   
     // Prepare the data object
     var data = {
         first_date: first_date,
@@ -237,7 +243,12 @@ function calmeal() {
         data: data,
         success: function(response) {
             if (response == 0) {
-                alert('There is no payment data')
+                        document.getElementById('total_meal').value = response;
+                var total_amount = response * 90
+                document.getElementById('total_amount').value = total_amount;
+                var pre_due = document.getElementById('pre_due').value;
+                var payable_amount = parseInt(parseInt(total_amount) + parseInt(pre_due));
+                document.getElementById('payable_amount').value = payable_amount;
             } else {
 
                 document.getElementById('total_meal').value = response;
