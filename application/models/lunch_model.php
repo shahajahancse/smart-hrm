@@ -319,6 +319,22 @@ class Lunch_model extends CI_Model {
         }else{
             return 0;
         }
-    }   
+    } 
+    
+    public function vendor_status_report($first_date,$second_date){
+        $this->db->select('*');
+        $this->db->where('date >=', $first_date);
+        $this->db->where('date <=', $second_date);
+        $query = $this->db->get('lunch_payment_vendor');
+        $data = $query->result();
+         
+        if ($query->num_rows() > 0) {
+         return $data;
+     
+     } else {
+         return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+     }
+       
+    }
 }
 ?>

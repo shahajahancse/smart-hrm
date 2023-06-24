@@ -580,5 +580,36 @@ class Lunch extends MY_Controller {
             echo 'there was an error';
         };
     }
+
+    //working here razibul 22-06-2023
+	public function vendor_status_report($exl=null){
+
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+
+        $f1_date = date("Y-m-d", strtotime($first_date));
+        $f2_date = date("Y-m-d", strtotime($second_date));
+        
+     
+        $data["values"] = $this->Lunch_model->vendor_status_report($f1_date, $f2_date);
+
+    //    dd($data["values"]);
+       
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+       if($exl==1){
+        $this->load->view("admin/lunch/vendor_status_report_exl", $data);
+       }else{
+        if(is_string($data["values"]))
+        {
+            echo $data["values"];
+        }
+        else
+        {	
+            echo $this->load->view("admin/lunch/vendor_status_report", $data, TRUE);
+        }
+    }
+
+}
 }
 ?>
