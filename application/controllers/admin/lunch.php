@@ -55,7 +55,42 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-        $query = $this->db->get_where('lunch', array('date' => date('Y-m-d')));
+         $date= date('Y-m-d',strtotime($this->input->post('date')));
+        // if ( $this->input->post('change')==1) {
+        //     $query = $this->db->get_where('lunch', array('date' =>$date));
+           
+           
+        //     if ($query->num_rows() > 0) {
+        //         $lid=$query->result()[0]->id;
+        //         redirect('admin/lunch/today_lunch/'.$lid);
+        //     } else {
+                
+        //         $data['results'] = $this->Lunch_model->get_lunch_info(false,$date);
+        //         $data['guest'] = '';
+        //         $data['ps'] ='no';
+        //         $data['date'] = $date;
+        //         $data['subview'] = $this->load->view("admin/lunch/today_lunch", $data, TRUE);
+        //     }
+          
+
+            
+        //     $data['title'] = 'Lunch | ' . $this->Xin_model->site_title();
+        //     $data['breadcrumbs'] = 'Lunch';
+        //     $data['path_url'] = 'lunch';
+        //     if (!empty($session)) {
+        //         $data['date'] = $date;
+              
+        //         $this->load->view('admin/layout/layout_main', $data); //page load
+        //     } else {
+        //         redirect('admin/');
+        //     }
+          
+        // }else {
+        //    if($this->input->post('date')) {
+        //     $date = $this->input->post('date');
+
+        //    }
+        $query = $this->db->get_where('lunch', array('date' => $date));
         // dd($_POST['empid']);
         //Validation
         $this->form_validation->set_rules('empid[]', 'Employee name', 'required|trim');
@@ -71,12 +106,13 @@ class Lunch extends MY_Controller {
             $bigcomment = $this->input->post('bigcomment');
             $guest_m = $this->input->post('guest');
             $guest_comment = $this->input->post('guest_comment');
+         
+            
             $total_m = 0;
             $emp_m = 0;
             $total_cost = 0; 
             $emp_cost = 0; 
             $guest_cost = 0; 
-
             if($id != null) {
                 $luncid = $id;
             } else if (!empty($query->row())) {
@@ -90,10 +126,11 @@ class Lunch extends MY_Controller {
                     'emp_cost'   => $emp_cost,
                     'guest_cost' => $guest_cost,
                     'bigcomment' => $bigcomment,
-                    'date'       => date('Y-m-d'),
+                    'date'       => $date,
                 );
                 $this->db->insert('lunch', $data);
                 $luncid = $this->db->insert_id();
+                // dd( $luncid );
             } 
 
             $row = $this->db->where('lunch_id', $luncid)->get('lunch_details');
@@ -116,7 +153,7 @@ class Lunch extends MY_Controller {
                         'meal_amount'   => $m_amount[$i],
                         'p_stutus'      => $p_status[$i],
                         'comment'       => $comment[$i],
-                        'date'          => date('Y-m-d'),
+                        'date'          => $date,
                     );
                 } 
                 $this->db->insert_batch('lunch_details', $form_data);
@@ -142,11 +179,13 @@ class Lunch extends MY_Controller {
         }
 
         if ($query->num_rows() > 0) {
-            $data['results'] = $this->Lunch_model->get_lunch_info(1);
+            $data['results'] = $this->Lunch_model->get_lunch_info(1,$date);
             $data['guest'] = $query->row();
             $data['ps'] ='yes';
+            $data['date'] =$date;
+
         } else {
-            $data['results'] = $this->Lunch_model->get_lunch_info(false);
+            $data['results'] = $this->Lunch_model->get_lunch_info(false,$date);
             $data['guest'] = '';
             $data['ps'] ='no';
         }
@@ -154,12 +193,16 @@ class Lunch extends MY_Controller {
         $data['title'] = 'Lunch | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch';
         $data['path_url'] = 'lunch';
+        if ($id!=null){
+            $data['date'] = $this->db->get_where('lunch', array('id' => $id))->result()[0]->date;
+        }
         if (!empty($session)) {
             $data['subview'] = $this->load->view("admin/lunch/today_lunch", $data, TRUE);
             $this->load->view('admin/layout/layout_main', $data); //page load
         } else {
             redirect('admin/');
         }
+    // }
  
     }
 
