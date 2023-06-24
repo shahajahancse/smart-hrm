@@ -65,10 +65,11 @@ $this->load->view('admin/head_bangla');
           $dateStr = $data->date;
                                 $date = strtotime($dateStr);
                                 $dayName = date("l", $date); 
+                                $convertedDate = date('d-m-Y', strtotime($dateStr));
 
 ?>
 <h5 style='font-size:13px; font-weight:bold; text-align:center'>
-  Lunch Details <?php echo $data->date;   ?> ( <?php echo  $dayName;   ?>)
+  Lunch Details  <?php echo   $convertedDate;   ?> ( <?php echo  $dayName;   ?>)
 </h5>
 <br>
 

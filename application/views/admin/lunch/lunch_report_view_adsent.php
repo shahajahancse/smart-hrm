@@ -97,8 +97,11 @@
          <?php   $dateStr = $lunch_data[0]->date;
                   $date = strtotime($dateStr);
                  $dayName = date("l", $date);
+                 $convertedDate = date('d-m-Y', strtotime($dateStr));
+                
+               
            ?>
-        <?php echo $lunch_data[0]->date ." (" .$dayName .")" ; ?></div>
+        <?php echo  $convertedDate ." (" .$dayName .")" ; ?></div>
 
     
 
