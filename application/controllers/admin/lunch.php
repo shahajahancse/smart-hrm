@@ -38,6 +38,7 @@ class Lunch extends MY_Controller {
             redirect('admin/');
         }
         $data['results'] = $this->Lunch_model->get_all_data();
+        // dd($data['results']);
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch';
         $data['path_url'] = 'lunch';
