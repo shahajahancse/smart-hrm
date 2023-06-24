@@ -28,6 +28,7 @@ class Lunch extends MY_Controller {
 
         $this->load->model("Xin_model");
         $this->load->model("Lunch_model");
+        $this->load->model("Attendance_model");
         $this->load->library('form_validation');
     }
 
@@ -594,5 +595,25 @@ class Lunch extends MY_Controller {
     }
 
 }
+    public function lunch_jobcard(){
+        $session = $this->session->userdata('username');
+            if (empty($session)) {
+                redirect('admin/');
+            }
+        
+            // $this->db->where("date <=", $process_date);
+            // $this->db->where("date >=", $process_date);
+            // $query = $this->db->get("xin_holidays");
+
+            $first_date = $this->input->post('first_date');
+            $second_date = $this->input->post('second_date');
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $data['company_info'] = $this->Xin_model->get_company_info(1);
+        $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+        echo $this->load->view("admin/lunch/lunch_jobcard", $data, TRUE);
+    }
 }
 ?>
