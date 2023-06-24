@@ -512,16 +512,11 @@ class Attendance extends MY_Controller {
 	 	$second_date = $this->input->post('second_date');
     	$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
-		
-			
-
-
 		$data['first_date'] = $first_date;
 		$data['second_date'] = $second_date;
 		$data['company_info'] = $this->Xin_model->get_company_info(1);
 		$data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
 		
-
 	 	echo $this->load->view("admin/attendance/job_card", $data, TRUE);
 		  
     }

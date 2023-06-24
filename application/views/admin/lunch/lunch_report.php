@@ -120,6 +120,10 @@
                     <a class="nav-link" id="payment-tab" data-toggle="tab" href="#payment" role="tab"
                         aria-controls="payment" aria-selected="false">Payment</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="continue-tab" data-toggle="tab" href="#continue" role="tab"
+                        aria-controls="payment" aria-selected="false">Continue</a>
+                </li>
 
 
             </ul>
@@ -143,6 +147,10 @@
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(0)">Unpaid Employees</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2)">Employees Collection Sheets</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="vendor_Report()">Vendor Report</button>
+                </div>
+                <div class="tab-pane fade" id="continue" role="tabpanel" aria-labelledby="continue-tab"
+                    style="margin-top: 30px;">
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="lunch_jobcard()">Lunch Report</button>
                 </div>
             </div>
 
