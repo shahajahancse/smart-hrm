@@ -55,42 +55,41 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-        $date=date('Y-m-d');
-        if ( $this->input->post('change')==1) {
-            $date= date('Y-m-d',strtotime($this->input->post('date')));
-            $query = $this->db->get_where('lunch', array('date' =>$date));
+         $date= date('Y-m-d',strtotime($this->input->post('date')));
+        // if ( $this->input->post('change')==1) {
+        //     $query = $this->db->get_where('lunch', array('date' =>$date));
            
            
-            if ($query->num_rows() > 0) {
-                $lid=$query->result()[0]->id;
-                redirect('admin/lunch/today_lunch/'.$lid);
-            } else {
+        //     if ($query->num_rows() > 0) {
+        //         $lid=$query->result()[0]->id;
+        //         redirect('admin/lunch/today_lunch/'.$lid);
+        //     } else {
                 
-                $data['results'] = $this->Lunch_model->get_lunch_info(false,$date);
-                $data['guest'] = '';
-                $data['ps'] ='no';
-                $data['date'] = $date;
-                $data['subview'] = $this->load->view("admin/lunch/today_lunch", $data, TRUE);
-            }
+        //         $data['results'] = $this->Lunch_model->get_lunch_info(false,$date);
+        //         $data['guest'] = '';
+        //         $data['ps'] ='no';
+        //         $data['date'] = $date;
+        //         $data['subview'] = $this->load->view("admin/lunch/today_lunch", $data, TRUE);
+        //     }
           
 
             
-            $data['title'] = 'Lunch | ' . $this->Xin_model->site_title();
-            $data['breadcrumbs'] = 'Lunch';
-            $data['path_url'] = 'lunch';
-            if (!empty($session)) {
-                $data['date'] = $date;
+        //     $data['title'] = 'Lunch | ' . $this->Xin_model->site_title();
+        //     $data['breadcrumbs'] = 'Lunch';
+        //     $data['path_url'] = 'lunch';
+        //     if (!empty($session)) {
+        //         $data['date'] = $date;
               
-                $this->load->view('admin/layout/layout_main', $data); //page load
-            } else {
-                redirect('admin/');
-            }
+        //         $this->load->view('admin/layout/layout_main', $data); //page load
+        //     } else {
+        //         redirect('admin/');
+        //     }
           
-        }else {
-           if($this->input->post('date')) {
-            $date = $this->input->post('date');
+        // }else {
+        //    if($this->input->post('date')) {
+        //     $date = $this->input->post('date');
 
-           }
+        //    }
         $query = $this->db->get_where('lunch', array('date' => $date));
         // dd($_POST['empid']);
         //Validation
@@ -183,6 +182,8 @@ class Lunch extends MY_Controller {
             $data['results'] = $this->Lunch_model->get_lunch_info(1,$date);
             $data['guest'] = $query->row();
             $data['ps'] ='yes';
+            $data['date'] =$date;
+
         } else {
             $data['results'] = $this->Lunch_model->get_lunch_info(false,$date);
             $data['guest'] = '';
@@ -201,7 +202,7 @@ class Lunch extends MY_Controller {
         } else {
             redirect('admin/');
         }
-    }
+    // }
  
     }
 
