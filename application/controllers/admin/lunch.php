@@ -29,6 +29,8 @@ class Lunch extends MY_Controller {
         $this->load->model("Xin_model");
         $this->load->model("Lunch_model");
         $this->load->library('form_validation');
+        $this->load->helper('date');
+
     }
 
     public function index()
