@@ -244,14 +244,15 @@ if($theme[0]->sub_menu_icons != ''){
           <li class="sidenav-link <?php if(!empty($arr_mod['today_active']))echo $arr_mod['today_active'];?>"> <a href="<?php echo site_url('admin/lunch/today_lunch');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Today Lunch  </a> </li>
           <?php } ?>  
 
-          <?php if(in_array('1059',$role_resources_ids)) { ?>
-          <li class="sidenav-link <?php if(!empty($arr_mod['lemp_list_active']))echo $arr_mod['lemp_list_active'];?>"> <a href="<?php echo site_url('admin/lunch/employee_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Today Lunch  </a> </li>
-          <?php } ?> 
-
           <?php if(in_array('1051',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['lunch_active']))echo $arr_mod['lunch_active'];?>"> <a href="<?php echo site_url('admin/lunch/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> 
         Lunch list </a> </li>
           <?php } ?>
+
+          <?php if(in_array('1059',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['lemp_list_active']))echo $arr_mod['lemp_list_active'];?>"> <a href="<?php echo site_url('admin/lunch/employee_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Employee List </a> </li>
+          <?php } ?> 
+
           <?php if(in_array('1053',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['emp_pay_active']))echo $arr_mod['emp_pay_active'];?>"> <a href="<?php echo site_url('admin/lunch/emp_pay_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Employee Pay  </a> </li>
           <?php } ?> 
