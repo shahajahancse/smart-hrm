@@ -1058,6 +1058,7 @@ class Employees_model extends CI_Model {
 		if($user_info[0]->user_role_id!=1){
 			$this->db->where("company_id=",$user_info[0]->company_id);
 		}
+		$this->db->where_in("status", array(1,4,5));
         $query = $this->db->get("xin_employees");
 
         if ($query->num_rows() > 0) {

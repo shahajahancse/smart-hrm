@@ -74,7 +74,7 @@
 </div>
 <?php } ?>
 <div class="row <?php echo $get_animate;?>">
-<?php if($total_record > 0) {?>
+<?php if($results > 0) {?>
   <?php foreach($results as $employee) { ?>
   <?php
 	if($employee->profile_picture!='' && $employee->profile_picture!='no file') {

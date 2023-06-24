@@ -55,7 +55,7 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-         $date= date('Y-m-d',strtotime($this->input->post('date')));
+         $date = date('Y-m-d',strtotime($this->input->post('date')));
         // if ( $this->input->post('change')==1) {
         //     $query = $this->db->get_where('lunch', array('date' =>$date));
            
