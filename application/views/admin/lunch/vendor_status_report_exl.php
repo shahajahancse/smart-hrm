@@ -107,7 +107,7 @@ header('Cache-Control: max-age=0'); //no cache
                             <tr>
                                     <td colspan="5" style="text-align: center;"><strong>Total</strong></td>
                                         <td style="text-align: center;"><strong><?= $total_meal ?></strong></td>
-                                        <td style="text-align: center;"><strong><?=  $t_amount?></strong></td>
+                                           <td style="text-align: center;"><strong><?=  $t_amount?></strong></td>
                                         <td style="text-align: center;"></td>
                                         <td style="text-align: center;"><strong><?= $t_net_amount ?></strong></td>
                                         <td style="text-align: center;"><strong><?= $t_paid_amount ?></strong></td>
