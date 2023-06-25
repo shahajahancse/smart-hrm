@@ -284,8 +284,7 @@ class Attendance extends MY_Controller {
 
     public function create_move_register()
     {	$session = $this->session->userdata('username');
-  
-		
+		dd($_POST);
      	if (!empty($_POST)) {
 			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
 			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
@@ -318,7 +317,7 @@ class Attendance extends MY_Controller {
 				$this->db->trans_rollback();
 		        $response = ['status' => 'success', 'message' => "failed"];
 				echo json_encode( $response );
-				exit;
+				// exit;
 			}
 			else
 			{
@@ -328,9 +327,10 @@ class Attendance extends MY_Controller {
 			        $response = ['status' => 'success', 'message' => "Successfully Insert Done"];
 				}
 		        echo json_encode( $response );
-				exit;
+				// exit;
 			}
 		}
+		redirect(base_url('admin/attendance/move_register'));
     }
 	 
 	public function delete_move_register($id)
@@ -512,16 +512,11 @@ class Attendance extends MY_Controller {
 	 	$second_date = $this->input->post('second_date');
     	$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
-		
-			
-
-
 		$data['first_date'] = $first_date;
 		$data['second_date'] = $second_date;
 		$data['company_info'] = $this->Xin_model->get_company_info(1);
 		$data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
 		
-
 	 	echo $this->load->view("admin/attendance/job_card", $data, TRUE);
 		  
     }

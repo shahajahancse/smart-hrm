@@ -53,7 +53,7 @@ hr {
                                     <div class="form-group">
                                         <label for="date">Date</label>
                                         <input class="form-control date" placeholder="date..." name="date" type="text"
-                                            value="" id="m_date">
+                                            value="" id="move_date">
                                         <input name="id" type="hidden" value="" id="id">
                                     </div>
                                 </div>
@@ -309,7 +309,7 @@ function edit(id) {
             var intime = b.slice(10, 16);
             $("#id").val(response[0].id);
             $("#id").val(response[0].id);
-            $("#m_date").val(response[0].date);
+            $("#move_date").val(response[0].date);
             $("#m_in_time").val(intime);
             $("#m_out_time").val(time);
             $("#emp").html(emp['first_name'] + ' ' + emp['last_name']);

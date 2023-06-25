@@ -28,6 +28,7 @@ class Lunch extends MY_Controller {
 
         $this->load->model("Xin_model");
         $this->load->model("Lunch_model");
+        $this->load->model("Attendance_model");
         $this->load->library('form_validation');
         $this->load->helper('date');
 
@@ -596,5 +597,129 @@ class Lunch extends MY_Controller {
     }
 
 }
+    public function lunch_jobcard(){
+        $session = $this->session->userdata('username');
+            if (empty($session)) {
+                redirect('admin/');
+            }
+        
+         
+            $first_date = $this->input->post('first_date');
+            $second_date = $this->input->post('second_date');
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $data['company_info'] = $this->Xin_model->get_company_info(1);
+        $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+        echo $this->load->view("admin/lunch/lunch_jobcard", $data, TRUE);
+    }
+    public function lunch_off(){
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $reason=$this->input->post('reason');
+        $dateoff=$this->input->post('dateoff');
+
+        $query = $this->db->get_where('lunch', array('date' => $dateoff))->result();
+        // dd($query[0]->id);
+        if(count($query)>0){
+          
+            $data = array(
+             'total_m' => 0,
+             'emp_m' => 0,
+             'guest_m' => 0,
+             'total_cost' => 0,
+             'emp_cost' => 0,
+             'guest_cost' => 0.00,
+             'package_id' => 0,
+             'status' => 2,
+             'bigcomment' => $reason,
+             'guest_ref_id' => '',
+             'guest_ref_comment' => '',
+            );
+            $this->db->where('date', $dateoff);
+            if($this->db->update('lunch', $data)){
+                $lunchid=$query[0]->id;
+                $data2 = array(
+                    'meal_amount' => 0,
+                    'comment' => '',
+                );
+                $this->db->where('lunch_id', $lunchid);
+                $this->db->update('lunch_details', $data2);
+            }else{
+                echo "there was an error";
+            }
+        }else{
+            $data = array(
+                'total_m' => 0,
+                'emp_m' => 0,
+                'guest_m' => 0,
+                'total_cost' => 0,
+                'emp_cost' => 0,
+                'guest_cost' => 0.00,
+                'package_id' => 0,
+                'status' => 2,
+                'bigcomment' => $reason,
+                'guest_ref_id' => '',
+                'guest_ref_comment' => '',
+                'date' => $dateoff ,
+               );
+               if($this->db->insert('lunch', $data)){
+                $insert_id = $this->db->insert_id();
+                $emp = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
+          
+                foreach($emp as $row){
+                    
+                    $data2 = array(
+                    'lunch_id'      => $insert_id,
+                    'emp_id'        => $row->user_id,
+                    'meal_amount'   => 0,
+                    'p_stutus'      => 0,
+                    'comment'       => '',
+                    'date'          => $dateoff,
+                       );
+                    $this->db->insert('lunch_details', $data2);
+
+                }
+               }else{
+                   echo "there was an error";
+               }
+
+        };
+        
+
+
+
+    }
+    public function employee_list(){
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
+        $data['first_date']=$result->end_date;
+        $data['second_date']=$result->next_date;
+        $data['empdata'] = $this->db
+        ->select('lunch_payment.*, xin_employees.first_name, xin_employees.last_name, xin_designations.designation_name')
+        ->from('lunch_payment')
+        ->join('xin_employees', 'lunch_payment.emp_id = xin_employees.user_id')
+        ->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id')
+        ->where('lunch_payment.end_date', $result->end_date)
+        ->order_by('lunch_payment.id', 'desc')
+        ->get()
+        ->result();
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch';
+        $data['path_url'] = 'lunch';
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/emp_list", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+       
+    }
 }
 ?>
