@@ -112,30 +112,33 @@
            ?>
         <?= $convertedDate1?> to <?= $convertedDate2?> </div>
     </div>
-    <div class="table-responsive" style="margin-top: 17px;">
-        <table class="table table-bordered">
+    <div class="table-responsive" style="margin-top: 17px; padding:10px;">
+        <table class="table table-bordered" style="text-align:center">
             <thead>
                 <tr>
-                    <th>Date</th>
-
-                    <th>Emp M</th>
-                    <th>Guest M</th>
-                    <th>Total M</th>
-
-                    <th>Emp Cost</th>
-                    <th>Guest Cost</th>
-                    <th>Total Cost</th>
+                    <th style="text-align:center">Date</th>
+                    <th style="text-align:center">Days</th>
+                    <th style="text-align:center">Emp M</th>
+                    <th style="text-align:center">Guest M</th>
+                    <th style="text-align:center">Total M</th>
+                    <th style="text-align:center">Emp Cost</th>
+                    <th style="text-align:center">Guest Cost</th>
+                    <th style="text-align:center">Total Cost</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($lunch_data as $item) : ?>
                 <tr> <?php $convertedDate2 = date('d-m-Y', strtotime($item->date));  ?>
                     <td><?php echo $convertedDate2 ; ?></td>
-
+                    <?php  
+                            $dateStr = $item->date;
+                            $date = strtotime($dateStr);
+                            $dayName = date("l", $date);
+                      ?>
+                    <td><?=   $dayName ?> </td>
                     <td><?php echo $item->emp_m; ?></td>
                     <td><?php echo $item->guest_m; ?></td>
                     <td><?php echo $item->total_m; ?></td>
-
                     <td><?php echo $item->emp_cost; ?></td>
                     <td><?php echo $item->guest_cost; ?></td>
                     <td><?php echo $item->total_cost; ?></td>
