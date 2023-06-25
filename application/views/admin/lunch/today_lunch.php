@@ -1,95 +1,51 @@
+
 <style>
-    .switch {
-    position: relative;
-    display: inline-block;
-    width: 123px;
-    height: 34px;
-    margin-top: 16px;
-    margin-left: 24px;
+    .error-border {
+  border: 2px solid red;
 }
 
-.switch input {
- display: none;
-}
 
-.slider {
- position: absolute;
- cursor: pointer;
- top: 0;
- left: 0;
- right: 0;
- bottom: 0;
- background-color: #3C3C3C;
- -webkit-transition: .4s;
- transition: .4s;
- border-radius: 34px;
-}
-
-.slider:before {
- position: absolute;
- content: "";
- height: 26px;
- width: 26px;
- left: 4px;
- bottom: 4px;
- background-color: white;
- -webkit-transition: .4s;
- transition: .4s;
- border-radius: 50%;
-}
-
-input:checked + .slider {
- background-color: #0E6EB8;
-}
-
-input:focus + .slider {
- box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
- -webkit-transform: translateX(26px);
- -ms-transform: translateX(26px);
- transform: translateX(85px);
-}
-
-/*------ ADDED CSS ---------*/
-.slider:after {
- content: 'DISABLED';
- color: white;
- display: block;
- position: absolute;
- transform: translate(-50%,-50%);
- top: 50%;
- left: 50%;
- font-size: 10px;
- font-family: Verdana, sans-serif;
-}
-
-input:checked + .slider:after {
- content: 'ENABLED';
-}
-
-/*--------- END --------*/
 </style>
+<!-- Modal -->
+<div id="lunchoffmodal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
-<a href="<?= base_url('admin/lunch/emp_pay_list') ?>" class="btn btn-primary float-right">Get Payment</a>
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Lunch Off</h4>
+        </div>
+        <div class="modal-body">
+            <form id="lunch-form">
+            <span style="font-size: 16px;font-weight: bold;">Reason</span>
+            <textarea name="reason" id="reason" cols="70" style="width: 100%; border-radius: 5px;" rows="4" required></textarea>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-primary" id="submit-btn">Submit</a>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+
+  </div>
+</div>
 <?= form_open(current_url(), array('id' => 'dateForm')); ?>
 <h3 style="float: left;">Today Lunch</h3>
 <?php $session = $this->session->userdata('username');
 if($session['role_id']==1){?>
 <div style="float: left;margin-left: 29px;margin-top: 22px;">
     <label for="date"> Enter Date</label>
-    <input type="date" onchange="submitForm()" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>" style="border-radius: 5px;">
+    <input type="date" id="dateoff" onchange="submitForm()" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>" style="border-radius: 5px;">
     <input type='hidden' id="ischange" name="change" value= 0>
 </div>
 <?php }else{?>
 
-<input type="hidden" name="date" value="<?= date('d-m-Y'); ?>">
+<input type="hidden" id="dateoff" name="date" value="<?= date('d-m-Y'); ?>">
 <?php } ?>
-<label class="switch">
-  <input onchange=changmeal(1) id="desable_all"  name='status' value=0 type="checkbox">
-  <span class="slider"></span>
-</label>
+<button type="button" class="btn btn-info"  data-toggle="modal" style="float: right;" data-target="#lunchoffmodal">Lunch Off</button>
+
 <table class="table table-hover" style="text-align-last: center;">
     <thead>
         <tr>
@@ -157,31 +113,51 @@ if($session['role_id']==1){?>
     $('#ischange').val(1);
     $('#dateForm').submit();
   }
-  function changmeal(s) {
-    var ison = $('#desable_all').val();
+  $(document).ready(function() {
+  $('#submit-btn').click(function() {
+    var reason = $('#reason').val();
+    if (reason !== '') {
+      var reasonValue = document.getElementById('reason').value;
+      var dateoffValue = document.getElementById('dateoff').value;
 
-    if (ison == 0) {
-      $('#desable_all').val(1);
+      var url = '<?= base_url('admin/lunch/lunch_off') ?>';
+      $.ajax({
+        url: url,
+        method: 'POST',
+        data: { reason: reasonValue, dateoff: dateoffValue },
+        success: function(response) {
+          // Hide the modal
+          $('#lunchoffmodal').modal('hide');
+
+          // Show a sweet alert
+          Swal.fire({
+            title: 'Success',
+            text: 'Your request was successful!',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              
+            }
+          });
+        },
+        error: function(xhr, status, error) {
+          // Handle the error response from the server
+          console.error(error);
+        }
+      });
     } else {
-      $('#desable_all').val(0);
+      // Add red border to the textarea
+      $('#reason').addClass('error-border');
     }
+  });
 
-    var inputs = $('.all_meal');
+  // Remove red border when the textarea is focused
+  $('#reason').focus(function() {
+    $(this).removeClass('error-border');
+  });
+});
 
-    inputs.val(ison);
-
-    if (ison == 0) {
-      $('html, body').animate({ scrollTop: $(document).height() }, 'slow', function() {
-        $('#bigcomment').prop('required', true).focus();
-        $('#is_requard').fadeIn();
-      });
-    } else if (ison == 1) {
-      $('html, body').animate({ scrollTop: 0 }, 'slow', function() {
-        $('#bigcomment').prop('required', false);
-        $('#is_requard').fadeOut();
-      });
-    }
-  }
 </script>
 
 

@@ -603,10 +603,7 @@ class Lunch extends MY_Controller {
                 redirect('admin/');
             }
         
-            // $this->db->where("date <=", $process_date);
-            // $this->db->where("date >=", $process_date);
-            // $query = $this->db->get("xin_holidays");
-
+         
             $first_date = $this->input->post('first_date');
             $second_date = $this->input->post('second_date');
         $sql = $this->input->post('sql');
@@ -616,6 +613,85 @@ class Lunch extends MY_Controller {
         $data['company_info'] = $this->Xin_model->get_company_info(1);
         $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
         echo $this->load->view("admin/lunch/lunch_jobcard", $data, TRUE);
+    }
+    public function lunch_off(){
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $reason=$this->input->post('reason');
+        $dateoff=$this->input->post('dateoff');
+
+        $query = $this->db->get_where('lunch', array('date' => $dateoff))->result();
+        // dd($query[0]->id);
+        if(count($query)>0){
+          
+            $data = array(
+             'total_m' => 0,
+             'emp_m' => 0,
+             'guest_m' => 0,
+             'total_cost' => 0,
+             'emp_cost' => 0,
+             'guest_cost' => 0.00,
+             'package_id' => 0,
+             'status' => 2,
+             'bigcomment' => $reason,
+             'guest_ref_id' => '',
+             'guest_ref_comment' => '',
+            );
+            $this->db->where('date', $dateoff);
+            if($this->db->update('lunch', $data)){
+                $lunchid=$query[0]->id;
+                $data2 = array(
+                    'meal_amount' => 0,
+                    'comment' => '',
+                );
+                $this->db->where('lunch_id', $lunchid);
+                $this->db->update('lunch_details', $data2);
+            }else{
+                echo "there was an error";
+            }
+        }else{
+            $data = array(
+                'total_m' => 0,
+                'emp_m' => 0,
+                'guest_m' => 0,
+                'total_cost' => 0,
+                'emp_cost' => 0,
+                'guest_cost' => 0.00,
+                'package_id' => 0,
+                'status' => 2,
+                'bigcomment' => $reason,
+                'guest_ref_id' => '',
+                'guest_ref_comment' => '',
+                'date' => $dateoff ,
+               );
+               if($this->db->insert('lunch', $data)){
+                $insert_id = $this->db->insert_id();
+                $emp = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
+          
+                foreach($emp as $row){
+                    
+                    $data2 = array(
+                    'lunch_id'      => $insert_id,
+                    'emp_id'        => $row->user_id,
+                    'meal_amount'   => 0,
+                    'p_stutus'      => 0,
+                    'comment'       => '',
+                    'date'          => $dateoff,
+                       );
+                    $this->db->insert('lunch_details', $data2);
+
+                }
+               }else{
+                   echo "there was an error";
+               }
+
+        };
+        
+
+
+
     }
 }
 ?>
