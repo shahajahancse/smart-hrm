@@ -81,7 +81,7 @@
 
       emp_status = document.getElementById('status').value;
       if(emp_status =='')
-      {
+      {a
         alert('Please select employee status');
         return ;
       }
@@ -750,6 +750,14 @@ function Per1_Report(statusC)
       }
     }
    
-  }
+}
+  
+
+
+
+
+
+
+
 
   

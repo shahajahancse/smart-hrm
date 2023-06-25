@@ -431,6 +431,10 @@ if($theme[0]->sub_menu_icons != ''){
               <?php if(in_array('1112',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['device_open']))echo $arr_mod['device_open'];?>"> <a href="<?php echo site_url('admin/accessories/device_model');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Device Model </a> </li>
               <?php } ?>
+
+              <?php if(in_array('1113',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['number_open']))echo $arr_mod['number_open'];?>"> <a href="<?php echo site_url('admin/accessories/number_add');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Add Phone Number</a> </li>
+              <?php } ?>
             </ul>
           </li>
           <?php } ?>

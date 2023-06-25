@@ -459,7 +459,7 @@ class Xin_model extends CI_Model {
 			return $arr;
 		} 	// Store 
  
-			// inventory
+		// inventory
 		else if($mClass=='accessories' && $mMethod=='index') {
 			$arr['access_open'] = 'active';
 			$arr['item_active'] = 'active';
@@ -483,7 +483,14 @@ class Xin_model extends CI_Model {
 			$arr['accsetting_open'] = 'active';
 			$arr['device_open'] = 'active';
 			return $arr;
-		} 	// inventory
+		} else if($mClass=='accessories' && $mMethod=='number_add') {
+			$arr['access_open'] = 'active';
+			$arr['accsetting_open'] = 'active';
+			$arr['number_open'] = 'active';
+			return $arr;
+		} 
+		
+		// inventory
 
 		else if($mClass=='performance_indicator') {
 			$arr['per_indi_active'] = 'active';

@@ -500,6 +500,8 @@ dataSource: [
 				{ id: "", class: "role-checkbox-modal", text: "Category",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1111", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1111',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"}, 
 
 				{ id: "", class: "role-checkbox-modal", text: "Device Model",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1112", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1112',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},  
+				
+				{ id: "", class: "role-checkbox-modal", text: "Add Phone Number",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1113", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1113',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},  
 			]},
 
 	]},
