@@ -156,7 +156,7 @@
             </div>
             <div class="form-group col-md-4">
                 <p class="levels">Remarks</p>
-                <textarea name="" id="" cols="30" rows="1" class="form-control" id="remarks" style="border-radius: 6px;"></textarea>
+                <textarea name="" cols="30" rows="1" class="form-control" id="remarks" style="border-radius: 6px;"></textarea>
             </div>
         </div>
 
