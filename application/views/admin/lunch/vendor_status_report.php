@@ -164,7 +164,9 @@
                                 <td><?php echo $row->net_payment ?></td>
                                 <td><?php echo $row->paid_amount ?> </td>
                                 <td><?php echo $row->due ?></td>
-                                <td><?php echo $row->Remarks ?></td>
+                                <td style="text-align: center;" title="<?php echo $row->Remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->Remarks ), 0, 4)); ?></td>
+        
+                                <!-- <td><?php echo $row->Remarks ?></td> -->
                                 
                                 
                             </tr>
