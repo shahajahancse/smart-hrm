@@ -1,7 +1,8 @@
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
 
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 <?php
 
  $all_policies = $this->db->select('*')->from('xin_company_policy')->order_by('policy_id', 'DESC')->get()->result_array();
