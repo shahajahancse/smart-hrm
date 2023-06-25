@@ -243,13 +243,12 @@
                 <td><?php echo $row->pay_amount; ?></td>
                 <td><?php echo $row->net_payment; ?></td>
                 <td><?php echo $row->paid_amount; ?></td>
-                <td><?php echo $row->due; ?></td>
-                <td><?php echo $row->date; ?></td>
-                <td><?php echo $row->Remarks; ?></td>
+                <td><?php echo $row->due; ?></td>           
+                <td style="text-align: center;" title="<?php echo $row->Remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->Remarks ), 0, 4)); ?></td>
                 <td>
                     <?=($row->status==0)? '<a data-toggle="modal" data-target="#make_payment" onclick="giveid('.$row->id.','.$row->due .','.$row->paid_amount.')" class="btn btn-primary">Paid</a>': 'Paid'?>
                 </td>
-                <td style="text-align: center;" title="<?php echo $row->Remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->Remarks ), 0, 4)); ?></td>
+                
  
 
             </tr>
