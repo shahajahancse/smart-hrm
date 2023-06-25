@@ -38,9 +38,9 @@
     <tr>
         <td><?= $key+1 ?></td>
         <td>
-  <a href="#" data-firstdate="<?= $first_date ?>" data-secenddate="<?= $second_date ?>" data-empid="<?= $data->emp_id ?>">
+  <h5  style="cursor: pointer;" data-firstdate="<?= $first_date ?>" data-secenddate="<?= $second_date ?>" data-empid="<?= $data->emp_id ?>">
     <?= $data->first_name ?> <?= $data->last_name ?>
-  </a>
+  </h5>
 </td>       <td><?= $data->designation_name ?></td>
         <td><?= $data->pay_amount/45?></td>
         <td><?= $data->pay_amount?></td>
@@ -67,7 +67,7 @@ $(document).ready(function() {
 </script>
 <script>
     
-  const links = document.querySelectorAll('a'); // Select all anchor elements
+  const links = document.querySelectorAll('h5'); // Select all anchor elements
 
   links.forEach(function(link) {
     link.addEventListener('click', function(event) {
@@ -77,10 +77,8 @@ $(document).ready(function() {
       links.forEach(function(link) {
         link.classList.remove('clicked');
       });
-
       // Add 'clicked' class to the clicked link
       link.classList.add('clicked');
-
       const firstDate = link.getAttribute('data-firstdate'); // Retrieve the value of data-firstdate attribute
       const secondDate = link.getAttribute('data-secenddate'); // Retrieve the value of data-secenddate attribute
       const empId = link.getAttribute('data-empid'); // Retrieve the value of data-empid attribute

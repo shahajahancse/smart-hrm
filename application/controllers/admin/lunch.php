@@ -531,14 +531,7 @@ class Lunch extends MY_Controller {
    
     }
     public function make_payment() {
-        // [pre_due] => 3
-        // [fromDate] => 2023-06-01
-        // [toDate] => 2023-06-30
-        // [totalMeal] => 41
-        // [totalAmount] => 3690
-        // [payableAmount] => 3693
-        // [dueAmount] => 3633
-        // [payAmount] => 60
+       
         $pre_due=$this->input->post('pre_due');
         $fromDate=$this->input->post('fromDate');
         $toDate=$this->input->post('toDate');
@@ -548,6 +541,20 @@ class Lunch extends MY_Controller {
         $dueAmount=$this->input->post('dueAmount');
         $paid_amount=$this->input->post('payAmount');
         $remarks=$this->input->post('remarks');
+        $last_collection_id=$this->input->post('last_collection_id');
+            if($last_collection_id!==null){;
+            $data = array(
+                'status' => 1,
+            );
+            $this->db->where('id', $last_collection_id);
+            $this->db->update('lunch_payment_vendor', $data);
+            }
+           if($dueAmount==0){
+                $status=1;
+            }else{
+                $status=0;
+            }
+         
         $data = array(
             'previous_due' => $pre_due,
             'from_date' => $fromDate,
@@ -559,6 +566,7 @@ class Lunch extends MY_Controller {
             'due' => $dueAmount,
             'date' => date('Y-m-d'),
             'Remarks' => $remarks,
+            'status' => $status,
         );
         if($this->db->insert('lunch_payment_vendor', $data)){
             echo 'success';
@@ -566,7 +574,35 @@ class Lunch extends MY_Controller {
             echo 'there was an error';
         };
     }
+public function make_id_payment(){
 
+    $dueAmount=$this->input->post('deu_amount');
+    $pay_Amount=$this->input->post('amount');
+    $id=$this->input->post('rawid');
+    $prepaid=$this->input->post('prepaid');
+    $present_deu=$this->input->post('present_deu');
+
+    $paid_amo=$prepaid+$pay_Amount;
+    // $due_amo=
+
+    if($present_deu>0){
+        $status=0;
+    }else{
+        $status=1;
+    }
+
+    $data = array(
+        'paid_amount' => $paid_amo,
+        'due' => $present_deu,
+        'status' => $status,
+    );
+    $this->db->where('id', $id);
+    if($this->db->update('lunch_payment_vendor', $data)){
+        echo "success!";
+    }else{
+        echo "Unsuccess!";
+    };
+}
     //working here razibul 22-06-2023
 	public function vendor_status_report($exl=null){
 
