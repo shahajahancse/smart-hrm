@@ -122,7 +122,7 @@
                     ?>
             <tr>
                 <td><?php echo $key+1 ?></td>
-                <td><?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
+                <td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
                 <td><?php echo $employee->prev_meal;?></td>
                 <td><?php echo $employee->prev_cost;?></td>
                 <td><?php echo $employee->prev_pay;?></td>

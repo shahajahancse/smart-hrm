@@ -27,15 +27,17 @@
                 <?= isset($lunch_data[0]->from_date) ? $convertedDate1  : ''; ?> to
                 <?= isset($lunch_data[0]->end_date) ? $convertedDate2 : ''; ?> </div>
         </div>
+        <br>
+        <br>
         <table class="table table-bordered table-hover table-striped">
             <thead style="text-align: center;">
                 <tr>
-                    <th>SL</th>
-                    <th>Name</th>
-                    <th>Previous Meal</th>
-                    <th>Previous Cost</th>
-                    <th>Previous Pay</th>
-                    <th>Previous Amount</th>
+                    <th style="text-align: center;">SL</th>
+                    <th style="text-align: center;">Name</th>
+                    <th style="text-align: center;">Previous Meal</th>
+                    <th style="text-align: center;">Previous Cost</th>
+                    <th style="text-align: center;">Previous Pay</th>
+                    <th style="text-align: center;">Previous Amount</th>
                 </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -47,12 +49,12 @@
                     $previouspay+=$employee->prev_pay;
                     ?>
                 <tr>
-                    <td><?php echo $key+1 ?></td>
-                    <td><?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
-                    <td><?php echo $employee->prev_meal;?></td>
-                    <td><?php echo $employee->prev_cost;?></td>
-                    <td><?php echo $employee->prev_pay;?></td>
-                    <td><?php echo $employee->prev_amount;?></td>
+                    <td style="text-align: center;"><?php echo $key+1 ?></td>
+                    <td>&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_meal;?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_cost;?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_pay;?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_amount;?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -60,8 +62,8 @@
 
             <tfoot style="text-align: center;font-weight: bold;">
                 <tr>
-                    <td colspan="4">Total</td>
-                    <td colspan="1"><?= $previouspay ?></td>
+                    <td colspan="4" style="text-align: center;">Total</td>
+                    <td colspan="1" style="text-align: center;"><?= $previouspay ?></td>
                 </tr>
             </tfoot>
 

@@ -173,7 +173,8 @@
         <thead>
             <tr>
                 <th>SL</th>
-                <th>Previous Due</th>
+                <th>Date</th>
+                <th>P.Due</th>
                 <th>From Date</th>
                 <th>To Date</th>
                 <th>Total Meal</th>
@@ -181,14 +182,17 @@
                 <th>Net Payment</th>
                 <th>Paid Amount</th>
                 <th>Due</th>
-                <th>Date</th>
+                
                 <th>Remarks</th>
+                
             </tr>
         </thead>
         <tbody>
             <?php foreach ($payment_data as $key=>$row): ?>
             <tr>
                 <td><?php echo $key+1 ?></td>
+                <?php    $convert = date('d-m-Y', strtotime($row->date)); ?>
+                <td><?php echo $convert; ?></td>
                 <td><?php echo $row->previous_due; ?></td>
                 <?php   
                 $convertedDate = date('d-m-Y', strtotime($row->from_date));
@@ -202,8 +206,10 @@
                 <td><?php echo $row->net_payment; ?></td>
                 <td><?php echo $row->paid_amount; ?></td>
                 <td><?php echo $row->due; ?></td>
-                <td><?php echo $row->date; ?></td>
-                <td><?php echo $row->Remarks; ?></td>
+                
+                <td style="text-align: center;" title="<?php echo $row->Remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->Remarks ), 0, 4)); ?></td>
+        
+               
 
             </tr>
             <?php endforeach; ?>
