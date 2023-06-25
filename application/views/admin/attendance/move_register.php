@@ -37,7 +37,7 @@ hr {
                                     <div class="form-group">
                                         <label for="date">Employee Name</label>
                                         <select name="emp_id" class="form-control" id="emp_name">
-                                            <option id="emp" value="">Select Employee Name</option>
+                                            <option id="employeeeees" value="">Select Employee Name</option>
                                             <?php foreach($emps as $emp){?>
                                             <option value="<?php echo $emp->user_id?>">
                                                 <?php echo $emp->first_name.' '.$emp->last_name?></option>
@@ -45,30 +45,28 @@ hr {
                                         </select>
                                     </div>
                                 </div>
-                                <?php }
-                                  else{?>
+                                <?php }else{?>
                                 <input type="hidden" name="emp_id" value="<?php echo $session['user_id']?>" id="emp_id">
                                 <?php }?>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="date">Date</label>
-                                        <input class="form-control date" placeholder="date..." name="date" type="text"
-                                            value="" id="move_date">
-                                        <input name="id" type="hidden" value="" id="id">
+                                        <input class="form-control date" placeholder="date..." name="date" type="text" value="" id="move_date">
+                                        <input name="id" type="hidden" value="" id="idesss">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="out_time">Office out time</label>
                                         <input class="form-control  timepicker clear-1" placeholder="Office out time"
-                                            name="out_time" type="text" value="" id="m_out_time">
+                                            name="out_time" type="text" value="" id="m_out_times">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="in_time">Office in time</label>
                                         <input class="form-control  timepicker clear-2" placeholder="Office in time"
-                                            name="in_time" type="text" value="" id="m_in_time">
+                                            name="in_time" type="text" value="" id="m_in_times">
                                     </div>
                                 </div>
                             </div>
@@ -77,7 +75,7 @@ hr {
                                     <div class="form-group">
                                         <label for="summary">Reason</label>
                                         <textarea class="form-control" placeholder="reason" name="reason" cols="30"
-                                            rows="3" id="m_reason"></textarea>
+                                            rows="3" id="m_reasoness"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -201,79 +199,53 @@ hr {
                                 <div class="dropdown">
                                     <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
                                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                        Action
-                                    </button>
+                                        aria-expanded="false"> Action </button>
                                     <div class="dropdown-menu"
                                         style=" min-width: 134px !important;border-radius:0;line-height: 1.7;"
                                         aria-labelledby="dropdownMenuButton">
-                                        <?php 
-                  if($session['role_id'] != 3){ ?>
-                        <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)"
-                                            class="text-dark collapsed" data-toggle="collapse"
-                                            href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a>
-                                        <hr>
-                                        <a style="padding-left:5px;"
-                                            href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
-                                        <?php if($row->status==1){?>
-                                        <hr> <a style="padding-left:5px;" href="#"
-                                            onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">View
-                                            TA/DA</a>
-                                        <?php } else{ if($row->status ==2){?>
-                                        <hr><a class='dropdown-item' style='padding-left:5px;'
-                                            href='#view_applied_report'
-                                            onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
-                                        <?php }
-                  else{ if($row->status ==3 ){?>
-                                        <hr> <a style="padding-left:5px;" href="#"
-                                            onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">
-                                            Modify TA/DA</a>
-                                        <hr><a class='dropdown-item' style='padding-left:5px;'
-                                            href='#view_applied_report'
-                                            onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
-                                        <?php }}
-              }} 
-                 else {  
-                        if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))){ ?>
-                                        <?php if( $row->status==3 ||$row->status==2){?>
-                                        <a style="padding-left:5px; pointer-events: none; "
-                                            onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed"
-                                            data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form"
-                                            aria-expanded="false">Edit</a>
-                                        <hr>
-                                        <a style="padding-left:5px; pointer-events: none;"
-                                            href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id);?>"
-                                            disable>Delete</a>
-                                        <?php } else{?>
-                                        <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)"
-                                            class="text-dark collapsed" data-toggle="collapse"
-                                            href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a>
-                                        <hr>
-                                        <a style="padding-left:5px;"
-                                            href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
-                                        <?php }?>
-                                        <?php if($row->status ==0) {?>
-                                        <hr> <a class="dropdown-item" style="padding-left:5px;" href="#"
-                                            onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply
-                                            for TA/DA</a>
-                                        <?php } 
-                                        else{?>
-                                        <hr><a class='dropdown-item' style='padding-left:5px;'
-                                            href='#view_applied_report'
-                                            onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
-                                        <?php }}
-                    else {  
-                           if($row->status ==0) {?>
-                            <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
-                            <?php } 
-                            else{?>
-                            <span class="dropdown-item" style="padding-left:5px;">No Action Need</span>
-                            <?php }
-                        }
-                    if($row->status ==1 ){?>
-                        <hr> <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Edit TA/DA </a>
-                    <?php }   
-                }?>
+                                        <?php if($session['role_id'] != 3){ ?>
+                                            <hr>
+                                            <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a>
+                                            <hr>
+                                            <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
+
+                                            <?php if($row->status == 1){?>                                            
+                                                <hr>
+                                                <a class='dropdown-item' style='padding-left:5px;' href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'> View </a>
+                                                <hr> 
+                                                <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Approved TA/DA</a>
+                                            <?php } else if($row->status == 2){?>
+                                                <hr>
+                                                <a class='dropdown-item' style='padding-left:5px;' href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'> View </a>
+                                                <hr>
+                                                <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)"> Paid/Reject TA/DA </a>
+                                            <?php } else { ?>
+                                                <br>
+                                                <a class='dropdown-item' style='padding-left:5px;' href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'> View </a>
+                                            <?php } ?>
+
+                                        <?php } else { ?>
+
+                                            <?php if($row->status != 0 && $row->status != null ){?> 
+                                                <a class='dropdown-item' style='padding-left:5px;' href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
+                                            <?php } ?> 
+
+                                            <?php  if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))){ ?>
+                                                <?php if($row->status == 1 ){?>
+                                                    <a style="padding-left:5px; pointer-events: none;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a>
+                                                    <hr>
+                                                    <a style="padding-left:5px; pointer-events: none;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id);?>" disable>Delete</a>
+                                                <?php } ?>
+                                            <?php } else { ?> 
+                                                <?php if($row->status == 0) {?>
+                                                    <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
+                                                <?php } else {?>
+                                                    <hr>
+                                                    <span class="dropdown-item" style="padding-left:5px;">No Action Need</span>
+                                                <?php } ?>
+                                            <?php } ?>
+
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </td>
@@ -302,18 +274,18 @@ function edit(id) {
         cache: false,
         success: function(data) {
             response = data[0]
-            emp = data[1][0];
-            var a = response[0].out_time;
-            var b = response[0].in_time;
+            emp = data[1];
+            var a = response.out_time;
+            var b = response.in_time;
             var time = a.slice(10, 16);
             var intime = b.slice(10, 16);
-            $("#id").val(response[0].id);
-            $("#id").val(response[0].id);
-            $("#move_date").val(response[0].date);
-            $("#m_in_time").val(intime);
-            $("#m_out_time").val(time);
-            $("#emp").html(emp['first_name'] + ' ' + emp['last_name']);
-            $("#m_reason").val(response[0].reason);
+
+            $("#idesss").val(response.id);
+            $("#move_date").val(response.date);
+            $("#m_in_times").val(intime);
+            $("#m_out_times").val(time);
+            $("#employeeeees").html(emp.first_name + ' ' + emp.last_name);
+            $("#m_reasoness").val(response.reason);
         }
 
     });
@@ -322,12 +294,13 @@ function edit(id) {
 
 $(document).ready(function() {
     $('.clockpicker').clockpicker();
-    var input = $('.timepicker').clockpicker({
+        var input = $('.timepicker').clockpicker({
         placement: 'bottom',
         align: 'left',
         autoclose: true,
         'default': 'now'
     });
+
     $("#move_register").on('submit', function(e) {
         var url = "<?php echo base_url('admin/attendance/create_move_register'); ?>";
         e.preventDefault();

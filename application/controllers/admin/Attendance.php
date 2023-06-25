@@ -251,10 +251,9 @@ class Attendance extends MY_Controller {
 		// dd($id);
 
 		if($id != null){
-		    $data = $this->db->where('id',$id)->get('xin_employee_move_register')->result();
-		    $emplyeedata = $this->db->where('user_id',$data[0]->employee_id)->get('xin_employees')->result();
+		    $data = $this->db->where('id',$id)->get('xin_employee_move_register')->row();
+		    $emplyeedata = $this->db->where('user_id',$data->employee_id)->get('xin_employees')->row();
 			$array=[$data,$emplyeedata];
-            
 			echo json_encode( $array);
 			exit;	   
 		}
@@ -284,7 +283,6 @@ class Attendance extends MY_Controller {
 
     public function create_move_register()
     {	$session = $this->session->userdata('username');
-		dd($_POST);
      	if (!empty($_POST)) {
 			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
 			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
