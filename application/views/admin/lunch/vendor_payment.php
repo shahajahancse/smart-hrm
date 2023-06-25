@@ -123,6 +123,7 @@
         <div class="col-md-12">
             <div class="form-group col-md-3">
                 <p class="levels">From Date</p>
+               
                 <input type="date" class="form-control" id="from_date"
                     value="<?= isset($result->to_date) ? $result->to_date : '0' ?>" style="border-radius: 6px;">
             </div>
@@ -189,8 +190,13 @@
             <tr>
                 <td><?php echo $key+1 ?></td>
                 <td><?php echo $row->previous_due; ?></td>
-                <td><?php echo $row->from_date; ?></td>
-                <td><?php echo $row->to_date; ?></td>
+                <?php   
+                $convertedDate = date('d-m-Y', strtotime($row->from_date));
+                $convertedDate2 = date('d-m-Y', strtotime($row->to_date));
+                
+                ?>
+                <td><?php echo $convertedDate  ?></td>
+                <td><?php echo  $convertedDate2 ?></td>
                 <td><?php echo $row->total_meal; ?></td>
                 <td><?php echo $row->pay_amount; ?></td>
                 <td><?php echo $row->net_payment; ?></td>
