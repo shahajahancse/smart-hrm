@@ -126,13 +126,18 @@
                            $t_pay_amount=0;
                            $t_net_amount=0;
                            $t_paid_amount=0;
+                           $st_pv=0;
    
                       ?>
                     <?php $i = 1; foreach ($values as $row): ?>
                         <tbody>
                             <tr>
+                                  <?php if($i==1){
+                                                $st_pv=$row->previous_due;
+                                       } ?>
                                 <td><?php echo $i++; ?></td>
                                    <?php $convert_date=date('d-m-Y', strtotime($row->date)) ?>
+                                   
                                 
                                 <td><?php echo $convert_date ?></td>
                                     <?php   $dateStr = $row->date;
@@ -163,18 +168,11 @@
                                 
                                 
                             </tr>
-                            <tr>
+                           
                             <?php endforeach; ?>
-                            <td colspan="5" style="text-align: center;"><strong>Total</strong></td>
-                                <td style="text-align: center;"><strong><?= $total_meal ?></strong></td>
-                                <td style="text-align: center;"><strong><?=  $t_amount?></strong></td>
-                                <td style="text-align: center;"></td>
-                                <td style="text-align: center;"><strong><?= $t_net_amount ?></strong></td>
-                                <td style="text-align: center;"><strong><?= $t_paid_amount ?></strong></td>
-                                <td style="text-align: center;"><strong><?= $t_net_amount-$t_paid_amount ?></strong></td>
-                                <td></td>
-                            </tr>
+                            
                         </tbody>
+                        
                    
                 <?php else: ?>
                     <tbody>
@@ -186,6 +184,32 @@
 
             
 	      </table>
+          <br>
+          <br>
+          <table class="table table-striped table-responsive  table-bordered table-sm">
+                        <tr >
+                            <td style="text-align:center; font-weight: bold">Total Meals</td>
+                            <td style="text-align:center; font-weight: bold">Total Amount</td>
+                            <td style="text-align:center; font-weight: bold">Paid Amount</td>
+                            <td style="text-align:center; font-weight: bold">Due</td>
+                            <td style="text-align:center;font-weight: bold">Previous Due</td>
+                            <td style="text-align:center; font-weight: bold">Total Due</td>
+                        
+                        </tr>
+                       
+                        <tr>
+                            
+                                <td style="text-align: center;"><strong><?= $total_meal ?></strong></td>
+                                <td style="text-align: center;"><strong><?=  $t_amount?></strong></td>
+                                <td style="text-align: center;"><strong><?= $t_paid_amount ?></strong></td>
+                                <td style="text-align: center;"><strong><?= $t_amount- $t_paid_amount ?></strong></td>
+                                <td style="text-align: center;"><strong><?=  $st_pv ?></strong></td>
+                                <?php $_due=$t_amount- $t_paid_amount ?>
+                                <td style="text-align: center;"><strong><?= $_due +$st_pv ?></strong></td>
+                                
+                            </tr>
+                    </table>
+          
 	    </div>
 	  </div>
   </div>

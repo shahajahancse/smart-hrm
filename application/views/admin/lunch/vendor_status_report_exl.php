@@ -70,12 +70,15 @@ header('Cache-Control: max-age=0'); //no cache
                                 $t_pay_amount=0;
                                 $t_net_amount=0;
                                 $t_paid_amount=0;
-        
+                                $st_pv=0;
                         ?>
                     
                     <?php $i = 1; foreach ($values as $row): ?>
                         <tbody>
                             <tr>
+                                <?php if($i==1){
+                                                    $st_pv=$row->previous_due;
+                                        } ?>
                             <td><?php echo $i++; ?></td>
                                 <td><?php echo $row->date ?></td>
                                     <?php   $dateStr = $row->date;
@@ -104,16 +107,29 @@ header('Cache-Control: max-age=0'); //no cache
                                 <td><?php echo $row->Remarks ?></td>
                             </tr>
                             <?php endforeach; ?>
-                            <tr>
-                                    <td colspan="5" style="text-align: center;"><strong>Total</strong></td>
-                                        <td style="text-align: center;"><strong><?= $total_meal ?></strong></td>
-                                           <td style="text-align: center;"><strong><?=  $t_amount?></strong></td>
-                                        <td style="text-align: center;"></td>
-                                        <td style="text-align: center;"><strong><?= $t_net_amount ?></strong></td>
-                                        <td style="text-align: center;"><strong><?= $t_paid_amount ?></strong></td>
-                                        <td style="text-align: center;"><strong><?= $t_net_amount-$t_paid_amount ?></strong></td>
-                                        <td></td>
-                            </tr>
+                               <tr></tr>
+                               <tr></tr>
+                                <tr >
+                                    <td colspan="2" style="text-align:center; font-weight: bold">Total Meals</td>
+                                    <td colspan="2" style="text-align:center; font-weight: bold">Total Amount</td>
+                                    <td colspan="2" style="text-align:center; font-weight: bold">Paid Amount</td>
+                                    <td colspan="2" style="text-align:center; font-weight: bold">Due</td>
+                                    <td colspan="2" style="text-align:center;font-weight: bold">Previous Due</td>
+                                    <td colspan="2" style="text-align:center; font-weight: bold">Total Due</td>
+                                
+                                </tr>
+                                
+                                <tr>
+                            
+                            <td colspan="2" style="text-align: center;"><strong><?= $total_meal ?></strong></td>
+                            <td colspan="2" style="text-align: center;"><strong><?=  $t_amount?></strong></td>
+                            <td colspan="2" style="text-align: center;"><strong><?= $t_paid_amount ?></strong></td>
+                            <td colspan="2"  style="text-align: center;"><strong><?= $t_amount- $t_paid_amount ?></strong></td>
+                            <td colspan="2" style="text-align: center;"><strong><?=  $st_pv ?></strong></td>
+                            <?php $_due=$t_amount- $t_paid_amount ?>
+                            <td colspan="2" style="text-align: center;"><strong><?= $_due +$st_pv ?></strong></td>
+                            
+                        </tr>
                         </tbody>
                     
                 <?php else: ?>
