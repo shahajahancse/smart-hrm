@@ -693,5 +693,33 @@ class Lunch extends MY_Controller {
 
 
     }
+    public function employee_list(){
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
+        $data['first_date']=$result->end_date;
+        $data['second_date']=$result->next_date;
+        $data['empdata'] = $this->db
+        ->select('lunch_payment.*, xin_employees.first_name, xin_employees.last_name, xin_designations.designation_name')
+        ->from('lunch_payment')
+        ->join('xin_employees', 'lunch_payment.emp_id = xin_employees.user_id')
+        ->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id')
+        ->where('lunch_payment.end_date', $result->end_date)
+        ->order_by('lunch_payment.id', 'desc')
+        ->get()
+        ->result();
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch';
+        $data['path_url'] = 'lunch';
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/emp_list", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+       
+    }
 }
 ?>
