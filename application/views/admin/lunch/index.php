@@ -56,6 +56,7 @@
                     <th style="text-align:center">Total Meal</th>
                     <th style="text-align:center">Emp.Cost</th>
                     <th style="text-align:center">G.Cost</th>
+                    <th style="text-align:center">Office.Cost</th>
                     <th style="text-align:center">Total Cost</th>
                     <th style="text-align:center">Remarks</th>
               
@@ -80,7 +81,8 @@
                     <td style="text-align:center"><?= $result->total_m ?></td>
                     <td style="text-align:center"><?= $result->emp_cost ?></td>
                     <td style="text-align:center"><?= $result->guest_cost ?></td>
-                    <td style="text-align:center"><?= $result->total_cost ?></td>
+                    <td style="text-align:center"><?= $result->emp_cost+ $result->guest_cost ?></td>
+                    <td style="text-align:center"><?= $result->total_cost * 2 ?></td>
                     <?php if ($result->bigcomment != null) : ?>
                     <td title="<?php echo $result->bigcomment; ?> " style="text-align:center">
                        <?php echo implode(' ', array_slice(explode(' ', $result->bigcomment), 0, 3)); ?>
