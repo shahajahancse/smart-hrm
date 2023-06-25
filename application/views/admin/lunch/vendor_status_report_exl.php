@@ -14,7 +14,7 @@ if ($statusC == 1) {
 
 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
 
-<body style="width:800px;">
+<body style="width:1000px;">
 <head>
     <style>
         th,td{
@@ -34,28 +34,45 @@ header('Cache-Control: max-age=0'); //no cache
 ?>
 
 
-<table width="900"width="900" align="center" height="auto" class="sal" border="1" cellspacing="0" cellpadding="2" style="font-size:12px; width:750px;">
-<tr width="900" align="center" style="height:100px;">
-    <td colspan="9" style="text-align:center;">
+<table width="1000" align="center" height="auto" class="sal" border="1" cellspacing="0" cellpadding="2" style="font-size:12px; width:750px;">
+<tr width="1000" align="center" style="height:100px;">
+    <td colspan="12" style="text-align:center;">
         <div style="font-size:30px; font-weight:bold; text-align:center;margin-top:3px;"><?php echo xin_company_info(1)->company_name; ?></div>
         <div style="font-size:20px; font-weight:bold; text-align:center;"><?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div> 
-        <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px"> <?php echo $statusText; ?> Report : <?php echo $first_date; ?> To  <?php echo $second_date; ?></div>
+        <?php $convert_f1=date('d-m-Y', strtotime($first_date));
+                    $convert_f2=date('d-m-Y', strtotime($second_date));
+            
+            ?>
+        <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px"> <?php echo $statusText; ?> Report : <?php echo $convert_f1; ?> To  <?php echo  $convert_f2; ?></div>
 
     </td>
 </tr>
 		<tr  style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px;">
-            <th style="background-color: #4CAF50;color: white;">Sl. No.</th>
+            <th style="background-color: #4CAF50;color: white;">Sl</th>
             <th style="background-color: #4CAF50;color: white;">Date</th>
             <th style="background-color: #4CAF50;color: white;">Days</th>
             <th style="background-color: #d5b2b2; color: black;">From Date</th>
             <th style="background-color: #d5b2b2; color: black;">To Date</th>
             <th style="background-color: #d5b2b2; color: black;">Total Meal</th>
-            <th style="background-color: #d5b2b2; color: black;">Total Amount</th>
+            <th style="background-color: #d5b2b2; color: black;">Amount</th>
+            <th style="background-color: #d5b2b2; color: black;">P.Due</th>
+            <th style="background-color: #d5b2b2; color: black;">Net.Amount</th>
+            <th style="background-color: #d5b2b2; color: black;">Paid Amount</th>
             <th style="background-color: #d5b2b2; color: black;" >Due</th>
+           
             <th style="background-color: #d5b2b2; color: black;">Remarks</th>
             
           </tr>
           <?php if (!empty($values)): ?>
+                       <?php    
+                                $total_meal=0;
+                                $t_amount=0;
+                                $t_pay_amount=0;
+                                $t_net_amount=0;
+                                $t_paid_amount=0;
+        
+                        ?>
+                    
                     <?php $i = 1; foreach ($values as $row): ?>
                         <tbody>
                             <tr>
@@ -64,17 +81,41 @@ header('Cache-Control: max-age=0'); //no cache
                                     <?php   $dateStr = $row->date;
                                             $date = strtotime($dateStr);
                                             $dayName = date("l", $date); 
+                                            $convert_date1=date('d-m-Y', strtotime($row->from_date));
+                                            $convert_date2=date('d-m-Y', strtotime($row->to_date));
                                     ?>
                                 <td><?php echo $dayName ?></td>
-                                <td><?php echo $row->from_date ?></td>
-                                <td><?php echo $row->to_date ?></td>
+                                <td><?php echo $convert_date1 ?></td>
+                                <td><?php echo  $convert_date2 ?></td>
+                                <?php 
+                                     
+                                        $total_meal=$total_meal+$row->total_meal;
+                                        $t_amount=$t_amount+$row->pay_amount;
+                                        $t_net_amount=$t_net_amount+$row->net_payment;
+                                        $t_paid_amount=$t_paid_amount+$row->paid_amount;
+
+                                 ?>
                                 <td><?php echo $row->total_meal ?></td>
                                 <td><?php echo $row->pay_amount ?></td>
+                                <td> <?php echo $row->previous_due ?> </td>
+                                <td><?php echo $row->net_payment ?></td>
+                                <td><?php echo $row->paid_amount ?> </td>
                                 <td><?php echo $row->due ?></td>
                                 <td><?php echo $row->Remarks ?></td>
                             </tr>
+                            <?php endforeach; ?>
+                            <tr>
+                                    <td colspan="5" style="text-align: center;"><strong>Total</strong></td>
+                                        <td style="text-align: center;"><strong><?= $total_meal ?></strong></td>
+                                        <td style="text-align: center;"><strong><?=  $t_amount?></strong></td>
+                                        <td style="text-align: center;"></td>
+                                        <td style="text-align: center;"><strong><?= $t_net_amount ?></strong></td>
+                                        <td style="text-align: center;"><strong><?= $t_paid_amount ?></strong></td>
+                                        <td style="text-align: center;"><strong><?= $t_net_amount-$t_paid_amount ?></strong></td>
+                                        <td></td>
+                            </tr>
                         </tbody>
-                    <?php endforeach; ?>
+                    
                 <?php else: ?>
                     <tbody>
                         <tr>

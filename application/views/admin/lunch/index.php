@@ -66,10 +66,13 @@
                 <?php foreach ($results as $key => $result) { ?>
                 <tr>
                     <td style="text-align:center"><?= $key + 1 ?></td>
-                    <td style="text-align:center"><?= $result->date ?></td>
+                    
                     <?php   $dateStr = $result->date;
                         $date = strtotime($dateStr);
-                        $dayName = date("l", $date); ?>
+                        $dayName = date("l", $date);
+                        $convertedDate = date('d-m-Y', strtotime($dateStr));
+                        ?>
+                    <td style="text-align:center"><?= $convertedDate ?></td>
 
                     <td style="text-align:center"> <?= $dayName?></td>
                     <td style="text-align:center"><?= $result->emp_m ?></td>

@@ -91,7 +91,14 @@
 	  <!-- <h5 class="box-title ti1">Daily Unpaid Report</h4> -->
       <h4 class="box-title  ti1">Daily  Vendor Report</h4>
         <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
-	  <p>Report date: <?php echo $first_date; ?> To <?php echo $second_date; ?> </p>
+       
+            <?php $convert_f1=date('d-m-Y', strtotime($first_date));
+                    $convert_f2=date('d-m-Y', strtotime($second_date));
+            
+            ?>
+        
+       
+	  <p>Report date: <?php echo $convert_f1; ?> To <?php echo $convert_f2; ?> </p>
   </div>
   
 
@@ -100,37 +107,75 @@
 	    <div class="box-datatable ">
 	      <table class="table table-striped table-responsive  table-bordered table-sm">
                                             <thead>
-                                <th>Sl. No.</th>
+                                <th>Sl</th>
                                 <th>Date</th>
                                 <th>Days</th>
                                 <th>From Date</th>
                                 <th>To Date</th>
                                 <th>Total Meal</th>
-                                <th>Total Amount</th>
+                                <th>Amount</th>
+                                <th>P.Due</th>
+                                <th>Net.Amount</th>
+                                <th>Paid Amount</th>
                                 <th>Due </th>
                                 <th>Remarks</th>
 	        </thead>
             <?php if (!empty($values)): ?>
+                     <?php $total_meal=0;
+                           $t_amount=0;
+                           $t_pay_amount=0;
+                           $t_net_amount=0;
+                           $t_paid_amount=0;
+   
+                      ?>
                     <?php $i = 1; foreach ($values as $row): ?>
                         <tbody>
                             <tr>
                                 <td><?php echo $i++; ?></td>
-                                <td><?php echo $row->date ?></td>
+                                   <?php $convert_date=date('d-m-Y', strtotime($row->date)) ?>
+                                
+                                <td><?php echo $convert_date ?></td>
                                     <?php   $dateStr = $row->date;
                                             $date = strtotime($dateStr);
-                                            $dayName = date("l", $date); ?>
+                                            $dayName = date("l", $date); 
+                                            $convert_date1=date('d-m-Y', strtotime($row->from_date));
+                                            $convert_date2=date('d-m-Y', strtotime($row->to_date));
+                                            
+                                            ?>
                                 <td><?php echo $dayName ?></td>
-                                <td><?php echo $row->from_date ?></td>
-                                <td><?php echo $row->to_date ?></td>
+                                <td><?php echo $convert_date1 ?></td>
+                                <td><?php echo $convert_date2 ?></td>
+                                 <?php 
+                                     
+                                        $total_meal=$total_meal+$row->total_meal;
+                                        $t_amount=$t_amount+$row->pay_amount;
+                                        $t_net_amount=$t_net_amount+$row->net_payment;
+                                        $t_paid_amount=$t_paid_amount+$row->paid_amount;
+
+                                 ?>
                                 <td><?php echo $row->total_meal ?></td>
                                 <td><?php echo $row->pay_amount ?></td>
+                                <td> <?php echo $row->previous_due ?> </td>
+                                <td><?php echo $row->net_payment ?></td>
+                                <td><?php echo $row->paid_amount ?> </td>
                                 <td><?php echo $row->due ?></td>
                                 <td><?php echo $row->Remarks ?></td>
                                 
                                 
                             </tr>
+                            <tr>
+                            <?php endforeach; ?>
+                            <td colspan="5" style="text-align: center;"><strong>Total</strong></td>
+                                <td style="text-align: center;"><strong><?= $total_meal ?></strong></td>
+                                <td style="text-align: center;"><strong><?=  $t_amount?></strong></td>
+                                <td style="text-align: center;"></td>
+                                <td style="text-align: center;"><strong><?= $t_net_amount ?></strong></td>
+                                <td style="text-align: center;"><strong><?= $t_paid_amount ?></strong></td>
+                                <td style="text-align: center;"><strong><?= $t_net_amount-$t_paid_amount ?></strong></td>
+                                <td></td>
+                            </tr>
                         </tbody>
-                    <?php endforeach; ?>
+                   
                 <?php else: ?>
                     <tbody>
                         <tr>

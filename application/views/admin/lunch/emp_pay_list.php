@@ -143,15 +143,9 @@ input[type="email"] {
         <!-- <div class="col-md-12" style="display: flex;"> -->
         <div class="container col-md-5">
             <h4 style="display: inline-block;">Last Process:</h4>
-            <span
-                style="color: blue;"><?php echo isset($last_prement->from_date)? date('Y-m-d', strtotime($last_prement->from_date)):'';?></span>
-            to <span style="color: blue;">
-                <?php echo isset($last_prement->from_date)? date('Y-m-d', strtotime($last_prement->end_date)):'';?></span>
-<!-- 
-            <?php if (date('Y-m-d') == '2023-06-14' OR date('Y-m-d') == '2023-06-15') { ?>
-            <span>&nbsp;&nbsp;&nbsp; <a class="btn-primary" style="padding: 5px;"
-                    href="<?= base_url('admin/lunch/manual_lunch_entry'); ?>">Manual Entry</a></span>
-            <?php } ?> -->
+            <span style="color: blue;"><?php echo isset($last_prement->from_date)? date('d-m-Y', strtotime($last_prement->from_date)):'';?></span> 
+            to 
+            <span style="color: blue;"> <?php echo isset($last_prement->end_date)? date('d-m-Y', strtotime($last_prement->end_date)):'';?></span>
 
             <h2>Add Payment</h2>
             <select id="search-select">

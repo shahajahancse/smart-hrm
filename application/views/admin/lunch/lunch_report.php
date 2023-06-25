@@ -136,7 +136,7 @@
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(5)">Daily Inactive Lunch</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(2)">Monthly Report</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(3)">Continue Report</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(4)">Vendor Voucher</button>
+                    <!-- <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(4)">Vendor Voucher</button> -->
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2,1)">Previous Report</button>
 
 

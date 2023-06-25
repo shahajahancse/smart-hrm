@@ -61,7 +61,9 @@
             <div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
             <div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;">
                 <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
-            <div>Lunch Date: <?php echo $paySlipData[0]->date; ?></div>
+            <div>Lunch Date:
+                <?php  $convertedDate = date('d-m-Y', strtotime($paySlipData[0]->date)); ?>
+            <?php echo $convertedDate; ?></div>
             <div style="font-size:12px; font-weight:bold; text-align:center;"></div>
             <div style="font-size:18px; font-weight:bold; text-align:center;">Vendor Voucher</div>
 
