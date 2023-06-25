@@ -106,7 +106,11 @@
         <div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;">
             <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
         <div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;">Lunch Report of
-            <?= $first_date?> to <?= $second_date?> </div>
+           <?php $convertedDate1 = date('d-m-Y', strtotime($first_date)); 
+                 $convertedDate2 = date('d-m-Y', strtotime($second_date));
+           
+           ?>
+        <?= $convertedDate1?> to <?= $convertedDate2?> </div>
     </div>
     <div class="table-responsive" style="margin-top: 17px;">
         <table class="table table-bordered">
@@ -125,8 +129,8 @@
             </thead>
             <tbody>
                 <?php foreach ($lunch_data as $item) : ?>
-                <tr>
-                    <td><?php echo $item->date; ?></td>
+                <tr> <?php $convertedDate2 = date('d-m-Y', strtotime($item->date));  ?>
+                    <td><?php echo $convertedDate2 ; ?></td>
 
                     <td><?php echo $item->emp_m; ?></td>
                     <td><?php echo $item->guest_m; ?></td>

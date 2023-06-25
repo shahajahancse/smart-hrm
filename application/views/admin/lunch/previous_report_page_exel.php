@@ -13,19 +13,7 @@
     <body>
 
         <div class="container">
-            <a onclick="window.print()" class="btn btn-primary" style="float: right;margin-top: 26px;">Pritn</a>
-
-
-            <div class="export-button">
-                <form style="float: right;margin-top: 27px;margin-right: 5px;"
-                    action="<?php echo base_url();?>admin/Lunch/paymentreport" method="post">
-                    <input type="hidden" name="status" value="<?php echo $status; ?>"></input>
-                    <input type="hidden" name="excel" value="1"></input>
-                    <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;"
-                        alt="XLS Export">XLS Export</button>
-                </form>
-            </div>
-
+           
 
             <div style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px">
                 <?php echo xin_company_info(1)->company_name; ?></div>
@@ -33,8 +21,11 @@
             <div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;">
                 <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
             <div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;">Monthly Lunch Payment
-                Report of <?= isset($lunch_data[0]->from_date) ? $lunch_data[0]->from_date : ''; ?> to
-                <?= isset($lunch_data[0]->end_date) ? $lunch_data[0]->end_date : ''; ?> </div>
+                Report of 
+                 <?php  $convertedDate1 = date('d-m-Y', strtotime($lunch_data[0]->from_date));
+                    $convertedDate2 = date('d-m-Y', strtotime($lunch_data[0]->end_date)); ?>
+                <?= isset($lunch_data[0]->from_date) ? $convertedDate1  : ''; ?> to
+                <?= isset($lunch_data[0]->end_date) ? $convertedDate2 : ''; ?> </div>
         </div>
         <table class="table table-bordered table-hover table-striped">
             <thead style="text-align: center;">

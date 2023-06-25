@@ -578,7 +578,7 @@ class Lunch extends MY_Controller {
      
         $data["values"] = $this->Lunch_model->vendor_status_report($f1_date, $f2_date);
 
-    //    dd($data["values"]);
+    //   dd($data["values"]);
        
         $data['first_date'] = $first_date;
         $data['second_date'] = $second_date;
