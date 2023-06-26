@@ -339,7 +339,7 @@ class Lunch extends MY_Controller {
             $this->load->view('admin/lunch/lunch_report_view_adsent', $data); 
         }
     }
-    public function conempmeal(){
+    public function conempmeal($ex=null){
 
 
         $session = $this->session->userdata('username');
@@ -349,6 +349,7 @@ class Lunch extends MY_Controller {
         $first_date = $this->input->post('first_date');
         $second_date = $this->input->post('second_date');
         $sql = $this->input->post('sql');
+
         $status = $this->input->post('status');
         $emp_id = explode(',', trim($sql));
         $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
@@ -356,7 +357,12 @@ class Lunch extends MY_Controller {
         $data['second_date'] = $second_date;
         $data['emp_id'] = $emp_id;
         $data['status'] = $status;
+        $data['sql'] = $sql;
+        if($ex==1){
+            $this->load->view('admin/lunch/emp_con_report_ex', $data); 
+        }else{
         $this->load->view('admin/lunch/emp_con_report', $data); 
+        }
     }
 
     public function paymentreport($r=null){
