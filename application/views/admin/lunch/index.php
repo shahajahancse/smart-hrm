@@ -89,7 +89,7 @@
                    </td>
                  <?php else : ?>
                     <td style="text-align:center">
-                       <?php echo "No Comment" ?>
+                       <?php echo "...." ?>
                     </td>
                 <?php endif; ?>
                   

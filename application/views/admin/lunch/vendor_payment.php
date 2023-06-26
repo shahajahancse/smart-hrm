@@ -91,30 +91,30 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Payment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="float: left">Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"style="float: right">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="overflow: auto;">
+            <div class="modal-body" style="overflow: auto; padding:0px;">
                 <input type="hidden" id="rawid" value="">
                 <input type="hidden" id="prepaid" value="">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4" style="padding-top: 7px">
                     <label for="deu_amount">Deu Amount</label>
-                    <input type="number" class="form-control" id="deu_amount" placeholder="Amount" disabled>
+                    <input type="number" class="form-control" id="deu_amount" placeholder="Amount" style="border-radius: 5px" disabled >
                 </div>
-                <div class="form-group  col-md-6">
+                <div class="form-group  col-md-4" style="padding-top: 7px">
                     <label for="paid_amount">Amount</label>
-                    <input type="number" onchange=changpayment() class="form-control" id="paid_amount" placeholder="Amount">
+                    <input type="number" onchange=changpayment() class="form-control" id="paid_amount" placeholder="Amount" style="border-radius: 5px">
                 </div>
-                <div class="form-group  col-md-6" style="float: right;">
+                <div class="form-group  col-md-4" style="padding-top: 7px" >
                     <label for="present_deu">Deu</label>
-                    <input type="number" class="form-control" id="present_deu" placeholder="Amount" disabled>
+                    <input type="number" class="form-control" id="present_deu" placeholder="Amount" disabled style="border-radius: 5px">
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="mcloss" data-dismiss="modal">Close</button>
-                <button type="button" onclick="make_id_payment()" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary" id="mcloss" data-dismiss="modal" style="margin-right:3px;">Close</button>
+                <button type="button" onclick="make_id_payment()" class="btn btn-primary" style="margin-right:3px;">Submit</button>
             </div>
         </div>
     </div>
@@ -245,8 +245,11 @@
                 <td><?php echo $row->paid_amount; ?></td>
                 <td><?php echo $row->due; ?></td>
             
-             
-                <td style="text-align: center;" title="<?php echo $row->Remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->Remarks ), 0, 4)); ?></td>
+                <?php if($row->Remarks){  ?>
+                  <td style="text-align: center;" title="<?php echo $row->Remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->Remarks ), 0, 4)); ?></td>
+                 <?php }else{ ?>
+                    <td style="text-align: center;" > ...</td>
+                 <?php } ?>
                 <td>
                     <?=($row->status==0)? '<a data-toggle="modal" data-target="#make_payment" onclick="giveid('.$row->id.','.$row->due .','.$row->paid_amount.')" class="btn btn-primary">Paid</a>': 'Paid'?>
                 </td>

@@ -138,10 +138,10 @@ input[type="email"] {
 
 </div>
 
-<div class="container">
+<div class="container" style="padding: 0;">
     <div class="content" style="padding: 0;margin: 0;min-height: 147px;">
         <!-- <div class="col-md-12" style="display: flex;"> -->
-        <div class="container col-md-5">
+        <div class="container col-md-5" style="padding: 0;">
             <h4 style="display: inline-block;">Last Process:</h4>
             <span style="color: blue;"><?php echo isset($last_prement->from_date)? date('d-m-Y', strtotime($last_prement->from_date)):'';?></span> 
             to 
