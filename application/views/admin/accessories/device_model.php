@@ -36,7 +36,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
             <div class="col-md-4">
               <div class="form-group">
-                <label for="description">Model Short Name</label>
+                <label for="description">Description</label>
                 <input class="form-control" placeholder="description" name="details" type="text" value="<?php echo !empty($row->details)? $row->details:''; ?>">
               </div>
             </div>
@@ -53,7 +53,11 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             <div class="col-md-2">
               <div class="form-group"> &nbsp;
                 <label for="">&nbsp;</label><br />
+                <?php if(isset($row->id)==null){?>
                 <input type="submit" name="submit" class="btn btn-success" value="Add Model"/>
+                <?php }else{?>
+                <input type="submit" name="submit" class="btn btn-primary" value="Update Model"/>
+                <?php }?>
               </div>
             </div>
           </div>
@@ -63,15 +67,10 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 </div>
 
 <?php echo validation_errors(); ?>
-<?php if($this->session->flashdata('success')):?>
-    <div class="alert alert-success">
-    <?php echo $this->session->flashdata('success');?>
-    </div>
-<?php endif; ?> 
-
-<?php if($this->session->flashdata('warning')):?>
-    <div class="alert alert-warning">
-    <?php echo $this->session->flashdata('warning');?>
+<?php if($this->session->flashdata('msg')):?>
+    <div class="alert alert-success" style="width: 250px;">       
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <?php echo $this->session->flashdata('msg');?>
     </div>
 <?php endif; ?> 
 
@@ -101,7 +100,10 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
               <td><?= $row->model_name; ?></td>
               <td><?= $row->details; ?></td>
               <td><?= $row->status=='1'?"<span class='label label-success'>Active</span>":"<span class='label label-danger'>Inctive</span>"; ?></td>
-              <td><a class="btn btn-sm btn-info" href="<?= base_url('admin/accessories/device_model/'.$row->id);?>">Edit</a></td>
+              <td>
+                <a class="btn btn-sm btn-info" href="<?= base_url('admin/accessories/device_model/'.$row->id);?>">Edit</a>
+                <a class="btn btn-sm btn-danger" href="<?= base_url('admin/accessories/delete/'.$row->id.'/product_accessories_model'.'/device_model');?>" onclick="return confirm('Are you sure to delete!!!')">Delete</a>
+              </td>
             </tr>
           <?php } ?>
         </tbody>
