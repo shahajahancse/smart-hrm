@@ -149,9 +149,10 @@
                 </div>
                 <div class="tab-pane fade" id="continue" role="tabpanel" aria-labelledby="continue-tab"
                     style="margin-top: 30px;">
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="lunch_jobcard()">Lunch Report</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(2)">Monthly Report</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="lunch_jobcard()">Lunch Card</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(2)">Meal Register</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(3)">Continue Report</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="conempmeal()">Employee Meal</button>
                 </div>
             </div>
 
