@@ -304,15 +304,17 @@ class Lunch extends MY_Controller {
 
     }
 
-    public function lunch_reports(){
-
-
+    public function lunch_reports($elc=null){
+       
+        // dd($elc);
         $session = $this->session->userdata('username');
         if (empty($session)) {
             redirect('admin/');
         }
+       
         $first_date = $this->input->post('first_date');
         $second_date = $this->input->post('second_date');
+        // dd($first_date .'-'. $second_date);
         $sql = $this->input->post('sql');
         $status = $this->input->post('status');
         $emp_id = explode(',', trim($sql));
@@ -325,8 +327,12 @@ class Lunch extends MY_Controller {
         $data['lunch_details_inactive']  = $this->Lunch_model->get_lunch_details_inactive($first_date,$second_date,$emp_id);
     
         $data['first_date'] = $first_date;
-        $data['second_date'] = $first_date;
+        $data['second_date'] = $second_date;
         $data['emp_id'] = $emp_id;
+        if($elc==1){
+            // dd($data['lunch_data'] );
+            $this->load->view('admin/lunch/lunch_report_cont_exl', $data); 
+        }else{
         if($status==1){
             $this->load->view('admin/lunch/lunch_report_view', $data); 
         }elseif($status==2){
@@ -338,10 +344,10 @@ class Lunch extends MY_Controller {
         }elseif($status==5){
             $this->load->view('admin/lunch/lunch_report_view_adsent', $data); 
         }
-    }
+    }      
+}
+
     public function conempmeal($ex=null){
-
-
         $session = $this->session->userdata('username');
         if (empty($session)) {
             redirect('admin/');
@@ -361,7 +367,7 @@ class Lunch extends MY_Controller {
         if($ex==1){
             $this->load->view('admin/lunch/emp_con_report_ex', $data); 
         }else{
-        $this->load->view('admin/lunch/emp_con_report', $data); 
+            $this->load->view('admin/lunch/emp_con_report', $data); 
         }
     }
 
