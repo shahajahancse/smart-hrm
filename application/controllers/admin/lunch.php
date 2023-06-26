@@ -188,7 +188,7 @@ class Lunch extends MY_Controller {
         } else {
             redirect('admin/');
         }
-    // }
+ 
  
     }
 
@@ -339,10 +339,33 @@ class Lunch extends MY_Controller {
             $this->load->view('admin/lunch/lunch_report_view_adsent', $data); 
         }
     }
+    public function conempmeal($ex=null){
+
+
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $sql = $this->input->post('sql');
+
+        $status = $this->input->post('status');
+        $emp_id = explode(',', trim($sql));
+        $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $data['emp_id'] = $emp_id;
+        $data['status'] = $status;
+        $data['sql'] = $sql;
+        if($ex==1){
+            $this->load->view('admin/lunch/emp_con_report_ex', $data); 
+        }else{
+        $this->load->view('admin/lunch/emp_con_report', $data); 
+        }
+    }
 
     public function paymentreport($r=null){
-
-
         $session = $this->session->userdata('username');
         if (empty($session)) {
             redirect('admin/');
@@ -352,6 +375,7 @@ class Lunch extends MY_Controller {
         $data['status'] = $status;
         $data['lunch_data'] = $this->Lunch_model->paymentreport($status);
         $data['r'] = $r;
+
         if($r==1){
             
             if($excel==1){
@@ -495,6 +519,7 @@ class Lunch extends MY_Controller {
         $data = array(
             'pay_amount' => $p_month_pay,
             'status' => $status,
+            'updated_at' => date('Y-m-d H:i:s')
         );
         $this->db->where('end_date', $pay_month);
         $this->db->where('emp_id', $empid);
@@ -575,7 +600,6 @@ class Lunch extends MY_Controller {
         };
     }
 public function make_id_payment(){
-
     $dueAmount=$this->input->post('deu_amount');
     $pay_Amount=$this->input->post('amount');
     $id=$this->input->post('rawid');
@@ -595,6 +619,7 @@ public function make_id_payment(){
         'paid_amount' => $paid_amo,
         'due' => $present_deu,
         'status' => $status,
+        'updated_at' => date('Y-m-d H:i:s'),
     );
     $this->db->where('id', $id);
     if($this->db->update('lunch_payment_vendor', $data)){

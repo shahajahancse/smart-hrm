@@ -127,6 +127,17 @@
                 </tr>
             </thead>
             <tbody>
+                <?php 
+                    $total_emp_meal = 0;
+                    $total_guest_meal = 0;
+                    $total_meal = 0;
+                    $total_empoloyee_cost = 0;
+                    $total_guest_cost = 0;
+                    $total_cost = 0;
+                    
+                
+                
+                ?>
                 <?php foreach ($lunch_data as $item) : ?>
                 <tr> <?php $convertedDate2 = date('d-m-Y', strtotime($item->date));  ?>
                     <td><?php echo $convertedDate2 ; ?></td>
@@ -134,6 +145,16 @@
                             $dateStr = $item->date;
                             $date = strtotime($dateStr);
                             $dayName = date("l", $date);
+
+                            $total_emp_meal += $item->emp_m;
+                            $total_guest_meal += $item->guest_m;
+                            $total_meal += $item->total_m;
+                            $total_empoloyee_cost += $item->emp_cost;
+                            $total_guest_cost += $item->guest_cost;
+                            $total_cost += $item->total_cost;
+
+
+                
                       ?>
                     <td><?=   $dayName ?> </td>
                     <td><?php echo $item->emp_m; ?></td>
@@ -144,7 +165,19 @@
                     <td><?php echo $item->total_cost; ?></td>
                 </tr>
                 <?php endforeach; ?>
+               
             </tbody>
+            <tfoot style="text-align: center;font-weight: bold;">
+            <tr>
+                <td colspan="2">Total</td>
+                <td><?=  $total_emp_meal ?></td>
+                <td><?=  $total_guest_meal ?></td>
+                <td><?=  $total_meal  ?></td>
+                <td><?=  $total_empoloyee_cost?></td>
+                <td><?=   $total_guest_cost  ?></td>
+                <td ><?=  $total_cost ?></td>
+            </tr>
+        </tfoot>
         </table>
     </div>
     </div>

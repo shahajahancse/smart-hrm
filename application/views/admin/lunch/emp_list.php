@@ -8,11 +8,11 @@
     <tr>
       <th>SL</th>
       <th>Name</th>
-      <th>D.Name</th>
-      <th>P.Meal</th>
-      <th>P.Amount</th>
-      <th>T.Meal</th>
-      <th>T.Amount</th>
+      <th>Designation</th>
+      <th>Previous.M</th>
+      <th>Previous.A</th>
+      <th>Take.M</th>
+      <th>Take.A</th>
       <th>B.Meal</th>
       <th>B.Amount</th>
       <th>Status</th>
@@ -38,10 +38,11 @@
     <tr>
         <td><?= $key+1 ?></td>
         <td>
-  <h5  style="cursor: pointer;" data-firstdate="<?= $first_date ?>" data-secenddate="<?= $second_date ?>" data-empid="<?= $data->emp_id ?>">
-    <?= $data->first_name ?> <?= $data->last_name ?>
-  </h5>
-</td>       <td><?= $data->designation_name ?></td>
+          <h5  style="cursor: pointer; color: blue" data-firstdate="<?= $first_date ?>" data-secenddate="<?= $second_date ?>" data-empid="<?= $data->emp_id ?>">
+            <?= $data->first_name ?> <?= $data->last_name ?>
+          </h5>
+        </td>      
+        <td><?= $data->designation_name ?></td>
         <td><?= $data->pay_amount/45?></td>
         <td><?= $data->pay_amount?></td>
       
