@@ -326,6 +326,7 @@ class Lunch_model extends CI_Model {
         $this->db->select('*');
         $this->db->where('date >=', $first_date);
         $this->db->where('date <=', $second_date);
+        $this->db->order_by('id', 'desc');
         $query = $this->db->get('lunch_payment_vendor');
         $data = $query->result();
          
