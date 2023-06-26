@@ -23,89 +23,170 @@
     <span style="justify-content: center;display: flex;">Lunch Report of <?= $first_date?> to <?= $second_date?></span>
 
     <div style="border: 1px solid black;padding: 0px;margin: 16px;">
-  <table class="table table-hover table-striped" id="myTable" >
-    <thead>
-        <tr>
-            <th>SL</th>
-            <th>Name</th>
-            <th>Designation</th>
-            <th>Active.M</th>
-            <th>Inactive.M</th>
-            <th>Employee.C</th>
-            <th>Office.C</th>
-            <th>T.Amount</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-         $grand_active_meal = 0;
-         $grand_inactive_meal  = 0;
-         $grand_total_emp_cost  = 0;
-         $grand_total_offic_cost   = 0;
-         $grand_total_cost    = 0;
-        ?>
-        
-        <?php foreach ($all_employees as $key=>$employee): ?>
-        <tr>
-            <td><?= $key+1 ?></td>
-            <td><?= $employee->first_name ?> <?= $employee->last_name ?></td>
-            <td><?= $employee->designation_name?></td>
-            <?php     
-                    $this->load->model("Lunch_model"); 
-            	$emp_data = $this->Lunch_model->get_data_date_wise($first_date,$second_date, $employee->user_id);
-                $active_meal = 0;
-                $inactive_meal  = 0;
-                $total_emp_cost  = 0;
-                $total_offic_cost   = 0;
-                $total_cost    = 0;
+<?php if($status==1){?>
 
-                foreach ($emp_data['emp_data'] as $key => $row) {
-					if($row->meal_amount>0){
-						$active_meal+=$row->meal_amount;
-					}else{
-						$inactive_meal+=1;
-					};
-                    $total_emp_cost+=$row->meal_amount*45;
-                    $total_offic_cost+=$row->meal_amount*45;
-                    $total_cost+=$row->meal_amount*90;
-
-
-
-
-
-
-                }
-
-            
+    
+    <table class="table table-hover table-striped" id="myTable" >
+        <thead>
+            <tr>
+                <th>SL</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Active.M</th>
+                <th>Inactive.M</th>
+                <th>Employee.C</th>
+                <th>Office.C</th>
+                <th>T.Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $grand_active_meal = 0;
+            $grand_inactive_meal  = 0;
+            $grand_total_emp_cost  = 0;
+            $grand_total_offic_cost   = 0;
+            $grand_total_cost    = 0;
             ?>
-            <td><?= $active_meal ?></td>
-            <td><?= $inactive_meal ?></td>
-            <td><?= $total_emp_cost ?></td>
-            <td><?= $total_offic_cost ?></td>
-            <td><?= $total_cost ?></td> 
-        </tr>
-        <?php 
-            $grand_active_meal += $active_meal;
-            $grand_inactive_meal += $inactive_meal;
-            $grand_total_emp_cost  += $total_emp_cost;
-            $grand_total_offic_cost   += $total_offic_cost;
-            $grand_total_cost    += $total_cost;
-        ?>
-        <?php endforeach; ?>
-     
+            
+            <?php foreach ($all_employees as $key=>$employee): ?>
+            <tr>
+                <td><?= $key+1 ?></td>
+                <td><?= $employee->first_name ?> <?= $employee->last_name ?></td>
+                <td><?= $employee->designation_name?></td>
+                <?php     
+                        $this->load->model("Lunch_model"); 
+                    $emp_data = $this->Lunch_model->get_data_date_wise($first_date,$second_date, $employee->user_id);
+                    $active_meal = 0;
+                    $inactive_meal  = 0;
+                    $total_emp_cost  = 0;
+                    $total_offic_cost   = 0;
+                    $total_cost    = 0;
 
-    </tbody>
-    <tfoot>
-        <tr>
-            <td colspan=3 style="text-align: center;font-weight: bold;" >Total</td>
-            <td><?=  $grand_active_meal?></td>
-            <td><?=  $grand_inactive_meal?></td>
-            <td><?=  $grand_total_emp_cost?></td>
-            <td><?=  $grand_total_offic_cost?></td>
-            <td><?=  $grand_total_cost?></td>
-        </tr>
-    </tfoot>
-</table>
+                    foreach ($emp_data['emp_data'] as $key => $row) {
+                        if($row->meal_amount>0){
+                            $active_meal+=$row->meal_amount;
+                        }else{
+                            $inactive_meal+=1;
+                        };
+                        $total_emp_cost+=$row->meal_amount*45;
+                        $total_offic_cost+=$row->meal_amount*45;
+                        $total_cost+=$row->meal_amount*90;
+
+
+
+
+
+
+                    }
+
+                
+                ?>
+                <td><?= $active_meal ?></td>
+                <td><?= $inactive_meal ?></td>
+                <td><?= $total_emp_cost ?></td>
+                <td><?= $total_offic_cost ?></td>
+                <td><?= $total_cost ?></td> 
+            </tr>
+            <?php 
+                $grand_active_meal += $active_meal;
+                $grand_inactive_meal += $inactive_meal;
+                $grand_total_emp_cost  += $total_emp_cost;
+                $grand_total_offic_cost   += $total_offic_cost;
+                $grand_total_cost    += $total_cost;
+            ?>
+            <?php endforeach; ?>
+        
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan=3 style="text-align: center;font-weight: bold;" >Total</td>
+                <td><?=  $grand_active_meal?></td>
+                <td><?=  $grand_inactive_meal?></td>
+                <td><?=  $grand_total_emp_cost?></td>
+                <td><?=  $grand_total_offic_cost?></td>
+                <td><?=  $grand_total_cost?></td>
+            </tr>
+        </tfoot>
+    </table>
+<?php }else{?>
+
+    <table class="table table-hover table-striped" id="myTable" >
+        <thead>
+            <tr>
+                <th>SL</th>
+                <th>Name</th>
+                <th>Active.M</th>
+                <th>T.Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $grand_active_meal = 0;
+            $grand_inactive_meal  = 0;
+            $grand_total_emp_cost  = 0;
+            $grand_total_offic_cost   = 0;
+            $grand_total_cost    = 0;
+            ?>
+            
+            <?php foreach ($all_employees as $key=>$employee): ?>
+            <tr>
+                <td><?= $key+1 ?></td>
+                <td>Gest</td>
+       
+                <?php     
+                        $this->load->model("Lunch_model"); 
+                    $emp_data = $this->Lunch_model->get_data_date_wise($first_date,$second_date, $employee->user_id);
+                    $active_meal = 0;
+                    $inactive_meal  = 0;
+                    $total_emp_cost  = 0;
+                    $total_offic_cost   = 0;
+                    $total_cost    = 0;
+
+                    foreach ($emp_data['emp_data'] as $key => $row) {
+                        if($row->meal_amount>0){
+                            $active_meal+=$row->meal_amount;
+                        }else{
+                            $inactive_meal+=1;
+                        };
+                        $total_emp_cost+=$row->meal_amount*45;
+                        $total_offic_cost+=$row->meal_amount*45;
+                        $total_cost+=$row->meal_amount*90;
+
+
+
+
+
+
+                    }
+
+                
+                ?>
+                <td><?= $active_meal ?></td>
+                <td><?= $total_cost ?></td> 
+            </tr>
+            <?php 
+                $grand_active_meal += $active_meal;
+                $grand_inactive_meal += $inactive_meal;
+                $grand_total_emp_cost  += $total_emp_cost;
+                $grand_total_offic_cost   += $total_offic_cost;
+                $grand_total_cost    += $total_cost;
+            ?>
+            <?php endforeach; ?>
+        
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan=2 style="text-align: center;font-weight: bold;" >Total</td>
+                <td><?=  $grand_active_meal?></td>
+                <td><?=  $grand_total_cost?></td>
+            </tr>
+        </tfoot>
+    </table>
+
+
+    <?php } ?>
 </div>
 
 
