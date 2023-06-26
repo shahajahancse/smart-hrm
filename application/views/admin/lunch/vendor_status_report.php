@@ -119,6 +119,7 @@
                                 <th>Paid Amount</th>
                                 <th>Due </th>
                                 <th>Remarks</th>
+                                <th>Status</th>
 	        </thead>
             <?php if (!empty($values)): ?>
                      <?php $total_meal=0;
@@ -166,7 +167,7 @@
                                 <td><?php echo $row->due ?></td>
                                 <td style="text-align: center;" title="<?php echo $row->Remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->Remarks ), 0, 4)); ?></td>
         
-                                <!-- <td><?php echo $row->Remarks ?></td> -->
+                                <td><?= $row->status != 1 ? 'unpaid' : 'paid' ?></td>
                                 
                                 
                             </tr>

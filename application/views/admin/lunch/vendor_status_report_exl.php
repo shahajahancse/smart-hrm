@@ -36,7 +36,7 @@ header('Cache-Control: max-age=0'); //no cache
 
 <table width="1000" align="center" height="auto" class="sal" border="1" cellspacing="0" cellpadding="2" style="font-size:12px; width:750px;">
 <tr width="1000" align="center" style="height:100px;">
-    <td colspan="12" style="text-align:center;">
+    <td colspan="13" style="text-align:center;">
         <div style="font-size:30px; font-weight:bold; text-align:center;margin-top:3px;"><?php echo xin_company_info(1)->company_name; ?></div>
         <div style="font-size:20px; font-weight:bold; text-align:center;"><?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div> 
         <?php $convert_f1=date('d-m-Y', strtotime($first_date));
@@ -61,6 +61,7 @@ header('Cache-Control: max-age=0'); //no cache
             <th style="background-color: #d5b2b2; color: black;" >Due</th>
            
             <th style="background-color: #d5b2b2; color: black;">Remarks</th>
+            <th style="background-color: #d5b2b2; color: black;">Status</th>
             
           </tr>
           <?php if (!empty($values)): ?>
@@ -105,12 +106,13 @@ header('Cache-Control: max-age=0'); //no cache
                                 <td><?php echo $row->paid_amount ?> </td>
                                 <td><?php echo $row->due ?></td>
                                 <td><?php echo $row->Remarks ?></td>
+                                <td><?= $row->status != 1 ? 'unpaid' : 'paid' ?></td>
                             </tr>
                             <?php endforeach; ?>
                                <tr></tr>
                                <tr></tr>
                                 <tr >
-                                    <td colspan="2" style="text-align:center; font-weight: bold">Total Meals</td>
+                                    <td colspan="3" style="text-align:center; font-weight: bold">Total Meals</td>
                                     <td colspan="2" style="text-align:center; font-weight: bold">Total Amount</td>
                                     <td colspan="2" style="text-align:center; font-weight: bold">Paid Amount</td>
                                     <td colspan="2" style="text-align:center; font-weight: bold">Due</td>
@@ -121,7 +123,7 @@ header('Cache-Control: max-age=0'); //no cache
                                 
                                 <tr>
                             
-                            <td colspan="2" style="text-align: center;"><strong><?= $total_meal ?></strong></td>
+                            <td colspan="3" style="text-align: center;"><strong><?= $total_meal ?></strong></td>
                             <td colspan="2" style="text-align: center;"><strong><?=  $t_amount?></strong></td>
                             <td colspan="2" style="text-align: center;"><strong><?= $t_paid_amount ?></strong></td>
                             <td colspan="2"  style="text-align: center;"><strong><?= $t_amount- $t_paid_amount ?></strong></td>
