@@ -1,4 +1,5 @@
 <?php 
+// dd($row);
 $session = $this->session->userdata('username');
 $eid = $this->uri->segment(4);
 $get_animate = $this->Xin_model->get_content_animate();
@@ -61,7 +62,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             <div class="col-md-3" >
               <div class="form-group">
                 <label for="description">Image</label>
-                <input class="form-control" name="image" type="file" value="<?php echo isset($row->image)? $row->image:''; ?>">
+                <input class="form-control" name="image" type="file" value="<?php echo (isset($row->image))? $row->image:''; ?>">
               </div>
             </div>     
 

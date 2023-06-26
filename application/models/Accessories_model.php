@@ -34,7 +34,7 @@ public function get_cat_model_info($id=null){
 
 
 public function get_product_reports_info($id=null,$status=null,$category=null){
-    // dd($category);
+    // dd($id);
 
     $this->db->select(' 
                         product_accessories.*,
@@ -53,10 +53,11 @@ public function get_product_reports_info($id=null,$status=null,$category=null){
     $this->db->join('xin_employees','product_accessories.user_id                  = xin_employees.user_id','left');
 
     if($id !=null){
-        $this->db->where('product_accessories.id',$id);
+        $this->db->where('product_accessories.cat_id',$id);
         $data=$this->db->get()->row();
     } 
     else if($status !=null && $category!=null){
+        dd($status.' '.$categorys);
         $this->db->where('product_accessories.status',$status);
         $this->db->where('product_accessories.cat_id',$category);
         // $this->db->group_by('product_accessories.cat_id');

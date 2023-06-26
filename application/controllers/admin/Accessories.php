@@ -202,7 +202,8 @@ public function item_add($id = null){
         );    
 
         if ($hid = $this->input->post('hidden_id')) {
-            $this->db->where('id', $hid)->update('product_accessories', $form_data);
+            $this->db->where('cat_id', $hid)->update('product_accessories', $form_data);
+            // dd($form_data);
             $this->session->set_flashdata('success', 'Successfully Updated Done');
              echo $this->item;
         } else {
@@ -217,6 +218,7 @@ public function item_add($id = null){
     }
 
     if($id != null) {
+        // dd($id);
         $data['row']  = $this->Accessories_model->get_product_reports_info($id); // get id wise data 
         // dd($data['row']); 
     }   
@@ -255,17 +257,17 @@ public function reports(){
                         $this->load->view('admin/layout/layout_main', $datas); 
 }
 
-public function inventory_report(){
+public function inventory_report($status=null,$category=null){
         $data = $this->page_loads();
         $data['title']       = 'On Working'.' | '.$this->Xin_model->site_title();
         $data['breadcrumbs'] = "On Working";
         $data['path_url']    = "Working";
-
-
-        $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$_POST['status'],$_POST['category']);
-        
+        if($status!=null && $category!=null){
+            $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$_POST['status'],$_POST['category']);
+        } else{
+            $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$status,$category);
+        }
         // dd($_POST);
-        
         if(is_string($data["reports"]))
         {
             echo $data["reports"];

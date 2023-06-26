@@ -1,6 +1,6 @@
 
 <?php 
-// dd($row);
+// dd($results);
 $session = $this->session->userdata('username');
 $eid = $this->uri->segment(4);
 $get_animate = $this->Xin_model->get_content_animate();
@@ -22,14 +22,14 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
     <div class="box-datatable table-responsive">
       <table class="datatables-demo table table-striped table-bordered" id="example">
         <thead class="text-center">
-          <tr >
+          <tr>
             <th class="text-center" style="width:20px;">No.</th>
             <!-- <th class="text-center" style="width:100px;">User</th> -->
             <th class="text-center" style="width:100px;">Category</th>
             <th class="text-center" style="width:100px;">Device</th>
             <th class="text-center" style="width:100px;">Model</th>
             <th class="text-center" style="width:100px;">Number</th>
-            <th class="text-center" style="width:100px;">Details</th>
+            <th class="text-center" style="width:100px;">Description</th>
             <th class="text-center" style="width:100px;">Purpose</th>
             <th class="text-center" style="width:100px;">Image</th>
             <th class="text-center" style="width:100px;">Status</th>
@@ -50,7 +50,10 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
               <td><img src="<?php echo (empty($row->image)) ? base_url("uploads/no_image.png"): base_url("uploads/accessory_images/".$row->image)?>"> 
               </td>
               <td>
-                 <?= $row->status=='1'?"<span class='label label-success'>On Working</span>":"<span class='label label-danger'>Stocked</span>"; ?></td>
+                 <?php 
+                      echo    $row->status; 
+                  ?>
+              </td>
               <td>
                 <a class="btn btn-sm btn-info" type="button" href="<?= base_url('admin/accessories/item_add/'.$row->id);?>">Edit</a>
                 <a class="btn btn-sm btn-danger" type="button" href="<?= base_url('admin/accessories/delete/'.$row->id.'/product_accessories/index');?>" onclick="return confirm('Are you sure to delete!!!')">delete</a>
