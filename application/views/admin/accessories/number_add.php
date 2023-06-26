@@ -17,24 +17,16 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
       <div class="col-md-12">
         <?php $attributes = array('id' => 'unit_insert', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
         <?php $hidden = array('user_id' => $session['user_id']);?>
-        <?php echo form_open_multipart('admin/accessories/category', $attributes, $hidden);?>
+        <?php echo form_open_multipart('admin/accessories/number_add', $attributes, $hidden);?>
           <div class="row">
             <div class="col-md-3">
               <div class="form-group">
-                <label >Category Name</label>
-                <input class="form-control" required name="cat_name" placeholder="Category Name" type="text" value="<?php echo !empty($row->cat_name)? $row->cat_name:''; ?>">
-              </div>
-            </div>
-            <input type="hidden" name="hidden_id" value="<?php echo !empty($row->id)? $row->id:''; ?>">
-
-            <div class="col-md-3">
-              <div class="form-group">
-                <label for="description">Category Short Name</label>
-                <input class="form-control" placeholder="Category Short Name" name="cat_short_name" type="text" value="<?php echo !empty($row->cat_short_name)? $row->cat_short_name:''; ?>">
+                <label >Add Number</label>
+                <input class="form-control" required name="number" placeholder="Add Number" type="text" value="<?php echo !empty($row->number)? $row->number:''; ?>">
               </div>
             </div>
             <div class="col-md-2">
-              <label for="Status">Category Status</label>
+              <label for="Status">Number Status</label>
               <select name="status" class="form-control" required>  
                 <option value="">Select status</option>
                 <option value="1" <?php echo (!empty($row->status) && $row->status == 1) ? 'selected':''; ?> >Active</option>
@@ -42,15 +34,14 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
               </select>
             </div>
 
-
+            <input type="hidden" name="hidden_id" value="<?php echo !empty($row->id)? $row->id:''; ?>">
             <div class="col-md-2">
               <div class="form-group"> &nbsp;
                 <label for="first_name">&nbsp;</label><br />
-
                 <?php if(isset($row->id)==null){?>
-                <input type="submit" name="submit" class="btn btn-success" value="Add Category"/>
+                <input type="submit" name="submit" class="btn btn-success" value="Add Number"/>
                 <?php }else{?>
-                <input type="submit" name="submit" class="btn btn-primary" value="Update Category"/>
+                <input type="submit" name="submit" class="btn btn-primary" value="Update Number"/>
                 <?php }?>
               </div>
             </div>
@@ -68,12 +59,6 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
     </div>
 <?php endif; ?> 
 
-<?php if($this->session->flashdata('warning')):?>
-    <div class="alert alert-warning"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <?php echo $this->session->flashdata('warning');?>
-    </div>
-<?php endif; ?> 
-
 
 <div class="box <?php echo $get_animate;?>">
     
@@ -86,8 +71,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
         <thead class="text-center">
           <tr >
             <th class="text-center" style="width:20px;">No.</th>
-            <th class="text-center" style="width:100px;">Name</th>
-            <th class="text-center" style="width:100px;">Description</th>
+            <th class="text-center" style="width:100px;">Number List</th>
             <th class="text-center" style="width:100px;">Status</th>
             <th class="text-center" style="width:100px;">Action</th>
           </tr>
@@ -96,12 +80,11 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
           <?php foreach ($results as $key => $row) { ?>
             <tr class="text-center">
               <td><?= $key + 1; ?></td>
-              <td><?= $row->cat_name; ?></td>
-              <td><?= $row->cat_short_name; ?></td>
+              <td><?= $row->number; ?></td>
               <td><?= $row->status=='1'?"<span class='label label-success'>Active</span>":"<span class='label label-danger'>Inctive</span>"; ?></td>
               <td>
-                <a class="btn btn-sm btn-info" href="<?= base_url('admin/accessories/category/'.$row->id);?>">Edit</a>
-                <a class="btn btn-sm btn-danger" href="<?= base_url('admin/accessories/delete/'.$row->id.'/product_accessory_categories'.'/category');?>" onclick="return confirm('Are you sure to delete!!!')">Delete</a>
+                <a class="btn btn-sm btn-info" href="<?= base_url('admin/accessories/number_add/'.$row->id);?>">Edit</a>
+                <a class="btn btn-sm btn-danger" href="<?= base_url('admin/accessories/delete/'.$row->id.'/mobile_numbers'.'/number_add');?>" onclick="return confirm('Are you sure to delete!!!')">Delete</a>
               </td>
             </tr>
           <?php } ?>

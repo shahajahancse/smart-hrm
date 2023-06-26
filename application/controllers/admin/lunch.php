@@ -495,6 +495,7 @@ class Lunch extends MY_Controller {
         $data = array(
             'pay_amount' => $p_month_pay,
             'status' => $status,
+            'updated_at' => date('Y-m-d H:i:s')
         );
         $this->db->where('end_date', $pay_month);
         $this->db->where('emp_id', $empid);
@@ -575,7 +576,6 @@ class Lunch extends MY_Controller {
         };
     }
 public function make_id_payment(){
-
     $dueAmount=$this->input->post('deu_amount');
     $pay_Amount=$this->input->post('amount');
     $id=$this->input->post('rawid');
@@ -595,6 +595,7 @@ public function make_id_payment(){
         'paid_amount' => $paid_amo,
         'due' => $present_deu,
         'status' => $status,
+        'updated_at' => date('Y-m-d H:i:s'),
     );
     $this->db->where('id', $id);
     if($this->db->update('lunch_payment_vendor', $data)){

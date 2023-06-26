@@ -114,15 +114,16 @@
             <ul class="nav nav-tabs " id="myTab" role="tablist">
                 <li class="nav-item active">
                     <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily"
-                        aria-selected="true">Report</a>
+                        aria-selected="true">Daily</a>
+                </li>
+              
+                <li class="nav-item">
+                    <a class="nav-link" id="continue-tab" data-toggle="tab" href="#continue" role="tab"
+                        aria-controls="payment" aria-selected="false">Continue</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="payment-tab" data-toggle="tab" href="#payment" role="tab"
                         aria-controls="payment" aria-selected="false">Payment</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="continue-tab" data-toggle="tab" href="#continue" role="tab"
-                        aria-controls="payment" aria-selected="false">Continue</a>
                 </li>
 
 
@@ -134,10 +135,7 @@
                     style="margin-top: 30px;">
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(1)">Active Lunch</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(5)">Inactive Lunch</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(2)">Monthly Report</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(3)">Continue Report</button>
                     <!-- <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(4)">Vendor Voucher</button> -->
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2,1)">Previous Report</button>
 
 
                 </div>
@@ -146,11 +144,14 @@
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(1)">Paid Employees</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(0)">Unpaid Employees</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2)">Employees Collection Sheets</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2,1)">Previous Report</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="vendor_Report()">Vendor Report</button>
                 </div>
                 <div class="tab-pane fade" id="continue" role="tabpanel" aria-labelledby="continue-tab"
                     style="margin-top: 30px;">
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="lunch_jobcard()">Lunch Report</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(2)">Monthly Report</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(3)">Continue Report</button>
                 </div>
             </div>
 
