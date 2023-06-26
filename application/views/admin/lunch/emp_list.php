@@ -38,7 +38,7 @@
     <tr>
         <td><?= $key+1 ?></td>
         <td>
-          <h5  style="cursor: pointer;" data-firstdate="<?= $first_date ?>" data-secenddate="<?= $second_date ?>" data-empid="<?= $data->emp_id ?>">
+          <h5  style="cursor: pointer; color: blue" data-firstdate="<?= $first_date ?>" data-secenddate="<?= $second_date ?>" data-empid="<?= $data->emp_id ?>">
             <?= $data->first_name ?> <?= $data->last_name ?>
           </h5>
         </td>      
