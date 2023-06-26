@@ -93,14 +93,11 @@
               </div>
             </div>
 
-            <div class="col-md-4">
-              
+            <!-- <div class="col-md-4">
                 <label for="p_type">Product Type<i class="hrsale-asterisk" style="color:red !important">*</i></label><br>
                 <label class="radio-inline"><input type="radio" name="p_type" value="1"<?php echo (!empty($row) && $row->p_type == 1)? 'checked':'' ?> >Inventory</label>
                 <label class="radio-inline"><input type="radio" name="p_type" value="0"<?php echo (!empty($row) && $row->p_type == 0)? 'checked':'' ?> >Store</label>
-
-           
-            </div>
+            </div> -->
 
           </div>
         </div>
