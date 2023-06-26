@@ -1,5 +1,5 @@
 
-function perday(status) {
+function perday(status) 
 {
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest = new XMLHttpRequest();
@@ -76,7 +76,60 @@ function perday(status) {
     }
   }
 }
+function conempmeal() 
+{
+  var ajaxRequest;  // The variable that makes Ajax possible!
+  ajaxRequest = new XMLHttpRequest();
+  var checkboxes = document.getElementsByName('select_emp_id[]');
+
+  var sql = get_checked_value(checkboxes);
+  
+   first_date = document.getElementById('process_date').value;
+   second_date = document.getElementById('second_date').value;
+ 
+
+
+  if(sql =='')
+  {
+    alert('Please select employee Id');
+    return ;
+  }
+  
+  
+  if(first_date =='')
+  {
+    alert('Please select first date');
+    return ;
+  }
+  if(second_date =='')
+  {
+    alert('Please select second date');
+    return ;
+  }else{
+    document.getElementById("loading").style.visibility = "visible";
+  }
+  
+  var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql;
+  console.log(data);
+  url = base_url + "/conempmeal/";
+  ajaxRequest.open("POST", url, true);
+  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+   ajaxRequest.send(data);
+    // alert(url); return;
+
+  ajaxRequest.onreadystatechange = function(){
+    if(ajaxRequest.readyState == 4){
+      document.getElementById("loading").style.visibility = "hidden";
+
+      // console.log(ajaxRequest.responseText); return;
+      var resp = ajaxRequest.responseText;
+      a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+      a.document.write(resp);
+      // a.close();
+    }
+  }
 }
+
 function paymentreport(status,r=null) {
 {
   
