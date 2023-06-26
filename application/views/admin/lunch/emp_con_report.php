@@ -37,6 +37,14 @@
         </tr>
     </thead>
     <tbody>
+        <?php
+         $grand_active_meal = 0;
+         $grand_inactive_meal  = 0;
+         $grand_total_emp_cost  = 0;
+         $grand_total_offic_cost   = 0;
+         $grand_total_cost    = 0;
+        ?>
+        
         <?php foreach ($all_employees as $key=>$employee): ?>
         <tr>
             <td><?= $key+1 ?></td>
@@ -50,6 +58,7 @@
                 $total_emp_cost  = 0;
                 $total_offic_cost   = 0;
                 $total_cost    = 0;
+
                 foreach ($emp_data['emp_data'] as $key => $row) {
 					if($row->meal_amount>0){
 						$active_meal+=$row->meal_amount;
@@ -75,9 +84,27 @@
             <td><?= $total_offic_cost ?></td>
             <td><?= $total_cost ?></td> 
         </tr>
+        <?php 
+            $grand_active_meal += $active_meal;
+            $grand_inactive_meal += $inactive_meal;
+            $grand_total_emp_cost  += $total_emp_cost;
+            $grand_total_offic_cost   += $total_offic_cost;
+            $grand_total_cost    += $total_cost;
+        ?>
         <?php endforeach; ?>
+     
 
     </tbody>
+    <tfoot>
+        <tr>
+            <td colspan=3 style="text-align: center;font-weight: bold;" >Total</td>
+            <td><?=  $grand_active_meal?></td>
+            <td><?=  $grand_inactive_meal?></td>
+            <td><?=  $grand_total_emp_cost?></td>
+            <td><?=  $grand_total_offic_cost?></td>
+            <td><?=  $grand_total_cost?></td>
+        </tr>
+    </tfoot>
 </table>
 </div>
 

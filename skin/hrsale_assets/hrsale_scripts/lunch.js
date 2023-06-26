@@ -83,26 +83,28 @@ function perday(status)
     }
   }
 }
-function conempmeal() 
+function conempmeal(r) 
 {
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest = new XMLHttpRequest();
   var checkboxes = document.getElementsByName('select_emp_id[]');
 
-  var sql = get_checked_value(checkboxes);
   
+
    first_date = document.getElementById('process_date').value;
    second_date = document.getElementById('second_date').value;
  
 
-
-  if(sql =='')
-  {
-    alert('Please select employee Id');
-    return ;
+  if (r==1) {
+    var sql = get_checked_value(checkboxes);
+    if(sql =='')
+    {
+      alert('Please select employee Id');
+      return ;
+    }
+  }else{
+    var sql =1;
   }
-  
-  
   if(first_date =='')
   {
     alert('Please select first date');
@@ -116,7 +118,7 @@ function conempmeal()
     document.getElementById("loading").style.visibility = "visible";
   }
   
-  var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql;
+  var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql+'&status='+r;
   console.log(data);
   url = base_url + "/conempmeal/";
   ajaxRequest.open("POST", url, true);
