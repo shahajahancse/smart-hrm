@@ -236,7 +236,7 @@ if($theme[0]->sub_menu_icons != ''){
 
 
     <!-- Lunch -->
-    <?php  if(in_array('1050',$role_resources_ids)) {?>
+    <?php  if(in_array('1050',$role_resources_ids) || in_array('1051',$role_resources_ids) || in_array('1052',$role_resources_ids) || in_array('1053',$role_resources_ids) || in_array('1054',$role_resources_ids) || in_array('1055',$role_resources_ids) || in_array('1056',$role_resources_ids) || in_array('1057',$role_resources_ids) || in_array('1058',$role_resources_ids) || in_array('1059',$role_resources_ids)) {?>
       <li class="<?php if(!empty($arr_mod['lunch_open']))echo $arr_mod['lunch_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> Lunch <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
  
@@ -265,7 +265,7 @@ if($theme[0]->sub_menu_icons != ''){
           <?php } ?>    
        
 
-          <?php if(in_array('1056',$role_resources_ids)) { ?>
+          <?php if(in_array('1056',$role_resources_ids) || in_array('1057',$role_resources_ids) || in_array('1058',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['lusetting_open']))echo $arr_mod['lusetting_open'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Settings <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
               <?php if(in_array('1057',$role_resources_ids)) { ?>
@@ -310,7 +310,7 @@ if($theme[0]->sub_menu_icons != ''){
 
 
     <!-- Store -->
-    <?php  if(in_array('1030',$role_resources_ids)) {?>
+    <?php  if(in_array('1030',$role_resources_ids) || in_array('1031',$role_resources_ids) || in_array('1033',$role_resources_ids) || in_array('1070',$role_resources_ids) || in_array('1071',$role_resources_ids) || in_array('1072',$role_resources_ids) || in_array('1073',$role_resources_ids) || in_array('1074',$role_resources_ids) || in_array('1075',$role_resources_ids) || in_array('1076',$role_resources_ids) || in_array('1080',$role_resources_ids) || in_array('1081',$role_resources_ids) || in_array('1082',$role_resources_ids) || in_array('1083',$role_resources_ids) || in_array('1084',$role_resources_ids) || in_array('1085',$role_resources_ids) || in_array('1041',$role_resources_ids)) {?>
       <li class="<?php if(!empty($arr_mod['invtry_open']))echo $arr_mod['invtry_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> Store <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
 
@@ -319,7 +319,7 @@ if($theme[0]->sub_menu_icons != ''){
           <?php } ?>  
 
           <!-- requisition part -->
-          <?php if(in_array('1070',$role_resources_ids)) { ?>
+          <?php if(in_array('1070',$role_resources_ids) || in_array('1070',$role_resources_ids) || in_array('1071',$role_resources_ids) || in_array('1072',$role_resources_ids) || in_array('1073',$role_resources_ids) || in_array('1074',$role_resources_ids) || in_array('1075',$role_resources_ids) || in_array('1076',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['requi_active']))echo $arr_mod['requi_active'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Requisition <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
               <?php if(in_array('1071',$role_resources_ids)) { ?>
@@ -346,7 +346,7 @@ if($theme[0]->sub_menu_icons != ''){
           <?php } ?>
 
           <!-- // purchase -->
-          <?php if(in_array('1080',$role_resources_ids)) { ?>
+          <?php if(in_array('1080',$role_resources_ids) || in_array('1081',$role_resources_ids) || in_array('1082',$role_resources_ids) || in_array('1083',$role_resources_ids) || in_array('1084',$role_resources_ids) || in_array('1085',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['puiqu_active']))echo $arr_mod['puiqu_active'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Purchase <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
 
@@ -405,7 +405,7 @@ if($theme[0]->sub_menu_icons != ''){
     <!-- Store -->
 
     <!-- Inventory / Accessories  -->
-    <?php  if(in_array('1100',$role_resources_ids)) {?>
+    <?php  if(in_array('1100',$role_resources_ids) || in_array('1101',$role_resources_ids) || in_array('1102',$role_resources_ids) || in_array('1103',$role_resources_ids) || in_array('1110',$role_resources_ids) || in_array('1111',$role_resources_ids) || in_array('1112',$role_resources_ids) || in_array('1113',$role_resources_ids)) {?>
       <li class="<?php if(!empty($arr_mod['access_open']))echo $arr_mod['access_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> Inventory <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
           <?php if(in_array('1101',$role_resources_ids)) { ?>
@@ -421,7 +421,7 @@ if($theme[0]->sub_menu_icons != ''){
           <?php } ?>  
 
        
-          <?php if(in_array('1110',$role_resources_ids)) { ?>
+          <?php if(in_array('1110',$role_resources_ids) || in_array('1111',$role_resources_ids) || in_array('1112',$role_resources_ids) || in_array('1113',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['accsetting_open']))echo $arr_mod['accsetting_open'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Settings <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
               <?php if(in_array('1111',$role_resources_ids)) { ?>
@@ -644,20 +644,22 @@ if($theme[0]->sub_menu_icons != ''){
     </li>
     <?php } ?>
     <?php } ?>
+
     <?php if($system[0]->module_events=='true'){?>
     <?php  if(in_array('97',$role_resources_ids) || in_array('98',$role_resources_ids) || in_array('99',$role_resources_ids)) {?>
-    <li class="<?php if(!empty($arr_mod['hr_events_open']))echo $arr_mod['hr_events_open'];?> treeview"> <a href="#"> <i class="fa fa-calendar-plus-o"></i> <span><?php echo $this->lang->line('xin_hr_events_meetings');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
-      <ul class="treeview-menu">
-        <?php if(in_array('98',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['hr_events_active']))echo $arr_mod['hr_events_active'];?>"> <a href="<?php echo site_url('admin/events');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_events');?> </a> </li>
-        <?php } ?>
-        <?php if(in_array('99',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['hr_meetings_active']))echo $arr_mod['hr_meetings_active'];?>"> <a href="<?php echo site_url('admin/meetings');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_meetings');?> </a> </li>
-        <?php } ?>
-      </ul>
-    </li>
+      <li class="<?php if(!empty($arr_mod['hr_events_open']))echo $arr_mod['hr_events_open'];?> treeview"> <a href="#"> <i class="fa fa-calendar-plus-o"></i> <span><?php echo $this->lang->line('xin_hr_events_meetings');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+        <ul class="treeview-menu">
+          <?php if(in_array('98',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['hr_events_active']))echo $arr_mod['hr_events_active'];?>"> <a href="<?php echo site_url('admin/events');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_events');?> </a> </li>
+          <?php } ?>
+          <?php if(in_array('99',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['hr_meetings_active']))echo $arr_mod['hr_meetings_active'];?>"> <a href="<?php echo site_url('admin/meetings');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_meetings');?> </a> </li>
+          <?php } ?>
+        </ul>
+      </li>
     <?php } ?>
     <?php } ?>
+
     <?php  if(in_array('110',$role_resources_ids) || in_array('111',$role_resources_ids) || in_array('112',$role_resources_ids) || in_array('113',$role_resources_ids) || in_array('114',$role_resources_ids) || in_array('115',$role_resources_ids)) {?>
     <li class="<?php if(!empty($arr_mod['reports_open']))echo $arr_mod['reports_open'];?> treeview"> <a href="#"> <i class="fa fa-bar-chart"></i> <span><?php echo $this->lang->line('xin_hr_report_title');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
       <ul class="treeview-menu">
