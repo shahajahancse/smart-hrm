@@ -8,12 +8,13 @@
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
-    position: fixed;
+    overflow: hidden;
+    position: absolute;
     background-color: #f9f9f9;
     min-width: 120px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 999909;
-    right: 25px;
+    right: 6px;
 }
 
 /* Links inside the dropdown */
@@ -119,14 +120,21 @@
                         </div>
                         <?php else : ?>
                                 <?php if ($result->if_eidit==1 && $session['role_id']==4) : ?>
+                                    <div class="dropdown">
+                            <a class="">Action <span><i class="fa fa-sort-desc" aria-hidden="true"></i></span> </a>
+                            <div class="dropdown-content">
                                     <a href="<?= base_url('admin/lunch/details/'.$result->id.'/'.$result->date) ?>">Details</a>
                                     <a href="<?=  base_url('admin/lunch/today_lunch/'.$result->id)?>">Edit</a>
-                             
+                                    </div>
                                 
                                 <?php elseif($session['role_id']==1 || $session['role_id']==2) : ?>
+                                    <div class="dropdown">
+                            <a class="">Action <span><i class="fa fa-sort-desc" aria-hidden="true"></i></span> </a>
+                            <div class="dropdown-content">
                                     <a href="<?= base_url('admin/lunch/details/'.$result->id.'/'.$result->date) ?>">Details</a>
                                     <a href="<?=  base_url('admin/lunch/today_lunch/'.$result->id)?>">Edit</a>
-                                <?php else : ?>
+                            </div>
+                                    <?php else : ?>
                                     <a href="<?= base_url('admin/lunch/details/'.$result->id.'/'.$result->date) ?>">Details</a>
                                 <?php endif; ?>
                         <?php endif; ?>
