@@ -8,5 +8,4 @@ application/config/database.php
 /vendor/
 uploads/
 attn_data/
-application/controllers/admin/lunch.php
-application/models/lunch_model.php
+
