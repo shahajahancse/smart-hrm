@@ -41,7 +41,8 @@
             <button class="btn btn-primary" id="btn" style="padding: 2px 15px;" onclick="window.print()">Print</button>
         </div>
         <div>
-            <form id="btn" style="float: right;margin-right: 4px;" action="<?php echo base_url('admin/lunch/conempmeal/'.$exc); ?>" method="post">
+            <form id="btn" style="float: right;margin-right: 4px;"
+                action="<?php echo base_url('admin/lunch/conempmeal/'.$exc); ?>" method="post">
                 <input type="hidden" name="first_date" value="<?php echo $first_date; ?>">
                 <input type="hidden" name="second_date" value="<?php echo $second_date; ?>">
                 <input type="hidden" name="sql" value="<?php echo $sql; ?>">

@@ -107,6 +107,7 @@ class Lunch_model extends CI_Model {
             'probable_meal' => $probable_meal,
             'from_date' => $from_date,
             'end_date' => $end_date,
+            'next_date' => $probable_date,
             'status' => $status
         );
         $this->db->insert('lunch_payment', $data);

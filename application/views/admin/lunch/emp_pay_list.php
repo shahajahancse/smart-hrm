@@ -50,7 +50,6 @@ input[type="email"] {
 .btn {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #007bff;
     color: #fff;
     text-decoration: none;
     border-radius: 3px;
@@ -58,11 +57,6 @@ input[type="email"] {
     transition: background-color 0.3s ease;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
-
-.btn:hover {
-    background-color: #0056b3;
-}
-
 /* Box shadow effect for the form container */
 .form-container {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -137,7 +131,9 @@ input[type="email"] {
     <img src="<?php echo base_url()?>skin/hrsale_assets/img/loding.gif">
 
 </div>
-
+<?php
+// dd($last_prement);
+?>
 <div class="container" style="padding: 0;">
     <div class="content" style="padding: 0;margin: 0;min-height: 147px;">
         <!-- <div class="col-md-12" style="display: flex;"> -->
@@ -146,6 +142,15 @@ input[type="email"] {
             <span style="color: blue;"><?php echo isset($last_prement->from_date)? date('d-m-Y', strtotime($last_prement->from_date)):'';?></span> 
             to 
             <span style="color: blue;"> <?php echo isset($last_prement->end_date)? date('d-m-Y', strtotime($last_prement->end_date)):'';?></span>
+          <?php
+          if ($last_prement->end_date=='2023-06-15'){ } else{
+            ?>
+            <a style="padding: 2px;margin: 0;width: 80px;" class="btn btn-info" onclick='updateprocess()'>Update</a>
+
+          <?php } ?>
+           <input type="hidden" value="<?php echo isset($last_prement->from_date)? date('Y-m-d', strtotime($last_prement->from_date)):'';?>" id="from_dateu">
+           <input type="hidden" value="<?php echo isset($last_prement->end_date)? date('Y-m-d', strtotime($last_prement->end_date)):'';?>" id="end_dateu">
+           <input type="hidden" value="<?php echo isset($last_prement->next_date)? date('Y-m-d', strtotime($last_prement->next_date)):'';?>" id="next_dateu">
 
             <h2>Add Payment</h2>
             <select id="search-select">
@@ -354,10 +359,7 @@ $(document).ready(function() {
             success: function(response) {
                 // Handle the success response
                 document.getElementById("loading").style.visibility = "hidden";
-
                 alert(response);
-
-
             },
             error: function(xhr, status, error) {
                 // Handle any errors that occur during the request
@@ -448,4 +450,51 @@ $(document).ready(function() {
         });
     });
 });
+</script>
+<script>
+    function updateprocess() {
+        var from_date = $('#from_dateu').val();
+        var end_date = $('#end_dateu').val();
+        var next_date = $('#next_dateu').val();
+        if (from_date == '' || end_date == '') {
+            alert('First Process');
+        } else {
+            // document.getElementById("loading").style.visibility = "visible";
+            $.ajax({
+            url: '<?= base_url('admin/lunch/process') ?>', // Replace with the URL to send the request
+            method: 'POST', // Replace with the desired HTTP method (POST, GET, etc.)
+            data: {
+                firstDate: from_date,
+                secondDate: end_date,
+                probable_date: next_date,
+                status:1
+            },
+            success: function(response) {
+                // Handle the success response from the server
+                document.getElementById("loading").style.visibility = "hidden";
+
+                console.log(response);
+                Swal.fire({
+                    title: 'Success!',
+                    text: response,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
+
+            },
+            error: function(xhr, status, error) {
+                // Handle the error response from the server
+                console.log(error);
+                document.getElementById("loading").style.visibility = "hidden";
+
+            }
+        });
+
+
+        }
+    }
 </script>
