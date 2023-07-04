@@ -968,7 +968,7 @@ class Inventory extends MY_Controller {
 			    'unit_id'       => $this->input->post('unit_id'),
 			    'quantity'      => $this->input->post('quantity'),
 			    'order_level'   => $this->input->post('order_level'),
-			    'p_type'   => $this->input->post('p_type'),
+			    // 'p_type'   => $this->input->post('p_type'),
 			    'short_details'   => $this->input->post('short_details')
 			);           
 
