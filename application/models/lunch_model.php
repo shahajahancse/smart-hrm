@@ -79,7 +79,8 @@ class Lunch_model extends CI_Model {
         $prev_pay=0;
 
         $this->db->where('emp_id', $row->user_id);
-        $this->db->where('end_date', $firstDate);
+        $this->db->where('end_date', date('Y-m-d', strtotime($firstDate . ' -1 day')));
+        
         $preepay= $this->db->get('lunch_payment')->result();
 
     //   dd( $preepay);
@@ -107,6 +108,7 @@ class Lunch_model extends CI_Model {
             'probable_meal' => $probable_meal,
             'from_date' => $from_date,
             'end_date' => $end_date,
+            'next_date' => $probable_date,
             'status' => $status
         );
         $this->db->insert('lunch_payment', $data);
