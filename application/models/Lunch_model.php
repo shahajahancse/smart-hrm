@@ -360,5 +360,14 @@ class Lunch_model extends CI_Model {
 		return $data;
        
     }
+
+    public function pay_vend_ajax_request($id)
+    {
+        $this->db->select('*');
+        $this->db->where('id', $id);
+        $query = $this->db->get('lunch_payment_vendor');
+        $data = $query->result();
+        return $data;
+    }
 }
 ?>

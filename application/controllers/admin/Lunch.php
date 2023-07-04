@@ -794,5 +794,14 @@ public function make_id_payment(){
         }
        
     }
+public function pay_vend_ajax_request(){
+    $id = $this->input->post('id');
+    $data= $this->Lunch_model-> pay_vend_ajax_request($id);
+    echo json_encode($data);
+
+}
+
+
+
 }
 ?>

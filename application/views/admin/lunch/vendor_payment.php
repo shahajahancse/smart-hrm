@@ -252,6 +252,9 @@
                  <?php } ?>
                 <td>
                     <?=($row->status==0)? '<a data-toggle="modal" data-target="#make_payment" onclick="giveid('.$row->id.','.$row->due .','.$row->paid_amount.')" class="btn btn-primary">Paid</a>': 'Paid'?>
+                    <br>
+                    <br>
+                    <button onclick="printF(<?=$row->id ?>)"> Print</button>
                 </td>
                 
  
@@ -384,6 +387,7 @@ function submit() {
     });
 }
 </script>
+
 <script>
 function giveid(id,deu,prepaid) {
     document.getElementById('rawid').value = id;
@@ -439,4 +443,35 @@ function make_id_payment() {
         }
     });
 }
+
+function printF(id) {
+  
+
+    $.ajax({
+        url: '<?= base_url('admin/lunch/pay_vend_ajax_request') ?>',
+        method: 'POST',
+        data: {
+            id: id,
+            status: status,
+        },
+        success: function(data) {
+         
+           // Parse the JSON string into a JavaScript object
+            const parsedData = JSON.parse(data);
+
+            // Access the "id" property workin here3 by razibul
+            const id = parsedData[0].id;
+                        
+            
+            
+          
+
+        },
+        error: function(xhr, status, error) {
+            console.log(error);
+        }
+    });
+}
+
+
 </script>
