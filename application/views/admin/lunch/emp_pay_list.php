@@ -459,7 +459,7 @@ $(document).ready(function() {
         if (from_date == '' || end_date == '') {
             alert('First Process');
         } else {
-            // document.getElementById("loading").style.visibility = "visible";
+            document.getElementById("loading").style.visibility = "visible";
             $.ajax({
             url: '<?= base_url('admin/lunch/process') ?>', // Replace with the URL to send the request
             method: 'POST', // Replace with the desired HTTP method (POST, GET, etc.)
