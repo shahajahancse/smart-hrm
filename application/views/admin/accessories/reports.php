@@ -15,7 +15,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
     <h3 class="box-title" id="report">Report</h3>
 </div>
   <div class="box-body" id="emp_report">
-    <div class="tab-content" id="">
+    <!-- <div class="tab-content" id=""> -->
           <div class="col-md-3">
             <div class="form-group">
               <label for="process_date">First Date</label>
@@ -47,11 +47,12 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             <?php }?>
               </select>
             </div> 
-            <button class="btn btn-info"  style="float:right;margin-right:15px;margin-top:20px" onclick="inventory_report()">Report</button>
+            <button class="btn btn-info"  style="float:right;margin-right:15px;margin-top:20px" onclick="inventory_report(1)">Report</button>
+            <button class="btn btn-primary"  style="float:right;margin-right:15px;margin-top:20px" onclick="inventory_report(2)">All Report</button>
           </div>
         </div>
 </div>
-</div>
+<!-- </div> -->
 
 </div>
 
@@ -65,21 +66,20 @@ $('process_date').datepicker();
 });
 
 
-
-function inventory_report(status)
+function inventory_report(report)
 {
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest     = new XMLHttpRequest();
   var first_date  = $('#first_date').val();
   var second_date = $('#second_date').val();
-
   var status      = $('#status').val();
   var category    = $('#category').val();
-
-  if(status==null){
+  
+  
+  if(report==1 && status==null){
     alert('Please select status');return;
   }
-  if(category==null){
+  if(report==1 && category==null){
     alert('Please select categroy');return;
   }
 
@@ -93,23 +93,25 @@ function inventory_report(status)
   //   }else{ alert('ok')}
   // }
 
-    
-      // console.log(data); return;
+  
+    // console.log(data); return;
+    if(report==1){
       var data = "status="+status+'&category='+category;
-      url = base_url + "/inventory_report";
-      ajaxRequest.open("POST", url, true);
-      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-      ajaxRequest.send(data);
-
-      ajaxRequest.onreadystatechange = function(){
-        if(ajaxRequest.readyState == 4){
-          var resp = ajaxRequest.responseText;
-          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1400,height=800');
-          a.document.write(resp);
-        }
+    }
+    else{
+      var data = null;
+    }
+    url = base_url + "/inventory_report";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+        var resp = ajaxRequest.responseText;
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1400,height=800');
+        a.document.write(resp);
       }
     }
-
-    
+    }
 
 </script>

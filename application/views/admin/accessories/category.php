@@ -90,7 +90,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
           <tr >
             <th class="text-center" style="width:20px;">No.</th>
             <th class="text-center" style="width:100px;">Name</th>
-            <th class="text-center" style="width:100px;">Description</th>
+            <th class="text-center" style="width:100px;">Short Name</th>
             <th class="text-center" style="width:100px;">Status</th>
             <th class="text-center" style="width:100px;">Action</th>
           </tr>
