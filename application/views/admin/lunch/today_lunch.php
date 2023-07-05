@@ -90,8 +90,8 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
            
             <td>
                   <input type="number" name="guest" id="guest-input" value="<?= isset($guest->guest_m) ? $guest->guest_m : ''; ?>" style="width: 83px;">
-                </td>
-                <td>
+            </td>
+            <td>
                   <input type="text" name="guest_comment" id="guest-comment" value="">
             </td>
         </tr>
