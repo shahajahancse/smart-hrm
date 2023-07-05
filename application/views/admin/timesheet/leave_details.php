@@ -132,7 +132,7 @@ if (isset($success)) {
              
                 <div class="row">
                   <div class="col-md-12">
-                    <?php if($user[0]->user_role_id == 1) {?>
+                    <?php  if($user[0]->user_role_id == 1 || $user[0]->user_role_id == 2 || $user[0]->user_role_id == 4) {?>
                     <div class="form-group">
                       <label for="status"><?php echo $this->lang->line('dashboard_xin_status');?></label>
                       <select class="form-control" name="status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
