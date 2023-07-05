@@ -93,7 +93,7 @@ class Lunch extends MY_Controller {
         //Validate and input data
     
         if ($this->form_validation->run() == true && $this->input->post('change')==0){
-          
+     
             $empid = $this->input->post('empid');
             $m_amount = $this->input->post('m_amount');
             $comment = $this->input->post('comment');
@@ -141,6 +141,7 @@ class Lunch extends MY_Controller {
                         'p_stutus'      => $p_status[$i],
                         'comment'       => $comment[$i],
                     );
+                    $this->db->where('date', $date);
                     $this->db->where('emp_id', $empid[$i])->update('lunch_details', $form_data);
                 } 
             } else {
@@ -170,6 +171,7 @@ class Lunch extends MY_Controller {
                 'total_cost' => $total_cost,
                 'emp_cost' => $emp_cost,
                 'guest_cost' => $guest_cost,
+                'bigcomment' => $bigcomment,
                 'status' => $status,
             );
 
