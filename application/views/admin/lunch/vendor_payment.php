@@ -84,6 +84,10 @@
     font-size: 13px;
     font-weight: bold;
 }
+.btn{
+    padding: 0px;
+    width: 54px;
+}
 </style>
 
 <!-- Modal -->
@@ -222,6 +226,7 @@
                 
                 <th>Remarks</th>
 
+                <th>Status</th>
                 <th>Action</th>
 
             </tr>
@@ -252,9 +257,12 @@
                  <?php } ?>
                 <td>
                     <?=($row->status==0)? '<a data-toggle="modal" data-target="#make_payment" onclick="giveid('.$row->id.','.$row->due .','.$row->paid_amount.')" class="btn btn-primary">Paid</a>': 'Paid'?>
-                    <br>
-                    <br>
-                    <button onclick="pdf_report(<?=$row->id ?>)"> Print</button>
+                   
+                    <!-- <button onclick="pdf_report(<?=$row->id ?>)"> Print</button> -->
+                    
+                </td>
+                <td>
+                <a class="btn btn-info" onclick="pdf_report(<?=$row->id ?>)">Print</a>
                 </td>
                 
  
@@ -444,35 +452,7 @@ function make_id_payment() {
     });
 }
 
-// function printF(id) {
-  
 
-//     $.ajax({
-//         url: '<?= base_url('admin/lunch/pay_vend_ajax_request') ?>',
-//         method: 'POST',
-//         data: {
-//             id: id,
-//             status: status,
-//         },
-//         success: function(data) {
-         
-//            // Parse the JSON string into a JavaScript object
-//             const parsedData = JSON.parse(data);
-
-//             // Access the "id" property workin here3 by razibul
-//             const id = parsedData[0].id;
-//             console.log(id);
-                        
-            
-            
-          
-
-//         },
-//         error: function(xhr, status, error) {
-//             console.log(error);
-//         }
-//     });
-// }
 
 function pdf_report(status)
     {
