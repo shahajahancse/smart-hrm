@@ -203,8 +203,6 @@ class Lunch extends MY_Controller {
         } else {
             redirect('admin/');
         }
- 
- 
     }
 
     public function add_lunch_pak(){
@@ -233,9 +231,7 @@ class Lunch extends MY_Controller {
 
         $this->db->where('id', 1); // Assuming you have an 'id' field in your database table to identify the record to update
         $this->db->update('lunch_package', $data);
-        
     }
-
     public function lunch_package(){
         $session = $this->session->userdata('username');
         if (empty($session)) {
@@ -854,7 +850,7 @@ public function pay_vend_ajax_request()
         $this->db->update('lunch', $data);
     }
 
-    public function vendor_meal() {
+    public function vendor_lunch_list() {
         $session = $this->session->userdata('username');
         if (empty($session)) {
             redirect('admin/');
@@ -867,7 +863,7 @@ public function pay_vend_ajax_request()
        
      
         if (!empty($session)) {
-            $data['subview'] = $this->load->view("admin/lunch/vendor_meal", $data, TRUE);
+            $data['subview'] = $this->load->view("admin/lunch/vendor_lunch_list", $data, TRUE);
             $this->load->view('admin/layout/layout_main', $data); //page load
         } else {
             redirect('admin/');
