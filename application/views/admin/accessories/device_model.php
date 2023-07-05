@@ -37,7 +37,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             <div class="col-md-4">
               <div class="form-group">
                 <label for="description">Description</label>
-                <input class="form-control" placeholder="description" name="details" type="text" value="<?php echo !empty($row->details)? $row->details:''; ?>">
+                <input class="form-control" placeholder="Description" name="details" type="text" value="<?php echo !empty($row->details)? $row->details:''; ?>">
               </div>
             </div>
             <div class="col-md-2">

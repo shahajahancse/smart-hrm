@@ -61,7 +61,7 @@
                     <th style="text-align:center">Total Cost</th>
                     <th style="text-align:center">Remarks</th>
                     <?php if( $session['role_id']==1): ?>
-                    <th style="text-align:center">HR Edit</th>
+                    <th style="text-align:center">Edit</th>
                     <?php endif; ?>
               
                     <th style="text-align:center">Action</th>
@@ -97,7 +97,7 @@
                     </td>
                 <?php endif; ?>
                 <?php if( $session['role_id']==1): ?>
-                <td>
+                <td style="text-align: center;">
                     <input type="checkbox" name="" class="chkbox" onchange='hrp(<?=$result->id?>,<?=$result->if_eidit?>)' <?= ($result->if_eidit==0)? '':'checked' ?> >
                 </td>
                 <?php endif; ?>

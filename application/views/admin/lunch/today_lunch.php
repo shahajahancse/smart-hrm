@@ -34,7 +34,7 @@
 <?= form_open(current_url(), array('id' => 'dateForm')); ?>
 <h3 style="float: left;">Today Lunch</h3>
 <?php $session = $this->session->userdata('username');
-if($session['role_id']==1){?>
+if($session['role_id']==1 || $session['role_id']==2 ){?>
 <div style="float: left;margin-left: 29px;margin-top: 22px;">
     <label for="date"> Enter Date</label>
     <input type="date" id="dateoff" onchange="submitForm()" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>" style="border-radius: 5px;">
@@ -42,7 +42,7 @@ if($session['role_id']==1){?>
 </div>
 <?php }else{?>
 
-<input type="hidden" id="dateoff" name="date" value="<?= date('d-m-Y'); ?>">
+<input type="hidden" id="dateoff" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>">
 <?php } ?>
 <button type="button" class="btn btn-info"  data-toggle="modal" style="float: right;" data-target="#lunchoffmodal">Lunch Off</button>
 

@@ -93,7 +93,7 @@ class Lunch extends MY_Controller {
         //Validate and input data
     
         if ($this->form_validation->run() == true && $this->input->post('change')==0){
-          
+     
             $empid = $this->input->post('empid');
             $m_amount = $this->input->post('m_amount');
             $comment = $this->input->post('comment');
@@ -141,6 +141,7 @@ class Lunch extends MY_Controller {
                         'p_stutus'      => $p_status[$i],
                         'comment'       => $comment[$i],
                     );
+                    $this->db->where('date', $date);
                     $this->db->where('emp_id', $empid[$i])->update('lunch_details', $form_data);
                 } 
             } else {
@@ -170,6 +171,7 @@ class Lunch extends MY_Controller {
                 'total_cost' => $total_cost,
                 'emp_cost' => $emp_cost,
                 'guest_cost' => $guest_cost,
+                'bigcomment' => $bigcomment,
                 'status' => $status,
             );
 
@@ -201,8 +203,6 @@ class Lunch extends MY_Controller {
         } else {
             redirect('admin/');
         }
- 
- 
     }
 
     public function add_lunch_pak(){
@@ -231,9 +231,7 @@ class Lunch extends MY_Controller {
 
         $this->db->where('id', 1); // Assuming you have an 'id' field in your database table to identify the record to update
         $this->db->update('lunch_package', $data);
-        
     }
-
     public function lunch_package(){
         $session = $this->session->userdata('username');
         if (empty($session)) {
@@ -851,6 +849,34 @@ public function pay_vend_ajax_request()
         $this->db->where('id', $id);
         $this->db->update('lunch', $data);
     }
+
+    public function vendor_lunch_list() {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch Vendor Meal';
+        $data['path_url'] = 'lunch';
+        $data['result'] = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row();
+        $data['payment_data'] = $this->db->get('lunch_payment_vendor')->result();
+       
+     
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/vendor_lunch_list", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+
+
+
+
+
+
+
+    }
+
 
 }
 ?>
