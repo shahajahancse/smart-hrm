@@ -8,12 +8,13 @@
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
-    position: fixed;
+    overflow: hidden;
+    position: absolute;
     background-color: #f9f9f9;
     min-width: 120px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 999909;
-    right: 25px;
+    right: 6px;
 }
 
 /* Links inside the dropdown */
@@ -59,6 +60,9 @@
                     <th style="text-align:center">Office.Cost</th>
                     <th style="text-align:center">Total Cost</th>
                     <th style="text-align:center">Remarks</th>
+                    <?php if( $session['role_id']==1): ?>
+                    <th style="text-align:center">HR Edit</th>
+                    <?php endif; ?>
               
                     <th style="text-align:center">Action</th>
                 </tr>
@@ -92,7 +96,11 @@
                        <?php echo "...." ?>
                     </td>
                 <?php endif; ?>
-                  
+                <?php if( $session['role_id']==1): ?>
+                <td>
+                    <input type="checkbox" name="" class="chkbox" onchange='hrp(<?=$result->id?>,<?=$result->if_eidit?>)' <?= ($result->if_eidit==0)? '':'checked' ?> >
+                </td>
+                <?php endif; ?>
 
                 
 
@@ -101,18 +109,34 @@
                
                    
                     <td>
-                        <?php if ($result->date == date('Y-m-d')) : ?>
+                        <?php  if ($result->date == date('Y-m-d')) : ?>
                         <div class="dropdown">
                             <a class="">Action <span><i class="fa fa-sort-desc" aria-hidden="true"></i></span> </a>
                             <div class="dropdown-content">
-                                <a
-                                    href="<?= base_url('admin/lunch/details/'.$result->id.'/'.$result->date) ?>">Details</a>
+                                <a href="<?= base_url('admin/lunch/details/'.$result->id.'/'.$result->date) ?>">Details</a>
                                 <a href="<?=  base_url('admin/lunch/today_lunch/'.$result->id)?>">Edit</a>
 
                             </div>
                         </div>
                         <?php else : ?>
-                        <a href="<?= base_url('admin/lunch/details/'.$result->id.'/'.$result->date) ?>">Details</a>
+                                <?php if ($result->if_eidit==1 && $session['role_id']==4) : ?>
+                                    <div class="dropdown">
+                            <a class="">Action <span><i class="fa fa-sort-desc" aria-hidden="true"></i></span> </a>
+                            <div class="dropdown-content">
+                                    <a href="<?= base_url('admin/lunch/details/'.$result->id.'/'.$result->date) ?>">Details</a>
+                                    <a href="<?=  base_url('admin/lunch/today_lunch/'.$result->id)?>">Edit</a>
+                                    </div>
+                                
+                                <?php elseif($session['role_id']==1 || $session['role_id']==2) : ?>
+                                    <div class="dropdown">
+                            <a class="">Action <span><i class="fa fa-sort-desc" aria-hidden="true"></i></span> </a>
+                            <div class="dropdown-content">
+                                    <a href="<?= base_url('admin/lunch/details/'.$result->id.'/'.$result->date) ?>">Details</a>
+                                    <a href="<?=  base_url('admin/lunch/today_lunch/'.$result->id)?>">Edit</a>
+                            </div>
+                                    <?php else : ?>
+                                    <a href="<?= base_url('admin/lunch/details/'.$result->id.'/'.$result->date) ?>">Details</a>
+                                <?php endif; ?>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -127,4 +151,27 @@ $(document).ready(function() {
 
     $('#Lunch_table').DataTable();
 });
+</script>
+<script>
+  function hrp(id,status) {
+   console.log(id,status);
+   $.ajax({
+            url: '<?= base_url('admin/lunch/sethrp') ?>', // Replace with the URL to send the request
+            method: 'POST', // Replace with the desired HTTP method (POST, GET, etc.)
+            data: {
+                id: id,
+                status: status,
+            },
+            success: function(response) {
+                console.log(response);
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+           
+
+            }
+        });
+    
+  }
 </script>

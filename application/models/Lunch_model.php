@@ -233,7 +233,7 @@ class Lunch_model extends CI_Model {
     }  
 
     public function get_all_data() {
-        $this->db->order_by('id', 'DESC');
+        $this->db->order_by('date', 'DESC');
         $query = $this->db->get('lunch');
         return $query->result();
     }

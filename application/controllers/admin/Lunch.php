@@ -45,6 +45,8 @@ class Lunch extends MY_Controller {
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch';
         $data['path_url'] = 'lunch';
+        $data['session'] = $session;
+
         if (!empty($session)) {
             $data['subview'] = $this->load->view("admin/lunch/index", $data, TRUE);
             $this->load->view('admin/layout/layout_main', $data); //page load
@@ -66,10 +68,19 @@ class Lunch extends MY_Controller {
 
         
         if ($this->input->post('date')==null) {
+            if($id!=null) {
+                $this->db->where('id', $id);
+                $query = $this->db->get('lunch');
+                $datas = $query->result();
+                $date=$datas[0]->date;
+
+            }else{
             $date= date('Y-m-d');
+            }
         }else {
             $date= date('Y-m-d',strtotime($this->input->post('date')));
         }
+
     
         $data['date'] =$date;
         
@@ -167,6 +178,7 @@ class Lunch extends MY_Controller {
         }
         
         if ($query->num_rows() > 0) {
+           
             $data['results'] = $this->Lunch_model->get_lunch_info(1,$date);
             $data['guest'] = $query->row();
             $data['ps'] ='yes';
@@ -176,6 +188,7 @@ class Lunch extends MY_Controller {
             $data['guest'] = '';
             $data['ps'] ='no';
         }
+        // dd($data['results']);
         $data['title'] = 'Lunch | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch';
         $data['path_url'] = 'lunch';
@@ -794,14 +807,7 @@ public function make_id_payment(){
         }
        
     }
-// public function pay_vend_ajax_request(){
-//     $id = $this->input->post('id');
-//     $data['inv']= $this->Lunch_model-> pay_vend_ajax_request($id);
-//     // echo json_encode($data);
-//     dd($data);
-//     echo $this->load->view("admin/lunch/inv_report", $data, TRUE);
 
-// }
 
 public function pay_vend_ajax_request()
 {
@@ -830,6 +836,21 @@ public function pay_vend_ajax_request()
 }
 
 
+    public function sethrp() {
+        $id=$this->input->post('id');
+        $status=$this->input->post('status');
+        if ($status==1) {
+            $if_eidit=0;
+        }else{
+            $if_eidit=1;
+        }
+     
+        $data = array(
+            'if_eidit' => $if_eidit
+        );
+        $this->db->where('id', $id);
+        $this->db->update('lunch', $data);
+    }
 
 }
 ?>
