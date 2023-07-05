@@ -794,11 +794,39 @@ public function make_id_payment(){
         }
        
     }
-public function pay_vend_ajax_request(){
-    $id = $this->input->post('id');
-    $data= $this->Lunch_model-> pay_vend_ajax_request($id);
-    echo json_encode($data);
+// public function pay_vend_ajax_request(){
+//     $id = $this->input->post('id');
+//     $data['inv']= $this->Lunch_model-> pay_vend_ajax_request($id);
+//     // echo json_encode($data);
+//     dd($data);
+//     echo $this->load->view("admin/lunch/inv_report", $data, TRUE);
 
+// }
+
+public function pay_vend_ajax_request()
+{
+            $id = $this->input->post('id');
+            $statusC = $this->input->post('statusC');
+
+       
+
+            $data["values"] = $this->Lunch_model->pay_vend_ajax_request($id);
+
+            $data["from_date"] = $data["values"][0]->from_date;
+            $data["to_date"] = $data["values"][0]->to_date;
+            $data["f_date"] = $data["values"][0]->date;
+          
+            if(is_string($data["values"]))
+            {
+                echo $data["values"];
+            }
+            else
+            {	
+                echo $this->load->view("admin/lunch/v_report", $data, TRUE);
+            }
+
+    
+     
 }
 
 

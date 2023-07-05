@@ -367,7 +367,19 @@ class Lunch_model extends CI_Model {
         $this->db->where('id', $id);
         $query = $this->db->get('lunch_payment_vendor');
         $data = $query->result();
-        return $data;
+     
+        if ($query->num_rows() > 0) {
+            return $data;
+         
+        } else {
+            return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+        }
+
+    
     }
+
+
+    
+
 }
 ?>

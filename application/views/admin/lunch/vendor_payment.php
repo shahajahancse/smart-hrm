@@ -254,7 +254,7 @@
                     <?=($row->status==0)? '<a data-toggle="modal" data-target="#make_payment" onclick="giveid('.$row->id.','.$row->due .','.$row->paid_amount.')" class="btn btn-primary">Paid</a>': 'Paid'?>
                     <br>
                     <br>
-                    <button onclick="printF(<?=$row->id ?>)"> Print</button>
+                    <button onclick="pdf_report(<?=$row->id ?>)"> Print</button>
                 </td>
                 
  
@@ -444,34 +444,63 @@ function make_id_payment() {
     });
 }
 
-function printF(id) {
+// function printF(id) {
   
 
-    $.ajax({
-        url: '<?= base_url('admin/lunch/pay_vend_ajax_request') ?>',
-        method: 'POST',
-        data: {
-            id: id,
-            status: status,
-        },
-        success: function(data) {
+//     $.ajax({
+//         url: '<?= base_url('admin/lunch/pay_vend_ajax_request') ?>',
+//         method: 'POST',
+//         data: {
+//             id: id,
+//             status: status,
+//         },
+//         success: function(data) {
          
-           // Parse the JSON string into a JavaScript object
-            const parsedData = JSON.parse(data);
+//            // Parse the JSON string into a JavaScript object
+//             const parsedData = JSON.parse(data);
 
-            // Access the "id" property workin here3 by razibul
-            const id = parsedData[0].id;
+//             // Access the "id" property workin here3 by razibul
+//             const id = parsedData[0].id;
+//             console.log(id);
                         
             
             
           
 
-        },
-        error: function(xhr, status, error) {
-            console.log(error);
+//         },
+//         error: function(xhr, status, error) {
+//             console.log(error);
+//         }
+//     });
+// }
+
+function pdf_report(status)
+    {
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+
+      
+
+      var data = "id="+status;
+      
+      // console.log(data); return;
+      url = base_url + "/pay_vend_ajax_request";
+    
+
+      ajaxRequest.open("POST", url, true);
+      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+      ajaxRequest.send(data);
+
+      ajaxRequest.onreadystatechange = function(){
+        if(ajaxRequest.readyState == 4){
+          // console.log(ajaxRequest);
+          var resp = ajaxRequest.responseText;
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1200,height=800');
+          a.document.write(resp);
         }
-    });
-}
+      }
+
+    }
 
 
 </script>
