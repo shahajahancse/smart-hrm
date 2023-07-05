@@ -313,6 +313,7 @@ function Actual_salary_sheet_excel_bank(s)
         // Parse the response from the server, which is expected to be a JSON array
         const response = JSON.parse(jsonArray);
       
+      
 
         // Create an empty array named "sql" and a variable named "count"
         const sql = [];

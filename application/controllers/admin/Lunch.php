@@ -809,6 +809,35 @@ public function make_id_payment(){
         }
        
     }
+
+
+public function pay_vend_ajax_request()
+{
+            $id = $this->input->post('id');
+            $statusC = $this->input->post('statusC');
+
+       
+
+            $data["values"] = $this->Lunch_model->pay_vend_ajax_request($id);
+
+            $data["from_date"] = $data["values"][0]->from_date;
+            $data["to_date"] = $data["values"][0]->to_date;
+            $data["f_date"] = $data["values"][0]->date;
+          
+            if(is_string($data["values"]))
+            {
+                echo $data["values"];
+            }
+            else
+            {	
+                echo $this->load->view("admin/lunch/v_report", $data, TRUE);
+            }
+
+    
+     
+}
+
+
     public function sethrp() {
         $id=$this->input->post('id');
         $status=$this->input->post('status');
@@ -824,5 +853,6 @@ public function make_id_payment(){
         $this->db->where('id', $id);
         $this->db->update('lunch', $data);
     }
+
 }
 ?>
