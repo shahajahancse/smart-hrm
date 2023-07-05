@@ -84,6 +84,10 @@
     font-size: 13px;
     font-weight: bold;
 }
+.btn{
+    padding: 0px;
+    width: 54px;
+}
 </style>
 
 <!-- Modal -->
@@ -222,6 +226,7 @@
                 
                 <th>Remarks</th>
 
+                <th>Status</th>
                 <th>Action</th>
 
             </tr>
@@ -252,6 +257,12 @@
                  <?php } ?>
                 <td>
                     <?=($row->status==0)? '<a data-toggle="modal" data-target="#make_payment" onclick="giveid('.$row->id.','.$row->due .','.$row->paid_amount.')" class="btn btn-primary">Paid</a>': 'Paid'?>
+                   
+                    <!-- <button onclick="pdf_report(<?=$row->id ?>)"> Print</button> -->
+                    
+                </td>
+                <td>
+                <a class="btn btn-info" onclick="pdf_report(<?=$row->id ?>)">Print</a>
                 </td>
                 
  
@@ -384,6 +395,7 @@ function submit() {
     });
 }
 </script>
+
 <script>
 function giveid(id,deu,prepaid) {
     document.getElementById('rawid').value = id;
@@ -439,4 +451,36 @@ function make_id_payment() {
         }
     });
 }
+
+
+
+function pdf_report(status)
+    {
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+
+      
+
+      var data = "id="+status;
+      
+      // console.log(data); return;
+      url = base_url + "/pay_vend_ajax_request";
+    
+
+      ajaxRequest.open("POST", url, true);
+      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+      ajaxRequest.send(data);
+
+      ajaxRequest.onreadystatechange = function(){
+        if(ajaxRequest.readyState == 4){
+          // console.log(ajaxRequest);
+          var resp = ajaxRequest.responseText;
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1200,height=800');
+          a.document.write(resp);
+        }
+      }
+
+    }
+
+
 </script>

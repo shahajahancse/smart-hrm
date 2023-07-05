@@ -24,15 +24,13 @@
 </script> 
 
 
-
-
 <div class="box <?php echo $get_animate;?>" style="margin-top:20px">
   <div class="box-header with-border">
     <h3 class="box-title">Requisition List</h3>
   </div>
   <div class="box-body">
     <div class="box-datatable" >
-    <input type="hidden" value="1" id="count">
+    <!-- <input type="hidden" value="1" id="count"> -->
       <table class="datatables-demo table table-striped table-bordered" id="purchase_table" style="width:100%">
         <thead>
           <tr>
@@ -58,7 +56,7 @@
                 <?php if($user_role_id==1){?>
                   <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                   <td class="text-center">
-                    <?php echo $rows->status == 5 ? "<span class='badge' style='background-color:#28a745'><b>First Step Approved</b></span>" : ($rows->status == 1 ? "<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" : ($rows->status == 2 ? "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>" : ($rows->status == 3 ? "<span class='badge' style='background-color:#28a745'><b>Handover</b></span>" : "<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"))); ?>
+                    <?php echo $rows->status == 5 ? "<span class='badge' style='background-color:#28a745'><b>First Step Approved</b></span>" : ($rows->status == 1 ? "<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" : ($rows->status == 2 ? "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>" : ($rows->status == 3 ? "<span class='badge' style='background-color:#087a58'><b>Handover</b></span>" : "<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"))); ?>
                   </td>
 
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
@@ -79,6 +77,7 @@
                          
                         <?php } if($rows->status==4 || $rows->status==1 ||  $rows->status==5 ){?> 
                           <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
+                        <a style="padding-left:5px; " href="<?= base_url('admin/inventory/requsition_approvedd/'.$rows->id);?>">Approved</a><br>
                         <a style="padding-left:5px; " href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">Reject</a>
                         <?php } ?>
                       </div>
@@ -101,14 +100,11 @@
 
                           <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                             
-                          <?php 
-                            // if($session['role_id'] =1){ ?>
                             <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
 
                             <?php if($rows->status==1){?> 
                               <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
                              <a style="padding-left:5px; " href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">Delete</a>
-                           
                             <?php } ?>
                           </div>
                   </td>
@@ -121,8 +117,7 @@
 </div>
 <script type="text/javascript">
    $(document).ready(function() {
-      //Load First row
-    
+
       $('#purchase_table').DataTable();
    });   
 

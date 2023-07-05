@@ -936,6 +936,7 @@ class Attendance_model extends CI_Model {
         return $result = $this->db->get('xin_employees')->result();
         // dd($result);
     }
+    
  
 
 

@@ -280,6 +280,12 @@ public function inventory_report($status=null,$category=null){
 }
 
 
+
+ public function get_model(){
+      $this->load->view('admin/accessories/get_model');
+ }
+
+
 }
 
 
