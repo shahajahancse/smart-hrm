@@ -824,5 +824,32 @@ public function make_id_payment(){
         $this->db->where('id', $id);
         $this->db->update('lunch', $data);
     }
+    public function vendor_meal() {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch Vendor Meal';
+        $data['path_url'] = 'lunch';
+        $data['result'] = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row();
+        $data['payment_data'] = $this->db->get('lunch_payment_vendor')->result();
+       
+     
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/vendor_meal", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+
+
+
+
+
+
+
+    }
+
 }
 ?>
