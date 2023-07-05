@@ -287,43 +287,36 @@ if(!is_null($role_user)){
   <?php } ?>
  
   <!-- box start -->
-          <div class="col-xl-6 col-md-3 col-12 hr-mini-state">
-            <div class="info-box2 hrsalle-mini-stat"> 
-              <p class="box_titel">Attendance Overview For <?=date( "M-Y")?> </p>
-              <div class="contentbox"> 
-                
-                
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">(Present : Absent):</p>
-                  <p style="margin: 0;" class="col-md-4 overlayth">(<?php echo $present_stutas->attend;?>: <?php echo $present_stutas->absent;?>)</p>
-                </div>
-              
-                <div class="col-md-12" style="margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Leave : </p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ($leave_stutas->el)+($leave_stutas->sl);?></p>
-                </div>
-                <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Holiday + weekend: </p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ($present_stutas->holiday)+($present_stutas->weekend) ?></p>
-                </div>
-                <div class="col-md-12" style="margin: 2px; padding: 2px;">
-                  
-                  <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Late : </p>
-                  <p style="margin: 0;" class="col-md-4 overlayth"><?php echo $present_stutas->late_status ?></p>
-                </div>
-              </div>
-                <a  href="<?php echo site_url('admin/timesheet/timecalendar/');?>">
-                  <div class="col-md-12 box_footer">
-                      
-                      <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">View attendance calendar <span class="pull-right-container">  <i class="fa fa-angle-right"></i> </span></p>
-                    
-                  </div>
-                </a>
+  <div class="col-xl-6 col-md-3 col-12 hr-mini-state">
+    <div class="info-box2 hrsalle-mini-stat">
+        <p class="box_titel">Attendance Overview For <?= date("M-Y") ?></p>
+        <div class="contentbox">
+            <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
+                <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">(Present : Absent):</p>
+                <p style="margin: 0;" class="col-md-4 overlayth">(<?php echo ($present_stutas->attend > 0) ? $present_stutas->attend : '0'; ?>: <?php echo ($present_stutas->absent > 0) ? $present_stutas->absent : '0'; ?>)</p>
             </div>
-          </div>
+            <div class="col-md-12" style="margin: 2px; padding: 2px;">
+                <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Leave : </p>
+                <p style="margin: 0;" class="col-md-4 overlayth"><?php echo (($leave_stutas->el) + ($leave_stutas->sl) > 0) ? ($leave_stutas->el) + ($leave_stutas->sl) : '0'; ?></p>
+            </div>
+            <div class="col-md-12" style="background-color: #e3eaf1;margin: 2px; padding: 2px;">
+                <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Holiday + weekend: </p>
+                <p style="margin: 0;" class="col-md-4 overlayth"><?php echo (($present_stutas->holiday) + ($present_stutas->weekend) > 0) ? ($present_stutas->holiday) + ($present_stutas->weekend) : '0'; ?></p>
+            </div>
+            <div class="col-md-12" style="margin: 2px; padding: 2px;">
+                <p style="margin: 0;font-weight: bold;padding: 0;" class="col-md-8 overlayth">Late : </p>
+                <p style="margin: 0;" class="col-md-4 overlayth"><?php echo ($present_stutas->late_status > 0) ? $present_stutas->late_status : '0'; ?></p>
+            </div>
+        </div>
+        <a href="<?php echo site_url('admin/timesheet/timecalendar/'); ?>">
+            <div class="col-md-12 box_footer">
+                <p style="margin: 0;font-weight: bold;text-align: center; color:#251e1e;" class="col-md-12">View attendance calendar <span class="pull-right-container"> <i class="fa fa-angle-right"></i> </span></p>
+            </div>
+        </a>
+    </div>
+</div>
+
+
   <!-- box end -->
    <!-- box start -->
    <div class="col-xl-6 col-md-3 col-12 hr-mini-state">
@@ -981,7 +974,7 @@ if($attendances->num_rows() < 1) {
 </div>
 <?php } ?>
 <?php if($theme[0]->dashboard_calendar == 'true'):?>
-<?php $this->load->view('admin/calendar/calendar_hr');?>
+<!-- <?php $this->load->view('admin/calendar/calendar_hr');?> -->
 <?php endif; ?>
 <style type="text/css">
 .btn-group {

@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
-
+<?php
+// dd($result);
+?>
 <style>
 .addbox {
     min-height: 49px;
@@ -75,7 +77,6 @@
     background: #fffcf9;
     box-shadow: 3px 8px 9px 3px rgb(0 0 0 / 10%);
     font-family: Arial, sans-serif;
-
     color: #333;
 }
 
@@ -85,6 +86,39 @@
 }
 </style>
 
+<!-- Modal -->
+<div class="modal fade" id="make_payment" tabindex="-1" role="dialog" aria-labelledby="make_payment" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle" style="float: left">Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"style="float: right">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="overflow: auto; padding:0px;">
+                <input type="hidden" id="rawid" value="">
+                <input type="hidden" id="prepaid" value="">
+                <div class="form-group col-md-4" style="padding-top: 7px">
+                    <label for="deu_amount">Deu Amount</label>
+                    <input type="number" class="form-control" id="deu_amount" placeholder="Amount" style="border-radius: 5px" disabled >
+                </div>
+                <div class="form-group  col-md-4" style="padding-top: 7px">
+                    <label for="paid_amount">Amount</label>
+                    <input type="number" onchange=changpayment() class="form-control" id="paid_amount" placeholder="Amount" style="border-radius: 5px">
+                </div>
+                <div class="form-group  col-md-4" style="padding-top: 7px" >
+                    <label for="present_deu">Deu</label>
+                    <input type="number" class="form-control" id="present_deu" placeholder="Amount" disabled style="border-radius: 5px">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="mcloss" data-dismiss="modal" style="margin-right:3px;">Close</button>
+                <button type="button" onclick="make_id_payment()" class="btn btn-primary" style="margin-right:3px;">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="addbox">
     <p class="p" style="font-size: 25px; font-weight: bold; float: left;">Payment List</p>
     <a class="btn btn-primary accordion" onclick="togglePaymentBox()">Make Payment</a>
@@ -123,8 +157,10 @@
         <div class="col-md-12">
             <div class="form-group col-md-3">
                 <p class="levels">From Date</p>
-                <input type="date" class="form-control" id="from_date"
-                    value="<?= isset($result->to_date) ? $result->to_date : '0' ?>" style="border-radius: 6px;">
+
+                <input type="date" class="form-control" id="from_date" type="text"
+                    value="<?= isset($result->to_date) ? date('Y-m-d',strtotime($result->to_date . ' +1 day')) : '0' ?>"
+                    style="border-radius: 6px;">
             </div>
             <div class="form-group col-md-3">
                 <p class="levels">To Date</p>
@@ -156,10 +192,12 @@
             </div>
             <div class="form-group col-md-4">
                 <p class="levels">Remarks</p>
-                <input type="text" class="form-control" id="remarks" style="border-radius: 6px;">
+                <textarea name="" cols="30" rows="1" class="form-control" id="remarks"
+                    style="border-radius: 6px;"></textarea>
             </div>
         </div>
-
+        <input type="hidden" id="last_collection_id" name="last_collection_id"
+            value="<?= isset($result->id) ? $result->id : null ?>">
         <div class="col-md-12">
             <a onclick="submit()" class="btn btn-primary" style="float: right;margin-right: 19px;">Submit</a>
         </div>
@@ -172,7 +210,8 @@
         <thead>
             <tr>
                 <th>SL</th>
-                <th>Previous Due</th>
+                <th>Date</th>
+                <th>P.Due</th>
                 <th>From Date</th>
                 <th>To Date</th>
                 <th>Total Meal</th>
@@ -180,36 +219,55 @@
                 <th>Net Payment</th>
                 <th>Paid Amount</th>
                 <th>Due</th>
-                <th>Date</th>
+                
                 <th>Remarks</th>
+
+                <th>Action</th>
+
             </tr>
         </thead>
         <tbody>
             <?php foreach ($payment_data as $key=>$row): ?>
             <tr>
                 <td><?php echo $key+1 ?></td>
+                <?php    $convert = date('d-m-Y', strtotime($row->date)); ?>
+                <td><?php echo $convert; ?></td>
                 <td><?php echo $row->previous_due; ?></td>
-                <td><?php echo $row->from_date; ?></td>
-                <td><?php echo $row->to_date; ?></td>
+                <?php   
+                $convertedDate = date('d-m-Y', strtotime($row->from_date));
+                $convertedDate2 = date('d-m-Y', strtotime($row->to_date));
+                ?>
+                <td><?php echo $convertedDate  ?></td>
+                <td><?php echo  $convertedDate2 ?></td>
                 <td><?php echo $row->total_meal; ?></td>
                 <td><?php echo $row->pay_amount; ?></td>
                 <td><?php echo $row->net_payment; ?></td>
                 <td><?php echo $row->paid_amount; ?></td>
                 <td><?php echo $row->due; ?></td>
-                <td><?php echo $row->date; ?></td>
-                <td><?php echo $row->Remarks; ?></td>
+            
+                <?php if($row->Remarks){  ?>
+                  <td style="text-align: center;" title="<?php echo $row->Remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->Remarks ), 0, 4)); ?></td>
+                 <?php }else{ ?>
+                    <td style="text-align: center;" > ...</td>
+                 <?php } ?>
+                <td>
+                    <?=($row->status==0)? '<a data-toggle="modal" data-target="#make_payment" onclick="giveid('.$row->id.','.$row->due .','.$row->paid_amount.')" class="btn btn-primary">Paid</a>': 'Paid'?>
+                </td>
+                
+ 
 
             </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
-
-
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('#myTable').DataTable();
+    $('#myTable').DataTable({
+      "order": [[4, "desc"]]
+    });
+   
 });
 </script>
 
@@ -222,6 +280,11 @@ function togglePaymentBox() {
 function calmeal() {
     var first_date = $('#from_date').val();
     var second_date = $('#to_date').val();
+    if (first_date > second_date) {
+        alert('Please select valid Date');
+        document.getElementById('to_date').value = first_date;
+        return false;
+    }
 
     // Prepare the data object
     var data = {
@@ -237,7 +300,12 @@ function calmeal() {
         data: data,
         success: function(response) {
             if (response == 0) {
-                alert('There is no payment data')
+                document.getElementById('total_meal').value = response;
+                var total_amount = response * 90
+                document.getElementById('total_amount').value = total_amount;
+                var pre_due = document.getElementById('pre_due').value;
+                var payable_amount = parseInt(parseInt(total_amount) + parseInt(pre_due));
+                document.getElementById('payable_amount').value = payable_amount;
             } else {
 
                 document.getElementById('total_meal').value = response;
@@ -273,6 +341,7 @@ function submit() {
     var dueAmount = document.getElementById('due_amount').value;
     var payAmount = document.getElementById('pay_amount').value;
     var remarks = document.getElementById('remarks').value;
+    var last_collection_id = document.getElementById('last_collection_id').value;
 
     // Create an object with the input data
     var inputData = {
@@ -284,7 +353,8 @@ function submit() {
         payableAmount: payableAmount,
         dueAmount: dueAmount,
         payAmount: payAmount,
-        remarks: remarks
+        remarks: remarks,
+        last_collection_id: last_collection_id,
     };
     url = '<?= base_url('/admin/lunch/make_payment/')?>'
 
@@ -309,6 +379,62 @@ function submit() {
         error: function(xhr, status, error) {
             // Handle the error
             console.log('AJAX request error');
+            console.log(xhr.responseText);
+        }
+    });
+}
+</script>
+<script>
+function giveid(id,deu,prepaid) {
+    document.getElementById('rawid').value = id;
+    document.getElementById('deu_amount').value = deu;
+    document.getElementById('prepaid').value = prepaid;
+ 
+}
+
+function changpayment(){
+    var deu_amount = $('#deu_amount').val();
+    var amount = $('#paid_amount').val();
+    document.getElementById('present_deu').value=deu_amount-amount
+}
+
+function make_id_payment() {
+    var rawid = $('#rawid').val();
+    var amount = $('#paid_amount').val();
+    var deu_amount = $('#deu_amount').val();
+    var prepaid = $('#prepaid').val();
+    var present_deu = $('#present_deu').val();
+    // Prepare the data object
+    var data = {
+        rawid: rawid,
+        amount: amount,
+        deu_amount: deu_amount,
+        prepaid: prepaid,
+        present_deu: present_deu
+    };
+    url = '<?= base_url('/admin/lunch/make_id_payment/')?>'
+
+    // Send AJAX request
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+            $('#mcloss').click(); 
+            Swal.fire({
+                title: 'Success!',
+                text: response,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+
+        },
+        error: function(xhr, status, error) {
+            // Handle errors
             console.log(xhr.responseText);
         }
     });

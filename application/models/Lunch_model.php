@@ -8,9 +8,10 @@ class Lunch_model extends CI_Model {
         parent::__construct();
     }
 
-    public function get_lunch_info($status)
+    public function get_lunch_info($status,$date)
     {
         if ($status == true) {
+            // dd($status .' = '. $date);
             $this->db->select('
                     u.first_name, 
                     u.last_name, 
@@ -21,8 +22,8 @@ class Lunch_model extends CI_Model {
                     ld.comment
                 ');
             $this->db->from('xin_employees as u')->from('lunch_details as ld');
-            $this->db->where('u.user_id = ld.emp_id')->where('ld.date', date('Y-m-d'))->group_by('ld.emp_id');
-            return $this->db->order_by('ld.p_stutus', 'ASC')->get()->result();
+            $this->db->where('u.user_id = ld.emp_id')->where('ld.date', $date)->group_by('ld.emp_id');
+            $data = $this->db->order_by('ld.p_stutus', 'ASC')->get()->result();
         } else {
             $this->db->select('
                     u.user_id as emp_id, 
@@ -32,9 +33,10 @@ class Lunch_model extends CI_Model {
                 ');
             $this->db->from('xin_employees as u');
             $this->db->join('xin_attendance_time as at', 'u.user_id = at.employee_id', 'left');
-            $this->db->where_in('u.status', array(1,4,5))->where('at.attendance_date', date('Y-m-d'))->group_by('u.user_id');
-            return $this->db->order_by('at.status', 'DESC')->get()->result();
+            $this->db->where_in('u.status', array(1,4,5))->where('at.attendance_date', $date)->group_by('u.user_id');
+            $data = $this->db->order_by('at.status', 'DESC')->get()->result();
         }
+        return $data;
     }
 
     public function all_employees()
@@ -77,7 +79,8 @@ class Lunch_model extends CI_Model {
         $prev_pay=0;
 
         $this->db->where('emp_id', $row->user_id);
-        $this->db->where('end_date', $firstDate);
+        $this->db->where('end_date', date('Y-m-d', strtotime($firstDate . ' -1 day')));
+        
         $preepay= $this->db->get('lunch_payment')->result();
 
     //   dd( $preepay);
@@ -105,6 +108,7 @@ class Lunch_model extends CI_Model {
             'probable_meal' => $probable_meal,
             'from_date' => $from_date,
             'end_date' => $end_date,
+            'next_date' => $probable_date,
             'status' => $status
         );
         $this->db->insert('lunch_payment', $data);
@@ -229,7 +233,7 @@ class Lunch_model extends CI_Model {
     }  
 
     public function get_all_data() {
-        $this->db->order_by('id', 'DESC');
+        $this->db->order_by('date', 'DESC');
         $query = $this->db->get('lunch');
         return $query->result();
     }
@@ -318,6 +322,43 @@ class Lunch_model extends CI_Model {
         }else{
             return 0;
         }
-    }   
+    } 
+    
+    public function vendor_status_report($first_date,$second_date){
+        $this->db->select('*');
+        $this->db->where('date >=', $first_date);
+        $this->db->where('date <=', $second_date);
+        $this->db->order_by('id', 'desc');
+        $query = $this->db->get('lunch_payment_vendor');
+        $data = $query->result();
+         
+        if ($query->num_rows() > 0) {
+         return $data;
+     
+     } else {
+         return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+     }
+       
+    }
+    public function get_data_date_wise($grid_firstdate, $grid_seconddate, $emp_id){
+        $data = array();
+		$grid_firstdate = date("Y-m-d", strtotime($grid_firstdate)); 
+		$grid_seconddate = date("Y-m-d", strtotime($grid_seconddate));
+			
+
+		$this->db->select('*');
+		$this->db->from('lunch_details');
+		$this->db->where('emp_id', $emp_id);
+		$this->db->where("date >=", $grid_firstdate);
+		$this->db->where("date <=", $grid_seconddate);
+		$this->db->order_by("date");				
+		$query = $this->db->get()->result();
+
+		$data['emp_data'] = $query;
+		// dd($data);
+
+		return $data;
+       
+    }
 }
 ?>

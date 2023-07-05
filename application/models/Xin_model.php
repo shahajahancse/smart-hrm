@@ -292,6 +292,10 @@ class Xin_model extends CI_Model {
 			$arr['lunch_open'] = 'active';
 			$arr['today_active'] = 'active';
 			return $arr;
+		} else if($mClass=='lunch' && $mMethod=='employee_list') {
+			$arr['lunch_open'] = 'active';
+			$arr['lemp_list_active'] = 'active';
+			return $arr;
 		} else if($mClass=='lunch' && $mMethod=='emp_pay_list') {
 			$arr['lunch_open'] = 'active';
 			$arr['emp_pay_active'] = 'active';
@@ -308,6 +312,11 @@ class Xin_model extends CI_Model {
 			$arr['lunch_open'] = 'active';
 			$arr['lusetting_open'] = 'active';
 			$arr['lpackage_active'] = 'active';
+			return $arr;
+		} else if($mClass=='lunch' && $mMethod=='lunch_menu') {
+			$arr['lunch_open'] = 'active';
+			$arr['lusetting_open'] = 'active';
+			$arr['lmenu_active'] = 'active';
 			return $arr;
 		}
 		// lunch

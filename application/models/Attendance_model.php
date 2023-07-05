@@ -316,7 +316,7 @@ class Attendance_model extends CI_Model {
     {   
         if ($process_date == '2023-03-25' || $process_date == '2023-04-15') {
             $off_day = array('Friday','Saturday');
-        } else if ($process_date < '2023-04-20' && $process_date > '2023-03-10') {
+        } else if (($process_date < '2023-04-20' && $process_date > '2023-03-10') || $process_date == '2023-06-24' || $process_date == '2023-06-10')  {
             $off_day = array('Friday');
         } else {
             $off_day = array('Friday','Saturday');

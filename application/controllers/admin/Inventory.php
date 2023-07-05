@@ -1157,6 +1157,7 @@ class Inventory extends MY_Controller {
 	{
         $this->db->where('cate_id',$cate_id);
         $result = $this->db->get('products_sub_categories')->result_array();
+        $data[0] = 'Select Sub Category';
         foreach ($result as $rows) {
             $data[$rows['id']] = $rows['sub_cate_name'];
         }
@@ -1168,7 +1169,7 @@ class Inventory extends MY_Controller {
 	{
         $this->db->where('sub_cate_id',$sub_cate_id);
         $result = $this->db->get('products')->result_array();
-		$data[0]= 'Select Product';
+		$data[0] = 'Select Product';
         foreach ($result as $rows) {
             $data[$rows['id']] = $rows['product_name'];
         }
