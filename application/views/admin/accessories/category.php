@@ -27,13 +27,13 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             </div>
             <input type="hidden" name="hidden_id" value="<?php echo !empty($row->id)? $row->id:''; ?>">
 
-            <div class="col-md-2">
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="description">Short Name</label>
                 <input class="form-control" placeholder="Short Name" name="cat_short_name" type="text" value="<?php echo !empty($row->cat_short_name)? $row->cat_short_name:''; ?>">
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
               <label for="Status">Category Status</label>
               <select name="status" class="form-control" required>  
                 <option value="">Select status</option>
@@ -41,22 +41,19 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
                 <option value="0" <?php echo (isset($row->status) && $row->status == 0) ? 'selected':''; ?> >Inactive</option>
               </select>
             </div>
-            <div class="col-md-5">
-              <div class="form-group">
-                <label for="description">View Titles</label>
-                <textarea class="form-control" placeholder="Tiltes" name="view_title" type="text" ><?php echo !empty($row->view_title)? $row->view_title:''; ?></textarea>
-              </div>
-            </div>
-
-          </div>
-
-              <div class="form-group">
+            <div class="col-md-2">
+              <label for="Status"></label>
+              <div class="form-group" style="margin-top:5px">
                 <?php if(isset($row->id)==null){?>
                 <input type="submit" name="submit" class="btn btn-success" style="float:right" value="Add Category"/>
                 <?php }else{?>
                 <input type="submit" name="submit" class="btn btn-primary" style="float:right" value="Update Category"/>
                 <?php }?>
               </div>
+            </div>
+
+          </div>
+
      
         <?php echo form_close(); ?> </div>
     </div>

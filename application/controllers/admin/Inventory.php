@@ -36,9 +36,9 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
+		$data['title'] = 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store';
-		$data['path_url'] = 'inventory';
+		// $data['path_url'] = 'inventory';
 		$data['products'] 		= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
 		$data['user_role_id'] 	= $session['role_id'];
 		if(!empty($session)){ 
@@ -94,7 +94,7 @@ class Inventory extends MY_Controller {
 
 		$data['title'] 		    =     'Inventory | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']    =     'Store Create Requisition';
-		$data['path_url'] 	    =     'inventory';
+		// $data['path_url'] 	    =     'inventory';
 		$data['categorys']		=     $this->db->get("products_categories")->result();
 		$data['products'] 		=     $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
 		$data['results'] 		=     $this->Inventory_model->product_list();
@@ -191,9 +191,9 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 		
-		$data['title'] 		 = 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
-		$data['path_url'] 	 = 'inventory';
+		$data['title'] 		 = 'Requsition Details | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Requsition Details';
+		// $data['path_url'] 	 = 'inventory';
 		if($session['role_id']==1 || $session['role_id']==3){
 			$data['results']	 = $this->Inventory_model->requisition_details($id);
 			if(!empty($data['results'])){
@@ -207,6 +207,17 @@ class Inventory extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
+	public function requsition_approved($id){
+	// dd($id);
+		$log_user=$_SESSION['username']['user_id'];
+		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
+		$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>4]);
+		if($approved){
+				$this->session->set_flashdata('warning', ' Requsition Status Rejected .');
+				redirect("admin/inventory/index","refresh");
+		}
+	}
+
 	public function requsition_rejected($id){
 		// dd($id);
 		$log_user=$_SESSION['username']['user_id'];
@@ -218,15 +229,26 @@ class Inventory extends MY_Controller {
 		}
 	}
 
-	// reqisition change status
+		public function requsition_approvedd($id){
+		// dd($id);
+		$log_user=$_SESSION['username']['user_id'];
+		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
+		$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
+		if($approved){
+			 $this->session->set_flashdata('success', ' Requsition Status Approved .');
+		     redirect("admin/inventory/index","refresh");
+		}
+	}
+
+	// reqisition change status requsition_edit_approved
 	public function requsition_edit_approved($id){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title']       = 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
-		$data['path_url']    = 'inventory';
+		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Requsition ';
+		// $data['path_url']    = 'inventory';
 	    $data['results'] 	 = $this->Inventory_model->requisition_details($id);
 		if(!empty($data['results'])){
 			$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
@@ -410,7 +432,7 @@ class Inventory extends MY_Controller {
 			//Dropdown
 			$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
 			$data['breadcrumbs']	= 'Store';
-			$data['path_url'] 		= 'inventory';
+			// $data['path_url'] 		= 'inventory';
 			$data['categorys']		= $this->db->get("products_categories")->result();
 			$data['products'] 		= $this->Inventory_model->purchase_products_requisition($session['user_id'],$session['role_id']);
 
@@ -556,7 +578,7 @@ class Inventory extends MY_Controller {
 		
 		$data['title'] 		 = 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store';
-		$data['path_url'] 	 = 'inventory';
+		// $data['path_url'] 	 = 'inventory';
 		if($session['role_id']==1){
 			$data['results']	 = $this->Inventory_model->product_purches_details($id);
 			if(!empty($data['results'])){
@@ -594,9 +616,9 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title']       = 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
-		$data['path_url']    = 'inventory';
+		$data['title']       = 'Purchase | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Purchase';
+		// $data['path_url']    = 'inventory';
 	    $data['results'] 	 = $this->Inventory_model->product_requisition_details($id);
 		// dd($data['results']);
 	    // $data['user_id'] 	 = $id;
@@ -759,7 +781,7 @@ class Inventory extends MY_Controller {
 		//Dropdown
 		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']	= 'Store';
-		$data['path_url'] 		= 'inventory';
+		// $data['path_url'] 		= 'inventory';
 		$data['products']		= $this->db->get("product_supplier")->result();
 		$data['col'] 			= $id;
 		$data['user_role_id'] 	= $session['role_id'];
@@ -772,9 +794,9 @@ class Inventory extends MY_Controller {
 		//search supplier details
 		
 		$data['result'] = $this->db->where('id', $id)->get('product_supplier')->row();
-		$data['title'] 			= 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs']	= 'Inventory';
-		$data['path_url'] 		= 'inventory';
+		$data['title'] 			= 'Supplier Details | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Supplier Details';
+		// $data['path_url'] 		= 'inventory';
 	 
 		// dd($data['products']);
 		$data['subview'] 		= $this->load->view("admin/inventory/supplier_details", $data, TRUE);
@@ -818,8 +840,8 @@ class Inventory extends MY_Controller {
 			redirect('admin/');
 		}
 		
-		$data['title'] 		 = 'Store | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store';
+		$data['title'] 		 = 'Report | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Report';
 		// $data['path_url'] 	 = 'inventory';
 	
 		$data['subview'] 	 = $this->load->view("admin/inventory/report", $data, TRUE);
@@ -988,7 +1010,7 @@ class Inventory extends MY_Controller {
         //Dropdown
 		$data['title'] = 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store';
-		$data['path_url'] = 'inventory';
+		// $data['path_url'] = 'inventory';
 	    $data['results'] = $this->Inventory_model->product_list();
 	    $data['categorys'] = $this->db->get("products_categories")->result();
 	    $data['sub_categorys'] = $this->db->get("products_sub_categories")->result();
@@ -1008,9 +1030,9 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store';
-		$data['path_url'] = 'inventory';
+		$data['title'] = 'Unit | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Add Unit';
+		// $data['path_url'] = 'inventory';
 
 		//Validate and input data
       	$this->form_validation->set_rules('unit_name', 'Unit name', 'required|trim');
@@ -1049,9 +1071,9 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store';
-		$data['path_url'] = 'inventory';
+		$data['title'] = 'category | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Add category';
+		// $data['path_url'] = 'inventory';
 
 		//Validate and input data
       	$this->form_validation->set_rules('category_name', 'Category name', 'required|trim');
@@ -1090,9 +1112,9 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store';
-		$data['path_url'] = 'inventory';
+		$data['title'] = 'Sub Category | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Add Sub Category';
+		// $data['path_url'] = 'inventory';
 
 		//Validate and input data
       	$this->form_validation->set_rules('cate_id', 'category name', 'required|trim');
@@ -1184,115 +1206,6 @@ class Inventory extends MY_Controller {
 	}
 
 
-	//  accessories 
-
-	public function mamange_accessories($id = null)
-	{
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-
-      //Validation
-		//   $this->form_validation->set_rules('cat_id', 'select category', 'required|trim');
-		//   $this->form_validation->set_rules('sub_cate_id', 'select sub category', 'required|trim');
-		//   $this->form_validation->set_rules('unit_id', 'select unit', 'required|trim');
-		//   $this->form_validation->set_rules('product_name', 'item name', 'required|trim');
-
-		//Validate and input data
-		if ($this->form_validation->run() == true){
-			$form_data = array(
-			    'cat_id'        => $this->input->post('cat_id'),
-			    'sub_cate_id'   => $this->input->post('sub_cate_id'),
-			    'product_name'  => $this->input->post('product_name'),
-			    'unit_id'       => $this->input->post('unit_id'),
-			    'quantity'      => $this->input->post('quantity'),
-			    'order_level'   => $this->input->post('order_level')
-			);           
-
-			if ($hid = $this->input->post('hidden_id')) {
-				$this->db->where('id', $hid)->update('products', $form_data);
-		        $this->session->set_flashdata('success', 'Successfully Updated Done');
-			} else {
-				if($this->Inventory_model->save('products', $form_data)){
-			        $this->session->set_flashdata('success', 'Successfully Insert Done');
-				} else {
-					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
-				}
-			}
-			redirect('admin/inventory/products');
-		}
-
-        //Dropdown
-		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
-		$data['path_url'] = 'inventory';
-	    $data['results'] = $this->Inventory_model->product_list();
-	    $data['categorys'] = $this->db->get("products_categories")->result();
-	    $data['sub_categorys'] = $this->db->get("products_sub_categories")->result();
-	    $data['units'] = $this->db->get("product_unit")->result();
-	    $data['col'] = $id;
-		if ($id != null) {
-			$data['row'] = $this->db->where('id',$id)->get("products")->row();
-		}
-
-		$data['subview'] = $this->load->view("admin/inventory/manage_accessories", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
-	}
-
-	public function user_uses_list($id = null)
-	{
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-
-      //Validation
-		//   $this->form_validation->set_rules('cat_id', 'select category', 'required|trim');
-		//   $this->form_validation->set_rules('sub_cate_id', 'select sub category', 'required|trim');
-		//   $this->form_validation->set_rules('unit_id', 'select unit', 'required|trim');
-		//   $this->form_validation->set_rules('product_name', 'item name', 'required|trim');
-
-		//Validate and input data
-		if ($this->form_validation->run() == true){
-			$form_data = array(
-			    'cat_id'        => $this->input->post('cat_id'),
-			    'sub_cate_id'   => $this->input->post('sub_cate_id'),
-			    'product_name'  => $this->input->post('product_name'),
-			    'unit_id'       => $this->input->post('unit_id'),
-			    'quantity'      => $this->input->post('quantity'),
-			    'order_level'   => $this->input->post('order_level')
-			);           
-
-			if ($hid = $this->input->post('hidden_id')) {
-				$this->db->where('id', $hid)->update('products', $form_data);
-		        $this->session->set_flashdata('success', 'Successfully Updated Done');
-			} else {
-				if($this->Inventory_model->save('products', $form_data)){
-			        $this->session->set_flashdata('success', 'Successfully Insert Done');
-				} else {
-					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
-				}
-			}
-			redirect('admin/inventory/user_uses_list');
-		}
-
-        //Dropdown
-		$data['title'] = 'Inventory | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Inventory';
-		$data['path_url'] = 'inventory';
-	    $data['user_uses_list'] = $this->Inventory_model->user_uses_list();
-	    $data['categorys'] = $this->db->get("products_categories")->result();
-	    $data['sub_categorys'] = $this->db->get("products_sub_categories")->result();
-	    $data['units'] = $this->db->get("product_unit")->result();
-	    $data['col'] = $id;
-		if ($id != null) {
-			$data['row'] = $this->db->where('id',$id)->get("products")->row();
-		}
-
-		$data['subview'] = $this->load->view("admin/inventory/user_uses_list", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
-	}
 
 
 }
