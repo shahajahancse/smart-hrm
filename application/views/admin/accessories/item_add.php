@@ -32,7 +32,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
             <div class="col-md-3">
               <label for="Status">Category Name</label>
-              <select name="cat_id" class="form-control" required >  
+              <select name="cat_id" id="cat_id" class="form-control" required >  
                 <option value="">Select Category</option>
                 <?php foreach ($categories as $key => $category) {?>
                 <option value="<?php echo $category->id ?>" <?php echo (isset($row->cat_id) && $row->cat_id == $category->id)? 'selected':''; ?> ><?php echo $category->cat_name ?></option>
@@ -51,11 +51,8 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
             <div class="col-md-2" >
               <label for="Status">Device Model</label>
-              <select name="device_model" class="form-control" >  
+              <select name="device_model" class="form-control" id="model_name">  
                 <option value="">Select Model</option>
-                <?php foreach ($models as $key => $model) {?>
-                <option value="<?php echo $model->id ?>" <?php echo (isset($row->device_model) && $row->device_model == $model->id)? 'selected':''; ?> ><?php echo $model->model_name?></option>
-                <?php }?>
               </select>
             </div>
             
@@ -106,7 +103,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
             <div class="col-md-2"  >
               <label for="Status">Use Sim Number</label>
-              <select name="use_number" class="form-control" >  
+              <select name="use_number" id="use_number" class="form-control" disabled>  
                 <option value="" disabled selected>Select</option>
                 <option value="1" <?php echo (isset($row->use_number) && $row->use_number == 1)? 'selected':''; ?> >Yes</option>
                 <option value="2" <?php echo (isset($row->use_number) && $row->use_number == 2)? 'selected':''; ?> >No</option>
@@ -116,7 +113,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
             <div class="col-md-3" >
               <label for="Status">Select Sim Number</label>
-              <select name="number" class="form-control">  
+              <select name="number" id="number"  class="form-control" disabled>  
                 <option value="">Select Number</option>
                 <?php foreach($numbers as $number){?>
                 <option value="<?php echo $number->id?>" <?php echo (isset($row->number) && $row->number == $number->number )? 'selected':''; ?> ><?php echo $number->number?></option>
@@ -130,7 +127,6 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
           </div>
           
-      
           <?php if(isset($row->id)==null){?>
                 <input type="submit" name="submit" class="btn btn-success" style="float:right" value="Add Item"/>
                 <?php }else{?>
@@ -142,78 +138,38 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 </div>
 
 
-<script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 
+<script>
+  
+	// function category(val) {
+  //       var category = $('#cat_id').find(":selected").text();  
+
+  //   // var sim = category.search(/sim/i); 
+
+  //    alert(category);return;
+
+	// }
 
 $('#cat_id').on('change',function(){
 
-  var category = $('#cat_id').find(":selected").text();  
-
-  var cat_name = category.search(/Mobile/i); 
-  var sim = category.search(/Sim/i); 
-
-
-  if(cat_name !== -1){
-    $('#use_number_div_id').show(500);
-
-    $('#use_number_id').on('change',function(){
-      var number = $('#use_number_id').find(":selected").val();  
-      if(number ==1){
-        $('#number_id').show(500);
-      }
-      else{
-      $('#number_id').hide(500);
-      }
-    });
-
-  }
-  else{
-    $('#use_number_div_id').hide(500);
-  }
-
-
-  if(sim !== -1){
-    $('#number_id').show(500);
-    $('#use_number_div_id').show(500);
-  }
-  else{
-    $('#number_id').hide(500);
-    $('#use_number_div_id').hide(500);
-
-  }
-
-
-
-
-
-
-
-
-
-});
-
-$('#status_id').on('change',function() {
-  var status = $('#status_id').find(":selected").val();  
- 
-  if(status ==1){
-    $('#user_id').show(500);
-  }
-  else{
-    $('#user_id').hide(500);
-  }
+var val = $('#cat_id').find(":selected").val();  
+var category = $('#cat_id').find(":selected").text();  
+          $.ajax({
+            type: "POST",
+            url: "<?php echo base_url('admin/accessories/get_model')?>",
+            data:'cat_id='+val,
+            success: function(data){
+            $("#model_name").html(data);
+            }
+          });
+    var sim = category.search(/Sim/i); 
+    if(sim !== -1){
+       $("#use_number").prop('disabled', false);
+      //  $("#number").prop('disabled', false);
+    }
 
   });
 
-  // $('#status_id').on('change',function() {
-  var status = $('#status_id').find(":selected").val();  
- 
-  if(status ==1){
-    $('#user_id').show(500);
-  }
-  else{
-    $('#user_id').hide(500);
-  }
-
-  // });
-
+// onChange="category(this.value);"
 </script>
