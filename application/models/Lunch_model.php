@@ -360,6 +360,9 @@ class Lunch_model extends CI_Model {
 		return $data;
        
     }
+    public function save($table, $data){
+        return $this->db->insert($table, $data);
+     }
 
     public function pay_vend_ajax_request($id)
     {

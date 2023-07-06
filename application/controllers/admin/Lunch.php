@@ -877,6 +877,61 @@ public function pay_vend_ajax_request()
 
     }
 
+    // ============================ Vendor Pakage Payment ============================
+
+	public function lunch_menu($id = null){
+     
+
+		$session = $this->session->userdata('username');
+		//  dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+        // dd($session);
+
+		$this->form_validation->set_rules('name', 'Pakage name', 'required|trim');
+		$this->form_validation->set_rules('description', 'address', 'required|trim');
+
+		if ($this->form_validation->run() == true){
+			$menu_data = array( 
+					'pakage_name'		 => $_POST['name'],
+					'details'	 => $_POST['description'],
+					
+				);				 
+									
+			if ($hid = $this->input->post('hid')) {
+				$this->db->where('id', $hid)->update('lunch_vendor_menu', $menu_data);
+				$this->session->set_flashdata('success', 'Successfully Updated Done');
+			} else {
+				if($this->Lunch_model->save('lunch_vendor_menu', $menu_data)){
+					$this->session->set_flashdata('success', 'Successfully Insert Done');
+				} else {
+					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+				}
+			}
+		}
+						
+
+		//Dropdown
+		$data['title'] 			= 'Lunch | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Vendor Pakage';
+        $this->db->order_by('id', 'desc');
+        $data['menulist'] = $this->db->get("lunch_vendor_menu")->result();
+		$data['col'] 			= $id;
+		$data['user_role_id'] 	= $session['role_id'];
+		
+		$data['subview'] 		= $this->load->view("admin/lunch/lunch_menu", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+    public function get_menu_ajax($id)
+	{   
+		$this->db->where('id', $id);
+		$result = $this->db->get('lunch_vendor_menu')->row();
+		header('Content-Type: application/x-json; charset=utf-8');
+		echo (json_encode($result));
+	}
+
 
 }
 ?>
