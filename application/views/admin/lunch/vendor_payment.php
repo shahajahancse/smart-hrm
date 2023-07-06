@@ -374,6 +374,10 @@ function submit() {
     var payableAmount = document.getElementById('payable_amount').value;
     var dueAmount = document.getElementById('due_amount').value;
     var payAmount = document.getElementById('pay_amount').value;
+    if (payAmount===''){
+        alert('Please Enter PayAmount');
+        return false;
+    }
     var remarks = document.getElementById('remarks').value;
     var last_collection_id = document.getElementById('last_collection_id').value;
 
