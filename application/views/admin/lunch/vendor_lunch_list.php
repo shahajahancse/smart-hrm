@@ -84,6 +84,9 @@
     font-size: 13px;
     font-weight: bold;
 }
+th{
+    text-align: center;
+}
 </style>
 
 <!-- Modal -->
@@ -129,19 +132,23 @@
         <div class="col-md-12">
             <div class="form-group col-md-3">
                 <p class="levels"> Date</p>
-                <input type="date" class="form-control" style="border-radius: 6px;" value="<?= date('Y-m-d')?>" disabled>
+                <input type="date" class="form-control" id="date" style="border-radius: 6px;" value="<?= date('Y-m-d')?>" disabled>
             </div>
             <div class="form-group col-md-2">
                 <p class="levels">Total Meal</p>
-                <input type="number" id="total_meal" class="form-control" style="border-radius: 6px;" >
+                <input type="number" id="total_meal" onchange=changemeal() class="form-control" style="border-radius: 6px;">
             </div>     
             <div class="form-group col-md-2">
                 <p class="levels">Total Amount</p>
-                <input type="number" id="total_meal" class="form-control" style="border-radius: 6px;" >
+                <input type="number" id="total_amount" class="form-control" style="border-radius: 6px;" disabled>
+            </div>
+            <div class="col-md-3">
+                <p class="levels">Upload File</p>
+                <input type="file" id="file" accept=".pdf, image/*">
             </div>
             <div class="form-group col-md-12">
                 <p class="levels">Remarks</p>
-                <textarea name="" id="remarks" style="width: 100%; height: 104px;"></textarea>
+                <textarea name="" id="remarks" style="width: 100%;height: 104px;border-radius: 6px;" required></textarea>
              
             </div>
             
@@ -158,51 +165,45 @@
         <thead>
             <tr>
                 <th>SL</th>
-                <th>Date</th>
-                <th>P.Due</th>
-                <th>From Date</th>
-                <th>To Date</th>
-                <th>Total Meal</th>
-                <th>Pay Amount</th>
-                <th>Net Payment</th>
-                <th>Paid Amount</th>
-                <th>Due</th>
-                
+                <th>Date</th> 
+                <th>Meal Qty</th> 
+                <th>Amount</th> 
+                <th>File</th>
                 <th>Remarks</th>
-
                 <th>Action</th>
 
             </tr>
         </thead>
         <tbody>
+        <!-- [0] => stdClass Object
+        (
+            [id] => 1
+            [date] => 2023-07-05
+            [meal_qty] => 768
+            [amount] => 69120
+            [remarks] => hkj
+            [file] => uploads/vendor_file/2023-07-05.pdf
+            [status] => 0
+            [created_at] => 2023-07-05 19:06:31
+            [updated_at] => 2023-07-05 19:06:31
+        ) -->
+
             <?php foreach ($payment_data as $key=>$row): ?>
             <tr>
                 <td><?php echo $key+1 ?></td>
-                <?php    $convert = date('d-m-Y', strtotime($row->date)); ?>
-                <td><?php echo $convert; ?></td>
-                <td><?php echo $row->previous_due; ?></td>
-                <?php   
-                $convertedDate = date('d-m-Y', strtotime($row->from_date));
-                $convertedDate2 = date('d-m-Y', strtotime($row->to_date));
-                ?>
-                <td><?php echo $convertedDate  ?></td>
-                <td><?php echo  $convertedDate2 ?></td>
-                <td><?php echo $row->total_meal; ?></td>
-                <td><?php echo $row->pay_amount; ?></td>
-                <td><?php echo $row->net_payment; ?></td>
-                <td><?php echo $row->paid_amount; ?></td>
-                <td><?php echo $row->due; ?></td>
-            
-                <?php if($row->Remarks){  ?>
-                  <td style="text-align: center;" title="<?php echo $row->Remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->Remarks ), 0, 4)); ?></td>
-                 <?php }else{ ?>
-                    <td style="text-align: center;" > ...</td>
-                 <?php } ?>
+                <td><?php echo $row->date; ?></td>
+                <td><?php echo $row->meal_qty; ?></td>
+                <td><?php echo $row->amount;?></td>
                 <td>
-                    <?=($row->status==0)? '<a data-toggle="modal" data-target="#make_payment" onclick="giveid('.$row->id.','.$row->due .','.$row->paid_amount.')" class="btn btn-primary">Paid</a>': 'Paid'?>
+                    <a href="<?php echo base_url($row->file);?>">View</a>
+                    <a href="<?php echo base_url($row->file);?>" download>Download</a>
                 </td>
-                
- 
+                <?php if($row->remarks){ ?>
+                  <td style="text-align: center;" title="<?php echo $row->remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->remarks ), 0, 4)); ?></td>
+                 <?php }else{ ?>
+                    <td style="text-align: center;" >...</td>
+                 <?php } ?>
+                 <td>Edit</td>
 
             </tr>
             <?php endforeach; ?>
@@ -216,4 +217,61 @@
     paymentBox.classList.toggle('open');
 }
 
+</script>
+<script>
+$(document).ready(function() {
+    $('#myTable').DataTable({
+      "order": [[2, "desc"]]
+    });
+   
+});
+</script>
+<script>
+  function changemeal() {
+    var inputData = $("#total_meal").val();
+    $("#total_amount").val(inputData * 90);
+  }
+</script>
+<script>
+function submit() {
+// Get form values
+            var date = $('#date').val();
+            var totalMeal = $('#total_meal').val();
+            var remarks = $('#remarks').val();
+            var total_amount = $('#total_amount').val();
+
+            // Prepare form data
+            var formData = new FormData();
+            formData.append('date', date);
+            formData.append('total_meal', totalMeal);
+            formData.append('remarks', remarks);
+            formData.append('total_amount', total_amount);
+            formData.append('file', $('#file')[0].files[0]);
+
+            url = '<?= base_url('/admin/lunch/vendor_data/')?>'
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+            Swal.fire({
+                title: 'Success!',
+                text: response,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            // Handle the error
+            console.log('AJAX request error');
+            console.log(xhr.responseText);
+        }
+            });
+}
 </script>
