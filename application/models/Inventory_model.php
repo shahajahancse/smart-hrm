@@ -500,7 +500,9 @@ class inventory_model extends CI_Model
 			$this->db->where("products.quantity < products.order_level");
 		}
 	
-		$this->db->order_by('products.quantity', 'ASC');
+		// $this->db->order_by('products.quantity', 'ASC');
+		$this->db->order_by('products_categories.category_name');
+		
 		$query = $this->db->get();
 		$data = $query->result();
 	
