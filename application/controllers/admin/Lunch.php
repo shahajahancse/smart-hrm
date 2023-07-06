@@ -31,7 +31,6 @@ class Lunch extends MY_Controller {
         $this->load->model("Attendance_model");
         $this->load->library('form_validation');
         $this->load->helper('date');
-
     }
 
     public function index()
@@ -755,12 +754,12 @@ public function make_id_payment(){
                 $emp = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
         
                 foreach($emp as $row){
-                    
+                    $p_stutus=$this->db->query("SELECT * FROM `xin_attendance_time` WHERE `employee_id` = $row->user_id AND `attendance_date` = $dateoff")->result()[0]->status;
                     $data2 = array(
                     'lunch_id'      => $insert_id,
                     'emp_id'        => $row->user_id,
                     'meal_amount'   => 0,
-                    'p_stutus'      => 'Lunch Off',
+                    'p_stutus'      => $p_stutus,
                     'comment'       => '',
                     'date'          => $dateoff,
                        );
