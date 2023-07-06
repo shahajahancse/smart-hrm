@@ -3,6 +3,14 @@
 // dd($result);
 ?>
 <style>
+#ve {
+    display: none;
+}
+
+#dw {
+    display: none;
+}
+
 .addbox {
     min-height: 49px;
     width: 100%;
@@ -84,74 +92,53 @@
     font-size: 13px;
     font-weight: bold;
 }
-th{
+
+th {
     text-align: center;
+}
+
+p {
+    margin: 0 0 0px;
 }
 </style>
 
 <!-- Modal -->
-<div class="modal fade" id="make_payment" tabindex="-1" role="dialog" aria-labelledby="make_payment" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle" style="float: left">Payment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"style="float: right">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" style="overflow: auto; padding:0px;">
-                <input type="hidden" id="rawid" value="">
-                <input type="hidden" id="prepaid" value="">
-                <div class="form-group col-md-4" style="padding-top: 7px">
-                    <label for="deu_amount">Deu Amount</label>
-                    <input type="number" class="form-control" id="deu_amount" placeholder="Amount" style="border-radius: 5px" disabled >
-                </div>
-                <div class="form-group  col-md-4" style="padding-top: 7px">
-                    <label for="paid_amount">Amount</label>
-                    <input type="number" onchange=changpayment() class="form-control" id="paid_amount" placeholder="Amount" style="border-radius: 5px">
-                </div>
-                <div class="form-group  col-md-4" style="padding-top: 7px" >
-                    <label for="present_deu">Deu</label>
-                    <input type="number" class="form-control" id="present_deu" placeholder="Amount" disabled style="border-radius: 5px">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="mcloss" data-dismiss="modal" style="margin-right:3px;">Close</button>
-                <button type="button" onclick="make_id_payment()" class="btn btn-primary" style="margin-right:3px;">Submit</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="addbox">
-    <p class="p" style="font-size: 25px; font-weight: bold; float: left;">Payment List</p>
-    <a class="btn btn-primary accordion" onclick="togglePaymentBox()">Make Payment</a>
-</div>
 
+<div class="addbox">
+    <p class="p" style="font-size: 25px; font-weight: bold; float: left;">Vendor Meal List</p>
+    <a class="btn btn-primary accordion" onclick="togglePaymentBox()">Add Meal</a>
+</div>
 <div class="panels payment_box" id="paymentBox">
     <section class="section_box">
         <div class="col-md-12">
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
                 <p class="levels"> Date</p>
-                <input type="date" class="form-control" id="date" style="border-radius: 6px;" value="<?= date('Y-m-d')?>" disabled>
+                <input type="date" class="form-control" id="date" style="border-radius: 6px;"
+                    value="<?= date('Y-m-d')?>" >
             </div>
             <div class="form-group col-md-2">
                 <p class="levels">Total Meal</p>
-                <input type="number" id="total_meal" onchange=changemeal() class="form-control" style="border-radius: 6px;">
-            </div>     
+                <input type="number" id="total_meal" onchange=changemeal() class="form-control"
+                    style="border-radius: 6px;">
+            </div>
             <div class="form-group col-md-2">
                 <p class="levels">Total Amount</p>
                 <input type="number" id="total_amount" class="form-control" style="border-radius: 6px;" disabled>
             </div>
             <div class="col-md-3">
-                <p class="levels">Upload File</p>
+                <input type="hidden" name="" id="prefile" value="">
+                <p class="levels" style="float: left;margin-right: 5px;">Upload File</p>
+                <a href="" id="ve" class="pre">View</a>
+                <a href="" id="dw" class="pre" download>Download</a>
                 <input type="file" id="file" accept=".pdf, image/*">
             </div>
             <div class="form-group col-md-12">
                 <p class="levels">Remarks</p>
-                <textarea name="" id="remarks" style="width: 100%;height: 104px;border-radius: 6px;" required></textarea>
-             
+                <textarea name="" id="remarks" style="width: 100%;height: 104px;border-radius: 6px;"
+                    required></textarea>
+
             </div>
-            
+
         </div>
         <div class="col-md-12">
             <a onclick="submit()" class="btn btn-primary" style="float: right;margin-right: 19px;">Submit</a>
@@ -165,9 +152,9 @@ th{
         <thead>
             <tr>
                 <th>SL</th>
-                <th>Date</th> 
-                <th>Meal Qty</th> 
-                <th>Amount</th> 
+                <th>Date</th>
+                <th>Meal Qty</th>
+                <th>Amount</th>
                 <th>File</th>
                 <th>Remarks</th>
                 <th>Action</th>
@@ -175,19 +162,6 @@ th{
             </tr>
         </thead>
         <tbody>
-        <!-- [0] => stdClass Object
-        (
-            [id] => 1
-            [date] => 2023-07-05
-            [meal_qty] => 768
-            [amount] => 69120
-            [remarks] => hkj
-            [file] => uploads/vendor_file/2023-07-05.pdf
-            [status] => 0
-            [created_at] => 2023-07-05 19:06:31
-            [updated_at] => 2023-07-05 19:06:31
-        ) -->
-
             <?php foreach ($payment_data as $key=>$row): ?>
             <tr>
                 <td><?php echo $key+1 ?></td>
@@ -199,11 +173,12 @@ th{
                     <a href="<?php echo base_url($row->file);?>" download>Download</a>
                 </td>
                 <?php if($row->remarks){ ?>
-                  <td style="text-align: center;" title="<?php echo $row->remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->remarks ), 0, 4)); ?></td>
-                 <?php }else{ ?>
-                    <td style="text-align: center;" >...</td>
-                 <?php } ?>
-                 <td>Edit</td>
+                <td style="text-align: center;" title="<?php echo $row->remarks; ?>">
+                    <?php echo implode(' ', array_slice(explode(' ', $row->remarks ), 0, 4)); ?></td>
+                <?php }else{ ?>
+                <td style="text-align: center;">...</td>
+                <?php } ?>
+                <td><a onclick="edit_vendor_data(<?php echo $row->id;?>)">Edit</a></td>
 
             </tr>
             <?php endforeach; ?>
@@ -212,50 +187,67 @@ th{
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 <script>
-    function togglePaymentBox() {
+function togglePaymentBox() {
     var paymentBox = document.getElementById('paymentBox');
     paymentBox.classList.toggle('open');
+
+    var currentDate = new Date().toISOString().split('T')[0];
+    $('#date').val(currentDate);
+    $('#total_meal').val(0);
+    $('#remarks').val('');
+    $('#total_amount').val(0);
+    $('#ve').css({
+        'display': 'none',
+    });
+
+    $('#dw').css({
+        'display': 'none',
+    });
 }
 
 </script>
 <script>
 $(document).ready(function() {
     $('#myTable').DataTable({
-      "order": [[2, "desc"]]
+        "order": [
+            [2, "desc"]
+        ]
     });
-   
+
 });
 </script>
 <script>
-  function changemeal() {
+function changemeal() {
     var inputData = $("#total_meal").val();
     $("#total_amount").val(inputData * 90);
-  }
+}
 </script>
 <script>
 function submit() {
-// Get form values
-            var date = $('#date').val();
-            var totalMeal = $('#total_meal').val();
-            var remarks = $('#remarks').val();
-            var total_amount = $('#total_amount').val();
+    // Get form values
+    var date = $('#date').val();
+    var totalMeal = $('#total_meal').val();
+    var remarks = $('#remarks').val();
+    var total_amount = $('#total_amount').val();
+    var prefile = $('#prefile').val();
 
-            // Prepare form data
-            var formData = new FormData();
-            formData.append('date', date);
-            formData.append('total_meal', totalMeal);
-            formData.append('remarks', remarks);
-            formData.append('total_amount', total_amount);
-            formData.append('file', $('#file')[0].files[0]);
+    // Prepare form data
+    var formData = new FormData();
+    formData.append('date', date);
+    formData.append('total_meal', totalMeal);
+    formData.append('remarks', remarks);
+    formData.append('total_amount', total_amount);
+    formData.append('prefile', prefile);
+    formData.append('file', $('#file')[0].files[0]);
 
-            url = '<?= base_url('/admin/lunch/vendor_data/')?>'
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
+    url = '<?= base_url('/admin/lunch/vendor_data/')?>'
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
             Swal.fire({
                 title: 'Success!',
                 text: response,
@@ -272,6 +264,47 @@ function submit() {
             console.log('AJAX request error');
             console.log(xhr.responseText);
         }
+    });
+}
+</script>
+<script>
+function edit_vendor_data(id) {
+    url = '<?= base_url('/admin/lunch/edit_vendor_data/')?>';
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            id: id,
+        },
+        success: function(response) {
+            togglePaymentBox();
+            var parsedData = JSON.parse(response);
+            console.log(parsedData.date);
+
+            // Assigning values to fields
+            $('#date').val(parsedData.date);
+            $('#total_meal').val(parsedData.meal_qty);
+            $('#remarks').val(parsedData.remarks);
+            $('#total_amount').val(parsedData.amount);
+            $('#prefile').val(parsedData.file);
+
+            $('#ve').attr('href', '<?= base_url() ?>' + parsedData.file).css({
+                'display': 'inline-block',
+                'color': 'red',
+                'font-size': '16px'
             });
+
+            $('#dw').attr('href', '<?= base_url() ?>' + parsedData.file).css({
+                'display': 'inline-block',
+                'color': 'blue',
+                'font-size': '14px'
+            });
+        },
+        error: function(xhr, status, error) {
+            // Handle the error
+            console.log('AJAX request error');
+            console.log(xhr.responseText);
+        }
+    });
 }
 </script>
