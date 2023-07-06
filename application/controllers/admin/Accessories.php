@@ -28,7 +28,7 @@ public function index(){
      $data = $this->page_loads();
      $data['title'] = 'Item List'.' | '.$this->Xin_model->site_title();
      $data['breadcrumbs'] = "Item List";
-     $data['path_url'] = "Index";    
+    //  $data['path_url'] = "Index";    
      $data['results'] = $this->Accessories_model->get_product_reports_info($id=null,$status=null,$category=null);
      $datas['subview']= $this->load->view('admin/accessories/index',$data,TRUE);  
      $this->load->view('admin/layout/layout_main', $datas); 
@@ -40,17 +40,15 @@ public function category($id = null){
      $data = $this->page_loads();
      $data['title'] = 'Add Category'.' | '.$this->Xin_model->site_title();
      $data['breadcrumbs'] = "Add Category";
-     $data['path_url'] = "Category";
+    //  $data['path_url'] = "Category";
      $this->form_validation->set_rules('cat_name', 'Category Name', 'required|trim');
      $this->form_validation->set_rules('cat_short_name', 'Category Short Name', 'required|trim');
      $this->form_validation->set_rules('status', 'Status ', 'required|trim');
-     $this->form_validation->set_rules('view_title', 'Title ', 'required|trim');
      if ($this->form_validation->run() == true){
      $form_data = array(
                         'cat_name'       => $this->input->post('cat_name'),
                         'cat_short_name' => $this->input->post('cat_short_name'),
                         'status'         => $this->input->post('status'),
-                        'view_title'         => $this->input->post('view_title'),
 			          );    
         if ($hid = $this->input->post('hidden_id')) {
         $this->db->where('id', $hid)->update('product_accessory_categories', $form_data);
@@ -79,7 +77,7 @@ public function device_model($id = null){
      $data = $this->page_loads();
      $data['title'] = 'Add Device Model'.' | '.$this->Xin_model->site_title();
 	 $data['breadcrumbs'] = "Add Model";
-	 $data['path_url'] = "Model";
+	//  $data['path_url'] = "Model";
      $this->form_validation->set_rules('cat_id', 'Category Name', 'required|trim');
      $this->form_validation->set_rules('model_name', 'Device Model', 'required|trim');
      $this->form_validation->set_rules('status', 'Status ', 'required|trim');
@@ -118,14 +116,14 @@ public function number_add($id = null){
     $data = $this->page_loads();
     $data['title'] = 'Add Number'.' | '.$this->Xin_model->site_title();
     $data['breadcrumbs'] = "Add Number";
-    $data['path_url'] = "Number";
+    // $data['path_url'] = "Number";
     $this->form_validation->set_rules('number', 'Number', 'required|trim');
     $this->form_validation->set_rules('status', 'Number', 'required|trim');
     if ($this->form_validation->run() == true){
     $form_data = array(
                         'number'   => $this->input->post('number'),
                         'status'   => $this->input->post('status'),
-			          );    
+                );    
         if ($hid = $this->input->post('hidden_id')) {
         $this->db->where('id', $hid)->update('mobile_numbers', $form_data);
         $this->session->set_flashdata('success', 'Successfully Updated Done');
@@ -151,15 +149,10 @@ public function number_add($id = null){
 public function item_add($id = null){
     // dd($id);
     $data = $this->page_loads();
-    $data['title']         = 'Add Device Model'.' | '.$this->Xin_model->site_title();
+    $data['title']         = 'Add Item'.' | '.$this->Xin_model->site_title();
 	$data['breadcrumbs']   = "Add Item";
-	$data['path_url']      = "Item";
+	// $data['path_url']      = "Item";
     $this->form_validation->set_rules('cat_id', 'Category Name', 'required|trim');
-    // $this->form_validation->set_rules('device_name_id', 'Device Name', 'required|trim');
-    // $this->form_validation->set_rules('device_model', 'Device Model', 'required|trim');
-    // $this->form_validation->set_rules('description', 'Description', 'required|trim');
-    // $this->form_validation->set_rules('remark', 'Remark', 'required|trim');
-    // $this->form_validation->set_rules('status', 'Status ', 'required|trim');
 
     if ($this->form_validation->run() == true){
 
@@ -201,9 +194,9 @@ public function item_add($id = null){
                             'number'         => $this->input->post('number'),
         );    
 
+        // dd($form_data);
         if ($hid = $this->input->post('hidden_id')) {
-            $this->db->where('cat_id', $hid)->update('product_accessories', $form_data);
-            // dd($form_data);
+            $this->db->where('id', $hid)->update('product_accessories', $form_data);
             $this->session->set_flashdata('success', 'Successfully Updated Done');
              echo $this->item;
         } else {
@@ -252,7 +245,7 @@ public function reports(){
     $data = $this->page_loads();
     $data['title'] = 'Report'.' | '.$this->Xin_model->site_title();
     $data['breadcrumbs'] = "Report";
-    $data['path_url'] = "Report";    
+    // $data['path_url'] = "Report";    
     $datas['subview'] = $this->load->view('admin/accessories/reports',$data,TRUE);  
                         $this->load->view('admin/layout/layout_main', $datas); 
 }
@@ -261,7 +254,7 @@ public function inventory_report($status=null,$category=null){
         $data = $this->page_loads();
         $data['title']       = 'On Working'.' | '.$this->Xin_model->site_title();
         $data['breadcrumbs'] = "On Working";
-        $data['path_url']    = "Working";
+        // $data['path_url']    = "Working";
         if($status!=null && $category!=null){
             $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$_POST['status'],$_POST['category']);
         } else{

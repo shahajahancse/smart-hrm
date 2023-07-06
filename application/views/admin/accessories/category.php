@@ -37,7 +37,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
               <label for="Status">Category Status</label>
               <select name="status" class="form-control" required>  
                 <option value="">Select status</option>
-                <option value="1" <?php echo (!empty($row->status) && $row->status == 1) ? 'selected':''; ?> >Active</option>
+                <option value="1" <?php echo (isset($row->status) && $row->status == 1) ? 'selected':''; ?> >Active</option>
                 <option value="0" <?php echo (isset($row->status) && $row->status == 0) ? 'selected':''; ?> >Inactive</option>
               </select>
             </div>
