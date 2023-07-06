@@ -132,13 +132,13 @@
       <table class="datatables-demo table table-striped table-bordered" id="example">
         <thead>
           <tr>
-            <th style="width:120px;">No.</th>
-            <th style="width:100px;">Product Name</th>
-            <th style="width:100px;">Category Name</th>
-            <th style="width:100px;">Sub Category Name</th>
-            <th style="width:100px;">Unit Name</th>
-            <th style="width:100px;">Quantity</th>
-            <th style="width:100px;">Action</th>
+            <th style="width:40px;">No.</th>
+            <th style="">Product Name</th>
+            <th style="">Category</th>
+            <th style="">Sub Category</th>
+            <th style="">Unit Name</th>
+            <th style="">Quantity</th>
+            <th style="">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -188,7 +188,12 @@
         }
       });
     });
-    $('#example').DataTable();
+
+
+    $('#example').DataTable({
+      "pageLength": 25,
+      "lengthMenu": [[10, 25, 50,100, -1], [10, 25, 50, 100, "All"]],
+    });
   });
 
 </script>
