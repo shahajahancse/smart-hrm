@@ -353,7 +353,7 @@ class Attendance extends MY_Controller {
 	// report section here
     // status wise daily report
     public function daily_report()
-    {  
+    {   
 		$report_date = $this->input->post('attendance_date');
     	$attendance_date = date("Y-m-d", strtotime($report_date));
 		$status = $this->input->post('status');

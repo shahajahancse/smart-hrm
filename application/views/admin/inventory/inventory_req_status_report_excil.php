@@ -36,7 +36,7 @@ header('Cache-Control: max-age=0'); //no cache
 
 <table width="900"width="900" align="center" height="auto" class="sal" border="1" cellspacing="0" cellpadding="2" style="font-size:12px; width:750px;">
 <tr width="900" align="center" style="height:100px;">
-    <td colspan="9" style="text-align:center;">
+    <td colspan="10" style="text-align:center;">
         <div style="font-size:30px; font-weight:bold; text-align:center;margin-top:3px;"><?php echo xin_company_info(1)->company_name; ?></div>
         <div style="font-size:20px; font-weight:bold; text-align:center;"><?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div> 
         <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px"> <?php echo $statusText; ?> Report : <?php echo $first_date; ?> To  <?php echo $second_date; ?></div>
@@ -48,6 +48,7 @@ header('Cache-Control: max-age=0'); //no cache
             <th style="background-color: #4CAF50;color: white;">Employee Name</th>
             <th style="background-color: #4CAF50;color: white;">Department</th>
             <th style="background-color: #d5b2b2; color: black;">Designation</th>
+            <th style="background-color: #d5b2b2; color: black;">Catagory</th>
             <th style="background-color: #d5b2b2; color: black;">Sub Catagory</th>
             <th style="background-color: #d5b2b2; color: black;">Product Name</th>
             <th style="background-color: #d5b2b2; color: black;">Request Quantity</th>
@@ -63,6 +64,7 @@ header('Cache-Control: max-age=0'); //no cache
                                 <td><?php echo $row->first_name . ' ' . $row->last_name ?></td>
                                 <td><?php echo $row->department_name ?></td>
                                 <td><?php echo $row->designation_name ?></td>
+                                <td><?php echo $row->category_name ?></td>
                                  <td><?php echo $row->sub_cate_name ?></td>
                                 <td><?php echo $row->product_name ?></td>
                                 <td><?php echo $row->quantity ?></td>

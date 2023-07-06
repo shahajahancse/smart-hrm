@@ -73,7 +73,7 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
             <td><?=  $raw->first_name .' '. $raw->last_name; ?></td>
             <td><?= $raw->p_stutus ?></td>
             <?php $set = (isset($raw->meal_amount) && $raw->meal_amount != null) ? $raw->meal_amount : 0 ?>
-            <td><input type="number" <?= ($raw->p_stutus == 'present')? 'class="all_meal"'  : 'class=""'; ?>name="m_amount[]"
+            <td><input max="1" min="0" type="number" <?= ($raw->p_stutus == 'present')? 'class="all_meal"'  : 'class=""'; ?>name="m_amount[]"
                     value="<?= ($ps == 'no' && $raw->p_stutus == 'Present')? 1 : $set; ?>" style="width: 83px;"></td>
             <td><input type="text" name="comment[]" value="<?= isset($raw->comment) ? $raw->comment : ''; ?>"></td>
         </tr>
@@ -87,9 +87,13 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
             <th scope="row">1</th>
             <td>Guest</td>
             <td>-</td>
-            <td><input type="number" name="guest" value="<?= isset($guest->guest_m) ? $guest->guest_m : ''; ?>"
-                    style="width: 83px;"></td>
-            <td><input type="text" name="guest_comment" value=""></td>
+           
+            <td>
+                  <input type="number" name="guest" min="0" id="guest-input" value="<?= isset($guest->guest_m) ? $guest->guest_m : ''; ?>" style="width: 83px;">
+            </td>
+            <td>
+                  <input type="text" name="guest_comment" id="guest-comment" value="">
+            </td>
         </tr>
     </tbody>
 </table>
@@ -158,6 +162,18 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
   });
 });
 
+</script>
+<script>
+  const guestInput = document.getElementById('guest-input');
+  const guestCommentInput = document.getElementById('guest-comment');
+
+  guestInput.addEventListener('input', () => {
+    if (guestInput.value > 0) {
+      guestCommentInput.required = true;
+    } else {
+      guestCommentInput.required = false;
+    }
+  });
 </script>
 
 

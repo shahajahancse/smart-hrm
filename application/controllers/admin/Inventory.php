@@ -859,7 +859,7 @@ class Inventory extends MY_Controller {
 				$f2_date = date("Y-m-d", strtotime($second_date));
 				$statusC = $this->input->post('statusC');
 				$data["values"] = $this->Inventory_model->requsition_status_report($f1_date, $f2_date, $statusC);
-
+                //  dd($data["values"]);
 				$data['statusC']= $statusC;
 				$data['first_date'] = $first_date;
 				$data['second_date'] = $second_date;
@@ -946,7 +946,7 @@ class Inventory extends MY_Controller {
 			  }else{
 				    $data['statusC']= $statusC;
 					$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report($statusC);
-					
+					// dd($data['values']);
 					if($exc == 2){
 						$this->load->view("admin/inventory/low_in_status_report_excel", $data);
 					 }else{

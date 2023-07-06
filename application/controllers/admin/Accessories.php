@@ -44,18 +44,19 @@ public function category($id = null){
      $this->form_validation->set_rules('cat_name', 'Category Name', 'required|trim');
      $this->form_validation->set_rules('cat_short_name', 'Category Short Name', 'required|trim');
      $this->form_validation->set_rules('status', 'Status ', 'required|trim');
-     $this->form_validation->set_rules('view_title', 'Title ', 'required|trim');
+     // $this->form_validation->set_rules('view_title', 'Title ', 'required|trim');
      if ($this->form_validation->run() == true){
-     $form_data = array(
-                        'cat_name'       => $this->input->post('cat_name'),
-                        'cat_short_name' => $this->input->post('cat_short_name'),
-                        'status'         => $this->input->post('status'),
-                        'view_title'         => $this->input->post('view_title'),
-			          );    
+        $form_data = array(
+                'cat_name'       => $this->input->post('cat_name'),
+                'cat_short_name' => $this->input->post('cat_short_name'),
+                'status'         => $this->input->post('status'),
+                // 'view_title'     => $this->input->post('view_title'),
+	       ); 
+              
         if ($hid = $this->input->post('hidden_id')) {
-        $this->db->where('id', $hid)->update('product_accessory_categories', $form_data);
-        $this->session->set_flashdata('success', 'Successfully Updated Done');
-        echo $this->category;
+            $this->db->where('id', $hid)->update('product_accessory_categories', $form_data);
+            $this->session->set_flashdata('success', 'Successfully Updated Done');
+            echo $this->category;
         } else {
             if($this->Accessories_model->add_category('product_accessory_categories', $form_data)){
                 $this->session->set_flashdata('success', 'Successfully Insert Done');
@@ -66,9 +67,11 @@ public function category($id = null){
             }
         }
     }
+
     if($id != null) {
       $data['row'] = $this->db->where('id',$id)->get("product_accessory_categories")->row();
     }   
+
      $data['results']=$this->db->select('*')->get('product_accessory_categories')->result();
      $datas['subview']= $this->load->view('admin/accessories/category',$data,TRUE);  
      $this->load->view('admin/layout/layout_main', $datas); 
