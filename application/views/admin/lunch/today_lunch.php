@@ -44,6 +44,8 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
 
 <input type="hidden" id="dateoff" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>">
 <?php } ?>
+<p style="margin: 25px -23px 0px 14px;padding: 0;display: inline-block;float: left;font-weight: bold;">Total Meal</p>
+<input style="float: left;margin-left: 29px;margin-top: 22px;width: 61px;text-align: center;border-radius: 3px;" type="number" id="summeale" value="0">
 <button type="button" class="btn btn-info"  data-toggle="modal" style="float: right;" data-target="#lunchoffmodal">Lunch Off</button>
 
 <table class="table table-hover" style="text-align-last: center;">
@@ -73,7 +75,7 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
             <td><?=  $raw->first_name .' '. $raw->last_name; ?></td>
             <td><?= $raw->p_stutus ?></td>
             <?php $set = (isset($raw->meal_amount) && $raw->meal_amount != null) ? $raw->meal_amount : 0 ?>
-            <td><input max="1" min="0" type="number" <?= ($raw->p_stutus == 'present')? 'class="all_meal"'  : 'class=""'; ?>name="m_amount[]"
+            <td><input max="1" min="0" type="number" onchange="summeal()" <?= ($raw->p_stutus == 'present')? 'class="all_meal activmeal"'  : 'class="activmeal"'; ?>name="m_amount[]"
                     value="<?= ($ps == 'no' && $raw->p_stutus == 'Present')? 1 : $set; ?>" style="width: 83px;"></td>
             <td><input type="text" name="comment[]" value="<?= isset($raw->comment) ? $raw->comment : ''; ?>"></td>
         </tr>
@@ -89,7 +91,7 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
             <td>-</td>
            
             <td>
-                  <input type="number" name="guest" min="0" id="guest-input" value="<?= isset($guest->guest_m) ? $guest->guest_m : ''; ?>" style="width: 83px;">
+                  <input type="number" name="guest" min="0" id="guest-input"  onchange="summeal()" class="activmeal" value="<?= isset($guest->guest_m) ? $guest->guest_m : '0'; ?>" style="width: 83px;">
             </td>
             <td>
                   <input type="text" name="guest_comment" id="guest-comment" value="">
@@ -175,7 +177,24 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
     }
   });
 </script>
+<script>
+function summeal() {
+  var elements = document.getElementsByClassName("activmeal");
+  var all_meal = 0;
 
+  for (var i = 0; i < elements.length; i++) {
+    var elementData = parseFloat(elements[i].value);
+    all_meal += elementData;
+  }
 
+  console.log(all_meal);
+  document.getElementById('summeale').value=all_meal;
+
+}
+</script>
+
+<script>
+  summeal()
+</script>
 
 
