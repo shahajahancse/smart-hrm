@@ -16,16 +16,17 @@ $get_animate = $this->Xin_model->get_content_animate();
     <br/>
   </div>
   <div class="box-body">
-    <div class="box-datatable table-responsive" >
-    <input type="hidden" value="1" id="count">
-      <table class="datatables-demo table table-striped table-bordered" id="" style="width:100%">
+    <div class="box-datatable table-responsive">
+    <!-- <input type="text" value="1" id="count"> -->
+      <table class="table table-striped table-bordered" id="" style="width:100%">
         <thead>
           <tr>
               <th class="text-center" >No.</th>
                 <th class="text-center" >Category</th>
                 <th class="text-center" >Sub Category</th>
                 <th class="text-center" >Product Name</th>
-                <th class="text-center" >Quantity</th>
+                <th class="text-center" >Request Quantity</th>
+                <th class="text-center" >Stock Quantity</th>
           </tr>
         </thead>
         <?php echo form_open('admin/inventory/persial_approved/'.$requisition_id)?>
@@ -38,24 +39,24 @@ $get_animate = $this->Xin_model->get_content_animate();
                 <td><?php echo $row->category_name?></td>
                 <td><?php echo $row->sub_cate_name?></td>
                 <td><?php echo $row->product_name?></td>
-                <td><input type="number" id="quantity" name="qunatity[]" min="1" style="width:20%" value="<?php echo $row->quantity?>"></td>
+                <td><input type="number" id="quantity" name="qunatity[]" min="1" style="width:40%" value="<?php echo $row->quantity?>"></td>
+                <td><?php echo $row->p_qty?></td>
                 <td><a href="<?php echo base_url('admin/inventory/delete_requsiton_item/'.$row->id.'/'.$requisition_id)?>">Delete</a></td>
-                <input type="hidden" name="r_id[]" value="<?php echo $row->id?>" >
+                <input type="hidden" name="r_id[]" value="<?php echo $row->id?>">
 
             </tr>
             <?php }?>
         </tbody>
       </table>
-      <!-- <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/persial_approved/'.$requisition_id);?>">Approved</a> -->
-       <?php if(!empty($results)){?>
-        <?php if($session['role_id']==1) {?>
+      <?php if(!empty($results)){?>
+      <?php if($session['role_id']==1) {?>
       <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-<?php if($row->status!=5){?>
-      <input type="submit" name="first_step" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="First Step Approved">
+      <?php } ?>
+      <?php if($session['role_id']==4){?>
+      <input type="submit" name="first_step" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
          <?php } ?>
-      <?php }else{?>
-        <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="update">
-    <?php }}?>
+
+      <?php }?>
         <?php echo form_close()?>
     </div>
   </div>

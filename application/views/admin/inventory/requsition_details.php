@@ -34,7 +34,7 @@ $get_animate = $this->Xin_model->get_content_animate();
   <div class="box-header with-border">
     <h3 class="box-title">Requisition List</h3>
 
-    <?php if($session['role_id']==1){ if($status == 1 || $status == 4){?>
+    <?php if($session['role_id']== 1 || $session['role_id']== 4){ if($status == 1 || $status == 4){?>
       <?php if(!empty($results)){?>
 
          <?php echo form_open('admin/inventory/persial_approved/'.$requisition_id)?>
@@ -43,8 +43,7 @@ $get_animate = $this->Xin_model->get_content_animate();
             <input type="hidden" id="quantity" name="qunatity[]" min="1" style="width:20%" value="<?php echo $row->quantity?>">
 
           <?php }?>
-          <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-           <!-- <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/purchase_approved/'.$results [0]->requisition_id .'/'.$results [0]->quantity);?>"> Approved </a> -->
+          <!-- <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved"> -->
         <?php echo form_close()?>
     
     
@@ -52,7 +51,7 @@ $get_animate = $this->Xin_model->get_content_animate();
        <a class="btn btn-sm btn-warning pull-right" style="margin-right: 10px;" href="<?php echo base_url('admin/inventory/requsition_edit_approved/'.$results [0]->requisition_id);?>">Edit & Approved</a>
     <?php }}}?>
 
-    <button class="btn btn-sm btn-info pull-right" style="margin-right: 10px;" onclick="history.back()"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+    <button class="btn btn-sm btn-info pull-right" style="margin-right: 10px;" onclick="history.back()"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button>
     <br/>
   </div>
   <div class="box-body">
