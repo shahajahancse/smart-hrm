@@ -203,8 +203,6 @@ class Lunch extends MY_Controller {
         } else {
             redirect('admin/');
         }
- 
- 
     }
 
     public function add_lunch_pak(){
@@ -233,9 +231,7 @@ class Lunch extends MY_Controller {
 
         $this->db->where('id', 1); // Assuming you have an 'id' field in your database table to identify the record to update
         $this->db->update('lunch_package', $data);
-        
     }
-
     public function lunch_package(){
         $session = $this->session->userdata('username');
         if (empty($session)) {
@@ -854,5 +850,64 @@ public function pay_vend_ajax_request()
         $this->db->update('lunch', $data);
     }
 
+    public function vendor_lunch_list() {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch Vendor Meal';
+        $data['path_url'] = 'lunch';
+        $data['payment_data'] = $this->db->get('lunch_vendor_meal')->result();
+       
+     
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/vendor_lunch_list", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+    }
+    public function vendor_data(){
+        $date = $this->input->post('date');
+        $totalMeal = $this->input->post('total_meal');
+        $remarks = $this->input->post('remarks');
+        $total_amount = $this->input->post('total_amount');
+    
+        // File upload configuration
+        $config['upload_path'] = 'uploads/vendor_file/'; // Specify the folder to upload files to
+        $config['allowed_types'] = 'pdf|jpg|jpeg|png'; // Specify the allowed file types
+        $config['max_size'] = 2048; // Specify the maximum file size in kilobytes
+    
+        $this->load->library('upload', $config);
+    
+        if (!$this->upload->do_upload('file')) {
+            // Handle file upload errors
+            $error = $this->upload->display_errors();
+            echo $error;
+        } else {
+            // File uploaded successfully
+            $data = $this->upload->data();
+            $fileExtension = pathinfo($data['file_name'], PATHINFO_EXTENSION);
+            $fileLocation = $config['upload_path'] . $date . '.' . $fileExtension;
+            $newFileName = $date . '.' . $fileExtension;
+    
+            // Rename the uploaded file to include the date
+            rename($data['full_path'], $fileLocation);
+            $data = array(
+                'date' => $date,
+                'meal_qty' => $totalMeal,
+                'amount' => $total_amount,
+                'remarks' => $remarks,
+                'file' => $fileLocation,
+                'status' => 0,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            );
+            $this->db->insert('lunch_vendor_meal', $data);
+            echo "Success";
+        }
+    }
+    
 }
 ?>
