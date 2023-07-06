@@ -753,14 +753,14 @@ public function make_id_payment(){
                if($this->db->insert('lunch', $data)){
                 $insert_id = $this->db->insert_id();
                 $emp = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
-          
+        
                 foreach($emp as $row){
                     
                     $data2 = array(
                     'lunch_id'      => $insert_id,
                     'emp_id'        => $row->user_id,
                     'meal_amount'   => 0,
-                    'p_stutus'      => 0,
+                    'p_stutus'      => 'Lunch Off',
                     'comment'       => '',
                     'date'          => $dateoff,
                        );
