@@ -3,91 +3,89 @@
 // dd($result);
 ?>
 <style>
-.addbox {
-    min-height: 49px;
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    background: #fffcf9;
-    box-shadow: 3px 8px 9px 3px rgb(0 0 0 / 10%);
-    font-family: Arial, sans-serif;
-    font-size: 18px;
-    color: #333;
-    line-height: 1.5;
-}
+    .addbox {
+        min-height: 49px;
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        background: #fffcf9;
+        box-shadow: 3px 8px 9px 3px rgb(0 0 0 / 10%);
+        font-family: Arial, sans-serif;
+        font-size: 18px;
+        color: #333;
+        line-height: 1.5;
+    }
 
-.panels {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.6s ease-out;
-}
+    .panels {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.6s ease-out;
+    }
 
-.payment_box {
-    opacity: 0;
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    background: #fffcf9;
-    box-shadow: 3px 8px 9px 3px rgb(0 0 0 / 10%);
-    font-family: Arial, sans-serif;
-    font-size: 18px;
-    color: #333;
-    transition: max-height 0.2s ease-out, opacity 0.2s ease-out;
-}
+    .payment_box {
+        opacity: 0;
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        background: #fffcf9;
+        box-shadow: 3px 8px 9px 3px rgb(0 0 0 / 10%);
+        font-family: Arial, sans-serif;
+        font-size: 18px;
+        color: #333;
+        transition: max-height 0.2s ease-out, opacity 0.2s ease-out;
+    }
 
-.p {
-    margin: 0 !important;
-    padding: 0 !important;
-}
+    .p {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
 
-.btn {
-    float: right;
-    padding: 5px;
-    font-weight: bold;
-}
+    .panels.open {
+        max-height: 1000px;
+        margin-top: 11px;
+        margin-bottom: 13px;
+        opacity: 1;
+        transition: max-height .6s ease-out, opacity .6s ease-out;
+    }
 
-.panels.open {
-    max-height: 1000px;
-    margin-top: 11px;
-    margin-bottom: 13px;
-    opacity: 1;
-    transition: max-height .6s ease-out, opacity .6s ease-out;
-}
+    .section_box {
+        width: 100%;
+        background: #fffcf9;
+        height: fit-content;
+        margin: 3px;
+        padding: 13px;
+        border-radius: 5px;
+        box-shadow: inset 5px 3px 20px 7px rgb(0 0 0 / 10%);
+        overflow: auto;
+    }
 
-.section_box {
-    width: 100%;
-    background: #fffcf9;
-    height: fit-content;
-    margin: 3px;
-    padding: 13px;
-    border-radius: 5px;
-    box-shadow: inset 5px 3px 20px 7px rgb(0 0 0 / 10%);
-    overflow: auto;
-}
+    .section-heding {
+        font-weight: bold;
+        font-size: 19px;
+    }
 
-.section-heding {
-    font-weight: bold;
-    font-size: 19px;
-}
+    .list_box {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        background: #fffcf9;
+        box-shadow: 3px 8px 9px 3px rgb(0 0 0 / 10%);
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
 
-.list_box {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    background: #fffcf9;
-    box-shadow: 3px 8px 9px 3px rgb(0 0 0 / 10%);
-    font-family: Arial, sans-serif;
-    color: #333;
-}
+    .levels {
+        font-size: 13px;
+        font-weight: bold;
+    }
 
-.levels {
-    font-size: 13px;
-    font-weight: bold;
-}
-.btn{
-    padding: 0px;
-    width: 54px;
-}
+  .dropup .dropdown-menu{
+    top: 30;
+    bottom: inherit;
+    right: 0 !important;
+    left: auto !important;
+    min-width: 100px !important;
+  }
 </style>
 
 <!-- Modal -->
@@ -227,7 +225,7 @@
                 <th>Remarks</th>
 
                 <th>Status</th>
-                <th>Action</th>
+                <!-- <th>Action</th> -->
 
             </tr>
         </thead>
@@ -255,14 +253,28 @@
                  <?php }else{ ?>
                     <td style="text-align: center;" > ...</td>
                  <?php } ?>
-                <td>
-                    <?=($row->status==0)? '<a data-toggle="modal" data-target="#make_payment" onclick="giveid('.$row->id.','.$row->due .','.$row->paid_amount.')" class="btn btn-primary">Paid</a>': 'Paid'?>
-                   
+                <!-- <td> -->
                     <!-- <button onclick="pdf_report(<?=$row->id ?>)"> Print</button> -->
-                    
-                </td>
+                <!-- </td> -->
                 <td>
-                <a class="btn btn-info" onclick="pdf_report(<?=$row->id ?>)">Print</a>
+                    <div class="dropup">
+                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" >
+                            Action
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <?php if ($row->status==0) { ?>
+                                <li><a data-toggle="modal" data-target="#make_payment" onclick="giveid(<?php echo $row->id .','. $row->due .','. $row->paid_amount; ?>)" class="btn btn-primary">Paid</a></li>
+                            <?php } else { ?>
+                                <li>Paid</li>
+                            <?php } ?>
+
+                            <!-- <li role="separator" class="divider"></li> -->
+                            <li><a class="btn btn-default" onclick="pdf_report(<?=$row->id ?>)"> Print</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- <a class="btn btn-info" onclick="pdf_report(<?=$row->id ?>)">Print</a> -->
                 </td>
                 
  

@@ -858,8 +858,7 @@ public function pay_vend_ajax_request()
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch Vendor Meal';
         $data['path_url'] = 'lunch';
-        $data['result'] = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row();
-        $data['payment_data'] = $this->db->get('lunch_payment_vendor')->result();
+        $data['payment_data'] = $this->db->get('lunch_vendor_meal')->result();
        
      
         if (!empty($session)) {
@@ -868,14 +867,8 @@ public function pay_vend_ajax_request()
         } else {
             redirect('admin/');
         }
-
-
-
-
-
-
-
     }
+
 
     // ============================ Vendor Pakage Payment ============================
 
@@ -932,6 +925,48 @@ public function pay_vend_ajax_request()
 		echo (json_encode($result));
 	}
 
+
+
+    public function vendor_data(){
+        $date = $this->input->post('date');
+        $totalMeal = $this->input->post('total_meal');
+        $remarks = $this->input->post('remarks');
+        $total_amount = $this->input->post('total_amount');
+    
+        // File upload configuration
+        $config['upload_path'] = 'uploads/vendor_file/'; // Specify the folder to upload files to
+        $config['allowed_types'] = 'pdf|jpg|jpeg|png'; // Specify the allowed file types
+        $config['max_size'] = 2048; // Specify the maximum file size in kilobytes
+    
+        $this->load->library('upload', $config);
+    
+        if (!$this->upload->do_upload('file')) {
+            // Handle file upload errors
+            $error = $this->upload->display_errors();
+            echo $error;
+        } else {
+            // File uploaded successfully
+            $data = $this->upload->data();
+            $fileExtension = pathinfo($data['file_name'], PATHINFO_EXTENSION);
+            $fileLocation = $config['upload_path'] . $date . '.' . $fileExtension;
+            $newFileName = $date . '.' . $fileExtension;
+    
+            // Rename the uploaded file to include the date
+            rename($data['full_path'], $fileLocation);
+            $data = array(
+                'date' => $date,
+                'meal_qty' => $totalMeal,
+                'amount' => $total_amount,
+                'remarks' => $remarks,
+                'file' => $fileLocation,
+                'status' => 0,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            );
+            $this->db->insert('lunch_vendor_meal', $data);
+            echo "Success";
+        }
+    }
 
 }
 ?>

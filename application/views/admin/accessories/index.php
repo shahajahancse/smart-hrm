@@ -13,6 +13,19 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
       <?php echo $this->session->flashdata('success');?>
     </div>
 <?php endif; ?> 
+
+
+<style>
+  .dropup .dropdown-menu{
+    top: 20px;
+    bottom: inherit;
+    right: 50px !important;
+    left: auto !important;
+    min-width: 100px !important;
+  }
+</style>
+
+
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border">
     <h3 class="box-title">Item list</h3>
@@ -23,13 +36,13 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
       <table class="datatables-demo table table-striped table-bordered" id="example">
         <thead class="text-center">
           <tr>
-            <th class="text-center" style="width:20px;">No.</th>
+            <th class="text-center" style="width:50px;">No.</th>
             <!-- <th class="text-center" style="width:100px;">User</th> -->
             <th class="text-center" style="width:100px;">Category</th>
             <th class="text-center" style="width:100px;">Device</th>
             <th class="text-center" style="width:100px;">Model</th>
             <th class="text-center" style="width:100px;">Number</th>
-            <th class="text-center" style="width:100px;">Description</th>
+            <th class="text-center" style="width:140px;">Description</th>
             <th class="text-center" style="width:100px;">Purpose</th>
             <th class="text-center" style="width:100px;">Image</th>
             <th class="text-center" style="width:100px;">Status</th>
@@ -55,8 +68,16 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
                   ?>
               </td>
               <td>
-                <a class="btn btn-sm btn-info" type="button" href="<?= base_url('admin/accessories/item_add/'.$row->id);?>">Edit</a>
-                <a class="btn btn-sm btn-danger" type="button" href="<?= base_url('admin/accessories/delete/'.$row->id.'/product_accessories/index');?>" onclick="return confirm('Are you sure to delete!!!')">delete</a>
+                <div class="dropup">
+                  <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" >
+                      Action
+                      <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                      <li><a class="btn btn-sm btn-info" href="<?= base_url('admin/accessories/item_add/'.$row->id);?>">Edit</a></li>
+                      <li><a class="btn btn-sm btn-danger" href="<?= base_url('admin/accessories/delete/'.$row->id.'/product_accessories/index');?>" onclick="return confirm('Are you sure to delete!!!')">delete</a></li>
+                  </ul>
+                </div>
               </td>
             </tr>
           <?php } ?>
@@ -71,7 +92,10 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 <script>
 
   $(document).ready(function() {
-    $('#example').DataTable();
+    $('#example').DataTable({
+      "pageLength": 50,
+      "lengthMenu": [[25, 50,100, -1], [25, 50, 100, "All"]],
+    });
   });
 
 </script>
