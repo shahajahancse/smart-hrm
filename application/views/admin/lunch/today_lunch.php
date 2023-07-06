@@ -3,6 +3,9 @@
     .error-border {
   border: 2px solid red;
 }
+td{
+  text-transform: capitalize;
+}
 
 
 </style>
