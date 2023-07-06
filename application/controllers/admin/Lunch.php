@@ -83,7 +83,7 @@ class Lunch extends MY_Controller {
 
     
         $data['date'] =$date;
-        
+     
         $query = $this->db->get_where('lunch', array('date' => $date));
         // dd($_POST['empid']);
         //Validation
@@ -183,7 +183,7 @@ class Lunch extends MY_Controller {
            
             $data['results'] = $this->Lunch_model->get_lunch_info(1,$date);
             $data['guest'] = $query->row();
-            $data['ps'] ='yes';
+            $data['ps'] ='yes'; 
         } else {
 
             $data['results'] = $this->Lunch_model->get_lunch_info(false,$date);

@@ -3,6 +3,9 @@
     .error-border {
   border: 2px solid red;
 }
+td{
+  text-transform: capitalize;
+}
 
 
 </style>
@@ -74,9 +77,9 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
             <th scope="row"><?= $key + 1 ?></th>
             <td><?=  $raw->first_name .' '. $raw->last_name; ?></td>
             <td><?= $raw->p_stutus ?></td>
-            <?php $set = (isset($raw->meal_amount) && $raw->meal_amount != null) ? $raw->meal_amount : 0 ?>
+            <?php $set = (isset($raw->meal_amount) && $raw->meal_amount != null) ? $raw->meal_amount : 1 ?>
             <td><input max="1" min="0" type="number" onchange="summeal()" <?= ($raw->p_stutus == 'present')? 'class="all_meal activmeal"'  : 'class="activmeal"'; ?>name="m_amount[]"
-                    value="<?= ($ps == 'no' && $raw->p_stutus == 'Present')? 1 : $set; ?>" style="width: 83px;"></td>
+                    value="<?= ($ps == 'no' && $raw->p_stutus == 'Absent')? 0 : $set; ?>" style="width: 83px;"></td>
             <td><input type="text" name="comment[]" value="<?= isset($raw->comment) ? $raw->comment : ''; ?>"></td>
         </tr>
         <?php } ?>
