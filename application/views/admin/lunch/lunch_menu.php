@@ -18,7 +18,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   .table {
     width: 92%;
     margin-bottom: 14px;
+    
 }
+.dropup .dropdown-menu{
+    top: 20px;
+    bottom: inherit;
+    right: 50px !important;
+    left: auto !important;
+    min-width: 100px !important;
+  }
 </style>
 <?php if($user_role_id !=3){?>
 <div class="box mb-4 <?php echo $get_animate;?>">
@@ -48,7 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               </td>
                               <th class="text-center">Description</th>
                               <td class="text-center">
-                                <input type="text" id="description" name="description" class="form-control" placeholder="Enter Description" required>
+                                <!-- <input type="text" id="description" name="description" class="form-control" placeholder="Enter Description" required> -->
+                                <textarea id="description" name="description" class="form-control" placeholder="Enter Description" required></textarea>
                               </td>
                               <td class="text-center">
                                   <button name="btn" type="submit" class="btn btn-primary btn-sm text-right" > <i class="fa fa-check-square-o"></i><?php echo $this->lang->line('xin_save');?></button>
@@ -73,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $(function() {$("#flash_message").hide(2000);});
 </script>  
 <?php if($this->session->flashdata('warning')):?>
-  <div class="alert alert-warning"id="flash_message1">
+  <div class="alert alert-danger"id="flash_message1">
     <?php echo $this->session->flashdata('warning');?>
   </div>
 <?php endif; ?> 
@@ -113,22 +122,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <?php foreach ($menulist as $key => $rows) { ?>
             <tr>
               <td class="text-center"><?php echo ($key+1)."."; ?></td>
-                <?php if($user_role_id==1){?>
+                <?php if($user_role_id==1 || $user_role_id==2){?>
                    <input type="hidden">
                   <td class="text-center"><?php echo $rows->pakage_name ?></td>
                   <td class="text-center"><?php echo $rows->details ?></td>
                 
-                  <td class="text-center"> <a onclick="edit(<?php echo $rows->id ?>)" class=" btn btn-sm btn-info text-dark collapsed" data-toggle="collapse" href="?<?php echo $rows->id; ?>#add_form" aria-expanded="false"><i class="fa fa-info" aria-hidden="true"></i>Edit</td>
-                  <!-- <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_detail/'.$rows->id);?>" onclick=""><i class="fa fa-info" aria-hidden="true"></i> Details</td> -->
+                  <!-- <td class="text-center"> 
+                    <a onclick="edit(<?php echo $rows->id ?>)" class=" btn btn-sm btn-info text-dark collapsed" data-toggle="collapse" href="?<?php echo $rows->id; ?>#add_form" aria-expanded="false"><i class="fa fa-info" aria-hidden="true"></i>Edit
+                  </td> -->
+                  <td class="text-center">
+                        <div class="dropup">
+                            <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" >Action
+                            <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <li><a class="btn btn-sm btn-info" onclick="edit(<?php echo $rows->id ?>)" data-toggle="collapse" href="?<?php echo $rows->id; ?>#add_form" >Edit</a></li>
+                                <li><a class="btn btn-sm btn-danger" href="<?= base_url('admin/lunch/menu_delete/'.$rows->id);?>" onclick="return confirm('Are you sure to delete!!!')">delete</a></li>
+                            </ul>
+                      </div>
+                  </td>
+                 
               <?php } ?>
-              <?php if($user_role_id==4){?>
-                
-                <td class="text-center"><?php echo $rows->name ?></td>
-                <td class="text-center"><?php echo $rows->company ?></td>
-                <td class="text-center"><?php echo $rows->phone ?></td>
-                
+              
             </tr>
-          <?php }} ?>
+          <?php } ?>
+         
         </tbody>
       </table>
     </div>
