@@ -39,7 +39,9 @@ header('Cache-Control: max-age=0'); //no cache
     <td colspan="10" style="text-align:center;">
         <div style="font-size:30px; font-weight:bold; text-align:center;margin-top:3px;"><?php echo xin_company_info(1)->company_name; ?></div>
         <div style="font-size:20px; font-weight:bold; text-align:center;"><?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div> 
-        <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px"> <?php echo $statusText; ?> Report : <?php echo $first_date; ?> To  <?php echo $second_date; ?></div>
+        <?php $convertedDate1 = date('d-m-Y', strtotime($first_date));
+               $convertedDate2 = date('d-m-Y', strtotime($second_date)); ?>
+        <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px"> <?php echo $statusText; ?> Report : <?php echo $convertedDate1; ?> To  <?php echo $convertedDate2; ?></div>
 
     </td>
 </tr>
@@ -53,7 +55,7 @@ header('Cache-Control: max-age=0'); //no cache
             <th style="background-color: #d5b2b2; color: black;">Product Name</th>
             <th style="background-color: #d5b2b2; color: black;">Request Quantity</th>
             <th style="background-color: #d5b2b2; color: black;" >Approved Quantity</th>
-            <th style="background-color: #d5b2b2; color: black;">Time</th>
+            <th style="background-color: #d5b2b2; color: black;">Date</th>
             
           </tr>
           <?php if (!empty($values)): ?>
@@ -69,7 +71,7 @@ header('Cache-Control: max-age=0'); //no cache
                                 <td><?php echo $row->product_name ?></td>
                                 <td><?php echo $row->quantity ?></td>
                                 <td><?php echo $row->approved_qty ?></td>
-                                <td><?php echo !empty($row->created_at) ? date('h:i:s a', strtotime($row->created_at)) : '' ?></td>
+                                <td><?php echo !empty($row->created_at) ? date('d-m-Y', strtotime($row->created_at)) : ''; ?></td>
                             </tr>
                         </tbody>
                     <?php endforeach; ?>
