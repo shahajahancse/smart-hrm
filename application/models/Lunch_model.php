@@ -311,11 +311,11 @@ class Lunch_model extends CI_Model {
         $this->db->select('*');
         $this->db->where('date >=', $first_date);
         $this->db->where('date <=', $second_date);
-        $data = $this->db->get('lunch')->result();
+        $data = $this->db->get('lunch_vendor_meal')->result();
         if (count($data) > 0) {
             $total_m=0;
             foreach($data as $m){
-                $total_m+=$m->total_m;
+                $total_m+=$m->meal_qty;
             }
             return $total_m;
           

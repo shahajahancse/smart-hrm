@@ -100,6 +100,37 @@ th {
 p {
     margin: 0 0 0px;
 }
+
+.dropdown-item {
+
+    overflow: hidden;
+    padding: 4px;
+    margin: 5px;
+    width: 72px;
+    height: 28px;
+    text-align: center;
+    border: 1px solid #0177bc;
+    border-radius: 4px;
+    /* New style for dropdown-item */
+    background-color: #f8f9fa;
+    color: #212529;
+    transition: box-shadow 0.3s, color 0.3s;
+}
+
+.dropdown-item:hover {
+    /* Hover effect */
+    box-shadow: 0 0 5px #0177bc;
+    color: #fff;
+}
+
+.dropdown-menu {
+    margin-top: 28px;
+    min-width: 85px !important;
+}
+
+.btn {
+    padding: 3px !important;
+}
 </style>
 
 <!-- Modal -->
@@ -155,7 +186,7 @@ p {
                 <th>Date</th>
                 <th>Meal Qty</th>
                 <th>Amount</th>
-                <th>File</th>
+
                 <th>Remarks</th>
                 <th>Action</th>
 
@@ -168,17 +199,33 @@ p {
                 <td><?php echo $row->date; ?></td>
                 <td><?php echo $row->meal_qty; ?></td>
                 <td><?php echo $row->amount;?></td>
-                <td>
-                    <a href="<?php echo base_url($row->file);?>">View</a>
-                    <a href="<?php echo base_url($row->file);?>" download>Download</a>
-                </td>
+
                 <?php if($row->remarks){ ?>
                 <td style="text-align: center;" title="<?php echo $row->remarks; ?>">
                     <?php echo implode(' ', array_slice(explode(' ', $row->remarks ), 0, 4)); ?></td>
                 <?php }else{ ?>
                 <td style="text-align: center;">...</td>
                 <?php } ?>
-                <td><a onclick="edit_vendor_data(<?php echo $row->id;?>)" class="btn btn-primary">Edit</a></td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="actionButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right list-group" aria-labelledby="actionButton">
+                            <a class="dropdown-item list-group-item" onclick="edit_vendor_data(<?php echo $row->id;?>)"
+                                class="btn btn-primary">Edit</a>
+                            <a class="dropdown-item list-group-item" href="<?php echo base_url($row->file);?>"
+                                class="btn btn-primary">View File </a>
+                            <a class="dropdown-item list-group-item" href="<?php echo base_url($row->file);?>"
+                                class="btn btn-primary" download>Download</a>
+                        </div>
+                    </div>
+
+
+
+
+                </td>
 
             </tr>
             <?php endforeach; ?>
