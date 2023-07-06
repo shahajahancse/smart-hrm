@@ -60,7 +60,7 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
         </tr>
     </thead>
     <tbody>
-        <?php $st = true; //dd($results); ?>
+        <?php $st = true; ?>
         <?php foreach ($results as $key => $raw) { 
                 if (($raw->p_stutus == 'Absent' && $st == true) || $raw->p_stutus == 'absent' && $st == true) { ?>
         <tr>

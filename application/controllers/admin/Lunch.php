@@ -760,7 +760,7 @@ public function make_id_payment(){
                     'lunch_id'      => $insert_id,
                     'emp_id'        => $row->user_id,
                     'meal_amount'   => 0,
-                    'p_stutus'      => 0,
+                    'p_stutus'      => 'Holiday',
                     'comment'       => '',
                     'date'          => $dateoff,
                        );
