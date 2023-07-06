@@ -114,7 +114,7 @@ p {
             <div class="form-group col-md-2">
                 <p class="levels"> Date</p>
                 <input type="date" class="form-control" id="date" style="border-radius: 6px;"
-                    value="<?= date('Y-m-d')?>" >
+                    value="<?= date('Y-m-d')?>">
             </div>
             <div class="form-group col-md-2">
                 <p class="levels">Total Meal</p>
@@ -178,7 +178,7 @@ p {
                 <?php }else{ ?>
                 <td style="text-align: center;">...</td>
                 <?php } ?>
-                <td><a onclick="edit_vendor_data(<?php echo $row->id;?>)">Edit</a></td>
+                <td><a onclick="edit_vendor_data(<?php echo $row->id;?>)" class="btn btn-primary">Edit</a></td>
 
             </tr>
             <?php endforeach; ?>
@@ -204,7 +204,6 @@ function togglePaymentBox() {
         'display': 'none',
     });
 }
-
 </script>
 <script>
 $(document).ready(function() {
@@ -224,17 +223,17 @@ function changemeal() {
 </script>
 <script>
 $(document).ready(function() {
-  $("#submitBtn").click(function() {
+    $("#submitBtn").click(function() {
 
-    
-    // All fields are valid, submit the form
-    $("form").submit();
-  });
+
+        // All fields are valid, submit the form
+        $("form").submit();
+    });
 });
 </script>
 <script>
 function submit() {
-  
+
     // Get form values
     var date = $('#date').val();
     var totalMeal = $('#total_meal').val();
@@ -243,28 +242,28 @@ function submit() {
     var filess = $('#file').val();
     var prefile = $('#prefile').val();
     if (date === "") {
-      alert("Please enter remarks");
-      return false;
+        alert("Please enter remarks");
+        return false;
     }
     if (date === "") {
-      alert("Please enter date");
-      return false;
+        alert("Please enter date");
+        return false;
     }
     if (totalMeal === "") {
-      alert("Please enter totalMeal");
-      return false;
+        alert("Please enter totalMeal");
+        return false;
     }
     if (remarks === "") {
-      alert("Please enter remarks");
-      return false;
+        alert("Please enter remarks");
+        return false;
     }
-    if (filess === "" ) {
-        if(prefile===''){
-      alert("Please enter file");
-      return false;
+    if (filess === "") {
+        if (prefile === '') {
+            alert("Please enter file");
+            return false;
         }
     }
-    
+
 
     // Prepare form data
     var formData = new FormData();
