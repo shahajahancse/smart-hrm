@@ -103,7 +103,7 @@ $newDate = $date->format('Y-m-d');
         <div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
         <div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;">
             <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
-        <div style="font-size:16px; line-height:15px; text-align:center;">Monthly Lunch Payment Report
+        <div style="font-size:13px; line-height:15px; text-align:center;">Monthly Lunch Payment Report
             of <?php $convertedDate1 = date('d-m-Y', strtotime($lunch_data[0]->end_date));
                $convertedDate2 = date('d-m-Y', strtotime($newDate)); ?>
              <?= isset($lunch_data[0]->end_date) ? $convertedDate1 : ''; ?> to
