@@ -29,18 +29,21 @@ class Inventory extends MY_Controller {
 
 	
 	//================= Requisition here =======================
-	public function index()
-	{
-		
+	public function index(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
 		$data['title'] = 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store';
-		// $data['path_url'] = 'inventory';
-		$data['products'] 		= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		if($session['role_id']== 1 || $session['role_id']== 2 || $session['role_id']== 4 ){
+			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		}
+		if( $session['role_id'] == 3) {
+			$data['results'] 	= $this->Inventory_model->requisition_details($session['user_id'],$id=null);
+		}
 		$data['user_role_id'] 	= $session['role_id'];
+		// dd($data);
 		if(!empty($session)){ 
 			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -194,8 +197,8 @@ class Inventory extends MY_Controller {
 		$data['title'] 		 = 'Requsition Details | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition Details';
 		// $data['path_url'] 	 = 'inventory';
-		if($session['role_id']==1 || $session['role_id']==3){
-			$data['results']	 = $this->Inventory_model->requisition_details($id);
+		if($session['role_id']== 1 || $session['role_id']== 3 || $session['role_id']== 4){
+			$data['results']	 = $this->Inventory_model->requisition_details($user_id=null,$id);
 			if(!empty($data['results'])){
 				$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 			}
@@ -203,6 +206,7 @@ class Inventory extends MY_Controller {
 	    } else {
 			  $data['results']	 = $this->Inventory_model->req_details_cat_wise($id);							
 	    }
+		// dd($data);
 		$data['subview'] 	 = $this->load->view("admin/inventory/requsition_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
@@ -249,7 +253,7 @@ class Inventory extends MY_Controller {
 		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition ';
 		// $data['path_url']    = 'inventory';
-	    $data['results'] 	 = $this->Inventory_model->requisition_details($id);
+	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id=null,$id,$id);
 		if(!empty($data['results'])){
 			$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 		}else{
@@ -262,55 +266,43 @@ class Inventory extends MY_Controller {
 	
 	
 	public function persial_approved($id){
-	
-
 		$session = $this->session->userdata('username');
 		$all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->result();
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
 		}
-		
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
-		// dd($d1);
+		// dd($quantity);
 		// dd($d1[1]->quantity);
 		foreach($d1 as $k=>$v){
-
 			if(isset($_POST['first_step'])){
 				$log_user=$_SESSION['username']['user_id'];
 				$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user,'status'=>5]);
-
 				foreach($quantity as $key=>$value){
-
-
-					$this->db->where('id',$r_did[$key])->update('products_requisition_details',['quantity'=>$value]); 
+					$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); 
 				}
 				   $this->session->set_flashdata('success', 'Product Updated Successfully.');
 				   redirect("admin/inventory/index","refresh");
-
 			}else{
 			if($session['role_id']==1){
 					if($d1[$k]->quantity >= $quantity[$k]) {
-						
 						foreach($quantity as $key=>$value){
 							$log_user=$_SESSION['username']['user_id'];
 							$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
-							$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); }
-
+							$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]);
+						}
 					} else{
 						// dd($d1[$k]->product_name);
 						$variable = $d1[$k]->product_name;
 						$variable1= $d1[$k]->quantity;
 						$this->session->set_flashdata('flash_data', $variable);
 						$this->session->set_flashdata('flash_data1', $variable1);
-
 						$this->session->set_flashdata('warning', 'Approved  Quantity is Biger ');
 						redirect("admin/inventory/requsition_details/$id","refresh");
 					}
 			}else{
-
 				foreach($quantity as $key=>$value){
-
 				     $this->db->where('id',$r_did[$key])->update('products_requisition_details',['quantity'=>$value]); 
 				 }
 					$this->session->set_flashdata('success', 'Product Updated Successfully.');
@@ -638,7 +630,7 @@ class Inventory extends MY_Controller {
 
 	//approved by prisal product purches edit
 	public function product_persial_approved($id){
-		
+		dd($id);
 	    $session = $this->session->userdata('username');
 		$all_detail=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
 		// dd($all_detail);
@@ -1181,21 +1173,24 @@ class Inventory extends MY_Controller {
 		
 		$approved = $this->db->where('id',$id)->delete('products_requisition_details');
 		if($approved){
-			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
-		 redirect("admin/inventory/requsition_edit_approved/".$rid);
+			$get=$this->db->get('products_requisition_details');
+			if($get->num_rows() < 0){
+		      $this->db->where('id',$id)->delete('products_requisitions');
+			  $this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
+			}
+		    redirect("admin/inventory/requsition_edit_approved/".$rid);
 		  
 		}
 	}
-   public function delete_requsiton($id){
-	
-	$approved=$this->db->where('id',$id)->delete('products_requisitions');
-	 $this->db->where('requisition_id',$id)->delete('products_requisition_details');
-	if($approved){
-		$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
-	 redirect("admin/inventory/index");
-	  
+    public function delete_requsiton($id){
+		$approved=$this->db->where('id',$id)->delete('products_requisitions');
+		if($approved){
+		 $this->db->where('requisition_id',$id)->delete('products_requisition_details');
+		 $this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
+		 redirect("admin/inventory/index");
 	}
-   }
+
+    }
 
 
 	public function delete_purches_item($id,$pid){
