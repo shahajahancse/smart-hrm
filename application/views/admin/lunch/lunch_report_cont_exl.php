@@ -35,15 +35,15 @@ header('Cache-Control: max-age=0'); //no cache
 
 
 <table width="1000" align="center" height="auto" class="sal" border="1" cellspacing="0" cellpadding="2" style="font-size:12px; width:750px;">
-<tr width="1000" align="center" style="height:100px;">
+<tr width="1000" align="center" style="height:115px;">
     <td colspan="9" style="text-align:center;">
-        <div style="font-size:30px; font-weight:bold; text-align:center;margin-top:3px;"><?php echo xin_company_info(1)->company_name; ?></div>
+        <div style="font-size:25px; font-weight:bold; text-align:center;margin-top:3px;"><?php echo xin_company_info(1)->company_name; ?></div>
         <div style="font-size:20px; font-weight:bold; text-align:center;"><?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div> 
         <?php $convert_f1=date('d-m-Y', strtotime($first_date));
                     $convert_f2=date('d-m-Y', strtotime($second_date));
             
             ?>
-             <div style="font-size:18px;  text-align:center; margin-bottom:3px">Daily Lunch Continuous Report </div>
+             <div style="font-size:18px;  text-align:center; margin-bottom:3px">Lunch Report </div>
         <div style="font-size:18px; font-weight:bold; text-align:center; margin-bottom:3px"> <?php echo $statusText; ?> Date : <?php echo $convert_f1; ?> To  <?php echo  $convert_f2; ?></div>
 
     </td>
