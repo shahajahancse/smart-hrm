@@ -6,8 +6,6 @@
 td{
   text-transform: capitalize;
 }
-
-
 </style>
 <!-- Modal -->
 <div id="lunchoffmodal" class="modal fade" role="dialog">
