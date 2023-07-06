@@ -223,13 +223,48 @@ function changemeal() {
 }
 </script>
 <script>
+$(document).ready(function() {
+  $("#submitBtn").click(function() {
+
+    
+    // All fields are valid, submit the form
+    $("form").submit();
+  });
+});
+</script>
+<script>
 function submit() {
+  
     // Get form values
     var date = $('#date').val();
     var totalMeal = $('#total_meal').val();
     var remarks = $('#remarks').val();
     var total_amount = $('#total_amount').val();
+    var filess = $('#file').val();
     var prefile = $('#prefile').val();
+    if (date === "") {
+      alert("Please enter remarks");
+      return false;
+    }
+    if (date === "") {
+      alert("Please enter date");
+      return false;
+    }
+    if (totalMeal === "") {
+      alert("Please enter totalMeal");
+      return false;
+    }
+    if (remarks === "") {
+      alert("Please enter remarks");
+      return false;
+    }
+    if (filess === "" ) {
+        if(prefile===''){
+      alert("Please enter file");
+      return false;
+        }
+    }
+    
 
     // Prepare form data
     var formData = new FormData();
