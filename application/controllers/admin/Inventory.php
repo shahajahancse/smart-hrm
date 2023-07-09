@@ -250,16 +250,17 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+		// dd($id);
 		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition ';
 		// $data['path_url']    = 'inventory';
-	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id=null,$id,$id);
+	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id=null,$id);
 		if(!empty($data['results'])){
 			$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 		}else{
 			$data['requisition_id'] 	 = '';
 		}
-		
+		dd($data);
 		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data);
 	}
@@ -630,7 +631,7 @@ class Inventory extends MY_Controller {
 
 	//approved by prisal product purches edit
 	public function product_persial_approved($id){
-		dd($id);
+		// dd($id);
 	    $session = $this->session->userdata('username');
 		$all_detail=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
 		// dd($all_detail);
