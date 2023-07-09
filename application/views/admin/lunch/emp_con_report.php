@@ -20,6 +20,17 @@
         margin: 0px 4px !important;
     }
 
+    .table-responsive{
+        overflow-x: hidden !important;
+    }
+    table thead tr th {
+		font-size:12px;
+        color: blue;
+		padding: 3px !important;
+	}
+
+   
+
     @media print {
         #btn {
             display: none;
@@ -57,15 +68,16 @@
         <?= $second_date?></span>
     </div>
 
+ <div class="table-responsive" style="margin-top: 17px; padding:10px;">
     <?php if($status==1){?>
 
 
-    <table class="table table-hover table-striped" id="myTable">
+    <table class="table  table-hover table-bordered" style="text-align:center" id="myTable">
         <thead>
             <tr>
                 <th>SL</th>
-                <th>Name</th>
-                <th>Designation</th>
+                <th style="text-align:left"> &nbsp;&nbsp;Name</th>
+                <th style="text-align:left"&nbsp;&nbsp;>Designation</th>
                 <th>Active.M</th>
                 <th>Inactive.M</th>
                 <th>Employee.C</th>
@@ -85,8 +97,8 @@
             <?php foreach ($all_employees as $key=>$employee): ?>
             <tr>
                 <td><?= $key+1 ?></td>
-                <td><?= $employee->first_name ?> <?= $employee->last_name ?></td>
-                <td><?= $employee->designation_name?></td>
+                <td style="text-align:left"> &nbsp;&nbsp;<?= $employee->first_name ?> <?= $employee->last_name ?></td>
+                <td style="text-align:left">&nbsp;&nbsp;<?= $employee->designation_name?></td>
                 <?php     
                         $this->load->model("Lunch_model"); 
                     $emp_data = $this->Lunch_model->get_data_date_wise($first_date,$second_date, $employee->user_id);
@@ -143,9 +155,10 @@
             </tr>
         </tfoot>
     </table>
+    </div>
     <?php }else{?>
 
-
+ <div class="table-responsive" style="margin-top: -17px; padding:10px;">
     <table class="table table-hover table-striped" id="myTable">
         <thead>
             <tr>
@@ -219,9 +232,11 @@
             </tr>
         </tfoot>
     </table>
+  </div>
 
 
     <?php } ?>
+ 
 
 
 
