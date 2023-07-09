@@ -289,7 +289,7 @@ class inventory_model extends CI_Model
 	}
 	// requisition details for requisition id
 	public  function requisition_details($user_id=null,$id=null){
-		        //    dd($user_id);
+		        
 			$this->db->select(" 
 					 xin_employees.first_name,
 					 xin_employees.last_name,
@@ -320,7 +320,7 @@ class inventory_model extends CI_Model
 			   $this->db->where("products_requisitions.user_id  = $user_id");
 			}
 			if($id!=null){
-			   $this->db->where("products_requisitions.id 		 = $id");
+			   $this->db->where("products_requisition_details.id 		 = $id");
 			}
 			$this->db->group_by('products_requisition_details.id');
 			return $this->db->get()->result();

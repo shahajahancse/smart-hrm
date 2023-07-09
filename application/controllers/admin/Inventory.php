@@ -256,11 +256,16 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		// dd($id);
+
+		if($session['role_id']==3){;
+		$user_id=$session['user_id'];
+		};
+		
 		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition ';
 		// $data['path_url']    = 'inventory';
 	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id=null,$id);
+
 		if(!empty($data['results'])){
 			$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 		}else{
