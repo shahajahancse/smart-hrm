@@ -301,6 +301,17 @@ class Inventory extends MY_Controller {
 				}
 				   $this->session->set_flashdata('success', 'Product Updated Successfully.');
 				   redirect("admin/inventory/index","refresh");
+
+
+			}elseif(isset($_POST['update'])){
+				$log_user=$_SESSION['username']['user_id'];
+				foreach($quantity as $key=>$value){
+					$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); 
+				}
+				   $this->session->set_flashdata('success', 'Product Updated Successfully.');
+				   redirect("admin/inventory/index","refresh");
+
+
 			}else{
 			if($session['role_id']==1){
 					if($d1[$k]->quantity >= $quantity[$k]) {
@@ -320,7 +331,7 @@ class Inventory extends MY_Controller {
 					}
 			}else{
 				foreach($quantity as $key=>$value){
-				     $this->db->where('id',$r_did[$key])->update('products_requisition_details',['quantity'=>$value]); 
+				     $this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); 
 				 }
 					$this->session->set_flashdata('success', 'Product Updated Successfully.');
 				    redirect("admin/inventory/index","refresh");
