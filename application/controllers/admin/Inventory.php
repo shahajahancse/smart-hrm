@@ -1041,6 +1041,16 @@ class Inventory extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
+	public function product_details($id){
+
+		$data['results'] = $this->Inventory_model->product_details($id);
+		dd($data['results']);
+		
+		// $this->db->where("trim(substr(date_time,1,10)) = '$date'");
+        // $this->db->where("trim(substr(date_time,11,19)) BETWEEN '$start_time' and '$end_time'");
+	}
+
+
 	public function unit($id = null)
 	{
 		$session = $this->session->userdata('username');
@@ -1224,12 +1234,6 @@ class Inventory extends MY_Controller {
 			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
 		 redirect("admin/inventory/product_purchase_edit_approved/".$pid);
 		}
-	}
-	public function product_details($id){
-		dd($id);
-
-
-
 	}
 
 
