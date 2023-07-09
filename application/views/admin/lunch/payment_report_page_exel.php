@@ -23,7 +23,7 @@ $newDate = $date->format('Y-m-d');
             <div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
             <div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;">
                 <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
-            <div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;">Monthly Lunch Payment
+            <div style="font-size:16px; line-height:15px;  text-align:center;">Monthly Lunch Payment
                 Report of <?php  $convertedDate1 = date('d-m-Y', strtotime($lunch_data[0]->end_date ));
                  $convertedDate2 = date('d-m-Y', strtotime($newDate)); ?>
                 <?= isset($lunch_data[0]->end_date) ?  $convertedDate1 : ''; ?> to
@@ -32,14 +32,14 @@ $newDate = $date->format('Y-m-d');
         <table class="table table-bordered table-hover table-striped">
             <thead style="text-align: center;">
                 <tr>
-                    <th>SL</th>
-                    <th>Name</th>
-                    <th>Current M. Lunch day</th>
-                    <th>Stock Lunch Balance</th>
-                    <th>Balance Days</th>
-                    <th>Collection Day</th>
-                    <th>Collection Amount</th>
-                    <th>Status</th>
+                    <th style="color: blue;">SL</th>
+                    <th style="color: blue;">Name</th>
+                    <th style="color: blue;">Current M. Lunch day</th>
+                    <th style="color: blue;">Stock Lunch Balance</th>
+                    <th style="color: blue;">Balance Days</th>
+                    <th style="color: blue;">Collection Day</th>
+                    <th style="color: blue;">Collection Amount</th>
+                    <th style="color: blue;">Status</th>
                 </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -51,14 +51,14 @@ $newDate = $date->format('Y-m-d');
                     $previouspay+=$employee->prev_pay;
                     ?>
                 <tr>
-                    <td><?php echo $key+1 ?></td>
+                    <td style="text-align:center"><?php echo $key+1 ?></td>
                     <td><?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
-                    <td><?php echo $employee->probable_meal;?></td>
-                    <td><?php echo $pbm;?></td>
-                    <td><?php echo $employee->probable_meal-$pbm;?></td>
-                    <td><?php echo $employee->pay_amount/45;?></td>
-                    <td><?php echo $employee->pay_amount;?></td>
-                    <td style="color: <?php echo $employee->status == 1 ? 'blue' : 'red'; ?>">
+                    <td style="text-align:center" ><?php echo $employee->probable_meal;?></td>
+                    <td style="text-align:center"><?php echo $pbm;?></td>
+                    <td style="text-align:center"><?php echo $employee->probable_meal-$pbm;?></td>
+                    <td style="text-align:center"><?php echo $employee->pay_amount/45;?></td>
+                    <td style="text-align:center"><?php echo $employee->pay_amount;?></td>
+                    <td style="color: <?php echo $employee->status == 1 ? 'blue' : 'red'; ?> text-align:center">
                         <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
                     </td>
 

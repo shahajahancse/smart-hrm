@@ -66,6 +66,11 @@ $newDate = $date->format('Y-m-d');
         margin: 0 !important;
         padding: 0 !important;
     }
+    table thead tr th {
+		font-size:12px;
+        color: blue;
+		padding: 3px !important;
+	}
 
     @media print {
         .btn {
@@ -98,12 +103,13 @@ $newDate = $date->format('Y-m-d');
         <div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
         <div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;">
             <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
-        <div style="font-size:16px; line-height:15px; font-weight:bold; text-align:center;">Monthly Lunch Payment Report
+        <div style="font-size:13px; line-height:15px; text-align:center;">Monthly Lunch Payment Report
             of <?php $convertedDate1 = date('d-m-Y', strtotime($lunch_data[0]->end_date));
                $convertedDate2 = date('d-m-Y', strtotime($newDate)); ?>
              <?= isset($lunch_data[0]->end_date) ? $convertedDate1 : ''; ?> to
             <?= isset($newDate) ? $convertedDate2: ''; ?> </div>
     </div>
+<div class="table-responsive" style="margin-top: 0px; padding:10px;">  
     <table class="table table-bordered table-hover table-striped">
         <thead style="text-align: center;">
             <tr>
@@ -133,7 +139,7 @@ $newDate = $date->format('Y-m-d');
                 <td><?php echo $employee->probable_meal-$pbm;?></td>
                 <td><?php echo $employee->pay_amount/45;?></td>
                 <td><?php echo $employee->pay_amount;?></td>
-                <td style="color: <?php echo $employee->status == 1 ? 'blue' : 'red'; ?>">
+                <td style="color: <?php echo $employee->status == 1 ? '#26ab31' : 'red'; ?>">
                     <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
                 </td>
 
@@ -162,6 +168,8 @@ $newDate = $date->format('Y-m-d');
         <?php } ?>
     </table>
     </div>
+ </div>
+
 
     <!-- Include Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>

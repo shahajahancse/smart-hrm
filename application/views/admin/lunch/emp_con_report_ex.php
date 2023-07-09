@@ -26,7 +26,13 @@ header('Cache-Control: max-age=0'); //no cache
     <div style="clear: both;"></div>
 
     <?php $this->load->view('admin/head_bangla')?>
-    <span style="justify-content: center;display: flex;">Lunch Report of <?= $first_date?> to <?= $second_date?></span>
+    <?php $convert_f1=date('d-m-Y', strtotime($first_date));
+                    $convert_f2=date('d-m-Y', strtotime($second_date));
+            
+            ?>
+             <div style="font-size:14px;  text-align:center; margin-bottom:3px">Lunch Report </div>
+        <div style="font-size:14px;  text-align:center; margin-bottom:7px"> <?php echo $statusText; ?> Date : <?php echo $convert_f1; ?> To  <?php echo  $convert_f2; ?></div>
+    
 
     <div style="border: 1px solid black;padding: 0px;margin: 16px;">
         <?php if($status==1){?>
@@ -36,8 +42,8 @@ header('Cache-Control: max-age=0'); //no cache
             <thead>
                 <tr>
                     <th>SL</th>
-                    <th>Name</th>
-                    <th>Designation</th>
+                    <th style="text-align:left">Name</th>
+                    <th style="text-align:left">Designation</th>
                     <th>Active.M</th>
                     <th>Inactive.M</th>
                     <th>Employee.C</th>
@@ -56,9 +62,9 @@ header('Cache-Control: max-age=0'); //no cache
 
                 <?php foreach ($all_employees as $key=>$employee): ?>
                 <tr>
-                    <td><?= $key+1 ?></td>
-                    <td><?= $employee->first_name ?> <?= $employee->last_name ?></td>
-                    <td><?= $employee->designation_name?></td>
+                    <td style="text-align:center"><?= $key+1 ?></td>
+                    <td ><?= $employee->first_name ?> <?= $employee->last_name ?></td>
+                    <td ><?= $employee->designation_name?></td>
                     <?php     
                         $this->load->model("Lunch_model"); 
                     $emp_data = $this->Lunch_model->get_data_date_wise($first_date,$second_date, $employee->user_id);
@@ -87,11 +93,11 @@ header('Cache-Control: max-age=0'); //no cache
 
                 
                 ?>
-                    <td><?= $active_meal ?></td>
-                    <td><?= $inactive_meal ?></td>
-                    <td><?= $total_emp_cost ?></td>
-                    <td><?= $total_offic_cost ?></td>
-                    <td><?= $total_cost ?></td>
+                    <td style="text-align:center"><?= $active_meal ?></td>
+                    <td style="text-align:center"><?= $inactive_meal ?></td>
+                    <td style="text-align:center"><?= $total_emp_cost ?></td>
+                    <td style="text-align:center"><?= $total_offic_cost ?></td>
+                    <td style="text-align:center"><?= $total_cost ?></td>
                 </tr>
                 <?php 
                 $grand_active_meal += $active_meal;
@@ -107,11 +113,11 @@ header('Cache-Control: max-age=0'); //no cache
             <tfoot>
                 <tr>
                     <td colspan=3 style="text-align: center;font-weight: bold;">Total</td>
-                    <td><?=  $grand_active_meal?></td>
-                    <td><?=  $grand_inactive_meal?></td>
-                    <td><?=  $grand_total_emp_cost?></td>
-                    <td><?=  $grand_total_offic_cost?></td>
-                    <td><?=  $grand_total_cost?></td>
+                    <td style="text-align:center"><?=  $grand_active_meal?></td>
+                    <td style="text-align:center"><?=  $grand_inactive_meal?></td>
+                    <td style="text-align:center"><?=  $grand_total_emp_cost?></td>
+                    <td style="text-align:center"><?=  $grand_total_offic_cost?></td>
+                    <td style="text-align:center"><?=  $grand_total_cost?></td>
                 </tr>
             </tfoot>
         </table>
@@ -121,10 +127,10 @@ header('Cache-Control: max-age=0'); //no cache
         <table class="table table-hover table-striped" id="myTable">
             <thead>
                 <tr>
-                    <th>SL</th>
-                    <th>Name</th>
-                    <th>Active.M</th>
-                    <th>T.Amount</th>
+                    <th style="text-align:center">SL</th>
+                    <th style="text-align:center">Name</th>
+                    <th style="text-align:center">Active.M</th>
+                    <th style="text-align:center">T.Amount</th>
                 </tr>
             </thead>
             <tbody>
@@ -138,8 +144,8 @@ header('Cache-Control: max-age=0'); //no cache
 
                 <?php foreach ($all_employees as $key=>$employee): ?>
                 <tr>
-                    <td><?= $key+1 ?></td>
-                    <td>Gest</td>
+                    <td style="text-align:center"><?= $key+1 ?></td>
+                    <td style="text-align:center">Gest</td>
 
                     <?php     
                         $this->load->model("Lunch_model"); 
@@ -169,8 +175,8 @@ header('Cache-Control: max-age=0'); //no cache
 
                 
                 ?>
-                    <td><?= $active_meal ?></td>
-                    <td><?= $total_cost ?></td>
+                    <td style="text-align:center"><?= $active_meal ?></td>
+                    <td style="text-align:center"><?= $total_cost ?></td>
                 </tr>
                 <?php 
                 $grand_active_meal += $active_meal;
@@ -186,8 +192,8 @@ header('Cache-Control: max-age=0'); //no cache
             <tfoot>
                 <tr>
                     <td colspan=2 style="text-align: center;font-weight: bold;">Total</td>
-                    <td><?=  $grand_active_meal?></td>
-                    <td><?=  $grand_total_cost?></td>
+                    <td style="text-align:center"><?=  $grand_active_meal?></td>
+                    <td style="text-align:center"><?=  $grand_total_cost?></td>
                 </tr>
             </tfoot>
         </table>

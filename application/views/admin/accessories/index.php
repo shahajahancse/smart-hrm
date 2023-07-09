@@ -78,6 +78,9 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
                       <li><a class="btn btn-sm btn-danger" href="<?= base_url('admin/accessories/delete/'.$row->id.'/product_accessories/index');?>" onclick="return confirm('Are you sure to delete!!!')">delete</a></li>
                   </ul>
                 </div>
+                <a class="btn btn-sm btn-info" type="button" href="<?= base_url('admin/accessories/item_add/'.$row->a_id);?>">Edit</a>
+                <a class="btn btn-sm btn-danger" type="button" href="<?= base_url('admin/accessories/delete/'.$row->a_id.'/product_accessories/index');?>" onclick="return confirm('Are you sure to delete!!!')">Delete</a>
+
               </td>
             </tr>
           <?php } ?>

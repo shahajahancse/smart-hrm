@@ -135,18 +135,9 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
         success: function(response) {
           // Hide the modal
           $('#lunchoffmodal').modal('hide');
+          console.log(response)
 
-          // Show a sweet alert
-          Swal.fire({
-            title: 'Success',
-            text: 'Your request was successful!',
-            icon: 'success',
-            confirmButtonText: 'OK'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              
-            }
-          });
+        
         },
         error: function(xhr, status, error) {
           // Handle the error response from the server
