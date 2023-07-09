@@ -193,19 +193,20 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		
+	if($session['user_id']){
+
+	};
 		$data['title'] 		 = 'Requsition Details | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition Details';
 		// $data['path_url'] 	 = 'inventory';
-		if($session['role_id']== 1 || $session['role_id']== 3 || $session['role_id']== 4){
+		
 			$data['results']	 = $this->Inventory_model->requisition_details($user_id=null,$id);
+			dd($data['results']);
 			if(!empty($data['results'])){
-				$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
+				$data['requisition_id'] 	 = $id;
 			}
 		    $data['status'] = $this->db->select('status')->where('id',$id)->get('products_requisitions')->row()->status;								
-	    } else {
-			  $data['results']	 = $this->Inventory_model->req_details_cat_wise($id);							
-	    }
+
 		// dd($data);
 		$data['subview'] 	 = $this->load->view("admin/inventory/requsition_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
@@ -277,15 +278,15 @@ class Inventory extends MY_Controller {
 	
 	
 	public function persial_approved($id){
+		
 		$session = $this->session->userdata('username');
 		$all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->result();
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
 		}
+
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
-		// dd($quantity);
-		// dd($d1[1]->quantity);
 		foreach($d1 as $k=>$v){
 			if(isset($_POST['first_step'])){
 				$log_user=$_SESSION['username']['user_id'];
