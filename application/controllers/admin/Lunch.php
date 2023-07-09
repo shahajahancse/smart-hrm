@@ -754,12 +754,20 @@ public function make_id_payment(){
                 $emp = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
         
                 foreach($emp as $row){
-                    $p_stutus=$this->db->query("SELECT * FROM `xin_attendance_time` WHERE `employee_id` = $row->user_id AND `attendance_date` = $dateoff")->result()[0]->status;
+                    $dateoff = date("Y-m-d", strtotime($dateoff));
+                    $this->db->select('*');
+                    $this->db->from('xin_attendance_time');
+                    $this->db->where('employee_id', $row->user_id);
+                    $this->db->where('attendance_date', $dateoff);
+                    $result = $this->db->get()->row();
+
+                   
+                    // dd($p_status);
                     $data2 = array(
                     'lunch_id'      => $insert_id,
                     'emp_id'        => $row->user_id,
                     'meal_amount'   => 0,
-                    'p_stutus'      => $p_stutus,
+                    'p_stutus'      => $result->status,
                     'comment'       => '',
                     'date'          => $dateoff,
                        );
