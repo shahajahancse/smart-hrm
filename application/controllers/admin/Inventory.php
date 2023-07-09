@@ -490,14 +490,14 @@ class Inventory extends MY_Controller {
 								$this->load->view('admin/layout/layout_main', $data); //page load
     }
 
-    function product_purchase_edit($id) {
+    // function product_purchase_edit($id) {
 
 
-    }
+    // }
 
-    function product_purchase_approved($id) {
+    // function product_purchase_approved($id) {
     	
-    }
+    // }
 
 	public function purchase_panding_list()
 	{
