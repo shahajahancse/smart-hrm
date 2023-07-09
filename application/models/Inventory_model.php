@@ -284,6 +284,7 @@ class inventory_model extends CI_Model
 					 products_categories.category_name,
 					 products_sub_categories.sub_cate_name,
 					 products.product_name,
+					 products.quantity as p_qty,
 							")
 			->from("products_categories")
 			->from("products_sub_categories")
