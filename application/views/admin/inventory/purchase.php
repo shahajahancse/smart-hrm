@@ -65,8 +65,8 @@
 
                   <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                     <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>" >Details</a><br>
-                    <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_edit/'.$rows->id);?>">Edit</a> <br>
-                    <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_approved/'.$rows->id);?>">Approved</a> <br>
+                    <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a> <br>
+                    <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Approved</a> <br>
                     <a style="padding-left:5px; " href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Reject</a> <br>
                     <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_delivered/'.$rows->id);?>">Delivery</a> <br>
                   </div>
