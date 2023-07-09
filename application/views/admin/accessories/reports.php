@@ -23,29 +23,56 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
         <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text" autocomplete="off">
       </div>
     </div>
-      <div class="col-md-3"  >
-        <label for="Status">Select Status</label>
-        <select class="form-control" id='status'>  
-          <option value="" disabled selected>Select Status</option>
-          <option value="1" >On Working</option>
-          <option value="2" >Store</option>
-          <option value="3" >Servicing</option>
-          <option value="4" >Destroy</option>
-        </select>
-      </div>
-      <div class="col-md-3"  >
-        <label for="Status">Select Category</label>
-        <select class="form-control" id='category'>  
-          <option value="" disabled selected>Select Category</option>
-      <?php $category = $this->db->select('*')->get('product_accessory_categories')->result(); foreach($category as $row){?>
-          <option value="<?= $row->id?>" ><?= $row->cat_name?></option>
-      <?php }?>
-        </select>
-      </div> 
+    <div class="col-md-3"  >
+      <label for="Status">Select Status</label>
+      <select class="form-control" id='status'>  
+        <option value="" disabled selected>Select Status</option>
+        <option value="1" >On Working</option>
+        <option value="2" >Store</option>
+        <option value="3" >Servicing</option>
+        <option value="4" >Destroy</option>
+      </select>
+    </div>
+    <div class="col-md-3"  >
+      <label for="Status">Select Category</label>
+      <select class="form-control" id='category'>  
+        <option value="" disabled selected>Select Category</option>
+          <?php $category = $this->db->select('*')->get('product_accessory_categories')->result(); foreach($category as $row){?>
+            <option value="<?= $row->id?>" ><?= $row->cat_name?></option>
+          <?php }?>
+      </select>
+    </div> 
       <button class="btn btn-info"  style="float:right;margin-right:15px;margin-top:20px" onclick="inventory_report(1)">Report</button>
       <button class="btn btn-primary"  style="float:right;margin-right:15px;margin-top:20px" onclick="inventory_report(2)">All Report</button>
-    </div>
   </div>
+
+
+  <div class="box-header with-border" id="report_title">
+    <h3 class="box-title" id="report">Report User Wise</h3>
+  </div>
+  <div class="box-body" id="emp_report">
+    <div class="col-md-4">
+      <label for="Status">User Name</label>
+      <select class="form-control" id='users'>  
+        <option value="" disabled selected>Select User</option>
+          <?php $users = $this->db->select('user_id,first_name,last_name')->get('xin_employees')->result(); foreach($users as $user){?>
+            <option value="<?= $user->user_id?>" ><?= $user->first_name.''.$user->last_name?></option>
+          <?php }?>
+      </select>
+    </div> 
+    <button class="btn btn-info"  style="margin-top:25px" onclick="user_report(1)">Single User Report</button>
+    <button class="btn btn-primary"  style="margin-top:25px" onclick="user_report(2)">All User's Report</button>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+  
 </div>
 </div>
 
@@ -102,4 +129,39 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
       }
     }
   }
+
+
+    function user_report(report){
+    var ajaxRequest;  // The variable that makes Ajax possible!
+    ajaxRequest     = new XMLHttpRequest();
+
+    var user_id      = $('#users').val();
+    
+    if(report==1 && user_id==null){
+      alert('Please select user name');
+      return;
+    }
+    // alert(user_id);return;
+    if(report==1){
+      var data = "user_id="+user_id;
+    }
+    else{
+      var data = null;
+    }
+
+    url = base_url + "/user_report";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+        var resp = ajaxRequest.responseText;
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1400,height=800');
+        a.document.write(resp);
+      }
+    }
+
+
+
+  }    
 </script>

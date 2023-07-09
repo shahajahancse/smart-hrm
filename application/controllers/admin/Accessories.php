@@ -256,8 +256,8 @@ public function inventory_report($status=null,$category=null){
     $data = $this->page_loads();
     $data['title']       = 'On Working'.' | '.$this->Xin_model->site_title();
     $data['breadcrumbs'] = "On Working";
-    $status = $_POST['status'];
-    $category= $_POST['category'];
+    $status   =  @$_POST['status'];
+    $category =  @$_POST['category'];
 
     // $data['path_url']    = "Working";
     if($status!=null && $category!=null){
@@ -276,6 +276,29 @@ public function inventory_report($status=null,$category=null){
      $this->load->view('admin/accessories/inventory_report',$data);
     }
 }
+
+
+
+public function user_report($user_id=null){
+    $data = $this->page_loads();
+    $data['title']       = 'User Report'.' | '.$this->Xin_model->site_title();
+    $user_id             =  @$_POST['user_id'];
+    if($user_id !=null){
+        $data['reports'] = $this->Accessories_model->get_user_reports_info($user_id);
+    } else{
+        $data['reports'] = $this->Accessories_model->get_user_reports_info($user_id=null);
+    }
+    if(is_string($data["reports"]))
+    {
+     echo $data["reports"];
+    }
+    else
+    {	
+    //  dd($data);
+     $this->load->view('admin/accessories/user_report',$data);
+    }
+}
+
 
 
 

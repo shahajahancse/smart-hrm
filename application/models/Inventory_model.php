@@ -271,41 +271,41 @@ class inventory_model extends CI_Model
 	// requisition details for requisition id
 	public  function requisition_details($user_id=null,$id=null){
 		        //    dd($user_id);
-			$this->db->select(" 
-					 xin_employees.first_name,
-					 xin_employees.last_name,
-			         products_requisition_details.id,
-					 products_requisition_details.requisition_id,
-				     products_requisition_details.quantity,
-					 products_requisition_details.approved_qty,
-					 products_requisitions.status,
-					 products_requisitions.user_id,
-					 products_requisitions.created_at,
-					 products_categories.category_name,
-					 products_sub_categories.sub_cate_name,
-					 products.product_name,
-					 products.quantity as p_qty,
-							")
-			->from("products_categories")
-			->from("products_sub_categories")
-			->from("products")
-			->from("products_requisitions")
-			->from("products_requisition_details")
-			->from("xin_employees")
-			->where("products_categories.id     = products_requisition_details.cat_id")	
-			->where("products_sub_categories.id = products_requisition_details.sub_cate_id")	
-			->where("products.id 				= products_requisition_details.product_id")	
-			->where("products_requisitions.id 	= products_requisition_details.requisition_id")	
-			->where("xin_employees.user_id 		= products_requisitions.user_id")	;
-			//razib
-			if($user_id!=null){
-			   $this->db->where("products_requisitions.user_id  = $user_id");
-			}
-			if($id!=null){
-			   $this->db->where("products_requisitions.id 		 = $id");
-			}
-			$this->db->group_by('products_requisition_details.id');
-			return $this->db->get()->result();
+	$this->db->select(" 
+				xin_employees.first_name,
+				xin_employees.last_name,
+				products_requisition_details.id,
+				products_requisition_details.requisition_id,
+				products_requisition_details.quantity,
+				products_requisition_details.approved_qty,
+				products_requisitions.status,
+				products_requisitions.user_id,
+				products_requisitions.created_at,
+				products_categories.category_name,
+				products_sub_categories.sub_cate_name,
+				products.product_name,
+				products.quantity as p_qty,
+	")
+	->from("products_categories")
+	->from("products_sub_categories")
+	->from("products")
+	->from("products_requisitions")
+	->from("products_requisition_details")
+	->from("xin_employees")
+	->where("products_categories.id     = products_requisition_details.cat_id")	
+	->where("products_sub_categories.id = products_requisition_details.sub_cate_id")	
+	->where("products.id 				= products_requisition_details.product_id")	
+	->where("products_requisitions.id 	= products_requisition_details.requisition_id")	
+	->where("xin_employees.user_id 		= products_requisitions.user_id")	;
+	//razib
+	if($user_id!=null){
+		$this->db->where("products_requisitions.user_id  = $user_id");
+	}
+	if($id!=null){
+		$this->db->where("products_requisitions.id 		 = $id");
+	}
+	$this->db->group_by('products_requisition_details.id');
+	return $this->db->get()->result();
 	}
 
 	public  function req_details_cat_wise($id){
