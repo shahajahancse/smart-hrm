@@ -94,18 +94,19 @@
       
       $('#purchase_table').DataTable();
    });   
-
+   let sl = 1; 
    $("#addRow").click(function(e) {
-      addNewRow();
+      sl++;
+      addNewRow(sl);
    }); 
    //remove row
    function removeRow(id){ 
       $(id).closest("tr").remove();
    }
    //add row function
-   function addNewRow(){
+   function addNewRow(sl){
       // id="category_'+sl+'"
-      let sl=$('#count').val();
+      // let sl=$('#count').val();
       let items = '';
       items+= '<tr>';
       items+= '<td><select name="cat_id[]" class="form-control input-sm" id="category_'+sl+'" required><?php echo $category_data;?></select></td>';
@@ -114,7 +115,7 @@
       items+= '<td><input name="quantity[]" id="quantity" value="" type="text" class="form-control input-sm" required></td>';
       items+= '<td> <a href="javascript:void();" class="label label-important text-danger" onclick="removeRow(this)"> <i class="fa fa-minus-circle text-danger"></i><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
       items+= '</tr>';
-      $('#count').val(sl+parseInt(1));
+      // $('#count').val(sl+parseInt(1));
       $('#appRowDiv tr:last').after(items);
       category_dd(sl);
       subcategory_dd(sl);
