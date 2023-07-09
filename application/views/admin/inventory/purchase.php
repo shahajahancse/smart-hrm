@@ -68,7 +68,7 @@
                     <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a> <br>
                     <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Approved</a> <br>
                     <a style="padding-left:5px; " href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Reject</a> <br>
-                    <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_delivered/'.$rows->id);?>">Delivery</a> <br>
+                    <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_delivered/'.$rows->id);?>">Order Received</a> <br>
                   </div>
                 </div>
               </td>
