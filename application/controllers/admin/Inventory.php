@@ -467,7 +467,6 @@ class Inventory extends MY_Controller {
 			$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
 			$data['breadcrumbs']	= 'Store';
 			$data['categorys']		= $this->db->get("products_categories")->result();
-			$data['products'] 		= $this->Inventory_model->purchase_products_requisition($session['user_id'],$session['role_id']);
 
 			// dd($data['products']);
 			$data['results'] 		= $this->Inventory_model->product_list();

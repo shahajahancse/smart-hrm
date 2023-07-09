@@ -14,19 +14,17 @@
     
     </div>
      
-        <div class="container pt-4">
-          <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
-            <?php $hidden = array('user_id' => $session['user_id']);?>
-            <?php echo form_open('admin/inventory/purchase', $attributes, $hidden);?>
-                <table class="table table-bordered table-sm table-striped " id="appRowDiv">
-                  <tr>
-                    
-                        <th class="text-center">Comany Name</th>
-                        <th class="text-center">Supplier Name</th>
-                        
-                  </tr>
-                   <tr>
-                   <td>
+    <div class="container pt-4">
+      <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
+        <?php $hidden = array('user_id' => $session['user_id']);?>
+        <?php echo form_open('admin/inventory/purchase', $attributes, $hidden);?>
+            <table class="table table-bordered table-sm table-striped " id="appRowDiv">
+                <!-- <tr>
+                    <th class="text-center">Comany Name</th>
+                    <th class="text-center">Supplier Name</th>
+                </tr>
+                <tr>
+                    <td>
                         <select name="cmp_name" class="form-control" id="cmp_name" required>
                             <option id="cmp" value="">Select Company Name</option>
                             <?php foreach($company as $cmp): ?>
@@ -39,25 +37,22 @@
                             <option id="spl" value="">Select Supplier Name</option>
                         </select>
                     </td>
-                      
-                   </tr>
+                </tr> -->
 
-                   <!-- <?php foreach($company as $cmp){?>
-                          <option value="<?php echo $cmp->company?>"><?php echo $cmp->company?></option>
-                          <?php }?> -->
-                    <tr>
-                        <th class="text-center">Category Name</th>
-                        <th class="text-center">Sub Category Name</th>
-                        <th class="text-center">Product Name</th>
-                        <th class="text-center">Quantity</th>
-                        <th class="text-center"> <button type="button" id="addRow"  class="btn btn-sm btn-success">+ Add More</button></th>
-                    </tr>
-                    <tr></tr>
-                </table>
-                <!-- <input type="submit" name="btn" class="" value="Save"> -->
-                <button name="btn" type="submit" class="btn btn-primary btn-sm text-right" style="float: right;margin-right: 92px;margin-bottom: 20px;" > <i class="fa fa-check-square-o"></i><?php echo $this->lang->line('xin_save');?></button>
-            <?php echo form_close(); ?> 
-  </div>
+                <tr>
+                    <th class="text-center">Category Name</th>
+                    <th class="text-center">Sub Category Name</th>
+                    <th class="text-center">Product Name</th>
+                    <th class="text-center">Quantity</th>
+                    <th class="text-center">Approx amount</th>
+                    <th class="text-center">Total amount</th>
+                    <th class="text-center"> <button type="button" id="addRow"  class="btn btn-sm btn-success">+ Add More</button></th>
+                </tr>
+                <tr></tr>
+            </table>
+            <button name="btn" type="submit" class="btn btn-primary btn-sm text-right" style="float: right;margin-right: 92px;margin-bottom: 20px;" > <i class="fa fa-check-square-o"></i><?php echo $this->lang->line('xin_save');?></button>
+        <?php echo form_close(); ?> 
+    </div>
 
 <?php if($this->session->flashdata('success')):?>
   <div class="alert alert-success" id="flash_message">
@@ -112,7 +107,13 @@
       items+= '<td><select name="cat_id[]" class="form-control input-sm" id="category_'+sl+'" required><?php echo $category_data;?></select></td>';
       items+= '<td><select name="sub_cate_id[]"  id="subcategory_'+sl+'" class="sub_category_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
       items+= '<td><select name="product_id[]" class="item_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
-      items+= '<td><input name="quantity[]" id="quantity" value="" type="text" class="form-control input-sm" required></td>';
+
+      items+= '<td><input name="quantity[]" id="quantity_'+sl+'" data-id="'+sl+'" value="0" type="number" class="form-control input-sm" required onChange="change_qty(this)"></td>';
+
+      items+= '<td><input name="approx_amount[]" id="approx_amount_'+sl+'" data-am="'+sl+'" value="0" type="number" class="form-control input-sm approx_amount" required onChange="change_amount(this)" ></td>';
+
+      items+= '<td><input name="total_amount[]" id="total_amount_'+sl+'" value="0" type="number" class="form-control input-sm" required></td>';
+
       items+= '<td> <a href="javascript:void();" class="label label-important text-danger" onclick="removeRow(this)"> <i class="fa fa-minus-circle text-danger"></i><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
       items+= '</tr>';
       // $('#count').val(sl+parseInt(1));
@@ -120,6 +121,16 @@
       category_dd(sl);
       subcategory_dd(sl);
    } 
+
+    function change_qty(qty) {
+        var approx_amount = document.getElementById('approx_amount_'+qty.getAttribute('data-id')).value;
+        document.getElementById('total_amount_'+qty.getAttribute('data-id')).value = approx_amount * qty.value;
+    }
+
+   function change_amount(amount) {
+        var quantity = document.getElementById('quantity_'+amount.getAttribute('data-am')).value;
+        document.getElementById('total_amount_'+amount.getAttribute('data-am')).value = quantity * amount.value;
+   }
 
    function category_dd(sl){
       //Category Dropdown
