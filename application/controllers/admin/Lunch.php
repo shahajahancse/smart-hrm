@@ -923,6 +923,13 @@ public function pay_vend_ajax_request()
 		header('Content-Type: application/x-json; charset=utf-8');
 		echo (json_encode($result));
 	}
+    public function menu_delete($id){
+        //delete id
+        $this->db->where('id', $id);
+        $this->db->delete('lunch_vendor_menu');
+        $this->session->set_flashdata('warning', 'Successfully Deleted');
+        redirect('admin/lunch/lunch_menu');
+    }
 
 
 

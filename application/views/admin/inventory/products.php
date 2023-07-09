@@ -112,9 +112,12 @@
 
 <?php echo validation_errors(); ?>
 <?php if($this->session->flashdata('success')):?>
-  <div class="alert alert-success alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <div class="alert alert-success alert-dismissible"id="flash_message1"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <?php echo $this->session->flashdata('success');?>
   </div>
+  <script>
+       $(function() {$("#flash_message1").hide(2000);});
+  </script> 
 <?php endif; ?> 
 
 <?php if($this->session->flashdata('warning')):?>
