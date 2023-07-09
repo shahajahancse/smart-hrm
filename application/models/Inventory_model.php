@@ -54,44 +54,6 @@ class inventory_model extends CI_Model
 		->join('product_supplier as ps', 'ps.id = p.supplier', 'left')
 		->order_by('p.id', 'desc');
 
-
-		if($role_id==1){
-			$this->db->select('
-					xin_employees.first_name,
-					xin_employees.last_name, 
-					product_supplier.name,
-					product_supplier.company,
-					products_purches.id,
-					products_purches.user_id,
-					products_purches.status,
-					products_purches.created_at,
-					products_purches.updated_by
-				')
-			->from('product_supplier')
-			->from('products_purches')
-			->from('xin_employees')
-			->where("products_purches.user_id = xin_employees.user_id")
-			->where("products_purches.supplier =product_supplier.id")
-			->order_by('products_purches.id', 'desc');
-		}
-
-		if($role_id==4){
-			$this->db->select("
-					xin_employees.first_name,
-					xin_employees.last_name, 
-					product_supplier.name,
-					product_supplier.company,
-					products_purches.status,
-					products_purches_details.id,
-				")
-	        ->from('product_supplier')
-	        ->from('products_purches')
-	        ->from('products')
-			->where("xin_employees.user_id = products_requisitions.user_id")
-			//search by accordinig to requisition id 
-			->group_by('products_requisitions.id')
-			->order_by('products_requisitions.id', 'desc');
-		}
 		// dd($this->db->get()->result());
 		return	$this->db->get()->result();
 	} 
@@ -314,7 +276,7 @@ class inventory_model extends CI_Model
 	}
 	// requisition details for requisition id
 	public  function requisition_details($user_id=null,$id=null){
-		        
+		        // dd($user_id.'hgf'.$id);
 			$this->db->select(" 
 					 xin_employees.first_name,
 					 xin_employees.last_name,
@@ -346,7 +308,7 @@ class inventory_model extends CI_Model
 			   $this->db->where("products_requisitions.user_id  = $user_id");
 			}
 			if($id!=null){
-			   $this->db->where("products_requisition_details.id 		 = $id");
+			   $this->db->where("products_requisition_details.requisition_id  = $id");
 			}
 			$this->db->group_by('products_requisition_details.id');
 			return $this->db->get()->result();

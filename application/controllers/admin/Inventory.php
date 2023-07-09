@@ -193,9 +193,9 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-	if($session['user_id']){
-
-	};
+	   if($session['role_id']==3){
+		 $user_id=$session['user_id'];
+	    };
 		$data['title'] 		 = 'Requsition Details | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition Details';
 		// $data['path_url'] 	 = 'inventory';
