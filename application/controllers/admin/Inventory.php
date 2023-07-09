@@ -1045,16 +1045,6 @@ class Inventory extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
-	public function product_details($id){
-
-		$data['results'] = $this->Inventory_model->product_details($id);
-		dd($data['results']);
-		
-		// $this->db->where("trim(substr(date_time,1,10)) = '$date'");
-        // $this->db->where("trim(substr(date_time,11,19)) BETWEEN '$start_time' and '$end_time'");
-	}
-
-
 	public function unit($id = null)
 	{
 		$session = $this->session->userdata('username');
@@ -1240,8 +1230,17 @@ class Inventory extends MY_Controller {
 		}
 	}
 
-
-
-
+	public function product_details($id){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = 'Product Details | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Product Details';
+		$data['results'] = $this->Inventory_model->product_details($id);
+		// dd($data['results']);
+		$data['subview'] = $this->load->view("admin/inventory/product_details", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
 }
 ?>

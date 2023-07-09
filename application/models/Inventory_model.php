@@ -31,7 +31,7 @@ class inventory_model extends CI_Model
 	   			SUBSTR(pp.created_at, 1, 10) as created_at,
 	   		');
 	    $this->db->from('products as p');
-	    $this->db->join('products_purches_details as pp', 'pp.product_id = p.id', 'left');
+	    $this->db->join('products_purches_details as pp', 'pp.product_id = p.id');
 	    $this->db->where('p.id',  $id);
 	    $this->db->group_by('pp.id');
 	   $purchase_query = $this->db->order_by('pp.id','DESC')->get()->result();
@@ -46,7 +46,7 @@ class inventory_model extends CI_Model
 	   			SUBSTR(pr.created_at, 1, 10) as created_at,
 	   		');
 	    $this->db->from('products as p');
-	    $this->db->join('products_requisition_details as pr', 'pr.product_id = p.id', 'left');
+	    $this->db->join('products_requisition_details as pr', 'pr.product_id = p.id');
 	    $this->db->where('p.id',  $id);
 	    $this->db->group_by('pr.id');
 	   $requisition_query = $this->db->order_by('pr.id','DESC')->get()->result();
