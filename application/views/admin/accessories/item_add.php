@@ -40,7 +40,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
               </select>
             </div>
             
-            <input type="hidden" name="hidden_id" value="<?php echo isset($row->id)? $row->id:''; ?>">
+            <input type="hidden" name="hidden_id" value="<?php echo isset($row->a_id)? $row->a_id:''; ?>">
 
             <div class="col-md-2" >
               <div class="form-group">
@@ -65,7 +65,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
             <div class="col-md-2" >
               <label for="Status">Item Status</label>
-              <select name="status" class="form-control"  >  
+              <select name="status" class="form-control"  id="status">  
                 <option value="">Select status</option>
                 <option value="1" <?php echo (isset($row->status) && $row->status == 1)? 'selected':''; ?> >On Working</option>
                 <option value="2" <?php echo (isset($row->status) && $row->status == 2)? 'selected':''; ?> >Stocked   </option>
@@ -91,7 +91,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             
             <div class="col-md-4" >
               <label for="Status">User</label>
-              <select name="user_id" class="form-control" >  
+              <select name="user_id" id="user_id" class="form-control" disabled>  
                 <option value="">Select User</option>
                 <?php foreach ($users as $key => $user) {?>
                 <option value="<?php echo $user->user_id ?>" <?php echo (isset($row->user_id) && $row->user_id == $user->user_id)? 'selected':''; ?> ><?php echo $user->first_name.' '.$user->last_name ?></option>
@@ -120,8 +120,6 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
                 <?php }?>
               </select>
             </div>
-            
- 
           </div>
           </div>        
 
@@ -152,24 +150,53 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 	// }
 
 $('#cat_id').on('change',function(){
+  var val = $('#cat_id').find(":selected").val();  
+  var category = $('#cat_id').find(":selected").text();  
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('admin/accessories/get_model')?>",
+      data:'cat_id='+val,
+      success: function(data){
+      $("#model_name").html(data);
+      }
+    });
+  var mobile = category.search(/Mobile/i); 
+  var sim = category.search(/Sim/i); 
 
-var val = $('#cat_id').find(":selected").val();  
-var category = $('#cat_id').find(":selected").text();  
-          $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('admin/accessories/get_model')?>",
-            data:'cat_id='+val,
-            success: function(data){
-            $("#model_name").html(data);
-            }
-          });
-    var sim = category.search(/Sim/i); 
-    if(sim !== -1){
-       $("#use_number").prop('disabled', false);
-      //  $("#number").prop('disabled', false);
-    }
+    if(mobile !== -1){
+    $("#use_number").prop('disabled', false);
+    $('#use_number').on('change',function(){
+       var status = $('#use_number').find(":selected").val();  
+      if(status==1){
+       $("#number").prop('disabled', false);
+      }else{
+       $("#number").prop('disabled', true);
+      }
+    });
+  }
 
-  });
+  if(sim !== -1){
+    $("#use_number").prop('disabled', false);
+    $('#use_number').on('change',function(){
+       var status = $('#use_number').find(":selected").val();  
+      if(status==1){
+       $("#number").prop('disabled', false);
+      }else{
+       $("#number").prop('disabled', true);
+      }
+    });
+  }
+});
+// able/disable user name list according to item status [ 1 == able , else disable ]
+$('#status').on('change',function(){
+  var status = $('#status').find(":selected").val();  
+  if(status==1){
+  $("#user_id").prop('disabled', false);
+  // $("#user_id").prop('required', true);
+  }else{
+  $("#user_id").prop('disabled', true);
+  }
+});
 
 // onChange="category(this.value);"
 </script>

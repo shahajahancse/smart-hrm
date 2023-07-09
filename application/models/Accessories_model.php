@@ -34,12 +34,24 @@ public function get_cat_model_info($id=null){
 
 
 public function get_product_reports_info($id=null,$status=null,$category=null){
-    // dd($id);
+    // dd($category);
 
     $this->db->select(' 
-                        product_accessories.*,
-                        product_accessory_categories.*,
-                        product_accessory_categories.*,
+                        
+                        
+                        product_accessories.id as a_id,
+                        product_accessories.cat_id,
+                        product_accessories.device_model,
+                        product_accessories.device_name_id,
+                        product_accessories.description,
+                        product_accessories.status,
+                        product_accessories.remark,
+                        product_accessories.use_number,
+                        product_accessories.number,
+                        product_accessories.image,
+                        product_accessories.user_id,
+                        product_accessory_categories.cat_name,
+                        product_accessory_categories.cat_short_name,
                         product_accessories_model.model_name,
                         mobile_numbers.number,
                         xin_employees.first_name,
@@ -53,8 +65,9 @@ public function get_product_reports_info($id=null,$status=null,$category=null){
     $this->db->join('xin_employees','product_accessories.user_id                  = xin_employees.user_id','left');
 
     if($id !=null){
-        $this->db->where('product_accessories.cat_id',$id);
+        $this->db->where('product_accessories.id',$id);
         $data=$this->db->get()->row();
+        // dd($data);
     } 
     else if($status !=null && $category!=null){
         dd($status.' '.$categorys);

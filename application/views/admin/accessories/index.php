@@ -36,17 +36,17 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
       <table class="datatables-demo table table-striped table-bordered" id="example">
         <thead class="text-center">
           <tr>
-            <th class="text-center" style="width:50px;">No.</th>
+            <th  style="width:60px;">No.</th>
             <!-- <th class="text-center" style="width:100px;">User</th> -->
-            <th class="text-center" style="width:100px;">Category</th>
-            <th class="text-center" style="width:100px;">Device</th>
-            <th class="text-center" style="width:100px;">Model</th>
-            <th class="text-center" style="width:100px;">Number</th>
-            <th class="text-center" style="width:140px;">Description</th>
-            <th class="text-center" style="width:100px;">Purpose</th>
-            <th class="text-center" style="width:100px;">Image</th>
-            <th class="text-center" style="width:100px;">Status</th>
-            <th class="text-center" style="width:100px;">Action</th>
+            <th style="width:100px;">Category</th>
+            <th style="width:80px;">Device</th>
+            <th style="width:80px;">Model</th>
+            <th style="width:80px;">Number</th>
+            <th style="width:120px;">Description</th>
+            <th style="width:80px;">Purpose</th>
+            <th style="width:80px;">Image</th>
+            <th style="width:80px;">Status</th>
+            <th style="width:100px;">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -68,6 +68,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
                   ?>
               </td>
               <td>
+<<<<<<< HEAD
                 <div class="dropup">
                   <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" >
                       Action
@@ -78,6 +79,10 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
                       <li><a class="btn btn-sm btn-danger" href="<?= base_url('admin/accessories/delete/'.$row->id.'/product_accessories/index');?>" onclick="return confirm('Are you sure to delete!!!')">delete</a></li>
                   </ul>
                 </div>
+=======
+                <a class="btn btn-sm btn-info" type="button" href="<?= base_url('admin/accessories/item_add/'.$row->a_id);?>">Edit</a>
+                <a class="btn btn-sm btn-danger" type="button" href="<?= base_url('admin/accessories/delete/'.$row->a_id.'/product_accessories/index');?>" onclick="return confirm('Are you sure to delete!!!')">Delete</a>
+>>>>>>> 9ca3d566a312e2cefe1bef6d7f7f24005dc5638e
               </td>
             </tr>
           <?php } ?>
