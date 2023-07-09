@@ -34,48 +34,43 @@ public function get_cat_model_info($id=null){
 
 
 public function get_product_reports_info($id=null,$status=null,$category=null){
-    // dd($category);
-
+    // dd("Ko");
+    // dd($status);
     $this->db->select(' 
-                        
-                        
-                        product_accessories.id as a_id,
-                        product_accessories.cat_id,
-                        product_accessories.device_model,
-                        product_accessories.device_name_id,
-                        product_accessories.description,
-                        product_accessories.status,
-                        product_accessories.remark,
-                        product_accessories.use_number,
-                        product_accessories.number,
-                        product_accessories.image,
-                        product_accessories.user_id,
-                        product_accessory_categories.cat_name,
-                        product_accessory_categories.cat_short_name,
-                        product_accessories_model.model_name,
-                        mobile_numbers.number,
-                        xin_employees.first_name,
-                        xin_employees.last_name,
-
-                    ');
+                product_accessories.id as a_id,
+                product_accessories.cat_id,
+                product_accessories.device_model,
+                product_accessories.device_name_id,
+                product_accessories.description,
+                product_accessories.status,
+                product_accessories.remark,
+                product_accessories.use_number,
+                product_accessories.number,
+                product_accessories.image,
+                product_accessories.user_id,
+                product_accessory_categories.cat_name,
+                product_accessory_categories.cat_short_name,
+                product_accessories_model.model_name,
+                mobile_numbers.number,
+                xin_employees.first_name,
+                xin_employees.last_name,
+    ');
     $this->db->from('product_accessories');
     $this->db->join('product_accessories_model','product_accessories.device_model = product_accessories_model.id','left');
     $this->db->join('product_accessory_categories','product_accessories.cat_id    = product_accessory_categories.id','left');
     $this->db->join('mobile_numbers','product_accessories.number                  = mobile_numbers.id','left');    
     $this->db->join('xin_employees','product_accessories.user_id                  = xin_employees.user_id','left');
-
     if($id !=null){
         $this->db->where('product_accessories.id',$id);
         $data=$this->db->get()->row();
         // dd($data);
     } 
     else if($status !=null && $category!=null){
-        dd($status.' '.$categorys);
+        // dd($status.' '.$categorys);
         $this->db->where('product_accessories.status',$status);
         $this->db->where('product_accessories.cat_id',$category);
         // $this->db->group_by('product_accessories.cat_id');
         $data=$this->db->get()->result();
-         
     } 
     else {
         $data=$this->db->get()->result();

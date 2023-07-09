@@ -253,25 +253,28 @@ public function reports(){
 }
 
 public function inventory_report($status=null,$category=null){
-        $data = $this->page_loads();
-        $data['title']       = 'On Working'.' | '.$this->Xin_model->site_title();
-        $data['breadcrumbs'] = "On Working";
-        // $data['path_url']    = "Working";
-        if($status!=null && $category!=null){
-            $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$_POST['status'],$_POST['category']);
-        } else{
-            $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$status,$category);
-        }
-        // dd($_POST);
-        if(is_string($data["reports"]))
-        {
-            echo $data["reports"];
-        }
-        else
-        {	
-			// dd($data["values"]);
-            $this->load->view('admin/accessories/inventory_report',$data);
-        }
+    $data = $this->page_loads();
+    $data['title']       = 'On Working'.' | '.$this->Xin_model->site_title();
+    $data['breadcrumbs'] = "On Working";
+    $status = $_POST['status'];
+    $category= $_POST['category'];
+
+    // $data['path_url']    = "Working";
+    if($status!=null && $category!=null){
+        // dd($status);
+        $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$status,$category);
+    } else{
+        $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$status=null,$category=null);
+    }
+    // dd($_POST);
+    if(is_string($data["reports"]))
+    {
+     echo $data["reports"];
+    }
+    else
+    {	
+     $this->load->view('admin/accessories/inventory_report',$data);
+    }
 }
 
 
