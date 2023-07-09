@@ -272,8 +272,7 @@ class inventory_model extends CI_Model
 		->where("products_purches_details.purches_id=products_purches.id")
 		->where("products_purches_details.purches_id",$id)
 		->order_by('products_purches_details.purches_id', 'desc');
-		return $this->db->get()->result();
-	}
+      	}
 	// requisition details for requisition id
 	public  function requisition_details($user_id=null,$id=null){
 		        // dd($user_id.'hgf'.$id);
