@@ -31,7 +31,7 @@ $get_animate = $this->Xin_model->get_content_animate();
           </tr>
         </thead>
         <?php echo form_open('admin/inventory/persial_approved/'.$requisition_id)?>
-        
+
         <tbody>
           
             <?php  $i=1;foreach($results as $row){?>
