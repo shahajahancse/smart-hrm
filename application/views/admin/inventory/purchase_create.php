@@ -11,7 +11,6 @@
  
     <div class="box-header with-border">
         <h3 class="box-title">Purchase Products Requisition </h3>
-    
     </div>
      
     <div class="container pt-4">
