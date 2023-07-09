@@ -1,28 +1,20 @@
 <?php 
-// dd($row);
-$session = $this->session->userdata('username');
-$eid = $this->uri->segment(4);
-$get_animate = $this->Xin_model->get_content_animate();
-$role_resources_ids = $this->Xin_model->user_role_resource(); 
-?>
-
-<?php
-// dd($row->category_name);
+  $session = $this->session->userdata('username');
+  $eid = $this->uri->segment(4);
+  $get_animate = $this->Xin_model->get_content_animate();
+  $role_resources_ids = $this->Xin_model->user_role_resource(); 
 ?>
 <?php $session = $this->session->userdata('username');?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $user_info   = $this->Xin_model->read_user_info($session['user_id']);?>
 <div class="box mb-4 <?php echo $get_animate;?>">
   <div class="box-body" >
-    
-<?php if($this->session->flashdata('success')):?>
+  <?php if($this->session->flashdata('success')):?>
     <div class="alert alert-success" style="width:250px">
-     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>  
-    <?php echo $this->session->flashdata('success');?>
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>  
+       <?php echo $this->session->flashdata('success');?>
     </div>
-<?php endif; ?> 
-
-
+  <?php endif; ?> 
     <div class="row">
       <div class="col-md-12">
         <?php $attributes = array('id' => 'unit_insert','enctype'=>'multipart/categoryform-data', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
@@ -100,7 +92,6 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             </div>   
           </div>
           <div class="row">
-
             <div class="col-md-2"  >
               <label for="Status">Use Sim Number</label>
               <select name="use_number" id="use_number" class="form-control" disabled>  
@@ -109,8 +100,6 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
                 <option value="2" <?php echo (isset($row->use_number) && $row->use_number == 2)? 'selected':''; ?> >No</option>
               </select>
             </div>
-
-
             <div class="col-md-3" >
               <label for="Status">Select Sim Number</label>
               <select name="number" id="number"  class="form-control" disabled>  
@@ -130,7 +119,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
                 <?php }else{?>
                 <input type="submit" name="submit" class="btn btn-primary" style="float:right" value="Update Item"/>
                 <?php }?>
-        <?php echo form_close(); ?> </div>
+          <?php echo form_close(); ?> </div>
     </div>
   </div>
 </div>
