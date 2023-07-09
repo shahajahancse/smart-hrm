@@ -140,7 +140,7 @@
 
 $('#cat_id').on('change',function(){
   var val = $('#cat_id').find(":selected").val();  
-  var category = $('#cat_id').find(":selected").text();  
+  var category = $('#cat_id').find(":selected").text();
     $.ajax({
       type: "POST",
       url: "<?php echo base_url('admin/accessories/get_model')?>",
@@ -151,6 +151,13 @@ $('#cat_id').on('change',function(){
     });
   var mobile = category.search(/Mobile/i); 
   var sim = category.search(/Sim/i); 
+  if(mobile==-1 || sim ==-1){
+    $("#use_number").prop('disabled', true);
+    $("#use_number").val(null);
+    $("#number").val(null);
+
+    $("#number").prop('disabled', true);
+  }
 
     if(mobile !== -1){
     $("#use_number").prop('disabled', false);
@@ -160,6 +167,7 @@ $('#cat_id').on('change',function(){
        $("#number").prop('disabled', false);
       }else{
        $("#number").prop('disabled', true);
+       $("#number").val(null);
       }
     });
   }
@@ -184,6 +192,8 @@ $('#status').on('change',function(){
   // $("#user_id").prop('required', true);
   }else{
   $("#user_id").prop('disabled', true);
+    $("#user_id").val(null);
+
   }
 });
 

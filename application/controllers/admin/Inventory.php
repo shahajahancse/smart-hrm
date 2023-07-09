@@ -305,6 +305,17 @@ class Inventory extends MY_Controller {
 				}
 				   $this->session->set_flashdata('success', 'Product Updated Successfully.');
 				   redirect("admin/inventory/index","refresh");
+
+
+			}elseif(isset($_POST['update'])){
+				$log_user=$_SESSION['username']['user_id'];
+				foreach($quantity as $key=>$value){
+					$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); 
+				}
+				   $this->session->set_flashdata('success', 'Product Updated Successfully.');
+				   redirect("admin/inventory/index","refresh");
+
+
 			}else{
 			if($session['role_id']==1){
 					if($d1[$k]->quantity >= $quantity[$k]) {
@@ -324,7 +335,7 @@ class Inventory extends MY_Controller {
 					}
 			}else{
 				foreach($quantity as $key=>$value){
-				     $this->db->where('id',$r_did[$key])->update('products_requisition_details',['quantity'=>$value]); 
+				     $this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); 
 				 }
 					$this->session->set_flashdata('success', 'Product Updated Successfully.');
 				    redirect("admin/inventory/index","refresh");
@@ -1049,16 +1060,6 @@ class Inventory extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
-	public function product_details($id){
-
-		$data['results'] = $this->Inventory_model->product_details($id);
-		dd($data['results']);
-		
-		// $this->db->where("trim(substr(date_time,1,10)) = '$date'");
-        // $this->db->where("trim(substr(date_time,11,19)) BETWEEN '$start_time' and '$end_time'");
-	}
-
-
 	public function unit($id = null)
 	{
 		$session = $this->session->userdata('username');
@@ -1244,8 +1245,17 @@ class Inventory extends MY_Controller {
 		}
 	}
 
-
-
-
+	public function product_details($id){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = 'Product Details | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Product Details';
+		$data['results'] = $this->Inventory_model->product_details($id);
+		// dd($data['results']);
+		$data['subview'] = $this->load->view("admin/inventory/product_details", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
 }
 ?>

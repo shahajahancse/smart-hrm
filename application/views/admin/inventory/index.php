@@ -30,6 +30,7 @@ $session = $this->session->userdata('username');
 <div class="box <?php echo $get_animate;?>" style="margin-top:20px">
   <div class="box-header with-border">
     <h3 class="box-title">Requisition List</h3>
+    <a class="btn btn-sm btn-primary pull-right" href="<?= base_url('admin/inventory/create');?>">Add New</a>
   </div>
   <div class="box-body">
     <div class="box-datatable" >
