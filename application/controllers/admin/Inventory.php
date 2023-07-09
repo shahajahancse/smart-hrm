@@ -193,7 +193,7 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-	dd($session);
+	dd($session['role_id']);
 		$data['title'] 		 = 'Requsition Details | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition Details';
 		// $data['path_url'] 	 = 'inventory';
