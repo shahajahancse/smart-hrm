@@ -16,7 +16,6 @@ $get_animate = $this->Xin_model->get_content_animate();
 
     <?php if($session['role_id']==1){ if($status == 1 || $status == 4){?>
       <?php if(!empty($results)){?>
-
          <?php echo form_open('admin/inventory/product_persial_approved/'.$purches_id)?>
          <?php $i=1;foreach($results as $row){?>
             <input type="hidden" name="r_id[]" value="<?php echo $row->id?>" >
@@ -42,8 +41,8 @@ $get_animate = $this->Xin_model->get_content_animate();
         <thead>
           <tr>
               <th class="text-center" >No.</th>
-                <th class="text-center" >Name Supplier</th>
-                <th class="text-center" > Company</th>
+                <!-- <th class="text-center" >Name Supplier</th>
+                <th class="text-center" > Company</th> -->
                 <th class="text-center" >Product Name</th>
                 <th class="text-center" > Req Quantity</th>
                 <th class="text-center" > Apv Quantity</th>
@@ -54,8 +53,8 @@ $get_animate = $this->Xin_model->get_content_animate();
             <?php $i=1;foreach($results as $row){?>
             <tr class="text-center">
                 <td><?php echo $i++?></td>
-                <td><?php echo $row->name?></td>
-                <td><?php echo $row->company?></td>
+                <!-- <td><?php echo $row->name?></td>
+                <td><?php echo $row->company?></td> -->
                 <td><?php echo $row->product_name?></td>
                 <td><?php echo $row->quantity?></td>
                 <td><?php echo $row->ap_quantity?></td>

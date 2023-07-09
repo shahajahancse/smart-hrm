@@ -22,20 +22,19 @@ $get_animate = $this->Xin_model->get_content_animate();
         <thead>
           <tr>
               <th class="text-center" >No.</th>
-                <th class="text-center" >Supplier</th>
-                <th class="text-center" >Company</th>
+                <!-- <th class="text-center" >Supplier</th>
+                <th class="text-center" >Company</th> -->
                 <th class="text-center" >Product Name</th>
                 <th class="text-center" >Quantity</th>
           </tr>
         </thead>
         <?php echo form_open('admin/inventory/product_persial_approved/'.$purches_id)?>
-        
         <tbody>
             <?php $i=1;foreach($results as $row){?>
             <tr class="text-center">
                 <td><?php echo $i++?></td>
-                <td><?php echo $row->name?></td>
-                <td><?php echo $row->company?></td>
+                <!-- <td><?php echo $row->name?></td>
+                <td><?php echo $row->company?></td> -->
                 <td><?php echo $row->product_name?></td>
                 <td><input type="number" id="quantity" name="qunatity[]" min="1" style="width:20%" value="<?php echo $row->quantity?>"></td>
                 <!-- <?php if($session['role_id']!=3) {?> -->
@@ -47,13 +46,17 @@ $get_animate = $this->Xin_model->get_content_animate();
             <?php }?>
         </tbody>
       </table>
+      <input type="hidden" name="update_a" id="update_a" value="0">
       <!-- <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/persial_approved/'.$requisition_id);?>">Approved</a> -->
       <?php if(!empty($results)){?>
-        <?php if($session['role_id']==1) {?>
-      <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
+        <?php if($session['role_id']!=3) {?>
+          <input type="button"  class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" onclick="upsub()" value="update">
+
+      <input type="submit" id="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
          
       <?php }else{?>
-        <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="update">
+        
+        <input  type="button"   class="btn btn-sm btn-success pull-right" onclick="upsub()" style="margin-right: 10px;" value="update">
     <?php }}?>
       <?php echo form_close()?>
     </div>
@@ -65,6 +68,10 @@ $get_animate = $this->Xin_model->get_content_animate();
 //     $('#details').DataTable();
 // });
 
+function upsub(){
+  document.getElementById('update_a').value = 1;
+  document.getElementById('submit').click();
+}
 
 </script>
 

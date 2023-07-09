@@ -260,13 +260,15 @@ class Inventory extends MY_Controller {
       
 		if($session['role_id']==3){;
 		$user_id=$session['user_id'];
+		}else{
+			$user_id=null;
 		};
 		
 		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition ';
 		// $data['path_url']    = 'inventory';
-	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id=null,$id);
-
+	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id,$id);
+// dd($data['results']);
 		if(!empty($data['results'])){
 			$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 		}else{
@@ -488,6 +490,7 @@ class Inventory extends MY_Controller {
 
     function product_purchase_edit($id) {
 
+
     }
 
     function product_purchase_approved($id) {
@@ -584,7 +587,7 @@ class Inventory extends MY_Controller {
 	}
 	
 	public function product_purchase_details($id)	{
-		//  dd($id);
+	
 		// dd($_SESSION);
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -594,12 +597,16 @@ class Inventory extends MY_Controller {
 		$data['title'] 		 = 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store';
 		// $data['path_url'] 	 = 'inventory';
-		if($session['role_id']==1){
+		if($session['role_id']!=3){
 			$data['results']	 = $this->Inventory_model->product_purches_details($id);
+			// dd($data['results']);
 			if(!empty($data['results'])){
 				$data['purches_id'] 	 = $data['results'][0]->purches_id;
 			}
-		    $data['status']      = $this->db->select('status')->where('id',$id)->get('products_purches')->row()->status;		
+		    $data['status'] = $this->db->select('status')
+			                     ->where('id',$id)->get('products_purches')
+								 ->result()[0]
+								 ->status;			
 		}
 		else
 		{
@@ -633,13 +640,7 @@ class Inventory extends MY_Controller {
 		}
 		$data['title']       = 'Purchase | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Purchase';
-		// $data['path_url']    = 'inventory';
 	    $data['results'] 	 = $this->Inventory_model->product_requisition_details($id);
-		// dd($data['results']);
-	    // $data['user_id'] 	 = $id;
-		// dd($data['results']);
-		 
-
 		 if(!empty($data['results'])){
 			$data['purches_id'] 	 = $data['results'][0]->purches_id;
 		}else{
@@ -663,7 +664,6 @@ class Inventory extends MY_Controller {
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
 			
 		}
-		
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
 		
@@ -671,13 +671,15 @@ class Inventory extends MY_Controller {
 			
 				 foreach($quantity as $key=>$value){
 					$log_user=$_SESSION['username']['user_id'];
-					if($session['role_id']==1){
+					if($session['role_id']!=3 &&  $this->input->post('update_a')==0){
 					$this->db->where('id',$id)->update('products_purches',['updated_by'=>$log_user]);
                     $this->db->where('id',$r_did[$key])->update('products_purches_details',['ap_quantity'=>$value]);}else{
 						$this->db->where('id',$r_did[$key])->update('products_purches_details',['quantity'=>$value]);
 					} }
 			 }
-			 if($session['role_id']==1){ $approved = $this->db->where('id',$id)->update('products_purches',['status'=>2]);
+
+			 if($session['role_id']!=3 && $this->input->post('update_a')==0){ 
+				$approved = $this->db->where('id',$id)->update('products_purches',['status'=>2]);
 				if($approved){
 					$this->session->set_flashdata('success', 'Updated Successfully.');
 					redirect("admin/inventory/purchase","refresh");
