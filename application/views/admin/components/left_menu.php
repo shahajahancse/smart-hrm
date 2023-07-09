@@ -365,7 +365,7 @@ if($theme[0]->sub_menu_icons != ''){
               <?php } ?>
 
               <?php if(in_array('1083',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['pusaproved_open']))echo $arr_mod['pusaproved_open'];?>"> <a href="<?php echo site_url('admin/inventory/purchase_aproved_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Pending List</a> </li>
+              <li class="sidenav-link <?php if(!empty($arr_mod['pusaproved_open']))echo $arr_mod['pusaproved_open'];?>"> <a href="<?php echo site_url('admin/inventory/purchase_aproved_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Approved List</a> </li>
               <?php } ?>
 
               <?php if(in_array('1084',$role_resources_ids)) { ?>
@@ -379,6 +379,14 @@ if($theme[0]->sub_menu_icons != ''){
           </li>
           <?php } ?> 
 
+          <?php if(in_array('1042',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['product_open']))echo $arr_mod['product_open'];?>"> <a href="<?php echo site_url('admin/inventory/products');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Product </a> </li>
+          <?php } ?>
+
+          <?php if(in_array('1047',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['low_product_list']))echo $arr_mod['low_product_list'];?>"> <a href="<?php echo site_url('admin/inventory/low_product_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Low Product List </a> </li>
+          <?php } ?>
+
           <?php if(in_array('1033',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['inreport_active']))echo $arr_mod['inreport_active'];?>"> <a href="<?php echo site_url('admin/inventory/report');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Report </a> </li>
           <?php } ?>    
@@ -386,9 +394,6 @@ if($theme[0]->sub_menu_icons != ''){
           <?php if(in_array('1041',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['insetting_open']))echo $arr_mod['insetting_open'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Settings <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
-              <?php if(in_array('1042',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['product_open']))echo $arr_mod['product_open'];?>"> <a href="<?php echo site_url('admin/inventory/products');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Product </a> </li>
-              <?php } ?>
               <?php if(in_array('1046',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['supplier_open']))echo $arr_mod['supplier_open'];?>"> <a href="<?php echo site_url('admin/inventory/supplier');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Supplier </a> </li>
               <?php } ?>

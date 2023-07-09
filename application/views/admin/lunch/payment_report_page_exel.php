@@ -53,7 +53,7 @@ $newDate = $date->format('Y-m-d');
                 <tr>
                     <td style="text-align:center"><?php echo $key+1 ?></td>
                     <td><?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
-                    <td style="text-align:center" ><?php echo $employee->probable_meal;?></td>
+                    <td style="text-align:center"><?php echo $employee->probable_meal;?></td>
                     <td style="text-align:center"><?php echo $pbm;?></td>
                     <td style="text-align:center"><?php echo $employee->probable_meal-$pbm;?></td>
                     <td style="text-align:center"><?php echo $employee->pay_amount/45;?></td>

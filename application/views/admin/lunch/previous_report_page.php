@@ -98,7 +98,7 @@
             <?php $convertedDate1 = date('d-m-Y', strtotime($lunch_data[0]->from_date));
                $convertedDate2 = date('d-m-Y', strtotime($lunch_data[0]->end_date));
              ?>
-             <?= isset($lunch_data[0]->from_date) ? $convertedDate1 : ''; ?> to
+            <?= isset($lunch_data[0]->from_date) ? $convertedDate1 : ''; ?> to
             <?= isset($lunch_data[0]->end_date) ? $convertedDate2  : ''; ?> </div>
     </div>
     <table class="table table-bordered table-hover table-striped">
@@ -122,7 +122,8 @@
                     ?>
             <tr>
                 <td><?php echo $key+1 ?></td>
-                <td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
+                <td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?>
+                    <?php echo $employee->last_name; ?></td>
                 <td><?php echo $employee->prev_meal;?></td>
                 <td><?php echo $employee->prev_cost;?></td>
                 <td><?php echo $employee->prev_pay;?></td>

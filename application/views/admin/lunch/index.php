@@ -94,11 +94,6 @@
                             <?= ($result->if_eidit==0)? '':'checked' ?>>
                     </td>
                     <?php endif; ?>
-
-
-
-
-
                     <td>
                         <?php if ($result->date == date('Y-m-d')) : ?>
                         <div class="dropdown">

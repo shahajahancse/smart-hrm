@@ -102,7 +102,8 @@
     </div>
 
     <div id="loader" align="center" style="margin:0 auto; width:600px; overflow:hidden; display:none; margin-top:10px;">
-        <img src="<?php echo base_url();?>/uploads/ajax-loader.gif" /></div>
+        <img src="<?php echo base_url();?>/uploads/ajax-loader.gif" />
+    </div>
 
     <div class="box <?php echo $get_animate;?>">
         <div class="box-header with-border" id="report_title">
@@ -116,7 +117,7 @@
                     <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily"
                         aria-selected="true">Daily</a>
                 </li>
-              
+
                 <li class="nav-item">
                     <a class="nav-link" id="continue-tab" data-toggle="tab" href="#continue" role="tab"
                         aria-controls="payment" aria-selected="false">Continue</a>
@@ -143,7 +144,8 @@
                     style="margin-top: 30px;">
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(1)">Paid Employees</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(0)">Unpaid Employees</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2)">Employees Collection Sheets</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2)">Employees Collection
+                        Sheets</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2,1)">Previous Report</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="vendor_Report()">Vendor Report</button>
                 </div>
