@@ -35,7 +35,7 @@ class inventory_model extends CI_Model
 
 	// ************* purchase part ********************
 	public function purchase_products_requisition($id,$role_id){
-<<<<<<< HEAD
+
 		// dd($id .' = '. $role_id);
 		$this->db->select('
 				p.id,
@@ -53,8 +53,7 @@ class inventory_model extends CI_Model
 		->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left')
 		->join('product_supplier as ps', 'ps.id = p.supplier', 'left')
 		->order_by('p.id', 'desc');
-=======
->>>>>>> 4f97cda5a8d4f2758af68fc4e5333726160b0fbf
+
 
 		if($role_id==1){
 			$this->db->select('
