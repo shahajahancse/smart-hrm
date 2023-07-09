@@ -39,21 +39,21 @@ $session = $this->session->userdata('username');
           <tr>
               <?php if($user_role_id==1 || $user_role_id== 2 || $user_role_id== 4){?>
               <th class="text-center" style="width:20px;">No.</th>
-                <th class="text-center" style="width:100px;">Requisition By</th>
+                <th class="text-center"style="width: 34%;">Requisition By</th>
                 <th class="text-center" style="width:20px;">Status</th>
                 <th class="text-center" style="width:20px;">Request Date</th>
                 <th class="text-center" style="width:50px;">Action</th>
               <?php }?> 
               <?php if($user_role_id==3){?>
               <th class="text-center" style="width:20px;">No.</th>
-              <th class="text-center" style="width:100px;">Requisition By</th>
+              <th class="text-center" style="width: 34%;">Requisition By</th>
                 <!-- <th class="text-center" >Category</th>
                 <th class="text-center" >Sub Category</th>
                 <th class="text-center" >Product Name</th> -->
                 <!-- <th class="text-center" >Quantity</th>
                 <th class="text-center" >Approved Quantity</th> -->
                 <th class="text-center" >Status</th>
-                <th class="text-center" >Request Date & Time</th>
+                <th class="text-center" >Request Date</th>
                 <!-- <th class="text-center" ></th> -->
                 <th class="text-center" style="width:50px;">Action</th>
               <?php }?> 
@@ -69,7 +69,7 @@ $session = $this->session->userdata('username');
                     <?php echo $rows->status == 5 ? "<span class='badge' style='background-color:#28a745'><b>First Step Approved</b></span>" : ($rows->status == 1 ? "<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" : ($rows->status == 2 ? "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>" : ($rows->status == 3 ? "<span class='badge' style='background-color:#087a58'><b>Handover</b></span>" : "<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"))); ?>
                   </td>
 
-              <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
+                <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
                 <!-- <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td> -->
                 <td class="text-center">
                         <div class="dropdown" >
@@ -114,7 +114,7 @@ $session = $this->session->userdata('username');
                 <td class="text-center"><?php echo $rows->created_at; ?></td>
                 <td class="text-center">
                     <!-- <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a> -->
-                    <?php if($rows->status==1){?> 
+                   
                     <div class="dropdown" >
                       <!-- < ?php if($rows->status== 2 || $rows->status== 3){?> -->
                       <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -124,8 +124,10 @@ $session = $this->session->userdata('username');
                       <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                         <!-- <a style="padding-left:5px;" href="< ?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br> -->
                           <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
-                        <a style="padding-left:5px; " href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">Delete</a>
+                          <?php if($rows->status==1){?> 
+                              <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
+                              <a style="padding-left:5px; " href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">Delete</a>
+                       
                       </div>
                     </div>
                     <?php } ?>
