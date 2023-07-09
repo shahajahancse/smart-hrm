@@ -1227,6 +1227,7 @@ class Inventory extends MY_Controller {
 		 redirect("admin/inventory/product_purchase_edit_approved/".$pid);
 		}
 	}
+
 	public function product_details($id){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -1234,7 +1235,8 @@ class Inventory extends MY_Controller {
 		}
 		$data['title'] = 'Product Details | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Product Details';
-		$data['results'] = $this->Inventory_model->sub_category_list(); 
+		$data['results'] = $this->Inventory_model->product_details($id);
+		// dd($data['results']);
 		$data['subview'] = $this->load->view("admin/inventory/product_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
