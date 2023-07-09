@@ -267,8 +267,10 @@ class Inventory extends MY_Controller {
 		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition ';
 		// $data['path_url']    = 'inventory';
-	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id,$id);
-// dd($data['results']);
+
+	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id=null,$id);
+        //  dd($data['results'] );
+
 		if(!empty($data['results'])){
 			$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 		}else{
@@ -488,14 +490,14 @@ class Inventory extends MY_Controller {
 								$this->load->view('admin/layout/layout_main', $data); //page load
     }
 
-    function product_purchase_edit($id) {
+    // function product_purchase_edit($id) {
 
 
-    }
+    // }
 
-    function product_purchase_approved($id) {
+    // function product_purchase_approved($id) {
     	
-    }
+    // }
 
 	public function purchase_panding_list()
 	{
