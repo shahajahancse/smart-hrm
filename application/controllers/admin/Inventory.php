@@ -201,7 +201,7 @@ class Inventory extends MY_Controller {
 		// $data['path_url'] 	 = 'inventory';
 		
 			$data['results']	 = $this->Inventory_model->requisition_details($user_id=null,$id);
-			dd($data['results']);
+			// dd($data['results']);
 			if(!empty($data['results'])){
 				$data['requisition_id'] 	 = $id;
 			}
