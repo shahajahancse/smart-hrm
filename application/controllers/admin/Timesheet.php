@@ -797,6 +797,7 @@ class Timesheet extends MY_Controller {
 		$leave_id = $this->uri->segment(5);
 		// leave applications
 		$result = $this->Timesheet_model->read_leave_information($leave_id);
+		// dd($result);
 		if(is_null($result)){
 			redirect('admin/timesheet/leave');
 		}
@@ -852,9 +853,11 @@ class Timesheet extends MY_Controller {
 			'all_employees' => $this->Xin_model->all_employees(),
 			'all_leave_types' => $this->Timesheet_model->all_leave_types(),
 		);
+
 		$data['breadcrumbs'] = $this->lang->line('xin_leave_detail');
 		$data['path_url'] = 'leave_details';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
+		// dd($data);
 		if(in_array('46',$role_resources_ids)) {
 			if(!empty($session)){ 
 				$data['subview'] = $this->load->view("admin/timesheet/leave_details", $data, TRUE);

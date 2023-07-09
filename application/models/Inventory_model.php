@@ -16,7 +16,7 @@ class inventory_model extends CI_Model
 	   $this->db->join('products_categories as pc', 'pc.id = p.cat_id');
 	   $this->db->join('products_sub_categories as psc', 'psc.id = p.sub_cate_id');
 	   $this->db->join('product_unit as pu', 'pu.id = p.unit_id');
-	   $query = $this->db->order_by('p.id','DESC')->get()->result();
+	   $query = $this->db->order_by('p.cat_id','ASC')->get()->result();
 	   return $query;
 	} 
 
@@ -507,7 +507,9 @@ class inventory_model extends CI_Model
 			$this->db->where("products.quantity < products.order_level");
 		}
 	
-		$this->db->order_by('products.quantity', 'ASC');
+		// $this->db->order_by('products.quantity', 'ASC');
+		$this->db->order_by('products_categories.category_name');
+		
 		$query = $this->db->get();
 		$data = $query->result();
 	

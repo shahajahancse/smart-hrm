@@ -83,7 +83,7 @@ class Lunch extends MY_Controller {
 
     
         $data['date'] =$date;
-        
+     
         $query = $this->db->get_where('lunch', array('date' => $date));
         // dd($_POST['empid']);
         //Validation
@@ -93,7 +93,7 @@ class Lunch extends MY_Controller {
         //Validate and input data
     
         if ($this->form_validation->run() == true && $this->input->post('change')==0){
-          
+     
             $empid = $this->input->post('empid');
             $m_amount = $this->input->post('m_amount');
             $comment = $this->input->post('comment');
@@ -141,6 +141,7 @@ class Lunch extends MY_Controller {
                         'p_stutus'      => $p_status[$i],
                         'comment'       => $comment[$i],
                     );
+                    $this->db->where('date', $date);
                     $this->db->where('emp_id', $empid[$i])->update('lunch_details', $form_data);
                 } 
             } else {
@@ -170,6 +171,7 @@ class Lunch extends MY_Controller {
                 'total_cost' => $total_cost,
                 'emp_cost' => $emp_cost,
                 'guest_cost' => $guest_cost,
+                'bigcomment' => $bigcomment,
                 'status' => $status,
             );
 
@@ -181,7 +183,7 @@ class Lunch extends MY_Controller {
            
             $data['results'] = $this->Lunch_model->get_lunch_info(1,$date);
             $data['guest'] = $query->row();
-            $data['ps'] ='yes';
+            $data['ps'] ='yes'; 
         } else {
 
             $data['results'] = $this->Lunch_model->get_lunch_info(false,$date);
@@ -201,8 +203,6 @@ class Lunch extends MY_Controller {
         } else {
             redirect('admin/');
         }
- 
- 
     }
 
     public function add_lunch_pak(){
@@ -231,9 +231,7 @@ class Lunch extends MY_Controller {
 
         $this->db->where('id', 1); // Assuming you have an 'id' field in your database table to identify the record to update
         $this->db->update('lunch_package', $data);
-        
     }
-
     public function lunch_package(){
         $session = $this->session->userdata('username');
         if (empty($session)) {
@@ -755,14 +753,14 @@ public function make_id_payment(){
                if($this->db->insert('lunch', $data)){
                 $insert_id = $this->db->insert_id();
                 $emp = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
-          
+        
                 foreach($emp as $row){
                     
                     $data2 = array(
                     'lunch_id'      => $insert_id,
                     'emp_id'        => $row->user_id,
                     'meal_amount'   => 0,
-                    'p_stutus'      => 0,
+                    'p_stutus'      => 'Lunch Off',
                     'comment'       => '',
                     'date'          => $dateoff,
                        );
@@ -807,6 +805,35 @@ public function make_id_payment(){
         }
        
     }
+
+
+public function pay_vend_ajax_request()
+{
+            $id = $this->input->post('id');
+            $statusC = $this->input->post('statusC');
+
+       
+
+            $data["values"] = $this->Lunch_model->pay_vend_ajax_request($id);
+
+            $data["from_date"] = $data["values"][0]->from_date;
+            $data["to_date"] = $data["values"][0]->to_date;
+            $data["f_date"] = $data["values"][0]->date;
+          
+            if(is_string($data["values"]))
+            {
+                echo $data["values"];
+            }
+            else
+            {	
+                echo $this->load->view("admin/lunch/v_report", $data, TRUE);
+            }
+
+    
+     
+}
+
+
     public function sethrp() {
         $id=$this->input->post('id');
         $status=$this->input->post('status');
@@ -822,5 +849,197 @@ public function make_id_payment(){
         $this->db->where('id', $id);
         $this->db->update('lunch', $data);
     }
+
+    public function vendor_lunch_list() {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch Vendor Meal';
+        $data['path_url'] = 'lunch';
+        $data['payment_data'] = $this->db->get('lunch_vendor_meal')->result();
+       
+     
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/vendor_lunch_list", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+    }
+
+
+    // ============================ Vendor Pakage Payment ============================
+
+	public function lunch_menu($id = null){
+     
+
+		$session = $this->session->userdata('username');
+		//  dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+        // dd($session);
+
+		$this->form_validation->set_rules('name', 'Pakage name', 'required|trim');
+		$this->form_validation->set_rules('description', 'address', 'required|trim');
+
+		if ($this->form_validation->run() == true){
+			$menu_data = array( 
+					'pakage_name'		 => $_POST['name'],
+					'details'	 => $_POST['description'],
+					
+				);				 
+									
+			if ($hid = $this->input->post('hid')) {
+				$this->db->where('id', $hid)->update('lunch_vendor_menu', $menu_data);
+				$this->session->set_flashdata('success', 'Successfully Updated Done');
+			} else {
+				if($this->Lunch_model->save('lunch_vendor_menu', $menu_data)){
+					$this->session->set_flashdata('success', 'Successfully Insert Done');
+				} else {
+					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+				}
+			}
+		}
+						
+
+		//Dropdown
+		$data['title'] 			= 'Lunch | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Vendor Pakage';
+        $this->db->order_by('id', 'desc');
+        $data['menulist'] = $this->db->get("lunch_vendor_menu")->result();
+		$data['col'] 			= $id;
+		$data['user_role_id'] 	= $session['role_id'];
+		
+		$data['subview'] 		= $this->load->view("admin/lunch/lunch_menu", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+    public function get_menu_ajax($id)
+	{   
+		$this->db->where('id', $id);
+		$result = $this->db->get('lunch_vendor_menu')->row();
+		header('Content-Type: application/x-json; charset=utf-8');
+		echo (json_encode($result));
+	}
+    public function menu_delete($id){
+        //delete id
+        $this->db->where('id', $id);
+        $this->db->delete('lunch_vendor_menu');
+        $this->session->set_flashdata('warning', 'Successfully Deleted');
+        redirect('admin/lunch/lunch_menu');
+    }
+
+
+
+    public function vendor_data(){
+
+        $date = $this->input->post('date');
+        $totalMeal = $this->input->post('total_meal');
+        $remarks = $this->input->post('remarks');
+        $total_amount = $this->input->post('total_amount');
+        $this->db->where('date', $date);
+        $query = $this->db->get('lunch_vendor_meal');
+        if (count($query->result()) > 0) {
+                if (isset($_FILES['file']) && !empty($_FILES['file']['name'])) {
+                    $prefile = $this->input->post('prefile');
+                    $fileLocation=$prefile;
+                    unlink($fileLocation);
+                    $config['upload_path'] = 'uploads/vendor_file/'; // Specify the folder to upload files to
+                    $config['allowed_types'] = 'pdf|jpg|jpeg|png'; // Specify the allowed file types
+                    $config['max_size'] = 20048; // Specify the maximum file size in kilobytes
+                    $this->load->library('upload', $config);
+                
+                    if (!$this->upload->do_upload('file')) {
+                        // Handle file upload errors
+                        $error = $this->upload->display_errors();
+                        echo $error;
+                    } else {
+                        // File uploaded successfully
+                        $data = $this->upload->data();
+                        $fileExtension = pathinfo($data['file_name'], PATHINFO_EXTENSION);
+                        $fileLocation = $config['upload_path'] . $date . '.' . $fileExtension;
+                        $newFileName = $date . '.' . $fileExtension;
+                
+                        // Rename the uploaded file to include the date
+                        rename($data['full_path'], $fileLocation);
+                        $data = array(
+                            'date' => $date,
+                            'meal_qty' => $totalMeal,
+                            'amount' => $total_amount,
+                            'remarks' => $remarks,
+                            'file' => $fileLocation,
+                            'status' => 0,
+                            'updated_at' => date('Y-m-d H:i:s'),
+                        );
+                        $this->db->where('date', $date);
+                        $this->db->update('lunch_vendor_meal', $data);
+                        echo "Successfully updated";
+                    }
+            
+                }else{
+                    $data = array(
+                        'date' => $date,
+                        'meal_qty' => $totalMeal,
+                        'amount' => $total_amount,
+                        'remarks' => $remarks,
+                        'status' => 0,
+            
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    );
+                    $this->db->where('date', $date);
+                    $this->db->update('lunch_vendor_meal', $data);
+                    echo "Successfully updated";
+
+                
+
+                }
+
+        }  else {
+        $config['upload_path'] = 'uploads/vendor_file/'; // Specify the folder to upload files to
+        $config['allowed_types'] = 'pdf|jpg|jpeg|png'; // Specify the allowed file types
+        $config['max_size'] = 2048; // Specify the maximum file size in kilobytes
+    
+        $this->load->library('upload', $config);
+    
+        if (!$this->upload->do_upload('file')) {
+            // Handle file upload errors
+            $error = $this->upload->display_errors();
+            echo $error;
+        } else {
+            // File uploaded successfully
+            $data = $this->upload->data();
+            $fileExtension = pathinfo($data['file_name'], PATHINFO_EXTENSION);
+            $fileLocation = $config['upload_path'] . $date . '.' . $fileExtension;
+            $newFileName = $date . '.' . $fileExtension;
+    
+            // Rename the uploaded file to include the date
+            rename($data['full_path'], $fileLocation);
+            $data = array(
+                'date' => $date,
+                'meal_qty' => $totalMeal,
+                'amount' => $total_amount,
+                'remarks' => $remarks,
+                'file' => $fileLocation,
+                'status' => 0,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            );
+            $this->db->insert('lunch_vendor_meal', $data);
+            echo "Success";
+        }
+     }
+    }
+    public function edit_vendor_data(){
+        $id = $this->input->post('id');
+        $this->db->where('id', $id);
+        $this->db->order_by('id', 'desc');
+        $this->db->limit(1);
+        $query = $this->db->get('lunch_vendor_meal')->row();
+        echo json_encode($query);
+    }
+
 }
 ?>

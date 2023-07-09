@@ -256,8 +256,14 @@ if($theme[0]->sub_menu_icons != ''){
           <?php if(in_array('1053',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['emp_pay_active']))echo $arr_mod['emp_pay_active'];?>"> <a href="<?php echo site_url('admin/lunch/emp_pay_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Employee Pay  </a> </li>
           <?php } ?> 
+          
           <?php if(in_array('1054',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['vendor_active']))echo $arr_mod['vendor_active'];?>"> <a href="<?php echo site_url('admin/lunch/vendor_payment');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Vendor Pay  </a> </li>
+          <?php } ?> 
+
+
+          <?php if(in_array('1060',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['vendor_list_active']))echo $arr_mod['vendor_list_active'];?>"> <a href="<?php echo site_url('admin/lunch/vendor_lunch_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Vendor Lunch  </a> </li>
           <?php } ?> 
 
           <?php if(in_array('1055',$role_resources_ids)) { ?>

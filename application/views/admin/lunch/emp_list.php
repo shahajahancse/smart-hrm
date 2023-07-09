@@ -9,11 +9,11 @@
       <th>SL</th>
       <th>Name</th>
       <th>Designation</th>
-      <th>Previous.M</th>
-      <th>Previous.A</th>
+      <th>Collection.M</th>
+      <th>Amount</th>
       <th>Take.M</th>
       <th>Take.A</th>
-      <th>B.Meal</th>
+      <th>Balance.M</th>
       <th>B.Amount</th>
       <th>Status</th>
     </tr>

@@ -23,7 +23,7 @@ class Lunch_model extends CI_Model {
                 ');
             $this->db->from('xin_employees as u')->from('lunch_details as ld');
             $this->db->where('u.user_id = ld.emp_id')->where('ld.date', $date)->group_by('ld.emp_id');
-            $data = $this->db->order_by('ld.p_stutus', 'ASC')->get()->result();
+            $data = $this->db->order_by('ld.p_stutus', 'DESC')->get()->result();
         } else {
             $this->db->select('
                     u.user_id as emp_id, 
@@ -311,11 +311,11 @@ class Lunch_model extends CI_Model {
         $this->db->select('*');
         $this->db->where('date >=', $first_date);
         $this->db->where('date <=', $second_date);
-        $data = $this->db->get('lunch')->result();
+        $data = $this->db->get('lunch_vendor_meal')->result();
         if (count($data) > 0) {
             $total_m=0;
             foreach($data as $m){
-                $total_m+=$m->total_m;
+                $total_m+=$m->meal_qty;
             }
             return $total_m;
           
@@ -360,5 +360,29 @@ class Lunch_model extends CI_Model {
 		return $data;
        
     }
+    public function save($table, $data){
+        return $this->db->insert($table, $data);
+     }
+
+    public function pay_vend_ajax_request($id)
+    {
+        $this->db->select('*');
+        $this->db->where('id', $id);
+        $query = $this->db->get('lunch_payment_vendor');
+        $data = $query->result();
+     
+        if ($query->num_rows() > 0) {
+            return $data;
+         
+        } else {
+            return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+        }
+
+    
+    }
+
+
+    
+
 }
 ?>

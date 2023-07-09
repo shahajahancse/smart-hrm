@@ -13,6 +13,19 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
       <?php echo $this->session->flashdata('success');?>
     </div>
 <?php endif; ?> 
+
+
+<style>
+  .dropup .dropdown-menu{
+    top: 20px;
+    bottom: inherit;
+    right: 50px !important;
+    left: auto !important;
+    min-width: 100px !important;
+  }
+</style>
+
+
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border">
     <h3 class="box-title">Item list</h3>
@@ -55,8 +68,16 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
                   ?>
               </td>
               <td>
-                <a class="btn btn-sm btn-info" type="button" href="<?= base_url('admin/accessories/item_add/'.$row->a_id);?>">Edit</a>
-                <a class="btn btn-sm btn-danger" type="button" href="<?= base_url('admin/accessories/delete/'.$row->a_id.'/product_accessories/index');?>" onclick="return confirm('Are you sure to delete!!!')">Delete</a>
+                <div class="dropup">
+                  <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" >
+                      Action
+                      <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                      <li><a class="btn btn-sm btn-info" href="<?= base_url('admin/accessories/item_add/'.$row->id);?>">Edit</a></li>
+                      <li><a class="btn btn-sm btn-danger" href="<?= base_url('admin/accessories/delete/'.$row->id.'/product_accessories/index');?>" onclick="return confirm('Are you sure to delete!!!')">delete</a></li>
+                  </ul>
+                </div>
               </td>
             </tr>
           <?php } ?>
@@ -71,7 +92,10 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 <script>
 
   $(document).ready(function() {
-    $('#example').DataTable();
+    $('#example').DataTable({
+      "pageLength": 50,
+      "lengthMenu": [[25, 50,100, -1], [25, 50, 100, "All"]],
+    });
   });
 
 </script>

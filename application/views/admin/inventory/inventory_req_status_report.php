@@ -97,9 +97,11 @@ if ($statusC == 1) {
   <div style="text-align: center;">
   <?php  $this->load->view('admin/head_bangla'); ?>
 	  <!-- <h5 class="box-title ti1">Daily Unpaid Report</h4> -->
-      <h4 class="box-title  ti1">Daily <?php echo $statusText; ?> Report</h4>
+      <h4 class="box-title  ti1"><?php echo $statusText; ?> Report</h4>
         <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
-	  <p>Report date: <?php echo $first_date; ?> To <?php echo $second_date; ?> </p>
+        <?php $convertedDate1 = date('d-m-Y', strtotime($first_date));
+               $convertedDate2 = date('d-m-Y', strtotime($second_date)); ?>
+	  <p>Report date: <?php echo $convertedDate1; ?> To <?php echo $convertedDate2; ?> </p>
   </div>
   
 
@@ -112,11 +114,12 @@ if ($statusC == 1) {
                                 <th>Employee Name</th>
                                 <th>Department</th>
                                 <th>Designation</th>
+                                <th>Catagory</th>
                                 <th>Sub Catagory</th>
                                 <th>Product Name</th>
                                 <th>Request Quantity</th>
                                 <th>Approved Quantity</th>
-                                <th>Time </th>
+                                <th>Date </th>
 	        </thead>
             <?php if (!empty($values)): ?>
                     <?php $i = 1; foreach ($values as $row): ?>
@@ -126,11 +129,14 @@ if ($statusC == 1) {
                                 <td><?php echo $row->first_name . ' ' . $row->last_name ?></td>
                                 <td><?php echo $row->department_name ?></td>
                                 <td><?php echo $row->designation_name ?></td>
+                                <td><?php echo $row->category_name ?></td>
                                 <td><?php echo $row->sub_cate_name ?></td>
                                 <td><?php echo $row->product_name ?></td>
                                 <td><?php echo $row->quantity ?></td>
                                 <td><?php echo $row->approved_qty ?></td>
-                                <td><?php echo !empty($row->created_at) ? date('h:i:s a', strtotime($row->created_at)) : '' ?></td>
+                                <td><?php echo !empty($row->created_at) ? date('d-m-Y', strtotime($row->created_at)) : ''; ?></td>
+
+                              
                                 
                             </tr>
                         </tbody>

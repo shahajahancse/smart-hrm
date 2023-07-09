@@ -51,9 +51,9 @@ public function category($id = null){
                         'status'         => $this->input->post('status'),
 			          );    
         if ($hid = $this->input->post('hidden_id')) {
-        $this->db->where('id', $hid)->update('product_accessory_categories', $form_data);
-        $this->session->set_flashdata('success', 'Successfully Updated Done');
-        echo $this->category;
+            $this->db->where('id', $hid)->update('product_accessory_categories', $form_data);
+            $this->session->set_flashdata('success', 'Successfully Updated Done');
+            echo $this->category;
         } else {
             if($this->Accessories_model->add_category('product_accessory_categories', $form_data)){
                 $this->session->set_flashdata('success', 'Successfully Insert Done');
@@ -64,9 +64,11 @@ public function category($id = null){
             }
         }
     }
+
     if($id != null) {
       $data['row'] = $this->db->where('id',$id)->get("product_accessory_categories")->row();
     }   
+
      $data['results']=$this->db->select('*')->get('product_accessory_categories')->result();
      $datas['subview']= $this->load->view('admin/accessories/category',$data,TRUE);  
      $this->load->view('admin/layout/layout_main', $datas); 

@@ -5,7 +5,7 @@ if ($statusC == 7) {
     $statusText = "Low Inventory";
     $exc=1;
 } elseif ($statusC == 8) {
-    $statusText = "All Products";
+    $statusText = "Products List";
     $exc=2;
 } 
 
@@ -51,7 +51,7 @@ if ($statusC == 7) {
 }
 .ti1{
     margin-top: 3px;
-    margin-bottom: 0px;
+    margin-bottom: 15px;
     font-size: 15px;
 }
 
@@ -95,7 +95,7 @@ if ($statusC == 7) {
   <div style="text-align: center;">
   <?php  $this->load->view('admin/head_bangla'); ?>
 	  <!-- <h5 class="box-title ti1">Daily Unpaid Report</h4> -->
-      <h4 class="box-title  ti1">Daily <?php echo $statusText; ?> Report</h4>
+      <h4 class="box-title  ti1"><?php echo $statusText; ?> Report</h4>
 	  <!-- <p>Report date: <?php echo $first_date; ?> To <?php echo $second_date; ?> </p> -->
   </div>
   
@@ -112,6 +112,7 @@ if ($statusC == 7) {
                                 <th>Unit</th>
                                 <th>Available Quantity </th>
                                 <th>Oder Level</th>
+                                <th>Status</th>
                                 
 	        </thead>
             <?php if (!empty($values)): ?>
@@ -125,6 +126,8 @@ if ($statusC == 7) {
                                 <td><?php echo $row->unit_name ?></td>
                                 <td><?php echo $row->quantity ?></td>
                                 <td><?php echo $row->order_level ?></td>
+                                <td><?php echo ($row->quantity < $row->order_level) ? '<span style=" color:#d90f4f;>Low Stack </span>' : '<span style=" color: #119f16;">Available</span>'; ?></td>
+
                               
                                 
                             </tr>

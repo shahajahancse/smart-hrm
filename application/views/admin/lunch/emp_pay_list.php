@@ -9,8 +9,13 @@
 
 .select2-container--default,
 .select2-container--open {
-    z-index: 1500 !important;
+    z-index: 0 !important;
 }
+
+#over_select2 span.select2-container--default {
+    z-index: 0 !important;
+}
+
 h2{
     margin-top:3px;
 }
@@ -137,7 +142,7 @@ input[type="email"] {
 <div class="container" style="padding: 0;">
     <div class="content" style="padding: 0;margin: 0;min-height: 147px;">
         <!-- <div class="col-md-12" style="display: flex;"> -->
-        <div class="container col-md-5" style="padding: 0;">
+        <div class="container col-md-5" style="padding: 0;" id="over_select2">
             <h4 style="display: inline-block;">Last Process:</h4>
             <span style="color: blue;"><?php echo isset($last_prement->from_date)? date('d-m-Y', strtotime($last_prement->from_date)):'';?></span> 
             to 

@@ -40,12 +40,6 @@
     padding: 0 !important;
 }
 
-.btn {
-    float: right;
-    padding: 5px;
-    font-weight: bold;
-}
-
 .panels.open {
     max-height: 1000px;
     margin-top: 11px;
@@ -84,6 +78,14 @@
     font-size: 13px;
     font-weight: bold;
 }
+
+.dropup .dropdown-menu {
+    top: 30;
+    bottom: inherit;
+    right: 0 !important;
+    left: auto !important;
+    min-width: 100px !important;
+}
 </style>
 
 <!-- Modal -->
@@ -92,7 +94,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle" style="float: left">Payment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"style="float: right">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float: right">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -101,27 +103,32 @@
                 <input type="hidden" id="prepaid" value="">
                 <div class="form-group col-md-4" style="padding-top: 7px">
                     <label for="deu_amount">Deu Amount</label>
-                    <input type="number" class="form-control" id="deu_amount" placeholder="Amount" style="border-radius: 5px" disabled >
+                    <input type="number" class="form-control" id="deu_amount" placeholder="Amount"
+                        style="border-radius: 5px" disabled>
                 </div>
                 <div class="form-group  col-md-4" style="padding-top: 7px">
                     <label for="paid_amount">Amount</label>
-                    <input type="number" onchange=changpayment() class="form-control" id="paid_amount" placeholder="Amount" style="border-radius: 5px">
+                    <input type="number" onchange=changpayment() class="form-control" id="paid_amount"
+                        placeholder="Amount" style="border-radius: 5px">
                 </div>
-                <div class="form-group  col-md-4" style="padding-top: 7px" >
+                <div class="form-group  col-md-4" style="padding-top: 7px">
                     <label for="present_deu">Deu</label>
-                    <input type="number" class="form-control" id="present_deu" placeholder="Amount" disabled style="border-radius: 5px">
+                    <input type="number" class="form-control" id="present_deu" placeholder="Amount" disabled
+                        style="border-radius: 5px">
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="mcloss" data-dismiss="modal" style="margin-right:3px;">Close</button>
-                <button type="button" onclick="make_id_payment()" class="btn btn-primary" style="margin-right:3px;">Submit</button>
+                <button type="button" class="btn btn-secondary" id="mcloss" data-dismiss="modal"
+                    style="margin-right:3px;">Close</button>
+                <button type="button" onclick="make_id_payment()" class="btn btn-primary"
+                    style="margin-right:3px;">Submit</button>
             </div>
         </div>
     </div>
 </div>
 <div class="addbox">
     <p class="p" style="font-size: 25px; font-weight: bold; float: left;">Payment List</p>
-    <a class="btn btn-primary accordion" onclick="togglePaymentBox()">Make Payment</a>
+    <a class="btn btn-primary accordion"  style="float: right" onclick="togglePaymentBox()">Make Payment</a>
 </div>
 
 <div class="panels payment_box" id="paymentBox">
@@ -219,10 +226,11 @@
                 <th>Net Payment</th>
                 <th>Paid Amount</th>
                 <th>Due</th>
-                
+
                 <th>Remarks</th>
 
-                <th>Action</th>
+                <th>Status</th>
+                <!-- <th>Action</th> -->
 
             </tr>
         </thead>
@@ -244,17 +252,41 @@
                 <td><?php echo $row->net_payment; ?></td>
                 <td><?php echo $row->paid_amount; ?></td>
                 <td><?php echo $row->due; ?></td>
-            
+
                 <?php if($row->Remarks){  ?>
-                  <td style="text-align: center;" title="<?php echo $row->Remarks; ?>"><?php echo implode(' ', array_slice(explode(' ', $row->Remarks ), 0, 4)); ?></td>
-                 <?php }else{ ?>
-                    <td style="text-align: center;" > ...</td>
-                 <?php } ?>
+                <td style="text-align: center;" title="<?php echo $row->Remarks; ?>">
+                    <?php echo implode(' ', array_slice(explode(' ', $row->Remarks ), 0, 4)); ?></td>
+                <?php }else{ ?>
+                <td style="text-align: center;"> ...</td>
+                <?php } ?>
+                <!-- <td> -->
+                <!-- <button onclick="pdf_report(<?=$row->id ?>)"> Print</button> -->
+                <!-- </td> -->
                 <td>
-                    <?=($row->status==0)? '<a data-toggle="modal" data-target="#make_payment" onclick="giveid('.$row->id.','.$row->due .','.$row->paid_amount.')" class="btn btn-primary">Paid</a>': 'Paid'?>
+                    <div class="dropup">
+                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenu2"
+                            data-toggle="dropdown">
+                            Action
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <?php if ($row->status==0) { ?>
+                            <li><a data-toggle="modal" data-target="#make_payment"
+                                    onclick="giveid(<?php echo $row->id .','. $row->due .','. $row->paid_amount; ?>)"
+                                    class="btn btn-primary">Paid</a></li>
+                            <?php } else { ?>
+                            <li>Paid</li>
+                            <?php } ?>
+
+                            <!-- <li role="separator" class="divider"></li> -->
+                            <li><a class="btn btn-default" onclick="pdf_report(<?=$row->id ?>)"> Print</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- <a class="btn btn-info" onclick="pdf_report(<?=$row->id ?>)">Print</a> -->
                 </td>
-                
- 
+
+
 
             </tr>
             <?php endforeach; ?>
@@ -265,9 +297,11 @@
 <script>
 $(document).ready(function() {
     $('#myTable').DataTable({
-      "order": [[4, "desc"]]
+        "order": [
+            [4, "desc"]
+        ]
     });
-   
+
 });
 </script>
 
@@ -340,6 +374,10 @@ function submit() {
     var payableAmount = document.getElementById('payable_amount').value;
     var dueAmount = document.getElementById('due_amount').value;
     var payAmount = document.getElementById('pay_amount').value;
+    if (payAmount===''){
+        alert('Please Enter PayAmount');
+        return false;
+    }
     var remarks = document.getElementById('remarks').value;
     var last_collection_id = document.getElementById('last_collection_id').value;
 
@@ -384,18 +422,19 @@ function submit() {
     });
 }
 </script>
+
 <script>
-function giveid(id,deu,prepaid) {
+function giveid(id, deu, prepaid) {
     document.getElementById('rawid').value = id;
     document.getElementById('deu_amount').value = deu;
     document.getElementById('prepaid').value = prepaid;
- 
+
 }
 
-function changpayment(){
+function changpayment() {
     var deu_amount = $('#deu_amount').val();
     var amount = $('#paid_amount').val();
-    document.getElementById('present_deu').value=deu_amount-amount
+    document.getElementById('present_deu').value = deu_amount - amount
 }
 
 function make_id_payment() {
@@ -420,7 +459,7 @@ function make_id_payment() {
         method: 'POST',
         data: data,
         success: function(response) {
-            $('#mcloss').click(); 
+            $('#mcloss').click();
             Swal.fire({
                 title: 'Success!',
                 text: response,
@@ -438,5 +477,34 @@ function make_id_payment() {
             console.log(xhr.responseText);
         }
     });
+}
+
+
+
+function pdf_report(status) {
+    var ajaxRequest; // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+
+
+
+    var data = "id=" + status;
+
+    // console.log(data); return;
+    url = base_url + "/pay_vend_ajax_request";
+
+
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+
+    ajaxRequest.onreadystatechange = function() {
+        if (ajaxRequest.readyState == 4) {
+            // console.log(ajaxRequest);
+            var resp = ajaxRequest.responseText;
+            a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1200,height=800');
+            a.document.write(resp);
+        }
+    }
+
 }
 </script>

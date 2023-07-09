@@ -3,8 +3,9 @@
     .error-border {
   border: 2px solid red;
 }
-
-
+td{
+  text-transform: capitalize;
+}
 </style>
 <!-- Modal -->
 <div id="lunchoffmodal" class="modal fade" role="dialog">
@@ -34,7 +35,7 @@
 <?= form_open(current_url(), array('id' => 'dateForm')); ?>
 <h3 style="float: left;">Today Lunch</h3>
 <?php $session = $this->session->userdata('username');
-if($session['role_id']==1){?>
+if($session['role_id']==1 || $session['role_id']==2 ){?>
 <div style="float: left;margin-left: 29px;margin-top: 22px;">
     <label for="date"> Enter Date</label>
     <input type="date" id="dateoff" onchange="submitForm()" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>" style="border-radius: 5px;">
@@ -42,8 +43,10 @@ if($session['role_id']==1){?>
 </div>
 <?php }else{?>
 
-<input type="hidden" id="dateoff" name="date" value="<?= date('d-m-Y'); ?>">
+<input type="hidden" id="dateoff" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>">
 <?php } ?>
+<p style="margin: 25px -23px 0px 14px;padding: 0;display: inline-block;float: left;font-weight: bold;">Total Meal</p>
+<input style="float: left;margin-left: 29px;margin-top: 22px;width: 61px;text-align: center;border-radius: 3px;" type="number" id="summeale" value="0">
 <button type="button" class="btn btn-info"  data-toggle="modal" style="float: right;" data-target="#lunchoffmodal">Lunch Off</button>
 
 <table class="table table-hover" style="text-align-last: center;">
@@ -57,7 +60,7 @@ if($session['role_id']==1){?>
         </tr>
     </thead>
     <tbody>
-        <?php $st = true; //dd($results); ?>
+        <?php $st = true; ?>
         <?php foreach ($results as $key => $raw) { 
                 if (($raw->p_stutus == 'Absent' && $st == true) || $raw->p_stutus == 'absent' && $st == true) { ?>
         <tr>
@@ -72,9 +75,9 @@ if($session['role_id']==1){?>
             <th scope="row"><?= $key + 1 ?></th>
             <td><?=  $raw->first_name .' '. $raw->last_name; ?></td>
             <td><?= $raw->p_stutus ?></td>
-            <?php $set = (isset($raw->meal_amount) && $raw->meal_amount != null) ? $raw->meal_amount : 0 ?>
-            <td><input type="number" <?= ($raw->p_stutus == 'present')? 'class="all_meal"'  : 'class=""'; ?>name="m_amount[]"
-                    value="<?= ($ps == 'no' && $raw->p_stutus == 'Present')? 1 : $set; ?>" style="width: 83px;"></td>
+            <?php $set = (isset($raw->meal_amount) && $raw->meal_amount != null) ? $raw->meal_amount : 1 ?>
+            <td><input max="1" min="0" type="number" onchange="summeal()" <?= ($raw->p_stutus == 'present')? 'class="all_meal activmeal"'  : 'class="activmeal"'; ?>name="m_amount[]"
+                    value="<?= ($ps == 'no' && $raw->p_stutus == 'Absent')? 0 : $set; ?>" style="width: 83px;"></td>
             <td><input type="text" name="comment[]" value="<?= isset($raw->comment) ? $raw->comment : ''; ?>"></td>
         </tr>
         <?php } ?>
@@ -87,9 +90,13 @@ if($session['role_id']==1){?>
             <th scope="row">1</th>
             <td>Guest</td>
             <td>-</td>
-            <td><input type="number" name="guest" value="<?= isset($guest->guest_m) ? $guest->guest_m : ''; ?>"
-                    style="width: 83px;"></td>
-            <td><input type="text" name="guest_comment" value=""></td>
+           
+            <td>
+                  <input type="number" name="guest" min="0" id="guest-input"  onchange="summeal()" class="activmeal" value="<?= isset($guest->guest_m) ? $guest->guest_m : '0'; ?>" style="width: 83px;">
+            </td>
+            <td>
+                  <input type="text" name="guest_comment" id="guest-comment" value="">
+            </td>
         </tr>
     </tbody>
 </table>
@@ -159,7 +166,36 @@ if($session['role_id']==1){?>
 });
 
 </script>
+<script>
+  const guestInput = document.getElementById('guest-input');
+  const guestCommentInput = document.getElementById('guest-comment');
 
+  guestInput.addEventListener('input', () => {
+    if (guestInput.value > 0) {
+      guestCommentInput.required = true;
+    } else {
+      guestCommentInput.required = false;
+    }
+  });
+</script>
+<script>
+function summeal() {
+  var elements = document.getElementsByClassName("activmeal");
+  var all_meal = 0;
 
+  for (var i = 0; i < elements.length; i++) {
+    var elementData = parseFloat(elements[i].value);
+    all_meal += elementData;
+  }
+
+  console.log(all_meal);
+  document.getElementById('summeale').value=all_meal;
+
+}
+</script>
+
+<script>
+  summeal()
+</script>
 
 
