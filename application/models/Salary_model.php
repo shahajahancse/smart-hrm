@@ -27,12 +27,15 @@ class Salary_model extends CI_Model {
             $department_id   = $row->department_id;
             $designation_id  = $row->designation_id;
             $salary          = $row->salary;
-            
+
+            $salary_month = trim(substr($end_date,0,7));
+            $join_month = trim(substr($doj,0,7));
+            if (strtotime($join_month) > strtotime($salary_month)) {
+                continue;
+            } 
 
             //=======PRESENT STATUS======
             $join_left_resign = 0;
-            $salary_month = trim(substr($end_date,0,7));
-            $join_month = trim(substr($doj,0,7));
             $resign_check   = $this->resign_check($emp_id, $first_date, $end_date);
             $left_check     = $this->left_check($emp_id, $first_date, $end_date);
 
