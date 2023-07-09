@@ -46,14 +46,16 @@ $session = $this->session->userdata('username');
               <?php }?> 
               <?php if($user_role_id==3){?>
               <th class="text-center" style="width:20px;">No.</th>
-                <th class="text-center" >Category</th>
+              <th class="text-center" style="width:100px;">Requisition By</th>
+                <!-- <th class="text-center" >Category</th>
                 <th class="text-center" >Sub Category</th>
-                <th class="text-center" >Product Name</th>
-                <th class="text-center" >Quantity</th>
-                <th class="text-center" >Approved Quantity</th>
+                <th class="text-center" >Product Name</th> -->
+                <!-- <th class="text-center" >Quantity</th>
+                <th class="text-center" >Approved Quantity</th> -->
                 <th class="text-center" >Status</th>
                 <th class="text-center" >Request Date & Time</th>
                 <!-- <th class="text-center" ></th> -->
+                <th class="text-center" style="width:50px;">Action</th>
               <?php }?> 
           </tr>
         </thead>
@@ -99,14 +101,13 @@ $session = $this->session->userdata('username');
                 <?php } } }?>
                         
               <?php  if($user_role_id==3){ 
-                foreach ($results as $key => $rows){  
+                foreach ($products as $key => $rows){  
               ?>
                 <td class="text-center"><?php echo ($key+1)."."; ?></td>
-                <td class="text-center"><?php echo $rows->category_name?></td>
-                <td class="text-center"><?php echo $rows->sub_cate_name?></td>
-                <td class="text-center"><?php echo $rows->product_name?></td>
-                <td class="text-center"><?php echo $rows->quantity?></td>
-                <td class="text-center"><?php echo $rows->approved_qty?></td>
+                <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
+             
+               
+                
                 <td class="text-center">
                     <?php echo $rows->status == 5 ? "<span class='badge' style='background-color:#28a745'><b>First Step Approved</b></span>" : ($rows->status == 1 ? "<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" : ($rows->status == 2 ? "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>" : ($rows->status == 3 ? "<span class='badge' style='background-color:#28a745'><b>Handover</b></span>" : "<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"))); ?>
                 </td>
@@ -122,9 +123,9 @@ $session = $this->session->userdata('username');
                       <!-- < ?php }?> -->
                       <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                         <!-- <a style="padding-left:5px;" href="< ?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br> -->
-                   
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->requisition_id);?>">Edit</a> <br>
-                        <a style="padding-left:5px; " href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->requisition_id);?>">Delete</a>
+                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
+                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
+                        <a style="padding-left:5px; " href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">Delete</a>
                       </div>
                     </div>
                     <?php } ?>

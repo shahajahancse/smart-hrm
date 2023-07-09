@@ -38,9 +38,13 @@ class Inventory extends MY_Controller {
 		$data['breadcrumbs'] = 'Store';
 		if($session['role_id']== 1 || $session['role_id']== 2 || $session['role_id']== 4 ){
 			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+	    //    dd($data['products']);
 		}
 		if( $session['role_id'] == 3) {
-			$data['results'] 	= $this->Inventory_model->requisition_details($session['user_id'],$id=null);
+			// $data['results'] 	= $this->Inventory_model->requisition_details($session['user_id'],$id=null);
+		    // dd($data['results']);
+			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		    //   dd($data['products']);
 		}
 		$data['user_role_id'] 	= $session['role_id'];
 		// dd($data);
@@ -267,8 +271,10 @@ class Inventory extends MY_Controller {
 		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition ';
 		// $data['path_url']    = 'inventory';
-	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id,$id);
-// dd($data['results']);
+
+	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id=null,$id);
+        //  dd($data['results'] );
+
 		if(!empty($data['results'])){
 			$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 		}else{
@@ -499,14 +505,14 @@ class Inventory extends MY_Controller {
 								$this->load->view('admin/layout/layout_main', $data); //page load
     }
 
-    function product_purchase_edit($id) {
+    // function product_purchase_edit($id) {
 
 
-    }
+    // }
 
-    function product_purchase_approved($id) {
+    // function product_purchase_approved($id) {
     	
-    }
+    // }
 
 	public function purchase_panding_list()
 	{
@@ -517,7 +523,7 @@ class Inventory extends MY_Controller {
 			}
 			//Dropdown
 			$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
-			$data['breadcrumbs']	= 'purchase Panding';
+			$data['breadcrumbs']	= 'purchase Pending';
 			$data['categorys']		= $this->db->get("products_categories")->result();
 			$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],1);
 

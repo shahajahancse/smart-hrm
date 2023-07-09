@@ -106,48 +106,50 @@ class inventory_model extends CI_Model
 	// ************* purchase part end ********************
 
 	public function purchase_products_status($id,$role_id,$status){
-
-		if($role_id==1){
+       
+		if($role_id==1 || $role_id==2 ||4 ){
+		
 			$this->db->select('
 					xin_employees.first_name,
 					xin_employees.last_name, 
-					product_supplier.name,
-					product_supplier.company,
 					products_purches.id,
 					products_purches.user_id,
 					products_purches.status,
 					products_purches.created_at,
 					products_purches.updated_by
 				')
-			->from('product_supplier')
 			->from('products_purches')
 			->from('xin_employees')
 			->where("products_purches.user_id = xin_employees.user_id")
-			->where("products_purches.supplier =product_supplier.id")
 			->where("products_purches.status =$status")
 			->order_by('products_purches.id', 'desc');
 		}
 
-		if($role_id==4){
-			$this->db->select("
-					xin_employees.first_name,
-					xin_employees.last_name, 
-					product_supplier.name,
-					product_supplier.company,
-					products_purches.status,
-					products_purches_details.id,
-				")
-	        ->from('product_supplier')
-	        ->from('products_purches')
-	        ->from('products')
-			->where("xin_employees.user_id = products_requisitions.user_id")
-			->where("products_purches.status =$status")
+		// if($role_id==4){
+		// 	$this->db->select("
+		// 			xin_employees.first_name,
+		// 			xin_employees.last_name, 
+		// 			product_supplier.name,
+		// 			product_supplier.company,
+		// 			products_purches.status,
+		// 			products_purches.id,
+		// 			products_purches.created_at,
+		// 		")
+	    //     ->from('product_supplier')
+	    //     ->from('products_purches')
+		// 	->from('xin_employees')
+		// 	->where("products_purches.user_id = xin_employees.user_id")
+		// 	->where("products_purches.supplier =product_supplier.id")
+		// 	// ->where("xin_employees.user_id = products_requisitions.user_id")
+		// 	->where("products_purches.status =$status")
 
-			//search by accordinig to requisition id 
-			->group_by('products_requisitions.id')
-			->order_by('products_requisitions.id', 'desc');
-		}
-		// dd($this->db->get()->result());
+		// 	// //search by accordinig to requisition id 
+		// 	// ->group_by('products_requisitions.id')
+		// 	// ->order_by('products_requisitions.id', 'desc');
+		// 	->order_by('products_purches.id', 'desc');
+		
+		// }
+		//  dd($this->db->get()->result());
 		return	$this->db->get()->result();
 	} 
 
@@ -155,7 +157,7 @@ class inventory_model extends CI_Model
 	public function purchase_products($id,$role_id){
 		if($role_id==3){
 			$this->db->select("
-						xin_employees.first_name,
+					xin_employees.first_name,
 						xin_employees.last_name,
 					products_categories.category_name,
 				    products_categories.id as cat_id,
@@ -313,7 +315,7 @@ class inventory_model extends CI_Model
 		->where("products_purches_details.purches_id",$id)
 		->order_by('products_purches_details.purches_id', 'desc');
 		return $this->db->get()->result();
-	}
+      	}
 	// requisition details for requisition id
 	public  function requisition_details($user_id=null,$id=null){
 		        // dd($user_id.'hgf'.$id);
