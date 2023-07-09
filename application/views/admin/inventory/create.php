@@ -6,7 +6,6 @@
     margin-bottom: 14px;
 }
 </style>
-<?php if($user_role_id ==1 || $user_role_id==3 || $user_role_id==2){?>
 <div class="box mb-4 <?php echo $get_animate;?>">
   <div id="accordion">
     <div class="box-header with-border">
@@ -49,7 +48,7 @@
 <script>
   $(function() {$("#flash_message1").hide(2000);});
 </script> 
-<?php }?>
+
 
 
 

@@ -46,6 +46,7 @@ $get_animate = $this->Xin_model->get_content_animate();
 
             </tr>
             <?php }?>
+           
         </tbody>
       </table>
       <?php if(!empty($results)){?>
@@ -54,8 +55,10 @@ $get_animate = $this->Xin_model->get_content_animate();
       <?php } ?>
       <?php if($session['role_id']==4){?>
       <input type="submit" name="first_step" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-         <?php } ?>
+         <?php }else{?>
+          <input type="submit" name="update" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Update">
 
+      <?php }?>
       <?php }?>
         <?php echo form_close()?>
     </div>
