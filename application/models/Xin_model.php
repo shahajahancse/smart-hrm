@@ -419,26 +419,26 @@ class Xin_model extends CI_Model {
 			$arr['reject_open'] = 'active';
 			return $arr;
 
-		} else if($mClass=='inventory' && $mMethod=='purchase_create') {
+		} else if($mClass=='inventory' && $mMethod=='purchase') {
 			$arr['invtry_open'] = 'active';
 			$arr['puiqu_active'] = 'active';
 			$arr['puscreate_open'] = 'active';
-			
+			return $arr;
 		} else if($mClass=='inventory' && $mMethod=='purchase_panding_list') {
 			$arr['invtry_open'] = 'active';
 			$arr['puiqu_active'] = 'active';
 			$arr['puspending_open'] = 'active';
-			
+			return $arr;
 		} else if($mClass=='inventory' && $mMethod=='purchase_aproved_list') {
 			$arr['invtry_open'] = 'active';
 			$arr['puiqu_active'] = 'active';
 			$arr['pusaproved_open'] = 'active';
-			
+			return $arr;
 		} else if($mClass=='inventory' && $mMethod=='purchase_order_received_list') {
 			$arr['invtry_open'] = 'active';
 			$arr['puiqu_active'] = 'active';
 			$arr['pusreceived_open'] = 'active';
-			
+			return $arr;
 		} else if($mClass=='inventory' && $mMethod=='purchase_reject_list') {
 			$arr['invtry_open'] = 'active';
 			$arr['puiqu_active'] = 'active';

@@ -26,6 +26,7 @@ $get_animate = $this->Xin_model->get_content_animate();
                 <th class="text-center" >Sub Category</th>
                 <th class="text-center" >Product Name</th>
                 <th class="text-center" >Request Quantity</th>
+                <th class="text-center" >Approved Quantity</th>
                 <th class="text-center" >Stock Quantity</th>
           </tr>
         </thead>
@@ -39,13 +40,15 @@ $get_animate = $this->Xin_model->get_content_animate();
                 <td><?php echo $row->category_name?></td>
                 <td><?php echo $row->sub_cate_name?></td>
                 <td><?php echo $row->product_name?></td>
-                <td><input type="number" id="quantity" name="qunatity[]" min="1" style="width:40%" value="<?php echo $row->quantity?>"></td>
+                <td><?php echo $row->quantity?></td>
+                <td><input type="number" id="quantity" name="qunatity[]" min="1" style="width:40%" value="<?php echo $row->approved_qty?>"></td>
                 <td><?php echo $row->p_qty?></td>
                 <td><a href="<?php echo base_url('admin/inventory/delete_requsiton_item/'.$row->id.'/'.$requisition_id)?>">Delete</a></td>
                 <input type="hidden" name="r_id[]" value="<?php echo $row->id?>">
 
             </tr>
             <?php }?>
+           
         </tbody>
       </table>
       <?php if(!empty($results)){?>
@@ -54,8 +57,10 @@ $get_animate = $this->Xin_model->get_content_animate();
       <?php } ?>
       <?php if($session['role_id']==4){?>
       <input type="submit" name="first_step" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-         <?php } ?>
+         <?php }else{?>
+          <input type="submit" name="update" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Update">
 
+      <?php }?>
       <?php }?>
         <?php echo form_close()?>
     </div>

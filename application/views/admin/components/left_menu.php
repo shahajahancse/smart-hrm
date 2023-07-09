@@ -353,11 +353,12 @@ if($theme[0]->sub_menu_icons != ''){
 
           <!-- // purchase -->
           <?php if(in_array('1080',$role_resources_ids) || in_array('1081',$role_resources_ids) || in_array('1082',$role_resources_ids) || in_array('1083',$role_resources_ids) || in_array('1084',$role_resources_ids) || in_array('1085',$role_resources_ids)) { ?>
+            
           <li class="<?php if(!empty($arr_mod['puiqu_active']))echo $arr_mod['puiqu_active'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Purchase <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
 
               <?php if(in_array('1081',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['puscreate_open']))echo $arr_mod['puscreate_open'];?>"> <a href="<?php echo site_url('admin/inventory/purchase_create');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Requisition</a> </li>
+              <li class="sidenav-link <?php if(!empty($arr_mod['puscreate_open']))echo $arr_mod['puscreate_open'];?>"> <a href="<?php echo site_url('admin/inventory/purchase');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Purchase List </a> </li>
               <?php } ?>
 
               <?php if(in_array('1082',$role_resources_ids)) { ?>

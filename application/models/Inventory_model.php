@@ -20,6 +20,50 @@ class inventory_model extends CI_Model
 	   return $query;
 	} 
 
+	public function product_details($id, $from_date = null, $to_date = null){
+	    $this->db->select('
+	   			p.id, 
+	   			p.product_name, 
+	   			pp.id as purchase_id,
+	   			pp.quantity, 
+	   			pp.ap_quantity, 
+	   			pp.status as purchase_status,
+	   			SUBSTR(pp.created_at, 1, 10) as created_at,
+	   		');
+	    $this->db->from('products as p');
+	    $this->db->join('products_purches_details as pp', 'pp.product_id = p.id');
+	    $this->db->where('p.id',  $id);
+	    $this->db->group_by('pp.id');
+	   $purchase_query = $this->db->order_by('pp.id','DESC')->get()->result();
+
+	    $this->db->select('
+	   			p.id, 
+	   			p.product_name, 
+	   			pr.id as requsition_id,
+	   			pr.quantity, 
+	   			pr.approved_qty as ap_quantity, 
+	   			pr.status as requisition_status,
+	   			SUBSTR(pr.created_at, 1, 10) as created_at,
+	   		');
+	    $this->db->from('products as p');
+	    $this->db->join('products_requisition_details as pr', 'pr.product_id = p.id');
+	    $this->db->where('p.id',  $id);
+	    $this->db->group_by('pr.id');
+	   $requisition_query = $this->db->order_by('pr.id','DESC')->get()->result();
+
+	   $query = array_merge($requisition_query,$purchase_query);
+
+	   	// array sorting to time asc order
+		usort($query, function ($one, $two) {
+		    if ($one->created_at === $two->created_at) {
+		        return 0;
+		    }
+		    return $one->created_at > $two->created_at ? - 1 : 1;
+		});
+
+	   return $query;
+	} 
+
 	public function sub_category_list(){
 	   $this->db->select('psc.*, pc.category_name');
 	   $this->db->from('products_sub_categories as psc');
@@ -32,29 +76,35 @@ class inventory_model extends CI_Model
 	   return $this->db->insert($table, $data);
 	}
 
+
+	// ************* purchase part ********************
 	public function purchase_products_requisition($id,$role_id){
+
 		// dd($id .' = '. $role_id);
 		$this->db->select('
-				xin_employees.first_name,
-				xin_employees.last_name, 
-				product_supplier.name,
-				product_supplier.company,
-				products_purches.id,
-				products_purches.user_id,
-				products_purches.status,
-				products_purches.created_at,
-				products_purches.updated_by
+				p.id,
+				p.user_id,
+				p.supplier,
+				p.status,
+				p.created_at,
+				p.updated_by,
+				emp.first_name,
+				emp.last_name, 
+				ps.name,
+				ps.company,
 			')
-		->from('product_supplier')
-		->from('products_purches')
-		->from('xin_employees')
-		->where("products_purches.user_id = xin_employees.user_id")
-		->where("products_purches.supplier =product_supplier.id")
-		->order_by('products_purches.id', 'desc');
+		->from('products_purches as p')
+		->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left')
+		->join('product_supplier as ps', 'ps.id = p.supplier', 'left')
+		->order_by('p.id', 'desc');
 
 		// dd($this->db->get()->result());
 		return	$this->db->get()->result();
 	} 
+
+
+	// ************* purchase part end ********************
+
 	public function purchase_products_status($id,$role_id,$status){
 
 		if($role_id==1){
@@ -203,11 +253,11 @@ class inventory_model extends CI_Model
 
 	
 	public  function product_purches_details($id){
+	
 		$this->db->select('
 		            xin_employees.first_name,
 		            xin_employees.last_name,
-					product_supplier.name,
-					product_supplier.company,
+				
 					products_purches.status,
 					products.product_name,
 					products_purches_details.quantity,
@@ -218,13 +268,12 @@ class inventory_model extends CI_Model
 					products_purches_details.created_at
 				')
 
-		->from('product_supplier')
+		// ->from('product_supplier')
 		->from('products_purches')
 		->from('products')
 		->from('products_purches_details')
 		->from('xin_employees')
 		->where("products_purches.user_id = xin_employees.user_id")
-		->where("products_purches.supplier =product_supplier.id")
 		->where("products_purches_details.product_id = products.id")
 		->where("products_purches_details.purches_id=products_purches.id")
 		->where("products_purches_details.purches_id",$id)
@@ -243,8 +292,6 @@ class inventory_model extends CI_Model
 		$this->db->select('
 					xin_employees.first_name,
 					xin_employees.last_name,
-					product_supplier.name,
-					product_supplier.company,
 					products_purches.status,
 					products.product_name,
 					products_purches_details.quantity,
@@ -255,13 +302,12 @@ class inventory_model extends CI_Model
 					products_purches_details.created_at
 				')
 
-		->from('product_supplier')
+		
 		->from('products_purches')
 		->from('products')
 		->from('products_purches_details')
 		->from('xin_employees')
 		->where("products_purches.user_id = xin_employees.user_id")
-		->where("products_purches.supplier =product_supplier.id")
 		->where("products_purches_details.product_id = products.id")
 		->where("products_purches_details.purches_id=products_purches.id")
 		->where("products_purches_details.purches_id",$id)
@@ -270,42 +316,43 @@ class inventory_model extends CI_Model
 	}
 	// requisition details for requisition id
 	public  function requisition_details($user_id=null,$id=null){
-		        //    dd($user_id);
-	$this->db->select(" 
-				xin_employees.first_name,
-				xin_employees.last_name,
-				products_requisition_details.id,
-				products_requisition_details.requisition_id,
-				products_requisition_details.quantity,
-				products_requisition_details.approved_qty,
-				products_requisitions.status,
-				products_requisitions.user_id,
-				products_requisitions.created_at,
-				products_categories.category_name,
-				products_sub_categories.sub_cate_name,
-				products.product_name,
-				products.quantity as p_qty,
-	")
-	->from("products_categories")
-	->from("products_sub_categories")
-	->from("products")
-	->from("products_requisitions")
-	->from("products_requisition_details")
-	->from("xin_employees")
-	->where("products_categories.id     = products_requisition_details.cat_id")	
-	->where("products_sub_categories.id = products_requisition_details.sub_cate_id")	
-	->where("products.id 				= products_requisition_details.product_id")	
-	->where("products_requisitions.id 	= products_requisition_details.requisition_id")	
-	->where("xin_employees.user_id 		= products_requisitions.user_id")	;
-	//razib
-	if($user_id!=null){
-		$this->db->where("products_requisitions.user_id  = $user_id");
-	}
-	if($id!=null){
-		$this->db->where("products_requisitions.id 		 = $id");
-	}
-	$this->db->group_by('products_requisition_details.id');
-	return $this->db->get()->result();
+		        // dd($user_id.'hgf'.$id);
+			$this->db->select(" 
+					 xin_employees.first_name,
+					 xin_employees.last_name,
+			         products_requisition_details.id,
+					 products_requisition_details.requisition_id,
+				     products_requisition_details.quantity,
+					 products_requisition_details.approved_qty,
+					 products_requisitions.status,
+					 products_requisitions.user_id,
+					 products_requisitions.created_at,
+					 products_categories.category_name,
+					 products_sub_categories.sub_cate_name,
+					 products.product_name,
+					 products.quantity as p_qty,
+							")
+			->from("products_categories")
+			->from("products_sub_categories")
+			->from("products")
+			->from("products_requisitions")
+			->from("products_requisition_details")
+			->from("xin_employees")
+			->where("products_categories.id     = products_requisition_details.cat_id")	
+			->where("products_sub_categories.id = products_requisition_details.sub_cate_id")	
+			->where("products.id 				= products_requisition_details.product_id")	
+			->where("products_requisitions.id 	= products_requisition_details.requisition_id")	
+			->where("xin_employees.user_id 		= products_requisitions.user_id")	;
+			//razib
+			if($user_id!=null){
+			
+			   $this->db->where("products_requisitions.user_id  = $user_id");
+			}
+			if($id!=null){
+			$this->db->where("products_requisition_details.requisition_id  = $id");
+		}
+			$this->db->group_by('products_requisition_details.id');
+			return $this->db->get()->result();
 	}
 
 	public  function req_details_cat_wise($id){
