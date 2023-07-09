@@ -125,7 +125,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
           </div>
           
-          <?php if(isset($row->id)==null){?>
+          <?php if(isset($row->a_id)==null){?>
                 <input type="submit" name="submit" class="btn btn-success" style="float:right" value="Add Item"/>
                 <?php }else{?>
                 <input type="submit" name="submit" class="btn btn-primary" style="float:right" value="Update Item"/>
