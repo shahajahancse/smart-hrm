@@ -49,7 +49,7 @@ $get_animate = $this->Xin_model->get_content_animate();
       <input type="hidden" name="update_a" id="update_a" value="0">
       <!-- <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/persial_approved/'.$requisition_id);?>">Approved</a> -->
       <?php if(!empty($results)){?>
-        <?php if($session['role_id']!=3) {?>
+        <?php if($session['role_id']==1) {?>
           <input type="button"  class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" onclick="upsub()" value="update">
 
           <input type="submit" id="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
