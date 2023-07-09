@@ -10,12 +10,9 @@ if ($statusC == 1) {
     $statusText = "Rejected";
 }
 ?> -->
-
-
-<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"
+    xmlns="http://www.w3.org/TR/REC-html40">
 <?php
-
-
 $filename = "Vendor_$first_date+to+$second_date.xls";
 header('Content-Type: application/vnd.ms-excel'); //mime type
 header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
@@ -24,20 +21,16 @@ header('Cache-Control: max-age=0'); //no cache
 
 <body>
     <div style="clear: both;"></div>
-
     <?php $this->load->view('admin/head_bangla')?>
-    <?php $convert_f1=date('d-m-Y', strtotime($first_date));
-                    $convert_f2=date('d-m-Y', strtotime($second_date));
-            
-            ?>
-             <div style="font-size:14px;  text-align:center; margin-bottom:3px">Lunch Report </div>
-        <div style="font-size:14px;  text-align:center; margin-bottom:7px"> <?php echo $statusText; ?> Date : <?php echo $convert_f1; ?> To  <?php echo  $convert_f2; ?></div>
-    
-
+    <?php 
+    $convert_f1=date('d-m-Y', strtotime($first_date));
+    $convert_f2=date('d-m-Y', strtotime($second_date));     
+    ?>
+    <div style="font-size:14px;  text-align:center; margin-bottom:3px">Lunch Report </div>
+    <div style="font-size:14px;  text-align:center; margin-bottom:7px"> <?php echo $statusText; ?> Date :
+        <?php echo $convert_f1; ?> To <?php echo  $convert_f2; ?></div>
     <div style="border: 1px solid black;padding: 0px;margin: 16px;">
         <?php if($status==1){?>
-
-
         <table class="table table-hover table-striped" id="myTable">
             <thead>
                 <tr>
@@ -59,12 +52,11 @@ header('Cache-Control: max-age=0'); //no cache
             $grand_total_offic_cost   = 0;
             $grand_total_cost    = 0;
             ?>
-
                 <?php foreach ($all_employees as $key=>$employee): ?>
                 <tr>
                     <td style="text-align:center"><?= $key+1 ?></td>
-                    <td ><?= $employee->first_name ?> <?= $employee->last_name ?></td>
-                    <td ><?= $employee->designation_name?></td>
+                    <td><?= $employee->first_name ?> <?= $employee->last_name ?></td>
+                    <td><?= $employee->designation_name?></td>
                     <?php     
                         $this->load->model("Lunch_model"); 
                     $emp_data = $this->Lunch_model->get_data_date_wise($first_date,$second_date, $employee->user_id);
@@ -83,16 +75,7 @@ header('Cache-Control: max-age=0'); //no cache
                         $total_emp_cost+=$row->meal_amount*45;
                         $total_offic_cost+=$row->meal_amount*45;
                         $total_cost+=$row->meal_amount*90;
-
-
-
-
-
-
-                    }
-
-                
-                ?>
+                    } ?>
                     <td style="text-align:center"><?= $active_meal ?></td>
                     <td style="text-align:center"><?= $inactive_meal ?></td>
                     <td style="text-align:center"><?= $total_emp_cost ?></td>
@@ -107,8 +90,6 @@ header('Cache-Control: max-age=0'); //no cache
                 $grand_total_cost    += $total_cost;
             ?>
                 <?php endforeach; ?>
-
-
             </tbody>
             <tfoot>
                 <tr>
@@ -122,8 +103,6 @@ header('Cache-Control: max-age=0'); //no cache
             </tfoot>
         </table>
         <?php }else{?>
-
-
         <table class="table table-hover table-striped" id="myTable">
             <thead>
                 <tr>
@@ -141,7 +120,6 @@ header('Cache-Control: max-age=0'); //no cache
             $grand_total_offic_cost   = 0;
             $grand_total_cost    = 0;
             ?>
-
                 <?php foreach ($all_employees as $key=>$employee): ?>
                 <tr>
                     <td style="text-align:center"><?= $key+1 ?></td>
@@ -165,15 +143,7 @@ header('Cache-Control: max-age=0'); //no cache
                         $total_emp_cost+=$row->meal_amount*45;
                         $total_offic_cost+=$row->meal_amount*45;
                         $total_cost+=$row->meal_amount*90;
-
-
-
-
-
-
                     }
-
-                
                 ?>
                     <td style="text-align:center"><?= $active_meal ?></td>
                     <td style="text-align:center"><?= $total_cost ?></td>
@@ -186,8 +156,6 @@ header('Cache-Control: max-age=0'); //no cache
                 $grand_total_cost    += $total_cost;
             ?>
                 <?php endforeach; ?>
-
-
             </tbody>
             <tfoot>
                 <tr>
@@ -197,14 +165,8 @@ header('Cache-Control: max-age=0'); //no cache
                 </tr>
             </tfoot>
         </table>
-
-
         <?php } ?>
     </div>
-
-
-
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -219,8 +181,6 @@ header('Cache-Control: max-age=0'); //no cache
     <script>
 
     </script>
-
-
 </body>
 
 </html>

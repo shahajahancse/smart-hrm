@@ -66,11 +66,12 @@ $newDate = $date->format('Y-m-d');
         margin: 0 !important;
         padding: 0 !important;
     }
+
     table thead tr th {
-		font-size:12px;
+        font-size: 12px;
         color: blue;
-		padding: 3px !important;
-	}
+        padding: 3px !important;
+    }
 
     @media print {
         .btn {
@@ -106,69 +107,70 @@ $newDate = $date->format('Y-m-d');
         <div style="font-size:13px; line-height:15px; text-align:center;">Monthly Lunch Payment Report
             of <?php $convertedDate1 = date('d-m-Y', strtotime($lunch_data[0]->end_date));
                $convertedDate2 = date('d-m-Y', strtotime($newDate)); ?>
-             <?= isset($lunch_data[0]->end_date) ? $convertedDate1 : ''; ?> to
+            <?= isset($lunch_data[0]->end_date) ? $convertedDate1 : ''; ?> to
             <?= isset($newDate) ? $convertedDate2: ''; ?> </div>
     </div>
-<div class="table-responsive" style="margin-top: 0px; padding:10px;">  
-    <table class="table table-bordered table-hover table-striped">
-        <thead style="text-align: center;">
-            <tr>
-                <th>SL</th>
-                <th>Name</th>
-                <th>Current M. Lunch day</th>
-                <th>Stock Lunch Balance</th>
-                <th>Balance Days</th>
-                <th>Collection Day</th>
-                <th>Collection Amount</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody style="text-align: center;">
+    <div class="table-responsive" style="margin-top: 0px; padding:10px;">
+        <table class="table table-bordered table-hover table-striped">
+            <thead style="text-align: center;">
+                <tr>
+                    <th>SL</th>
+                    <th>Name</th>
+                    <th>Current M. Lunch day</th>
+                    <th>Stock Lunch Balance</th>
+                    <th>Balance Days</th>
+                    <th>Collection Day</th>
+                    <th>Collection Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center;">
 
-            <?php  $totalamount=0;$previouspay=0; foreach ($lunch_data as $key=>$employee): ?>
-            <?php 
+                <?php  $totalamount=0;$previouspay=0; foreach ($lunch_data as $key=>$employee): ?>
+                <?php 
                     $pbm=($employee->prev_amount/45);
                     $totalamount+=$employee->pay_amount;
                     $previouspay+=$employee->prev_pay;
                     ?>
-            <tr>
-                <td><?php echo $key+1 ?></td>
-                <td style="text-align: left;">&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
-                <td><?php echo $employee->probable_meal;?></td>
-                <td><?php echo $pbm;?></td>
-                <td><?php echo $employee->probable_meal-$pbm;?></td>
-                <td><?php echo $employee->pay_amount/45;?></td>
-                <td><?php echo $employee->pay_amount;?></td>
-                <td style="color: <?php echo $employee->status == 1 ? '#26ab31' : 'red'; ?>">
-                    <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
-                </td>
+                <tr>
+                    <td><?php echo $key+1 ?></td>
+                    <td style="text-align: left;">&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?>
+                        <?php echo $employee->last_name; ?></td>
+                    <td><?php echo $employee->probable_meal;?></td>
+                    <td><?php echo $pbm;?></td>
+                    <td><?php echo $employee->probable_meal-$pbm;?></td>
+                    <td><?php echo $employee->pay_amount/45;?></td>
+                    <td><?php echo $employee->pay_amount;?></td>
+                    <td style="color: <?php echo $employee->status == 1 ? '#26ab31' : 'red'; ?>">
+                        <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
+                    </td>
 
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-        <?php if($r==1){?>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+            <?php if($r==1){?>
 
-        <tfoot style="text-align: center;font-weight: bold;">
-            <tr>
-                <td colspan="6">Total</td>
-                <td colspan="1"><?= $totalamount ?></td>
-            </tr>
-        </tfoot>
-
-
+            <tfoot style="text-align: center;font-weight: bold;">
+                <tr>
+                    <td colspan="6">Total</td>
+                    <td colspan="1"><?= $totalamount ?></td>
+                </tr>
+            </tfoot>
 
 
-        <?php }else{ ?>
-        <tfoot style="text-align: center;font-weight: bold;">
-            <tr>
-                <td colspan="6">Total</td>
-                <td colspan="1"><?= $totalamount ?></td>
-            </tr>
-        </tfoot>
-        <?php } ?>
-    </table>
+
+
+            <?php }else{ ?>
+            <tfoot style="text-align: center;font-weight: bold;">
+                <tr>
+                    <td colspan="6">Total</td>
+                    <td colspan="1"><?= $totalamount ?></td>
+                </tr>
+            </tfoot>
+            <?php } ?>
+        </table>
     </div>
- </div>
+    </div>
 
 
     <!-- Include Bootstrap JS -->

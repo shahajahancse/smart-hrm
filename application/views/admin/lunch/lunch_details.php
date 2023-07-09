@@ -69,7 +69,7 @@ $this->load->view('admin/head_bangla');
 
 ?>
 <h5 style='font-size:13px; font-weight:bold; text-align:center'>
-  Lunch Details  <?php echo   $convertedDate;   ?> ( <?php echo  $dayName;   ?>)
+    Lunch Details <?php echo   $convertedDate;   ?> ( <?php echo  $dayName;   ?>)
 </h5>
 <br>
 
@@ -91,11 +91,11 @@ $this->load->view('admin/head_bangla');
                                 <th width="250px">Employee Name</th>
                                 <th width="150px" style="text-align: center;">Quantity</th>
                                 <th width="150px" style="text-align: center;">Employee-Cost</th>
-                            
+
                                 <th width="150px" style="text-align: center;">Office-Cost</th>
 
                                 <th style="text-align: center;">Remarks</th>
-                               
+
                             </tr>
                         </thead>
                         <tbody>
@@ -109,23 +109,26 @@ $this->load->view('admin/head_bangla');
                                 <td style="text-align: center;"><?= $detail->meal_amount*45 ?></td>
                                 <td style="text-align: center;"><?= $detail->meal_amount*45 ?></td>
                                 <!-- <td><?= $detail->comment ?></td> -->
-                                <td style="text-align: center;" title="<?php echo $detail->comment; ?>"><?php echo implode(' ', array_slice(explode(' ', $detail->comment ), 0, 4)); ?></td>
+                                <td style="text-align: center;" title="<?php echo $detail->comment; ?>">
+                                    <?php echo implode(' ', array_slice(explode(' ', $detail->comment ), 0, 4)); ?></td>
                             </tr>
-                           
+
                             <?php } if($data->guest_m >0){ ?>
-                                <tr style="color:blue;">
-                                    <td><?= $numKey+1 ?></td>
-                                    <td><?= " Guest Meals"?></td>
-                                    <td style="text-align: center;"><?= $data->guest_m ?></td>
-                                    <td style="text-align: center;"><?=$data->guest_m*0   ?></td>
-                                    <td style="text-align: center;"><?= $data->guest_m*90   ?></td>
-                                    <td style="text-align: center;" title="<?php echo $detail->comment; ?>"><?php echo implode(' ', array_slice(explode(' ', $detail->comment ), 0, 4)); ?></td>
-                                </tr>
+                            <tr style="color:blue;">
+                                <td><?= $numKey+1 ?></td>
+                                <td><?= " Guest Meals"?></td>
+                                <td style="text-align: center;"><?= $data->guest_m ?></td>
+                                <td style="text-align: center;"><?=$data->guest_m*0   ?></td>
+                                <td style="text-align: center;"><?= $data->guest_m*90   ?></td>
+                                <td style="text-align: center;" title="<?php echo $detail->comment; ?>">
+                                    <?php echo implode(' ', array_slice(explode(' ', $detail->comment ), 0, 4)); ?></td>
+                            </tr>
                             <?php } ?>
 
                             <tr>
                                 <td colspan="2" style="text-align: center;"><strong>Total</strong></td>
-                                <td style="text-align: center;"><strong><?= $data->emp_m + $data->guest_m  ?></strong></td>
+                                <td style="text-align: center;"><strong><?= $data->emp_m + $data->guest_m  ?></strong>
+                                </td>
                                 <td style="text-align: center;"><strong><?= $data->emp_cost ?></strong></td>
                                 <td style="text-align: center;"><strong><?= $data->total_cost ?></strong></td>
                                 <td></td>
@@ -137,7 +140,7 @@ $this->load->view('admin/head_bangla');
 
 
                     <table class="table table-border table-hover">
-                        <tr >
+                        <tr>
                             <th style="text-align:center">Total Meals</th>
                             <th style="text-align:center">Employee Meals</th>
                             <th style="text-align:center">Guest Meals</th>
@@ -145,7 +148,7 @@ $this->load->view('admin/head_bangla');
                             <th style="text-align:center">Total Office Cost</th>
                             <th style="text-align:center">Toatal Cost</th>
                         </tr>
-                        <tr >
+                        <tr>
                             <td style="text-align:center"><?php echo $data->emp_m + $data->guest_m; ?></td>
                             <td style="text-align:center"><?php echo $data->emp_m ?></td>
                             <td style="text-align:center"><?php echo $data->guest_m; ?></td>

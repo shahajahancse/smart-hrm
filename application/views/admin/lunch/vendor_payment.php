@@ -128,7 +128,7 @@
 </div>
 <div class="addbox">
     <p class="p" style="font-size: 25px; font-weight: bold; float: left;">Payment List</p>
-    <a class="btn btn-primary accordion"  style="float: right" onclick="togglePaymentBox()">Make Payment</a>
+    <a class="btn btn-primary accordion" style="float: right" onclick="togglePaymentBox()">Make Payment</a>
 </div>
 
 <div class="panels payment_box" id="paymentBox">
@@ -374,7 +374,7 @@ function submit() {
     var payableAmount = document.getElementById('payable_amount').value;
     var dueAmount = document.getElementById('due_amount').value;
     var payAmount = document.getElementById('pay_amount').value;
-    if (payAmount===''){
+    if (payAmount === '') {
         alert('Please Enter PayAmount');
         return false;
     }
