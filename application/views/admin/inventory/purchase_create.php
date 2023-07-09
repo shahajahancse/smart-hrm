@@ -10,7 +10,7 @@
 <div class="box mb-4 <?php echo $get_animate;?>">
  
     <div class="box-header with-border">
-        <h3 class="box-title">Purches Products Requisition </h3>
+        <h3 class="box-title">Purchase Products Requisition </h3>
     
     </div>
      
