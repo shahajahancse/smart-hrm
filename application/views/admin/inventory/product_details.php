@@ -30,7 +30,7 @@
             <td><?php
                 if(isset($raw->purchase_status)){
                     $type='in';
-                  
+                    $class='style="color: blue;"';
                     $stat=$raw->purchase_status;
                    if($stat==1){
                     $status='Pending';
@@ -42,6 +42,7 @@
                     $status='Rejected';
                 }
                 }elseif(isset($raw->requisition_status)){
+                    $class='style="color: red;"';
                     $type='out';
                     $stat=$raw->requisition_status;
                     if($stat==5){
@@ -57,7 +58,7 @@
                 }
             }
                 ?>
-              <span>  <?=$type?></span>
+              <span <?= $class ?> >  <?=$type?></span>
               <span> (<?= $status ?>)</span>
             </td>
         </tr>
