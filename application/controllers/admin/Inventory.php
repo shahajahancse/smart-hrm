@@ -256,6 +256,7 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+      
 		if($session['role_id']==3){;
 		$user_id=$session['user_id'];
 		};
@@ -270,7 +271,7 @@ class Inventory extends MY_Controller {
 		}else{
 			$data['requisition_id'] 	 = '';
 		}
-		
+		// dd($data);
 		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data);
 	}
@@ -651,6 +652,8 @@ class Inventory extends MY_Controller {
 
 	//approved by prisal product purches edit
 	public function product_persial_approved($id){
+
+		// dd($id);
 
 	    $session = $this->session->userdata('username');
 		$all_detail=$this->db->where('purches_id',$id)->get('products_purches_details')->result();

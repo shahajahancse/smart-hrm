@@ -126,7 +126,7 @@ if ($statusC == 7) {
                                 <td><?php echo $row->unit_name ?></td>
                                 <td><?php echo $row->quantity ?></td>
                                 <td><?php echo $row->order_level ?></td>
-                                <td><?php echo ($row->quantity < $row->order_level) ? '<span style=" color:#d90f4f;>Low Stack </span>' : '<span style=" color: #119f16;">Available</span>'; ?></td>
+                                <td><?php echo ($row->quantity <= $row->order_level) ? '<span style=" color:#d90f4f;">Low Stack </span>' : '<span style=" color: #119f16;">Available</span>'; ?></td>
 
                               
                                 
