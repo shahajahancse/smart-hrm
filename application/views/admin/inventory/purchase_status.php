@@ -57,7 +57,7 @@
                   <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                   <td class="text-center"><?php echo $rows->status==1?"
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
-                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Deliver</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
+                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Received</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
                     ?>
               </td>
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
@@ -115,7 +115,7 @@
                 <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                 <td class="text-center"><?php echo $rows->status==1?"
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>":
-                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Deliver</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
+                     ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Received</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));
                     ?></td>
                 <td class="text-center"><?php echo $rows->created_at; ?></td>
                 <td class="text-center">
