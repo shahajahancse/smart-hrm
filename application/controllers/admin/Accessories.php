@@ -256,8 +256,8 @@ public function inventory_report($status=null,$category=null){
     $data = $this->page_loads();
     $data['title']       = 'On Working'.' | '.$this->Xin_model->site_title();
     $data['breadcrumbs'] = "On Working";
-    $status   =  @$_POST['status'];
-    $category =  @$_POST['category'];
+    $status = @$_POST['status'];
+    $category= @$_POST['category'];
 
     // $data['path_url']    = "Working";
     if($status!=null && $category!=null){
