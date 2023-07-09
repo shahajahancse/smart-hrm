@@ -256,7 +256,7 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-
+      
 		if($session['role_id']==3){;
 		$user_id=$session['user_id'];
 		};
