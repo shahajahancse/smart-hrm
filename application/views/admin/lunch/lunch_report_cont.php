@@ -107,7 +107,7 @@ $exc=1;
             <div style="text-align: center;">
             <?php  $this->load->view('admin/head_bangla'); ?>
                 <!-- <h5 class="box-title ti1">Daily Unpaid Report</h4> -->
-                <h4 class="box-title  ti1">Daily Lunch Continuous Report</h4>
+                <h4 class="box-title  ti1">Lunch Report</h4>
                     <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
                 
                         <?php $convert_f1=date('d-m-Y', strtotime($first_date));
