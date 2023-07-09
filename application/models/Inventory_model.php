@@ -209,11 +209,11 @@ class inventory_model extends CI_Model
 
 	
 	public  function product_purches_details($id){
+	
 		$this->db->select('
 		            xin_employees.first_name,
 		            xin_employees.last_name,
-					product_supplier.name,
-					product_supplier.company,
+				
 					products_purches.status,
 					products.product_name,
 					products_purches_details.quantity,
@@ -224,13 +224,12 @@ class inventory_model extends CI_Model
 					products_purches_details.created_at
 				')
 
-		->from('product_supplier')
+		// ->from('product_supplier')
 		->from('products_purches')
 		->from('products')
 		->from('products_purches_details')
 		->from('xin_employees')
 		->where("products_purches.user_id = xin_employees.user_id")
-		->where("products_purches.supplier =product_supplier.id")
 		->where("products_purches_details.product_id = products.id")
 		->where("products_purches_details.purches_id=products_purches.id")
 		->where("products_purches_details.purches_id",$id)
@@ -249,8 +248,6 @@ class inventory_model extends CI_Model
 		$this->db->select('
 					xin_employees.first_name,
 					xin_employees.last_name,
-					product_supplier.name,
-					product_supplier.company,
 					products_purches.status,
 					products.product_name,
 					products_purches_details.quantity,
@@ -261,13 +258,12 @@ class inventory_model extends CI_Model
 					products_purches_details.created_at
 				')
 
-		->from('product_supplier')
+		
 		->from('products_purches')
 		->from('products')
 		->from('products_purches_details')
 		->from('xin_employees')
 		->where("products_purches.user_id = xin_employees.user_id")
-		->where("products_purches.supplier =product_supplier.id")
 		->where("products_purches_details.product_id = products.id")
 		->where("products_purches_details.purches_id=products_purches.id")
 		->where("products_purches_details.purches_id",$id)
