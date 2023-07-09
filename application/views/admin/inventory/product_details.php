@@ -2,6 +2,12 @@
 // dd($results)
 
 ?>
+<style>
+    th, td {
+        text-align: center !important;
+    }
+</style>
+
 <table id="datatbale" style="width: 100%;" class="table">
     <thead>
         <tr>
