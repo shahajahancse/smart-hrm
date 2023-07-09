@@ -29,9 +29,6 @@
         color: blue;
         padding: 3px !important;
     }
-
-
-
     @media print {
         #btn {
             display: none;

@@ -215,8 +215,10 @@ class Inventory extends MY_Controller {
 	// dd($id);
 		$log_user=$_SESSION['username']['user_id'];
 		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
-		$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>4]);
+		$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
 		if($approved){
+			$this->db->where('requisition_id',$id)->update('products_requisition_details',['status'=>2]);
+
 				$this->session->set_flashdata('warning', ' Requsition Status Rejected .');
 				redirect("admin/inventory/index","refresh");
 		}
@@ -228,6 +230,8 @@ class Inventory extends MY_Controller {
 		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
 		$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>4]);
 		if($approved){
+			$this->db->where('requisition_id',$id)->update('products_requisition_details',['status'=>4]);
+
 			 $this->session->set_flashdata('warning', ' Requsition Status Rejected .');
 		     redirect("admin/inventory/index","refresh");
 		}
@@ -239,6 +243,8 @@ class Inventory extends MY_Controller {
 		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
 		$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
 		if($approved){
+			$this->db->where('requisition_id',$id)->update('products_requisition_details',['status'=>2]);
+
 			 $this->session->set_flashdata('success', ' Requsition Status Approved .');
 		     redirect("admin/inventory/index","refresh");
 		}
@@ -280,7 +286,7 @@ class Inventory extends MY_Controller {
 				$log_user=$_SESSION['username']['user_id'];
 				$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user,'status'=>5]);
 				foreach($quantity as $key=>$value){
-					$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); 
+					$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value,'status'=>5]); 
 				}
 				   $this->session->set_flashdata('success', 'Product Updated Successfully.');
 				   redirect("admin/inventory/index","refresh");
@@ -314,6 +320,8 @@ class Inventory extends MY_Controller {
 			if($session['role_id'] == 1){
 			$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
 				if($approved){
+					$this->db->where('requisition_id',$id)->update('products_requisition_details',['status'=>2]);
+
 							$this->session->set_flashdata('success', 'Updated Successfully.');
 							redirect("admin/inventory/index","refresh");
 						}
@@ -363,6 +371,8 @@ class Inventory extends MY_Controller {
 
 			$deliver=$this->db->where('id',$id)->update('products_requisitions',['status'=>3]);
 			if($deliver){
+				$this->db->where('requisition_id',$id)->update('products_requisition_details',['status'=>3]);
+
 				$this->session->set_flashdata('success', 'Handover Successfully.');
 				redirect("admin/inventory/index","refresh");
 			}
@@ -629,7 +639,7 @@ class Inventory extends MY_Controller {
 
 	//approved by prisal product purches edit
 	public function product_persial_approved($id){
-		dd($id);
+
 	    $session = $this->session->userdata('username');
 		$all_detail=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
 		// dd($all_detail);
@@ -1198,6 +1208,12 @@ class Inventory extends MY_Controller {
 			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
 		 redirect("admin/inventory/product_purchase_edit_approved/".$pid);
 		}
+	}
+	public function product_details($id){
+		dd($id);
+
+
+
 	}
 
 
