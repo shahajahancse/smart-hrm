@@ -260,13 +260,15 @@ class Inventory extends MY_Controller {
       
 		if($session['role_id']==3){;
 		$user_id=$session['user_id'];
+		}else{
+			$user_id=null;
 		};
 		
 		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition ';
 		// $data['path_url']    = 'inventory';
-	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id=null,$id);
-
+	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id,$id);
+// dd($data['results']);
 		if(!empty($data['results'])){
 			$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
 		}else{

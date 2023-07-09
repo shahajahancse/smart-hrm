@@ -58,8 +58,8 @@ $session = $this->session->userdata('username');
           </tr>
         </thead>
         <tbody>
-          <?php if($user_role_id==1 || $user_role_id == 4){?>
-          <?php foreach ($products as $key => $rows) { ?>
+          <?php if($user_role_id==1 || $user_role_id == 4 || $user_role_id == 2){?>
+          <?php  foreach ($products as $key => $rows) { ?>
             <tr>
                   <td class="text-center"><?php echo ($key+1)."."; ?></td>
                   <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
@@ -98,7 +98,7 @@ $session = $this->session->userdata('username');
              
                 <?php } } }?>
                         
-              <?php if($user_role_id==3){
+              <?php  if($user_role_id==3){ 
                 foreach ($results as $key => $rows){  
               ?>
                 <td class="text-center"><?php echo ($key+1)."."; ?></td>
@@ -123,8 +123,8 @@ $session = $this->session->userdata('username');
                       <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                         <!-- <a style="padding-left:5px;" href="< ?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br> -->
                    
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
-                        <a style="padding-left:5px; " href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">Delete</a>
+                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->requisition_id);?>">Edit</a> <br>
+                        <a style="padding-left:5px; " href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->requisition_id);?>">Delete</a>
                       </div>
                     </div>
                     <?php } ?>

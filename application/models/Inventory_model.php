@@ -301,11 +301,12 @@ class inventory_model extends CI_Model
 			->where("xin_employees.user_id 		= products_requisitions.user_id")	;
 			//razib
 			if($user_id!=null){
+			
 			   $this->db->where("products_requisitions.user_id  = $user_id");
 			}
 			if($id!=null){
-			   $this->db->where("products_requisition_details.requisition_id  = $id");
-			}
+			$this->db->where("products_requisition_details.requisition_id  = $id");
+		}
 			$this->db->group_by('products_requisition_details.id');
 			return $this->db->get()->result();
 	}
