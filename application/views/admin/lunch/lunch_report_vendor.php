@@ -63,7 +63,7 @@
                 <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
             <div>Lunch Date:
                 <?php  $convertedDate = date('d-m-Y', strtotime($paySlipData[0]->date)); ?>
-            <?php echo $convertedDate; ?></div>
+                <?php echo $convertedDate; ?></div>
             <div style="font-size:12px; font-weight:bold; text-align:center;"></div>
             <div style="font-size:18px; font-weight:bold; text-align:center;">Vendor Voucher</div>
 
