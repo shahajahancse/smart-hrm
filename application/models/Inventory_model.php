@@ -20,6 +20,50 @@ class inventory_model extends CI_Model
 	   return $query;
 	} 
 
+	public function product_details($id, $from_date = null, $to_date = null){
+	    $this->db->select('
+	   			p.id, 
+	   			p.product_name, 
+	   			pp.id as purchase_id,
+	   			pp.quantity, 
+	   			pp.ap_quantity, 
+	   			pp.status as purchase_status,
+	   			SUBSTR(pp.created_at, 1, 10) as created_at,
+	   		');
+	    $this->db->from('products as p');
+	    $this->db->join('products_purches_details as pp', 'pp.product_id = p.id', 'left');
+	    $this->db->where('p.id',  $id);
+	    $this->db->group_by('pp.id');
+	   $purchase_query = $this->db->order_by('pp.id','DESC')->get()->result();
+
+	    $this->db->select('
+	   			p.id, 
+	   			p.product_name, 
+	   			pr.id as requsition_id,
+	   			pr.quantity, 
+	   			pr.approved_qty as ap_quantity, 
+	   			pr.status as requisition_status,
+	   			SUBSTR(pr.created_at, 1, 10) as created_at,
+	   		');
+	    $this->db->from('products as p');
+	    $this->db->join('products_requisition_details as pr', 'pr.product_id = p.id', 'left');
+	    $this->db->where('p.id',  $id);
+	    $this->db->group_by('pr.id');
+	   $requisition_query = $this->db->order_by('pr.id','DESC')->get()->result();
+
+	   $query = array_merge($requisition_query,$purchase_query);
+
+	   	// array sorting to time asc order
+		usort($query, function ($one, $two) {
+		    if ($one->created_at === $two->created_at) {
+		        return 0;
+		    }
+		    return $one->created_at > $two->created_at ? - 1 : 1;
+		});
+
+	   return $query;
+	} 
+
 	public function sub_category_list(){
 	   $this->db->select('psc.*, pc.category_name');
 	   $this->db->from('products_sub_categories as psc');
