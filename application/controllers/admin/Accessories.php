@@ -44,14 +44,12 @@ public function category($id = null){
      $this->form_validation->set_rules('cat_name', 'Category Name', 'required|trim');
      $this->form_validation->set_rules('cat_short_name', 'Category Short Name', 'required|trim');
      $this->form_validation->set_rules('status', 'Status ', 'required|trim');
-
      if ($this->form_validation->run() == true){
-        $form_data = array(
-                    'cat_name'       => $this->input->post('cat_name'),
-                    'cat_short_name' => $this->input->post('cat_short_name'),
-                    'status'         => $this->input->post('status'),
-		          );    
-
+     $form_data = array(
+                        'cat_name'       => $this->input->post('cat_name'),
+                        'cat_short_name' => $this->input->post('cat_short_name'),
+                        'status'         => $this->input->post('status'),
+			          );    
         if ($hid = $this->input->post('hidden_id')) {
             $this->db->where('id', $hid)->update('product_accessory_categories', $form_data);
             $this->session->set_flashdata('success', 'Successfully Updated Done');

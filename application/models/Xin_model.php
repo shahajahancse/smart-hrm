@@ -380,6 +380,19 @@ class Xin_model extends CI_Model {
 			$arr['invtry_open'] = 'active';
 			$arr['my_requi_active'] = 'active';
 			return $arr;
+		}  else if($mClass=='inventory' && $mMethod=='report') {
+			$arr['invtry_open'] = 'active';
+			$arr['inreport_active'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='products') {
+			$arr['invtry_open'] = 'active';
+			// $arr['insetting_open'] = 'active';
+			$arr['product_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='low_product_list') {
+			$arr['invtry_open'] = 'active';
+			$arr['low_product_list'] = 'active';
+			return $arr;
 		} else if($mClass=='inventory' && $mMethod=='create') {
 			$arr['invtry_open'] = 'active';
 			$arr['requi_active'] = 'active';
@@ -432,15 +445,6 @@ class Xin_model extends CI_Model {
 			$arr['pusreject_open'] = 'active';
 			return $arr;
 			
-		}  else if($mClass=='inventory' && $mMethod=='report') {
-			$arr['invtry_open'] = 'active';
-			$arr['inreport_active'] = 'active';
-			return $arr;
-		} else if($mClass=='inventory' && $mMethod=='products') {
-			$arr['invtry_open'] = 'active';
-			$arr['insetting_open'] = 'active';
-			$arr['product_open'] = 'active';
-			return $arr;
 		} else if($mClass=='inventory' && $mMethod=='supplier') {
 			$arr['invtry_open'] = 'active';
 			$arr['insetting_open'] = 'active';
