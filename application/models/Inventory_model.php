@@ -504,7 +504,7 @@ class inventory_model extends CI_Model
 		->join("product_unit", "product_unit.id = products.unit_id");
 	
 		if ($statusC == null) {
-			$this->db->where("products.quantity < products.order_level");
+			$this->db->where("products.quantity <= products.order_level");
 		}
 	
 		// $this->db->order_by('products.quantity', 'ASC');
