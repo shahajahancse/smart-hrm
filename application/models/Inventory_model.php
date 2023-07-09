@@ -32,29 +32,74 @@ class inventory_model extends CI_Model
 	   return $this->db->insert($table, $data);
 	}
 
+
+	// ************* purchase part ********************
 	public function purchase_products_requisition($id,$role_id){
+<<<<<<< HEAD
 		// dd($id .' = '. $role_id);
 		$this->db->select('
-				xin_employees.first_name,
-				xin_employees.last_name, 
-				product_supplier.name,
-				product_supplier.company,
-				products_purches.id,
-				products_purches.user_id,
-				products_purches.status,
-				products_purches.created_at,
-				products_purches.updated_by
+				p.id,
+				p.user_id,
+				p.supplier,
+				p.status,
+				p.created_at,
+				p.updated_by,
+				emp.first_name,
+				emp.last_name, 
+				ps.name,
+				ps.company,
 			')
-		->from('product_supplier')
-		->from('products_purches')
-		->from('xin_employees')
-		->where("products_purches.user_id = xin_employees.user_id")
-		->where("products_purches.supplier =product_supplier.id")
-		->order_by('products_purches.id', 'desc');
+		->from('products_purches as p')
+		->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left')
+		->join('product_supplier as ps', 'ps.id = p.supplier', 'left')
+		->order_by('p.id', 'desc');
+=======
+>>>>>>> 4f97cda5a8d4f2758af68fc4e5333726160b0fbf
 
+		if($role_id==1){
+			$this->db->select('
+					xin_employees.first_name,
+					xin_employees.last_name, 
+					product_supplier.name,
+					product_supplier.company,
+					products_purches.id,
+					products_purches.user_id,
+					products_purches.status,
+					products_purches.created_at,
+					products_purches.updated_by
+				')
+			->from('product_supplier')
+			->from('products_purches')
+			->from('xin_employees')
+			->where("products_purches.user_id = xin_employees.user_id")
+			->where("products_purches.supplier =product_supplier.id")
+			->order_by('products_purches.id', 'desc');
+		}
+
+		if($role_id==4){
+			$this->db->select("
+					xin_employees.first_name,
+					xin_employees.last_name, 
+					product_supplier.name,
+					product_supplier.company,
+					products_purches.status,
+					products_purches_details.id,
+				")
+	        ->from('product_supplier')
+	        ->from('products_purches')
+	        ->from('products')
+			->where("xin_employees.user_id = products_requisitions.user_id")
+			//search by accordinig to requisition id 
+			->group_by('products_requisitions.id')
+			->order_by('products_requisitions.id', 'desc');
+		}
 		// dd($this->db->get()->result());
 		return	$this->db->get()->result();
 	} 
+
+
+	// ************* purchase part end ********************
+
 	public function purchase_products_status($id,$role_id,$status){
 
 		if($role_id==1){

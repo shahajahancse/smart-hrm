@@ -236,7 +236,7 @@ class Inventory extends MY_Controller {
 		}
 	}
 
-		public function requsition_approvedd($id){
+	public function requsition_approvedd($id){
 		// dd($id);
 		$log_user=$_SESSION['username']['user_id'];
 		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
@@ -255,6 +255,7 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+      
 		if($session['role_id']==3){;
 		$user_id=$session['user_id'];
 		};
@@ -269,7 +270,7 @@ class Inventory extends MY_Controller {
 		}else{
 			$data['requisition_id'] 	 = '';
 		}
-		
+		// dd($data);
 		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data);
 	}
@@ -389,97 +390,106 @@ class Inventory extends MY_Controller {
 
 	public function purchase($id = null)
 	{
-			$session = $this->session->userdata('username');
-			//   dd($session);
-			if(empty($session)){ 
-				redirect('admin/');
-			}
-			
+		$session = $this->session->userdata('username');
+		//   dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		
 
-			//   //Validation
-			$this->form_validation->set_rules('spl_name', 'Sapplier name', 'required|trim');
-			$this->form_validation->set_rules('cmp_name', 'select category', 'required|trim');
-			$this->form_validation->set_rules('cat_id[]', 'select category', 'required|trim');
-			$this->form_validation->set_rules('sub_cate_id[]', 'select category', 'required|trim');
-			$this->form_validation->set_rules('product_id[]', 'item name', 'required|trim');
-			$this->form_validation->set_rules('quantity[]', 'Quantity', 'required|trim');
+		//Validation
+		// $this->form_validation->set_rules('spl_name', 'Sapplier name', 'required|trim');
+		// $this->form_validation->set_rules('cmp_name', 'select category', 'required|trim');
+		$this->form_validation->set_rules('cat_id[]', 'select category', 'required|trim');
+		$this->form_validation->set_rules('sub_cate_id[]', 'select category', 'required|trim');
+		$this->form_validation->set_rules('product_id[]', 'item name', 'required|trim');
+		$this->form_validation->set_rules('quantity[]', 'Quantity', 'required|trim');
 
 
 		//   //Validate and input data
 		if ($this->form_validation->run() == true){
-			$supplier_id=$_POST['spl_name'];
-			$company=$_POST['cmp_name'];
-			$ids=$this->Inventory_model->save('products_purches', ['user_id'=>$session['user_id'],'	supplier'=>$supplier_id]);
-			$last_id=$this->db->insert_id();
+			// $supplier_id=$_POST['spl_name'];
+			// $company=$_POST['cmp_name'];
+			$ids=$this->Inventory_model->save('products_purches', ['user_id'=>$session['user_id']]);
+			$last_id = $this->db->insert_id();
 			
 			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
 				$form_data[] = array( 
-					'product_id'	 => $_POST['product_id'][$i],
-					'quantity'		 => $_POST['quantity'][$i],
-					'purches_id' => $last_id,
-				);}
-				//   dd($form_data);
+					'purches_id'	  => $last_id,
+					'product_id'	  => $_POST['product_id'][$i],
+					'quantity'		  => $_POST['quantity'][$i],
+					'approx_amount'	  => $_POST['approx_amount'][$i],
+					'approx_t_amount' => $_POST['total_amount'][$i],
+				);
+			}
+			//   dd($form_data);
 
-				if ($hid = $this->input->post('hidden_id')) {
-					$this->db->where('id', $hid)->update_batch('products_purches_details', $form_data);
-					$this->session->set_flashdata('success', 'Successfully Updated Done');
+			if ($hid = $this->input->post('hidden_id')) {
+				$this->db->where('id', $hid)->update_batch('products_purches_details', $form_data);
+				$this->session->set_flashdata('success', 'Successfully Updated Done');
+			} else {
+				if($this->db->insert_batch('products_purches_details', $form_data)){
+					$this->session->set_flashdata('success', 'Successfully Insert Done');
 				} else {
-					if($this->db->insert_batch('products_purches_details', $form_data)){
-						$this->session->set_flashdata('success', 'Successfully Insert Done');
-					} else {
-						$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
-					}
-				}		
-				
-				
-				return redirect('admin/inventory/purchase');
-			}
+					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+				}
+			}		
+		}
 
-			//Dropdown
-			$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
-			$data['breadcrumbs']	= 'Store';
-			// $data['path_url'] 		= 'inventory';
-			$data['categorys']		= $this->db->get("products_categories")->result();
-			$data['products'] 		= $this->Inventory_model->purchase_products_requisition($session['user_id'],$session['role_id']);
+		//Dropdown
+		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Store';
+		// $data['path_url'] 		= 'inventory';
+		// $data['categorys']		= $this->db->get("products_categories")->result();
+		$data['products'] 		= $this->Inventory_model->purchase_products_requisition($session['user_id'],$session['role_id']);
 
-			// dd($data['products']);
-			$data['results'] 		= $this->Inventory_model->product_list();
-			$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-			$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
-			$data['units'] 			= $this->db->get("product_unit")->result();
-			$data['col'] 			= $id;
-			$data['user_role_id'] 	= $session['role_id'];
-			if ($id != null) {
-				$data['row'] 		= $this->db->where('id',$id)->get("products")->row();
-			}
-			$data['subview'] 		= $this->load->view("admin/inventory/purchase", $data, TRUE);
-									$this->load->view('admin/layout/layout_main', $data); //page load
-    }
+		// dd($data['products']);
+		/*$data['results'] 		= $this->Inventory_model->product_list();
+		$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
+		$data['company'] 		= $this->db->distinct()->select('company')->get("product_supplier")->result();
+		$data['units'] 			= $this->db->get("product_unit")->result();
+		$data['col'] 			= $id;*/
+
+		$data['user_role_id'] 	= $session['role_id'];
+		if ($id != null) {
+			$data['row'] 		= $this->db->where('id',$id)->get("products")->row();
+		}
+		$data['subview'] 		= $this->load->view("admin/inventory/purchase", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data); //page load
+	}
 
 	public function purchase_create($id = null)
 	{
-			$session = $this->session->userdata('username');
-			//   dd($session);
-			if(empty($session)){ 
-				redirect('admin/');
-			}
-			//Dropdown
-			$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
-			$data['breadcrumbs']	= 'Store';
-			$data['categorys']		= $this->db->get("products_categories")->result();
+		$session = $this->session->userdata('username');
+		//   dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		//Dropdown
+		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Store';
 
-			// dd($data['products']);
-			$data['results'] 		= $this->Inventory_model->product_list();
-			$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-			$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
-			$data['units'] 			= $this->db->get("product_unit")->result();
-			$data['col'] 			= $id;
-			$data['user_role_id'] 	= $session['role_id'];
-			if ($id != null) {
-				$data['row'] 		= $this->db->where('id',$id)->get("products")->row();
-			}
-			$data['subview'] 		= $this->load->view("admin/inventory/purchase_create", $data, TRUE);
-									$this->load->view('admin/layout/layout_main', $data); //page load
+		// dd($data['products']);
+		$data['results'] 		= $this->Inventory_model->product_list();
+		$data['categorys']		= $this->db->get("products_categories")->result();
+		$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
+		$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
+		$data['units'] 			= $this->db->get("product_unit")->result();
+		$data['col'] 			= $id;
+		$data['user_role_id'] 	= $session['role_id'];
+		if ($id != null) {
+			$data['row'] 		= $this->db->where('id',$id)->get("products")->row();
+		}
+		$data['subview'] 		= $this->load->view("admin/inventory/purchase_create", $data, TRUE);
+								$this->load->view('admin/layout/layout_main', $data); //page load
+    }
+
+    function product_purchase_edit($id) {
+
+    }
+
+    function product_purchase_approved($id) {
+    	
     }
 
 	public function purchase_panding_list()
@@ -507,72 +517,70 @@ class Inventory extends MY_Controller {
 
 	public function purchase_aproved_list()
 	{
-			$session = $this->session->userdata('username');
-			//   dd($session);
-			if(empty($session)){ 
-				redirect('admin/');
-			}
-			//Dropdown
-			$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
-			$data['breadcrumbs']	= 'Purchase Aproved';
-			$data['categorys']		= $this->db->get("products_categories")->result();
-			$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],2);
-			// dd($data['products']);
-			$data['results'] 		= $this->Inventory_model->product_list();
-			$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-			$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
-			$data['units'] 			= $this->db->get("product_unit")->result();
-			$data['user_role_id'] 	= $session['role_id'];
-			$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
-									$this->load->view('admin/layout/layout_main', $data); //page load
+		$session = $this->session->userdata('username');
+		//   dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		//Dropdown
+		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Purchase Aproved';
+		$data['categorys']		= $this->db->get("products_categories")->result();
+		$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],2);
+		// dd($data['products']);
+		$data['results'] 		= $this->Inventory_model->product_list();
+		$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
+		$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
+		$data['units'] 			= $this->db->get("product_unit")->result();
+		$data['user_role_id'] 	= $session['role_id'];
+		$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
+								$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
 	public function purchase_order_received_list()
 	{
-			$session = $this->session->userdata('username');
-			//   dd($session);
-			if(empty($session)){ 
-				redirect('admin/');
-			}
-			//Dropdown
-			$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
-			$data['breadcrumbs']	= 'Purchase Delivered';
-			$data['categorys']		= $this->db->get("products_categories")->result();
-			$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],3);
-			// dd($data['products']);
-			$data['results'] 		= $this->Inventory_model->product_list();
-			$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-			$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
-			$data['units'] 			= $this->db->get("product_unit")->result();
-			$data['user_role_id'] 	= $session['role_id'];
-			$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
-									$this->load->view('admin/layout/layout_main', $data); //page load
+		$session = $this->session->userdata('username');
+		//   dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		//Dropdown
+		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Purchase Delivered';
+		$data['categorys']		= $this->db->get("products_categories")->result();
+		$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],3);
+		// dd($data['products']);
+		$data['results'] 		= $this->Inventory_model->product_list();
+		$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
+		$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
+		$data['units'] 			= $this->db->get("product_unit")->result();
+		$data['user_role_id'] 	= $session['role_id'];
+		$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
+								$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
 	public function purchase_reject_list()
 	{
-			$session = $this->session->userdata('username');
-			//   dd($session);
-			if(empty($session)){ 
-				redirect('admin/');
-			}
-			//Dropdown
-			$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
-			$data['breadcrumbs']	= 'Purchase Reject';
-			$data['categorys']		= $this->db->get("products_categories")->result();
-			$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],4);
-			// dd($data['products']);
-			$data['results'] 		= $this->Inventory_model->product_list();
-			$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-			$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
-			$data['units'] 			= $this->db->get("product_unit")->result();
-			$data['user_role_id'] 	= $session['role_id'];
-			$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
-									$this->load->view('admin/layout/layout_main', $data); //page load
+		$session = $this->session->userdata('username');
+		//   dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		//Dropdown
+		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Purchase Reject';
+		$data['categorys']		= $this->db->get("products_categories")->result();
+		$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],4);
+		// dd($data['products']);
+		$data['results'] 		= $this->Inventory_model->product_list();
+		$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
+		$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
+		$data['units'] 			= $this->db->get("product_unit")->result();
+		$data['user_role_id'] 	= $session['role_id'];
+		$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
+								$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 	
-
-
 	public function product_purchase_details($id)	{
 		//  dd($id);
 		// dd($_SESSION);
@@ -643,6 +651,8 @@ class Inventory extends MY_Controller {
 
 	//approved by prisal product purches edit
 	public function product_persial_approved($id){
+
+		// dd($id);
 
 	    $session = $this->session->userdata('username');
 		$all_detail=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
