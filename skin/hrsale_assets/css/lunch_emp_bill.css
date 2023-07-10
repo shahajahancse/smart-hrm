@@ -96,3 +96,23 @@ table {
   border-top: 1px solid;
   max-width: 97% !important;
 }
+.danger{
+  height: 27px;
+  width: 67px;
+  display: inline-block;
+  padding: 3px;
+  color: black;
+  border-radius: 13px;
+  text-align: center;
+  border: 1px solid #fc0000;
+}
+.suncces{
+  height: 27px;
+  width: 67px;
+  display: inline-block;
+  padding: 3px;
+  color: black;
+  border-radius: 13px;
+  text-align: center;
+  border: 1px solid #00ff15;
+}
