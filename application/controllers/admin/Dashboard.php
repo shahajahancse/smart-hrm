@@ -431,6 +431,7 @@ class Dashboard extends MY_Controller {
 		$emp_id = $this->input->post('sql');
     	
     	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
+		// dd($salary_month);
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;
