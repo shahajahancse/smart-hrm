@@ -1056,6 +1056,20 @@ public function pay_vend_ajax_request()
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+     
+        $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
+        $data['first_date']=$result->end_date;
+        $data['second_date']=$result->next_date;
+        $data['empdata'] = $this->db
+        ->select('lunch_payment.*, xin_employees.first_name, xin_employees.last_name, xin_designations.designation_name')
+        ->from('lunch_payment')
+        ->join('xin_employees', 'lunch_payment.emp_id = xin_employees.user_id')
+        ->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id')
+        ->where('lunch_payment.end_date', $result->end_date)
+        ->where('lunch_payment.emp_id', $session['user_id'])
+        ->order_by('lunch_payment.id', 'desc')
+        ->get()
+        ->result();
 
 		$data['session'] 			= $session;
 		$data['title'] 			= 'Lunch | '.$this->Xin_model->site_title();
