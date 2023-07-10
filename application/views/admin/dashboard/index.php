@@ -22,3 +22,14 @@
 		$this->load->view('admin/dashboard/employee_dashboard');
 	endif;
 ?>
+
+
+
+
+
+
+
+
+
+
+
