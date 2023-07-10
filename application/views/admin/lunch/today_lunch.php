@@ -168,9 +168,10 @@ $(document).ready(function() {
                 },
                 success: function(response) {
                     // Hide the modal
+                    $('#lunchoffmodal').modal('hide');
                     document.getElementById("loading").style.visibility = "hidden";
 
-                    $('#lunchoffmodal').modal('hide');
+                  
                     window.location.href = "<?= base_url('admin/lunch/') ?>";
                 },
                 error: function(xhr, status, error) {
