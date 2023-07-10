@@ -17,6 +17,7 @@ $session = $this->session->userdata('username');
         }
        .t2 {float: left;color: #000;font-family: Roboto;font-size: 15px;font-style: normal;font-weight: 400;line-height: 22.5px;
     text-transform: capitalize;
+    padding-left:5px;
   }
   .te{
 color: var(--white, #FFF);
@@ -34,7 +35,7 @@ line-height: 100%;
 
 <div class="row">
     <div class="col-md-12">
-        <span style="t2">If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
+        <span class="t2" >If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
         <span class="t1 btn" id="requisition">requisition</span>
     </div>
     <div class="row">
