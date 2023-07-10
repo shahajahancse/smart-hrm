@@ -2,6 +2,12 @@
 // dd($results)
 
 ?>
+<style>
+    th, td {
+        text-align: center !important;
+    }
+</style>
+
 <table id="datatbale" style="width: 100%;" class="table">
     <thead>
         <tr>
@@ -30,7 +36,7 @@
             <td><?php
                 if(isset($raw->purchase_status)){
                     $type='in';
-                  
+                    $class='style="color: blue;"';
                     $stat=$raw->purchase_status;
                    if($stat==1){
                     $status='Pending';
@@ -42,6 +48,7 @@
                     $status='Rejected';
                 }
                 }elseif(isset($raw->requisition_status)){
+                    $class='style="color: red;"';
                     $type='out';
                     $stat=$raw->requisition_status;
                     if($stat==5){
@@ -57,7 +64,7 @@
                 }
             }
                 ?>
-              <span>  <?=$type?></span>
+              <span <?= $class ?> >  <?=$type?></span>
               <span> (<?= $status ?>)</span>
             </td>
         </tr>
