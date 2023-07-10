@@ -281,16 +281,14 @@ class Salary_model extends CI_Model {
     }
 
     function getpassedmonthsalary($emp_id)
-{
+    {
     $this->db->select('*');
     $this->db->from('xin_salary_payslips');
     $this->db->where('employee_id', $emp_id);
     $this->db->order_by('payslip_id', 'desc');
     $this->db->limit(2); // Retrieve 1 row starting from the second-to-last row
     return $this->db->get()->result();
-   
-
-}
+    }
 
 
     public function get_employee_info($emp_ids = null)
@@ -382,6 +380,35 @@ class Salary_model extends CI_Model {
         {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
+    }
+    public function getall_salary_with_id($emp_id)
+    {
+        $this->db->select('
+            sp.*,
+            em.employee_id,
+            em.first_name,
+            em.last_name,
+            em.date_of_joining,
+            xin_departments.department_name,
+            xin_designations.designation_name,
+            eb.account_number,
+        ');
+
+        $this->db->from('xin_salary_payslips as sp');
+        $this->db->from('xin_employees as  em');
+        $this->db->from('xin_departments');
+        $this->db->from('xin_designations');
+        $this->db->join('xin_employee_bankaccount as eb', 'sp.employee_id = eb.employee_id', 'left');
+        $this->db->where("sp.employee_id", $emp_id);
+        $this->db->where('sp.employee_id = em.user_id');
+        $this->db->where('sp.department_id = xin_departments.department_id');
+        $this->db->where('sp.designation_id = xin_designations.designation_id');
+        $this->db->order_by('sp.payslip_id', "DESC");
+
+        $data = $this->db->get()->result();
+         return $data;
+    
+        
     }
 
 

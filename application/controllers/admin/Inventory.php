@@ -49,6 +49,33 @@ class Inventory extends MY_Controller {
 		$data['user_role_id'] 	= $session['role_id'];
 		// dd($data);
 		if(!empty($session)){ 
+			$data['subview'] = $this->load->view("admin/inventory/index1", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+	public function index1(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store';
+		if($session['role_id']== 1 || $session['role_id']== 2 || $session['role_id']== 4 ){
+			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+	    //    dd($data['products']);
+		}
+		if( $session['role_id'] == 3) {
+			// $data['results'] 	= $this->Inventory_model->requisition_details($session['user_id'],$id=null);
+		    // dd($data['results']);
+			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		    //   dd($data['products']);
+		}
+		$data['user_role_id'] 	= $session['role_id'];
+		// dd($data);
+		if(!empty($session)){ 
 			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -470,6 +497,7 @@ class Inventory extends MY_Controller {
 		$data['company'] 		= $this->db->distinct()->select('company')->get("product_supplier")->result();
 		$data['units'] 			= $this->db->get("product_unit")->result();
 		$data['col'] 			= $id;*/
+		$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
 
 		$data['user_role_id'] 	= $session['role_id'];
 		if ($id != null) {
@@ -709,8 +737,8 @@ class Inventory extends MY_Controller {
 	
 	}
 
-	public function product_purchase_delivered($id){
-    
+	public function product_purchase_delivered(){
+		$id=$this->input->post('id');
          $pr1=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
 					$mergedArray = [];
 			foreach ($pr1 as $item) {
@@ -757,17 +785,12 @@ class Inventory extends MY_Controller {
 	 
 			//  foreach ($array as $row) {
 			// 	 $ff = $row->qty + $row->ap_quantity;
-			// 	 $data = array(
-			// 		 'id' => $row->product_id,
-			// 		'product_name' => $row->product_name,
-			// 		'quantity' => $row->qty + $row->ap_quantity,
-			// 	 ); 
+				 $data = array(
+					 'supplier' => $this->input->post('spl_name'),
+					
+				 ); 
 				 
-			// 	 $deliver = $this->db->where('id',$row->product_id)->update('products', $data);
-			//  }
-		
-	 
-
+				 $deliver = $this->db->where('id',$id)->update('products_purches', $data);
 			$deliver=$this->db->where('id',$id)->update('products_purches',['status'=>3]);
 			if($deliver){
 				 $this->session->set_flashdata('success', 'Delivered Successfully.');

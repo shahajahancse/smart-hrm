@@ -93,7 +93,7 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
                 if (($raw->p_stutus == 'Absent' && $st == true) || $raw->p_stutus == 'absent' && $st == true) { ?>
         <tr>
             <td colspan="5">
-                <p style="font-size: 18px; color: black; background-color: aquamarine;">Inactive</p>
+                <p style="font-size: 18px; color: black; background-color: aquamarine;">Absent</p>
             </td>
         </tr>
         <?php $st = false; } ?>
@@ -103,10 +103,10 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
             <th scope="row"><?= $key + 1 ?></th>
             <td><?=  $raw->first_name .' '. $raw->last_name; ?></td>
             <td><?= $raw->p_stutus ?></td>
-            <?php $set = (isset($raw->meal_amount) && $raw->meal_amount != null) ? $raw->meal_amount : 1 ?>
+            <?php $set = (isset($raw->meal_amount) && $raw->meal_amount != null) ? $raw->meal_amount : 0 ?>
             <td><input max="1" min="0" type="number" onchange="summeal()"
                     <?= ($raw->p_stutus == 'present')? 'class="all_meal activmeal"'  : 'class="activmeal"'; ?>name="m_amount[]"
-                    value="<?= ($ps == 'no' && $raw->p_stutus == 'Absent')? 0 : $set; ?>" style="width: 83px;"></td>
+                    value="<?= $set; ?>" style="width: 83px;"></td>
             <td><input type="text" name="comment[]" value="<?= isset($raw->comment) ? $raw->comment : ''; ?>"></td>
         </tr>
         <?php } ?>
@@ -168,9 +168,10 @@ $(document).ready(function() {
                 },
                 success: function(response) {
                     // Hide the modal
+                    $('#lunchoffmodal').modal('hide');
                     document.getElementById("loading").style.visibility = "hidden";
 
-                    $('#lunchoffmodal').modal('hide');
+                  
                     window.location.href = "<?= base_url('admin/lunch/') ?>";
                 },
                 error: function(xhr, status, error) {
