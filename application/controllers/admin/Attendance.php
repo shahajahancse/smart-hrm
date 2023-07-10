@@ -659,6 +659,21 @@ class Attendance extends MY_Controller {
         echo json_encode($data);
     }
 
+	// attandancevied code here
+	public function employee_attendance(){
+        $session = $this->session->userdata('username');
+		//  dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$data['session'] 			= $session;
+		$data['title'] 			= 'Attendance | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Attendance | Employee Attendance';
+		$data['subview'] 		= $this->load->view("admin/attendance/employee_attandance", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data); 
+    }
+
 
 
 }
