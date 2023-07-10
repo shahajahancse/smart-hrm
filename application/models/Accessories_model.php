@@ -79,6 +79,46 @@ public function get_product_reports_info($id=null,$status=null,$category=null){
     return $data;          
 }
 
-
+public function get_user_reports_info($id){
+    // dd("Ko");
+    // dd($id);
+    $this->db->select(' 
+                product_accessories.id as a_id,
+                product_accessories.cat_id,
+                product_accessories.device_model,
+                product_accessories.device_name_id,
+                product_accessories.description,
+                product_accessories.status,
+                product_accessories.remark,
+                product_accessories.use_number,
+                product_accessories.number,
+                product_accessories.image,
+                product_accessories.user_id,
+                product_accessory_categories.cat_name,
+                product_accessory_categories.cat_short_name,
+                product_accessories_model.model_name,
+                mobile_numbers.number,
+                xin_employees.first_name,
+                xin_employees.last_name,
+                xin_departments.department_name,
+                xin_designations.designation_name,
+    ');
+    $this->db->from('product_accessories');
+    $this->db->join('product_accessories_model','product_accessories.device_model = product_accessories_model.id','left');
+    $this->db->join('product_accessory_categories','product_accessories.cat_id    = product_accessory_categories.id','left');
+    $this->db->join('mobile_numbers','product_accessories.number                  = mobile_numbers.id','left');    
+    $this->db->join('xin_employees','product_accessories.user_id                  = xin_employees.user_id','left');
+    $this->db->join('xin_departments','xin_departments.department_id              = xin_employees.department_id','left');
+    $this->db->join('xin_designations','xin_designations.designation_id           = xin_employees.designation_id','left');
+    if($id !=null){
+        $this->db->where('product_accessories.user_id',$id);
+        $data=$this->db->get()->result();
+    } 
+    else {
+        $data=$this->db->get()->result();
+    }
+   
+    return $data;          
+}
 
 }

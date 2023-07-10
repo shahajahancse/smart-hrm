@@ -27,12 +27,19 @@ class Salary_model extends CI_Model {
             $department_id   = $row->department_id;
             $designation_id  = $row->designation_id;
             $salary          = $row->salary;
-            
+
+            // skip salary proccess
+            if($salary < 1) {
+                continue;
+            }
+            $salary_month = trim(substr($end_date,0,7));
+            $join_month = trim(substr($doj,0,7));
+            if (strtotime($join_month) > strtotime($salary_month)) {
+                continue;
+            } 
 
             //=======PRESENT STATUS======
             $join_left_resign = 0;
-            $salary_month = trim(substr($end_date,0,7));
-            $join_month = trim(substr($doj,0,7));
             $resign_check   = $this->resign_check($emp_id, $first_date, $end_date);
             $left_check     = $this->left_check($emp_id, $first_date, $end_date);
 
@@ -320,7 +327,7 @@ class Salary_model extends CI_Model {
             em.date_of_joining,
             xin_departments.department_name,
             xin_designations.designation_name,
-            xin_employee_bankaccount.account_number,
+            eb.account_number,
 
             sp.salary_month,
             sp.basic_salary,
@@ -348,7 +355,8 @@ class Salary_model extends CI_Model {
         $this->db->from('xin_employees as  em');
         $this->db->from('xin_departments');
         $this->db->from('xin_designations');
-        $this->db->from('xin_employee_bankaccount');
+        $this->db->join('xin_employee_bankaccount as eb', 'sp.employee_id = eb.employee_id', 'left');
+        // $this->db->from('xin_employee_bankaccount');
 
         /*if ($status != null && $status != 0 && $status != '') {
             $this->db->where("xin_attendance_time.status", $status);
@@ -360,7 +368,7 @@ class Salary_model extends CI_Model {
         $this->db->where('sp.employee_id = em.user_id');
         $this->db->where('sp.department_id = xin_departments.department_id');
         $this->db->where('sp.designation_id = xin_designations.designation_id');
-        $this->db->where('sp.employee_id = xin_employee_bankaccount.employee_id');
+        // $this->db->where('sp.employee_id = xin_employee_bankaccount.employee_id');
 
         $this->db->group_by('sp.employee_id');
         $this->db->order_by('sp.basic_salary', "DESC");

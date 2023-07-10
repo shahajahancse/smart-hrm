@@ -28,70 +28,51 @@ $(function() {
 });
 </script>
 <?php }?>
-
-          <!-- <tr>
-                    <th class="text-center">Comany Name</th>
-                    <th class="text-center">Supplier Name</th>
-                </tr>
-                <tr>
-                    <td>
-                        <select name="cmp_name" class="form-control" id="cmp_name" required>
-                            <option id="cmp" value="">Select Company Name</option>
-                            <?php foreach($company as $cmp): ?>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <?php echo form_open('admin/inventory/product_purchase_delivered/')?>
+                <input type="hidden" name="id" id="rawid" value="">
+                <table>
+                    <tr>
+                        <th class="text-center">Comany Name</th>
+                        <th class="text-center">Supplier Name</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select name="cmp_name" class="form-control" id="cmp_name" required>
+                                <option id="cmp" value="">Select Company Name</option>
+                                <?php foreach($company as $cmp): ?>
                                 <option value="<?php echo $cmp->company; ?>"><?php echo $cmp->company; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </td>
-                    <td>
-                        <select name="spl_name" class="form-control" id="spl_name" required>
-                            <option id="spl" value="">Select Supplier Name</option>
-                        </select>
-                    </td>
-                </tr> -->
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="spl_name" class="form-control" id="spl_name" required>
+                                <option id="spl" value="">Select Supplier Name</option>
+                            </select>
+                        </td>
+                    </tr>
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-     <?php echo form_open('admin/inventory/product_purchase_delivered/')?>
-     <input type="hidden" name="id" id="rawid" value="">
-        <table>
-           <tr>
-                    <th class="text-center">Comany Name</th>
-                    <th class="text-center">Supplier Name</th>
-                </tr>
-                <tr>
-                    <td>
-                        <select name="cmp_name" class="form-control" id="cmp_name" required>
-                            <option id="cmp" value="">Select Company Name</option>
-                            <?php foreach($company as $cmp): ?>
-                                <option value="<?php echo $cmp->company; ?>"><?php echo $cmp->company; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </td>
-                    <td>
-                        <select name="spl_name" class="form-control" id="spl_name" required>
-                            <option id="spl" value="">Select Supplier Name</option>
-                        </select>
-                    </td>
-                </tr>
+                </table>
 
-        </table>
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
-        <?php echo form_close()?>
-      </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                <?php echo form_close()?>
+            </div>
+
+        </div>
     </div>
-  </div>
 </div>
 
 
@@ -186,9 +167,9 @@ $(function() {
                                         href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
                                 </div>
                                 <?php } ?>
-                          </div>
+                            </div>
                             <?php }elseif($user_role_id==4){ ?>
-                              <div class="dropdown">
+                            <div class="dropdown">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
                                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -203,7 +184,7 @@ $(function() {
                                     <a style="padding-left:5px;"
                                         href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a>
                                     <br>
-                                   
+
                                     <a style="padding-left:5px; "
                                         href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Reject</a>
                                     <br>
@@ -217,7 +198,8 @@ $(function() {
                                     aria-labelledby="dropdownMenuButton">
                                     <a style="padding-left:5px;"
                                         href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                    <a style="padding-left:5px;" data-toggle="modal" data-target="#exampleModalCenter" id="<?= $rows->id ?>" onclick="openmod(this)" >Order
+                                    <a style="padding-left:5px;" data-toggle="modal" data-target="#exampleModalCenter"
+                                        id="<?= $rows->id ?>" onclick="openmod(this)">Order
                                         Receive</a> <br>
                                 </div>
                                 <?php }elseif($rows->status==3) { ?>
@@ -235,10 +217,10 @@ $(function() {
                                         href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
                                 </div>
                                 <?php } ?>
-                          </div>
+                            </div>
 
                             <?php }elseif($user_role_id==3){ ?>
-                              <div class="dropdown">
+                            <div class="dropdown">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
                                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -259,7 +241,7 @@ $(function() {
                                     aria-labelledby="dropdownMenuButton">
                                     <a style="padding-left:5px;"
                                         href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                             
+
                                 </div>
                                 <?php }elseif($rows->status==3) { ?>
                                 <div class="dropdown-menu"
@@ -276,7 +258,7 @@ $(function() {
                                         href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
                                 </div>
                                 <?php } ?>
-                          </div>
+                            </div>
 
                             <?php } ?>
                         </td>
@@ -288,48 +270,46 @@ $(function() {
     </div>
 </div>
 <script>
-  
-    //Company Supplier
-    $(document).ready(function() {
-        // Handle change event of the company name select field
-        $('#cmp_name').change(function() {
-            var companyName = $(this).val();
-            // var url = 'fetch_suppliers.php'; // Replace with the URL to fetch suppliers based on the selected company
-            var url='<?php echo base_url('admin/inventory/get_supplier_ajax/');?>'
-            // Make an AJAX request to fetch the suppliers
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: { companyName: companyName },
-                dataType: 'json',
-                success: function(func_data) {
-                    // console.log(response[0]['name']);
-                    var options = '';
-                    // $.each(response, function(index, supplier) {
-                       
-                    //     options += '<option value="' + supplier.id + '">' + supplier.name + '</option>';
-                    // });
+//Company Supplier
+$(document).ready(function() {
+    // Handle change event of the company name select field
+    $('#cmp_name').change(function() {
+        var companyName = $(this).val();
+        // var url = 'fetch_suppliers.php'; // Replace with the URL to fetch suppliers based on the selected company
+        var url = '<?php echo base_url('admin/inventory/get_supplier_ajax/');?>'
+        // Make an AJAX request to fetch the suppliers
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                companyName: companyName
+            },
+            dataType: 'json',
+            success: function(func_data) {
+                // console.log(response[0]['name']);
+                var options = '';
+                // $.each(response, function(index, supplier) {
 
-                    $.each(func_data,function(id,name)
-                {
+                //     options += '<option value="' + supplier.id + '">' + supplier.name + '</option>';
+                // });
 
-                  options += '<option value="' + id + '">' + name + '</option>';
-                  
+                $.each(func_data, function(id, name) {
+
+                    options += '<option value="' + id + '">' + name + '</option>';
+
                 });
-                      $('#spl_name').html(options);
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
-                }
-            });
+                $('#spl_name').html(options);
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+            }
         });
     });
-
-
+});
 </script>
 <script>
- function openmod(data){
+function openmod(data) {
 
-  document.getElementById('rawid').value = data.id;
- }
+    document.getElementById('rawid').value = data.id;
+}
 </script>

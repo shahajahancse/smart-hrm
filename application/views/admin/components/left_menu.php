@@ -321,7 +321,7 @@ if($theme[0]->sub_menu_icons != ''){
         <ul class="treeview-menu">
 
           <?php if(in_array('1031',$role_resources_ids)) { ?>
-          <li class="sidenav-link <?php if(!empty($arr_mod['my_requi_active']))echo $arr_mod['my_requi_active'];?>"> <a href="<?php echo site_url('admin/inventory/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> My Requisition </a> </li>
+          <li class="sidenav-link <?php if(!empty($arr_mod['my_requi_active']))echo $arr_mod['my_requi_active'];?>"> <a href="<?php echo site_url('admin/inventory/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Requisition List </a> </li>
           <?php } ?>  
 
           <!-- requisition part -->
