@@ -56,6 +56,7 @@ class Lunch extends MY_Controller {
 
     public function today_lunch($id = null)
     {
+        
         $session = $this->session->userdata('username');
         if (empty($session)) {
             redirect('admin/');
@@ -92,7 +93,6 @@ class Lunch extends MY_Controller {
         //Validate and input data
     
         if ($this->form_validation->run() == true && $this->input->post('change')==0){
-     
             $empid = $this->input->post('empid');
             $m_amount = $this->input->post('m_amount');
             $comment = $this->input->post('comment');
@@ -179,13 +179,14 @@ class Lunch extends MY_Controller {
         }
         
         if ($query->num_rows() > 0) {
-           
             $data['results'] = $this->Lunch_model->get_lunch_info(1,$date);
             $data['guest'] = $query->row();
             $data['ps'] ='yes'; 
         } else {
+         
 
             $data['results'] = $this->Lunch_model->get_lunch_info(false,$date);
+            // dd( $data['results']);
             $data['guest'] = '';
             $data['ps'] ='no';
         }
@@ -1048,5 +1049,19 @@ public function pay_vend_ajax_request()
         echo json_encode($query);
     }
 
+    // ============================employee view==============================================
+    public function lunch_emp_bill(){
+        $session = $this->session->userdata('username');
+		//  dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$data['session'] 			= $session;
+		$data['title'] 			= 'Lunch | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Lunch';
+		$data['subview'] 		= $this->load->view("admin/lunch/lunch_emp_bill", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data); 
+    }
 }
 ?>
