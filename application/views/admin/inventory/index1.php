@@ -2,37 +2,54 @@
 // dd($results); 
 $session = $this->session->userdata('username');
 ?>
-<?php $get_animate = $this->Xin_model->get_content_animate();?>
+
 <style>
-  .table {
-    width: 92%;
-    margin-bottom: 14px;
-}
+    .t1{float: right; border-radius: 4px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7); display: inline-flex;height: 41px;
+         padding: 17px 91px;justify-content: center;align-items: center;gap: 10px;flex-shrink: 0;
+         color: #FFF;
+        text-align: center;
+        font-family: Roboto;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22.5px;
+        text-transform: uppercase;
+        }
+       .t2 {float: left;color: #000;font-family: Roboto;font-size: 15px;font-style: normal;font-weight: 400;line-height: 22.5px;
+    text-transform: capitalize;
+    padding-left:5px;
+  }
+  .te{
+color: var(--white, #FFF);
+font-family: Roboto;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 100%;
+  }
+
 </style>
-<?php if($this->session->flashdata('success')):?>
-  <div class="alert alert-success" id="flash_message">
-    <?php echo $this->session->flashdata('success');?>
-  </div>
-<?php endif; ?> 
-<script>
-  $(function() {$("#flash_message").hide(2000);});
-</script>  
-<?php if($this->session->flashdata('warning')):?>
-  <div class="alert alert-warning"id="flash_message1">
-    <?php echo $this->session->flashdata('warning');?>
-  </div>
-<?php endif; ?> 
-<script>
-  $(function() {$("#flash_message1").hide(2000);});
-</script> 
+<?php $get_animate = $this->Xin_model->get_content_animate();?>
 
+<link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/main.css') ?>">
 
-<div class="box <?php echo $get_animate;?>" style="margin-top:20px">
-  <div class="box-header with-border">
-    <h3 class="box-title">Requisition List</h3>
-    <a class="btn btn-sm btn-primary pull-right" href="<?= base_url('admin/inventory/create');?>">Add New</a>
-  </div>
-  <div class="box-body">
+<div class="row">
+    <div class="col-md-12">
+        <span class="t2" >If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
+        <span class="t1 btn" id="requisition">requisition</span>
+    </div>
+    <div class="row">
+        <div class="col-md-2"style=" display: inline-flex;padding: 9px 46px;justify-content: center;gap: 10px;">
+            <h4 >Using List</h3>
+        </div>
+        <div class="col-md-5"style=" width:18.666667%;  text-align:left; display: inline-flex;padding: 5px 46px;justify-content: center;align-items: center;gap: 10px;">
+              <h4 class="btn te" style="border-radius: 2px;
+               background: var(--g, #2DCA8C);">Requsiton information</h4>
+        </div>
+    </div>
+ 
+
+<div class="box-body">
     <div class="box-datatable" >
     <!-- <input type="hidden" value="1" id="count"> -->
       <table class="datatables-demo table table-striped table-bordered" id="purchase_table" style="width:100%">
@@ -139,11 +156,48 @@ $session = $this->session->userdata('username');
       </table>
     </div>
   </div>
+
 </div>
-<script type="text/javascript">
-   $(document).ready(function() {
 
-      $('#purchase_table').DataTable();
-   });   
+<script>
+  // Assuming you have the base URL defined somewhere
+  var base_url = "http://localhost/smart-hrm/";
 
-  </script>
+  // Retrieve the <span> element by its ID
+  var spanElement = document.getElementById("requisition");
+
+  // Add a click event listener to the <span> element
+  spanElement.addEventListener("click", function() {
+    // Redirect the user to the desired URL
+    window.location.href = base_url + "/create";
+  });
+</script>
+
+
+
+
+
+
+
+
+
+<!-- <div class="v167_2851 row" style="height: 52px; width:1220px;"><div class="v167_2852">
+<span class="v167_2853" left="884px">requisition</span></div><span class="v167_2854">If you need
+stationery items (Pen, Paper, Drairy etc ) or devices to work, feel free and
+fill out the requisition form</span></div> -->
+<!-- <div class="container">
+  <div class="row">
+    <div class="col-sm-9">
+    <span class="v167_2854" style="
+    padding-left: 11px;">If you need
+       stationery items (Pen, Paper, Drairy etc ) or devices to work, feel free andfill out the requisition form</span>
+    
+  </div>
+    <div class="col-sm-2" left="884px">
+    <span left="v167_2853">requisition</span></div>
+    </div>
+  
+  </div>
+</div> -->
+
+

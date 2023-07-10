@@ -115,9 +115,9 @@ public function get_user_reports_info($id){
         $data=$this->db->get()->result();
     } 
     else {
+        // $this->db->group_by('product_accessories.id');
         $data=$this->db->get()->result();
     }
-   
     return $data;          
 }
 

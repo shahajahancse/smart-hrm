@@ -698,6 +698,7 @@ public function make_id_payment(){
         $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
         echo $this->load->view("admin/lunch/lunch_jobcard", $data, TRUE);
     }
+
     public function lunch_off(){
         $session = $this->session->userdata('username');
         if (empty($session)) {
@@ -709,7 +710,6 @@ public function make_id_payment(){
         $query = $this->db->get_where('lunch', array('date' => $dateoff))->result();
         // dd($query[0]->id);
         if(count($query)>0){
-          
             $data = array(
              'total_m' => 0,
              'emp_m' => 0,
@@ -723,6 +723,7 @@ public function make_id_payment(){
              'guest_ref_id' => '',
              'guest_ref_comment' => '',
             );
+
             $this->db->where('date', $dateoff);
             if($this->db->update('lunch', $data)){
                 $lunchid=$query[0]->id;
@@ -735,6 +736,7 @@ public function make_id_payment(){
             }else{
                 echo "there was an error";
             }
+
         }else{
             $data = array(
                 'total_m' => 0,
@@ -749,14 +751,20 @@ public function make_id_payment(){
                 'guest_ref_id' => '',
                 'guest_ref_comment' => '',
                 'date' => $dateoff ,
-               );
-               if($this->db->insert('lunch', $data)){
+            );
+
+            if($this->db->insert('lunch', $data)){
                 $insert_id = $this->db->insert_id();
-                $emp = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
+
+                $dateoff = date("Y-m-d", strtotime($dateoff));
+                $emp = $this->db->select('user_id')
+                    ->where_in('status', array(1,4,5))->where('date_of_joining <=', $dateoff)
+                    ->get('xin_employees')->result();
+
+                // $emp = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4, 5)")->result();
         
-                foreach($emp as $row){
-                    $dateoff = date("Y-m-d", strtotime($dateoff));
-                    $this->db->select('*');
+                foreach($emp as $key => $row){
+                    $this->db->select('status');
                     $this->db->from('xin_attendance_time');
                     $this->db->where('employee_id', $row->user_id);
                     $this->db->where('attendance_date', $dateoff);
@@ -765,26 +773,23 @@ public function make_id_payment(){
                    
                     // dd($p_status);
                     $data2 = array(
-                    'lunch_id'      => $insert_id,
-                    'emp_id'        => $row->user_id,
-                    'meal_amount'   => 0,
-                    'p_stutus'      => $result->status,
-                    'comment'       => '',
-                    'date'          => $dateoff,
-                       );
+                        'lunch_id'      => $insert_id,
+                        'emp_id'        => $row->user_id,
+                        'meal_amount'   => 0,
+                        'p_stutus'      => $result->status,
+                        'comment'       => '',
+                        'date'          => $dateoff,
+                    );
                     $this->db->insert('lunch_details', $data2);
 
                 }
-               }else{
+            }else{
                    echo "there was an error";
-               }
-
+            }
         };
-        
-
-
 
     }
+
     public function employee_list(){
         $session = $this->session->userdata('username');
         if (empty($session)) {
