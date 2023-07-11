@@ -110,6 +110,7 @@ class Dashboard extends MY_Controller {
 				'all_jobsx' => $this->Job_post_model->five_latest_jobs(),
 				'all_jobs' => $this->Recruitment_model->get_all_jobs_last_desc()
 			);
+			// dd($data);
 			$data['subview'] = $this->load->view('admin/dashboard/index', $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -147,9 +148,14 @@ class Dashboard extends MY_Controller {
 			'all_jobsx' => $this->Job_post_model->all_jobs(),
 			'all_jobs' => $this->Recruitment_model->get_all_jobs_last_desc()
 			);
+			// dd($data);
 			$data['subview'] = $this->load->view('admin/dashboard/index', $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		}
+	}
+
+	public function chart(){
+		$this->load->view('admin/dashboard/chart');
 	}
 	
 	// get opened and closed tickets for chart
