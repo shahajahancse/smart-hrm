@@ -142,7 +142,7 @@ class Lunch extends MY_Controller {
                         'comment'       => $comment[$i],
                     );
 
-                    $rows = $this->db->where('date', $date)->('emp_id', $empid[$i])->get('lunch_details');
+                    $rows = $this->db->where('date', $date)->where('emp_id', $empid[$i])->get('lunch_details');
                     if($rows->num_rows() > 0){
                         $this->db->where('date', $date);
                         $this->db->where('emp_id', $empid[$i])->update('lunch_details', $form_data);

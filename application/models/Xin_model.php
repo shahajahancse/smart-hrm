@@ -169,7 +169,7 @@ class Xin_model extends CI_Model {
 			return $arr;
 		} else if($mClass=='employees' && $mMethod=='emp_list') {
 			$arr['eemp_active'] = 'active';
-			$arr['stff_open'] = 'active';
+			$arr['attnd_open'] = 'active';
 			return $arr;
 		} else if($mClass=='employees') {
 			$arr['emp_active'] = 'active';
@@ -240,6 +240,10 @@ class Xin_model extends CI_Model {
 			return $arr;
 		} else if($mClass=='attendance' && $mMethod=='index') {
 			$arr['attnp_active'] = 'active';
+			$arr['attnd_open'] = 'active';
+			return $arr;
+		} else if($mClass=='attendance' && $mMethod=='employee_attendance') {
+			$arr['emp_atten_active'] = 'active';
 			$arr['attnd_open'] = 'active';
 			return $arr;
 		} else if($mClass=='timesheet' && $mMethod=='attendance') {
