@@ -23,6 +23,14 @@ class Attendance_model extends CI_Model {
 
         $off_day = $this->dayoff_check($process_date);
         $holiday_day = $this->holiday_check($process_date);
+
+        // lumch auto off in holiday & weekend
+        $lunch_id = null;
+        if ($off_day == true || $holiday_day == true) {
+            $lunch_id = $this->lunch_auto_off($process_date);
+        }
+        // lumch auto off
+
         $employees = $this->get_employees($emp_ids);
 
         foreach ($employees as $key => $row) {
@@ -32,7 +40,10 @@ class Attendance_model extends CI_Model {
             $in_time  = '';
             $out_time = '';
             $clock_in_out = 0;
-            $late_status = 0;
+            $late_status = 0;            
+            $late_time = 0;
+            $production = 0;
+            $ot = 0;
             $lunch_late_status = 0;
             $early_out_status = 0;
 
@@ -41,6 +52,13 @@ class Attendance_model extends CI_Model {
                 $attn_delete = $this->attn_delete_for_eligibility_failed($emp_id, $process_date);
                 continue;
             }
+
+             // lumch auto off in holiday & weekend
+            if (($off_day == true || $holiday_day == true) && $lunch_id != null) {
+                $lst = ($off_day == true)? 'Off Day':'Holiday';
+                $lunch_id = $this->lunch_auto_off_details($lunch_id, $emp_id, $lst, $process_date);
+            }
+            // lumch auto off
             
             $proxi_id   = $this->get_proxi($emp_id);
             if (strtotime('2023-04-29') >= strtotime($process_date)) {
@@ -64,33 +82,33 @@ class Attendance_model extends CI_Model {
             // dd($shift_schedule);
 
             $in_start_time   = $shift_schedule->in_start_time;
+            $late_start_time = $shift_schedule->late_start;
             $out_end_time    = $shift_schedule->out_end_time;
             $out_start_time  = $shift_schedule->out_start_time;
-            $late_start_time = $shift_schedule->late_start;
             $lunch_time      = $shift_schedule->lunch_time;
             $lunch_minute    = $shift_schedule->lunch_minute;
             $ot_start_time   = $shift_schedule->ot_start_time;
 
             $start_time      = date("Y-m-d H:i:s", strtotime($process_date.' '.$in_start_time));
+            $actual_in_time  = date("Y-m-d H:i:s", strtotime($process_date.' '.$shift_schedule->in_time));
             $end_time        = date("Y-m-d H:i:s", strtotime($process_date.' '.$out_end_time));
             $out_start_time  = date("Y-m-d H:i:s", strtotime($process_date.' '.$out_start_time));
             $late_start_time = date("Y-m-d H:i:s", strtotime($process_date.' '.$late_start_time));
 
             $lunch_time      = date("Y-m-d H:i:s", strtotime($process_date.' '.$lunch_time));
-            $lunch_in        = date('Y-m-d H:i:s', strtotime($lunch_time. ' +'.$lunch_minute));
-            $lunch_end       = date('Y-m-d H:i:s', strtotime($lunch_time. ' +60 minutes'));
-            $lunch_late_time = date('Y-m-d H:i:s', strtotime($lunch_in. ' +5 minutes'));
+            $lunch_end       = date('Y-m-d H:i:s', strtotime($lunch_time. ' +'.$lunch_minute));
+            $lunch_late_time = date('Y-m-d H:i:s', strtotime($lunch_end. ' +5 minutes'));
             $early_out_time  = date("Y-m-d H:i:s", strtotime($process_date.' '.$ot_start_time));
 
             // get lunch in and out time and check lunch late status
-            $lunch_out   = $this->check_in_out_time($proxi_id, $out_start_time, $lunch_in, 'ASC');
-            $lunch_in    = $this->check_in_out_time($proxi_id, $lunch_time, $lunch_end, 'DESC');
+            $half_evening = date('Y-m-d H:i:s', strtotime($early_out_time. ' -3 hours'));
+            $lunch_out   = $this->check_in_out_time($proxi_id, $out_start_time, $lunch_end, 'ASC');
+            $lunch_in    = $this->check_in_out_time($proxi_id, $lunch_time, $half_evening, 'DESC');
             if (strtotime($lunch_in) > strtotime($lunch_late_time)) {
                 $lunch_late_status = 1; 
             }
 
             // get in time
-            $half_evening = date('Y-m-d H:i:s', strtotime($early_out_time. ' -3 hours'));
             $in_time    = $this->check_in_out_time($proxi_id, $start_time, $half_evening, 'ASC');
             $movement_time = $this->check_movement_time($emp_id, $process_date, 'ASC');
             if ($movement_time->num_rows() > 0) {
@@ -205,17 +223,34 @@ class Attendance_model extends CI_Model {
                 $status = 'Off Day';
             }
 
-            // scheck late and early out status
-            if (strtotime($in_time) > strtotime($late_start_time)) {
+            // check late & calculation late minute
+            if (strtotime($in_time) > strtotime($late_start_time) && strtotime($in_time) < strtotime($lunch_time)) {
                 $late_status = 1; 
+                $late_time = round((strtotime($in_time) - strtotime($actual_in_time)) / 60);
             }
+
+            // total calculation production time & over time (ot)
+            if (($astatus == 'Present' || $status == 'Present') && $out_time != null && $in_time != null) {
+                $production = round((strtotime($out_time) - strtotime($in_time)) / 60) - $lunch_minute;
+                $actual_p_time = round((strtotime($early_out_time) - strtotime($actual_in_time)) / 60) - $lunch_minute;
+
+                if($production > $actual_p_time) {
+                    $ot = $production - $actual_p_time;
+                }
+            } else if (($astatus == 'HalfDay' || $status == 'HalfDay') && $out_time != null && $in_time != null) {
+                if (strtotime($in_time) < strtotime($lunch_time)) {
+                    $production = round((strtotime($out_time) - strtotime($in_time)) / 60) -  $lunch_minute;
+                } else {
+                    $production = round((strtotime($out_time) - strtotime($in_time)) / 60);
+                }
+            }
+            // end production time & over time
+
+            // early out status
             if (strtotime($out_time) < strtotime($early_out_time) && strtotime($out_time) != null) {
                 $early_out_status = 1; 
             }
-
             // dd($out_time .' '. $early_out_time .' '. $early_out_status);
-
-
 
             $data = array(
                 'employee_id'       => $emp_id,
@@ -223,6 +258,9 @@ class Attendance_model extends CI_Model {
                 'attendance_date'   => $process_date,
                 'clock_in'          => $in_time,
                 'clock_out'         => $out_time,
+                'production'        => $production,
+                'ot'                => $ot,
+                'late_time'         => $late_time,
                 'lunch_in'          => $lunch_in ? $lunch_in:'',
                 'lunch_out'         => $lunch_out ? $lunch_out:'',
                 'attendance_status' => $astatus,
@@ -256,6 +294,43 @@ class Attendance_model extends CI_Model {
             }
         }
         return 'Successfully Process Done';
+    }
+
+    function lunch_auto_off($date) {
+        $this->db->select("id");
+        $this->db->where("date", $date);
+        $query = $this->db->get('lunch');
+
+        if($query->num_rows() > 0 ){
+            return $query->row()->id;
+        } else {
+            $data = array(
+                'total_m'    => 0,
+                'emp_m'      => 0,
+                'guest_m'    => 0,
+                'total_cost' => 0,
+                'emp_cost'   => 0,
+                'guest_cost' => 0,
+                'bigcomment' => 'holiday / weekend off',
+                'date'       => $date,
+                'status'     => 0,
+            );
+            $this->db->insert('lunch', $data);
+            return $this->db->insert_id();
+        }
+    }
+
+    function lunch_auto_off_details($lunch_id, $emp_id, $lst, $date) {
+        $form_data = array(
+            'lunch_id'      => $lunch_id,
+            'emp_id'        => $emp_id,
+            'meal_amount'   => 0,
+            'p_stutus'      => $lst,
+            'comment'       => '.',
+            'date'          => $date,
+        );
+        $this->db->insert('lunch_details', $form_data);
+        return true;
     }
 
 
