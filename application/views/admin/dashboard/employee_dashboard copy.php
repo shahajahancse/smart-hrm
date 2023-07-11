@@ -66,6 +66,7 @@ $leave_calel=$leavecal['leaves'][0];
 $leave_calsl=$leavecal['leaves'][1];  
 ?>
 <?php
+// dd($session);
   $datep        = date( "Y-m-d");
   $date        = date( "Y-m-01");
   $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
