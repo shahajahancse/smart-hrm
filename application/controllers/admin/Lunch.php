@@ -141,8 +141,22 @@ class Lunch extends MY_Controller {
                         'p_stutus'      => $p_status[$i],
                         'comment'       => $comment[$i],
                     );
-                    $this->db->where('date', $date);
-                    $this->db->where('emp_id', $empid[$i])->update('lunch_details', $form_data);
+
+                    $rows = $this->db->where('date', $date)->('emp_id', $empid[$i])->get('lunch_details');
+                    if($rows->num_rows() > 0){
+                        $this->db->where('date', $date);
+                        $this->db->where('emp_id', $empid[$i])->update('lunch_details', $form_data);
+                    } else {
+                        $datas = array(
+                            'lunch_id'      => $luncid,
+                            'emp_id'        => $empid[$i],
+                            'meal_amount'   => $m_amount[$i],
+                            'p_stutus'      => $p_status[$i],
+                            'comment'       => $comment[$i],
+                            'date'          => $date,
+                        );
+                        $this->db->insert('lunch_details', $datas);
+                    }
                 } 
             } else {
                 for ($i=0; $i<sizeof($empid); $i++) {

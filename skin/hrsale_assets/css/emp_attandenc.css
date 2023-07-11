@@ -1,0 +1,228 @@
+.topbar {
+    display: flex;
+    gap: 11px
+}
+
+.box {
+    display: flex;
+    padding: 16px 4px;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    flex: 1 0 0;
+}
+
+.box_heding {
+    display: flex;
+    width: 291px;
+    align-items: flex-start;
+}
+
+.box_heding2 {
+    display: flex;
+    padding: 11px 43px 12px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 4px;
+    border: 1px solid #E3E3E3;
+    background: #F9F9F9;
+}
+
+.box_heding_text {
+    color: #1F1F1F;
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    left: -32px;
+}
+
+.box_heding_date {
+    color: #8E8E8E;
+    font-family: Roboto;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    right: -43px;
+}
+
+.box_heding2_text {
+    color: rgba(0, 0, 0, 0.85);
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+}
+
+.box_heding2_text2 {
+    color: #727272;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+}
+
+.pans {
+    height: 144px;
+    border-radius: 54%;
+    background: #d4d4d49c;
+    border: 7px solid  #599AE7;
+    padding: 0px 27.5px;
+}
+
+.box_heding_footer {
+    display: flex;
+    padding: 6px 48.34px 14.39px 47.16px;
+    flex-direction: column;
+    align-items: center;
+    height: 52px;
+    border: 1px solid #E3E3E3;
+    background: #F9F9F9;
+    border-radius: 6px;
+
+}
+
+.box_heding4 {
+    display: flex;
+    padding: 9px;
+    gap: 32px;
+}
+
+.box2_heding2 {
+
+    display: flex;
+    padding: 4px 6px 4px 5px;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 4px;
+    border: 1px solid #E5E5E5;
+    background: #F9F9F9;
+    gap: 9px;
+
+}
+
+.box2_heding2_text1 {
+    color: #1F1F1F;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    left: -47px;
+}
+
+
+.box2_heding2_text2 {
+    color: #1F1F1F;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    right: -39px;
+}
+
+.progress1 {
+    background: #BB10AA;
+}
+
+.progress2 {
+    background: #FFBE3D;
+}
+
+.progress3 {
+    background: #2DCA8C;
+}
+
+.progress4 {
+    background: #FF715B;
+}
+
+.box3_heding {}
+
+.box3_heding_text {
+    color: #292B3A;
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0.3px;
+    left: -17px;
+}
+
+.box3_heding2 {
+    height: 76px;
+    position: relative;
+    width: 47%;
+    padding-top: 18px;
+    margin-bottom: 11px;
+}
+
+.box3_heding2_text1 {
+    color: var(--text-color-1, #333);
+    text-align: center;
+    font-family: Roboto;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+.box3_heding2_text2 {
+    color: var(--text-color-1, #333);
+    text-align: center;
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0.3px;
+}
+
+.medelbar {
+    display: flex;
+    gap: 11px;
+    margin-bottom: 16px;
+}
+
+.divform-group {
+    position: relative;
+    float: left;
+    color: gray;
+    cursor: pointer;
+}
+
+.input {
+    width: 100%;
+    border-radius: 6px;
+    background-color: white;
+    border: 1px solid gainsboro;
+    box-sizing: border-box;
+    height: 54px;
+    padding: 6px 6px 6px 11px;
+    cursor: pointer;
+}
+
+.level {
+    color: #888;
+    font-family: Inter;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 18px;
+}
+.serceb{
+    padding: 18px 0px;
+    text-align: -webkit-center;
+    border-radius: 4px;
+    border: 1px solid var(--g, #2DCA8C);
+    background: var(--g, #2DCA8C);
+    color: white;
+}

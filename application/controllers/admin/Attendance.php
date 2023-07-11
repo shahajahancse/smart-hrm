@@ -29,6 +29,7 @@ class Attendance extends MY_Controller {
 		$this->load->model("Xin_model");
 		$this->load->model("Job_card_model");
 		$this->load->model("Timesheet_model");
+		$this->load->model("Salary_model");
 
 		// $this->load->model("Employees_model");
 		// $this->load->library('email');
@@ -662,10 +663,12 @@ class Attendance extends MY_Controller {
 	// attandancevied code here
 	public function employee_attendance(){
         $session = $this->session->userdata('username');
-		//  dd($session);
+		//  dd($session['user_id']);
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+		$data["todaylog"] = $this->Attendance_model->gettodaylog(date("Y-m-d"),$session['user_id']);
+		$data['shift'] = $this->db->where('office_shift_id',1)->get('xin_office_shift')->row();
 
 		$data['session'] 			= $session;
 		$data['title'] 			= 'Attendance | '.$this->Xin_model->site_title();
