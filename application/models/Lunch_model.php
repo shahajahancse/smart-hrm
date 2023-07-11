@@ -10,22 +10,8 @@ class Lunch_model extends CI_Model {
 
     public function get_lunch_info($status,$date)
     {
-        if ($status == true) {
-            // dd($status .' = '. $date);
-            $this->db->select('
-                    u.first_name, 
-                    u.last_name, 
-                    ld.lunch_id, 
-                    ld.emp_id, 
-                    ld.meal_amount, 
-                    ld.p_stutus, 
-                    ld.comment
-                ');
-            $this->db->from('xin_employees as u')->from('lunch_details as ld');
-            $this->db->where('u.user_id = ld.emp_id')->where('ld.date', $date)->group_by('ld.emp_id');
-            $data = $this->db->order_by('ld.p_stutus', 'DESC')->get()->result();
-        } else {
-            $this->db->select('
+
+        $this->db->select('
                     u.user_id as emp_id, 
                     u.first_name, 
                     u.last_name, 
@@ -35,7 +21,18 @@ class Lunch_model extends CI_Model {
             $this->db->join('xin_attendance_time as at', 'u.user_id = at.employee_id', 'left');
             $this->db->where_in('u.status', array(1,4,5))->where('at.attendance_date', $date)->group_by('u.user_id');
             $data = $this->db->order_by('at.status', 'DESC')->get()->result();
+
+        if ($status == true) {
+            foreach ($data as $key => $row) {
+                $this->db->select('lunch_id, meal_amount, comment');
+                $this->db->from('lunch_details')->where('date', $date)->where('emp_id', $row->emp_id);
+                $data2 = $this->db->group_by('emp_id')->order_by('p_stutus', 'DESC')->get()->row();
+                @$data[$key]->meal_amount = $data2->meal_amount;
+                @$data[$key]->comment = $data2->comment;
+                @$data[$key]->lunch_id = $data2->lunch_id;
+            }
         }
+        
         return $data;
     }
 
@@ -57,18 +54,6 @@ class Lunch_model extends CI_Model {
         $this->db->where('emp_id', $row->user_id);
         $result = $this->db->get('lunch_details')->result();
     
-// id
-// emp_id
-// prev_meal
-// prev_cost
-// prev_pay
-// prev_amount
-// probable_meal
-// pay_amount
-// from_date
-// end_date Descending 1
-// updated_at
-// status
         $emp_id=$row->user_id;
 
         $prev_meal=0;
@@ -83,7 +68,7 @@ class Lunch_model extends CI_Model {
         
         $preepay= $this->db->get('lunch_payment')->result();
 
-    //   dd( $preepay);
+        //   dd( $preepay);
         if (count($preepay)>0){
             if($preepay[0]->status==1){
 

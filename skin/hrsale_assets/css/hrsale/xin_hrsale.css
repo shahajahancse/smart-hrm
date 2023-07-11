@@ -92,10 +92,10 @@
 }
 }
 .sidebar-menu>li {
-    padding: 3px 5px;
+    padding: 0px 0px;
 }
 .sidebar-menu>li:hover>a, .sidebar-menu>li.active>a, .sidebar-menu>li.menu-open>a{
-	border-radius: 5px;
+	border-radius: 0px;
 }
 .dropdown-menu>li>a {
 	width: calc(100% - 10px) !important;

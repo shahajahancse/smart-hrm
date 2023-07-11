@@ -75,7 +75,7 @@ class Lunch extends MY_Controller {
                 $date=$datas[0]->date;
 
             }else{
-            $date= date('Y-m-d');
+                $date= date('Y-m-d');
             }
         }else {
             $date= date('Y-m-d',strtotime($this->input->post('date')));
@@ -110,6 +110,7 @@ class Lunch extends MY_Controller {
             $total_cost = 0; 
             $emp_cost = 0; 
             $guest_cost = 0; 
+
             if($id != null) {
                 $luncid = $id;
             } else if (!empty($query->row())) {
@@ -181,16 +182,11 @@ class Lunch extends MY_Controller {
         if ($query->num_rows() > 0) {
             $data['results'] = $this->Lunch_model->get_lunch_info(1,$date);
             $data['guest'] = $query->row();
-            $data['ps'] ='yes'; 
         } else {
-         
-
             $data['results'] = $this->Lunch_model->get_lunch_info(false,$date);
-            // dd( $data['results']);
             $data['guest'] = '';
-            $data['ps'] ='no';
         }
-        // dd($data['results']);
+
         $data['title'] = 'Lunch | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch';
         $data['path_url'] = 'lunch';
