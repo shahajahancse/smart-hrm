@@ -667,16 +667,31 @@ class Attendance extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+		$session = $this->session->userdata( 'username' );
+		$userid  = $session[ 'user_id' ];
+		$date = $this->input->post('date');
+
+		$this->db->select("*");
+		$this->db->where("employee_id", $userid);
+		if ($date!=null){
+			$this->db->where("attendance_date", $date);
+			$this->db->order_by("time_attendance_id", "desc");
+		$data['alldata'] = $this->db->get('xin_attendance_time')->result();
+		$data['tablebody'] 		= $this->load->view("admin/attendance/employee_at_tbale_body", $data, TRUE);
+		echo $data['tablebody'] ;
+		}else{
+		$this->db->order_by("time_attendance_id", "desc");
+		$data['alldata'] = $this->db->get('xin_attendance_time')->result();
+
 		$data["todaylog"] = $this->Attendance_model->gettodaylog(date("Y-m-d"),$session['user_id']);
 		$data['shift'] = $this->db->where('office_shift_id',1)->get('xin_office_shift')->row();
 
 		$data['session'] 			= $session;
 		$data['title'] 			= 'Attendance | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']	= 'Attendance | Employee Attendance';
+		$data['tablebody'] 		= $this->load->view("admin/attendance/employee_at_tbale_body", $data, TRUE);
+
 		$data['subview'] 		= $this->load->view("admin/attendance/employee_attandance", $data, TRUE);
-								  $this->load->view('admin/layout/layout_main', $data); 
+								  $this->load->view('admin/layout/layout_main', $data); }
     }
-
-
-
 }
