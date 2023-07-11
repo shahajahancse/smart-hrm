@@ -16,15 +16,28 @@
 //     [late_status] => 0
 // )
 // dd($leave_stutas)
-$this->db->select("*");
-$this->db->where("employee_id", $userid);
-$this->db->order_by("time_attendance_id", "desc");
-$this->db->limit(20); // Replace 10 with the desired limit
-$alldata = $this->db->get('xin_attendance_time')->result();
-
-
 ?>
+<style>
+body {
+    font-family: 'Fira Mono', monospace;
+}
 
+.list-group>li:nth-child(5n+1) {
+    border-top: 1px solid rgba(0, 0, 0, .125);
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+.list-group>li:nth-child(5n+0) {
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+
+.pagination-container {
+    justify-content: right !important;
+    display: flex !important;
+}
+</style>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
@@ -36,7 +49,7 @@ $alldata = $this->db->get('xin_attendance_time')->result();
         <div class="heading">Active Days</div>
         <div class="heading2"><?= $present_stutas->attend ?></div>
     </div>
-    
+
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
         <div class="heading">Late Days</div>
         <div class="heading2"><?= $present_stutas->late_status  ?></div>
@@ -56,8 +69,8 @@ $alldata = $this->db->get('xin_attendance_time')->result();
         <div class="input">
             <div class="level">Select Date</div>
             <div class="pseudo6">
-                <input style="width: 98%;border: none;cursor: pointer;" type="date" name="" value="<?= date('Y-m-d') ?>"
-                    id="">
+                <input onchange=getdata() style="width: 98%;border: none;cursor: pointer;" type="date" name="" value="<?= date('Y-m-d') ?>"
+                    id="datef">
             </div>
         </div>
 
@@ -90,7 +103,7 @@ $alldata = $this->db->get('xin_attendance_time')->result();
 
     </div>
     <div class="col-md-3 divform-group">
-        <a>
+        <a onclick="getdata()">
             <div class="input serceb">
                 Search
             </div>
@@ -98,7 +111,7 @@ $alldata = $this->db->get('xin_attendance_time')->result();
 
     </div>
 </div>
-<table class="table table-striped" style="border-top: 1px solid #d6d2d2;">
+<table class="table table-striped"  style="border-top: 1px solid #d6d2d2;">
     <thead>
         <tr>
             <th>Sl</th>
@@ -110,17 +123,39 @@ $alldata = $this->db->get('xin_attendance_time')->result();
             <th>Break</th>
         </tr>
     </thead>
-    <tbody>
-        <?php  foreach($alldata as $key=>$data){ ?>
-        <tr>
-            <td><?= $key+1 ?></td>
-            <td><?= $data->attendance_date ?></td>
-            <td><?= ($data->clock_in=='')?'--:--:--':date('h:s A',strtotime($data->clock_in)) ?></td>
-            <td><?= ($data->clock_out=='')?'--:--:--':date('h:s A',strtotime($data->clock_out)) ?></td>
-            <td><?= $data->late_time ?></td>
-            <td><?= $data->production ?></td>
-            <td><?= 1?> hrs</td>
-        </tr>
-        <?php  }?>
+    <tbody id="datatable">
+    <?php echo $tablebody;?>
     </tbody>
 </table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/alfrcr/paginathing/dist/paginathing.min.js"></script>
+<!--  <script type="text/javascript" src="../src/test.js"></script>-->
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    const listElement = $('.list-group');
+    $('.table tbody').paginathing({
+        perPage: 10,
+        insertAfter: '.table',
+        pageNumbers: true,
+        limitPagination: 4,
+        ulClass: 'pagination flex-wrap justify-content-center'
+    });
+});
+</script>
+<script>
+function getdata(){
+var datef = document.getElementById('datef').value;
+    $.ajax({
+        url: '<?php echo base_url('admin/attendance/employee_attendance'); ?>',
+        method: 'POST',
+        data: {
+            date: datef,
+        },
+        success: function(resp) {
+            
+            $('#datatable').empty();
+            $('#datatable').html(resp);
+        }
+    });
+}
+</script>
