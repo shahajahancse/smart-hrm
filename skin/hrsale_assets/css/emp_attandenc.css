@@ -67,10 +67,10 @@
 }
 
 .pans {
-    height: 135px;
+    height: 144px;
     border-radius: 54%;
     background: #d4d4d49c;
-    border: 8px solid var(--b, #599AE7);
+    border: 7px solid  #599AE7;
     padding: 0px 27.5px;
 }
 
@@ -158,8 +158,71 @@
 }
 
 .box3_heding2 {
-    height: 74px;
-    position: absolute;
-    opacity: 0.20000000298023224;
-    background: #17A2B8;
+    height: 76px;
+    position: relative;
+    width: 47%;
+    padding-top: 18px;
+    margin-bottom: 11px;
+}
+
+.box3_heding2_text1 {
+    color: var(--text-color-1, #333);
+    text-align: center;
+    font-family: Roboto;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+}
+
+.box3_heding2_text2 {
+    color: var(--text-color-1, #333);
+    text-align: center;
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0.3px;
+}
+
+.medelbar {
+    display: flex;
+    gap: 11px;
+    margin-bottom: 16px;
+}
+
+.divform-group {
+    position: relative;
+    float: left;
+    color: gray;
+    cursor: pointer;
+}
+
+.input {
+    width: 100%;
+    border-radius: 6px;
+    background-color: white;
+    border: 1px solid gainsboro;
+    box-sizing: border-box;
+    height: 54px;
+    padding: 6px 6px 6px 11px;
+    cursor: pointer;
+}
+
+.level {
+    color: #888;
+    font-family: Inter;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 18px;
+}
+.serceb{
+    padding: 18px 0px;
+    text-align: -webkit-center;
+    border-radius: 4px;
+    border: 1px solid var(--g, #2DCA8C);
+    background: var(--g, #2DCA8C);
+    color: white;
 }
