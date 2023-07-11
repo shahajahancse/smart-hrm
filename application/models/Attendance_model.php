@@ -1011,6 +1011,15 @@ class Attendance_model extends CI_Model {
         return $result = $this->db->get('xin_employees')->result();
         // dd($result);
     }
+    public function gettodaylog($date, $user_id) {
+        $this->db->select('*');
+        $this->db->from('xin_attendance_time');
+        $this->db->where('employee_id', $user_id);
+        $this->db->where('attendance_date', date('Y-m-d', strtotime($date)));
+        $this->db->limit(1); // Limit the result to one row
+        $data = $this->db->get()->row();
+        return $data;
+    }
     
  
 
