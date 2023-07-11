@@ -78,7 +78,7 @@ class Attendance_model extends CI_Model {
 
             $lunch_time      = date("Y-m-d H:i:s", strtotime($process_date.' '.$lunch_time));
             $lunch_in        = date('Y-m-d H:i:s', strtotime($lunch_time. ' +'.$lunch_minute));
-            $lunch_end       = date('Y-m-d H:i:s', strtotime($lunch_time. ' +50 minutes'));
+            $lunch_end       = date('Y-m-d H:i:s', strtotime($lunch_time. ' +60 minutes'));
             $lunch_late_time = date('Y-m-d H:i:s', strtotime($lunch_in. ' +5 minutes'));
             $early_out_time  = date("Y-m-d H:i:s", strtotime($process_date.' '.$ot_start_time));
 
@@ -90,7 +90,8 @@ class Attendance_model extends CI_Model {
             }
 
             // get in time
-            $in_time    = $this->check_in_out_time($proxi_id, $start_time, $lunch_end, 'ASC');
+            $half_evening = date('Y-m-d H:i:s', strtotime($early_out_time. ' -3 hours'));
+            $in_time    = $this->check_in_out_time($proxi_id, $start_time, $half_evening, 'ASC');
             $movement_time = $this->check_movement_time($emp_id, $process_date, 'ASC');
             if ($movement_time->num_rows() > 0) {
                 $move_out_time = $movement_time->row()->in_time;
@@ -178,7 +179,6 @@ class Attendance_model extends CI_Model {
                             $astatus = 'HalfDay';
                             $status = 'HalfDay';
                         }
-                        $half_evening = date('Y-m-d H:i:s', strtotime($early_out_time. ' -3 hours'));
                         if (strtotime($out_time) < strtotime($half_evening)) {
                             $astatus = 'HalfDay';
                             $status = 'HalfDay';
