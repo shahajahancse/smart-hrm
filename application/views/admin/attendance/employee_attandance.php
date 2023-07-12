@@ -111,37 +111,9 @@ body {
 
     </div>
 </div>
-<table class="table table-striped"  style="border-top: 1px solid #d6d2d2;">
-    <thead>
-        <tr>
-            <th>Sl</th>
-            <th>Date</th>
-            <th>Punch In</th>
-            <th>Punch Out</th>
-            <th>Late</th>
-            <th>Production</th>
-            <th>Break</th>
-        </tr>
-    </thead>
-    <tbody id="datatable">
-    <?php echo $tablebody;?>
-    </tbody>
-</table>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/alfrcr/paginathing/dist/paginathing.min.js"></script>
-<!--  <script type="text/javascript" src="../src/test.js"></script>-->
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-    const listElement = $('.list-group');
-    $('.table tbody').paginathing({
-        perPage: 10,
-        insertAfter: '.table',
-        pageNumbers: true,
-        limitPagination: 4,
-        ulClass: 'pagination flex-wrap justify-content-center'
-    });
-});
-</script>
+<div id="datatable">
+<?php echo $tablebody;?>
+</div>
 <script>
 function getdata(){
 var datef = document.getElementById('datef').value;
