@@ -14,7 +14,7 @@
     </thead>
     <tbody>
     <!-- admin/timesheet/leave_details/id/$data->leave_id/ -->
-        <?php dd($alldata);  foreach($alldata as $key=>$data){ ?>
+        <?php  foreach($alldata as $key=>$data){ ?>
         <tr>
             <td><?= $key+1 ?></td>
             <td><?= ($data->leave_type_id == 1)? 'Casual Leave':'Medical Leave' ?></td>
