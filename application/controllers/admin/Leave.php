@@ -55,5 +55,43 @@ class Leave extends MY_Controller
 			redirect('admin/dashboard');
 		}
 	}
+	// attandancevied code here
+	public function emp_leave(){
+		
+	
+        $session = $this->session->userdata('username');
+		//  dd($session['user_id']);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$session = $this->session->userdata( 'username' );
+		$userid  = $session[ 'user_id' ];
+		$firstdate = $this->input->post('firstdate');
+		$seconddate = $this->input->post('seconddate');
+
+		$this->db->select("*");
+		$this->db->where("employee_id", $userid);
+		if ($firstdate!=null && $seconddate!=null){
+				$f1_date=date('Y-m-d',strtotime($firstdate));
+				$f2_date=date('Y-m-d',strtotime($seconddate));
+				$this->db->where("from_date BETWEEN '$f1_date' AND '$f2_date'");
+				$this->db->order_by("from_date", "desc");
+			$data['alldata'] = $this->db->get('xin_leave_applications')->result();
+			$data['tablebody'] 		= $this->load->view("admin/leave/emp_leave_table", $data, TRUE);
+			echo $data['tablebody'] ;
+		}else{
+				$this->db->order_by("from_date", "desc");
+				$data['alldata'] = $this->db->get('xin_leave_applications')->result();
+				// dd($data['alldata'] );
+				$data['session'] 			= $session;
+				$data['title'] 			= 'Leave | '.$this->Xin_model->site_title();
+				$data['breadcrumbs']	= 'Leave | Employee Leave';
+				$data['tablebody'] 		= $this->load->view("admin/leave/emp_leave_table", $data, TRUE);
+
+				$data['subview'] 		= $this->load->view("admin/leave/emp_leave", $data, TRUE);
+										$this->load->view('admin/layout/layout_main', $data); 
+		    }
+    }
 } 
 ?>
