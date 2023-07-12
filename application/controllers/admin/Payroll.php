@@ -3442,8 +3442,8 @@ class Payroll extends MY_Controller {
 		$this->load->view('admin/payroll/report');
 	}
 
-	    // ============================employee view==============================================
 
+	// ============================employee view==============================================
 	public function selary_emp(){
         $session = $this->session->userdata('username');
 		//  dd($session);

@@ -679,22 +679,23 @@ class Attendance extends MY_Controller {
 			$f2_date=date('Y-m-d',strtotime($seconddate));
 			$this->db->where("attendance_date BETWEEN '$f1_date' AND '$f2_date'");
 			$this->db->order_by("attendance_date", "desc");
-		$data['alldata'] = $this->db->get('xin_attendance_time')->result();
-		$data['tablebody'] 		= $this->load->view("admin/attendance/employee_at_tbale_body", $data, TRUE);
-		echo $data['tablebody'] ;
+			$data['alldata']   = $this->db->get('xin_attendance_time')->result();
+			$data['tablebody'] = $this->load->view("admin/attendance/employee_at_tbale_body", $data, TRUE);
+			echo $data['tablebody'] ;
 		}else{
-		$this->db->order_by("time_attendance_id", "desc");
-		$data['alldata'] = $this->db->get('xin_attendance_time')->result();
+			$this->db->order_by("time_attendance_id", "desc");
+			$data['alldata'] = $this->db->get('xin_attendance_time')->result();
 
-		$data["todaylog"] = $this->Attendance_model->gettodaylog(date("Y-m-d"),$session['user_id']);
-		$data['shift'] = $this->db->where('office_shift_id',1)->get('xin_office_shift')->row();
+			$data["todaylog"]    = $this->Attendance_model->gettodaylog(date("Y-m-d"),$session['user_id']);
+			$data['shift']       = $this->db->where('office_shift_id',1)->get('xin_office_shift')->row();
 
-		$data['session'] 			= $session;
-		$data['title'] 			= 'Attendance | '.$this->Xin_model->site_title();
-		$data['breadcrumbs']	= 'Attendance | Employee Attendance';
-		$data['tablebody'] 		= $this->load->view("admin/attendance/employee_at_tbale_body", $data, TRUE);
+			$data['session']     = $session;
+			$data['title'] 		 = 'Attendance | '.$this->Xin_model->site_title();
+			$data['breadcrumbs'] = 'Attendance';
+			$data['tablebody'] 	 = $this->load->view("admin/attendance/employee_at_tbale_body", $data, TRUE);
 
-		$data['subview'] 		= $this->load->view("admin/attendance/employee_attandance", $data, TRUE);
-								  $this->load->view('admin/layout/layout_main', $data); }
+			$data['subview'] 	 = $this->load->view("admin/attendance/employee_attandance", $data, TRUE);
+								   $this->load->view('admin/layout/layout_main', $data); 
+		}
     }
 }

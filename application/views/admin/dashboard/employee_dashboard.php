@@ -25,13 +25,17 @@
     // end 
     // dd($salary_month);
     // punch time
-    $punch_time = $this->db->select('clock_in,clock_out')
+    $in_time = "00:00";
+    $out_time = "00:00";
+    $punch_time = $this->db->select('clock_in, clock_out')
                           ->where('employee_id', $userid)
                           ->where('attendance_date',date('Y-m-d'))
                           ->get('xin_attendance_time')
                           ->row();
-    $in_time = date('h.i A',strtotime($punch_time->clock_in));
-    $out_time = date('h.i A',strtotime($punch_time->clock_out));
+    if (!empty($punch_time)) {
+      $in_time = date('h.i A',strtotime($punch_time->clock_in));
+      $out_time = date('h.i A',strtotime($punch_time->clock_out));
+    } 
     // end punch time
 
     //get employee name
