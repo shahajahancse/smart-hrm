@@ -14,7 +14,18 @@
     </thead>
     <tbody>
     <!-- admin/timesheet/leave_details/id/$data->leave_id/ -->
-        <?php  foreach($alldata as $key=>$data){ ?>
+        <?php foreach($alldata as $key => $data){ $leave_status = ''; ?>
+        <?php 
+            if ($data->status == '1') {
+                $leave_status = 'Pending';
+            } else if($data->status == '2'){
+                $leave_status = 'Approved';
+            } else if($data->status == '3'){
+                $leave_status = 'Rejected';
+            } else {
+                $leave_status = 'First Level Approval';
+            }
+        ?>
         <tr>
             <td><?= $key+1 ?></td>
             <td><?= ($data->leave_type_id == 1)? 'Casual Leave':'Medical Leave' ?></td>
@@ -22,11 +33,7 @@
             <td><?= ($data->to_date=='')? '-----' :date('d-M-Y',strtotime($data->to_date)) ?></td>
             <td><?= $data->qty ?></td>
             <td><?= $data->reason ?></td>
-            <td><?= ($data->status == 1) ? 'Pending' :
-          ($data->status == 2) ? 'Approved' :
-          ($data->status == 3) ? 'Rejected' :
-          ($data->status == 4) ? 'First Level Approval' :
-          ''; ?></td>
+            <td><?= $leave_status ?></td>
 
             <td>Admin</td>
             <td>

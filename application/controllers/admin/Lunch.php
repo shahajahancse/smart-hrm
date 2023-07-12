@@ -786,7 +786,7 @@ public function make_id_payment(){
                         'lunch_id'      => $insert_id,
                         'emp_id'        => $row->user_id,
                         'meal_amount'   => 0,
-                        'p_stutus'      => $result->status,
+                        'p_stutus'      => isset($result->status)? $result->status:"",
                         'comment'       => '',
                         'date'          => $dateoff,
                     );

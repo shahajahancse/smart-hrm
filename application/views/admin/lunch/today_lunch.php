@@ -63,8 +63,7 @@ td {
 if($session['role_id']==1 || $session['role_id']==2 ){?>
 <div style="float: left;margin-left: 29px;margin-top: 22px;">
     <label for="date"> Enter Date</label>
-    <input type="date" id="dateoff" onchange="submitForm()" name="date"
-        value="<?= isset($date) ? $date : date('Y-m-d'); ?>" style="border-radius: 5px;">
+    <input type="date" id="dateoff" onchange="submitForm()" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>" style="border-radius: 5px;" max="<?php echo date('Y-m-d');?>" >
     <input type='hidden' id="ischange" name="change" value=0>
 </div>
 <?php }else{?>
