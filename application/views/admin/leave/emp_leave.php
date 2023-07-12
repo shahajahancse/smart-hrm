@@ -95,7 +95,7 @@ body {
                 <div class="input">
                     <div class="level">Select Leave Type**</div>
                     <div class="pseudo6">
-                        <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;">
+                        <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;" required>
                             <option>Select Leave Type**</option>
                             <option value="1">Casual Leave</option>
                             <option value="2">Medical Leave</option>
@@ -108,7 +108,7 @@ body {
                     <div class="level">Select Start Date**</div>
                     <div class="pseudo6">
                         <input name="start_date" value="<?= date('Y-m-d') ?>" class="col-md-12 "
-                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="">
+                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="" required>
                     </div>
                 </div>
 
@@ -118,7 +118,7 @@ body {
                     <div class="level">Select End Date**</div>
                     <div class="pseudo6">
                         <input name="end_date" value="<?= date('Y-m-d') ?>" class="col-md-12"
-                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="">
+                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="" required>
                     </div>
                 </div>
             </div>
