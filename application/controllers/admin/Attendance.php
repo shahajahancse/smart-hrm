@@ -669,13 +669,16 @@ class Attendance extends MY_Controller {
 		}
 		$session = $this->session->userdata( 'username' );
 		$userid  = $session[ 'user_id' ];
-		$date = $this->input->post('date');
+		$firstdate = $this->input->post('firstdate');
+		$seconddate = $this->input->post('seconddate');
 
 		$this->db->select("*");
 		$this->db->where("employee_id", $userid);
-		if ($date!=null){
-			$this->db->where("attendance_date", $date);
-			$this->db->order_by("time_attendance_id", "desc");
+		if ($firstdate!=null && $seconddate!=null){
+			$f1_date=date('Y-m-d',strtotime($firstdate));
+			$f2_date=date('Y-m-d',strtotime($seconddate));
+			$this->db->where("attendance_date BETWEEN '$f1_date' AND '$f2_date'");
+			$this->db->order_by("attendance_date", "desc");
 		$data['alldata'] = $this->db->get('xin_attendance_time')->result();
 		$data['tablebody'] 		= $this->load->view("admin/attendance/employee_at_tbale_body", $data, TRUE);
 		echo $data['tablebody'] ;

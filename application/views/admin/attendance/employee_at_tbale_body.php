@@ -11,12 +11,12 @@
         </tr>
     </thead>
     <tbody>
-        <?php  foreach($alldata as $key=>$data){ ?>
+        <?php foreach($alldata as $key=>$data){ ?>
         <tr>
             <td><?= $key+1 ?></td>
             <td><?= $data->attendance_date ?></td>
-            <td><?= ($data->clock_in=='')?'--:--:--':date('h:s A',strtotime($data->clock_in)) ?></td>
-            <td><?= ($data->clock_out=='')?'--:--:--':date('h:s A',strtotime($data->clock_out)) ?></td>
+            <td><?= ($data->clock_in=='')? $data->status :date('h:s A',strtotime($data->clock_in)) ?></td>
+            <td><?= ($data->clock_out=='')? $data->status :date('h:s A',strtotime($data->clock_out)) ?></td>
             <td><?= $data->late_time ?></td>
             <td><?= $data->production ?></td>
             <td><?= 1?> hrs</td>
@@ -31,7 +31,7 @@
 jQuery(document).ready(function($) {
     const listElement = $('.list-group');
     $('.table tbody').paginathing({
-        perPage: 10,
+        perPage: 31,
         insertAfter: '.table',
         pageNumbers: true,
         limitPagination: 4,

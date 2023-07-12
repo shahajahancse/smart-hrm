@@ -69,8 +69,8 @@ body {
         <div class="input">
             <div class="level">Select Date</div>
             <div class="pseudo6">
-                <input onchange=getdata() style="width: 98%;border: none;cursor: pointer;" type="date" name="" value="<?= date('Y-m-d') ?>"
-                    id="datef">
+                <input onchange=getdata(this) style="width: 98%;border: none;cursor: pointer;" type="date" name=""
+                    value="<?= date('Y-m-d') ?>" id="datef">
             </div>
         </div>
 
@@ -79,8 +79,8 @@ body {
         <div class="input">
             <div class="level">Select Month</div>
             <div class="pseudo6">
-                <input style="width: 98%;border: none;cursor: pointer;" type="month" value="<?= date('Y-m') ?>" name=""
-                    id="">
+                <input onchange=getdata(this) id="month" style="width: 98%;border: none;cursor: pointer;" type="month"
+                    value="<?= date('Y-m') ?>" name="" id="">
             </div>
         </div>
 
@@ -91,10 +91,10 @@ body {
 
             <div class="level">Select Year</div>
             <div class="pseudo6">
-                <select style="width: 98%;border: none;cursor: pointer;">
+                <select onchange=getdata(this) id="year" style="width: 98%;border: none;cursor: pointer;">
                     <option>Select Year</option>
                     <?php foreach($years as $year) : ?>
-                    <option <?= ($year=date('Y'))?'selected':'' ?> value="<?php echo $year; ?>"><?php echo $year; ?>
+                    <option <?= ($year==date('Y'))?'selected':'' ?> value="<?php echo $year; ?>"><?php echo $year; ?>
                     </option>
                     <?php endforeach; ?>
                 </select>
@@ -103,28 +103,55 @@ body {
 
     </div>
     <div class="col-md-3 divform-group">
-        <a onclick="getdata()">
+        <a onclick="location.reload();">
             <div class="input serceb">
-                Search
+                Get All Data
             </div>
         </a>
+
 
     </div>
 </div>
 <div id="datatable">
-<?php echo $tablebody;?>
+    <?php echo $tablebody;?>
 </div>
 <script>
-function getdata(){
-var datef = document.getElementById('datef').value;
+function getdata(status) {
+
+    // console.log(status.id);
+    if (status.id == 'datef') {
+        var firstdate = document.getElementById('datef').value
+        var seconddate = document.getElementById('datef').value
+    } else if (status.id == 'month') {
+        var date = new Date(document.getElementById('month').value);
+
+
+        var firstDate = new Date(date.getFullYear(), date.getMonth(), 2);
+
+        // Get the last date of the month by setting the day to 0 (which gives the last day of the previous month) and adding 1 day
+        var lastDate = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+
+        // Format the dates as strings in the format 'YYYY-MM-DD'
+        var firstdate = firstDate.toISOString().slice(0, 10);
+        var seconddate = lastDate.toISOString().slice(0, 10);
+
+    } else if (status.id == 'year') {
+        var date = document.getElementById('year').value;
+        var firstDate = new Date(date, 0, 1); // Month is zero-based, so 0 represents January
+        var lastDate = new Date(date, 11, 31); // Month is zero-based, so 11 represents December
+
+        // Format the dates as strings
+        var firstdate = firstDate.toDateString();
+        var seconddate = lastDate.toDateString();
+    }
     $.ajax({
         url: '<?php echo base_url('admin/attendance/employee_attendance'); ?>',
         method: 'POST',
         data: {
-            date: datef,
+            firstdate: firstdate,
+            seconddate: seconddate
         },
         success: function(resp) {
-            
             $('#datatable').empty();
             $('#datatable').html(resp);
         }
