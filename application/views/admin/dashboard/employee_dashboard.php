@@ -230,7 +230,7 @@ letter-spacing: -0.28px;
 
 
 <div class="row equal-height-row " style="margin-top:-10px">
-  
+
   <div class="col-sm-4 col_style">
     <div class="card">
       <div class="card-body">
