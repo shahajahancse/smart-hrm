@@ -178,12 +178,16 @@ if($theme[0]->sub_menu_icons != ''){
     </li>
     <?php } ?>
 
-    <?php  if(in_array('27',$role_resources_ids) || in_array('28',$role_resources_ids) || in_array('29',$role_resources_ids) || in_array('30',$role_resources_ids) || in_array('31',$role_resources_ids) || in_array('7',$role_resources_ids) || in_array('8',$role_resources_ids) || in_array('46',$role_resources_ids) || in_array('377',$role_resources_ids) || in_array('389',$role_resources_ids) || in_array('401',$role_resources_ids) || in_array('1001',$role_resources_ids)) {?>
+    <?php  if(in_array('27',$role_resources_ids) || in_array('28',$role_resources_ids) || in_array('29',$role_resources_ids) || in_array('30',$role_resources_ids) || in_array('31',$role_resources_ids) || in_array('7',$role_resources_ids) || in_array('8',$role_resources_ids) || in_array('46',$role_resources_ids) || in_array('377',$role_resources_ids) || in_array('389',$role_resources_ids) || in_array('390',$role_resources_ids) || in_array('401',$role_resources_ids) || in_array('1001',$role_resources_ids)) {?>
     <li class="<?php if(!empty($arr_mod['attnd_open']))echo $arr_mod['attnd_open'];?> treeview"> <a href="#"> <i class="fa fa-clock-o"></i> <span> HR <?php //echo $this->lang->line('left_timesheet');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
       <ul class="treeview-menu">
 
         <?php if(in_array('389',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['emp_atten_active']))echo $arr_mod['emp_atten_active'];?>"> <a href="<?php echo site_url('admin/attendance/employee_attendance');?>"><i class="fa <?php echo $submenuicon;?>"></i>Attendance</a> </li>
+        <?php } ?> 
+
+        <?php if(in_array('390',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['emp_lunch_active']))echo $arr_mod['emp_lunch_active'];?>"> <a href="<?php echo site_url('admin/lunch/lunch_emp_bill');?>"><i class="fa <?php echo $submenuicon;?>"></i>Lunch Bill</a> </li>
         <?php } ?>   
 
         <?php if(in_array('1001',$role_resources_ids)) { ?>
@@ -236,7 +240,6 @@ if($theme[0]->sub_menu_icons != ''){
       </ul>
     </li>
     <?php } ?>
-
 
     <!-- Lunch -->
     <?php  if(in_array('1050',$role_resources_ids) || in_array('1051',$role_resources_ids) || in_array('1052',$role_resources_ids) || in_array('1053',$role_resources_ids) || in_array('1054',$role_resources_ids) || in_array('1055',$role_resources_ids) || in_array('1056',$role_resources_ids) || in_array('1057',$role_resources_ids) || in_array('1058',$role_resources_ids) || in_array('1059',$role_resources_ids)) {?>

@@ -246,6 +246,10 @@ class Xin_model extends CI_Model {
 			$arr['emp_atten_active'] = 'active';
 			$arr['attnd_open'] = 'active';
 			return $arr;
+		} else if($mClass=='lunch' && $mMethod=='lunch_emp_bill') {
+			$arr['emp_lunch_active'] = 'active';
+			$arr['attnd_open'] = 'active';
+			return $arr;
 		} else if($mClass=='timesheet' && $mMethod=='attendance') {
 			$arr['attnd_active'] = 'active';
 			$arr['attnd_open'] = 'active';
