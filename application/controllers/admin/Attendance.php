@@ -737,10 +737,10 @@ class Attendance extends MY_Controller {
 		if ($firstdate!=null && $seconddate!=null){
 			$f1_date=date('Y-m-d',strtotime($firstdate));
 			$f2_date=date('Y-m-d',strtotime($seconddate));
-			$this->db->where("attendance_date BETWEEN '$f1_date' AND '$f2_date'");
-			$this->db->order_by("attendance_date", "desc");
-			$data['alldata']   = $this->db->get('xin_attendance_time')->result();
-			$data['tablebody'] = $this->load->view("admin/attendance/employee_at_tbale_body", $data, TRUE);
+			$this->db->where("date BETWEEN '$f1_date' AND '$f2_date'");
+			$this->db->order_by("date", "desc");
+			$data['alldata']   = $this->db->get('xin_employee_floor_move')->result();
+			$data['tablebody'] = $this->load->view("admin/attendance/employee_movement_flor_table", $data, TRUE);
 			echo $data['tablebody'] ;
 		}else{
 			$this->db->order_by("date", "desc");
