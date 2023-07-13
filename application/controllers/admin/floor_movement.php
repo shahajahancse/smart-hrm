@@ -72,19 +72,6 @@ class floor_movement extends MY_Controller {
                 echo "unable to insert";
             };
 
-
-
-
-
-
-
-            
-
-
-
-
-
-
         }else{
             $input_location=$this->input->post('area');
             $input_reason=$this->input->post('reason');

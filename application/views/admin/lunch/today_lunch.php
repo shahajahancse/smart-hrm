@@ -177,6 +177,7 @@ $(document).ready(function() {
                 error: function(xhr, status, error) {
                     // Handle the error response from the server
                     console.error(error);
+                    document.getElementById("loading").style.visibility = "hidden";
                 }
             });
         } else {
