@@ -438,7 +438,7 @@ a:hover,a:active,a:focus{
     padding:0
 }
 .sidebar-menu>li>a{
-    padding:11px 39px 11px 39px;
+    padding:10px 25px 10px 25px;
     display:block
 }
 .sidebar-menu>li>a>.fa,.sidebar-menu>li>a>.glyphicon,.sidebar-menu>li>a>.ion{
@@ -2683,13 +2683,13 @@ table.text-center,table.text-center td,table.text-center th{
     padding-left:5px
 }
 .treeview-menu .treeview-menu{
-    padding-left:20px
+    padding-left:10px
 }
 .treeview-menu>li{
     margin:0
 }
 .treeview-menu>li>a{
-    padding:10px 5px 8px 15px;
+    padding:10px 5px 8px 25px;
     display:block;
     font-size:14px
 }
