@@ -727,6 +727,14 @@ class Attendance extends MY_Controller {
 							$this->db->where('company_id',1);
 							$this->db->where('user_id',$userid );
         $data['empinfo']=$this->db->get('xin_employees')->result();
+							$this->db->select('first_name,last_name');
+							$this->db->where('company_id',1);
+							$this->db->where('floor_status',3);
+        $data['emp3rd']=$this->db->get('xin_employees')->result();
+		                    $this->db->select('first_name,last_name');
+							$this->db->where('company_id',1);
+							$this->db->where('floor_status',5);
+        $data['emp5th']=$this->db->get('xin_employees')->result();
 		
 
 		$this->db->select("*");
