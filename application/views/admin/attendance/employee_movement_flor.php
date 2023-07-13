@@ -20,7 +20,8 @@ $m = $timeDifference->i; // Get the minutes from the time difference
 $timeDifferenceFormatted = sprintf('%02d:%02d', $h, $m); // Format the time difference
 
  }
- $totalmove=count($todaylog);
+ $totalmove=count($totalmove_out_array);
+
  $totalSpendingTime = array(
     'hours' => 0,
     'minutes' => 0,
@@ -138,6 +139,25 @@ body {
 .texta {
     padding: 18px;
 }
+
+.cboton {
+    color: #000;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    height: 39px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 2px;
+    border: 1px solid #9d9797;
+ 
+}
+.cactive{
+    color: #FFF;
+    background: #2DCA8C;
+}
 </style>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
@@ -226,24 +246,27 @@ body {
         <div class="heading" style="font-size: 12px!important;color: red;">Your Check In time <span
                 style="color: #599AE7;"><?= (isset($timeDifferenceFormatted))? $timeDifferenceFormatted:''?> m</span> on
             <span style="color: #599AE7;"><?= ($empinfo[0]->floor_status!=3)? '5rd floor':'3th floor'?></span> Make Sure
-            when You Come back Check out </div>
+            when You Come back Check out
+        </div>
         <div class="heading2"><a class="btn" href="<?= base_url('admin/floor_movement/informsub') ?>"
                 style="width: 146px;height: 32px;border-radius: 2px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);color: white;font-weight: bold;">Check
                 Out</a></div>
     </div>
     <?php } ?>
 </div>
-<div class="col-md-12 medelbar">
-    <div class="col-md-10"
-        style="color: #000;font-family: Roboto;font-size: 15px;font-style: normal;line-height: 43.5px;text-transform: capitalize;font-weight: bold;">
-        Are you want to take a leave? Please make sure to leave the request form to HR/ Admin. </div>
-    <!-- <a class="col-md-2" id="openModal"
-        style="text-align-last: right;color: white;display: flex;height: 41px;padding: 4px 17px;cursor: pointer;justify-content: center;align-items: center;gap: 10px;border-radius: 4px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);">
-        Leave Request
-    </a> -->
-</div>
-<div class="col-md-12 medelbar">
-    <div class="col-md-3 divform-group">
+<div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
+    <div class="col-md-2 divform-group " style="padding: 0;">
+        <a href="" class="cboton cactive">Floor wise Movement</a>
+    </div>
+    <div class="col-md-2 divform-group" style="padding: 0;">
+        <a href="" class="cboton">Outside office </a>
+    </div>
+    <div class="col-md-2 divform-group" style="padding: 0;">
+        <a href="" class="cboton">Outside Dhaka</a>
+    </div>
+    <div class="col-md-2 divform-group">
+    </div>
+    <div class="col-md-3 divform-group" style="padding: 0;">
         <div class="input">
             <div class="level">Select Date</div>
             <div class="pseudo6">
@@ -252,42 +275,7 @@ body {
             </div>
         </div>
     </div>
-    <div class="col-md-3 divform-group">
-        <div class="input">
-            <div class="level">Select Month</div>
-            <div class="pseudo6">
-                <input onchange=getdata(this) id="month" style="width: 98%;border: none;cursor: pointer;" type="month"
-                    value="<?= date('Y-m') ?>" name="" id="">
-            </div>
-        </div>
 
-    </div>
-    <div class="col-md-3 divform-group">
-        <div class="input">
-            <?php $years = range(1900, strftime("%Y", time())); ?>
-
-            <div class="level">Select Year</div>
-            <div class="pseudo6">
-                <select onchange=getdata(this) id="year" style="width: 98%;border: none;cursor: pointer;">
-                    <option>Select Year</option>
-                    <?php foreach($years as $year) : ?>
-                    <option <?= ($year==date('Y'))?'selected':'' ?> value="<?php echo $year; ?>"><?php echo $year; ?>
-                    </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        </div>
-
-    </div>
-    <div class="col-md-3 divform-group">
-        <a onclick="location.reload();">
-            <div class="input serceb">
-                Get All Data
-            </div>
-        </a>
-
-
-    </div>
 </div>
 <div id="datatable">
     <?php echo $tablebody;?>
