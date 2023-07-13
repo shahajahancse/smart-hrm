@@ -660,6 +660,11 @@ class Attendance extends MY_Controller {
         echo json_encode($data);
     }
 
+
+
+
+
+	// ========================================Employee view===========================================
 	// attandancevied code here
 	public function employee_attendance(){
         $session = $this->session->userdata('username');
@@ -698,4 +703,58 @@ class Attendance extends MY_Controller {
 								   $this->load->view('admin/layout/layout_main', $data); 
 		}
     }
+
+	public function employee_movement($type = null){
+		if ($type == 1) {
+			$data = $this->employee_movement_flor();
+		}
+
+		$this->load->view('admin/layout/layout_main', $data); 
+    }
+
+    
+	public function employee_movement_flor(){
+		$session = $this->session->userdata('username');
+		$userid  = $session[ 'user_id' ];
+		$firstdate = $this->input->post('firstdate');
+		$seconddate = $this->input->post('seconddate');
+							$this->db->select('floor_status');
+							$this->db->where('company_id',1);
+							$this->db->where('user_id',$userid );
+        $data['empinfo']=$this->db->get('xin_employees')->result();
+							$this->db->select('first_name,last_name');
+							$this->db->where('company_id',1);
+							$this->db->where('floor_status',3);
+        $data['emp3rd']=$this->db->get('xin_employees')->result();
+		                    $this->db->select('first_name,last_name');
+							$this->db->where('company_id',1);
+							$this->db->where('floor_status',5);
+        $data['emp5th']=$this->db->get('xin_employees')->result();
+		
+
+		$this->db->select("*");
+		$this->db->where("user_id", $userid);
+		if ($firstdate!=null && $seconddate!=null){
+			$f1_date=date('Y-m-d',strtotime($firstdate));
+			$f2_date=date('Y-m-d',strtotime($seconddate));
+			$this->db->where("attendance_date BETWEEN '$f1_date' AND '$f2_date'");
+			$this->db->order_by("attendance_date", "desc");
+			$data['alldata']   = $this->db->get('xin_attendance_time')->result();
+			$data['tablebody'] = $this->load->view("admin/attendance/employee_at_tbale_body", $data, TRUE);
+			echo $data['tablebody'] ;
+		}else{
+			$this->db->order_by("date", "desc");
+			$data['alldata'] = $this->db->get('xin_employee_floor_move')->result();
+
+			$data["todaylog"]    = $this->Attendance_model->today_floor_movement($session['user_id']);
+			$data['session']     = $session;
+			$data['title'] 		 = 'Floor Movements';
+			$data['breadcrumbs'] = 'Floor Movements';
+			$data['tablebody'] 	 = $this->load->view("admin/attendance/employee_movement_flor_table", $data, TRUE);
+
+			$data['subview'] 	 = $this->load->view("admin/attendance/employee_movement_flor", $data, TRUE);
+			return $data;
+		}
+    }
+
 }

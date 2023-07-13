@@ -3457,5 +3457,21 @@ class Payroll extends MY_Controller {
 		$data['breadcrumbs']	= 'Salary';
 		$data['subview'] 		= $this->load->view("admin/payroll/selary_emp", $data, TRUE);
 								  $this->load->view('admin/layout/layout_main', $data); 
+    }	
+
+    public function employee_bonus(){
+    	exit("coming soon");
+        $session = $this->session->userdata('username');
+		//  dd($session);
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['result'] = $this->Salary_model->getall_salary_with_id($session['user_id']);
+		// dd($data['result']);
+		$data['session'] 			= $session;
+		$data['title'] 			= 'Salary | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Salary';
+		$data['subview'] 		= $this->load->view("admin/payroll/selary_emp", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data); 
     }
 }

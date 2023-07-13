@@ -41,28 +41,35 @@ class floor_movement extends MY_Controller {
         $this->db->where("date", $current_date);
         $this->db->limit("1");
         $user_movement = $this->db->get('xin_employee_floor_move')->result();
+        // dd($user_movement);
         if(count($user_movement)>0){
             $input_location=$this->input->post('area');
             $input_reason=$this->input->post('reason');
+            $input_meet_with=$this->input->post('meet_with');
             $currentDateTime = date('g:i A'); 
            $movementid=$user_movement[0]->id;
            $out_time_array=json_decode($user_movement[0]->out_time);
            $location_array=json_decode($user_movement[0]->location);
            $reason_array=json_decode($user_movement[0]->reason);
+           $meet_with_array=json_decode($user_movement[0]->meet_with);
+        //    dd($meet_with_array);
             array_push($out_time_array,$currentDateTime);
             array_push($location_array,$input_location);
             array_push($reason_array,$input_reason);
+            array_push($meet_with_array,$input_meet_with);
 
 
 
             $out_time=json_encode($out_time_array);
             $location=json_encode($location_array);
             $reason=json_encode($reason_array);
+            $meet_with=json_encode($meet_with_array);
             $data = array(
                 
                 'out_time' => $out_time,
                 'location' => $location,
                 'reason' => $reason,
+                'meet_with' => $meet_with,
                 'inout' => 1,
             );
             $this->db->where('id', $movementid);
@@ -72,34 +79,25 @@ class floor_movement extends MY_Controller {
                 echo "unable to insert";
             };
 
-
-
-
-
-
-
-            
-
-
-
-
-
-
         }else{
             $input_location=$this->input->post('area');
             $input_reason=$this->input->post('reason');
+            $meet_with=$this->input->post('meet_with');
+            
             $out_time_array=[];
             $in_time_array=[];
             $location_array=[];
             $reason_array=[];
+            $meetwith_array=[];
             $currentDateTime = date('g:i A');
             array_push($out_time_array,$currentDateTime);
             array_push($location_array,$input_location);
             array_push($reason_array,$input_reason);
-
+            array_push($meetwith_array,$meet_with);
             $user_id=$session['user_id'];
 
             $out_time=json_encode($out_time_array);
+            $mettwithh=json_encode($meetwith_array);
 
             $in_time=json_encode($in_time_array);
             $location=json_encode($location_array);
@@ -111,6 +109,7 @@ class floor_movement extends MY_Controller {
                 'in_time' => $in_time,
                 'location' => $location,
                 'reason' => $reason,
+                'meet_with' => $mettwithh,
                 'date' => $current_date,
             );
             if($this->db->insert('xin_employee_floor_move', $data)){
@@ -146,11 +145,8 @@ class floor_movement extends MY_Controller {
             'inout' => 0,
         );
          $this->db->where('id', $movementid);
-            if($this->db->update('xin_employee_floor_move', $data)){
-                echo "success";
-            }else{
-                echo "unable to insert";
-            };
+            $this->db->update('xin_employee_floor_move', $data);
+            redirect('admin/attendance/employee_movement/1');
 
         }
         
