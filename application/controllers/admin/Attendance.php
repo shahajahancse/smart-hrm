@@ -705,21 +705,16 @@ class Attendance extends MY_Controller {
     }
 
 	public function employee_movement($type = null){
-        $session = $this->session->userdata('username');
-		//  dd($session['user_id']);
-		if(empty($session) || $type == null){ 
-			redirect('admin/');
-		}
-
 		if ($type == 1) {
-			$data = $this->employee_movement_flor($session);
+			$data = $this->employee_movement_flor();
 		}
 
 		$this->load->view('admin/layout/layout_main', $data); 
     }
 
     
-	public function employee_movement_flor($session){
+	public function employee_movement_flor(){
+		$session = $this->session->userdata('username');
 		$userid  = $session[ 'user_id' ];
 		$firstdate = $this->input->post('firstdate');
 		$seconddate = $this->input->post('seconddate');
