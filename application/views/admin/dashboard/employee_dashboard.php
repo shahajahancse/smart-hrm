@@ -96,7 +96,10 @@
                 ->get('xin_attendance_time')
                 ->row()->count_late;                
 
-                // dd($count_p);          
+
+      $holidays= $this->db->select('*')->get('xin_holidays')->result();
+      $holidayss= $this->db->select('*')->limit(5)->where("start_date > '".date('Y-m-d')."'")->get('xin_holidays')->result();
+      // dd($this->db->last_query());       
 ?>
 
 
@@ -136,7 +139,7 @@
 
   .flex-item {
     flex: 1;
-    /* padding: 10px; */
+    /* padding-left: 10px; */
   }
 
   .card_layout{
@@ -185,7 +188,7 @@
 
   .stats-box{
     display: flex;
-    padding: 4px;
+    padding: 30px 0px;
     flex-direction: column;
     align-items: center;
     gap: -1px;
@@ -232,19 +235,19 @@
       align-items: center;
   }
   .step-wizard-list{
-      background: #fff;
-      box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+      /* background: #fff; */
+      /* box-shadow: 0 15px 25px rgba(0,0,0,0.1); */
       color: #333;
       list-style-type: none;
-      border-radius: 10px;
+      /* border-radius: 10px; */
       display: flex;
-      padding: 20px 10px;
+      padding: 0px 0px;
       position: relative;
       z-index: 10;
   }
 
   .step-wizard-item{
-      padding: 0 20px;
+      padding: 0 0px;
       flex-basis: 0;
       -webkit-box-flex: 1;
       -ms-flex-positive:1;
@@ -253,7 +256,7 @@
       display: flex;
       flex-direction: column;
       text-align: center;
-      min-width: 170px;
+      min-width: 162px;
       position: relative;
   }
   .step-wizard-item + .step-wizard-item:after{
@@ -371,10 +374,10 @@
   <!-- Today attendance info -->
   <div class="row equal-height-row " style="margin-top:10px">
     <div class="col-sm-4 col_style">
-      <div class="card" >
+      <div class="card" style="width: 250px;">
         <div class="card-body flex-container" style="margin-top: -8px;margin-bottom: -20px;">
-          <h5 class="card-title flex-item ">Timesheet</h5>
-          <h6 class="card-title flex-item " style="margin-left: 169px;"><?php echo date('d M Y')?></h6>
+          <h5 class="card-title flex-item " style="font-weight: 600;">Timesheet</h5>
+          <h6 class="card-title flex-item " style="margin-left: 86px;"><?php echo date('d M Y')?></h6>
         </div>
         <div class="card-body">
           <div style="border-radius: 4px;border: 1px solid #E3E3E3;background: #F9F9F9; padding: 5px 0px;">
@@ -392,44 +395,29 @@
             <div class="text"><?= $total_working_hour." hrs"?></div>
           </div>
         </div>
-        <div class="stats-box-row">
+        <!-- <div class="stats-box-row">
                <div class="stats-box col-md-6">
                     <span>Break</span>
-                    <span><?php echo "01.30 PM"?></span>
-                    <!-- <span>< ?php echo date('h.i A')?></span> -->
+                    <span>< ?php echo "01.30 PM"?></span>
+                    
                </div>
                 <div class="stats-box col-md-6">
                     <span>Over Time</span>
                     <span class="text-danger"><b>Pending</b></span>
-                    <!-- <span><?= $total_over_time_hour." hrs"?></span> -->
+                 
                </div>
-        </div>
-      </div>
+          </div> -->
+          <br>
+        </div> 
     </div>
 
     <!-- step bar -->
     <div class="col-sm-8 col_style">
-      <div class="card">
+      <div class="card" style="margin-left: -82px;" >
         <div class="card-header" style="border-bottom: 0px !important;">
-          <h5 class="card-title flex-item ">Today Activity <i class="fa icon-time"></i></h5>
+          <h5 class="card-title flex-item " style="font-weight: 600;margin-left:10px;">Today Activity<i class="fa icon-time"></i></h5>
         </div>
         <div class="card-body">
-         
-          <!-- <div class="container-fluid">
-            <br /><br />
-            <ul class="list-unstyled multi-steps">
-              <li id="step-1" class="is-active">Start<div class="progress-bar progress-bar--success">
-            <div class="progress-bar__bar"></div></li>
-              <li id="step-2">First Step<div class="progress-bar progress-bar--success">
-            <div class="progress-bar__bar"></div></li>
-              <li id="step-3">Middle Stage<div class="progress-bar progress-bar--success">
-            <div class="progress-bar__bar"></div></li>
-              <li id="step-4">Finish</li>
-            </ul>
-          </div>
-          <br>
-          <br>
-          <button onClick=next()>Next Step</button> -->
           <?php 
             $lunch_end = date('h:i A', strtotime("$schedule->lunch_minute minutes", strtotime($schedule->lunch_time)));
             $in_time_class = '';
@@ -446,8 +434,8 @@
               $out_time_class = 'current-item';
             }
           ?>
-          <section class="step-wizard">
-            <ul class="step-wizard-list">
+          <section class="step-wizard" style="    margin-top: -15px;">
+            <ul class="step-wizard-list" style="margin-left: -48px;">
               <li class="step-wizard-item <?=$in_time_class?>">
                   <span class="progress-label-top">Punch In</span>
                   <span class="progress-count"><i class="icon-time"></i></span>
@@ -470,6 +458,21 @@
               </li>
             </ul>
           </section>
+         
+  <div class="row" style="margin-left: -8px;margin-top: 45px;">
+    <div class="col-sm-3">
+     <p><span style="font-weight:600">Status : </span><span>On Time</span></p>
+    </div>
+    <div class="col-sm-4">
+     <p><span style="font-weight:600">Lunch Time : </span><span>1 Hour</span></p>
+     
+    </div>
+    <div class="col-sm-5">
+     <p><span style="font-weight:600">Working Time: </span><span>09:50 AM - 06:00 PM</span></p>
+     
+    </div>
+  </div>
+
         </div>
       </div>
     </div>
@@ -500,30 +503,39 @@
     <div class="col-sm-4 col_style">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title" style="    margin-left: 13px;">This Month Summary</h5>
-              <div class="stats-box-row">
+          <h5 class="card-title" style="    margin-left: 13px;font-weight:600">This Month Summary</h5>
+              <div class="stats-box-row" style="margin-top:40px">
                <div class="stats-box col-md-6">
-                <i class="fa fa-calendar-o" aria-hidden="true" style="font-size: 24px;margin-left: -60px;"></i>
-                    <span>Working Day</span>
-                    <span style="margin-left: -40px;"><?php echo $count_p?>Day</span>
+                <div class="text-center">
+                  <i class="fa fa-calendar-o" aria-hidden="true" style="font-size: 24px;"></i>
+                </div>
+                    <span class="text-center text-success"><b>Working Day</b></span>
+                    <span class="text-center"><b><?php echo $count_p?> Day</b></span>
                </div>
                 <div class="stats-box col-md-6">
-                <i class="fa fa-ban" aria-hidden="true" style="font-size: 24px;margin-left: -60px; color: #FF715B;"></i>
-                    <span style="margin-left: -26px;" >Absent</span>
-                    <span style="margin-left: -36px;"><?php echo $count_a?> Day</span>
+                  <div class="text-center">
+                    <i class="fa fa-ban" aria-hidden="true" style="font-size: 24px;color: #FF715B;"></i>
+                  </div>
+                    <span class="text-center accordion text-danger"><b>Absent</b></span>
+                    <span class="text-center"><b><?php echo $count_a?> Day</b></span>
                </div>
         </div>
               <div class="stats-box-row">
                <div class="stats-box col-md-6">
-                <i class="fa fa-clock-o" aria-hidden="true" style="font-size: 24px;margin-left: -60px;color:#BB10AA"></i>
-                    <span style="margin-left: 12px;">Late Coming</span>
-                    <span style="margin-left: -38px;"><?php echo $count_late?> Day</span>
+                <div class="text-center">
+                  <i class="fa fa-clock-o" aria-hidden="true" style="font-size: 24px;color:#BB10AA"></i>
+                </div>    
+                    <span class="text-warning"><b>Late Coming</b></span>
+                    <span><b><?php echo $count_late?> Day</b></span>
                </div>
                 <div class="stats-box col-md-6">
-                <i class="fa fa-umbrella" aria-hidden="true" style="font-size: 24px;margin-left: -60px;color:#2DCA8C"></i>
-                    <span style="margin-left: -30px;">Leave</span>
-                    <span style="margin-left: -10px;color:red"><b>Pending</b></span>
+                  <div class="text-center">
+                    <i class="fa fa-umbrella" aria-hidden="true" style="font-size: 24px;color:#2DCA8C"></i>
+                  </div>
+                    <span class="text-center"><b>Leave</b></span>
+                    <span class="text-center" style="color:red"><b>Pending</b></span>
                </div>
+               
         </div>
         </div>
       </div>
@@ -573,17 +585,8 @@
       </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-    <div class="col-sm-4 col_style">
-        <div class="card" style="    padding-bottom: 18px;"> 
+    <div class="col-sm-3 col_style">
+        <div class="card" style=" padding-bottom: 18px;"> 
           <span style="margin-left:20px;padding-top: 1.25rem;font-weight: 600;" >Notice Board</span>
           <hr>
             <div class="row">
@@ -598,150 +601,55 @@
 
           </div>
           <hr>
-            <div class="row">
-            <div class="col-md-4" style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
-              <span class="text_s" style="    padding-top: 4px;"><?php echo date("d")?></span>
-              <span class="text_s"><?php echo date("M")?></span>
-            </div>
-            <div class="col-md-8">
-              <span style="font-weight: 500;">Board meeting Completed</span>
-              <span style="color:#929292;font-size:13px">attend the company mangers...</span>
-            </div>
-
-          </div>
-          <hr>
-
-          <div class="row">
-            <div class="col-md-4" style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
-              <span class="text_s" style="    padding-top: 4px;"><?php echo date("d")?></span>
-              <span class="text_s"><?php echo date("M")?></span>
-            </div>
-            <div class="col-md-8">
-              <span style="font-weight: 500;">Board meeting Completed</span>
-              <span style="color:#929292;font-size:13px">attend the company mangers...</span>
-            </div>
-
-          </div>
-          <hr>
-
-          <div class="row">
-            <div class="col-md-4" style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
-              <span class="text_s" style="    padding-top: 4px;"><?php echo date("d")?></span>
-              <span class="text_s"><?php echo date("M")?></span>
-            </div>
-            <div class="col-md-8">
-              <span style="font-weight: 500;">Board meeting Completed</span>
-              <span style="color:#929292;font-size:13px">attend the company mangers...</span>
-            </div>
-
-          </div>
-          <hr>
 
 
-          <div class="row">
-            <div class="col-md-4" style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
-              <span class="text_s" style="    padding-top: 4px;"><?php echo date("d")?></span>
-              <span class="text_s"><?php echo date("M")?></span>
-            </div>
-            <div class="col-md-8">
-              <span style="font-weight: 500;">Board meeting Completed</span>
-              <span style="color:#929292;font-size:13px">attend the company mangers...</span>
-            </div>
 
-          </div>
+
+
+
+
           <!-- <hr> -->
           <!-- <button class="btn btn-sm">View All</button> -->
           <a href="#" class="" style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>  
         </div>
-
-
-
     </div>
-    <div class="col-sm-4 col_style">
+
+    <!-- upcomming holidays -->
+
+    <div class="col-md-5 col_style">
         <div class="card" style="    padding-bottom: 18px;"> 
           <span style="margin-left:20px;padding-top: 1.25rem;font-weight: 600;" >Upcoming Holidays</span>
           <hr>
+            <?php foreach($holidayss as $holiday){
+              $today = new DateTime();  // Current date
+              $date = $holiday->start_date;
+              $futureDate = new DateTime($date);  // Future date
+              if ($futureDate < $today) {
+                  $daysLeft = 0;
+              } else {
+                  $interval = date_diff($today, $futureDate);
+                  $daysLeft = $interval->format('%a');
+              }  
+            ?>
             <div class="row">
-            <div class="col-md-4" style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
-              <span class="text_s" style="    padding-top: 4px;"><?php echo date("d")?></span>
-              <span class="text_s"><?php echo date("M")?></span>
+            <div class="col-md-4" style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 58px;height: 56px;flex-shrink: 0;">
+              <span class="text_s" style="padding-top: 4px;"><?php echo date("d")?></span>
+              <span class="text_s"><?php echo date("M",strtotime($holiday->start_date))?></span>
             </div>
             <div class="col-md-4">
-              <span style="font-weight: 500;">Durgapuja</span>
-              <span style="color:#929292"><?php echo date("l")?></span>
+              <span style="font-weight: 500;"><?php echo $holiday->event_name ?></span>
+              <span style="color:#929292"><?php echo date("l",strtotime($holiday->start_date))?></span>
             </div>
             <div class="col-md-d" style="float: right;margin-right: 36px;">
-              <span style="color:#8D8D8D">11 days left</span>
+              <span style="color:#8D8D8D"><?php echo $daysLeft?> days left</span>
             </div>
           </div>
           <hr>
+          <?php }?>
 
-          <div class="row">
-            <div class="col-md-4" style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
-              <span class="text_s" style="    padding-top: 4px;"><?php echo date("d")?></span>
-              <span class="text_s"><?php echo date("M")?></span>
-            </div>
-            <div class="col-md-4">
-              <span style="font-weight: 500;">Durgapuja</span>
-              <span style="color:#929292"><?php echo date("l")?></span>
-            </div>
-            <div class="col-md-d" style="float: right;margin-right: 36px;">
-              <span style="color:#8D8D8D">11 days left</span>
-            </div>
-          </div>
-          <hr>
-
-
-
-          <div class="row">
-            <div class="col-md-4" style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
-              <span class="text_s" style="    padding-top: 4px;"><?php echo date("d")?></span>
-              <span class="text_s"><?php echo date("M")?></span>
-            </div>
-            <div class="col-md-4">
-              <span style="font-weight: 500;">Durgapuja</span>
-              <span style="color:#929292"><?php echo date("l")?></span>
-            </div>
-            <div class="col-md-d" style="float: right;margin-right: 36px;">
-              <span style="color:#8D8D8D">11 days left</span>
-            </div>
-          </div>
-          <hr>
-          
-          
-
-          <div class="row">
-            <div class="col-md-4" style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
-              <span class="text_s" style="    padding-top: 4px;"><?php echo date("d")?></span>
-              <span class="text_s"><?php echo date("M")?></span>
-            </div>
-            <div class="col-md-4">
-              <span style="font-weight: 500;">Durgapuja</span>
-              <span style="color:#929292"><?php echo date("l")?></span>
-            </div>
-            <div class="col-md-d" style="float: right;margin-right: 36px;">
-              <span style="color:#8D8D8D">11 days left</span>
-            </div>
-          </div>
-          <hr>
-          
-          
-          <div class="row">
-            <div class="col-md-4" style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
-              <span class="text_s" style="    padding-top: 4px;"><?php echo date("d")?></span>
-              <span class="text_s"><?php echo date("M")?></span>
-            </div>
-            <div class="col-md-4">
-              <span style="font-weight: 500;">Durgapuja</span>
-              <span style="color:#929292"><?php echo date("l")?></span>
-            </div>
-            <div class="col-md-d" style="float: right;margin-right: 36px;">
-              <span style="color:#8D8D8D">11 days left</span>
-            </div>
-          </div>
 
           <!-- <button class="btn btn-sm">View All</button> -->
-          <a href="#" class="" style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>  
+          <a href="#" class="" data-toggle="modal" data-target=".bs-example-modal-lg" style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>  
         </div>
 
 
@@ -750,6 +658,62 @@
   </div>
 
 </div>
+
+
+<!-- upcomming holidays modal -->
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <br>
+      <h4 class="modal-title text-center" ><b>Upcoming Holidays</b></h4><br>
+    <table class="table table-bordered table-striped">
+  <thead class="text-center">
+    <tr >
+      <th class="text-center" scope="col">Sl. No.</th>
+      <th class="text-center" scope="col">Name</th>
+      <th class="text-center" scope="col">Date</th>
+      <th class="text-center" scope="col">Day</th>
+      <th class="text-center" scope="col">Day Left</th>
+      <!-- <th class="text-center" scope="col">Total Day</th> -->
+    </tr>
+  </thead>
+  <tbody>
+  <?php 
+      $i=1;
+      // $holidays= $this->db->select('*')->get('xin_holidays')->result();
+      foreach($holidays as $holiday){
+      $today = new DateTime();  // Current date
+      $date = $holiday->start_date;
+      $futureDate = new DateTime($date);  // Future date
+
+      if ($futureDate < $today) {
+          $daysLeft = 0;
+      } else {
+          $interval = date_diff($today, $futureDate);
+          $daysLeft = $interval->format('%a');
+      }
+
+      ?>
+    <tr class="text-center">
+      <td><?php echo $i++ ?></td>
+      <td><?php echo $holiday->event_name?></td>
+      <td><?php echo $holiday->start_date?></td>
+      <td><?php echo date("l",strtotime($holiday->start_date))?></td>
+      <td><?php echo $daysLeft?></td>
+      <!-- <td><?php echo $daysLeft?></td> -->
+    </tr>
+<?php }?>
+  </tbody>
+</table>
+<br>        <button type="button" class="btn btn-danger btn-sm" style="float:right;margin-right: 10px;" data-dismiss="modal">Close</button><br><br><br>
+    </div>
+  </div>
+</div>
+<!-- end upcomming holidays modal -->
+
+
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
