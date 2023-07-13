@@ -246,8 +246,8 @@ class Xin_model extends CI_Model {
 			$arr['emp_atten_active'] = 'active';
 			$arr['attnd_open'] = 'active';
 			return $arr;
-		} else if($mClass=='lunch' && $mMethod=='lunch_emp_bill') {
-			$arr['emp_lunch_active'] = 'active';
+		}  else if($mClass=='attendance' && $mMethod=='employee_movement') {
+			$arr['emp_move_active'] = 'active';
 			$arr['attnd_open'] = 'active';
 			return $arr;
 		} else if($mClass=='timesheet' && $mMethod=='attendance') {
@@ -290,8 +290,16 @@ class Xin_model extends CI_Model {
 			$arr['leave_active'] = 'active';
 			$arr['attnd_open'] = 'active';
 			return $arr;
-
+		} else if($mClass=='leave' && $mMethod=='emp_leave') {
+			$arr['emp_leave'] = 'active';
+			$arr['attnd_open'] = 'active';
+			return $arr;
+		 
 		// lunch
+		} else if($mClass=='lunch' && $mMethod=='lunch_emp_bill') {
+			$arr['emp_lunch_active'] = 'active';
+			$arr['payrl_open'] = 'active';
+			return $arr;
 		}  else if($mClass=='lunch' && $mMethod=='index') {
 			$arr['lunch_open'] = 'active';
 			$arr['lunch_active'] = 'active';

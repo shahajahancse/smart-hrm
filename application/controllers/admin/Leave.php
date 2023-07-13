@@ -55,11 +55,10 @@ class Leave extends MY_Controller
 			redirect('admin/dashboard');
 		}
 	}
+	
 	// attandancevied code here
 	public function emp_leave(){
-		
-	
-        $session = $this->session->userdata('username');
+      $session = $this->session->userdata('username');
 		//  dd($session['user_id']);
 		if(empty($session)){ 
 			redirect('admin/');
@@ -81,17 +80,17 @@ class Leave extends MY_Controller
 			$data['tablebody'] 		= $this->load->view("admin/leave/emp_leave_table", $data, TRUE);
 			echo $data['tablebody'] ;
 		}else{
-				$this->db->order_by("from_date", "desc");
-				$data['alldata'] = $this->db->get('xin_leave_applications')->result();
-				// dd($data['alldata'] );
-				$data['session'] 			= $session;
-				$data['title'] 			= 'Leave | '.$this->Xin_model->site_title();
-				$data['breadcrumbs']	= 'Leave | Employee Leave';
-				$data['tablebody'] 		= $this->load->view("admin/leave/emp_leave_table", $data, TRUE);
+			$this->db->order_by("from_date", "desc");
+			$data['alldata'] = $this->db->get('xin_leave_applications')->result();
+			// dd($data['alldata'] );
+			$data['session'] 			= $session;
+			$data['title'] 			= 'Leave | '.$this->Xin_model->site_title();
+			$data['breadcrumbs']	= 'Leave | Employee Leave';
+			$data['tablebody'] 		= $this->load->view("admin/leave/emp_leave_table", $data, TRUE);
 
-				$data['subview'] 		= $this->load->view("admin/leave/emp_leave", $data, TRUE);
-										$this->load->view('admin/layout/layout_main', $data); 
-		    }
-    }
+			$data['subview'] 		= $this->load->view("admin/leave/emp_leave", $data, TRUE);
+									$this->load->view('admin/layout/layout_main', $data); 
+	    }
+   }
 } 
 ?>
