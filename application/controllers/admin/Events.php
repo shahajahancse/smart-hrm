@@ -111,7 +111,7 @@ class Events extends MY_Controller
 	 }
 	
 	// events_list > Events
-	 public function events_list() {
+	public function events_list() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
@@ -215,9 +215,9 @@ class Events extends MY_Controller
 		);
 	  echo json_encode($output);
 	  exit();
-     }
+    }
 	 
-	 // Validate and add info in database
+	// Validate and add info in database
 	public function add_event() {
 	
 		if($this->input->post('add_type')=='event') {		
@@ -426,11 +426,26 @@ class Events extends MY_Controller
 	 
 	 header('Content-Type: application/x-json; charset=utf-8');
 	 echo (json_encode($data));
-	
-	
-
 	}
 	 
+	function notice() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$system = $this->Xin_model->read_setting_info(1);
+		if($system[0]->module_events!='true'){
+			redirect('admin/dashboard');
+		}
+		$data['title'] = 'Notice | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Notice';
+		// $data['path_url'] = 'events';
+		// $data['get_all_companies'] = $this->Xin_model->get_companies();
+		// $data['all_employees'] = $this->Xin_model->all_employees();
+		// $role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['subview'] = $this->load->view("admin/events/notice", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
 	 
 	 
 } 

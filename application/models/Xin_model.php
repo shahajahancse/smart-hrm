@@ -712,6 +712,10 @@ class Xin_model extends CI_Model {
 			$arr['hr_events_active'] = 'active';
 			$arr['hr_events_open'] = 'active';
 			return $arr;
+		} else if($mClass=='events' && $mMethod=='notice') {
+			$arr['notice_active'] = 'active';
+			$arr['hr_events_open'] = 'active';
+			return $arr;
 		} else if($mClass=='goal_tracking' && $mMethod=='calendar') {
 			$arr['goal_tracking_cal_active'] = 'active';
 			$arr['performance_open'] = 'active';

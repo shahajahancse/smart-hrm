@@ -691,12 +691,17 @@ if($theme[0]->sub_menu_icons != ''){
     <?php } ?>
 
     <?php if($system[0]->module_events=='true'){?>
-    <?php  if(in_array('97',$role_resources_ids) || in_array('98',$role_resources_ids) || in_array('99',$role_resources_ids)) {?>
+    <?php  if(in_array('97',$role_resources_ids) || in_array('98',$role_resources_ids) || in_array('99',$role_resources_ids) || in_array('127',$role_resources_ids)) {?>
       <li class="<?php if(!empty($arr_mod['hr_events_open']))echo $arr_mod['hr_events_open'];?> treeview"> <a href="#"> <i class="fa fa-calendar-plus-o"></i> <span><?php echo $this->lang->line('xin_hr_events_meetings');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
           <?php if(in_array('98',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['hr_events_active']))echo $arr_mod['hr_events_active'];?>"> <a href="<?php echo site_url('admin/events');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_events');?> </a> </li>
           <?php } ?>
+
+          <?php if(in_array('127',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['notice_active']))echo $arr_mod['notice_active'];?>"> <a href="<?php echo site_url('admin/events/notice');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Notice </a> </li>
+          <?php } ?>
+
           <?php if(in_array('99',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['hr_meetings_active']))echo $arr_mod['hr_meetings_active'];?>"> <a href="<?php echo site_url('admin/meetings');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_meetings');?> </a> </li>
           <?php } ?>
