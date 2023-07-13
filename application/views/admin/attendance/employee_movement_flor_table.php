@@ -20,7 +20,7 @@
             <td><?= $k+1?></td>
             <td><?= $value->date?></td>
             <td class="p0"><?= $outtime?></td>
-            <td class="p0"><?= $in_time_array[$k]?></td>
+            <td class="p0"><?= (isset($in_time_array[$k]))? $in_time_array[$k] :''?></td>
             <td class="p0"><?= ($location_array[$k]==1) ? '5th Floor' : (($location_array[$k]==2) ? '3rd Floor' : 'Out Side');?></td>
             <td class="p0"><?= $reason_array[$k]?></td>
             </tr>

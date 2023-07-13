@@ -1,13 +1,26 @@
 <?php
-// dd($empinfo);
+
  $userid  = $session[ 'user_id' ];
  $totalmove_out_array = 0;
  $totalmove_in_array = 0;
+ $inout=0;
  if (!empty($todaylog)) {
      $totalmove_out_array=json_decode($todaylog[0]->out_time);
      $totalmove_in_array=json_decode($todaylog[0]->in_time);
+     $inout=$todaylog[0]->inout;
+     
+$lastRow = end($totalmove_out_array); // Get the last element of the array
+$currentDateTime = new DateTime(); // Get the current date and time
+$lastRowDateTime = DateTime::createFromFormat('g:i A', $lastRow); // Convert the last row value to DateTime object
+
+$timeDifference = $currentDateTime->diff($lastRowDateTime); // Calculate the difference between current time and last row time
+$h = $timeDifference->h; // Get the hours from the time difference
+$m = $timeDifference->i; // Get the minutes from the time difference
+
+$timeDifferenceFormatted = sprintf('%02d:%02d', $h, $m); // Format the time difference
+
  }
- $totalmove=count($totalmove_out_array);
+ $totalmove=count($todaylog);
  $totalSpendingTime = array(
     'hours' => 0,
     'minutes' => 0,
@@ -16,6 +29,8 @@
 
 $count = count($totalmove_out_array);
 for ($i = 0; $i < $count; $i++) {
+    if(isset($totalmove_in_array[$i])){
+
     $outDateTime = new DateTime($totalmove_out_array[$i]);
     $inDateTime = new DateTime($totalmove_in_array[$i]);
 
@@ -23,6 +38,7 @@ for ($i = 0; $i < $count; $i++) {
     $totalSpendingTime['hours'] += $timeDiff->h;
     $totalSpendingTime['minutes'] += $timeDiff->i;
     $totalSpendingTime['seconds'] += $timeDiff->s;
+    }
 }
 
 // Adjust minutes and seconds if necessary
@@ -68,7 +84,21 @@ body {
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
 }
+
 #customModal2 {
+
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#customModal3 {
 
     display: none;
     position: fixed;
@@ -116,144 +146,61 @@ body {
 
 
 <div id="customModal">
-  
-    <?php $attributes = array('name' => 'add_leave', 'autocomplete' => 'off');?>
-    <?php $hidden = array('_user' => $session['user_id']);?>
-    <?php echo form_open('admin/timesheet/add_leave', $attributes, $hidden);?>
-    <input type="hidden" name="company_id" id="company_id" value="1" />
-    <input type="hidden" name="employee_id" id="employee_id" value="<?php echo $userid; ?>"> />
-
-
-
-    <div class="modal-content">1
+    <div class="modal-content">
         <span id="close" class="close"><svg style="width: 20px;height: 20px;flex-shrink: 0;"
                 xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path
                     d="M18.0002 4H6.41453C6.15184 3.99995 5.89172 4.05167 5.64903 4.15221C5.40634 4.25275 5.18585 4.40013 5.00016 4.58594L0.292969 9.29281C-0.0976562 9.68344 -0.0976562 10.3166 0.292969 10.7069L5.00016 15.4141C5.37516 15.7891 5.88391 16 6.41422 16H18.0002C19.1048 16 20.0002 15.1047 20.0002 14V6C20.0002 4.89531 19.1048 4 18.0002 4ZM15.3536 11.9394C15.5489 12.1347 15.5489 12.4513 15.3536 12.6466L14.6467 13.3534C14.4514 13.5487 14.1348 13.5487 13.9395 13.3534L12.0002 11.4141L10.0608 13.3534C9.86547 13.5487 9.54891 13.5487 9.35359 13.3534L8.64672 12.6466C8.45141 12.4513 8.45141 12.1347 8.64672 11.9394L10.5861 10L8.64672 8.06063C8.45141 7.86531 8.45141 7.54875 8.64672 7.35344L9.35359 6.64656C9.54891 6.45125 9.86547 6.45125 10.0608 6.64656L12.0002 8.58594L13.9395 6.64656C14.1348 6.45125 14.4514 6.45125 14.6467 6.64656L15.3536 7.35344C15.5489 7.54875 15.5489 7.86531 15.3536 8.06063L13.4142 10L15.3536 11.9394Z"
                     fill="#858A8F" />
             </svg></span>
-        <div class="col-md-12">
-            <div class="col-md-6">
-                <div class="input">
-                    <div class="level">Select Reason of move**</div>
-                    <div class="pseudo6">
-                        <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;" required>
-                            <option>Select Reason of move**</option>
-                            <option value="Meeting">Meeting</option>
-                        </select>
+        <form id="movementform1">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="input">
+                        <div class="level">Select Reason of move**</div>
+                        <div class="pseudo6">
+                            <select id="leave_type" name="reason" style="width: 98%;border: none;cursor: pointer;"
+                                required>
+                                <option>Select Reason of move**</option>
+                                <option value="Meeting">Meeting</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="area" value="<?= ($empinfo[0]->floor_status!=3)? '2':'1'?>">
+                <div class="col-md-6">
+                    <div class="input">
+                        <div class="level">Select Meeting People**</div>
+                        <div class="pseudo6">
+                            <select id="leave_type" name="meet_with" style="width: 98%;border: none;cursor: pointer;"
+                                required>
+                                <option>Select Meeting People**</option>
+
+                                <?php
+                                 if($empinfo[0]->floor_status!=3){
+                                    $data=$emp3rd;
+                                    }else{
+                                        $data=$emp5th ;}; foreach($data as $emp){?>
+                                <option value="<?= $emp->first_name ?> <?= $emp->last_name ?> "><?= $emp->first_name ?>
+                                    <?= $emp->last_name ?> </option>
+                                <?php } ?>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
-            <input type="hidden" name="area" value="">
-            <div class="col-md-6">
-                <div class="input">
-                    <div class="level">Select Meeting People**</div>
-                    <div class="pseudo6">
-                        <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;" required>
-                            <option>Select Meeting People**</option>
-                            <?php foreach($emp3rd as $emp){?>
-                            <option value="<?= $emp->first_name ?> <?= $emp->last_name ?> "><?= $emp->first_name ?> <?= $emp->last_name ?> </option>
-                        <?php } ?>
-                        </select>
-                    </div>
+            <div class="col-md-12">
+                <div class="form-actions box-footer">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
                 </div>
             </div>
-        </div>
-        <div class="col-md-12">
-            <div class="form-actions box-footer">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
-            </div>
-        </div>
 
 
 
     </div>
-    <?php echo form_close(); ?>
+    </form>
 </div>
-<div id="customModal2">
-   
-    <?php $attributes = array('name' => 'add_leave', 'autocomplete' => 'off');?>
-    <?php $hidden = array('_user' => $session['user_id']);?>
-    <?php echo form_open('admin/timesheet/add_leave', $attributes, $hidden);?>
-    <input type="hidden" name="company_id" id="company_id" value="1" />
-    <input type="hidden" name="employee_id" id="employee_id" value="<?php echo $userid; ?>"/>
-
-
-
-    <div class="modal-content">2
-        <span id="close2" class="close"><svg style="width: 20px;height: 20px;flex-shrink: 0;"
-                xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path
-                    d="M18.0002 4H6.41453C6.15184 3.99995 5.89172 4.05167 5.64903 4.15221C5.40634 4.25275 5.18585 4.40013 5.00016 4.58594L0.292969 9.29281C-0.0976562 9.68344 -0.0976562 10.3166 0.292969 10.7069L5.00016 15.4141C5.37516 15.7891 5.88391 16 6.41422 16H18.0002C19.1048 16 20.0002 15.1047 20.0002 14V6C20.0002 4.89531 19.1048 4 18.0002 4ZM15.3536 11.9394C15.5489 12.1347 15.5489 12.4513 15.3536 12.6466L14.6467 13.3534C14.4514 13.5487 14.1348 13.5487 13.9395 13.3534L12.0002 11.4141L10.0608 13.3534C9.86547 13.5487 9.54891 13.5487 9.35359 13.3534L8.64672 12.6466C8.45141 12.4513 8.45141 12.1347 8.64672 11.9394L10.5861 10L8.64672 8.06063C8.45141 7.86531 8.45141 7.54875 8.64672 7.35344L9.35359 6.64656C9.54891 6.45125 9.86547 6.45125 10.0608 6.64656L12.0002 8.58594L13.9395 6.64656C14.1348 6.45125 14.4514 6.45125 14.6467 6.64656L15.3536 7.35344C15.5489 7.54875 15.5489 7.86531 15.3536 8.06063L13.4142 10L15.3536 11.9394Z"
-                    fill="#858A8F" />
-            </svg></span>
-        <div class="col-md-12">
-            <div class="col-md-4">
-                <div class="input">
-                    <div class="level">Select Leave Type**</div>
-                    <div class="pseudo6">
-                        <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;" required>
-                            <option>Select Leave Type**</option>
-                            <option value="1">Casual Leave</option>
-                            <option value="2">Medical Leave</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="input">
-                    <div class="level">Select Start Date**</div>
-                    <div class="pseudo6">
-                        <input name="start_date" value="<?= date('Y-m-d') ?>" class="col-md-12 "
-                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="" required>
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-md-3">
-                <div class="input">
-                    <div class="level">Select End Date**</div>
-                    <div class="pseudo6">
-                        <input name="end_date" value="<?= date('Y-m-d') ?>" class="col-md-12"
-                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="" required>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <br />
-                    <input type="checkbox" class="form-control minimal" value="1" id="leave_half_day"
-                        name="leave_half_day">
-                    <label><?php echo $this->lang->line('xin_hr_leave_half_day');?></span> </label>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="form-group texta">
-                <label for="summary"> Leave Reason** </label>
-                <textarea class="form-control" placeholder="Describe your leave reason" name="reason" cols="30" rows="5"
-                    id="reason" required></textarea>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="form-actions box-footer">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
-            </div>
-        </div>
-
-
-
-    </div>
-    <?php echo form_close(); ?>
-</div>
-
-
-
-
-
-
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
         <div class="heading">Today Move</div>
@@ -264,10 +211,27 @@ body {
         <div class="heading">Total Spending time</div>
         <div class="heading2"><?= $totaltime ?></div>
     </div>
+    <?php if($inout==0){ ?>
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
-    <div class="heading" style="font-size: 12px!important;">Are you want to go to the <span style="color: #599AE7;"><?= ($empinfo[0]->floor_status!=3)? '3rd floor?':'5th floor?'?></span> Please Make Sure your Check In & entry Purpose </div>
-        <div class="heading2"><a class="btn" id="<?= ($empinfo[0]->floor_status!=3)? 'openModal':'openModal2'?>"  style="width: 146px;height: 32px;border-radius: 2px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);color: white;font-weight: bold;">Check In</a></div>
+        <div class="heading" style="font-size: 12px!important;">Are you want to go to the <span
+                style="color: #599AE7;"><?= ($empinfo[0]->floor_status!=3)? '3rd floor?':'5th floor?'?></span> Please
+            Make Sure your Check In & entry Purpose </div>
+        <div class="heading2"><a class="btn" id="openModal"
+                style="width: 146px;height: 32px;border-radius: 2px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);color: white;font-weight: bold;">Check
+                In</a></div>
     </div>
+    <?php }else{ ?>
+
+    <div class="divstats-info col-md-6" style="background-color:#FFF;">
+        <div class="heading" style="font-size: 12px!important;color: red;">Your Check In time <span
+                style="color: #599AE7;"><?= (isset($timeDifferenceFormatted))? $timeDifferenceFormatted:''?> m</span> on
+            <span style="color: #599AE7;"><?= ($empinfo[0]->floor_status!=3)? '5rd floor':'3th floor'?></span> Make Sure
+            when You Come back Check out </div>
+        <div class="heading2"><a class="btn" href="<?= base_url('admin/floor_movement/informsub') ?>"
+                style="width: 146px;height: 32px;border-radius: 2px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);color: white;font-weight: bold;">Check
+                Out</a></div>
+    </div>
+    <?php } ?>
 </div>
 <div class="col-md-12 medelbar">
     <div class="col-md-10"
@@ -378,12 +342,33 @@ document.getElementById("openModal").addEventListener("click", function() {
 document.getElementById("close").addEventListener("click", function() {
     document.getElementById("customModal").style.display = "none";
 });
-</script>
+</script>'
 <script>
-document.getElementById("openModal2").addEventListener("click", function() {
-    document.getElementById("customModal2").style.display = "block";
-});
-document.getElementById("close2").addEventListener("click", function() {
-    document.getElementById("customModal2").style.display = "none";
+$('#movementform1').on('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Get the form data
+    var formData = $(this).serialize();
+
+
+    // Make an AJAX post request to the controller
+    $.ajax({
+        url: '<?= base_url('admin/floor_movement/outformsub') ?>', // Replace 'controller/method' with your actual controller and method
+        method: 'POST',
+        data: formData,
+        success: function(response) {
+            // Handle the success response
+
+            alert(response);
+            location.reload();
+            // Process the response data returned from the controller
+        },
+        error: function(xhr, status, error) {
+            // Handle any errors that occur during the request
+
+            alert(error);
+            location.reload();
+        }
+    });
 });
 </script>
