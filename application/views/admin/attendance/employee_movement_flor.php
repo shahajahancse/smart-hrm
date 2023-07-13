@@ -113,7 +113,7 @@ body {
 
 
 <div id="customModal">
-    1
+  
     <?php $attributes = array('name' => 'add_leave', 'autocomplete' => 'off');?>
     <?php $hidden = array('_user' => $session['user_id']);?>
     <?php echo form_open('admin/timesheet/add_leave', $attributes, $hidden);?>
@@ -122,7 +122,7 @@ body {
 
 
 
-    <div class="modal-content">
+    <div class="modal-content">1
         <span id="close" class="close"><svg style="width: 20px;height: 20px;flex-shrink: 0;"
                 xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path
@@ -130,51 +130,30 @@ body {
                     fill="#858A8F" />
             </svg></span>
         <div class="col-md-12">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="input">
-                    <div class="level">Select Leave Type**</div>
+                    <div class="level">Select Reason of move**</div>
                     <div class="pseudo6">
                         <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;" required>
-                            <option>Select Leave Type**</option>
-                            <option value="1">Casual Leave</option>
-                            <option value="2">Medical Leave</option>
+                            <option>Select Reason of move**</option>
+                            <option value="Meeting">Meeting</option>
                         </select>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <input type="hidden" name="area" value="">
+            <div class="col-md-6">
                 <div class="input">
-                    <div class="level">Select Start Date**</div>
+                    <div class="level">Select Meeting People**</div>
                     <div class="pseudo6">
-                        <input name="start_date" value="<?= date('Y-m-d') ?>" class="col-md-12 "
-                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="" required>
+                        <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;" required>
+                            <option>Select Meeting People**</option>
+                            <?php foreach($emp3rd as $emp){?>
+                            <option value="<?= $emp->first_name ?> <?= $emp->last_name ?> "><?= $emp->first_name ?> <?= $emp->last_name ?> </option>
+                        <?php } ?>
+                        </select>
                     </div>
                 </div>
-
-            </div>
-            <div class="col-md-3">
-                <div class="input">
-                    <div class="level">Select End Date**</div>
-                    <div class="pseudo6">
-                        <input name="end_date" value="<?= date('Y-m-d') ?>" class="col-md-12"
-                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="" required>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <br />
-                    <input type="checkbox" class="form-control minimal" value="1" id="leave_half_day"
-                        name="leave_half_day">
-                    <label><?php echo $this->lang->line('xin_hr_leave_half_day');?></span> </label>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="form-group texta">
-                <label for="summary"> Leave Reason** </label>
-                <textarea class="form-control" placeholder="Describe your leave reason" name="reason" cols="30" rows="5"
-                    id="reason" required></textarea>
             </div>
         </div>
         <div class="col-md-12">
@@ -190,7 +169,7 @@ body {
     <?php echo form_close(); ?>
 </div>
 <div id="customModal2">
-    2
+   
     <?php $attributes = array('name' => 'add_leave', 'autocomplete' => 'off');?>
     <?php $hidden = array('_user' => $session['user_id']);?>
     <?php echo form_open('admin/timesheet/add_leave', $attributes, $hidden);?>
@@ -199,7 +178,7 @@ body {
 
 
 
-    <div class="modal-content">
+    <div class="modal-content">2
         <span id="close2" class="close"><svg style="width: 20px;height: 20px;flex-shrink: 0;"
                 xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path
