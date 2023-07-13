@@ -1,11 +1,14 @@
 <?php
 // dd($empinfo);
  $userid  = $session[ 'user_id' ];
-
- $totalmove_out_array=json_decode($todaylog[0]->out_time);
- $totalmove_in_array=json_decode($todaylog[0]->in_time);
+ $totalmove_out_array = 0;
+ $totalmove_in_array = 0;
+ if (!empty($todaylog)) {
+     $totalmove_out_array=json_decode($todaylog[0]->out_time);
+     $totalmove_in_array=json_decode($todaylog[0]->in_time);
+ }
  $totalmove=count($totalmove_out_array);
-$totalSpendingTime = array(
+ $totalSpendingTime = array(
     'hours' => 0,
     'minutes' => 0,
     'seconds' => 0
