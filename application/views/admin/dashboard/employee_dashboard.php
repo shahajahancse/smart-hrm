@@ -129,7 +129,10 @@ $balanceMeal= $paymeal-$taken_meal;
 
       $holidays= $this->db->select('*')->get('xin_holidays')->result();
       $holidayss= $this->db->select('*')->limit(4)->where("start_date > '".date('Y-m-d')."'")->get('xin_holidays')->result();
-      // dd($this->db->last_query());       
+      // dd($this->db->last_query());   
+    $leave_calel=get_cal_leave($userid,1);
+    $leave_calsl=get_cal_leave($userid,2);  
+    $totaluseleave=$leave_calel+$leave_calsl;
 ?>
 
 
@@ -604,7 +607,7 @@ hr {
                                 </svg>
                             </div>
                             <span class="text-center"><b>Leave</b></span>
-                            <span class="text-center" style="color:red"><b>Pending</b></span>
+                            <span class="text-center" style="color:red"><b><?= 16-$totaluseleave ?></b></span>
                         </div>
 
                     </div>
@@ -653,11 +656,11 @@ hr {
                         </div>
                     </div>
                     <div class="text-center">
-                        <a href="<?= base_url('admin/lunch/lunch_emp_bill') ?>" style="margin-top:15px;color:#5442A8;">View All</a>
+                        <a href="<?= base_url('admin/lunch/lunch_emp_bill') ?>"
+                            style="margin-top:15px;color:#5442A8;">View All</a>
                     </div>
                     <h5 class="card-title" style="margin-top: 20px;margin-left: 13px;font-weight:600">Leave Balance</h5>
-                    <?php $leave_calel=get_cal_leave($userid,1);
-                          $leave_calsl=get_cal_leave($userid,2);    ?>
+                    
                     <div class="stats-box-row" style="border:2px solid #E1E1E1;padding:15px 5px;border-radius:5px;">
                         <div class="col-md-4" style="border-right:2px solid #E1E1E1">
                             <span><b>Sick</b></span>
@@ -670,7 +673,7 @@ hr {
                         </div>
 
                         <div class="col-md-4">
-                          <?php
+                            <?php
                         $date        = date( "Y-01-01");
                         $datep       = date( "Y-m-d");
                         $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
@@ -682,7 +685,8 @@ hr {
                         </div>
                     </div>
                     <div class="text-center">
-                        <a href="<?= base_url('admin/attendance/employee_attendance') ?>" style="margin-top:15px;color:#5442A8;">View All</a>
+                        <a href="<?= base_url('admin/attendance/employee_attendance') ?>"
+                            style="margin-top:15px;color:#5442A8;">View All</a>
                     </div>
 
                 </div>
