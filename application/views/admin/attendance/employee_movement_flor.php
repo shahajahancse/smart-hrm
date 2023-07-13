@@ -146,7 +146,7 @@ body {
     font-size: 14px;
     font-weight: 600;
     display: flex;
-    height: 39px;
+    height: 42px;
     justify-content: center;
     align-items: center;
     gap: 10px;
@@ -256,7 +256,7 @@ body {
 </div>
 <div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
     <div class="col-md-2 divform-group " style="padding: 0;">
-        <a href="" class="cboton cactive">Floor wise Movement</a>
+        <a href="<?= base_url('admin/attendance/employee_movement/1') ?>" class="cboton cactive">Floor wise Movement</a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
         <a href="" class="cboton">Outside office </a>
@@ -310,7 +310,7 @@ function getdata(status) {
         var seconddate = lastDate.toDateString();
     }
     $.ajax({
-        url: '<?php echo base_url('admin/leave/emp_leave'); ?>',
+        url: '<?php echo base_url('admin/attendance/employee_movement_flor'); ?>',
         method: 'POST',
         data: {
             firstdate: firstdate,
