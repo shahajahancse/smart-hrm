@@ -703,13 +703,23 @@ class Attendance extends MY_Controller {
 								   $this->load->view('admin/layout/layout_main', $data); 
 		}
     }
-	public function employee_movement_flor(){
+
+	public function employee_movement($type = null){
         $session = $this->session->userdata('username');
 		//  dd($session['user_id']);
-		if(empty($session)){ 
+		if(empty($session) || $type == null){ 
 			redirect('admin/');
 		}
-		$session = $this->session->userdata( 'username' );
+
+		if ($type == 1) {
+			$data = $this->employee_movement_flor($session);
+		}
+
+		$this->load->view('admin/layout/layout_main', $data); 
+    }
+
+    
+	public function employee_movement_flor($session){
 		$userid  = $session[ 'user_id' ];
 		$firstdate = $this->input->post('firstdate');
 		$seconddate = $this->input->post('seconddate');
@@ -748,7 +758,7 @@ class Attendance extends MY_Controller {
 			$data['tablebody'] 	 = $this->load->view("admin/attendance/employee_movement_flor_table", $data, TRUE);
 
 			$data['subview'] 	 = $this->load->view("admin/attendance/employee_movement_flor", $data, TRUE);
-								   $this->load->view('admin/layout/layout_main', $data); 
+			return $data;
 		}
     }
 
