@@ -111,113 +111,7 @@ class Events extends MY_Controller
 		$length = intval($this->input->get("length"));
 	 }
 	
-	// events_list > Events
-	//  public function events_list() {
-
-	// 	$data['title'] = $this->Xin_model->site_title();
-	// 	$session = $this->session->userdata('username');
-	// 	if(!empty($session)){ 
-	// 		$this->load->view("admin/events/events_list", $data);
-	// 	} else {
-	// 		redirect('admin/');
-	// 	}
-	// 	// Datatables Variables
-	// 	$draw = intval($this->input->get("draw"));
-	// 	$start = intval($this->input->get("start"));
-	// 	$length = intval($this->input->get("length"));
-				
-		
-	// 	$role_resources_ids = $this->Xin_model->user_role_resource();
-	// 	$user_info = $this->Xin_model->read_user_info($session['user_id']);
-	// 	if($user_info[0]->user_role_id==1){
-	// 		$events = $this->Events_model->get_events();
-	// 	} else {
-	// 		if(in_array('272',$role_resources_ids)) {
-	// 			$events = $this->Events_model->get_company_events($user_info[0]->company_id);
-	// 		} else {
-	// 			$events = $this->Events_model->get_employee_events($session['user_id']);
-	// 		}
-	// 	}
-	// 	$data = array();
-
-    //     foreach($events->result() as $r) {
-			  
-	// 		 // get start date and end date
-	// 		 $sdate = $this->Xin_model->set_date_format($r->event_date);
-	// 		 // get time am/pm
-	// 		 $event_time = new DateTime($r->event_time);
-	// 		 // get company
-	// 		$company = $this->Xin_model->read_company_info($r->company_id);
-	// 		if(!is_null($company)){
-	// 			$comp_name = $company[0]->name;
-	// 		} else {
-	// 			$comp_name = '--';	
-	// 		}
-			
-	// 		// get user > added by
-	// 		if($r->employee_id == '') {
-	// 			$ol = $this->lang->line('xin_not_assigned');
-	// 		} else {
-	// 			$ol = '';
-	// 			foreach(explode(',',$r->employee_id) as $desig_id) {
-	// 				$assigned_to = $this->Xin_model->read_user_info($desig_id);
-	// 				if(!is_null($assigned_to)){
-						
-	// 				  $assigned_name = $assigned_to[0]->first_name.' '.$assigned_to[0]->last_name;
-	// 				 if($assigned_to[0]->profile_picture!='' && $assigned_to[0]->profile_picture!='no file') {
-	// 					$ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.base_url().'uploads/profile/'.$assigned_to[0]->profile_picture.'" class="user-image-hr" alt=""></span></a>';
-	// 					} else {
-	// 					if($assigned_to[0]->gender=='Male') { 
-	// 						$de_file = base_url().'uploads/profile/default_male.jpg';
-	// 					 } else {
-	// 						$de_file = base_url().'uploads/profile/default_female.jpg';
-	// 					 }
-	// 					$ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.$de_file.'" class="user-image-hr" alt=""></span></a>';
-	// 					}
-	// 				} ////
-	// 				else {
-	// 					$ol .= '';
-	// 				}
-	// 			 }
-	// 			 $ol .= '';
-	// 		}
-	// 		$full_name = $ol;
-	// 		if(in_array('270',$role_resources_ids)) { //edit
-	// 			$edit = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light edit-data" data-toggle="modal" data-target=".edit-modal-data" data-event_id="'. $r->event_id.'"><span class="fa fa-pencil"></span></button></span>';
-	// 		} else {
-	// 			$edit = '';
-	// 		}
-	// 		if(in_array('271',$role_resources_ids)) { // delete
-	// 			$delete = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->event_id . '"><span class="fa fa-trash"></span></button></span>';
-	// 		} else {
-	// 			$delete = '';
-	// 		}
-	// 		if(in_array('272',$role_resources_ids)) { //view
-	// 			$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-event_id="'. $r->event_id . '"><span class="fa fa-eye"></span></button></span>';
-	// 		} else {
-	// 			$view = '';
-	// 		}
-	// 	   $combhr = $edit.$view.$delete;
-	// 	   $data[] = array(
-	// 			$combhr,
-	// 			$comp_name,
-	// 			$full_name,
-	// 			$r->event_title,
-	// 			$sdate,
-	// 			$event_time->format('h:i a')
-	// 	   );
-	//   }
-
-	//   $output = array(
-	// 	   "draw" => $draw,
-	// 		 "recordsTotal" => $events->num_rows(),
-	// 		 "recordsFiltered" => $events->num_rows(),
-	// 		 "data" => $data
-	// 	);
-	//   echo json_encode($output);
-	//   exit();
-    //  }
-	 
+	
 	 // Validate and add info in database
 	public function add_event() {
 		
@@ -464,7 +358,6 @@ if ($hours > 0) {
 								   $this->load->view('admin/layout/layout_main', $data); 
 		}
 	}
-	 
 	 
 	 
 } 
