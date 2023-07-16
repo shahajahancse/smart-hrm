@@ -3,9 +3,9 @@
 $total_event=count($allevent);
 
 $this->db->select("*");
-$this->db->where("start_event_date >=", date('Y-m-d'));
-$this->db->order_by("event_id", "desc");
-$upcomming_event = $this->db->get('xin_events')->result();
+$this->db->where("start_date >=", date('Y-m-d'));
+$this->db->order_by("holiday_id", "desc");
+$upcomming_event = $this->db->get('xin_holidays')->result();
 $total_upcomming_event=count($upcomming_event);
 if($total_upcomming_event!=0){
     $lastEvent = end($upcomming_event);
@@ -39,7 +39,7 @@ if($total_upcomming_event!=0){
 
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
-        <div class="heading">Total Event</div>
+        <div class="heading">Total Holyday</div>
         <div class="heading2"><?= $total_event ?></div>
     </div>
 
@@ -50,11 +50,11 @@ if($total_upcomming_event!=0){
     <div class="divstats-info col-md-6" style="background-color: #D2F9EE;display: flex;">
     <div class='col-md-6' style="display: flex;flex-direction: column;">
         <span>Upcoming  Event</span>
-        <span style="color: #1F1F1F;font-family: Roboto;font-size: 19px;font-style: normal;font-weight: 700;/* 143% */"><?= (isset($lastEvent->start_event_date))? date('d-M-Y H:i',strtotime($lastEvent->start_event_date.' '.$lastEvent->start_event_time)) : 'none'?></span>
+        <span style="color: #1F1F1F;font-family: Roboto;font-size: 19px;font-style: normal;font-weight: 700;/* 143% */"><?= (isset($lastEvent->start_date))? date('d-M-Y',strtotime($lastEvent->start_date)) : 'none'?></span>
 
     </div>
     <div class='col-md-6'>
-        <span><?= (isset($lastEvent->event_title))? $lastEvent->event_title: '' ?></span>
+        <span><?= (isset($lastEvent->event_name))? $lastEvent->event_name: '' ?></span>
     </div>
 
        
@@ -63,10 +63,10 @@ if($total_upcomming_event!=0){
 </div>
 <div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
     <div class="col-md-2 divform-group " style="padding: 0;">
-        <a href="#" class="cboton cactive">Event List</a>
+        <a href="<?= base_url('admin/events/epm_event')?>" class="cboton ">Event List</a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
-        <a href="<?= base_url('admin/leave/emp_holyday')?>" class="cboton">Yearly Holiday  </a>
+        <a href="<?= base_url('admin/leave/emp_holyday')?>" class="cboton cactive">Yearly Holiday  </a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
         <a href="" class="cboton">Calendar</a>
@@ -117,7 +117,7 @@ function getdata(status) {
         var seconddate = lastDate.toDateString();
     }
     $.ajax({
-        url: '<?php echo base_url('admin/events/epm_event'); ?>',
+        url: '<?php echo base_url('admin/leave/emp_holyday'); ?>',
         method: 'POST',
         data: {
             firstdate: firstdate,

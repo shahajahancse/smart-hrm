@@ -92,5 +92,39 @@ class Leave extends MY_Controller
 									$this->load->view('admin/layout/layout_main', $data); 
 	    }
    }
+	
+   public function emp_holyday(){
+	$session = $this->session->userdata('username');
+	//  dd($session['user_id']);
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$session = $this->session->userdata( 'username' );
+	$userid  = $session[ 'user_id' ];
+	$firstdate = $this->input->post('firstdate');
+	$seconddate = $this->input->post('seconddate');
+
+	$this->db->select("*");
+	if ($firstdate!=null && $seconddate!=null){
+		$f1_date=date('Y-m-d',strtotime($firstdate));
+		$f2_date=date('Y-m-d',strtotime($seconddate));
+		$this->db->where("start_date BETWEEN '$f1_date' AND '$f2_date'");
+		$this->db->order_by("holiday_id", "desc");
+		$data['allevent']   = $this->db->get('xin_holidays')->result();
+		$data['tablebody'] = $this->load->view("admin/leave/emp_holyday_table", $data, TRUE);
+		echo $data['tablebody'] ;
+	}else{
+		$this->db->order_by("holiday_id", "desc");
+		$data['allevent'] = $this->db->get('xin_holidays')->result();
+		$data['session']     = $session;
+		$data['title'] 		 = 'Holyday | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Holyday';
+		$data['tablebody'] 	 = $this->load->view("admin/leave/emp_holyday_table", $data, TRUE);
+		
+
+		$data['subview'] 	 = $this->load->view("admin/leave/emp_holyday", $data, TRUE);
+							   $this->load->view('admin/layout/layout_main', $data); 
+	}
+}
 } 
 ?>
