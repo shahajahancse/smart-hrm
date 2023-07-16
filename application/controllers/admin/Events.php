@@ -439,14 +439,192 @@ class Events extends MY_Controller
 		}
 		$data['title'] = 'Notice | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Notice';
-		// $data['path_url'] = 'events';
+		$data['path_url'] = 'events';
 		// $data['get_all_companies'] = $this->Xin_model->get_companies();
 		// $data['all_employees'] = $this->Xin_model->all_employees();
 		// $role_resources_ids = $this->Xin_model->user_role_resource();
 		$data['subview'] = $this->load->view("admin/events/notice", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
+	// notice_list > Notice
+	public function notice_list() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/events/notice_list", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+				
+
+		$events = $this->db->get("xin_office_notice");
+		$data = array();
+
+        foreach($events->result() as $r) {
+			
+			//edit
+			// $edit = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light edit-data" data-toggle="modal" data-target=".edit-modal-data" data-notice_id="'. $r->id.'"><span class="fa fa-pencil"></span></button></span>';
+        	$edit = '';
+			// delete
+			$delete = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->id . '"><span class="fa fa-trash"></span></button></span>';
+			//view
+			$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-details" data-notice_id="'. $r->id . '"><span class="fa fa-eye"></span></button></span>';
+
+		    $combhr = $edit.$view.$delete;
+			$description = substr($r->description,0, 20);
+		    $data[] = array(
+				$combhr,
+				$r->title,
+				$description,
+				$r->created_at,
+		    );
+	    }
+
+	    $output = array(
+		   "draw" => $draw,
+			"recordsTotal" => $events->num_rows(),
+			"recordsFiltered" => $events->num_rows(),
+			"data" => $data
+		);
+	  	echo json_encode($output);
+	  	exit();
+    }
 	 
+
+
+	// Validate and add info in database
+	public function add_notice() {
+		$session = $this->session->userdata('username');
+		if($this->input->post('add_type')=='notice') {		
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
+				
+			/* Server side PHP input validation */		
+			if($this->input->post('notice_title') === '') {
+				$Return['error'] = 'Notice Title';
+			} else if($this->input->post('description')  === '') {
+				$Return['error'] = 'Notice Description';
+			}
+					
+			if($Return['error'] != ''){
+	       		$this->output($Return);
+	    	}
+
+			$data = array(
+				'title' => $this->input->post('notice_title'),
+				'description' => $this->input->post('description'),
+				'created_at' => date('Y-m-d'),
+				'created_by' => $session['user_id'],
+			);
+
+			if ($this->db->insert('xin_office_notice', $data) == TRUE) {
+				$row = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("xin_office_notice")->row();
+				$Return['result'] = 'Successfully Insert Done';
+				$Return['re_event_id'] = $row->id;
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_msg');
+			}
+			$this->output($Return);
+			exit;
+		}
+	}
+	
+	// Validate and add info in database
+	public function edit_notice() {
+	
+		if($this->input->post('edit_type')=='event') {
+			
+		$id = $this->uri->segment(4);		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		
+		$event_date = $this->input->post('event_date');
+		$current_date = date('Y-m-d');
+		$event_note = $this->input->post('event_note');
+		$ev_date = strtotime($event_date);
+		$ct_date = strtotime($current_date);
+		$qt_event_note = htmlspecialchars(addslashes($event_note), ENT_QUOTES);
+			
+		/* Server side PHP input validation */		
+		if($this->input->post('event_title')==='') {
+        	$Return['error'] = $this->lang->line('xin_error_event_title_field');
+		} else if($this->input->post('event_date')==='') {
+			$Return['error'] = $this->lang->line('xin_error_event_date_field');
+		} else if($ev_date < $ct_date) {
+			$Return['error'] = $this->lang->line('xin_error_event_date_current_date');
+		} else if($this->input->post('event_time')==='') {
+			$Return['error'] = $this->lang->line('xin_error_event_time_field');
+		}
+				
+		if($Return['error']!=''){
+       		$this->output($Return);
+    	}
+	
+		$data = array(
+		'event_title' => $this->input->post('event_title'),
+		'event_date' => $this->input->post('event_date'),
+		'event_time' => $this->input->post('event_time'),
+		'event_note' => $qt_event_note
+		);
+		$result = $this->Events_model->update_record($data,$id);
+				
+		if ($result == TRUE) {
+			$Return['result'] = $this->lang->line('xin_hr_success_event_updated');
+		} else {
+			$Return['error'] = $this->lang->line('xin_error_msg');
+		}
+		$this->output($Return);
+		exit;
+		}
+	}
+	
+	// get record of notice
+	public function read_notice_record()
+	{
+		$data['title'] = $this->Xin_model->site_title();
+		$notice_id = $this->input->get('notice_id');
+		dd($_POST);
+		$result = $this->Events_model->read_event_information($event_id);
+		
+		$data = array(
+				'event_title' => $result[0]->event_title,
+				'event_date' => $result[0]->event_date,
+				'event_time' => $result[0]->event_time,
+				'event_note' => $result[0]->event_note,
+				'all_employees' => $this->Xin_model->all_employees(),
+				'get_all_companies' => $this->Xin_model->get_companies()
+				);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view('admin/events/dialog_events', $data);
+		} else {
+			redirect('admin/');
+		}
+	}
+		
+	public function delete_notice() {
+		if($this->input->post('type')=='delete') {
+			// Define return | here result is used to return user data and error for error message 
+			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+			$id = $this->uri->segment(4);
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
+			$result = $this->Events_model->delete_event_record($id);
+			if(isset($id)) {
+				$Return['result'] = $this->lang->line('xin_hr_success_event_deleted');
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_msg');
+			}
+			$this->output($Return);
+		}
+	}
 	 
 } 
 ?>

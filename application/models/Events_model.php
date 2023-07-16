@@ -25,7 +25,21 @@ class Events_model extends CI_Model {
 		} else {
 			return null;
 		}
+	}
+
+	public function read_notice_information($id) {
+	
+		$sql = 'SELECT * FROM xin_office_notice WHERE id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
 	}	
+
 	public function get_company_events($company_id) {
 	
 		$sql = 'SELECT * FROM xin_events WHERE company_id = ?';
