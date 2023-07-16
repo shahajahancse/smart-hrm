@@ -2,14 +2,16 @@
    
     $userid  = $session[ 'user_id' ];
     $lastmonthsalarys  = $this->Salary_model->getpassedmonthsalary( $userid );
-  
+  if( count($lastmonthsalarys)>0 ){
+
+ 
     $lastmonthsalaryy =$lastmonthsalarys[0];
   
     $lastmont=$lastmonthsalarys[0]->salary_month;
     $date_object = DateTime::createFromFormat('Y-m', $lastmont);
     $monthName = $date_object->format('M-Y'); 
 
-
+}
 // dd($lastmonthsalaryy);
 ?>
 
@@ -18,26 +20,26 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
 <div class="monthname">
-     <?= $monthName ?> Month Salary Summery
+     <?= (isset( $lastmonthsalaryy))?$monthName:'----' ?> Month Salary Summery
 </div>
 <div class="divrow col-md-12">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
         <div class="heading">Total Salary</div>
-        <div class="heading2"><?= $lastmonthsalaryy->basic_salary?></div>
+        <div class="heading2"><?=(isset( $lastmonthsalaryy))? $lastmonthsalaryy->basic_salary:'0'?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
         <div class="heading">Deduction</div>
         <div class="heading2">
-            <?=  $lastmonthsalaryy->modify_salary+$lastmonthsalaryy->late_deduct+$lastmonthsalaryy->absent_deduct ?>
+            <?=  (isset( $lastmonthsalaryy))? $lastmonthsalaryy->modify_salary+$lastmonthsalaryy->late_deduct+$lastmonthsalaryy->absent_deduct :'0'?>
         </div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">
         <div class="heading">Modify Salary</div>
-        <div class="heading2"><?=  $lastmonthsalaryy->aba_deduct?></div>
+        <div class="heading2"><?= (isset( $lastmonthsalaryy))? $lastmonthsalaryy->aba_deduct :'0' ?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
         <div class="heading">Pay Salary </div>
-        <div class="heading2"><?=  $lastmonthsalaryy->grand_net_salary?></div>
+        <div class="heading2"><?=  (isset( $lastmonthsalaryy))? $lastmonthsalaryy->grand_net_salary : '0'?></div>
     </div>
 </div>
 

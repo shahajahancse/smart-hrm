@@ -1,5 +1,8 @@
 <?php
 // dd($empdataall);
+if (count($empdata)>0){
+
+
 $data1=$empdata[0];
 // dd($data1);
 $taken_meal=0;
@@ -12,7 +15,7 @@ foreach ($emp_data['emp_data'] as $r) {
 }
 $paymeal=$data1->pay_amount/45;
 $balanceMeal= $paymeal-$taken_meal;
-
+}
 ?>
 
 
@@ -20,25 +23,29 @@ $balanceMeal= $paymeal-$taken_meal;
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
 <div class="monthname">
+    <?php
+if (count($empdata)>0){
+?>
     <?= date('d-M-Y', strtotime($data1->end_date)) ?> to <?= date('d-M-Y', strtotime($data1->next_date)) ?> Lunch Bill
     Summery
+    <?php } ?>
 </div>
 <div class="divrow col-md-12">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
         <div class="heading">Total Lunch</div>
-        <div class="heading2"><?= $paymeal ?></div>
+        <div class="heading2"><?= (isset($paymeal))? $paymeal:'0' ?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
         <div class="heading">Total Payment</div>
-        <div class="heading2"><?=  $data1->pay_amount ?></div>
+        <div class="heading2"><?= (isset($paymeal))? $data1->pay_amount:'0' ?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">
         <div class="heading">Taken Lunch</div>
-        <div class="heading2"><?=  $taken_meal?></div>
+        <div class="heading2"><?= (isset($paymeal))? $taken_meal:'0'?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
         <div class="heading">Taken Amount</div>
-        <div class="heading2"><?=  $taken_meal*45?></div>
+        <div class="heading2"><?= (isset($paymeal))? $taken_meal*45 :'0'?></div>
     </div>
 </div>
 
