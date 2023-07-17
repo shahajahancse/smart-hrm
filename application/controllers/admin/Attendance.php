@@ -699,7 +699,7 @@ class Attendance extends MY_Controller {
 			$data['tablebody'] 	 = $this->load->view("admin/attendance/employee_at_tbale_body", $data, TRUE);
 
 			$data['subview'] 	 = $this->load->view("admin/attendance/employee_attandance", $data, TRUE);
-								   $this->load->view('admin/layout/layout_main', $data); 
+								$this->load->view('admin/layout/layout_main', $data); 
 		}
     }
 
