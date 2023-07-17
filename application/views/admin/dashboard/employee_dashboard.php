@@ -253,10 +253,10 @@ hr {
     color: #5442A8;
     text-align: center;
     /* font-family: Roboto; */
-    font-size: 14px;
+    font-size: 12px;
     font-style: normal;
     font-weight: 500;
-    line-height: 20px;
+    line-height: 18px;
     letter-spacing: -0.28px;
 }
 
@@ -470,21 +470,21 @@ hr {
                 </div>
                 <div class="card-body">
                     <?php 
-            $lunch_end = date('h:i A', strtotime("$schedule->lunch_minute minutes", strtotime($schedule->lunch_time)));
-            $in_time_class = '';
-            $lunch_start_class = '';
-            $lunch_end_class = '';
-            $out_time_class = '';
-            if (date('H:i:s') > $schedule->in_start_time && date('H:i:s') < $schedule->in_time) {
-              $in_time_class = 'current-item';
-            } else if (date('H:i:s') > $schedule->in_time && date('H:i:s') < $schedule->lunch_time) {
-              $lunch_start_class = 'current-item';
-            } else if (date('H:i:s') > $schedule->lunch_time && date('H:i:s') < date("H:i:s", strtotime($lunch_end))) {
-              $lunch_end_class = 'current-item';
-            } else if (date('H:i:s') > date("H:i:s", strtotime($lunch_end)) && date('H:i:s') < $schedule->ot_start_time) {
-              $out_time_class = 'current-item';
-            }
-          ?>
+                        $lunch_end = date('h:i A', strtotime("$schedule->lunch_minute minutes", strtotime($schedule->lunch_time)));
+                        $in_time_class = '';
+                        $lunch_start_class = '';
+                        $lunch_end_class = '';
+                        $out_time_class = '';
+                        if (date('H:i:s') > $schedule->in_start_time && date('H:i:s') < $schedule->in_time) {
+                          $in_time_class = 'current-item';
+                        } else if (date('H:i:s') > $schedule->in_time && date('H:i:s') < $schedule->lunch_time) {
+                          $lunch_start_class = 'current-item';
+                        } else if (date('H:i:s') > $schedule->lunch_time && date('H:i:s') < date("H:i:s", strtotime($lunch_end))) {
+                          $lunch_end_class = 'current-item';
+                        } else if (date('H:i:s') > date("H:i:s", strtotime($lunch_end)) && date('H:i:s') < $schedule->ot_start_time) {
+                          $out_time_class = 'current-item';
+                        }
+                    ?>
                     <section class="step-wizard" style="margin-top: -15px;">
                         <ul class="step-wizard-list" style="margin-left: -48px;">
                             <li class="step-wizard-item <?=$in_time_class?>">
@@ -521,8 +521,12 @@ hr {
 
                         </div>
                         <div class="col-sm-5">
-                            <p><span style="font-weight:600">Working Time: </span><span>09:50 AM - 06:00 PM</span></p>
-
+                            <?php $in = date("h:i A", strtotime($schedule->in_time)); 
+                            $out = date("h:i A", strtotime($schedule->ot_start_time)); ?>
+                            <p>
+                                <span style="font-weight:600">Working Time: </span>
+                                <span><?= $in .'  -  '. $out; ?></span>
+                            </p>
                         </div>
                     </div>
 
@@ -697,19 +701,22 @@ hr {
             <div class="card" style=" padding-bottom: 18px;">
                 <span style="margin-left:20px;padding-top: 1.25rem;font-weight: 600;">Notice Board</span>
                 <hr>
-                <div class="row">
-                    <div class="col-md-4"
-                        style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
-                        <span class="text_s" style="    padding-top: 4px;"><?php echo date("d")?></span>
-                        <span class="text_s"><?php echo date("M")?></span>
-                    </div>
-                    <div class="col-md-8">
-                        <span style="font-weight: 500;">Board meeting Completed</span>
-                        <span style="color:#929292;font-size:13px">attend the company mangers...</span>
-                    </div>
+                <?php $notice = $this->db->limit(10,0)->get('xin_office_notice')->result(); ?>
+                <?php foreach ($notice as $key => $row) { ?>
+                    <div class="row">
+                        <div class="col-md-4"
+                            style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
+                            <span class="text_s" style="padding-top: 4px;"><?php echo date("d", strtotime($row->created_at))?></span>
+                            <span class="text_s"><?php echo date("M", strtotime($row->created_at))?></span>
+                        </div>
+                        <div class="col-md-8">
+                            <span style="font-weight: 500;"><?= $row->title ?></span>
+                            <span style="color:#929292;font-size:13px"><?= substr($row->description, 0, 20) ?></span>
+                        </div>
 
-                </div>
-                <hr>
+                    </div>
+                    <hr>
+                <?php } ?>
                 <!-- <hr> -->
                 <!-- <button class="btn btn-sm">View All</button> -->
                 <a href="#" class="" style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>

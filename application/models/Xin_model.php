@@ -294,7 +294,11 @@ class Xin_model extends CI_Model {
 			$arr['emp_leave'] = 'active';
 			$arr['attnd_open'] = 'active';
 			return $arr;
-		 
+		} else if($mClass=='leave' && $mMethod=='emp_holyday') {
+			$arr['emp_holyday'] = 'active';
+			$arr['attnd_open'] = 'active';
+			return $arr;
+			 
 		// lunch
 		} else if($mClass=='lunch' && $mMethod=='lunch_emp_bill') {
 			$arr['emp_lunch_active'] = 'active';
@@ -710,6 +714,10 @@ class Xin_model extends CI_Model {
 			return $arr;
 		} else if($mClass=='events') {
 			$arr['hr_events_active'] = 'active';
+			$arr['hr_events_open'] = 'active';
+			return $arr;
+		} else if($mClass=='events' && $mMethod=='epm_event') {
+			$arr['epm_event'] = 'active';
 			$arr['hr_events_open'] = 'active';
 			return $arr;
 		} else if($mClass=='events' && $mMethod=='notice') {
