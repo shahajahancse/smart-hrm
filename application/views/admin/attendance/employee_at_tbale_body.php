@@ -15,8 +15,8 @@
         <tr>
             <td><?= $key+1 ?></td>
             <td><?= $data->attendance_date ?></td>
-            <td><?= ($data->clock_in=='')? $data->status :date('h:s A',strtotime($data->clock_in)) ?></td>
-            <td><?= ($data->clock_out=='')? $data->status :date('h:s A',strtotime($data->clock_out)) ?></td>
+            <td><?= ($data->clock_in=='')? $data->status :date('h:i A',strtotime($data->clock_in)) ?></td>
+            <td><?= ($data->clock_out=='')? $data->status :date('h:i A',strtotime($data->clock_out)) ?></td>
             <td><?= $data->late_time ?></td>
             <td><?= $data->production ?></td>
             <td><?= 1?> hrs</td>

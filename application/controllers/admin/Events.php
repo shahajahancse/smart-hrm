@@ -111,8 +111,8 @@ class Events extends MY_Controller
 		$length = intval($this->input->get("length"));
 	 }
 	
-
-	// Validate and add info in database
+	 
+	 // Validate and add info in database
 	public function add_event() {
 		
 		/* Define return | here result is used to return user data and error for error message */
@@ -318,7 +318,6 @@ class Events extends MY_Controller
 	 header('Content-Type: application/x-json; charset=utf-8');
 	 echo (json_encode($data));
 	}
-	
 	public function epm_event(){
 		$session = $this->session->userdata('username');
 		//  dd($session['user_id']);
@@ -353,12 +352,14 @@ class Events extends MY_Controller
 								   $this->load->view('admin/layout/layout_main', $data); 
 		}
 	}
-	 
-	function notice() {
+
+	public function alle(){
 		$session = $this->session->userdata('username');
+		//  dd($session['user_id']);
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+<<<<<<< HEAD
 		$system = $this->Xin_model->read_setting_info(1);
 		if($system[0]->module_events!='true'){
 			redirect('admin/dashboard');
@@ -371,6 +372,21 @@ class Events extends MY_Controller
 		// $role_resources_ids = $this->Xin_model->user_role_resource();
 		$data['subview'] = $this->load->view("admin/events/notice", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
+=======
+		$session = $this->session->userdata( 'username' );
+		$userid  = $session[ 'user_id' ];
+		$this->db->select("*");
+	
+			$this->db->order_by("event_id", "desc");
+			$data['allevent'] = $this->db->get('xin_events')->result();
+			$data['shift']       = $this->db->where('office_shift_id',1)->get('xin_office_shift')->row();
+			$data['session']     = $session;
+			$data['title'] 		 = 'Events | '.$this->Xin_model->site_title();
+			$data['breadcrumbs'] = 'Events';
+			$data['subview'] 	 = $this->load->view("admin/events/epm_eventc", $data, TRUE);
+								   $this->load->view('admin/layout/layout_main', $data); 
+		
+>>>>>>> aea0ad7349503d3663357d8091fa62f211f68f98
 	}
 
 	// notice_list > Notice
@@ -422,6 +438,7 @@ class Events extends MY_Controller
 	  	exit();
     }
 	 
+<<<<<<< HEAD
 
 
 	// Validate and add info in database
@@ -551,6 +568,27 @@ class Events extends MY_Controller
 			$this->output($Return);
 		}
 	}
+=======
+	public function data(){
+		$this->db->select("id, calendarId, title, category, start, end, isReadOnly, bgColor");
+        $this->db->from("(SELECT holiday_id AS id, '1' AS calendarId, event_name AS title, 'allday' AS category, CONCAT(YEAR(start_date), '-', LPAD(MONTH(start_date), 2, '0'), '-', LPAD(DAY(start_date), 2, '0')) AS start, CONCAT(YEAR(end_date), '-', LPAD(MONTH(end_date), 2, '0'), '-', LPAD(DAY(end_date), 2, '0')) AS end, 'TRUE' AS isReadOnly, '#4fd3e8' AS bgColor FROM xin_holidays
+                       UNION
+                       SELECT event_id AS id, '1' AS calendarId, event_title AS title, 'allday' AS category, CONCAT(YEAR(start_event_date), '-', LPAD(MONTH(start_event_date), 2, '0'), '-', LPAD(DAY(start_event_date), 2, '0')) AS start, CONCAT(YEAR(end_event_date), '-', LPAD(MONTH(end_event_date), 2, '0'), '-', LPAD(DAY(end_event_date), 2, '0')) AS end, 'TRUE' AS isReadOnly, '#80eb6f' AS bgColor FROM xin_events) merged_data");
+        $this->db->order_by('start', 'asc');
+        
+        $query = $this->db->get();
+      
+	   // Set the response content type to JSON
+	   $this->output->set_content_type('application/json');
+        
+	   // Output the data as JSON
+	   echo json_encode( $query->result());
+
+	
+	}
+	 
+	 
+>>>>>>> aea0ad7349503d3663357d8091fa62f211f68f98
 	 
 } 
 ?>
