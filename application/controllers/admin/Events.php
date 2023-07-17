@@ -387,6 +387,27 @@ class Events extends MY_Controller
 								   $this->load->view('admin/layout/layout_main', $data); 
 	}
 
+
+	// notice
+	function notice() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$system = $this->Xin_model->read_setting_info(1);
+		if($system[0]->module_events!='true'){
+			redirect('admin/dashboard');
+		}
+		$data['title'] = 'Notice | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Notice';
+		$data['path_url'] = 'events';
+		// $data['get_all_companies'] = $this->Xin_model->get_companies();
+		// $data['all_employees'] = $this->Xin_model->all_employees();
+		// $role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['subview'] = $this->load->view("admin/events/notice", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
 	// notice_list > Notice
 	public function notice_list() {
 
@@ -416,7 +437,7 @@ class Events extends MY_Controller
 			//view
 			$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-notice_id="'. $r->id . '"><span class="fa fa-eye"></span></button></span>';
 
-		    $combhr = $edit.$view.$delete;
+		    $combhr = $view.$delete;
 			$description = substr($r->description,0, 20);
 		    $data[] = array(
 				$combhr,
@@ -475,55 +496,6 @@ class Events extends MY_Controller
 		}
 	}
 	
-	// Validate and add info in database
-	public function edit_notice() {
-	
-		if($this->input->post('edit_type')=='event') {
-			
-		$id = $this->uri->segment(4);		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
-		$event_date = $this->input->post('event_date');
-		$current_date = date('Y-m-d');
-		$event_note = $this->input->post('event_note');
-		$ev_date = strtotime($event_date);
-		$ct_date = strtotime($current_date);
-		$qt_event_note = htmlspecialchars(addslashes($event_note), ENT_QUOTES);
-			
-		/* Server side PHP input validation */		
-		if($this->input->post('event_title')==='') {
-        	$Return['error'] = $this->lang->line('xin_error_event_title_field');
-		} else if($this->input->post('event_date')==='') {
-			$Return['error'] = $this->lang->line('xin_error_event_date_field');
-		} else if($ev_date < $ct_date) {
-			$Return['error'] = $this->lang->line('xin_error_event_date_current_date');
-		} else if($this->input->post('event_time')==='') {
-			$Return['error'] = $this->lang->line('xin_error_event_time_field');
-		}
-				
-		if($Return['error']!=''){
-       		$this->output($Return);
-    	}
-	
-		$data = array(
-		'event_title' => $this->input->post('event_title'),
-		'event_date' => $this->input->post('event_date'),
-		'event_time' => $this->input->post('event_time'),
-		'event_note' => $qt_event_note
-		);
-		$result = $this->Events_model->update_record($data,$id);
-				
-		if ($result == TRUE) {
-			$Return['result'] = $this->lang->line('xin_hr_success_event_updated');
-		} else {
-			$Return['error'] = $this->lang->line('xin_error_msg');
-		}
-		$this->output($Return);
-		exit;
-		}
-	}
 	
 	// get record of notice
 	public function read_notice_record()
@@ -532,18 +504,18 @@ class Events extends MY_Controller
 		$notice_id = $this->input->get('notice_id');
 
 		$result = $this->Events_model->read_notice_information($notice_id);
-		dd($result );
+		// dd($result );
 		$data = array(
-				'event_title' => $result[0]->event_title,
-				'event_date' => $result[0]->event_date,
-				'event_time' => $result[0]->event_time,
-				'event_note' => $result[0]->event_note,
-				'all_employees' => $this->Xin_model->all_employees(),
-				'get_all_companies' => $this->Xin_model->get_companies()
-				);
+				'id' => $result[0]->id,
+				'title' => $result[0]->title,
+				'description' => $result[0]->description,
+				'created_at' => $result[0]->created_at,
+				'created_by' => $result[0]->created_by,
+				'updated_at' => $result[0]->updated_at,
+			);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view('admin/events/dialog_events', $data);
+			$this->load->view('admin/events/dialog_notice', $data);
 		} else {
 			redirect('admin/');
 		}
