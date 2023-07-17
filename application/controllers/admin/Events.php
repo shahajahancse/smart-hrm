@@ -367,24 +367,17 @@ class Events extends MY_Controller
 		$data['title'] = 'Notice | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Notice';
 		$data['path_url'] = 'events';
-		// $data['get_all_companies'] = $this->Xin_model->get_companies();
-		// $data['all_employees'] = $this->Xin_model->all_employees();
-		// $role_resources_ids = $this->Xin_model->user_role_resource();
-		$data['subview'] = $this->load->view("admin/events/notice", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
-
 		$session = $this->session->userdata( 'username' );
 		$userid  = $session[ 'user_id' ];
 		$this->db->select("*");
-	
-			$this->db->order_by("event_id", "desc");
-			$data['allevent'] = $this->db->get('xin_events')->result();
-			$data['shift']       = $this->db->where('office_shift_id',1)->get('xin_office_shift')->row();
-			$data['session']     = $session;
-			$data['title'] 		 = 'Events | '.$this->Xin_model->site_title();
-			$data['breadcrumbs'] = 'Events';
-			$data['subview'] 	 = $this->load->view("admin/events/epm_eventc", $data, TRUE);
-								   $this->load->view('admin/layout/layout_main', $data); 
+	    $this->db->order_by("event_id", "desc");
+		$data['allevent'] = $this->db->get('xin_events')->result();
+		$data['shift']       = $this->db->where('office_shift_id',1)->get('xin_office_shift')->row();
+		$data['session']     = $session;
+		$data['title'] 		 = 'Events | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Events';
+		$data['subview'] 	 = $this->load->view("admin/events/epm_eventc", $data, TRUE);
+								$this->load->view('admin/layout/layout_main', $data); 
 	}
 
 
