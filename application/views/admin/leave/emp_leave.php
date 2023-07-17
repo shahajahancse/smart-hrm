@@ -224,15 +224,10 @@ body {
         </div>
 
     </div>
-    <div class="col-md-3 divform-group">
-        <a onclick="location.reload();">
-            <div class="input serceb">
-                Get All Data
-            </div>
-        </a>
-
-
-    </div>
+   <div class="col-md-3 divform-group">
+       <input type="button" onclick="location.reload();" value="Get All Data" class="input serceb">
+   </div>
+   
 </div>
 <div id="datatable">
     <?php echo $tablebody;?>
@@ -281,13 +276,18 @@ function getdata(status) {
 }
 </script>
 <script>
-document.getElementById("openModal").addEventListener("click", function() {
+function openModal() {
     document.getElementById("customModal").style.display = "block";
-});
-document.getElementById("close").addEventListener("click", function() {
+}
+
+function closeModal() {
     document.getElementById("customModal").style.display = "none";
-});
+}
+
+document.getElementById("openModal").addEventListener("click", openModal);
+document.getElementById("close").addEventListener("click", closeModal);
 </script>
+
 <script>
 function calculateDays() {
     var startDate = new Date(document.getElementById('start_date').value);
