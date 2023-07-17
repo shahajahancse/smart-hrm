@@ -21,7 +21,7 @@
           <div class="col-md-12">
             <div class="form-group">
               <label for="event_title"><?php echo $this->lang->line('xin_hr_event_title');?></label>
-              <input type="text" class="form-control" name="event_title" placeholder="<?php echo $this->lang->line('xin_hr_event_title');?>">
+              <input type="text" class="form-control" name="event_title" placeholder="<?php echo $this->lang->line('xin_hr_event_title');?>" required>
             </div>
           </div>
         </div>
@@ -29,13 +29,13 @@
           <div class="col-md-6">
             <div class="form-group">
               <label for="start_date">Start Date</label>
-              <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_hr_event_date');?>"  name="start_event_date" type="text">
+              <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_hr_event_date');?>"  name="start_event_date" type="text" required>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label for="event_time">Start Time</label>
-              <input class="form-control timepicker" placeholder="<?php echo $this->lang->line('xin_hr_event_time');?>"  name="start_event_time" type="text">
+              <input class="form-control timepicker" placeholder="<?php echo $this->lang->line('xin_hr_event_time');?>"  name="start_event_time" type="text" required>
             </div>
           </div>
         </div>
@@ -43,13 +43,13 @@
           <div class="col-md-6">
             <div class="form-group">
               <label for="start_date">End Date</label>
-              <input class="form-control date"  placeholder="End Date"  name="end_event_date" type="text">
+              <input class="form-control date"  placeholder="End Date"  name="end_event_date" type="text" required>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label for="event_time">End Time</label>
-              <input class="form-control timepicker"  placeholder="End Time" name="end_event_time" type="text">
+              <input class="form-control timepicker"  placeholder="End Time" name="end_event_time" type="text" required>
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@
           <div class="col-md-12">
             <div class="form-group">
               <label for="event_title">Event Location</label>
-              <input type="text" class="form-control" name="location" placeholder="Location">
+              <input type="text" class="form-control" name="location" placeholder="Location" required>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@
           <div class="col-md-12">
             <div class="form-group">
               <label for="event_note">Event Description</label>
-              <textarea class="form-control textarea" placeholder="Event Description" name="event_note" id="event_note"></textarea>
+              <textarea class="form-control textarea" placeholder="Event Description" name="event_note" id="event_note" required></textarea>
             </div>
           </div>
         </div>
