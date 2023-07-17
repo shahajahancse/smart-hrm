@@ -69,7 +69,7 @@ if($total_upcomming_event!=0){
         <a href="<?= base_url('admin/leave/emp_holyday')?>" class="cboton cactive">Yearly Holiday  </a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
-        <a href="" class="cboton">Calendar</a>
+        <a  href="<?= base_url('admin/events/alle')?>" class="cboton">Calendar</a>
     </div>
     <div class="col-md-2 divform-group">
     </div>

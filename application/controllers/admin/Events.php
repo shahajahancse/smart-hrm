@@ -469,16 +469,15 @@ if ($hours > 0) {
 		}
 		$session = $this->session->userdata( 'username' );
 		$userid  = $session[ 'user_id' ];
-		$firstdate = $this->input->post('firstdate');
-		$seconddate = $this->input->post('seconddate');
+		$this->db->select("*");
+	
+			$this->db->order_by("event_id", "desc");
+			$data['allevent'] = $this->db->get('xin_events')->result();
 			$data['shift']       = $this->db->where('office_shift_id',1)->get('xin_office_shift')->row();
 			$data['session']     = $session;
 			$data['title'] 		 = 'Events | '.$this->Xin_model->site_title();
 			$data['breadcrumbs'] = 'Events';
-			$data['tablebody'] 	 = $this->load->view("admin/events/epm_event_table", $data, TRUE);
-			
-
-			$data['subview'] 	 = $this->load->view("admin/events/calander", $data, TRUE);
+			$data['subview'] 	 = $this->load->view("admin/events/epm_eventc", $data, TRUE);
 								   $this->load->view('admin/layout/layout_main', $data); 
 		
 	}

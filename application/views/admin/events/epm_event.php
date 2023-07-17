@@ -14,6 +14,7 @@ if($total_upcomming_event!=0){
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/emp_attandenc.css') ?>">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.css" />
 
 <style>
     
@@ -69,7 +70,7 @@ if($total_upcomming_event!=0){
         <a href="<?= base_url('admin/leave/emp_holyday')?>" class="cboton">Yearly Holiday  </a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
-        <a href="" class="cboton">Calendar</a>
+        <a href="<?= base_url('admin/events/alle')?>" class="cboton">Calendar</a>
     </div>
     <div class="col-md-2 divform-group">
     </div>

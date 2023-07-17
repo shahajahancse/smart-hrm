@@ -690,7 +690,6 @@ class Attendance extends MY_Controller {
 		}else{
 			$this->db->order_by("time_attendance_id", "desc");
 			$data['alldata'] = $this->db->get('xin_attendance_time')->result();
-
 			$data["todaylog"]    = $this->Attendance_model->gettodaylog(date("Y-m-d"),$session['user_id']);
 			$data['shift']       = $this->db->where('office_shift_id',1)->get('xin_office_shift')->row();
 
