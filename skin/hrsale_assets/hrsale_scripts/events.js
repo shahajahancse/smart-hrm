@@ -72,7 +72,7 @@ $(document).ready(function() {
 		});
 	});
 
-	$('.view-modal-data').on('show.bs.modal', function (event) {
+	/*$('.view-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
 		var event_id = button.data('event_id');
 		var modal = $(this);
@@ -86,7 +86,7 @@ $(document).ready(function() {
 				}
 			}
 		});
-	});
+	});*/
 
 	var input = $('.timepicker').clockpicker({
 		placement: 'bottom',
@@ -165,8 +165,7 @@ $(document).ready(function() {
 	});
 
 	// view data
-		$('.view-modal-details').on('show.bs.modal', function (event) {
-			alert('ok'); return;
+		$('.view-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
 		var notice_id = button.data('notice_id');
 		var modal = $(this);

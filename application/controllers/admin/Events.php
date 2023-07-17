@@ -400,7 +400,7 @@ class Events extends MY_Controller
 			// delete
 			$delete = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->id . '"><span class="fa fa-trash"></span></button></span>';
 			//view
-			$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-details" data-notice_id="'. $r->id . '"><span class="fa fa-eye"></span></button></span>';
+			$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-notice_id="'. $r->id . '"><span class="fa fa-eye"></span></button></span>';
 
 		    $combhr = $edit.$view.$delete;
 			$description = substr($r->description,0, 20);
@@ -517,9 +517,9 @@ class Events extends MY_Controller
 	{
 		$data['title'] = $this->Xin_model->site_title();
 		$notice_id = $this->input->get('notice_id');
-		dd($_POST);
-		$result = $this->Events_model->read_event_information($event_id);
-		
+
+		$result = $this->Events_model->read_notice_information($notice_id);
+		dd($result );
 		$data = array(
 				'event_title' => $result[0]->event_title,
 				'event_date' => $result[0]->event_date,
