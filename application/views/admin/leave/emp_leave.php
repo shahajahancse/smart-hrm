@@ -232,6 +232,8 @@ body {
 <div id="datatable">
     <?php echo $tablebody;?>
 </div>
+
+
 <script>
 function getdata(status) {
 

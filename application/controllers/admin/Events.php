@@ -530,23 +530,22 @@ class Events extends MY_Controller
 		}
 	}
 
-	public function data(){
-		$this->db->select("id, calendarId, title, category, start, end, isReadOnly, bgColor");
-        $this->db->from("(SELECT holiday_id AS id, '1' AS calendarId, event_name AS title, 'allday' AS category, CONCAT(YEAR(start_date), '-', LPAD(MONTH(start_date), 2, '0'), '-', LPAD(DAY(start_date), 2, '0')) AS start, CONCAT(YEAR(end_date), '-', LPAD(MONTH(end_date), 2, '0'), '-', LPAD(DAY(end_date), 2, '0')) AS end, 'TRUE' AS isReadOnly, '#4fd3e8' AS bgColor FROM xin_holidays
-                       UNION
-                       SELECT event_id AS id, '1' AS calendarId, event_title AS title, 'allday' AS category, CONCAT(YEAR(start_event_date), '-', LPAD(MONTH(start_event_date), 2, '0'), '-', LPAD(DAY(start_event_date), 2, '0')) AS start, CONCAT(YEAR(end_event_date), '-', LPAD(MONTH(end_event_date), 2, '0'), '-', LPAD(DAY(end_event_date), 2, '0')) AS end, 'TRUE' AS isReadOnly, '#80eb6f' AS bgColor FROM xin_events) merged_data");
-        $this->db->order_by('start', 'asc');
-        
-        $query = $this->db->get();
-      
-	   // Set the response content type to JSON
-	   $this->output->set_content_type('application/json');
-        
-	   // Output the data as JSON
-	   echo json_encode( $query->result());
-
+	public function data()
+	{
+		$query = $this->db->query("
+			SELECT holiday_id AS id, '1' AS calendarId, event_name AS title, 'allday' AS category, CONCAT(YEAR(start_date), '-', LPAD(MONTH(start_date), 2, '0'), '-', LPAD(DAY(start_date), 2, '0')) AS start, CONCAT(YEAR(end_date), '-', LPAD(MONTH(end_date), 2, '0'), '-', LPAD(DAY(end_date), 2, '0')) AS end, 'TRUE' AS isReadOnly, '#4fd3e8' AS bgColor 
+			FROM xin_holidays
+			UNION ALL
+			SELECT event_id, '1', event_title, 'allday', CONCAT(YEAR(start_event_date), '-', LPAD(MONTH(start_event_date), 2, '0'), '-', LPAD(DAY(start_event_date), 2, '0')), CONCAT(YEAR(end_event_date), '-', LPAD(MONTH(end_event_date), 2, '0'), '-', LPAD(DAY(end_event_date), 2, '0')), 'TRUE', '#80eb6f' 
+			FROM xin_events
+			ORDER BY start ASC
+		");
 	
+		// Set the response content type to JSON
+		$this->output->set_content_type('application/json');
+	
+		// Return the data as JSON
+		return $this->output->set_output(json_encode($query->result()));
 	}
-	 
 } 
 ?>
