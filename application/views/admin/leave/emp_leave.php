@@ -35,17 +35,17 @@ body {
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
+    height: -webkit-fill-available;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
     background-color: #fff;
-    margin: 15% auto;
-    padding: 20px;
+    padding: 2px;
+    margin: 8% 0% 0% 26%;
     border: 1px solid #888;
-    width: 60%;
+    width: 55%;
     overflow: auto;
 }
 
@@ -90,12 +90,13 @@ body {
                     d="M18.0002 4H6.41453C6.15184 3.99995 5.89172 4.05167 5.64903 4.15221C5.40634 4.25275 5.18585 4.40013 5.00016 4.58594L0.292969 9.29281C-0.0976562 9.68344 -0.0976562 10.3166 0.292969 10.7069L5.00016 15.4141C5.37516 15.7891 5.88391 16 6.41422 16H18.0002C19.1048 16 20.0002 15.1047 20.0002 14V6C20.0002 4.89531 19.1048 4 18.0002 4ZM15.3536 11.9394C15.5489 12.1347 15.5489 12.4513 15.3536 12.6466L14.6467 13.3534C14.4514 13.5487 14.1348 13.5487 13.9395 13.3534L12.0002 11.4141L10.0608 13.3534C9.86547 13.5487 9.54891 13.5487 9.35359 13.3534L8.64672 12.6466C8.45141 12.4513 8.45141 12.1347 8.64672 11.9394L10.5861 10L8.64672 8.06063C8.45141 7.86531 8.45141 7.54875 8.64672 7.35344L9.35359 6.64656C9.54891 6.45125 9.86547 6.45125 10.0608 6.64656L12.0002 8.58594L13.9395 6.64656C14.1348 6.45125 14.4514 6.45125 14.6467 6.64656L15.3536 7.35344C15.5489 7.54875 15.5489 7.86531 15.3536 8.06063L13.4142 10L15.3536 11.9394Z"
                     fill="#858A8F" />
             </svg></span>
-        <div class="col-md-12">
+        <div class="col-md-12" style="padding: 0;">
             <div class="col-md-4">
                 <div class="input">
                     <div class="level">Select Leave Type**</div>
                     <div class="pseudo6">
-                        <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;" required>
+                        <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;"
+                            required>
                             <option>Select Leave Type**</option>
                             <option value="1">Casual Leave</option>
                             <option value="2">Medical Leave</option>
@@ -103,22 +104,23 @@ body {
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" style="padding: 0;">
                 <div class="input">
                     <div class="level">Select Start Date**</div>
                     <div class="pseudo6">
                         <input name="start_date" value="<?= date('Y-m-d') ?>" class="col-md-12 "
-                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="" required>
+                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="start_date"
+                            required>
                     </div>
                 </div>
 
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" style="padding: 0;">
                 <div class="input">
                     <div class="level">Select End Date**</div>
                     <div class="pseudo6">
                         <input name="end_date" value="<?= date('Y-m-d') ?>" class="col-md-12"
-                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="" required>
+                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="end_date" required>
                     </div>
                 </div>
             </div>
@@ -285,4 +287,29 @@ document.getElementById("openModal").addEventListener("click", function() {
 document.getElementById("close").addEventListener("click", function() {
     document.getElementById("customModal").style.display = "none";
 });
+</script>
+<script>
+function calculateDays() {
+    var startDate = new Date(document.getElementById('start_date').value);
+    var endDate = new Date(document.getElementById('end_date').value);
+    var checkpoint = document.getElementById('leave_half_day');
+
+
+
+    // Calculate the time difference in milliseconds
+    var timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
+
+    // Calculate the number of days
+    var days = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    if (days + 1 > 1) {
+        checkpoint.setAttribute('disabled', 'disabled');
+    } else {
+        checkpoint.removeAttribute('disabled');
+    }
+
+}
+
+// Event listeners for date input changes
+document.getElementById('start_date').addEventListener('change', calculateDays);
+document.getElementById('end_date').addEventListener('change', calculateDays);
 </script>
