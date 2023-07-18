@@ -123,7 +123,7 @@
 
     function change_qty(qty) {
         var approx_amount = document.getElementById('approx_amount_'+qty.getAttribute('data-id')).value;
-        document.getElementById('total_amount_'+qty.getAttribute('data-id')).value = approx_amount * qty.value;
+        document.getElementById('total_amount_'+qty.getAttribute('data-id')).value = Math.round(approx_amount * qty.value);
     }
 
    function change_amount(amount) {
