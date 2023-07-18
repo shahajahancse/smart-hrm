@@ -109,7 +109,7 @@
 
       items+= '<td><input name="quantity[]" id="quantity_'+sl+'" data-id="'+sl+'" value="0" type="number" class="form-control input-sm" required onChange="change_qty(this)"></td>';
 
-      items+= '<td><input name="approx_amount[]" id="approx_amount_'+sl+'" data-am="'+sl+'" value="0" type="number" class="form-control input-sm approx_amount" required onChange="change_amount(this)" ></td>';
+      items+= '<td><input name="approx_amount[]" id="approx_amount_'+sl+'" data-am="'+sl+'" step="0.01" min="0" value="0" type="number" class="form-control input-sm approx_amount" required onChange="change_amount(this)" ></td>';
 
       items+= '<td><input name="total_amount[]" id="total_amount_'+sl+'" value="0" type="number" class="form-control input-sm" required></td>';
 
@@ -123,7 +123,7 @@
 
     function change_qty(qty) {
         var approx_amount = document.getElementById('approx_amount_'+qty.getAttribute('data-id')).value;
-        document.getElementById('total_amount_'+qty.getAttribute('data-id')).value = approx_amount * qty.value;
+        document.getElementById('total_amount_'+qty.getAttribute('data-id')).value = Math.round(approx_amount * qty.value);
     }
 
    function change_amount(amount) {
