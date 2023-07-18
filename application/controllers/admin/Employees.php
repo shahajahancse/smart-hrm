@@ -280,7 +280,7 @@ class Employees extends MY_Controller {
 				$employee = $this->Employees_model->get_company_location_department_designation_employees_flt($this->input->get("company_id"),$this->input->get("location_id"),$this->input->get("department_id"),$this->input->get("designation_id"));
 			}
 		} else {
-			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
+			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==2 || $user_info[0]->user_role_id==4) {
 				$employee = $this->Employees_model->get_employees();
 			} else {
 				if(in_array('372',$role_resources_ids)) {
@@ -296,7 +296,7 @@ class Employees extends MY_Controller {
 		$data = array();
 		// dd($employee->result());
 
-        foreach($employee->result() as $r) {		  
+        foreach($employee->result() as $key => $r) {		  
 		
 			// get company
 			$company = $this->Xin_model->read_company_info($r->company_id);
@@ -343,10 +343,12 @@ class Employees extends MY_Controller {
 			if($r->is_active==0): $status = '<span class="badge bg-red">'.$this->lang->line('xin_employees_inactive').'</span>';
 			elseif($r->is_active==1): $status = '<span class="badge bg-green">'.$this->lang->line('xin_employees_active').'</span>';endif;
 			
-			// if($r->user_id != '1') {
+			// if($r->user_id != '1') { delete section
 			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
 				if(in_array('203',$role_resources_ids)) {
-					$del_opt = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fa fa-trash"></span></button></span>';
+					$del_opt = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'">
+					<button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fa fa-trash"></span>
+					</button></span>';
 				} else {
 					$del_opt = '';
 				}
@@ -370,13 +372,45 @@ class Employees extends MY_Controller {
 				$lr_opt = '';
 			}
 
+			// view section
 			if(in_array('202',$role_resources_ids)) {
 				$view_opt = ' <span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
 			} else {
 				$view_opt = '';
 			}
 
-			$function = $view_opt.$lr_opt.$del_opt.'';
+			// $function = $view_opt.$lr_opt.$del_opt.'';
+
+			if($r->status == 1 || $r->status == 4 || $r->status == 5) {
+				$lrip = '<a onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign"> 
+                        <button type="button" class="btn btn-xs btn-info"><span class="fa fa-arrow-circle-right"> </span></button> Left / Resign </a><br>
+
+                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Increment"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Increment</a><br></hr>
+
+                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Promotion"> <button type="button" class="btn btn-xs btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Promotion</a><br>';
+			} else {
+				$lrip = '';
+			}
+
+			$function = '
+				<div class="dropdown" >
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Action
+                    </button>
+                    <div class="dropdown-menu" style=" min-width: 180px !important;border-radius:0;line-height: 1.7;" aria-labelledby="dropdownMenuButton">
+
+                        <a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a><br>
+
+                        '. $lrip .'
+
+                        <a> <button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"> <span class="fa fa-trash"></span>  </button>   Delete </a>
+                    </div>
+                </div>';
+
+
+
+
+
 			if($r->wages_type == 1){
 				$bsalary = $this->Xin_model->currency_sign($r->basic_salary);
 			} else {
@@ -409,11 +443,12 @@ class Employees extends MY_Controller {
 			
 			$role_status = $role_name.'<br>'.$status;
 			$data[] = array(
-				$function,
+				$sl = $key + 1,
 				$employee_name,
 				$comp_name,
 				$contact_info,
 				$role_status,
+				$function,
 			);
       
 	    }

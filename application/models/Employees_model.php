@@ -11,7 +11,7 @@ class Employees_model extends CI_Model {
  
  	// get all employes
 	public function get_employees() {
-		$this->db->order_by("user_id", 'desc')->where('is_active',1);
+		$this->db->order_by("user_id", 'ASC')->where('is_active',1);
 		return $this->db->get("xin_employees");
 	}
 	// get all employes > not super admin

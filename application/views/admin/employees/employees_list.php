@@ -418,11 +418,12 @@
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
         <thead>
           <tr>
-            <th style="width:80px;"><?php echo $this->lang->line('xin_action');?></th>
+            <th>Sl.</th>
             <th width="200"><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_employees_full_name');?></th>
             <th><?php echo $this->lang->line('left_company');?></th>
             <th><?php echo $this->lang->line('dashboard_contact');?></th>
             <th><?php echo $this->lang->line('xin_employee_role');?></th>
+            <th style="width:80px;"><?php echo $this->lang->line('xin_action');?></th>
           </tr>
         </thead>
       </table>
