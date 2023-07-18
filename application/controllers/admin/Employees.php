@@ -1344,6 +1344,7 @@ class Employees extends MY_Controller {
 			'company_id' => $result[0]->company_id,
 			'notify_incre_prob' => $result[0]->notify_incre_prob,
 			'status' => $result[0]->status,
+			'floor_status' => $result[0]->floor_status,
 			'location_id' => $result[0]->location_id,
 			'office_shift_id' => $result[0]->office_shift_id,
 			'username' => $result[0]->username,
@@ -2201,7 +2202,8 @@ class Employees extends MY_Controller {
 			'company_id' => $this->input->post('company_id'),
 			'location_id' => $this->input->post('location_id'),
 			'email' => $this->input->post('email'),
-			'status' => 4,
+			'status' => $this->input->post('status'),
+			'floor_status' => $this->input->post('floor_status'),
 			'password' => $password_hash,
 			'date_of_birth' => $date_of_birth,
 			'gender' => $this->input->post('gender'),
@@ -2474,6 +2476,7 @@ class Employees extends MY_Controller {
 			'marital_status' => $this->input->post('marital_status'),
 			'is_active' => $this->input->post('is_active'),
 			'status' => $this->input->post('status'),
+			'floor_status' => $this->input->post('floor_status'),
 		);
 		// dd($data);
 		$id = $this->input->post('user_id');

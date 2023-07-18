@@ -42,8 +42,21 @@ $leave_user = $this->Xin_model->read_user_info($eid);
             <div class="card overflow-hidden">
               <div class="row no-gutters row-bordered row-border-light">
                 <div class="col-md-3 pt-0">
-                  <div class="list-group list-group-flush account-settings-links"> <a class="list-group-item list-group-item-action  nav-tabs-link active" data-toggle="list" href="javascript:void(0);" data-profile="1" data-profile-block="user_basic_info" aria-expanded="true" id="user_profile_1"><?php echo $this->lang->line('xin_e_details_basic');?></a> <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="2" data-profile-block="immigration" aria-expanded="true" id="user_profile_2"><?php echo $this->lang->line('xin_employee_immigration');?></a> <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="3" data-profile-block="contacts" aria-expanded="true" id="user_profile_3"><?php echo $this->lang->line('xin_employee_emergency_contacts');?></a> <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="4" data-profile-block="social-networking" aria-expanded="true" id="user_profile_4"><?php echo $this->lang->line('xin_e_details_social');?></a> <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="5" data-profile-block="documents" aria-expanded="true" id="user_profile_5"><?php echo $this->lang->line('xin_e_details_document');?></a> <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="6" data-profile-block="qualification" aria-expanded="true" id="user_profile_6"><?php echo $this->lang->line('xin_e_details_qualification');?></a> <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="7" data-profile-block="work-experience" aria-expanded="true" id="user_profile_7"><?php echo $this->lang->line('xin_e_details_w_experience');?></a> <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="8" data-profile-block="bank-account" aria-expanded="true" id="user_profile_8"><?php echo $this->lang->line('xin_e_details_baccount');?></a> <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="9" data-profile-block="change-password" aria-expanded="true" id="user_profile_9"><?php echo $this->lang->line('xin_e_details_cpassword');?></a> <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="12" data-profile-block="security_level" aria-expanded="true" id="user_profile_12"><?php echo $this->lang->line('xin_esecurity_level_title');?></a> <a  class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="13" data-profile-block="contract" aria-expanded="true" id="user_profile_13"> <?php echo $this->lang->line('xin_e_details_contract');?> </a> </div>
+                  <div class="list-group list-group-flush account-settings-links"> 
+                    <a class="list-group-item list-group-item-action  nav-tabs-link active" data-toggle="list" href="javascript:void(0);" data-profile="1" data-profile-block="user_basic_info" aria-expanded="true" id="user_profile_1"><?php echo $this->lang->line('xin_e_details_basic');?></a> 
+                    <!-- <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="2" data-profile-block="immigration" aria-expanded="true" id="user_profile_2"><?php //echo $this->lang->line('xin_employee_immigration');?></a>  -->
+                    <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="3" data-profile-block="contacts" aria-expanded="true" id="user_profile_3"><?php echo $this->lang->line('xin_employee_emergency_contacts');?></a> 
+                    <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="4" data-profile-block="social-networking" aria-expanded="true" id="user_profile_4"><?php echo $this->lang->line('xin_e_details_social');?></a> 
+                    <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="5" data-profile-block="documents" aria-expanded="true" id="user_profile_5"><?php echo $this->lang->line('xin_e_details_document');?></a> 
+                    <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="6" data-profile-block="qualification" aria-expanded="true" id="user_profile_6"><?php echo $this->lang->line('xin_e_details_qualification');?></a> 
+                    <!-- <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="7" data-profile-block="work-experience" aria-expanded="true" id="user_profile_7"><?php //echo $this->lang->line('xin_e_details_w_experience');?></a>  -->
+                    <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="8" data-profile-block="bank-account" aria-expanded="true" id="user_profile_8"><?php echo $this->lang->line('xin_e_details_baccount');?></a> 
+                    <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="9" data-profile-block="change-password" aria-expanded="true" id="user_profile_9"><?php echo $this->lang->line('xin_e_details_cpassword');?></a> 
+                    <!-- <a class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="12" data-profile-block="security_level" aria-expanded="true" id="user_profile_12"><?php //echo $this->lang->line('xin_esecurity_level_title');?></a>  -->
+                    <a  class="list-group-item list-group-item-action nav-tabs-link" data-toggle="list" href="javascript:void(0);" data-profile="13" data-profile-block="contract" aria-expanded="true" id="user_profile_13"> <?php echo $this->lang->line('xin_e_details_contract');?> </a> 
+                  </div>
                 </div>
+
                 <div class="col-md-9">
                   <div class="tab-content">
                     <div class="tab-pane active current-tab <?php echo $get_animate;?>" id="user_basic_info">
@@ -179,7 +192,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                           </div>
 
                           <div class="row">
-                            <div class="col-md-4">
+
+                            <div class="col-md-3">
                               <div class="form-group">
                                 <label for="date_of_joining" class="control-label"><?php echo $this->lang->line('xin_employee_doj');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                                 <input class="form-control date" readonly placeholder="<?php echo $this->lang->line('xin_employee_doj');?>" autocomplete="off" name="date_of_joining" type="text" value="<?php echo $date_of_joining;?>">
@@ -189,21 +203,32 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                             <input type="hidden" name="company_id" value="<?php echo $company_id?>">
                             <input type="hidden" name="location_id" value="<?php echo $location_id?>">
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                               <div class="form-group">
                                 <label for="probation">Next Incre/Prob Date<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                                 <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_contact_number');?>" name="notify_incre_prob" autocomplete="off" type="text" value="<?php echo $notify_incre_prob;?>">
                               </div>
                             </div>
 
-                            <div class="col-md-4" id="status">
+                            <div class="col-md-3" id="status">
                               <div class="form-group">
                                 <label for="status"><?php echo $this->lang->line('dashboard_xin_status');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
-                                <select name="status" id="status" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_location');?>">
-                                  <option value="4" <?php echo ($status == 4)? "selected":"";?> >New</option>
+                                <select name="status" id="status" class="form-control" data-plugin="select_hrm">
+                                  <option >-- Select Status --</option>
+                                  <option value="4" <?php echo ($status == 4)? "selected":"";?> >Internship</option>
+                                  <option value="5" <?php echo ($status == 5)? "selected":"";?> >Probation</option>
                                   <option value="1" <?php echo ($status == 1)? "selected":"";?> >Regular</option>
-                                  <!-- <option value="2" <?php echo ($status == 2)? "selected":"";?> >Left</option> -->
-                                  <!-- <option value="3" <?php echo ($status == 3)? "selected":"";?> >Resign</option> -->
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <label for="floor_status">Floor Set<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                <select name="floor_status" id="floor_status" class="form-control">
+                                  <option >-- Select Floor --</option>
+                                  <option value="3" <?php echo ($floor_status == 3)? "selected":"";?> >3 <sup>rd</sup></option>
+                                  <option value="5" <?php echo ($floor_status == 5)? "selected":"";?> >5 <sup>th</sup></option>
                                 </select>
                               </div>
                             </div>
