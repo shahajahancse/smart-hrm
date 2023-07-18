@@ -17,8 +17,6 @@ $paymeal=$data1->pay_amount/45;
 $balanceMeal= $paymeal-$taken_meal;
 }
 ?>
-
-
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
@@ -56,7 +54,6 @@ if (count($empdata)>0){
 <div class="titel_sec_head2 col-md-4">
     <input type="month" class="datesec" id="monthYearInput" value="<?= date('Y-m')?>">
     <a class="btn btns">Submit</a>
-
 </div>
 <table class="table table-striped">
     <thead>
