@@ -89,11 +89,11 @@ class Employees_model extends CI_Model {
 	
 	// get total number of employees
 	public function get_total_employees() {
-	  $query = $this->db->get("xin_employees");
+	  $query = $this->db->where_in('status', array(1,4,5))->get("xin_employees");
 	  return $query->num_rows();
 	}
 		 
-	 public function read_employee_information($id) {
+	public function read_employee_information($id) {
 	
 		$sql = 'SELECT xin_employees.*, xin_proxi.proxi_id 
 				FROM xin_employees

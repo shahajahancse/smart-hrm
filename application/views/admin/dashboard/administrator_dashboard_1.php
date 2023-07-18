@@ -6,6 +6,7 @@ $user = $this->Xin_model->read_employee_info($session['user_id']);
 $theme = $this->Xin_model->read_theme_info(1);
 ?>
 <?php $get_animate = $this->Xin_model->get_content_animate(); ?>
+
 <div class="box-widget widget-user-2">
   <!-- Add the bg color to the header using any of the bg-* classes  -->
   <div class="widget-user-header">
@@ -19,6 +20,7 @@ $theme = $this->Xin_model->read_theme_info(1);
     </h5>
   </div>
 </div>
+
 <?php /*?><?php if($this->session->flashdata('expire_official_document')):?>
  <?php $company_license = $this->Xin_model->company_license_expiry();?>
  <?php foreach($company_license as $clicense):?>
@@ -36,6 +38,8 @@ $theme = $this->Xin_model->read_theme_info(1);
  <?php echo $this->lang->line('xin_title_license');?> <?php echo $clicense_exp->license_name;?> <?php echo $this->lang->line('xin_title_is_expired');?> </div>
  <?php endforeach;?>
  <?php endif;?><?php */?>
+
+
 <div class="row <?php echo $get_animate; ?>">
   <div class="col-sm-6 col-lg-3">
     <div class="card p-3">
@@ -47,7 +51,7 @@ $theme = $this->Xin_model->read_theme_info(1);
           <div>
             <h5 class="mb-1"><b>
                 <?php echo $this->Employees_model->get_total_employees(); ?> <small>
-                  <?php echo $this->lang->line('xin_people'); ?>
+                <?php echo $this->lang->line('xin_people'); ?>
                 </small>
               </b></h5>
             <small class="text-muted"><span class="badge badge-info">
@@ -63,28 +67,6 @@ $theme = $this->Xin_model->read_theme_info(1);
       </a>
     </div>
   </div>
-
-  <!-- <div class="col-sm-6 col-lg-3">
-    <div class="card p-3">
-      <a href="<?php echo site_url('admin/roles'); ?>">
-        <div class="d-flex align-items-center">
-          <span class="stamp-hrsale-4 stamp-hrsale-md bg-hrsale-success-4 mr-3">
-            <i class="fa fa-lock"></i>
-          </span>
-          <div>
-            <h5 class="mb-1"><b>
-                <?php echo $this->lang->line('xin_roles'); ?> <small>
-                  <?php echo $this->lang->line('xin_permission'); ?>
-                </small>
-              </b></h5>
-            <small class="text-muted">
-              <?php echo $this->lang->line('left_set_roles'); ?>
-            </small>
-          </div>
-        </div>
-      </a>
-    </div>
-  </div> -->
 
   <div class="col-sm-6 col-lg-3">
     <div class="card p-3">
@@ -150,11 +132,11 @@ $theme = $this->Xin_model->read_theme_info(1);
     </div>
   </div>
 </div>
+
 <?php
 $current_month = date('Y-m-d');
 $working = $this->Xin_model->current_month_day_attendance($current_month);
-$query = $this->Xin_model->all_employees_status();
-$total = $query->num_rows();
+$total = $this->Employees_model->get_total_employees(); 
 // absent
 $abs = $total - $working;
 ?>
