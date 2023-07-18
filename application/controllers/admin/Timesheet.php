@@ -858,15 +858,12 @@ class Timesheet extends MY_Controller {
 		$data['path_url'] = 'leave_details';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		// dd($data);
-		if(in_array('46',$role_resources_ids)) {
-			if(!empty($session)){ 
-				$data['subview'] = $this->load->view("admin/timesheet/leave_details", $data, TRUE);
-				$this->load->view('admin/layout/layout_main', $data); //page load
-			} else {
-				redirect('admin/');
-			}
+		
+		if(!empty($session)){ 
+			$data['subview'] = $this->load->view("admin/timesheet/leave_details", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
-			redirect('admin/dashboard');
+			redirect('admin/');
 		}
 		  
      }

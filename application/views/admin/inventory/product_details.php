@@ -43,7 +43,7 @@
                 }elseif($stat==2){
                     $status='Approved';
                 }elseif($stat==3){
-                    $status='Delivered';
+                    $status='Received';
                 }else{
                     $status='Rejected';
                 }

@@ -76,6 +76,55 @@ class inventory_model extends CI_Model
 	   return $this->db->insert($table, $data);
 	}
 
+	public function requisition_list($session)
+	{
+		$this->db->select("
+				xin_employees.first_name,
+				xin_employees.last_name,
+				products_categories.category_name,
+			    products_categories.id as cat_id,
+
+			    products_requisitions.user_id,
+			    products_requisitions.status,
+			    products_requisition_details.created_at,
+			    products_requisitions.created_at,
+			    products_requisitions.id
+			")
+		->from("products_requisitions")
+		->from("products_requisition_details")
+		->from("products_categories")
+		->from("xin_employees");
+
+		$this->db->where("products_requisitions.id = products_requisition_details.requisition_id");
+		$this->db->where("xin_employees.user_id = products_requisitions.user_id");
+		$this->db->where("products_categories.id = products_requisition_details.cat_id");	
+
+		if( $session['role_id'] == 3) {
+			$this->db->where("products_requisitions.user_id", $session['user_id']);
+		}
+		$this->db->order_by('products_requisitions.id', 'desc');
+		return	$this->db->get()->result();
+	} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// ************* purchase part ********************
 	public function purchase_products_requisition($id,$role_id){
