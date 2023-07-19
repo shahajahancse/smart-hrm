@@ -243,6 +243,8 @@ $(document).ready(function() {
                 }
                 var pay_m = parseInt(responseData[0].pay_amount) - parseInt(responseData[0]
                     .prev_amount);
+                  var payday =parseInt(pay_m)/45
+                 
 
 
                 // Generate the form dynamically
@@ -294,13 +296,13 @@ $(document).ready(function() {
                 formHtml += '<div class="form-group col-md-3">';
                 formHtml += '<label for="gender">Current M. Lunch day</label>';
                 formHtml += '<input type="number" class="form-control"  value="' +
-                    responseData[0].probable_meal + '" >';
+                    responseData[0].probable_meal + '" readonly>';
                 formHtml += '</div>';
                 formHtml += '<div class="form-group col-md-3">';
                 formHtml += '<label for="gender">Collection Day</label>';
                 formHtml +=
                     '<input type="number" class="form-control" id="p_month_day" onchange="calculatePayment()" value="' +
-                    responseData[0].probable_meal + '" >';
+                    payday + '" >';
                 formHtml += '</div>';
                 formHtml += '<div class="form-group col-md-3">';
                 formHtml += '<label for="gender">Collection Amount</label>';
@@ -383,20 +385,7 @@ $(document).ready(function() {
 
 function calculatePayment() {
     var p_month_day = document.getElementById('p_month_day').value;
-    var p_month_pay = document.getElementById('p_month_pay').value;
-    var prev_balance = document.getElementById('prev_balance').value;
-    console.log(prev_balance);
-    console.log(p_month_day);
-
-
-
-
-
-
-
-
-
-    document.getElementById("p_month_pay").value = parseInt(p_month_day * 45) - parseInt(prev_balance);
+    document.getElementById("p_month_pay").value = parseInt(p_month_day * 45);
 }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
