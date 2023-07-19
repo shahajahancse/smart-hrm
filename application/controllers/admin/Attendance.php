@@ -703,9 +703,12 @@ class Attendance extends MY_Controller {
 		}
     }
 
-	public function employee_movement($type = null){
-		if ($type == 1) {
+	public function employee_movement($type = null,$msg = null){
+		if ($type == 0) {
 			$data = $this->employee_movement_flor();
+		}
+		if ($type == 1) {
+			$data = $this->employee_movement_outside_office();
 		}
 
 		$this->load->view('admin/layout/layout_main', $data); 
@@ -755,5 +758,208 @@ class Attendance extends MY_Controller {
 			return $data;
 		}
     }
+	public function employee_movement_outside_office(){
+		$session = $this->session->userdata('username');
+		$userid  = $session[ 'user_id' ];
+		$firstdate = $this->input->post('firstdate');
+		$seconddate = $this->input->post('seconddate');
+		$this->db->select("*");
+		$this->db->where("employee_id", $userid);
+		$this->db->where("location_status", 1);
+		if ($firstdate!=null && $seconddate!=null){
+			$f1_date=date('Y-m-d',strtotime($firstdate));
+			$f2_date=date('Y-m-d',strtotime($seconddate));
+			$this->db->where("date BETWEEN '$f1_date' AND '$f2_date'");
+			$this->db->order_by("date", "desc");
+			$data['alldata']   = $this->db->get('xin_employee_floor_move')->result();
+			$data['tablebody'] = $this->load->view("admin/attendance/employee_movement_flor_table", $data, TRUE);
+			echo $data['tablebody'] ;
+		}else{
+			$this->db->order_by("id", "desc");
+			$data['alldata'] = $this->db->get('xin_employee_move_register')->result();
 
+			$data['session']     = $session;
+			$data['title'] 		 = 'Outside Office Movements';
+			$data['breadcrumbs'] = 'Outside Office Movements';
+			$data['tablebody'] 	 = $this->load->view("admin/attendance/employee_movement_outside_office_table", $data, TRUE);
+
+			$data['subview'] 	 = $this->load->view("admin/attendance/employee_movement_outside_office", $data, TRUE);
+			return $data;
+		}
+    }
+	function add_move_register(){
+		
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$userid  = $session[ 'user_id' ];
+		$data = array(
+			'employee_id' => $userid,
+			'date' => date('Y-m-d'),
+			'out_time' => date('Y-m-d H:i:s'),
+			'in_time' => date('Y-m-d H:i:s'),
+			'duration' => '00:00:00',
+			'request_amount' => 0,
+			'payable_amount' => 0,
+			'status' => 1,
+			'astatus' => 1,
+			'reason' => $this->input->post('reason'),
+			'location_status' => $this->input->post('location_status'),
+			'in_out' => 1,
+			'place_adress' => $this->input->post('place_adress'),
+			'updated_at' => date('Y-m-d H:i:s'),
+			'created_at' => date('Y-m-d H:i:s')
+		);
+		if($this->db->insert("xin_employee_move_register" , $data)){
+			$msg="success";
+		}else{
+			$msg="error";
+		}
+
+      redirect('admin/attendance/employee_movement/'.$this->input->post('location_status'));
+	}
+	function checkout($s){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$userid  = $session[ 'user_id' ];
+
+
+		$this->db->select("*");
+		$this->db->where("employee_id", $userid);
+		$this->db->where("location_status", $s);
+		$this->db->order_by("id", "desc");
+		$this->db->limit(1); // Limit the result to 1 row
+		$alldata = $this->db->get('xin_employee_move_register')->row();
+		$targetDate = new DateTime($alldata->out_time);
+		// Get the current date and time
+		$currentDate = new DateTime();
+		// Calculate the time difference
+		$timeDiff = $currentDate->diff($targetDate);
+		$timeDifferenceFormatted=$timeDiff->format('%d day, %H:%i:%s');
+
+		$data = array(
+			'in_time' => date('Y-m-d H:i:s'),
+			'duration' => $timeDifferenceFormatted,
+			'in_out' => 0,
+			'updated_at' => date('Y-m-d H:i:s'),
+		);
+		$this->db->where('id', $alldata->id);
+        $this->db->update('xin_employee_move_register', $data);
+
+		$data = array(
+			'move_id' => $alldata->id,
+			'travel_with' =>'[]',
+			'g_place' =>'[]',
+			'g_transportation' =>'[]',
+			'g_costing' =>'[]',
+			'c_place' =>'[]',
+			'c_transportation' =>'[]',
+			'c_costing' =>'[]',
+			'additional_cost' =>'0',
+			'remark' =>'',
+		);
+		if($this->db->insert("xin_employee_move_details" , $data)){
+		redirect('admin/attendance/employee_movement/'.$s);
+	}
+}
+	
+public function ta_da_form($id){
+	$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$userid  = $session[ 'user_id' ];
+		$data['move_id'] 		 = $id;
+
+		$this->db->select("*");
+		$this->db->where("move_id", $id);
+		$data['movedata']   = $this->db->get('xin_employee_move_details')->result()[0];
+		$data['title'] 		 = 'Outside Office Movements Form';
+		$data['breadcrumbs'] = 'Outside Office Movements Form';
+		$data['subview'] 	 = $this->load->view("admin/attendance/ta_da_form", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); 
+
+}
+public function add_ta_da()
+{
+    $session = $this->session->userdata('username');
+    if (empty($session)) {
+        redirect('admin/');
+    }
+
+    $userid = $session['user_id'];
+
+    $this->load->library('upload');
+
+    $move_id = $this->input->post('move_id');
+    $gonig_way_place = json_encode($this->input->post('gonig_way_place'));
+    $gonig_way_transport = json_encode($this->input->post('gonig_way_transport'));
+    $gonig_way_costing = json_encode($this->input->post('gonig_way_costing'));
+    $coming_way_place = json_encode($this->input->post('coming_way_place'));
+    $coming_way_transport = json_encode($this->input->post('coming_way_transport'));
+    $coming_way_costing = json_encode($this->input->post('coming_way_costing'));
+    $additional_cost = $this->input->post('additional_cost');
+    $remark = $this->input->post('remark');
+    $total_cost=0;
+	$goingcosrarray=$this->input->post('gonig_way_costing');
+	$comingcostrarray=$this->input->post('coming_way_costing');
+	foreach ($goingcosrarray as  $value) {
+		$total_cost+=$value;
+	};
+	foreach ($comingcostrarray as  $v) {
+		$total_cost+=$v;
+	};
+	$total_cost+=$additional_cost;
+	
+	$data1 = array(
+		'request_amount' => $total_cost // Add the file location to the data array
+	);
+	$this->db->where('id', $move_id);
+    $this->db->update('xin_employee_move_register', $data1);
+    // File Upload Configuration
+    $config['upload_path'] = './uploads/move_file/'; // Modify this path as needed
+    $config['allowed_types'] = 'gif|jpg|png|pdf'; // Add more allowed file types as needed
+    $config['encrypt_name'] = TRUE; // Generate a unique encrypted filename
+    $config['max_size'] = 10048; // Set maximum file size in kilobytes (2MB in this case)
+
+    $this->upload->initialize($config);
+
+    if ($this->upload->do_upload('additional_invoice')) {
+        // File uploaded successfully
+        $fileData = $this->upload->data();
+        $fileLocation = base_url('uploads/move_file/') . $fileData['file_name'];
+
+        $data = array(
+            'g_place' => $gonig_way_place,
+            'g_transportation' => $gonig_way_transport,
+            'g_costing' => $gonig_way_costing,
+            'c_place' => $coming_way_place,
+            'c_transportation' => $coming_way_transport,
+            'c_costing' => $coming_way_costing,
+            'additional_cost' => $additional_cost,
+            'remark' => $remark,
+            'costing_invoice' => $fileLocation // Add the file location to the data array
+        );
+    } else {
+        // File upload failed or no file was uploaded
+        $data = array(
+            'g_place' => $gonig_way_place,
+            'g_transportation' => $gonig_way_transport,
+            'g_costing' => $gonig_way_costing,
+            'c_place' => $coming_way_place,
+            'c_transportation' => $coming_way_transport,
+            'c_costing' => $coming_way_costing,
+            'additional_cost' => $additional_cost,
+            'remark' => $remark,
+        );
+    }
+
+    // Update the database
+    $this->db->where('move_id', $move_id);
+    $this->db->update('xin_employee_move_details', $data);
+	redirect('admin/employee_movement/1');
+}
 }

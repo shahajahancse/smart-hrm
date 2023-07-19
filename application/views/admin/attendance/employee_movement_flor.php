@@ -54,10 +54,6 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
 
 ?>
 <style>
-body {
-    font-family: 'Fira Mono', monospace;
-}
-
 .list-group>li:nth-child(5n+1) {
     border-top: 1px solid rgba(0, 0, 0, .125);
     border-top-left-radius: .25rem;
@@ -152,9 +148,10 @@ body {
     gap: 10px;
     border-radius: 2px;
     border: 1px solid #9d9797;
- 
+
 }
-.cactive{
+
+.cactive {
     color: #FFF;
     background: #2DCA8C;
 }
@@ -256,10 +253,10 @@ body {
 </div>
 <div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
     <div class="col-md-2 divform-group " style="padding: 0;">
-        <a href="<?= base_url('admin/attendance/employee_movement/1') ?>" class="cboton cactive">Floor wise Movement</a>
+        <a href="<?= base_url('admin/attendance/employee_movement/0') ?>" class="cboton cactive">Floor wise Movement</a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
-        <a href="" class="cboton">Outside office </a>
+        <a href="<?= base_url('admin/attendance/employee_movement/1') ?>" class="cboton">Outside office </a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
         <a href="" class="cboton">Outside Dhaka</a>
