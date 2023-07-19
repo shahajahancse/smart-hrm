@@ -59,7 +59,7 @@ if($total_upcomming_event!=0){
     </div>
 </div>
 
-<div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
+<div class="col-md-12 medelbar" style="gap: 4px;align-items: end;margin-top:-10px;">
     <div class="col-md-2 divform-group " style="padding: 0;">
         <a href="<?= base_url('admin/events/epm_event')?>" class="cboton ">Event List</a>
     </div>
@@ -69,24 +69,22 @@ if($total_upcomming_event!=0){
     <div class="col-md-2 divform-group" style="padding: 0;">
         <a href="#" class="cboton cactive">Calendar</a>
     </div>
-</div>
-<div id="datatable">
-    <!-- TOAST UI Calendar CSS -->
-    <link rel="stylesheet" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.css" />
-    <!-- TOAST UI Calendar JavaScript dependencies -->
-
-
-    <div style="padding: 122px 6px 0px 0px; margin-bottom:20px">
+        <div >
         <!-- Year and month selection -->
-        <div style="display:flex;">
+        <div style="display:flex;    margin-left: 200px;">
             <button id="prevBtn" class=" btn btn-primary"><</button>
             <select id="month" class="form-control"></select>
             <select id="year" class="form-control"></select>
             <button id="nextBtn" class=" btn btn-primary">></button>
         </div>
     </div>
+</div>
+<div id="datatable" style="margin-top:100px"> 
+    <!-- TOAST UI Calendar CSS -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.css" />
+    <!-- TOAST UI Calendar JavaScript dependencies -->
     <!-- Calendar container -->
-    <div id="calendar" style="padding: 24px 6px 35px 19px;"></div>
+    <div id="calendar" style="padding: 60px 10px 10px 15px"></div>
     <script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.min.js"></script>
     <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>

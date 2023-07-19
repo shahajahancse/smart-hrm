@@ -399,10 +399,6 @@ hr {
 }
 
 /* progress bar style */
-
-
-
-
 .sticky-heading {
     position: sticky;
     top: 0;
@@ -410,7 +406,6 @@ hr {
     background-color: #f8f8f8;
     padding: 10px 0;
 }
-
 </style>
 
 <div class=" <?php echo $get_animate;?>">
@@ -421,12 +416,11 @@ hr {
             <h4 class="widget-user-username welcome-hrsale-user" style="margin-top:5px;">
                 Welcome back, <span style="color:#599AE7 "><?php echo $name->first_name.' '.$name->last_name?></span>
             </h4>
-
             <div class="breadcrumbs-hr-top">
                 <div class="breadcrumb-wrapper col-xs-12">
                     <ol class="breadcrumb" style="margin-bottom: 10px; margin-left: -25px; margin-top: -5px;">
                         <li class="breadcrumb-item"><a
-                                href="<?php echo site_url('admin/dashboard/');?>"><?php echo $this->lang->line('xin_e_details_home');?></a>
+                            href="<?php echo site_url('admin/dashboard/');?>"><?php echo $this->lang->line('xin_e_details_home');?></a>
                         </li>
                         <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
@@ -520,7 +514,6 @@ hr {
                         </div>
                         <div class="col-sm-4">
                             <p><span style="font-weight:600">Lunch Time : </span><span>1 Hour</span></p>
-
                         </div>
                         <div class="col-sm-5">
                             <?php $in = date("h:i A", strtotime($schedule->in_time)); 
@@ -680,12 +673,10 @@ hr {
 
                         <div class="col-md-4">
                             <?php
-                        $date        = date( "Y-01-01");
-                        $datep       = date( "Y-m-d");
-                        $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
-      
-                          
-                          ?>
+                                $date        = date( "Y-01-01");
+                                $datep       = date( "Y-m-d");
+                                $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
+                            ?>
                             <span><b>Absent</b></span>
                             <span><?= $present_stutas->absent ?>/365</span>
                         </div>
@@ -712,13 +703,13 @@ hr {
                             <span class="text_s"><?php echo date("M", strtotime($row->created_at))?></span>
                         </div>
                         <div class="col-md-8">
-                            <span style="font-weight: 500;"><?= $row->title ?></span>
+                            <span style="font-weight: 500;cursor: pointer;"  data-toggle="modal" data-target="#myModals" onclick="myfunc(this)" data-title="<?php echo $row->title?>" data-description="<?php echo $row->description?>"><?= $row->title ?></span>
                             <span style="color:#929292;font-size:13px"><?= substr($row->description, 0, 20) ?></span>
                         </div>
                     </div>
                     <hr>
                 <?php } ?>
-                <a href=""  data-toggle="modal" data-target=".bbs-example-modal-lg" style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
+                <a href="<?php echo base_url('admin/events/notice')?>" style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
         </div>
 
@@ -760,8 +751,12 @@ hr {
                 </div>
                 <hr>
                 <?php }?>
+                <!-- Buttons with data-attributes -->
+                
+
+                
                 <!-- <button class="btn btn-sm">View All</button> -->
-                <a href="#" class="" data-toggle="modal" data-target="bs-example-modal-lg"
+                <a href="#" class="" data-toggle="modal" data-target=".bs-example-modal-lg"
                     style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
 
@@ -773,36 +768,28 @@ hr {
 
 
  <!-- notice modal -->
-        <div class="modal fade bbs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-         <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-            <br>
-            <h4 class="modal-title text-center sticky-heading"><b>All Notice</b></h4><br>
-            <table class="table table-bordered table-striped"  id="datatbale">
-                <thead class="text-center">
-                    <tr>
-                        <th class="text-center">Sl.</th>
-                        <th class="text-center">Title</th>
-                        <th class="text-center">Details</th>
-                        <th class="text-center">Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $i=1;$notices= $this->db->select('*')->get('xin_office_notice')->result();foreach($notices as $notice){ ?>
-                        <tr class="text-center">
-                            <td><?php echo $i++ ?></td>
-                            <td><?php echo $notice->title?></td>
-                            <td class="text-justify"><?php echo $notice->description?></td>
-                            <td><?php echo date("d-m-Y",strtotime($notice->created_at))?></td>
-                        </tr>
-                    <?php }?>
-                </tbody>
-            </table>
-            <br><button type="button" class="btn btn-danger btn-sm" style="float:right;margin-right: 10px;" data-dismiss="modal">Close</button><br><br><br>
+
+
+<!-- Modal -->
+<div id="myModals" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Notice</h4>
+        </div>
+        <div class="modal-body">
+            <p id="title" class="h4 text-center"></p>
+            <p id="description" class="text-justify"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger btn-sm " data-dismiss="modal">Close</button>
+        </div>
         </div>
     </div>
 </div>
-        <!-- end notice modal -->
+
+<!-- end notice modal -->
 
 
 <!-- upcomming holidays modal -->
@@ -865,6 +852,12 @@ hr {
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
 
 <script>
+function myfunc(e){
+  var title= e.getAttribute('data-title');
+  var description= e.getAttribute('data-description');
+  $("#title").text(title);
+  $("#description").text(description);
+}    
 // Get the canvas element
 var ctx = document.getElementById('myChart').getContext('2d');
 
@@ -906,4 +899,5 @@ $('#year_id').on('change', function() {
 $(document).ready(function() {
     $('#datatbale').DataTable();
 });
+
 </script>

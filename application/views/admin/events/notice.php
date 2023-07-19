@@ -9,7 +9,7 @@
 <?php if(in_array('269',$role_resources_ids)) {?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
   <div class="col-md-4">
-    <div class="box">
+    <div class="box"> 
       <div class="box-header with-border">
         <h3 class="box-title"> Add New Notice </h3>
       </div>
