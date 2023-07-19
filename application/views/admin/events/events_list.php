@@ -1,6 +1,3 @@
-<?php
-
-?>
 <?php $session = $this->session->userdata('username');?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <div class="row m-b-1 <?php echo $get_animate;?>">

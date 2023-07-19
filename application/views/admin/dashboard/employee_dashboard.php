@@ -130,9 +130,11 @@ $balanceMeal= $paymeal-$taken_meal;
       $holidays= $this->db->select('*')->get('xin_holidays')->result();
       $holidayss= $this->db->select('*')->limit(4)->where("start_date > '".date('Y-m-d')."'")->get('xin_holidays')->result();
       // dd($this->db->last_query());   
-    $leave_calel=get_cal_leave($userid,1);
-    $leave_calsl=get_cal_leave($userid,2);  
-    $totaluseleave=$leave_calel+$leave_calsl;
+      $leave_calel=get_cal_leave($userid,1);
+      $leave_calsl=get_cal_leave($userid,2);  
+      $totaluseleave=$leave_calel+$leave_calsl;
+      $all_notice = $this->db->select('*')->get('xin_events')->result();
+    //   dd($all_notice);
 ?>
 
 
@@ -397,6 +399,18 @@ hr {
 }
 
 /* progress bar style */
+
+
+
+
+.sticky-heading {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #f8f8f8;
+    padding: 10px 0;
+}
+
 </style>
 
 <div class=" <?php echo $get_animate;?>">
@@ -445,18 +459,6 @@ hr {
                         <div class="text"><?= $total_working_hour." hrs"?></div>
                     </div>
                 </div>
-                <!-- <div class="stats-box-row">
-               <div class="stats-box col-md-6">
-                    <span>Break</span>
-                    <span>< ?php echo "01.30 PM"?></span>
-                    
-               </div>
-                <div class="stats-box col-md-6">
-                    <span>Over Time</span>
-                    <span class="text-danger"><b>Pending</b></span>
-                 
-               </div>
-          </div> -->
                 <br>
             </div>
         </div>
@@ -705,7 +707,7 @@ hr {
                 <?php foreach ($notice as $key => $row) { ?>
                     <div class="row">
                         <div class="col-md-4"
-                            style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
+                            style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 53px;height: 50px;flex-shrink: 0;">
                             <span class="text_s" style="padding-top: 4px;"><?php echo date("d", strtotime($row->created_at))?></span>
                             <span class="text_s"><?php echo date("M", strtotime($row->created_at))?></span>
                         </div>
@@ -713,15 +715,18 @@ hr {
                             <span style="font-weight: 500;"><?= $row->title ?></span>
                             <span style="color:#929292;font-size:13px"><?= substr($row->description, 0, 20) ?></span>
                         </div>
-
                     </div>
                     <hr>
                 <?php } ?>
-                <!-- <hr> -->
-                <!-- <button class="btn btn-sm">View All</button> -->
-                <a href="#" class="" style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
+                <a href=""  data-toggle="modal" data-target=".bbs-example-modal-lg" style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
         </div>
+
+       
+
+
+
+
 
         <!-- upcomming holidays -->
 
@@ -730,20 +735,19 @@ hr {
                 <span style="margin-left:20px;padding-top: 1.25rem;font-weight: 600;">Upcoming Holidays</span>
                 <hr>
                 <?php foreach($holidayss as $holiday){
-              $today = new DateTime();  // Current date
-              $date = $holiday->start_date;
-              $futureDate = new DateTime($date);  // Future date
-              if ($futureDate < $today) {
-                  $daysLeft = 0;
-              } else {
-                  $interval = date_diff($today, $futureDate);
-                  $daysLeft = $interval->format('%a');
-              }  
-            ?>
+                    $today = new DateTime();  // Current date
+                    $date = $holiday->start_date;
+                    $futureDate = new DateTime($date);  // Future date
+                    if ($futureDate < $today) {
+                        $daysLeft = 0;
+                    } else {
+                        $interval = date_diff($today, $futureDate);
+                        $daysLeft = $interval->format('%a');
+                    }  
+                ?>
                 <div class="row">
-                    <div class="col-md-4"
-                        style="padding-left: 5px;padding-right: 5px;margin-left: 33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;">
-                        <span class="text_s" style="padding-top: 4px;"><?php echo date("d")?></span>
+                    <div class="col-md-4" style="padding-left: 5px;padding-right: 5px;margin-left: 33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;">
+                        <span class="text_s" style="padding-top: 4px;"><?php echo date("d",strtotime($holiday->start_date))?></span>
                         <span class="text_s"><?php echo date("M",strtotime($holiday->start_date))?></span>
                     </div>
                     <div class="col-md-4">
@@ -756,19 +760,49 @@ hr {
                 </div>
                 <hr>
                 <?php }?>
-
-
                 <!-- <button class="btn btn-sm">View All</button> -->
-                <a href="#" class="" data-toggle="modal" data-target=".bs-example-modal-lg"
+                <a href="#" class="" data-toggle="modal" data-target="bs-example-modal-lg"
                     style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
-
-
 
         </div>
     </div>
 
 </div>
+
+
+
+ <!-- notice modal -->
+        <div class="modal fade bbs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+         <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+            <br>
+            <h4 class="modal-title text-center sticky-heading"><b>All Notice</b></h4><br>
+            <table class="table table-bordered table-striped"  id="datatbale">
+                <thead class="text-center">
+                    <tr>
+                        <th class="text-center">Sl.</th>
+                        <th class="text-center">Title</th>
+                        <th class="text-center">Details</th>
+                        <th class="text-center">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $i=1;$notices= $this->db->select('*')->get('xin_office_notice')->result();foreach($notices as $notice){ ?>
+                        <tr class="text-center">
+                            <td><?php echo $i++ ?></td>
+                            <td><?php echo $notice->title?></td>
+                            <td class="text-justify"><?php echo $notice->description?></td>
+                            <td><?php echo date("d-m-Y",strtotime($notice->created_at))?></td>
+                        </tr>
+                    <?php }?>
+                </tbody>
+            </table>
+            <br><button type="button" class="btn btn-danger btn-sm" style="float:right;margin-right: 10px;" data-dismiss="modal">Close</button><br><br><br>
+        </div>
+    </div>
+</div>
+        <!-- end notice modal -->
 
 
 <!-- upcomming holidays modal -->
@@ -777,7 +811,7 @@ hr {
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <br>
-            <h4 class="modal-title text-center"><b>Upcoming Holidays</b></h4><br>
+            <h4 class="modal-title text-center sticky-heading"><b>Upcoming Holidays</b></h4><br>
             <table class="table table-bordered table-striped">
                 <thead class="text-center">
                     <tr>
@@ -869,4 +903,7 @@ $('#year_id').on('change', function() {
         alert("KO");
     }
 })
+$(document).ready(function() {
+    $('#datatbale').DataTable();
+});
 </script>
