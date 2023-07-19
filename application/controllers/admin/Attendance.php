@@ -960,6 +960,6 @@ public function add_ta_da()
     // Update the database
     $this->db->where('move_id', $move_id);
     $this->db->update('xin_employee_move_details', $data);
-	redirect('admin/employee_movement/1');
+	redirect('admin/attendance/employee_movement/1');
 }
 }

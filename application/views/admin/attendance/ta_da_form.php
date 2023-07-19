@@ -139,19 +139,19 @@ $c_costing_array=json_decode($movedata->c_costing);
                     <input class=" col-md-3 input" placeholder="Place" name="coming_way_place[]" value="<?= $v?>" type="text" required>
                     <select class="col-md-4 input" name="coming_way_transport[]" required>
                         <option value="">Select transportation method</option>
-                        <option <?= ($c_transportation_array[$key]=='CNG')? 'selected': '' ?> value="CNG">CNG</option>
-                        <option <?= ($c_transportation_array[$key]=='rickshaw')? 'selected': '' ?> value="rickshaw">
+                        <option <?= ($c_transportation_array[$k]=='CNG')? 'selected': '' ?> value="CNG">CNG</option>
+                        <option <?= ($c_transportation_array[$k]=='rickshaw')? 'selected': '' ?> value="rickshaw">
                             Rickshaw</option>
-                        <option <?= ($c_transportation_array[$key]=='car')? 'selected': '' ?> value="car">Car</option>
-                        <option <?= ($c_transportation_array[$key]=='bus')? 'selected': '' ?> value="bus">Bus</option>
-                        <option <?= ($c_transportation_array[$key]=='train')? 'selected': '' ?> value="train">Train
+                        <option <?= ($c_transportation_array[$k]=='car')? 'selected': '' ?> value="car">Car</option>
+                        <option <?= ($c_transportation_array[$k]=='bus')? 'selected': '' ?> value="bus">Bus</option>
+                        <option <?= ($c_transportation_array[$k]=='train')? 'selected': '' ?> value="train">Train
                         </option>
-                        <option <?= ($c_transportation_array[$key]=='plane')? 'selected': '' ?> value="plane">Plane
+                        <option <?= ($c_transportation_array[$k]=='plane')? 'selected': '' ?> value="plane">Plane
                         </option>
-                        <option <?= ($c_transportation_array[$key]=='Others')? 'selected': '' ?> value="Others">Others
+                        <option <?= ($c_transportation_array[$k]=='Others')? 'selected': '' ?> value="Others">Others
                         </option>
                     </select>
-                    <input class=" col-md-3 input"  value="<?= $c_costing_array[$key]?>" placeholder="Cost" name="coming_way_costing[]" type="number"
+                    <input class=" col-md-3 input"  value="<?= $c_costing_array[$k]?>" placeholder="Cost" name="coming_way_costing[]" type="number"
                         required>
                     <a href="#" class="remove-field sideb col-md-1 btn-remove-gonig_way"> - </a>
                 </div>
