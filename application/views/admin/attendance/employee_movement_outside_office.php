@@ -203,7 +203,7 @@ textarea {
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
         <div class="heading">Are you want to go Outside <?=($location_status==1)? 'Office': 'Dhaka'?> ? Please Make Sure your Checking & entry Purpose</div>
         <div class="heading2">
-            <a class="btn" onclick="move_modal()"> <?=($location_status==1)? 'Check In': 'Request'?>Check In</a>
+            <a class="btn" onclick="move_modal()"> <?=($location_status==1)? 'Check In': 'Request'?></a>
         </div>
     </div>
     <?php }else{ ?>

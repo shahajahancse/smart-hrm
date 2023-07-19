@@ -12,7 +12,7 @@ hr {
     <div class="box mb-4 <?php echo $get_animate;?>">
         <div id="accordion">
             <div class="box-header with-border">
-                <h3 class="box-title"><?php echo 'Add Movement leave';?></h3>
+                <h3 class="box-title"><?php echo 'Add Outside Office Movement';?></h3>
                 <div class="box-tools pull-right">
                     <a class="text-dark collapsed" data-toggle="collapse" href="#add_form" aria-expanded="false">
                         <button type="button" class="btn btn-xs btn-primary"> <span class="ion ion-md-add"></span>
