@@ -157,7 +157,7 @@ textarea {
             </div>
 <?php if($in_out!=1){?>
             <div class="col-md-12 contentss">
-                <input type="hidden" name="location_status" value="1">
+                <input type="hidden" name="location_status" value="<?=($location_status==1)? 1: 2?> ">
 
                 <div class="form-field">
                     <label for="reason">Select Reason of move**</label>
@@ -189,15 +189,9 @@ textarea {
         </div>
     </form>
 </div>
-
-
-
-
-
-
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
-        <div class="heading">Outside Office Move</div>
+        <div class="heading">Outside <?=($location_status==1)? 'Office': 'Dhaka'?> Move</div>
         <div class="heading2"><?= $totalRows ?></div>
     </div>
 
@@ -207,7 +201,7 @@ textarea {
     </div>
     <?php if($in_out==0){ ?>
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
-        <div class="heading">Are you want to go Outside office? Please Make Sure your Checking & entry Purpose</div>
+        <div class="heading">Are you want to go Outside <?=($location_status==1)? 'Office': 'Dhaka'?> ? Please Make Sure your Checking & entry Purpose</div>
         <div class="heading2">
             <a class="btn" onclick="move_modal()">Check In</a>
         </div>
@@ -218,7 +212,7 @@ textarea {
         <div class="heading" style="font-size: 12px!important;color: red;">Your Check In time  <span
                 style="color: #599AE7;"><?= $timeDifferenceFormatted ?></span>. Make Sure when You Come back to office & Check out
         </div>
-        <div class="heading2"><a class="btn" href="<?= base_url('admin/attendance/checkout/1') ?>"
+        <div class="heading2"><a class="btn" href="<?= base_url('admin/attendance/checkout/')?><?=($location_status==1)? 1: 2 ?> "
                 style="width: 146px;height: 32px;border-radius: 2px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);color: white;font-weight: bold;">Check
                 Out</a></div>
     </div>
@@ -229,10 +223,10 @@ textarea {
         <a href="<?= base_url('admin/attendance/employee_movement/0') ?>" class="cboton ">Floor wise Movement</a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
-        <a href="<?= base_url('admin/attendance/employee_movement/1') ?>" class="cboton cactive">Outside office </a>
+        <a href="<?= base_url('admin/attendance/employee_movement/1') ?>" class="cboton <?=($location_status==1)? 'cactive': ''?>">Outside office </a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
-        <a href="" class="cboton">Outside Dhaka</a>
+        <a href="" class="cboton <?=($location_status==1)? '': 'cactive'?>">Outside Dhaka</a>
     </div>
     <div class="col-md-2 divform-group">
     </div>
@@ -281,7 +275,7 @@ function getdata(status) {
         var seconddate = lastDate.toDateString();
     }
     $.ajax({
-        url: '<?php echo base_url('admin/attendance/employee_movement_flor'); ?>',
+        url: '<?php echo base_url('admin/attendance/employee_movement_outside_')?><?=($location_status==1)? 'Office': 'dhaka'?> ',
         method: 'POST',
         data: {
             firstdate: firstdate,

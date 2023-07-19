@@ -710,6 +710,9 @@ class Attendance extends MY_Controller {
 		if ($type == 1) {
 			$data = $this->employee_movement_outside_office();
 		}
+		if ($type == 2) {
+			$data = $this->employee_movement_outside_dhaka();
+		}
 
 		$this->load->view('admin/layout/layout_main', $data); 
     }
@@ -761,6 +764,8 @@ class Attendance extends MY_Controller {
 	public function employee_movement_outside_office(){
 		$session = $this->session->userdata('username');
 		$userid  = $session[ 'user_id' ];
+		$location_status=1;
+		$data['location_status'] = $location_status;
 		$firstdate = $this->input->post('firstdate');
 		$seconddate = $this->input->post('seconddate');
 		$this->db->select("*");
@@ -770,9 +775,9 @@ class Attendance extends MY_Controller {
 			$f1_date=date('Y-m-d',strtotime($firstdate));
 			$f2_date=date('Y-m-d',strtotime($seconddate));
 			$this->db->where("date BETWEEN '$f1_date' AND '$f2_date'");
-			$this->db->order_by("date", "desc");
-			$data['alldata']   = $this->db->get('xin_employee_floor_move')->result();
-			$data['tablebody'] = $this->load->view("admin/attendance/employee_movement_flor_table", $data, TRUE);
+			$this->db->order_by("id", "desc");
+			$data['alldata']   = $this->db->get('xin_employee_move_register')->result();
+			$data['tablebody'] = $this->load->view("admin/attendance/employee_movement_outside_office_table", $data, TRUE);
 			echo $data['tablebody'] ;
 		}else{
 			$this->db->order_by("id", "desc");
@@ -787,6 +792,38 @@ class Attendance extends MY_Controller {
 			return $data;
 		}
     }
+	public function employee_movement_outside_dhaka(){
+		$session = $this->session->userdata('username');
+		$userid  = $session[ 'user_id' ];
+		$location_status=2;
+		$data['location_status'] = $location_status;
+		$firstdate = $this->input->post('firstdate');
+		$seconddate = $this->input->post('seconddate');
+		$this->db->select("*");
+		$this->db->where("employee_id", $userid);
+		$this->db->where("location_status", $location_status);
+		if ($firstdate!=null && $seconddate!=null){
+			$f1_date=date('Y-m-d',strtotime($firstdate));
+			$f2_date=date('Y-m-d',strtotime($seconddate));
+			$this->db->where("date BETWEEN '$f1_date' AND '$f2_date'");
+			$this->db->order_by("id", "desc");
+			$data['alldata']   = $this->db->get('xin_employee_move_register')->result();
+			$data['tablebody'] = $this->load->view("admin/attendance/employee_movement_outside_office_table", $data, TRUE);
+			echo $data['tablebody'] ;
+		}else{
+			$this->db->order_by("id", "desc");
+			$data['alldata'] = $this->db->get('xin_employee_move_register')->result();
+	
+
+			$data['session']     = $session;
+			$data['title'] 		 = 'Outside Office Movements';
+			$data['breadcrumbs'] = 'Outside Office Movements';
+			$data['tablebody'] 	 = $this->load->view("admin/attendance/employee_movement_outside_office_table", $data, TRUE);
+			$data['subview'] 	 = $this->load->view("admin/attendance/employee_movement_outside_office", $data, TRUE);
+			return $data;
+		}
+    }
+	
 	function add_move_register(){
 		
 		$session = $this->session->userdata('username');
@@ -829,7 +866,6 @@ class Attendance extends MY_Controller {
 
 		$this->db->select("*");
 		$this->db->where("employee_id", $userid);
-		$this->db->where("location_status", $s);
 		$this->db->order_by("id", "desc");
 		$this->db->limit(1); // Limit the result to 1 row
 		$alldata = $this->db->get('xin_employee_move_register')->row();
@@ -873,6 +909,10 @@ public function ta_da_form($id){
 		}
 		$userid  = $session[ 'user_id' ];
 		$data['move_id'] 		 = $id;
+
+		$this->db->select("*");
+		$this->db->where("move_id", $id);
+		$data['movedata']   = $this->db->get('xin_employee_move_details')->result()[0];
 		$data['title'] 		 = 'Outside Office Movements Form';
 		$data['breadcrumbs'] = 'Outside Office Movements Form';
 		$data['subview'] 	 = $this->load->view("admin/attendance/ta_da_form", $data, TRUE);
@@ -899,12 +939,27 @@ public function add_ta_da()
     $coming_way_costing = json_encode($this->input->post('coming_way_costing'));
     $additional_cost = $this->input->post('additional_cost');
     $remark = $this->input->post('remark');
-
+    $total_cost=0;
+	$goingcosrarray=$this->input->post('gonig_way_costing');
+	$comingcostrarray=$this->input->post('coming_way_costing');
+	foreach ($goingcosrarray as  $value) {
+		$total_cost+=$value;
+	};
+	foreach ($comingcostrarray as  $v) {
+		$total_cost+=$v;
+	};
+	$total_cost+=$additional_cost;
+	
+	$data1 = array(
+		'request_amount' => $total_cost // Add the file location to the data array
+	);
+	$this->db->where('id', $move_id);
+    $this->db->update('xin_employee_move_register', $data1);
     // File Upload Configuration
     $config['upload_path'] = './uploads/move_file/'; // Modify this path as needed
     $config['allowed_types'] = 'gif|jpg|png|pdf'; // Add more allowed file types as needed
     $config['encrypt_name'] = TRUE; // Generate a unique encrypted filename
-    $config['max_size'] = 2048; // Set maximum file size in kilobytes (2MB in this case)
+    $config['max_size'] = 10048; // Set maximum file size in kilobytes (2MB in this case)
 
     $this->upload->initialize($config);
 
@@ -941,7 +996,6 @@ public function add_ta_da()
     // Update the database
     $this->db->where('move_id', $move_id);
     $this->db->update('xin_employee_move_details', $data);
+	redirect('admin/attendance/employee_movement/1');
 }
-
-
 }
