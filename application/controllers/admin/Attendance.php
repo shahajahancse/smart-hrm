@@ -873,6 +873,10 @@ public function ta_da_form($id){
 		}
 		$userid  = $session[ 'user_id' ];
 		$data['move_id'] 		 = $id;
+
+		$this->db->select("*");
+		$this->db->where("move_id", $id);
+		$data['movedata']   = $this->db->get('xin_employee_move_details')->result()[0];
 		$data['title'] 		 = 'Outside Office Movements Form';
 		$data['breadcrumbs'] = 'Outside Office Movements Form';
 		$data['subview'] 	 = $this->load->view("admin/attendance/ta_da_form", $data, TRUE);
@@ -899,12 +903,27 @@ public function add_ta_da()
     $coming_way_costing = json_encode($this->input->post('coming_way_costing'));
     $additional_cost = $this->input->post('additional_cost');
     $remark = $this->input->post('remark');
-
+    $total_cost=0;
+	$goingcosrarray=$this->input->post('gonig_way_costing');
+	$comingcostrarray=$this->input->post('coming_way_costing');
+	foreach ($goingcosrarray as  $value) {
+		$total_cost+=$value;
+	};
+	foreach ($comingcostrarray as  $v) {
+		$total_cost+=$v;
+	};
+	$total_cost+=$additional_cost;
+	
+	$data1 = array(
+		'request_amount' => $total_cost // Add the file location to the data array
+	);
+	$this->db->where('id', $move_id);
+    $this->db->update('xin_employee_move_register', $data1);
     // File Upload Configuration
     $config['upload_path'] = './uploads/move_file/'; // Modify this path as needed
     $config['allowed_types'] = 'gif|jpg|png|pdf'; // Add more allowed file types as needed
     $config['encrypt_name'] = TRUE; // Generate a unique encrypted filename
-    $config['max_size'] = 2048; // Set maximum file size in kilobytes (2MB in this case)
+    $config['max_size'] = 10048; // Set maximum file size in kilobytes (2MB in this case)
 
     $this->upload->initialize($config);
 
@@ -941,7 +960,6 @@ public function add_ta_da()
     // Update the database
     $this->db->where('move_id', $move_id);
     $this->db->update('xin_employee_move_details', $data);
+	redirect('admin/employee_movement/1');
 }
-
-
 }
