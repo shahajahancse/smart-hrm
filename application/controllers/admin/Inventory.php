@@ -36,9 +36,11 @@ class Inventory extends MY_Controller {
 		}
 		$data['title'] = 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store';
-
-		$data['products'] 	= $this->Inventory_model->requisition_list($session);
-
+		if($session['role_id']!=3){
+			$data['products'] 	= $this->Inventory_model->requisition_list($session);
+		}else{
+			$data['products'] 	= $this->Inventory_model->equipment_list($session['user_id']);
+		}
 		$data['user_role_id'] 	= $session['role_id'];
 		// dd($data);
 		if(!empty($session)){ 
