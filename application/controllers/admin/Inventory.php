@@ -30,21 +30,23 @@ class Inventory extends MY_Controller {
 	
 	//================= Requisition here =======================
 	public function index($id = null){
+		// dd($id);
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
 		$data['title'] = 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store';
+		$data['session']     = $session;
 
-		if($id != null && $id == 2 && $session['role_id'] = 3){
-			$data['products'] 	= $this->Inventory_model->requisition_list($session);
-			$data['equipments'] 	= $this->Inventory_model->equipment_list($session['user_id']);
-			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
-		}else{
-			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
-		}
-
+		// if( $session['role_id'] = 3){
+		// 	$data['products'] 	= $this->Inventory_model->requisition_list($session);
+		// 	$data['equipments'] 	= $this->Inventory_model->equipment_list($session['user_id']);
+		// 	$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
+		// }else{
+		// }
+		
+		$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load 
 	}
 
@@ -1260,5 +1262,56 @@ class Inventory extends MY_Controller {
         return true;
 	}
 
+	
+ public function equipment_list(){
+	// dd("ok");
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['session']    = $session;
+	$data['equipments'] = $this->Inventory_model->equipment_list($session['user_id']);
+	$this->load->view("admin/inventory/equipment_list", $data);
 }
+
+function requisition_list(){
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['session']    = $session;
+	$data['products'] 	= $this->Inventory_model->requisition_list($session);
+	$data['subview']    = $this->load->view("admin/inventory/requisition_list", $data);
+}
+
+
+
+
+ public function equipment_card(){
+	// dd("ok");
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['session']    = $session;
+	// $data['equipments'] = $this->Inventory_model->equipment_list($session['user_id']);
+	$this->load->view("admin/inventory/equip_card", $data);
+}
+
+function requisition_card(){
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['session']    = $session;
+	// $data['products'] 	= $this->Inventory_model->requisition_list($session);
+	$data['subview']    = $this->load->view("admin/inventory/requip_card", $data);
+}
+
+
+
+}
+
+
+
 ?>
