@@ -218,6 +218,16 @@ textarea {
     </div>
     <?php } ?>
 </div>
+
+    <?php if($this->session->flashdata('success')):?>
+        <div class="col-md-12" style="gap: 4px;margin: 2px;align-items: end;">
+            <div class="alert alert-success" id="flash_message">
+              <?php echo $this->session->flashdata('success');?>
+            </div>
+        </div>
+    <?php endif; ?> 
+
+
 <div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
     <div class="col-md-2 divform-group " style="padding: 0;">
         <a href="<?= base_url('admin/attendance/employee_movement/0') ?>" class="cboton ">Floor wise Movement</a>

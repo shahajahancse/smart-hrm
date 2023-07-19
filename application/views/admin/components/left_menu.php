@@ -355,19 +355,21 @@ if($theme[0]->sub_menu_icons != ''){
         <ul class="treeview-menu">
 
           <?php if(in_array('1031',$role_resources_ids)) { ?>
-          <li class="sidenav-link <?php if(!empty($arr_mod['my_requi_active']))echo $arr_mod['my_requi_active'];?>"> <a href="<?php echo site_url('admin/inventory/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Requisition List </a> </li>
+          <li class="sidenav-link <?php if(!empty($arr_mod['my_requi_active']))echo $arr_mod['my_requi_active'];?>"> <a href="<?php echo site_url('admin/inventory/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Requisition </a> </li>
           <?php } ?>  
 
           <!-- requisition part -->
           <?php if(in_array('1070',$role_resources_ids) || in_array('1070',$role_resources_ids) || in_array('1071',$role_resources_ids) || in_array('1072',$role_resources_ids) || in_array('1073',$role_resources_ids) || in_array('1074',$role_resources_ids) || in_array('1075',$role_resources_ids) || in_array('1076',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['requi_active']))echo $arr_mod['requi_active'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Requisition <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
-              <?php if(in_array('1071',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['iqcreate_open']))echo $arr_mod['iqcreate_open'];?>"> <a href="<?php echo site_url('admin/inventory/create');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Create Requisition </a> </li>
-              <?php } ?>
               <?php if(in_array('1072',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['iqlist_open']))echo $arr_mod['iqlist_open'];?>"> <a href="<?php echo site_url('admin/inventory/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Requisition List </a> </li>
               <?php } ?>
+
+              <?php if(in_array('1071',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['iqcreate_open']))echo $arr_mod['iqcreate_open'];?>"> <a href="<?php echo site_url('admin/inventory/create');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Create Requisition </a> </li>
+              <?php } ?>
+
               <?php if(in_array('1033',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['iqpending_open']))echo $arr_mod['iqpending_open'];?>"> <a href="<?php echo site_url('admin/inventory/pending_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Pending List </a> </li>
               <?php } ?>

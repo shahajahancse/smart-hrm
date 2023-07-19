@@ -736,10 +736,11 @@ class Attendance extends MY_Controller {
 		}
     }
 
-	public function employee_movement($type = null,$msg = null){
-		if ($type == 0) {
+	public function employee_movement($type = null){
+		if ($type == null) {
 			$data = $this->employee_movement_flor();
 		}
+		
 		if ($type == 1) {
 			$data = $this->employee_movement_outside_office();
 		}
@@ -869,6 +870,7 @@ class Attendance extends MY_Controller {
 		}else{
 			$osd_status=1;
 		}
+
 		$data = array(
 			'employee_id' => $userid,
 			'date' => date('Y-m-d'),
@@ -888,13 +890,14 @@ class Attendance extends MY_Controller {
 			'created_at' => date('Y-m-d H:i:s')
 		);
 		if($this->db->insert("xin_employee_move_register" , $data)){
-			$msg="success";
+			$this->session->set_flashdata('success', 'Successfully Insert Done');
 		}else{
-			$msg="error";
+			$this->session->set_flashdata('success', 'Successfully Insert Done');
 		}
 
       redirect('admin/attendance/employee_movement/'.$this->input->post('location_status'));
 	}
+
 	function checkout($s){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
