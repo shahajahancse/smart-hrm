@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/main.css') ?>">
 <?php
 // dd($results); 
 $session = $this->session->userdata('username');
@@ -29,9 +30,33 @@ line-height: 100%;
   }
 
 </style>
+
+<link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
+
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 
-<link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/main.css') ?>">
+
+<div class="row">
+  <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
+    <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
+        <div class="heading">Active Days</div>
+        <div class="heading2"><?= 0 ?></div>
+    </div>
+
+    <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
+        <div class="heading">Late Days</div>
+        <div class="heading2"><?= 0  ?></div>
+    </div>
+    <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">
+        <div class="heading">Absent</div>
+        <div class="heading2"><?=  0 ?></div>
+    </div>
+    <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
+        <div class="heading">Taking Leave</div>
+        <div class="heading2"><?= 0 ?></div>
+    </div>
+  </div>
+</div>
 
 <div class="row">
     <div class="col-md-12">

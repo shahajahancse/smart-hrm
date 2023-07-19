@@ -122,12 +122,10 @@ class Inventory extends MY_Controller {
 		$data['title'] 		    =     'Inventory | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']    =     'Store Create Requisition';
 		// $data['path_url'] 	    =     'inventory';
-		$data['categorys']		=     $this->db->get("products_categories")->result();
 		$data['products'] 		=     $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
 		$data['results'] 		=     $this->Inventory_model->product_list();
-		$data['sub_categorys']  =     $this->db->get("products_sub_categories")->result();
-		$data['units'] 			=     $this->db->get("product_unit")->result();
 		$data['user_role_id'] 	=     $session['role_id'];
+		// dd($data['results']);
 		$data['subview'] 	    =     $this->load->view("admin/inventory/create", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
@@ -1197,6 +1195,7 @@ class Inventory extends MY_Controller {
 		  
 		}
 	}
+
     public function delete_requsiton($id){
 		$approved=$this->db->where('id',$id)->delete('products_requisitions');
 		if($approved){
@@ -1228,5 +1227,29 @@ class Inventory extends MY_Controller {
 		$data['subview'] = $this->load->view("admin/inventory/product_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
+
+	public function get_product_by_ajax($product_id)
+	{
+	   $this->db->select('
+		   		p.id, 
+		   		p.product_name, 
+		   		p.quantity, 
+		   		p.cat_id, 
+		   		pc.category_name, 
+		   		p.sub_cate_id, 
+		   		psc.sub_cate_name,
+		   		pu.unit_name
+	   		');
+	    $this->db->from('products as p');
+	    $this->db->join('products_categories as pc', 'pc.id = p.cat_id');
+	    $this->db->join('products_sub_categories as psc', 'psc.id = p.sub_cate_id');
+	    $this->db->join('product_unit as pu', 'pu.id = p.unit_id');
+	    $query = $this->db->where('p.id', $product_id)->get()->row();
+        header('Content-Type: application/x-json; charset=utf-8');
+        echo (json_encode($query));
+        return true;
+	}
+
 }
 ?>
