@@ -61,15 +61,15 @@ $session = $this->session->userdata('username');
 </div>
 
 <div class="row">
-    <div class="col-md-12">
-        <span class="t2" >If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
-        <span class="btn btn-md btn-primary" style="float:right" id="requisition">Requisition</span>
-    </div>
+  <div class="col-md-12">
+      <span class="t2" >If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
+      <span class="btn btn-md btn-primary" style="float:right" id="requisition">Requisition</span>
+  </div>
 
-<div class="col-md-4" style="display:flex;">
-    <a href="#" class="btn" id="listButton">Using List</a>
-    <a href="#" class="btn" style="margin-left:10px;" id="infoButton">Request Information</a>
-</div>
+  <div class="col-md-4" style="display:flex;">
+      <a href="#" class="btn" id="listButton">Using List</a>
+      <a href="#" class="btn" style="margin-left:10px;" id="infoButton">Request Information</a>
+  </div>
 
 
 
@@ -141,7 +141,7 @@ $session = $this->session->userdata('username');
               <tr>  
                 <td class="text-center"><?php echo ($key+1)."."; ?></td>
                 <td class="text-center"><?php echo $rows->model_name ?></td>
-                <td class="text-center"><?php echo $rows->device_name_id ?></td>
+                <td class="text-center"><?php echo "MHL-".$rows->device_name_id ?></td>
                 <td class="text-center"><?php echo ($key+1)."."; ?></td>
                 <td class="text-center"><?php echo ($key+1)."."; ?></td>
                 <td class="text-center"><?php echo $rows->status ; ?></td>
