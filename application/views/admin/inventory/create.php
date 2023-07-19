@@ -11,25 +11,41 @@
     <div class="box-header with-border">
         <h3 class="box-title">Add Requisition</h3>
     </div>
-        <div class="container pt-4">
-          <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
-            <?php $hidden = array('user_id' => $session['user_id']);?>
-            <?php echo form_open('admin/inventory/create', $attributes, $hidden);?>
-                <table class="table table-bordered table-sm table-striped " id="appRowDiv">
-                    <tr>
-                        <th class="text-center">Category Name</th>
-                        <th class="text-center">Sub Category Name</th>
-                        <th class="text-center">Product Name</th>
-                        <th class="text-center">Quantity</th>
-                        <th class="text-center"> <button type="button" id="addRow"  class="btn btn-sm btn-success">+ Add More</button></th>
-                    </tr>
-                    <tr></tr>
-                </table>
-                <!-- <input type="submit" name="btn" class="" value="Save"> -->
-                <button name="btn" type="submit" class="btn btn-primary btn-sm text-right" style="float: right;margin-right: 92px;margin-bottom: 20px;" > <i class="fa fa-check-square-o"></i><?php echo $this->lang->line('xin_save');?></button>
-            <?php echo form_close(); ?> 
+      <div class="container pt-4">
+        <div class="row">
+          <div class="col-md-3">
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group">
+              <!-- <label for="department"><?php echo $this->lang->line('left_department');?></label> -->
+              <select class="form-control" id="select_item" name="select_item" data-plugin="select_hrm" placeholder="Search Item" >
+                <option><-- Search Item --></option>
+                <?php foreach ($results as $key => $row) { ?>
+                  <option value="<?= $row->id ?>"><?= $row->category_name .' >> '. $row->sub_cate_name .' >> '. $row->product_name ?></option>
+                <?php } ?>
+              </select>
+            </div>
+          </div>
         </div>
 
+        <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
+        <?php $hidden = array('user_id' => $session['user_id']);?>
+        <?php echo form_open(current_url(), $attributes, $hidden);?>
+          <table class="table table-bordered table-sm table-striped " id="appRowDiv">
+            <tr>
+              <th class="text-left">Category Name</th>
+              <th class="text-left">Sub Category Name</th>
+              <th class="text-left">Product Name</th>
+              <th class="text-left">Quantity</th>
+              <th class="text-left">Action</th>
+            </tr>
+            <tr></tr>
+          </table>
+              <!-- <input type="submit" name="btn" class="" value="Save"> -->
+          <button name="btn" type="submit" class="btn btn-primary btn-sm text-right" style="float: right;margin-right: 92px;margin-bottom: 20px;" > <i class="fa fa-check-square-o"></i><?php echo $this->lang->line('xin_save');?></button>
+        <?php echo form_close(); ?> 
+      </div>
   </div>
 </div>
 <?php if($this->session->flashdata('success')):?>
@@ -37,6 +53,58 @@
     <?php echo $this->session->flashdata('success');?>
   </div>
 <?php endif; ?> 
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    // get designations
+    $('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
+    $('[data-plugin="select_hrm"]').select2({ width:'100%' });
+
+    $('#select_item').change(function(e) {
+      product_id = $(this).val();
+      // console.log($(this).find('option[value="' +$(this).val() + '"]').text());
+      $.ajax({
+        type: "POST",
+        url: "<?php echo base_url('admin/inventory/get_product_by_ajax/');?>" + product_id,
+        success: function(response)
+        {
+          product_name = response.product_name;
+          unit_name = response.unit_name;
+          category_name = response.category_name;
+          cat_id = response.cat_id;
+          sub_cat_name = response.sub_cate_name;
+          sub_cat_id = response.sub_cate_id;
+
+          let items = '';
+          items+= '<tr>';
+          items+= '<input name="product_id[]" value="'+product_id+'" type="hidden" required>';
+          items+= '<input name="sub_cate_id[]" value="'+sub_cat_id+'" type="hidden" required>';
+          items+= '<input name="cat_id[]" value="'+cat_id+'" type="hidden" required>';
+
+          items+= '<td>'+category_name+'</td>';
+          items+= '<td>'+sub_cat_name+'</td>';
+          items+= '<td>'+product_name+' '+unit_name+'</td>';
+
+          items+= '<td><input name="quantity[]" class="form-control input-sm" required /></td>';
+
+          items+= '<td> <a href="javascript:void();" class="label label-important text-danger" onclick="removeRow(this)"><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
+          items+= '</tr>';
+          $('#appRowDiv tr:last').after(items);
+
+        }
+     });
+    })
+
+  });
+
+  function removeRow(id){ 
+    $(id).closest("tr").remove();
+  }
+
+</script>
+
+
 <script>
   $(function() {$("#flash_message").hide(2000);});
 </script>  
@@ -51,146 +119,3 @@
 
 
 
-
-
-<?php
-  $category_data = '';
-  $category_data .= '<option value="">--Select One--</option>';
-  $i=1;
-  foreach ($categorys as $key => $value) {
-    $category_data .= '<option value="'.$i++.'">'.$value->category_name.'</option>';
-  }
-?>
-<script type="text/javascript">
-    // load auto row when page load
-   $(document).ready(function() {
-      //Load First row
-      addNewRow();
-      // $('#purchase_table').DataTable();
-   });  
-
-   // add row to new item
-   let sl = 1; 
-   $("#addRow").click(function(e) {
-      sl++;
-      addNewRow(sl);
-   }); 
-
-   //remove row
-   function removeRow(id){ 
-      $(id).closest("tr").remove();
-   }
-
-   //add row function
-   function addNewRow(sl){
-      // id="category_'+sl+'"
-      // let sl=$('#count').val();
-      let items = '';
-      items+= '<tr>';
-      items+= '<td><select name="cat_id[]" class="form-control input-sm" id="category_'+sl+'" required><?php echo $category_data;?></select></td>';
-      items+= '<td><select name="sub_cate_id[]"  id="subcategory_'+sl+'" class="sub_category_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
-      items+= '<td><select name="product_id[]" class="item_val_'+sl+' form-control input-sm" required ><option value="">-- Select One --</option></select></td>';
-      items+= '<td><input name="quantity[]" id="quantity" value="" type="text" class="form-control input-sm" required></td>';
-      items+= '<td> <a href="javascript:void();" class="label label-important text-danger" onclick="removeRow(this)"> <i class="fa fa-minus-circle text-danger"></i><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
-      items+= '</tr>';
-      // $('#count').val(sl+parseInt(1));
-      $('#appRowDiv tr:last').after(items);
-      category_dd(sl);
-      subcategory_dd(sl);
-   } 
-
-   function category_dd(sl){
-      //Category Dropdown
-      $('#category_'+sl).change(function(){
-         $('.sub_category_val_'+sl).addClass('form-control input-sm');
-         $('.sub_category_val_'+sl+' > option').remove();
-         var id = $('#category_'+sl).val();
-
-         $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('admin/inventory/get_sub_category_ajax/');?>" + id,
-            success: function(func_data)
-            {
-               // console.log(func_data);
-               $.each(func_data,function(id,name)
-               {
-                  var opt = $('<option />');
-                  opt.val(id);
-                  opt.text(name);
-                  $('.sub_category_val_'+sl).append(opt);
-               });
-            }
-         });
-      });
-   }
-
-   function subcategory_dd(sl){
-      //Sub Category Dropdown
-      $('#subcategory_'+sl).on('change',function(){
-         $('.item_val_'+sl).addClass('forcontrolm- input-sm');
-         $(".item_val_"+sl+"> option").remove();
-         var id = $('#subcategory_'+sl).val();
-
-         $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('admin/inventory/get_product_ajax/');?>" + id,
-            success: function(func_data)
-            {
-               $.each(func_data,function(id,name)
-               {
-
-                  var opt = $('<option />');
-                  opt.val(id);
-                  opt.text(name);
-                  $('.item_val_'+sl).append(opt);
-               });
-              //  handleSelectionChange(this)
-           
-
-
-            }
-         });
-      });
-   }
-  
-
-
-    function handleSelectionChange(selectedMenu) {
-      var selectionMenus = document.getElementsByClassName("selection-menu");
-      
-
-      // Disable all options
-      for (var i = 0; i < selectionMenus.length; i++) {
-        var options = selectionMenus[i].options;
-        console.log(options);
-        for (var j = 0; j < options.length; j++) {console.log(options[j]);
-          options[j].disabled = false;
-        }
-      }
-
-      // Iterate over all selection menus
-      for (var i = 0; i < selectionMenus.length; i++) {
-        var options = selectionMenus[i].options;
-        var selectedValues = [];
-
-        // Get the selected values from each selection menu
-        for (var j = 0; j < options.length; j++) {
-          if (options[j].selected) {
-            selectedValues.push(options[j].value);
-          }
-        }
-
-        // Disable selected options in other selection menus
-        for (var j = 0; j < selectionMenus.length; j++) {
-          if (selectionMenus[j] !== selectedMenu) {
-            var otherOptions = selectionMenus[j].options;
-            for (var k = 0; k < otherOptions.length; k++) {
-              if (selectedValues.includes(otherOptions[k].value)) {
-                otherOptions[k].disabled = true;
-              }
-            }
-          }
-        }
-      }
-    }
-  </script>
