@@ -20,7 +20,6 @@ if($total_upcomming_event!=0){
     
 .cboton {
     color: #000;
-    font-family: Roboto;
     font-size: 14px;
     font-weight: 600;
     display: flex;
@@ -40,22 +39,24 @@ if($total_upcomming_event!=0){
 
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
-        <div class="heading">Total Event</div>
-        <div class="heading2"><?= $total_event ?></div>
+        <div class="h4">Total Event</div>
+        <div class="h4"><?= $total_event ?></div>
     </div>
 
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
-        <div class="heading">Total Upcoming </div>
-        <div class="heading2"><?= $total_upcomming_event ?></div>
+        <div class="h4">Total Upcoming </div>
+        <div class="h4"><?= $total_upcomming_event ?></div>
     </div>
     <div class="divstats-info col-md-6" style="background-color: #D2F9EE;display: flex;">
-    <div class='col-md-6' style="display: flex;flex-direction: column;">
-        <span>Upcoming  Event</span>
-        <span style="color: #1F1F1F;font-family: Roboto;font-size: 19px;font-style: normal;font-weight: 700;/* 143% */"><?= (isset($lastEvent->start_event_date))? date('d-M-Y H:i',strtotime($lastEvent->start_event_date.' '.$lastEvent->start_event_time)) : 'none'?></span>
+    <div class='col-md-5' style="display: flex;flex-direction: column;">
+        <span class="h4">Upcoming  Event</span>
+        <span style="color: #1F1F1F;font-size: 16px;font-style: normal;font-weight: 600;/* 143% */"><?= (isset($lastEvent->start_event_date))? date('d-M-Y H:i',strtotime($lastEvent->start_event_date.' '.$lastEvent->start_event_time)) : 'none'?></span>
 
     </div>
-    <div class='col-md-6'>
-        <span><?= (isset($lastEvent->event_title))? $lastEvent->event_title: '' ?></span>
+    <div class='col-md-7'>
+        <div class="h4">
+            <?= (isset($lastEvent->event_title))? $lastEvent->event_title: '' ?>
+        </div>
     </div>
 
        

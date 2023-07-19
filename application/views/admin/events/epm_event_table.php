@@ -1,25 +1,24 @@
 <style>
 .pending {
-    display: inline-block;
-    height: 24px;
-    color: white;
-    width: 67px;
-    padding: 2px 4px 5px 5px;
-    background: #ff2d2d;
-    border-radius: 10px;
-    font-weight: bold;
+    display: inline-flex;
+    padding: 4.5px 14.3px 5.5px 9px;
+    align-items: center;
+    gap: 9px;
+    border-radius: 50px;
+    border: 1px solid #CCC;
+    background: #FFF;
 }
 
 .complet {
-    display: inline-block;
-    height: 24px;
-    color: white;
-    width: 86px;
-    padding: 2px 4px 5px 5px;
-    background: #0dae06;
-    border-radius: 10px;
-    font-weight: bold;
+    display: inline-flex;
+    padding: 4.5px 14.3px 5.5px 9px;
+    align-items: center;
+    gap: 9px;
+    border-radius: 50px;
+    border: 1px solid #CCC;
+    background: #FFF;
 }
+
 
 #deteils {
     display: none;
@@ -57,8 +56,7 @@
 }
 .kispan{
     color: var(--white, #FFF);
-    font-family: Roboto;
-    font-size: 16px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: 100%;
@@ -71,8 +69,6 @@
     <div class="detailsc">
         <div class="col-md-12" style="background: aliceblue;padding: 0px;width: 147%;">
             <div class="col-md-12 hedingt"></div>
-
-
             <div class="col-md-12" style="text-align-last: right;">
                 <svg class="close"  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <path id='close'
@@ -80,19 +76,22 @@
                         fill="#858A8F" />
                 </svg>
             </div>
-            <div class="col-md-12" style="padding: 25px;">
-                <div class="col-md-12"
-                    style="padding: 0;color: var(--text-color-1, #333);text-align: center;font-family: Roboto;font-size: 19px;font-style: normal;font-weight: 600;line-height: 150.5%; /* 35.88px */">
+            <div class="col-md-12">
+                <div class="h4" style="color: var(--text-color-1, #333);text-align: center;font-weight: 600;">
                     <span id="titel"></span>
                 </div>
-                <div class="col-md-12" style="padding: 0;display: flex;justify-content: center;gap: 17px;">
-                    <div class="kitt"><span class="kispan" id="location"></i></span></div>
-                    <div class="kitt"><span class="kispan" id="duration"></span></div>
+                <div class="col-md-12" style="padding: 0;display: flex;justify-content: center;gap: 10px;">
+                    <div class="btn btn-info">
+                        <i class="fa fa-map-marker text-white" aria-hidden="true"></i> 
+                        <span class="kispan" id="location"> </span>
+                    </div>
+                    <div class="btn btn-info">
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        <span class="kispan" id="duration"></span></div>
                 </div>
                 <div class="col-md-12" style="padding: 0;display: flex;justify-content: center;">
-                <div id="descrption" style="padding: 12px;display: flex;text-align: center;color: #000;font-family: Roboto;font-size: 15px;font-style: normal;font-weight: 400;line-height: 22.5px; /* 150% */text-transform: capitalize;">
-                </div>
-                
+                    <div id="descrption"   style="padding: 12px;display: flex;text-align: justify;color: #000;font-weight: 400;line-height: ; text-transform: capitalize;margin-bottom:15px;">
+                    </div>
                 </div>
 
             </div>
@@ -105,13 +104,14 @@
 <table class="datatables-demo table table-striped table-bordered">
     <thead>
         <tr>
-            <th>SL</th>
-            <th>Start Date </th>
-            <th>End Date</th>
-            <th>Duration</th>
-            <th>Details</th>
-            <th>Place Name</th>
-            <th>Status</th>
+            <th class="text-center">SL</th>
+            <th class="text-center">Purpose Of Events</th>
+            <th class="text-center">Date</th>
+            <th class="text-center">Time</th>
+            <th class="text-center">Duration</th>
+            <th class="text-center">Details</th>
+            <th class="text-center">Place Name</th>
+            <th class="text-center">Status</th>
 
         </tr>
     </thead>
@@ -120,38 +120,40 @@
               $enddatetime=date('d-M-Y H:i:s' , strtotime($data->end_event_date.' '. $data->end_event_time))
               ?>
         <tr>
-            <td><?= $kay+1 ?></td>
-            <td><?= date('d-M-Y H:i:s' , strtotime($data->start_event_date.' '. $data->start_event_time))?></td>
-            <td><?= date('d-M-Y H:i:s' , strtotime($data->end_event_date.' '. $data->end_event_time))?></td>
-            <td><?= $data->event_duration ?></td>
-            <td><a class="btn" onclick=opm(this) data-titel="<?= $data->event_title ?>" data-location="<?= $data->location ?>" data-duration="<?= $data->event_duration ?>" data-description="<?= $data->event_note ?>"  style="padding: 2px;margin: 0;color: #ffffff;background: #006bc8;">Details</a></td>
-            <td><?= $data->location ?></td>
-            <td><?= ($enddatetime > date('d-M-Y H:i:s'))? '<span class="pending">Pending</span>': '<span class="complet">Complete</span>' ?>
+            <td class="text-center"><?= $kay+1 ?></td>
+            <td class="text-center"><?= $data->event_title ?></td>
+            <td class="text-center"><?= date('d-M-Y' , strtotime($data->start_event_date))?></td>
+            <td class="text-center"><?= date('h:i:s A' , strtotime($data->start_event_time))?></td>
+            <td class="text-center"><?= $data->event_duration ?></td>
+            <td class="text-center"><a class="btn btn-sm btn-info" onclick=opm(this) data-titel="<?= $data->event_title ?>" data-location="<?= $data->location ?>" data-duration="<?= $data->event_duration ?>" data-description="<?= $data->event_note ?>" >Details</a></td>
+            <td class="text-center"><?= $data->location ?></td>
+            <td class="text-center">
+                <?= ($enddatetime > date('d-M-Y H:i:s'))? '<span class="pending"><i class="fa fa-dot-circle-o" style="color:red"></i>Pending</span>': '<span class="complet"><i class="fa fa-dot-circle-o" style="color:green"></i>Complete</span>' ?>
             </td>
         </tr>
         <?php } ?>
     </tbody>
 </table>
+
 <script>
    function opm(element){
-    const title = element.dataset.titel;
-    const location = element.dataset.location;
-    const duration = element.dataset.duration;
-    const description = element.dataset.description;
-    document.getElementById('deteils').style.display = "block";
-    document.getElementById('titel').innerHTML=title;
-    document.getElementById('location').innerHTML=location;
-    document.getElementById('duration').innerHTML=duration;
-    document.getElementById('descrption').innerHTML=description;
+        const title = element.dataset.titel;
+        const location = element.dataset.location;
+        const duration = element.dataset.duration;
+        const description = element.dataset.description;
+        document.getElementById('deteils').style.display = "block";
+        document.getElementById('titel').innerHTML=title;
+        document.getElementById('location').innerHTML=location;
+        document.getElementById('duration').innerHTML=duration;
+        document.getElementById('descrption').innerHTML=description;
     }
 
-    
-</script>
-<script>
-window.addEventListener("click", (event) => {
-  if (event.target.className === 'mmm' || event.target.id === 'close') {
-    document.getElementById('deteils').style.display = "none";
-  }})   
+
+    window.addEventListener("click", (event) => {
+        if (event.target.className === 'mmm' || event.target.id === 'close') {
+            document.getElementById('deteils').style.display = "none";
+        }
+    })   
 </script>
 
 

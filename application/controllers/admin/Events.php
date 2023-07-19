@@ -406,6 +406,7 @@ class Events extends MY_Controller
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
+		// dd($session);
 		if(!empty($session)){ 
 			$this->load->view("admin/events/notice_list", $data);
 		} else {
@@ -426,7 +427,11 @@ class Events extends MY_Controller
 			// $edit = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light edit-data" data-toggle="modal" data-target=".edit-modal-data" data-notice_id="'. $r->id.'"><span class="fa fa-pencil"></span></button></span>';
         	$edit = '';
 			// delete
-			$delete = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->id . '"><span class="fa fa-trash"></span></button></span>';
+			if($session['role_id']==3){
+				$delete= '';
+			}else{
+				$delete = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->id . '"><span class="fa fa-trash"></span></button></span>';
+			}
 			//view
 			$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-notice_id="'. $r->id . '"><span class="fa fa-eye"></span></button></span>';
 

@@ -1,24 +1,22 @@
 <style>
 .pending {
-    display: inline-block;
-    height: 24px;
-    color: white;
-    width: 67px;
-    padding: 2px 4px 5px 5px;
-    background: #ff2d2d;
-    border-radius: 10px;
-    font-weight: bold;
+    display: inline-flex;
+    padding: 4.5px 14.3px 5.5px 9px;
+    align-items: center;
+    gap: 9px;
+    border-radius: 50px;
+    border: 1px solid #CCC;
+    background: #FFF;
 }
 
 .complet {
-    display: inline-block;
-    height: 24px;
-    color: white;
-    width: 86px;
-    padding: 2px 4px 5px 5px;
-    background: #0dae06;
-    border-radius: 10px;
-    font-weight: bold;
+    display: inline-flex;
+    padding: 4.5px 14.3px 5.5px 9px;
+    align-items: center;
+    gap: 9px;
+    border-radius: 50px;
+    border: 1px solid #CCC;
+    background: #FFF;
 }
 
 #deteils {
@@ -66,13 +64,10 @@
 }
 </style>
 
-
 <div id="deteils" class="mmm">
     <div class="detailsc">
         <div class="col-md-12" style="background: aliceblue;padding: 0px;width: 147%;">
             <div class="col-md-12 hedingt"></div>
-
-
             <div class="col-md-12" style="text-align-last: right;">
                 <svg class="close"  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <path id='close'
@@ -85,29 +80,24 @@
                     style="padding: 0;color: var(--text-color-1, #333);text-align: center;font-family: Roboto;font-size: 19px;font-style: normal;font-weight: 600;line-height: 150.5%; /* 35.88px */">
                     <span id="titel"></span>
                 </div>
-              
                 <div class="col-md-12" style="padding: 0;display: flex;justify-content: center;">
-                <div id="descrption" style="padding: 12px;display: flex;text-align: center;color: #000;font-family: Roboto;font-size: 15px;font-style: normal;font-weight: 400;line-height: 22.5px; /* 150% */text-transform: capitalize;">
+                    <div id="descrption" style="padding: 12px;display: flex;text-align: center;color: #000;font-family: Roboto;font-size: 15px;font-style: normal;font-weight: 400;line-height: 22.5px; /* 150% */text-transform: capitalize;">
+                    </div>
                 </div>
-                
-                </div>
-
             </div>
         </div>
-
     </div>
-
 </div>
 
-<table class="datatables-demo table table-striped table-bordered">
+<table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th>SL</th>
-            <th>Name</th>
-            <th>Start Date </th>
-            <th>End Date</th>
-            <th>Details</th>
-            <th>Status</th>
+            <th class="text-center">SL</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Start Date </th>
+            <th class="text-center">End Date</th>
+            <th class="text-center">Details</th>
+            <th class="text-center">Status</th>
 
         </tr>
     </thead>
@@ -115,12 +105,12 @@
         <?php foreach($allevent as $kay=>$data){ 
               ?>
         <tr>
-            <td><?= $kay+1 ?></td>
-            <td><?= $data->event_name ?></td>
-            <td><?= date('d-M-Y' , strtotime($data->start_date))?></td>
-            <td><?= date('d-M-Y' , strtotime($data->end_date))?></td>
-            <td><a class="btn" onclick=opm(this) data-titel="<?= $data->event_name ?>"  data-description="<?= $data->description ?>"  style="padding: 2px;margin: 0;color: #ffffff;background: #006bc8;">Details</a></td>
-            <td><?= ($data->end_date > date('Y-m-d'))? '<span class="pending">Pending</span>': '<span class="complet">Complete</span>' ?>
+            <td class="text-center"><?= $kay+1 ?></td>
+            <td class="text-center"><?= $data->event_name ?></td>
+            <td class="text-center"><?= date('d-M-Y' , strtotime($data->start_date))?></td>
+            <td class="text-center"><?= date('d-M-Y' , strtotime($data->end_date))?></td>
+            <td class="text-center"><a class="btn btn-sm btn-info" onclick=opm(this) data-titel="<?= $data->event_name ?>"  data-description="<?= $data->description ?>">Details</a></td>
+            <td class="text-center"><?= ($data->end_date > date('Y-m-d'))? '<span class="pending"><i class="fa fa-dot-circle-o" style="color:red"></i> Pending</span>': '<span class="complet"><i class="fa fa-dot-circle-o" style="color:green"></i> Complete</span>' ?>
             </td>
         </tr>
         <?php } ?>

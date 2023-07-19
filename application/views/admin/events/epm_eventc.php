@@ -18,7 +18,7 @@ if($total_upcomming_event!=0){
 <style>
 .cboton {
     color: #000;
-    font-family: Roboto;
+    /* font-family: Roboto; */
     font-size: 14px;
     font-weight: 600;
     display: flex;
@@ -39,31 +39,27 @@ if($total_upcomming_event!=0){
 
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
-        <div class="heading">Total Event</div>
-        <div class="heading2"><?= $total_event ?></div>
+        <div class="h4">Total Event</div>
+        <div class="h4"><?= $total_event ?></div>
     </div>
-
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
-        <div class="heading">Total Upcoming </div>
-        <div class="heading2"><?= $total_upcomming_event ?></div>
+        <div class="h4">Total Upcoming </div>
+        <div class="h4"><?= $total_upcomming_event ?></div>
     </div>
     <div class="divstats-info col-md-6" style="background-color: #D2F9EE;display: flex;">
         <div class='col-md-6' style="display: flex;flex-direction: column;">
-            <span>Upcoming Event</span>
-            <span
-                style="color: #1F1F1F;font-family: Roboto;font-size: 19px;font-style: normal;font-weight: 700;/* 143% */"><?= (isset($lastEvent->start_event_date))? date('d-M-Y H:i',strtotime($lastEvent->start_event_date.' '.$lastEvent->start_event_time)) : 'none'?></span>
-
+            <span class="h4">Upcoming Event</span>
+            <span style="color: #1F1F1F;font-weight: 600;/* 143% */">
+                <?= (isset($lastEvent->start_event_date))? date('d-M-Y H:i',strtotime($lastEvent->start_event_date.' '.$lastEvent->start_event_time)) : 'none'?>
+            </span>
         </div>
         <div class='col-md-6'>
-            <span><?= (isset($lastEvent->event_title))? $lastEvent->event_title: '' ?></span>
+            <div class="h4"><?= (isset($lastEvent->event_title))? $lastEvent->event_title: '' ?></div>
         </div>
-
-
     </div>
-
 </div>
 
-<div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
+<div class="col-md-12 medelbar" style="gap: 4px;align-items: end;margin-top:-10px;">
     <div class="col-md-2 divform-group " style="padding: 0;">
         <a href="<?= base_url('admin/events/epm_event')?>" class="cboton ">Event List</a>
     </div>
@@ -73,44 +69,27 @@ if($total_upcomming_event!=0){
     <div class="col-md-2 divform-group" style="padding: 0;">
         <a href="#" class="cboton cactive">Calendar</a>
     </div>
-    <div class="col-md-2 divform-group">
-    </div>
-    <div class="col-md-3 divform-group" style="padding: 0;">
-        <div class="input">
-            <div class="level">Select Date</div>
-            <div class="pseudo6">
-                <input onchange=getdata(this) style="width: 98%;border: none;cursor: pointer;" type="date" name=""
-                    value="<?= date('Y-m-d') ?>" id="datef">
-            </div>
+        <div >
+        <!-- Year and month selection -->
+        <div style="display:flex;    margin-left: 200px;">
+            <button id="prevBtn" class=" btn btn-primary"><</button>
+            <select id="month" class="form-control"></select>
+            <select id="year" class="form-control"></select>
+            <button id="nextBtn" class=" btn btn-primary">></button>
         </div>
     </div>
-
 </div>
-<div id="datatable">
-
+<div id="datatable" style="margin-top:100px"> 
     <!-- TOAST UI Calendar CSS -->
     <link rel="stylesheet" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.css" />
-
     <!-- TOAST UI Calendar JavaScript dependencies -->
+    <!-- Calendar container -->
+    <div id="calendar" style="padding: 60px 10px 10px 15px"></div>
     <script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.min.js"></script>
     <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
-
     <!-- TOAST UI Calendar JavaScript -->
     <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>
-
-    <div style="padding: 178px 11px 0px 21px;">
-        <!-- Year and month selection -->
-        <select id="year" style="height: 40px;width: 18%;padding: 10px;border: 1px solid black;border-radius: 6px;"></select>
-        <div style="float: right;">
-            <button id="prevBtn" style="height: 35px;width: 46px;border: none;color: white;background: #599AE7;font-weight: bold;border-radius: 5px 0px 0px 5px;">←</button>
-            <select id="month" style="width: 56px;height: 35px;"></select>
-            <button id="nextBtn" style="height: 35px;width: 46px;border: none;color: white;background: #599AE7;font-weight: bold;border-radius: 0px 5px 5px 0px;">→</button>
-        </div>
-    </div>
-    <!-- Calendar container -->
-    <div id="calendar" style="padding: 24px 6px 35px 19px;"></div>
-
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Get current year and month

@@ -130,9 +130,11 @@ $balanceMeal= $paymeal-$taken_meal;
       $holidays= $this->db->select('*')->get('xin_holidays')->result();
       $holidayss= $this->db->select('*')->limit(4)->where("start_date > '".date('Y-m-d')."'")->get('xin_holidays')->result();
       // dd($this->db->last_query());   
-    $leave_calel=get_cal_leave($userid,1);
-    $leave_calsl=get_cal_leave($userid,2);  
-    $totaluseleave=$leave_calel+$leave_calsl;
+      $leave_calel=get_cal_leave($userid,1);
+      $leave_calsl=get_cal_leave($userid,2);  
+      $totaluseleave=$leave_calel+$leave_calsl;
+      $all_notice = $this->db->select('*')->get('xin_events')->result();
+    //   dd($all_notice);
 ?>
 
 
@@ -397,6 +399,13 @@ hr {
 }
 
 /* progress bar style */
+.sticky-heading {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #f8f8f8;
+    padding: 10px 0;
+}
 </style>
 
 <div class=" <?php echo $get_animate;?>">
@@ -407,12 +416,11 @@ hr {
             <h4 class="widget-user-username welcome-hrsale-user" style="margin-top:5px;">
                 Welcome back, <span style="color:#599AE7 "><?php echo $name->first_name.' '.$name->last_name?></span>
             </h4>
-
             <div class="breadcrumbs-hr-top">
                 <div class="breadcrumb-wrapper col-xs-12">
                     <ol class="breadcrumb" style="margin-bottom: 10px; margin-left: -25px; margin-top: -5px;">
                         <li class="breadcrumb-item"><a
-                                href="<?php echo site_url('admin/dashboard/');?>"><?php echo $this->lang->line('xin_e_details_home');?></a>
+                            href="<?php echo site_url('admin/dashboard/');?>"><?php echo $this->lang->line('xin_e_details_home');?></a>
                         </li>
                         <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
@@ -445,18 +453,6 @@ hr {
                         <div class="text"><?= $total_working_hour." hrs"?></div>
                     </div>
                 </div>
-                <!-- <div class="stats-box-row">
-               <div class="stats-box col-md-6">
-                    <span>Break</span>
-                    <span>< ?php echo "01.30 PM"?></span>
-                    
-               </div>
-                <div class="stats-box col-md-6">
-                    <span>Over Time</span>
-                    <span class="text-danger"><b>Pending</b></span>
-                 
-               </div>
-          </div> -->
                 <br>
             </div>
         </div>
@@ -518,7 +514,6 @@ hr {
                         </div>
                         <div class="col-sm-4">
                             <p><span style="font-weight:600">Lunch Time : </span><span>1 Hour</span></p>
-
                         </div>
                         <div class="col-sm-5">
                             <?php $in = date("h:i A", strtotime($schedule->in_time)); 
@@ -678,12 +673,10 @@ hr {
 
                         <div class="col-md-4">
                             <?php
-                        $date        = date( "Y-01-01");
-                        $datep       = date( "Y-m-d");
-                        $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
-      
-                          
-                          ?>
+                                $date        = date( "Y-01-01");
+                                $datep       = date( "Y-m-d");
+                                $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
+                            ?>
                             <span><b>Absent</b></span>
                             <span><?= $present_stutas->absent ?>/365</span>
                         </div>
@@ -705,23 +698,26 @@ hr {
                 <?php foreach ($notice as $key => $row) { ?>
                     <div class="row">
                         <div class="col-md-4"
-                            style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;flex-shrink: 0;">
+                            style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 53px;height: 50px;flex-shrink: 0;">
                             <span class="text_s" style="padding-top: 4px;"><?php echo date("d", strtotime($row->created_at))?></span>
                             <span class="text_s"><?php echo date("M", strtotime($row->created_at))?></span>
                         </div>
                         <div class="col-md-8">
-                            <span style="font-weight: 500;"><?= $row->title ?></span>
+                            <span style="font-weight: 500;cursor: pointer;"  data-toggle="modal" data-target="#myModals" onclick="myfunc(this)" data-title="<?php echo $row->title?>" data-description="<?php echo $row->description?>"><?= $row->title ?></span>
                             <span style="color:#929292;font-size:13px"><?= substr($row->description, 0, 20) ?></span>
                         </div>
-
                     </div>
                     <hr>
                 <?php } ?>
-                <!-- <hr> -->
-                <!-- <button class="btn btn-sm">View All</button> -->
-                <a href="#" class="" style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
+                <a href="<?php echo base_url('admin/events/notice')?>" style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
         </div>
+
+       
+
+
+
+
 
         <!-- upcomming holidays -->
 
@@ -730,20 +726,19 @@ hr {
                 <span style="margin-left:20px;padding-top: 1.25rem;font-weight: 600;">Upcoming Holidays</span>
                 <hr>
                 <?php foreach($holidayss as $holiday){
-              $today = new DateTime();  // Current date
-              $date = $holiday->start_date;
-              $futureDate = new DateTime($date);  // Future date
-              if ($futureDate < $today) {
-                  $daysLeft = 0;
-              } else {
-                  $interval = date_diff($today, $futureDate);
-                  $daysLeft = $interval->format('%a');
-              }  
-            ?>
+                    $today = new DateTime();  // Current date
+                    $date = $holiday->start_date;
+                    $futureDate = new DateTime($date);  // Future date
+                    if ($futureDate < $today) {
+                        $daysLeft = 0;
+                    } else {
+                        $interval = date_diff($today, $futureDate);
+                        $daysLeft = $interval->format('%a');
+                    }  
+                ?>
                 <div class="row">
-                    <div class="col-md-4"
-                        style="padding-left: 5px;padding-right: 5px;margin-left: 33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;">
-                        <span class="text_s" style="padding-top: 4px;"><?php echo date("d")?></span>
+                    <div class="col-md-4" style="padding-left: 5px;padding-right: 5px;margin-left: 33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;">
+                        <span class="text_s" style="padding-top: 4px;"><?php echo date("d",strtotime($holiday->start_date))?></span>
                         <span class="text_s"><?php echo date("M",strtotime($holiday->start_date))?></span>
                     </div>
                     <div class="col-md-4">
@@ -756,19 +751,45 @@ hr {
                 </div>
                 <hr>
                 <?php }?>
+                <!-- Buttons with data-attributes -->
+                
 
-
+                
                 <!-- <button class="btn btn-sm">View All</button> -->
                 <a href="#" class="" data-toggle="modal" data-target=".bs-example-modal-lg"
                     style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
 
-
-
         </div>
     </div>
 
 </div>
+
+
+
+ <!-- notice modal -->
+
+
+<!-- Modal -->
+<div id="myModals" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Notice</h4>
+        </div>
+        <div class="modal-body">
+            <p id="title" class="h4 text-center"></p>
+            <p id="description" class="text-justify"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger btn-sm " data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- end notice modal -->
 
 
 <!-- upcomming holidays modal -->
@@ -777,7 +798,7 @@ hr {
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <br>
-            <h4 class="modal-title text-center"><b>Upcoming Holidays</b></h4><br>
+            <h4 class="modal-title text-center sticky-heading"><b>Upcoming Holidays</b></h4><br>
             <table class="table table-bordered table-striped">
                 <thead class="text-center">
                     <tr>
@@ -831,6 +852,12 @@ hr {
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
 
 <script>
+function myfunc(e){
+  var title= e.getAttribute('data-title');
+  var description= e.getAttribute('data-description');
+  $("#title").text(title);
+  $("#description").text(description);
+}    
 // Get the canvas element
 var ctx = document.getElementById('myChart').getContext('2d');
 
@@ -869,4 +896,8 @@ $('#year_id').on('change', function() {
         alert("KO");
     }
 })
+$(document).ready(function() {
+    $('#datatbale').DataTable();
+});
+
 </script>
