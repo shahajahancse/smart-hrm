@@ -651,7 +651,46 @@ class inventory_model extends CI_Model
 	// $data = $query->result();	
 
  
+// }
+
+
+
+public function equipment_list($id){
+    // dd($id);
+    // dd($status);
+    $this->db->select(' 
+                product_accessories.id as a_id,
+                product_accessories.cat_id,
+                product_accessories.device_model,
+                product_accessories.device_name_id,
+                product_accessories.description,
+                product_accessories.status,
+                product_accessories.remark,
+                product_accessories.use_number,
+                product_accessories.number,
+                product_accessories.image,
+                product_accessories.user_id,
+                product_accessory_categories.cat_name,
+                product_accessory_categories.cat_short_name,
+                product_accessories_model.model_name,
+                mobile_numbers.number,
+                xin_employees.first_name,
+                xin_employees.last_name,
+    ');
+    $this->db->from('product_accessories');
+    $this->db->join('product_accessories_model','product_accessories.device_model = product_accessories_model.id','left');
+    $this->db->join('product_accessory_categories','product_accessories.cat_id    = product_accessory_categories.id','left');
+    $this->db->join('mobile_numbers','product_accessories.number                  = mobile_numbers.id','left');    
+    $this->db->join('xin_employees','product_accessories.user_id                  = xin_employees.user_id','left');
+	$this->db->where('product_accessories.user_id',$id);
+	$data=$this->db->get()->result();   
+    return $data;          
 }
+
+
+
+}
+
 	
 ?>
  

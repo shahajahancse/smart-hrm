@@ -29,7 +29,7 @@ class Inventory extends MY_Controller {
 
 	
 	//================= Requisition here =======================
-	public function index(){
+	public function index($id = null){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -37,15 +37,15 @@ class Inventory extends MY_Controller {
 		$data['title'] = 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store';
 
-		$data['products'] 	= $this->Inventory_model->requisition_list($session);
-
-		// dd($data['products']);
-		if(!empty($session)){ 
+		if($id != null && $id == 2 && $session['role_id'] = 3){
+			$data['products'] 	= $this->Inventory_model->requisition_list($session);
+			$data['equipments'] 	= $this->Inventory_model->equipment_list($session['user_id']);
 			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/');
+		}else{
+			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
 		}
+
+		$this->load->view('admin/layout/layout_main', $data); //page load 
 	}
 
 	public function index1(){

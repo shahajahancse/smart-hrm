@@ -1,33 +1,33 @@
-<link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/main.css') ?>">
 <?php
 // dd($results); 
 $session = $this->session->userdata('username');
 ?>
 
 <style>
-    .t1{float: right; border-radius: 4px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7); display: inline-flex;height: 41px;
-         padding: 17px 91px;justify-content: center;align-items: center;gap: 10px;flex-shrink: 0;
-         color: #FFF;
-        text-align: center;
-        font-family: Roboto;
-        font-size: 15px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 22.5px;
-        text-transform: uppercase;
-        }
-       .t2 {float: left;color: #000;font-family: Roboto;font-size: 15px;font-style: normal;font-weight: 400;line-height: 22.5px;
-    text-transform: capitalize;
-    padding-left:5px;
-  }
-  .te{
-color: var(--white, #FFF);
-font-family: Roboto;
-font-size: 18px;
-font-style: normal;
-font-weight: 600;
-line-height: 100%;
-  }
+.btn.active {
+  background-color: #2DCA8C;
+  color: white;
+}
+
+.using {
+    display: inline-flex;
+    padding: 4.5px 14.3px 5.5px 9px;
+    align-items: center;
+    gap: 9px;
+    border-radius: 50px;
+    border: 1px solid #CCC;
+    background: #FFF;
+}
+
+.return {
+    display: inline-flex;
+    padding: 4.5px 14.3px 5.5px 9px;
+    align-items: center;
+    gap: 9px;
+    border-radius: 50px;
+    border: 1px solid #CCC;
+    background: #FFF;
+}
 
 </style>
 
@@ -39,42 +39,38 @@ line-height: 100%;
 <div class="row">
   <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
-        <div class="heading">Active Days</div>
-        <div class="heading2"><?= 0 ?></div>
+        <div class="h4">Total Using Items</div>
+        <div class="h4"><?= 0 ?></div>
     </div>
 
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
-        <div class="heading">Late Days</div>
+        <div class="h4">Total Requisition</div>
         <div class="heading2"><?= 0  ?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">
-        <div class="heading">Absent</div>
-        <div class="heading2"><?=  0 ?></div>
+        <div class="h4">Return Items</div>
+        <div class="h4"><?=  0 ?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
-        <div class="heading">Taking Leave</div>
-        <div class="heading2"><?= 0 ?></div>
+        <div class="h4">Pending Items</div>
+        <div class="h4"><?= 0 ?></div>
     </div>
   </div>
 </div>
 
 <div class="row">
-    <div class="col-md-12">
-        <span class="t2" style="font-family: sans-serif;" >If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
-        <span class="t1 btn" id="requisition">requisition</span>
-    </div>
-    <div class="row">
-        <div class="col-md-2"style=" display: inline-flex;padding: 9px 46px;justify-content: center;gap: 10px;">
-            <h4 >Using List</h3>
-        </div>
-        <div class="col-md-5"style=" width:18.666667%;  text-align:left; display: inline-flex;padding: 5px 46px;justify-content: center;align-items: center;gap: 10px;">
-              <h4 class="btn te" style="border-radius: 2px;
-               background: var(--g, #2DCA8C);">Requsiton information</h4>
-        </div>
-    </div>
- 
+  <div class="col-md-12">
+    <span class="t2" >If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
+    <a href="<?= base_url('admin/inventory/create') ?>" class="btn btn-md btn-primary" style="float:right">Requisition</a>
+    
+  </div>
 
-<div class="box-body">
+  <div class="col-md-4" style="display:flex;">
+    <a href="<?= base_url('admin/inventory') ?>" class="btn" id="listButton">Using List</a>
+    <a href="<?= base_url('admin/inventory') ?>" class="btn" style="margin-left:10px;" id="infoButton">Request Information</a>
+  </div>
+
+  <div class="box-body">
     <div class="box-datatable" >
       <?php if($this->session->flashdata('success')):?>
         <div class="alert alert-success" id="flash_message">
@@ -82,7 +78,7 @@ line-height: 100%;
         </div>
       <?php endif; ?> 
 
-    <!-- <input type="hidden" value="1" id="count"> -->
+      <!-- <input type="hidden" value="1" id="count"> -->
       <table class="datatables-demo table table-striped table-bordered" id="purchase_table" style="width:100%">
         <thead>
           <tr>
@@ -164,7 +160,7 @@ line-height: 100%;
                 <input type="hidden" id="item_hid" name="requisition_id">
                 <td id="item"></td>
                 <td id="item_cat"></td>
-                <td><input type="number" id="item_qty" name="quantity"></td>
+                <td><input type="text" id="item_qty" name="quantity"></td>
               </tr>
           </tbody>
         </table>
@@ -212,20 +208,41 @@ line-height: 100%;
 
 
 <script>
-  // Assuming you have the base URL defined somewhere
-  var base_url = "http://localhost/smart-hrm/";
+    // Get references to the buttons
+    var listButton = document.getElementById("listButton");
+    var infoButton = document.getElementById("infoButton");
 
-  // Retrieve the <span> element by its ID
-  var spanElement = document.getElementById("requisition");
+    // Function to handle button click event
+    function handleClick(event) {
+        // Prevent the default behavior of the anchor tag
+        event.preventDefault();
 
-  // Add a click event listener to the <span> element
-  spanElement.addEventListener("click", function() {
-    // Redirect the user to the desired URL
-    window.location.href = base_url + "/create";
-  });
+        // Remove the "active" class from both buttons
+        listButton.classList.remove("active");
+        infoButton.classList.remove("active");
+
+        // Add the "active" class to the clicked button
+        event.target.classList.add("active");
+
+        // Store the ID of the clicked button in Local Storage
+        localStorage.setItem("activeButtonId", event.target.id);
+    }
+
+    // Add event listeners to the buttons
+    listButton.addEventListener("click", handleClick);
+    infoButton.addEventListener("click", handleClick);
+
+    // Check Local Storage for an active button ID and set it as active on page load
+    document.addEventListener("DOMContentLoaded", function() {
+        var activeButtonId = localStorage.getItem("activeButtonId");
+        if (activeButtonId) {
+            var activeButton = document.getElementById(activeButtonId);
+            if (activeButton) {
+                activeButton.classList.add("active");
+            }
+        }
+    });
 </script>
-
-
 
 
 
