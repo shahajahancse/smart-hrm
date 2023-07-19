@@ -39,8 +39,7 @@ class Inventory extends MY_Controller {
 
 		$data['products'] 	= $this->Inventory_model->requisition_list($session);
 
-		$data['user_role_id'] 	= $session['role_id'];
-		// dd($data);
+		// dd($data['products']);
 		if(!empty($session)){ 
 			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -129,6 +128,20 @@ class Inventory extends MY_Controller {
 		$data['subview'] 	    =     $this->load->view("admin/inventory/create", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
+	public function requisition_edit($id)
+	{
+        $this->form_validation->set_rules('quantity', 'Quantity', 'required|trim');
+       	if ($this->form_validation->run() == true){
+			$data = array(
+				'quantity' => $_POST['quantity'],
+			);
+			$this->db->where('id', $id)->update('products_requisition_details', $data);
+			$this->session->set_flashdata('success', 'Successfully Updated Done');
+		}
+		return true;
+	}
+
 
 	public function pending_list(){
 		$session = $this->session->userdata('username');
@@ -1197,13 +1210,9 @@ class Inventory extends MY_Controller {
 	}
 
     public function delete_requsiton($id){
-		$approved=$this->db->where('id',$id)->delete('products_requisitions');
-		if($approved){
-		 $this->db->where('requisition_id',$id)->delete('products_requisition_details');
-		 $this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
-		 redirect("admin/inventory/index");
-	}
-
+		$this->db->where('id',$id)->delete('products_requisition_details');
+		$this->session->set_flashdata('success', 'Requsiton deleted successfully.');
+		redirect("admin/inventory/index");
     }
 
 

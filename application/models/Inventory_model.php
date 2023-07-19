@@ -79,30 +79,28 @@ class inventory_model extends CI_Model
 	public function requisition_list($session)
 	{
 		$this->db->select("
-				xin_employees.first_name,
-				xin_employees.last_name,
-				products_categories.category_name,
-			    products_categories.id as cat_id,
+				p.product_name, 
+				pc.category_name, 
 
-			    products_requisitions.user_id,
-			    products_requisitions.status,
-			    products_requisition_details.created_at,
-			    products_requisitions.created_at,
-			    products_requisitions.id
-			")
-		->from("products_requisitions")
-		->from("products_requisition_details")
-		->from("products_categories")
-		->from("xin_employees");
+			    prd.id,
+			    prd.quantity,
+			    prd.approved_qty,
+			    prd.status,
+			    prd.created_at,
+			");
+		$this->db->from("products_requisition_details as prd");
+		$this->db->from("products as p");
+		$this->db->from("products_categories as pc");
+		$this->db->from("products_requisitions as pr");
 
-		$this->db->where("products_requisitions.id = products_requisition_details.requisition_id");
-		$this->db->where("xin_employees.user_id = products_requisitions.user_id");
-		$this->db->where("products_categories.id = products_requisition_details.cat_id");	
+		$this->db->where("p.id = prd.product_id");
+		$this->db->where("pc.id = prd.cat_id");	
+		$this->db->where("pr.id = prd.requisition_id");	
 
 		if( $session['role_id'] == 3) {
-			$this->db->where("products_requisitions.user_id", $session['user_id']);
+			$this->db->where("pr.user_id", $session['user_id']);
 		}
-		$this->db->order_by('products_requisitions.id', 'desc');
+		$this->db->order_by('prd.created_at', 'desc');
 		return	$this->db->get()->result();
 	} 
 
