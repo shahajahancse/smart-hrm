@@ -288,13 +288,30 @@ class Attendance extends MY_Controller {
 			$out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time']:'';
 			$in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time']:'';
 
+		$targetDate = new DateTime($out_time);
+		// Get the current date and time
+		$currentDate = new DateTime($in_time);
+		// Calculate the time difference
+		$timeDiff = $currentDate->diff($targetDate);
+		$timeDifferenceFormatted=$timeDiff->format('%d day, %H:%i:%s');
+
 			$comData = array(
 	            'employee_id' => $this->input->post('emp_id'),
 	            'date' 		  => $this->input->post('date'),
 	            'out_time'    => $out_time,
 	            'in_time'     => $in_time,
+	            'duration'     => $timeDifferenceFormatted,
+				'request_amount' => 0,
+			    'payable_amount' => 0,
+				'status' => 0,
+				'osd_status' => 1,
+				'location_status' => 1,
+				'in_out' => 0,
+				'place_adress' => '',
 	            'astatus'     => $session['role_id']==3?1:2,
 	            'reason'	  => $this->input->post('reason'),
+				'updated_at' => date('Y-m-d H:i:s'),
+				'created_at' => date('Y-m-d H:i:s')
 	        );
 
 	        if ($this->input->post('id') != null) {
@@ -306,9 +323,25 @@ class Attendance extends MY_Controller {
 		        );
 
 		        $this->db->where('id', $this->input->post('id'))->update('xin_employee_move_register',$comData);
+				$move_id= $this->input->post('id');
 	        } else {
 		        $this->db->insert('xin_employee_move_register',$comData);
+				$move_id = $this->db->insert_id();
 	        }
+			
+			$data = array(
+				'move_id' => $move_id,
+				'travel_with' =>'[]',
+				'g_place' =>'[]',
+				'g_transportation' =>'[]',
+				'g_costing' =>'[]',
+				'c_place' =>'[]',
+				'c_transportation' =>'[]',
+				'c_costing' =>'[]',
+				'additional_cost' =>'0',
+				'remark' =>'',
+			);
+			$this->db->insert("xin_employee_move_details" , $data);
 
 			$this->db->trans_complete();
 			if ($this->db->trans_status() === FALSE)
@@ -831,6 +864,11 @@ class Attendance extends MY_Controller {
 			redirect('admin/');
 		}
 		$userid  = $session[ 'user_id' ];
+		if($this->input->post('location_status')==2){
+			$osd_status=0;
+		}else{
+			$osd_status=1;
+		}
 		$data = array(
 			'employee_id' => $userid,
 			'date' => date('Y-m-d'),
@@ -839,8 +877,9 @@ class Attendance extends MY_Controller {
 			'duration' => '00:00:00',
 			'request_amount' => 0,
 			'payable_amount' => 0,
-			'status' => 1,
+			'status' => 0,
 			'astatus' => 1,
+			'osd_status' => $osd_status,
 			'reason' => $this->input->post('reason'),
 			'location_status' => $this->input->post('location_status'),
 			'in_out' => 1,
@@ -951,7 +990,8 @@ public function add_ta_da()
 	$total_cost+=$additional_cost;
 	
 	$data1 = array(
-		'request_amount' => $total_cost // Add the file location to the data array
+		'request_amount' => $total_cost, // Add the file location to the data array
+		'status' => 1 
 	);
 	$this->db->where('id', $move_id);
     $this->db->update('xin_employee_move_register', $data1);
