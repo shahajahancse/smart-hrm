@@ -1679,13 +1679,10 @@ class Xin_model extends CI_Model {
 	}
 	
 	// get current day attendance 
-	public function current_month_day_attendance($current_month) {
-		
-		$session = $this->session->userdata('username');
-		$sql = 'SELECT employee_id,attendance_date FROM xin_attendance_time WHERE attendance_date = ? group by employee_id';
-		$binds = array($current_month);
-		$query = $this->db->query($sql, $binds);
-		return $query->num_rows();
+	public function current_month_day_attendance($date) {
+
+		$sql = $this->db->where('attendance_date',$date)->where('status','Present')->get('xin_attendance_time');
+		return $sql->num_rows();
 	}
 	
 	// get current day attendance > calendar

@@ -84,9 +84,6 @@ if($theme[0]->sub_menu_icons != ''){
           <?php if(in_array('13',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['emp_active']))echo $arr_mod['emp_active'];?>"><a href="<?php echo site_url('admin/employees');?>"><i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('dashboard_employees');?></a></li>
           <?php } ?>
-          <?php if($user_info[0]->user_role_id==1) { ?>
-          <li class="<?php if(!empty($arr_mod['roles_active']))echo $arr_mod['roles_active'];?>"><a href="<?php echo site_url('admin/roles');?>"><i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_role_urole');?></a></li>
-          <?php } ?>
           <?php if(in_array('393',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['custom_fields_active']))echo $arr_mod['custom_fields_active'];?>"><a href="<?php echo site_url('admin/custom_fields');?>"><i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hrsale_custom_fields');?></a></li>
           <?php } ?>
@@ -756,6 +753,10 @@ if($theme[0]->sub_menu_icons != ''){
     <?php  if(in_array('57',$role_resources_ids) || in_array('60',$role_resources_ids) || in_array('61',$role_resources_ids) || in_array('61',$role_resources_ids) || in_array('62',$role_resources_ids) || in_array('63',$role_resources_ids) || in_array('89',$role_resources_ids) || in_array('93',$role_resources_ids)) {?>
     <li class="<?php if(!empty($arr_mod['system_open']))echo $arr_mod['system_open'];?> treeview"> <a href="#"> <i class="fa fa-cog"></i> <span><?php echo $this->lang->line('xin_system');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
       <ul class="treeview-menu">
+        <?php if($user_info[0]->user_role_id==1) { ?>
+          <li class="<?php if(!empty($arr_mod['roles_active']))echo $arr_mod['roles_active'];?>"><a href="<?php echo site_url('admin/roles');?>"><i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_role_urole');?></a></li>
+        <?php } ?>
+
         <?php if($system[0]->module_language=='true'){?>
         <?php if(in_array('89',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['languages_active']))echo $arr_mod['languages_active'];?>"> <a href="<?php echo site_url('admin/languages');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_multi_language');?> </a> </li>

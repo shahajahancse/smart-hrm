@@ -207,27 +207,51 @@
           </div>
 
           <div class="row">
-            <div class="col-md-4">
+
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="date_of_joining" class="control-label"><?php echo $this->lang->line('xin_employee_doj');?><i class="hrsale-asterisk"></i></label>
                 <input class="form-control date_of_joining" readonly placeholder="<?php echo $this->lang->line('xin_employee_doj');?>" name="date_of_joining" type="text" value="">
               </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="probition" class="control-label">Probation month<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                 <input class="form-control" placeholder="Number of probition month" name="probation" type="text" value="">
               </div>
             </div>
 
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="status"><?php echo $this->lang->line('dashboard_xin_status');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                <select name="status" id="status" class="form-control" data-plugin="select_hrm">
+                  <option > Select Status </option>
+                  <option value="4">Internship</option>
+                  <option value="5">Probation</option>
+                  <option value="1">Regular</option>
+                </select>
+              </div>
+            </div>
 
-            <div class="col-md-4">
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="floor_status">Floor Set<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                <select name="floor_status" id="floor_status" class="form-control">
+                  <option >Select Floor</option>
+                  <option value="3">3 <sup>rd</sup></option>
+                  <option value="5">5 <sup>th</sup></option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-2"> 
               <div class="form-group">
                 <label for="date_of_birth"><?php echo $this->lang->line('xin_employee_dob');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                 <input class="form-control date_of_birth" readonly placeholder="<?php echo $this->lang->line('xin_employee_dob');?>" name="date_of_birth" type="text" value="">
               </div>
             </div>
+
           </div>
 
           <input type="hidden" name="subdepartment_id" value="YES" />
@@ -418,11 +442,12 @@
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
         <thead>
           <tr>
-            <th style="width:80px;"><?php echo $this->lang->line('xin_action');?></th>
+            <th>Sl.</th>
             <th width="200"><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_employees_full_name');?></th>
             <th><?php echo $this->lang->line('left_company');?></th>
             <th><?php echo $this->lang->line('dashboard_contact');?></th>
             <th><?php echo $this->lang->line('xin_employee_role');?></th>
+            <th style="width:80px;"><?php echo $this->lang->line('xin_action');?></th>
           </tr>
         </thead>
       </table>
@@ -435,7 +460,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="card" style="padding:10px">
-         <h3 style="margin-left:15px">Employee Left/Resign Form</h3>
+         <h3 style="margin-left:15px">Employee Left/Resign List</h3>
          <ul class="nav nav-tabs" id="myTab" role="tablist">
 
           <li class="nav-item active">

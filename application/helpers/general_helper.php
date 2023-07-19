@@ -212,7 +212,7 @@ if ( ! function_exists('active_employees'))
 	function active_employees() {
 		$CI =&	get_instance();
 		$CI->db->from('xin_employees');
-		$CI->db->where('is_active',1);
+		$CI->db->where('is_active',1)->where_in('status', array(1,4,5));
 		$query=$CI->db->get();
 		if ($query->num_rows() > 0) {
 			return $query->num_rows();
@@ -226,7 +226,7 @@ if ( ! function_exists('inactive_employees'))
 	function inactive_employees() {
 		$CI =&	get_instance();
 		$CI->db->from('xin_employees');
-		$CI->db->where('is_active',0);
+		$CI->db->where('is_active',0)->where_in('status', array(2,3));
 		$query=$CI->db->get();
 		if ($query->num_rows() > 0) {
 			return $query->num_rows();
