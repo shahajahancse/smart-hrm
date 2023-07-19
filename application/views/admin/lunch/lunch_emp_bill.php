@@ -4,7 +4,7 @@ if (count($empdata)>0){
 
 
 $data1=$empdata[0];
-dd($data1);
+// dd($data1);
 $taken_meal=0;
 $this->load->model("Lunch_model");
 $emp_data = $this->Lunch_model->get_data_date_wise($data1->end_date,$data1->next_date, $data1->emp_id);
