@@ -29,26 +29,23 @@ class Inventory extends MY_Controller {
 
 	
 	//================= Requisition here =======================
-	public function index(){
+	public function index($id = null){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
 		$data['title'] = 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store';
-		if($session['role_id']!=3){
+
+		if($id != null && $id == 2 && $session['role_id'] = 3){
 			$data['products'] 	= $this->Inventory_model->requisition_list($session);
-		}else{
-			$data['products'] 	= $this->Inventory_model->equipment_list($session['user_id']);
-		}
-		$data['user_role_id'] 	= $session['role_id'];
-		// dd($data);
-		if(!empty($session)){ 
+			$data['equipments'] 	= $this->Inventory_model->equipment_list($session['user_id']);
 			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/');
+		}else{
+			$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
 		}
+
+		$this->load->view('admin/layout/layout_main', $data); //page load 
 	}
 
 	public function index1(){
@@ -131,6 +128,20 @@ class Inventory extends MY_Controller {
 		$data['subview'] 	    =     $this->load->view("admin/inventory/create", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
+	public function requisition_edit($id)
+	{
+        $this->form_validation->set_rules('quantity', 'Quantity', 'required|trim');
+       	if ($this->form_validation->run() == true){
+			$data = array(
+				'quantity' => $_POST['quantity'],
+			);
+			$this->db->where('id', $id)->update('products_requisition_details', $data);
+			$this->session->set_flashdata('success', 'Successfully Updated Done');
+		}
+		return true;
+	}
+
 
 	public function pending_list(){
 		$session = $this->session->userdata('username');
@@ -1199,13 +1210,9 @@ class Inventory extends MY_Controller {
 	}
 
     public function delete_requsiton($id){
-		$approved=$this->db->where('id',$id)->delete('products_requisitions');
-		if($approved){
-		 $this->db->where('requisition_id',$id)->delete('products_requisition_details');
-		 $this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
-		 redirect("admin/inventory/index");
-	}
-
+		$this->db->where('id',$id)->delete('products_requisition_details');
+		$this->session->set_flashdata('success', 'Requsiton deleted successfully.');
+		redirect("admin/inventory/index");
     }
 
 

@@ -1,6 +1,5 @@
-<!-- <link rel="stylesheet" href="< ?= base_url('skin/hrsale_assets/css/main.css') ?>"> -->
 <?php
-// dd($products); 
+// dd($results); 
 $session = $this->session->userdata('username');
 ?>
 
@@ -9,7 +8,6 @@ $session = $this->session->userdata('username');
   background-color: #2DCA8C;
   color: white;
 }
-
 
 .using {
     display: inline-flex;
@@ -62,80 +60,76 @@ $session = $this->session->userdata('username');
 
 <div class="row">
   <div class="col-md-12">
-      <span class="t2" >If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
-      <span class="btn btn-md btn-primary" style="float:right" id="requisition">Requisition</span>
+    <span class="t2" >If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
+    <a href="<?= base_url('admin/inventory/create') ?>" class="btn btn-md btn-primary" style="float:right">Requisition</a>
+    
   </div>
 
   <div class="col-md-4" style="display:flex;">
-      <a href="#" class="btn" id="listButton">Using List</a>
-      <a href="#" class="btn" style="margin-left:10px;" id="infoButton">Request Information</a>
+    <a href="<?= base_url('admin/inventory') ?>" class="btn" id="listButton">Using List</a>
+    <a href="<?= base_url('admin/inventory') ?>" class="btn" style="margin-left:10px;" id="infoButton">Request Information</a>
   </div>
 
-
-
- 
-
-<div class="box-body">
+  <div class="box-body">
     <div class="box-datatable" >
-    <!-- <input type="hidden" value="1" id="count"> -->
-      <table class="table table-striped table-bordered" id="purchase_table" style="width:100%">
+      <?php if($this->session->flashdata('success')):?>
+        <div class="alert alert-success" id="flash_message">
+          <?php echo $this->session->flashdata('success');?>
+        </div>
+      <?php endif; ?> 
+
+      <!-- <input type="hidden" value="1" id="count"> -->
+      <table class="datatables-demo table table-striped table-bordered" id="purchase_table" style="width:100%">
         <thead>
           <tr>
-              <?php if($user_role_id==1 || $user_role_id== 2 || $user_role_id== 4){?>
-                <th class="text-center">No.</th>
-                <th class="text-center">Requisition By</th>
-                <th class="text-center">Status</th>
-                <th class="text-center">Request Date</th>
-                <th class="text-center">Action</th>
-              <?php }?> 
-              <?php if($user_role_id==3){?>
-                <th class="text-center">Sl.</th>
-                <th class="text-center">Equipment Name</th>
-                <th class="text-center">MHL Code</th>
-                <th class="text-center">Provide Date</th>
-                <th class="text-center">Using Days</th>
-                <th class="text-center">Provided By</th>
-                <th class="text-center">Status</th>
-              <?php }?> 
+            <th class="text-left" style="">No.</th>
+            <th class="text-left" style="">Item Name</th>
+              <th class="text-left" >Request Date</th>
+              <th class="text-left" >Category</th>
+              <th class="text-left" >Request Qty</th>
+              <th class="text-left" >Approved Qty</th>
+              <th class="text-left" >Status</th>
+              <th class="text-left" style="">Action</th>
           </tr>
         </thead>
         <tbody>
-          <?php if($user_role_id==1 || $user_role_id == 4 || $user_role_id == 2){?>
-          <?php  foreach ($products as $key => $rows) { ?>
+          <?php foreach ($products as $key => $row) { 
+            $status = '';
+            if ($row->status == 1) {
+              $status = 'Pending';
+            } else if ($row->status == 2) {
+              $status = 'Approved';
+            } else if ($row->status == 3) {
+              $status = 'Hand Over';
+            } else if ($row->status == 4) {
+              $status = 'Rejected';
+            } else if ($row->status == 5) {
+              $status = 'First Approved';
+            }
+            ?>
             <tr>
-              <td class="text-center"><?php echo ($key+1)."."; ?></td>
-              <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
-              <td class="text-center">
-                <?php echo $rows->status == 5 ? "<span class='badge' style='background-color:#28a745'><b>First Step Approved</b></span>" : ($rows->status == 1 ? "<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" : ($rows->status == 2 ? "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>" : ($rows->status == 3 ? "<span class='badge' style='background-color:#087a58'><b>Handover</b></span>" : "<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"))); ?>
-              </td>
-              <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td><td class="text-center">
-                <div class="dropdown" >
-                  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Action
-                  </button>
-                  <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
-                    <?php if($rows->status==1 || $rows->status==5){?> 
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a><br>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">Delete</a> <br>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Approved</a><br>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">Reject</a>
-                      <?php } if($rows->status== 2){?>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/hand_over/'.$rows->id);?>">Delivered</a> <br>
-                      <?php } if($rows->status== 3){?>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                      <?php } if($rows->status== 4){?>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                      <?php if($session['role_id']== 1 || $session['role_id']== 2 ){?>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a><br>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">Delete</a> <br>
-                    <?php }?> 
+              <td><?= $key + 1 ?></td>
+              <td><?= $row->product_name ?></td>
+              <td><?= date("d-m-Y", strtotime($row->created_at)) ?></td>
+              <td><?= $row->category_name ?></td>
+              <td><?= $row->quantity ?></td>
+              <td><?= $row->approved_qty ?></td>
+              <td><?= $status ?></td>
+              <td>
+                <?php if($row->status == 1){?> 
+                  <div class="dropdown" >
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Action
+                    </button>
+                    <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
+                      <a class='req_id' data-id="<?= $row->id ?>" data-p="<?= $row->product_name ?>" data-c="<?= $row->category_name ?>" data-q="<?= $row->quantity ?>" data-toggle="modal" data-target="#requisition_edit" style="padding-left:5px; cursor: pointer">Edit</a><br>
+                      <a style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_requsiton/'.$row->id);?>">Delete</a>
+                    </div>
                   </div>
-                </div>
+                <?php } else { echo "..."; } ?>
               </td>
             </tr>
-          <?php }}}?>
+          <?php }?>
                         
             <?php  if($user_role_id==3){ foreach ($products as $key => $rows){ ?>
               <tr>  
@@ -153,21 +147,79 @@ $session = $this->session->userdata('username');
         </tbody>
       </table>
     </div>
+  </div>
 </div>
 
-<script>
-  // Assuming you have the base URL defined somewhere
-  var base_url = "http://localhost/smart-hrm/";
 
-  // Retrieve the <span> element by its ID
-  var spanElement = document.getElementById("requisition");
+<!-- The Modal -->
+<div class="modal fade" id="requisition_edit" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit Requsiton</h4>
+      </div>
+      <div class="modal-body">      
+        <table class="table table-striped table-bordered" style="width:100%">
+          <thead>
+            <tr>
+              <th class="text-left" style="">Item Name</th>
+              <th class="text-left" >Category</th>
+              <th class="text-left" >Request Qty</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                <input type="hidden" id="item_hid" name="requisition_id">
+                <td id="item"></td>
+                <td id="item_cat"></td>
+                <td><input type="text" id="item_qty" name="quantity"></td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button id="submit" type="submit" class="btn btn-success">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-  // Add a click event listener to the <span> element
-  spanElement.addEventListener("click", function() {
-    // Redirect the user to the desired URL
-    window.location.href = base_url + "/create";
+
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $('.req_id').on('click', function(e) {
+      val = $(this).attr("data-id");
+      pro = $(this).attr("data-p");
+      cat = $(this).attr("data-c");
+      qty = $(this).attr("data-q");
+      $('#item').text(pro);
+      $('#item_cat').text(cat);
+      $('#item_qty').val(qty);
+      $('#item_hid').val(val);
+    })
+
+    $('#submit').on('click', function(){
+      qty     = $('#item_qty').val();
+      item_id = $('#item_hid').val();
+      $.ajax({
+        type: "POST",
+        data:{'quantity':qty},
+        url: "<?php echo base_url('admin/inventory/requisition_edit/');?>" + item_id,
+        success: function(response)
+        {
+          $('#requisition_edit').modal('hide');
+
+          window.location.href = base_url;
+        }
+      });
+    })
   });
 </script>
+
 
 <script>
     // Get references to the buttons
@@ -205,3 +257,9 @@ $session = $this->session->userdata('username');
         }
     });
 </script>
+
+
+
+
+
+
