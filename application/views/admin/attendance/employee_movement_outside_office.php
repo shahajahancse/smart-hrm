@@ -203,7 +203,7 @@ textarea {
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
         <div class="heading">Are you want to go Outside <?=($location_status==1)? 'Office': 'Dhaka'?> ? Please Make Sure your Checking & entry Purpose</div>
         <div class="heading2">
-            <a class="btn" onclick="move_modal()"> <?=($location_status==1)? 'Check In': 'Request'?>Check In</a>
+            <a class="btn" onclick="move_modal()"> <?=($location_status==1)? 'Check In': 'Request'?></a>
         </div>
     </div>
     <?php }else{ ?>
@@ -218,6 +218,16 @@ textarea {
     </div>
     <?php } ?>
 </div>
+
+    <?php if($this->session->flashdata('success')):?>
+        <div class="col-md-12" style="gap: 4px;margin: 2px;align-items: end;">
+            <div class="alert alert-success" id="flash_message">
+              <?php echo $this->session->flashdata('success');?>
+            </div>
+        </div>
+    <?php endif; ?> 
+
+
 <div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
     <div class="col-md-2 divform-group " style="padding: 0;">
         <a href="<?= base_url('admin/attendance/employee_movement/0') ?>" class="cboton ">Floor wise Movement</a>
