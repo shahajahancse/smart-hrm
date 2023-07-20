@@ -83,25 +83,25 @@ public function get_user_reports_info($id){
     // dd("Ko");
     // dd($id);
     $this->db->select(' 
-                product_accessories.id as a_id,
-                product_accessories.cat_id,
-                product_accessories.device_model,
-                product_accessories.device_name_id,
-                product_accessories.description,
-                product_accessories.status,
-                product_accessories.remark,
-                product_accessories.use_number,
-                product_accessories.number,
-                product_accessories.image,
-                product_accessories.user_id,
-                product_accessory_categories.cat_name,
-                product_accessory_categories.cat_short_name,
-                product_accessories_model.model_name,
-                mobile_numbers.number,
-                xin_employees.first_name,
-                xin_employees.last_name,
-                xin_departments.department_name,
-                xin_designations.designation_name,
+        product_accessories.id as a_id,
+        product_accessories.cat_id,
+        product_accessories.device_model,
+        product_accessories.device_name_id,
+        product_accessories.description,
+        product_accessories.status,
+        product_accessories.remark,
+        product_accessories.use_number,
+        product_accessories.number,
+        product_accessories.image,
+        product_accessories.user_id,
+        product_accessory_categories.cat_name,
+        product_accessory_categories.cat_short_name,
+        product_accessories_model.model_name,
+        mobile_numbers.number,
+        xin_employees.first_name,
+        xin_employees.last_name,
+        xin_departments.department_name,
+        xin_designations.designation_name,
     ');
     $this->db->from('product_accessories');
     $this->db->join('product_accessories_model','product_accessories.device_model = product_accessories_model.id','left');
@@ -115,7 +115,6 @@ public function get_user_reports_info($id){
         $data=$this->db->get()->result();
     } 
     else {
-        // $this->db->group_by('product_accessories.id');
         $data=$this->db->get()->result();
     }
     return $data;          

@@ -149,73 +149,81 @@ public function number_add($id = null){
 }
 
 public function item_add($id = null){
-    // dd($id);
     $data = $this->page_loads();
     $data['title']         = 'Add Item'.' | '.$this->Xin_model->site_title();
 	$data['breadcrumbs']   = "Add Item";
-	// $data['path_url']      = "Item";
     $this->form_validation->set_rules('cat_id', 'Category Name', 'required|trim');
-
     if ($this->form_validation->run() == true){
-
-            if(!empty($_FILES['image']['name'])){
-            $config['upload_path'] = 'uploads/accessory_images/';
-            $config['allowed_types'] = 'jpg|jpeg|png|gif';
-            $config['file_name'] = $_FILES['image']['name'];
-            //Load upload library and initialize configuration
-            $this->load->library('upload',$config);
-            $this->upload->initialize($config);
-            
-            if($this->upload->do_upload('image')){
-                $uploadData = $this->upload->data();
-                $picture = $uploadData['file_name'];
-            }else{
-                $picture = '';
-            }
-            }else{
-                $picture = '';
-            }
-
+        if(!empty($_FILES['image']['name'])){
+        $config['upload_path'] = 'uploads/accessory_images/';
+        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+        $config['file_name'] = $_FILES['image']['name'];
+        //Load upload library and initialize configuration
+        $this->load->library('upload',$config);
+        $this->upload->initialize($config);
+        
+        if($this->upload->do_upload('image')){
+            $uploadData = $this->upload->data();
+            $picture = $uploadData['file_name'];
+        }else{
+            $picture = '';
+        }
+        }else{
+            $picture = '';
+        }
         if($this->input->post('status')==1){
          $user_id = $this->input->post('user_id');
         }
         else{
             $user_id=null;
         }
-
         $form_data = array(
-                            'cat_id'         => $this->input->post('cat_id'),
-                            'device_name_id' => $this->input->post('device_name_id'),
-                            'device_model'   => $this->input->post('device_model'),
-                            'description'    => $this->input->post('description'),
-                            'remark'         => $this->input->post('remark'),
-                            'image'          => $picture,
-                            'user_id'        => $user_id,
-                            'status'         => $this->input->post('status'),
-                            'use_number'     => $this->input->post('use_number'),
-                            'number'         => $this->input->post('number'),
+            'cat_id'         => $this->input->post('cat_id'),
+            'device_name_id' => $this->input->post('device_name_id'),
+            'device_model'   => $this->input->post('device_model'),
+            'description'    => $this->input->post('description'),
+            'remark'         => $this->input->post('remark'),
+            'image'          => $picture,
+            'user_id'        => $user_id,
+            'status'         => $this->input->post('status'),
+            'use_number'     => $this->input->post('use_number'),
+            'number'         => $this->input->post('number'),
         );    
-
-        // dd($form_data);
         if ($hid = $this->input->post('hidden_id')) {
             $this->db->where('id', $hid)->update('product_accessories', $form_data);
             $this->session->set_flashdata('success', 'Successfully Updated Done');
              echo $this->item;
-        } else {
-            if($this->Accessories_model->add_device('product_accessories', $form_data)){
-                $this->session->set_flashdata('success', 'Successfully Insert Done');
-                 echo $this->item;
-            } else {
+        } else{
+            if($insert=$this->Accessories_model->add_device('product_accessories', $form_data)){
+                if($insert){
+                    $lastInsertedId = $this->db->insert_id();
+                    $query = $this->db->get_where('product_accessories', array('id' => $lastInsertedId));
+                    $result = $query->row();
+                    $data= array(
+                        'p_a_id'=>$result->id,
+                        'user_id'=>$result->user_id,
+                        'provide_by'=>$data['user_id'],
+                        'provide_date'=>date('Y-m-d H:i:s'),
+                        'created_by'=>$data['user_id'],
+                        'created_at'=>date('Y-m-d H:i:s'),
+                        'updated_by'=>$data['user_id'],
+                        'updated_at'=>date('Y-m-d H:i:s'),
+                        'status'=>1,
+                    );
+                    $insert_data=$this->db->insert('product_accessories_working', $data);
+                    if($insert_data){
+                        $this->session->set_flashdata('success', 'Successfully Insert Done');
+                        echo $this->item;
+                    }     
+                }
+            } else{
                 $this->session->set_flashdata('success', 'Sorry Something Wrong.');
                  echo $this->item;
             }
         }
     }
-
     if($id != null) {
-        // dd($id);
         $data['row']  = $this->Accessories_model->get_product_reports_info($id); // get id wise data 
-        // dd($data['row']); 
     }   
     $data['categories'] = $this->db->select('*')->get('product_accessory_categories')->result(); //showing category list
     $data['models']     = $this->db->select('*')->get('product_accessories_model')->result(); //showing model list
@@ -224,30 +232,24 @@ public function item_add($id = null){
     $data['results']    = $this->Accessories_model->get_cat_model_info(); //showing data 
     $datas['subview']   = $this->load->view('admin/accessories/item_add',$data,TRUE);  
                           $this->load->view('admin/layout/layout_main', $datas); 
-
 } 
-
-
 
 public function delete($id,$table,$url){
     $delete= $this->db->where('id',$id)->delete($table);
     if($delete){
         $this->session->set_flashdata('success', 'Successfully Delete Done');
         redirect('admin/accessories/'.$url,['msg'=>1]);
-    } else {
+    } else{
         $this->session->set_flashdata('success', 'Sorry Something Wrong.');
         redirect('admin/accessories/'.$url);
-
     }
 
 }
 
-
 public function reports(){
     $data = $this->page_loads();
     $data['title'] = 'Report'.' | '.$this->Xin_model->site_title();
-    $data['breadcrumbs'] = "Report";
-    // $data['path_url'] = "Report";    
+    $data['breadcrumbs'] = "Report"; 
     $datas['subview'] = $this->load->view('admin/accessories/reports',$data,TRUE);  
                         $this->load->view('admin/layout/layout_main', $datas); 
 }
@@ -258,21 +260,14 @@ public function inventory_report($status=null,$category=null){
     $data['breadcrumbs'] = "On Working";
     $status = @$_POST['status'];
     $category= @$_POST['category'];
-
-    // $data['path_url']    = "Working";
     if($status!=null && $category!=null){
-        // dd($status);
         $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$status,$category);
     } else{
         $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$status=null,$category=null);
     }
-    // dd($_POST);
-    if(is_string($data["reports"]))
-    {
+    if(is_string($data["reports"])){
      echo $data["reports"];
-    }
-    else
-    {	
+    } else{	
      $this->load->view('admin/accessories/inventory_report',$data);
     }
 }
