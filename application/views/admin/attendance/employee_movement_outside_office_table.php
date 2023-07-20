@@ -1,3 +1,24 @@
+<style>
+.pending {
+    display: inline-flex;
+    padding: 4.5px 14.3px 5.5px 9px;
+    align-items: center;
+    gap: 9px;
+    border-radius: 50px;
+    border: 1px solid #CCC;
+    background: #FFF;
+}
+
+.complet {
+    display: inline-flex;
+    padding: 4.5px 14.3px 5.5px 9px;
+    align-items: center;
+    gap: 9px;
+    border-radius: 50px;
+    border: 1px solid #CCC;
+    background: #FFF;
+}
+</style>
 <table class="table table-striped" style="border-top: 1px solid #d6d2d2;">
     <thead>
         <tr>
@@ -8,6 +29,7 @@
             <th class="p0">In Time</th>
             <th class="p0">Total Time</th>
             <th class="p0">Place Address</th>
+            <th class="p0">TA/DA Status</th>
             <th class="p0">TA Bill Details</th>
         </tr>
     </thead>
@@ -36,13 +58,40 @@
             <td><?php echo $data->out_time; ?></td>
             <td><?php echo $data->in_time; ?></td>
             <td><?php echo $data->duration; ?></td>
-            <td><?php echo $data->place_adress; ?></td>
+            <td><?php echo $data->place_adress; ?> </td>
+            <?php
+            $status = $data->status;
+            $statusMessage = '';
+
+            switch ($status) {
+                case 0:
+                    $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:black"></i> Not Applied</span>';
+                    break;
+                case 1:
+                    $statusMessage = '<span class="complet"><i class="fa fa-dot-circle-o" style="color:green"></i>In Process</span>';
+                    break;
+                case 2:
+                    $statusMessage = '<span class="complet"><i class="fa fa-dot-circle-o" style="color:green"></i>Approved</span>';
+                    break;
+                case 3:
+                    $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:red"></i>Reject</span>';
+                    break;
+                case 4:
+                    $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:green"></i>Pay</span>';
+                    break;
+                case 5:
+                    $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:green"></i>First Step Approved </span>';
+                    break;
+            }
+            ?>
+
+            <td><?= $statusMessage ?></td>
             <td>
-                <?php if($data->in_out==0){?>
-                <a href="<?= base_url('admin/attendance/ta_da_form/').$data->id?>"> Details </a>
-                <?php }else{ echo "Not Avalable";} ?>
-
-
+                <?php if ($data->in_out == 0 && $status <= 1): ?>
+                <a href="<?= base_url('admin/attendance/ta_da_form/') . $data->id ?>">Details</a>
+                <?php else: ?>
+                Not Available
+                <?php endif; ?>
             </td>
         </tr>
         <?php } ?>

@@ -1,9 +1,34 @@
 <style>
-hr {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    border: 0;
-    border-top: 1px solid #10101029;
+.dropdown-item {
+    padding: 4px;
+    margin: 5px;
+    width: 72px;
+    height: 28px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #0177bc;
+    border-radius: 4px;
+    /* New style for dropdown-item */
+    background-color: #f8f9fa;
+    color: #212529;
+    transition: box-shadow 0.3s, color 0.3s;
+}
+
+.dropdown-item:hover {
+    /* Hover effect */
+    box-shadow: 0 0 5px #0177bc;
+    color: #fff;
+}
+
+.dropdown-menu {
+    min-width: 85px !important;
+}
+
+.btn {
+    padding: 3px !important;
+}
+.swal2-container{
+    z-index: 1111!important;
 }
 </style>
 <?php $session = $this->session->userdata('username');?>
@@ -51,7 +76,8 @@ hr {
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="date">Date</label>
-                                        <input class="form-control date" placeholder="date..." name="date" type="text" value="" id="move_date">
+                                        <input class="form-control date" placeholder="date..." name="date" type="text"
+                                            value="" id="move_date">
                                         <input name="id" type="hidden" value="" id="idesss">
                                     </div>
                                 </div>
@@ -112,13 +138,13 @@ hr {
                         <textarea type="text" class="form-control" id="short_details" placeholder="Details"></textarea>
                     </div>
 
-        <?php 
+                    <?php 
         $role_id =$session['role_id'];
         if ($role_id == 1) { ?>
                     <div class="form-group col-lg-6" id="ta_da_div" style="display: none;">
                         <label id="manage_ta_da">Manage TA/DA</label>
                         <select class="form-control" id="status">
-                            <option value="" disabled selected>Select</option>
+                            <option>Select</option>
                             <option value="2">Approved</option>
                             <option value="3">Reject</option>
                         </select>
@@ -145,21 +171,17 @@ hr {
         aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="color: white;background: #0177bc;">
                     <h4 class="modal-title">View TA/DA</h4>
                 </div>
-                <table class="table table-condensed table-bordered table-hover table-striped w-75">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Requested Amount</th>
-                            <th class="text-center">Payable Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ta_da_view">
-                    </tbody>
-                </table>
+                <div id="modelcontectview">
+
+                </div>
+
                 <div class="modal-footer">
+                    <hr>
                     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                    <a class="btn btn-info btn-sm" onclick="changetada()"> Submit </a>
                 </div>
             </div>
         </div>
@@ -193,59 +215,77 @@ hr {
                             <td><?php echo $row->out_time == "" ? "" : date('h:i A',strtotime($row->out_time)); ?></td>
                             <td><?php echo $row->in_time  == "" ? "" : date('h:i A',strtotime($row->in_time));?></td>
                             <td><?php echo $row->reason; ?></td>
-                            <td><?php echo ($row->status == 0)? '<span class="badge badge-primary"style="background: #000000c7;color: white;padding: 5px;">Not Applied</span>':($row->status == 1? '<span class="badge" style="background: #ff7600c7;color: white;padding: 5px;">Applied</span>':($row->status == 2?"<span class='badge' style='background: #036a2c;color: white;padding: 5px;'>Approved</span>":($row->status == 3?"<span class='badge' style='background: #ff0000b8;color: white;padding: 5px;'>Rejected</span>":"<span class='badge' style='background: #00bb5c;color: white;padding: 5px;'>Paid</span>")));?>
+                            <?php
+                                $status = $row->status;
+                                $statusMessage = '';
+
+                                switch ($status) {
+                                    case 0:
+                                        $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:black"></i> Not Applied</span>';
+                                        break;
+                                    case 1:
+                                        $statusMessage = '<span class="complet"><i class="fa fa-dot-circle-o" style="color:green"></i>In Process</span>';
+                                        break;
+                                    case 2:
+                                        $statusMessage = '<span class="complet"><i class="fa fa-dot-circle-o" style="color:green"></i>Approved</span>';
+                                        break;
+                                    case 3:
+                                        $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:red"></i>Reject</span>';
+                                        break;
+                                    case 4:
+                                        $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:green"></i>Pay</span>';
+                                        break;
+                                    case 5:
+                                        $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:green"></i>First Step Approved </span>';
+                                        break;
+                                }
+                                ?>
+
+                            <td><?= $statusMessage ?></td>
                             </td>
                             <td>
+
                                 <div class="dropdown">
-                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false"> Action </button>
-                                    <div class="dropdown-menu"
-                                        style=" min-width: 134px !important;border-radius:0;line-height: 1.7;"
-                                        aria-labelledby="dropdownMenuButton">
-                                        <?php if($session['role_id'] != 3){ ?>
-                                            <hr>
-                                            <a style="padding-left:5px;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a>
-                                            <hr>
-                                            <a style="padding-left:5px;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="actionButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right list-group"
+                                        aria-labelledby="actionButton">
+                                        <?php if($status==0){ ?>
+                                        <a class="dropdown-item list-group-item"
+                                            href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
+                                        <?php }elseif($status==1){?>
+                                        <a class="dropdown-item list-group-item"
+                                            href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
 
-                                            <?php if($row->status == 1){?>                                            
-                                                <hr>
-                                                <a class='dropdown-item' style='padding-left:5px;' href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'> View </a>
-                                                <hr> 
-                                                <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Approved TA/DA</a>
-                                            <?php } else if($row->status == 2){?>
-                                                <hr>
-                                                <a class='dropdown-item' style='padding-left:5px;' href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'> View </a>
-                                                <hr>
-                                                <a style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)"> Paid/Reject TA/DA </a>
-                                            <?php } else { ?>
-                                                <br>
-                                                <a class='dropdown-item' style='padding-left:5px;' href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'> View </a>
-                                            <?php } ?>
+                                        <a class="dropdown-item list-group-item"
+                                            onclick="moveview(<?= $row->id ?>,'v')">View</a>
+                                        <a class="dropdown-item list-group-item"
+                                            onclick="moveview(<?= $row->id ?>,'e')">Edit</a>
+                                        <?php }elseif($status==2){?>
+                                        <a class="dropdown-item list-group-item"
+                                            href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Pay</a>
+                                        <a class="dropdown-item list-group-item"
+                                            onclick="moveview(<?= $row->id ?>,'e')">Edit</a>
+                                        <a class="dropdown-item list-group-item"
+                                            onclick="moveview(<?= $row->id ?>,'v')">View</a>
+                                        <?php }elseif($status==3){?>
+                                        <a class="dropdown-item list-group-item"
+                                            onclick="moveview(<?= $row->id ?>,'v')">View</a>
+                                        <?php }elseif($status==4){?>
+                                        <a class="dropdown-item list-group-item"
+                                            onclick="moveview(<?= $row->id ?>,'v')">View</a>
+                                        <?php }elseif($status==5){?>
+                                        <a class="dropdown-item list-group-item"
+                                            href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id); ?>">Delete</a>
+                                        <a class="dropdown-item list-group-item"
+                                            onclick="moveview(<?= $row->id ?>,'e')">Edit</a>
+                                        <a class="dropdown-item list-group-item"
+                                            onclick="moveview(<?= $row->id ?>,'v')">View</a>
+                                        <?php }?>
 
-                                        <?php } else { ?>
 
-                                            <?php if($row->status != 0 && $row->status != null ){?> 
-                                                <a class='dropdown-item' style='padding-left:5px;' href='#view_applied_report' onclick='view_applied_report(<?php echo $row->id?>)'>View</a>
-                                            <?php } ?> 
-
-                                            <?php  if(date("Y-m-d") < date("Y-m-d",strtotime("+ 5 days",strtotime($row->date)))){ ?>
-                                                <?php if($row->status == 1 ){?>
-                                                    <a style="padding-left:5px; pointer-events: none;" onclick="edit(<?php echo $row->id;?>)" class="text-dark collapsed" data-toggle="collapse" href="?<?php echo $row->id; ?>#add_form" aria-expanded="false">Edit</a>
-                                                    <hr>
-                                                    <a style="padding-left:5px; pointer-events: none;" href="<?php echo base_url('admin/attendance/delete_move_register/'.$row->id);?>" disable>Delete</a>
-                                                <?php } ?>
-                                            <?php } else { ?> 
-                                                <?php if($row->status == 0) {?>
-                                                    <a class="dropdown-item" style="padding-left:5px;" href="#" onclick="showModal(<?php echo $row->id?>,<?php echo $session['role_id']?>)">Apply for TA/DA</a>
-                                                <?php } else {?>
-                                                    <hr>
-                                                    <span class="dropdown-item" style="padding-left:5px;">No Action Need</span>
-                                                <?php } ?>
-                                            <?php } ?>
-
-                                        <?php } ?>
                                     </div>
                                 </div>
                             </td>
@@ -259,42 +299,44 @@ hr {
 </div>
 
 <script>
-function edit(id) {
+function changetada(){
+    $('#viewModal').modal().hide();
 
-    var url = "<?php echo base_url('admin/attendance/move_register/')?>" + id;
-    $.ajax({
-        url: url,
-        type: 'POST',
-        dataType: "json",
-        data: {
-            id: id
-        },
-        processData: false,
-        contentType: false,
-        cache: false,
-        success: function(data) {
-            response = data[0]
-            emp = data[1];
-            var a = response.out_time;
-            var b = response.in_time;
-            var time = a.slice(10, 16);
-            var intime = b.slice(10, 16);
+var payamValue = document.getElementById("payam").value;
+var staValue = document.getElementById("sta").value;
+var moveid = document.getElementById("moveid").value;
 
-            $("#idesss").val(response.id);
-            $("#move_date").val(response.date);
-            $("#m_in_times").val(intime);
-            $("#m_out_times").val(time);
-            $("#employeeeees").html(emp.first_name + ' ' + emp.last_name);
-            $("#m_reasoness").val(response.reason);
-        }
-
-    });
-    return false;
+    var url = "<?php echo base_url('admin/attendance/changetada'); ?>";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                payable_amount: payamValue,
+                status: staValue,
+                moveid: moveid
+                },
+            success: function(response) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: response,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
+            },
+            error: function(response) {
+                alert(response.message)
+            }
+        });
 }
-
+</script>
+<script>
 $(document).ready(function() {
     $('.clockpicker').clockpicker();
-        var input = $('.timepicker').clockpicker({
+    var input = $('.timepicker').clockpicker({
         placement: 'bottom',
         align: 'left',
         autoclose: true,
@@ -333,30 +375,24 @@ $(document).ready(function() {
     $('#example').DataTable();
 });
 
-function view_applied_report(id) {
+function moveview(id,st) {
     $('#viewModal').modal().show();
     // alert(id);
-    var url = "<?php echo base_url('admin/attendance/view_ta_da/')?>" + id;
+    var url = "<?php echo base_url('admin/attendance/view_ta_da/')?>" + id + "/" + st;
     $.ajax({
         type: "GET",
         url: url,
-        dataType: "json",
         data: {
             id: id
         },
         success: function(data) {
-            var trHTML = '';
-            $.each(data, function(i, item) {
-                var payable = item.payable_amount !== null ? item.payable_amount : 'waiting';
-                trHTML += '<tr class="text-center"><td>' + item.request_amount + '</td><td>' +
-                    payable + '</td></tr>';
-            });
-            $('#ta_da_view').html(trHTML);
-
+            // console.log(data);
+            $('#modelcontectview').empty();
+            $('#modelcontectview').html(data);
         }
     });
 }
-// appply for ta / da
+
 
 function showModal(id, role_id) {
     //  alert(id + ' '+ role_id); 
