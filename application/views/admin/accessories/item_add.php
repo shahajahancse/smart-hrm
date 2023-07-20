@@ -142,8 +142,8 @@ $('#cat_id').on('change',function(){
   var val = $('#cat_id').find(":selected").val();  
   var category = $('#cat_id').find(":selected").text();
     $.ajax({
-      type: "POST",
-      url: "<?php echo base_url('admin/accessories/get_model')?>",
+      type: "GET",
+      url: "<?php echo base_url('admin/accessories/get_model/')?>"+val,
       data:'cat_id='+val,
       success: function(data){
       $("#model_name").html(data);

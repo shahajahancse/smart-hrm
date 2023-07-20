@@ -561,7 +561,7 @@
         <?php echo form_open('admin/employees/emp_left_resign', $attributes, $hidden);?>
           <div class="form-group col-md-6">
             <level>Employee Name</label>
-            <input disabled class="form-control" id="emp_name" >
+            <input disabled class="form-control" id="emp_namesss" >
           </div>
           <div class="form-group col-md-6">
             <level>Department Name</label>
@@ -641,7 +641,7 @@
       var targetUrl = "<?=base_url('admin/employees/emp_left_resign/')?>" + emp_id;
       $.ajax({
           url: targetUrl,
-          type: "POST",
+          type: "GET",
           data: sendData,
           dataType: "json",
           success: function (response) {
@@ -665,11 +665,12 @@
   
     $.ajax({
       url         : url,
-      type        : 'POST',
+      type        : 'GET',
       dataType    : 'json',
       success     : function(response){
+        // alert(response[0].first_name)
         $('#hidden_id_emp').val(id);
-        $('#emp_name').val(response[0].first_name +' '+response[0].last_name);
+        $('#emp_namesss').val(response[0].first_name +' '+response[0].last_name);
         $('#department_id').val(response[0].department_id);
         $('#department').val(response[0].department_name);
         $('#designation_id').val(response[0].designation_id);

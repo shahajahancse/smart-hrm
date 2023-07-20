@@ -220,7 +220,7 @@ $(document).ready(function() {
         // Make an AJAX post request to the controller
         $.ajax({
             url: '<?= base_url('admin/lunch/getfrom') ?>',
-            method: 'POST',
+            method: 'GET',
             data: {
                 selectedValue: selectedValue,
                 paymonth: paymonth
@@ -365,7 +365,7 @@ $(document).ready(function() {
         // Make an AJAX post request to the controller
         $.ajax({
             url: '<?= base_url('admin/lunch/submit_payment') ?>', // Change the URL to the appropriate controller method
-            method: 'POST',
+            method: 'GET',
             data: formData,
             success: function(response) {
                 // Handle the success response
@@ -416,7 +416,7 @@ $(document).ready(function() {
         // Create the AJAX request
         $.ajax({
             url: '<?= base_url('admin/lunch/process') ?>', // Replace with the URL to send the request
-            method: 'POST', // Replace with the desired HTTP method (POST, GET, etc.)
+            method: 'GET', // Replace with the desired HTTP method (POST, GET, etc.)
             data: {
                 firstDate: firstDate,
                 secondDate: secondDate,
@@ -460,7 +460,7 @@ function updateprocess() {
         document.getElementById("loading").style.visibility = "visible";
         $.ajax({
             url: '<?= base_url('admin/lunch/process') ?>', // Replace with the URL to send the request
-            method: 'POST', // Replace with the desired HTTP method (POST, GET, etc.)
+            method: 'GET', // Replace with the desired HTTP method (POST, GET, etc.)
             data: {
                 firstDate: from_date,
                 secondDate: end_date,

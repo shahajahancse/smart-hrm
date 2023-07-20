@@ -466,6 +466,11 @@ class Employees extends MY_Controller {
     // increment/probation/promotion here
     public function incre_prob_prom_add($id)
     {
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
+
     	$user_info = $this->db->where('user_id', $id)->get('xin_employees')->row();
 
 		if ($this->input->post('status') == 2) {
@@ -1309,7 +1314,11 @@ class Employees extends MY_Controller {
      }
 	 
 	  public function detail() {
-
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
+	
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -2078,6 +2087,10 @@ class Employees extends MY_Controller {
 	
 	// Validate and add info in database
 	public function add_employee() {
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
 	
 		if($this->input->post('add_type')=='employee') {		
 		/* Define return | here result is used to return user data and error for error message */
@@ -2343,11 +2356,17 @@ class Employees extends MY_Controller {
 	
 	// Validate and update info in database // basic info
 	public function basic_info() {
-		// dd($this->input->post());
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
+	
+
 		if($this->input->post('type')=='basic_info') {		
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		// dd($Return['csrf_hash']);
 		
 		//$office_shift_id = $this->input->post('office_shift_id');
 		$system = $this->Xin_model->read_setting_info(1);
@@ -2411,10 +2430,6 @@ class Employees extends MY_Controller {
 		} else {
 			$column_shift = $this->input->post('office_shift_id');
 		}*/
-		
-		if($Return['error']!=''){
-       		$this->output($Return);
-    	}
 		
 		$first_name = $this->Xin_model->clean_post($this->input->post('first_name'));
 		$last_name = $this->Xin_model->clean_post($this->input->post('last_name'));
@@ -2749,6 +2764,11 @@ class Employees extends MY_Controller {
 	// Validate and update info in database // contact info
 	public function update_contacts_info() {
 	
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
+	
 		if($this->input->post('type')=='contact_info') {		
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -2814,6 +2834,11 @@ class Employees extends MY_Controller {
 	
 	// Validate and update info in database //  econtact info
 	public function update_contact_info() {
+	
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
 	
 		if($this->input->post('type')=='contact_info') {		
 		/* Define return | here result is used to return user data and error for error message */
@@ -2881,6 +2906,10 @@ class Employees extends MY_Controller {
 	
 	// Validate and update info in database // contact info
 	public function contact_info() {
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
 	
 		if($this->input->post('type')=='contact_info') {		
 		/* Define return | here result is used to return user data and error for error message */
@@ -2970,6 +2999,10 @@ class Employees extends MY_Controller {
 	
 	// Validate and update info in database //  econtact info
 	public function e_contact_info() {
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
 	
 		if($this->input->post('type')=='e_contact_info') {		
 		/* Define return | here result is used to return user data and error for error message */
@@ -3033,6 +3066,10 @@ class Employees extends MY_Controller {
 	
 	// Validate and add info in database // document info
 	public function document_info() {
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
 	
 		if($this->input->post('type')=='document_info' && $this->input->post('data')=='document_info') {		
 		/* Define return | here result is used to return user data and error for error message */
@@ -4176,6 +4213,11 @@ class Employees extends MY_Controller {
 	// Validate and update info in database // change password
 	public function change_password() {
 	
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
+
 		if($this->input->post('type')=='change_password') {		
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -4874,6 +4916,10 @@ class Employees extends MY_Controller {
 	 
 	// Validate and add info in database
 	public function import_employees() {
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
 	
 		if($this->input->post('is_ajax')=='3') {		
 		/* Define return | here result is used to return user data and error for error message */
@@ -5031,7 +5077,11 @@ class Employees extends MY_Controller {
 	
 	// delete contact record
 	public function delete_contact() {
-		
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
+	
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5122,7 +5172,11 @@ class Employees extends MY_Controller {
 	
 	// delete bank_account record
 	public function delete_bank_account() {
-		
+		$session = $this->session->userdata('username');
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+			redirect('admin/');
+		}
+	
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
