@@ -1015,11 +1015,17 @@ class Attendance_model extends CI_Model {
         return $result = $this->db->get()->result();        
     }
     public function view_ta_da($id){
-        $this->db->select("request_amount,payable_amount")
-                 ->from('xin_employee_move_register')
-                 ->where('id',$id);   
-        return $result = $this->db->get()->result();        
+        $this->db->select('emr.*, emd.*, e.first_name, e.last_name')
+                ->from('xin_employee_move_register as emr')
+                ->join('xin_employee_move_details as emd', 'emr.id = emd.move_id')
+                ->join('xin_employees as e', 'emr.employee_id = e.user_id')
+                ->where('emr.id', $id);
+                
+        $query = $this->db->get();
+        return $query->result();
     }
+ 
+
 
 
 

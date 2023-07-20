@@ -669,11 +669,15 @@ class Attendance extends MY_Controller {
 	echo json_encode($data);
 	}
 
-	public function view_ta_da(){
-		// dd($_GET['id']);
-	$data = $this->Attendance_model->view_ta_da($_GET['id']);
-	echo json_encode($data);
-	}
+	public function view_ta_da($id,$st){
+	$data['alld']= $this->Attendance_model->view_ta_da($id);
+	$data['st']= $st;
+	$data['modelcontectview'] = $this->load->view("admin/attendance/modelcontectview", $data, TRUE);
+	echo $data['modelcontectview'] ;
+   }
+
+
+
 	public function update_ta_da(){
 	$data = $this->Attendance_model->update_ta_da($_POST['form_id'],$_POST['payable_amount'],$_POST['status']);
 	echo json_encode($data);
@@ -692,11 +696,20 @@ class Attendance extends MY_Controller {
     	$data["employees"] = $this->Attendance_model->get_employee_ajax_request($status);
         echo json_encode($data);
     }
-
-
-
-
-
+	public function changetada()
+    {
+    	$status = $this->input->post('status');
+    	$payable_amount = $this->input->post('payable_amount');
+    	$moveid = $this->input->post('moveid');
+		$data = array(
+			'payable_amount' => $payable_amount,
+			'status' => $status,
+			'updated_at' => date('Y-m-d H:i:s'),
+		);
+		$this->db->where('id', $moveid);
+        $this->db->update('xin_employee_move_register', $data);
+		echo "Success";
+    }
 	// ========================================Employee view===========================================
 	// attandancevied code here
 	public function employee_attendance(){
