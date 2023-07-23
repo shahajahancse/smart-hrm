@@ -18,7 +18,7 @@
             <td><?= ($data->clock_in=='')? $data->status :date('h:i A',strtotime($data->clock_in)) ?></td>
             <td><?= ($data->clock_out=='')? $data->status :date('h:i A',strtotime($data->clock_out)) ?></td>
             <td><?= $data->late_time ?></td>
-            <td><?= $data->production ?></td>
+            <td><?= floor($data->production / 60) .":". round($data->production % 60, 2) ?></td>
             <td><?= 1?> hrs</td>
         </tr>
         <?php  }?>

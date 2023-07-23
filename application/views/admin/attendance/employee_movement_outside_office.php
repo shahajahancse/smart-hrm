@@ -230,13 +230,13 @@ textarea {
 
 <div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
     <div class="col-md-2 divform-group " style="padding: 0;">
-        <a href="<?= base_url('admin/attendance/employee_movement/0') ?>" class="cboton ">Floor wise Movement</a>
+        <a href="<?= base_url('admin/attendance/employee_movement') ?>" class="cboton ">Floor wise Movement</a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
         <a href="<?= base_url('admin/attendance/employee_movement/1') ?>" class="cboton <?=($location_status==1)? 'cactive': ''?>">Outside office </a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
-        <a href="" class="cboton <?=($location_status==1)? '': 'cactive'?>">Outside Dhaka</a>
+        <a href="<?= base_url('admin/attendance/employee_movement/2') ?>" class="cboton <?=($location_status==1)? '': 'cactive'?>">Outside Dhaka</a>
     </div>
     <div class="col-md-2 divform-group">
     </div>

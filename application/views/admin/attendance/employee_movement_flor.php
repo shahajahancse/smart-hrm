@@ -185,7 +185,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                         </div>
                     </div>
                 </div>
-                <input type="hidden" name="area" value="<?= ($empinfo[0]->floor_status!=3)? '2':'1'?>">
+                <input type="hidden" name="area" value="<?= ($empinfo->floor_status!=3)? '2':'1'?>">
                 <div class="col-md-6">
                     <div class="input">
                         <div class="level">Select Meeting People**</div>
@@ -193,14 +193,8 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                             <select id="leave_type" name="meet_with" style="width: 98%;border: none;cursor: pointer;"
                                 required>
                                 <option>Select Meeting People**</option>
-
-                                <?php
-                                 if($empinfo[0]->floor_status!=3){
-                                    $data=$emp3rd;
-                                    }else{
-                                        $data=$emp5th ;}; foreach($data as $emp){?>
-                                <option value="<?= $emp->first_name ?> <?= $emp->last_name ?> "><?= $emp->first_name ?>
-                                    <?= $emp->last_name ?> </option>
+                                <?php foreach($emp_floor as $emp){?>
+                                <option value="<?= $emp->user_id ?>"><?= $emp->first_name .' '. $emp->last_name ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -232,7 +226,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
     <?php if($inout==0){ ?>
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
         <div class="heading" style="font-size: 12px!important;">Are you want to go to the <span
-                style="color: #599AE7;"><?= ($empinfo[0]->floor_status!=3)? '3rd floor?':'5th floor?'?></span> Please
+                style="color: #599AE7;"><?= ($empinfo->floor_status!=3)? '3rd floor?':'5th floor?'?></span> Please
             Make Sure your Check In & entry Purpose </div>
         <div class="heading2"><a class="btn" id="openModal"
                 style="width: 146px;height: 32px;border-radius: 2px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);color: white;font-weight: bold;">Check
@@ -243,7 +237,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
         <div class="heading" style="font-size: 12px!important;color: red;">Your Check In time <span
                 style="color: #599AE7;"><?= (isset($timeDifferenceFormatted))? $timeDifferenceFormatted:''?> m</span> on
-            <span style="color: #599AE7;"><?= ($empinfo[0]->floor_status!=3)? '5rd floor':'3th floor'?></span> Make Sure
+            <span style="color: #599AE7;"><?= ($empinfo->floor_status!=3)? '5rd floor':'3th floor'?></span> Make Sure
             when You Come back Check out
         </div>
         <div class="heading2"><a class="btn" href="<?= base_url('admin/floor_movement/informsub') ?>"
@@ -254,13 +248,13 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
 </div>
 <div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
     <div class="col-md-2 divform-group " style="padding: 0;">
-        <a href="<?= base_url('admin/attendance/employee_movement/0') ?>" class="cboton cactive">Floor wise Movement</a>
+        <a href="<?= base_url('admin/attendance/employee_movement') ?>" class="cboton cactive">Floor wise Movement</a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
         <a href="<?= base_url('admin/attendance/employee_movement/1') ?>" class="cboton">Outside office </a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
-        <a href="" class="cboton">Outside Dhaka</a>
+        <a href="<?= base_url('admin/attendance/employee_movement/2') ?>" class="cboton">Outside Dhaka</a>
     </div>
     <div class="col-md-2 divform-group">
     </div>
@@ -278,6 +272,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
 <div id="datatable">
     <?php echo $tablebody;?>
 </div>
+
 <script>
 function getdata(status) {
 
@@ -321,6 +316,7 @@ function getdata(status) {
     });
 }
 </script>
+
 <script>
 document.getElementById("openModal").addEventListener("click", function() {
     document.getElementById("customModal").style.display = "block";
