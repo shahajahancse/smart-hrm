@@ -17,7 +17,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class floor_movement extends MY_Controller {
+class Movement_floor extends MY_Controller {
 
 	 public function __construct() {
         parent::__construct();
