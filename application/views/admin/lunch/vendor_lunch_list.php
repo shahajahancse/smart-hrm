@@ -199,29 +199,34 @@ p {
 
 </div>
 <div class="addbox" style="margin-bottom: 11px;min-height: 119px;font-size: 15px;">
-<div class="col-md-12 serchbox">
-    <?php $pass_data = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row(); 
+    <div class="col-md-12 serchbox">
+        <?php $pass_data = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row(); 
     ?>
         <div>
             <label for="">Last Calculate Date</label>
-            <input class="inputb" type="date" value="<?= $pass_data->to_date ?>" disabled>
+            <input class="inputb" type="date" value="<?= isset($pass_data->to_date) ? $pass_data->to_date : '' ?>"
+                disabled>
         </div>
         <div>
-            <label for=""> Total Meal </label>
-            <input class="inputb" type="number" value="<?= $pass_data->total_meal ?>" disabled>
+            <label for="">Total Meal</label>
+            <input class="inputb" type="number"
+                value="<?= isset($pass_data->total_meal) ? $pass_data->total_meal : '' ?>" disabled>
         </div>
         <div>
-            <label for="">Total Amount </label>
-            <input class="inputb" type="number"  value="<?= $pass_data->total_meal*90 ?>" disabled>
+            <label for="">Total Amount</label>
+            <input class="inputb" type="number"
+                value="<?= isset($pass_data->total_meal) ? $pass_data->total_meal * 90 : '' ?>" disabled>
         </div>
         <div>
-            <label for="">Paid Amount </label>
-            <input class="inputb" type="number"  value="<?= $pass_data->paid_amount ?>" disabled>
+            <label for="">Paid Amount</label>
+            <input class="inputb" type="number"
+                value="<?= isset($pass_data->paid_amount) ? $pass_data->paid_amount : '' ?>" disabled>
         </div>
         <div>
             <label for="">Deu</label>
-            <input class="inputb" type="number"  value="<?= $pass_data->due ?>" disabled>
+            <input class="inputb" type="number" value="<?= isset($pass_data->due) ? $pass_data->due : '' ?>" disabled>
         </div>
+
         <div>
             <br>
             <a class="btn btn-primary accordion" href="<?= base_url('admin/lunch/vendor_payment') ?>">View Payment</a>
