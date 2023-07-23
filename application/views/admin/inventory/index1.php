@@ -1,5 +1,5 @@
 <?php
-// dd($results); 
+// dd($products);   
 $session = $this->session->userdata('username');
 ?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
@@ -8,6 +8,21 @@ $session = $this->session->userdata('username');
     width: 92%;
     margin-bottom: 14px;
 }
+.using {
+    display: inline-flex;
+    padding: 4.5px 14.3px 5.5px 9px;
+    align-items: center;
+    gap: 9px;
+    border-radius: 50px;
+    border: 1px solid #CCC;
+    background: #FFF;
+    font-size:12px
+}
+
+.d-hidden {
+  display: none !important;
+}
+
 </style>
 <?php if($this->session->flashdata('success')):?>
   <div class="alert alert-success" id="flash_message">
@@ -32,118 +47,80 @@ $session = $this->session->userdata('username');
     <h3 class="box-title">Requisition List</h3>
     <a class="btn btn-sm btn-primary pull-right" href="<?= base_url('admin/inventory/create');?>">Add New</a>
   </div>
-  <div class="box-body">
-    <div class="box-datatable" >
-    <!-- <input type="hidden" value="1" id="count"> -->
-      <table class="datatables-demo table table-striped table-bordered" id="purchase_table" style="width:100%">
+
+  <div class="card">
+    <div class="card-body">
+      <table class="datatables-demo table table-striped table-bordered" id="purchase_tables" style="width:100%">
         <thead>
           <tr>
-              <?php if($user_role_id==1 || $user_role_id== 2 || $user_role_id== 4){?>
-              <th class="text-center" style="width:20px;">No.</th>
-                <th class="text-center"style="width: 34%;">Requisition By</th>
-                <th class="text-center" style="width:20px;">Status</th>
-                <th class="text-center" style="width:20px;">Request Date</th>
-                <th class="text-center" style="width:50px;">Action</th>
-              <?php }?> 
-              <?php if($user_role_id==3){?>
-              <th class="text-center" style="width:20px;">No.</th>
-              <th class="text-center" style="width: 34%;">Requisition By</th>
-                <!-- <th class="text-center" >Category</th>
-                <th class="text-center" >Sub Category</th>
-                <th class="text-center" >Product Name</th> -->
-                <!-- <th class="text-center" >Quantity</th>
-                <th class="text-center" >Approved Quantity</th> -->
-                <th class="text-center" >Status</th>
-                <th class="text-center" >Request Date</th>
-                <!-- <th class="text-center" ></th> -->
-                <th class="text-center" style="width:50px;">Action</th>
-              <?php }?> 
+            <th>No.</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Item Name</th>
+            <th>Qty</th>
+            <th>App. Qty</th>
+            <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <?php if($user_role_id==1 || $user_role_id == 4 || $user_role_id == 2){?>
-          <?php  foreach ($products as $key => $rows) { ?>
+          <?php  foreach($products as $key => $rows) { ?>
             <tr>
-                  <td class="text-center"><?php echo ($key+1)."."; ?></td>
-                  <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
-                  <td class="text-center">
-                    <?php echo $rows->status == 5 ? "<span class='badge' style='background-color:#28a745'><b>First Step Approved</b></span>" : ($rows->status == 1 ? "<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" : ($rows->status == 2 ? "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>" : ($rows->status == 3 ? "<span class='badge' style='background-color:#087a58'><b>Handover</b></span>" : "<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"))); ?>
+                  <td><?php echo ($key+1)."."; ?></td>
+                  <td><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
+                  <td><?php echo $rows->first_name." ".$rows->last_name; ?></td>
+                  <td><?php echo $rows->category_name?></td>
+                  <td><?php echo $rows->product_name; ?></td>
+                  <td><?php echo $rows->quantity; ?></td>
+                  <td><?php echo $rows->approved_qty; ?></td>
+                  <td>
+                    <?php echo $rows->status == 5 ? "<span class='using' style='color:#28a745'>First Step Approved</span>" : ($rows->status == 1 ? "<span class='using' style='color:#ffc107'> <i class='fa fa-dot-circle-o'></i> Pending</span>" : ($rows->status == 2 ? "<span class='using' style='color:#28a745'> <i class='fa fa-dot-circle-o'></i> Approved</span>" : ($rows->status == 3 ? "<span class='using' style='color:#087a58'> <i class='fa fa-dot-circle-o'></i> Handover</span>" : "<span class='using' style='color:#d56666'> <i class='fa fa-dot-circle-o'></i> Rejected</span>"))); ?>
                   </td>
-
-                <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
-                <!-- <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td> -->
-                <td class="text-center">
-                        <div class="dropdown" >
-                      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Action
+                  <td>
+                    <div class="btn-group <?php echo $rows->status == 3?'d-hidden':''?>" >
+                      <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                        <span>Action</span> 
                       </button>
-                      <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
-                    
-                      <?php if($rows->status==1 || $rows->status==5){?> 
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a><br>
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">Delete</a> <br>
-                          <a style="padding-left:5px; " href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Approved</a><br>
-                          <a style="padding-left:5px; " href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">Reject</a>
-                        <?php } if($rows->status== 2){?>
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/hand_over/'.$rows->id);?>">Delivered</a> <br>
-                        <?php } if($rows->status== 3){?>
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                        <?php } if($rows->status== 4){?>
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                        <?php if($session['role_id']== 1 || $session['role_id']== 2 ){?>
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a><br>
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">Delete</a> <br>
-                        <?php }?> 
-                      </div>
-              </td>
-             
-                <?php } } }?>
-                        
-              <?php  if($user_role_id==3){ 
-                foreach ($products as $key => $rows){  
-              ?>
-                <td class="text-center"><?php echo ($key+1)."."; ?></td>
-                <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
-             
-               
-                
-                <td class="text-center">
-                    <?php echo $rows->status == 5 ? "<span class='badge' style='background-color:#28a745'><b>First Step Approved</b></span>" : ($rows->status == 1 ? "<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" : ($rows->status == 2 ? "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>" : ($rows->status == 3 ? "<span class='badge' style='background-color:#28a745'><b>Handover</b></span>" : "<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"))); ?>
-                </td>
-                <td class="text-center"><?php echo $rows->created_at; ?></td>
-                <td class="text-center">
-                    <!-- <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i> Details</a> -->
-                   
-                    <div class="dropdown" >
-                      <!-- < ?php if($rows->status== 2 || $rows->status== 3){?> -->
-                      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Action
-                      </button>
-                      <!-- < ?php }?> -->
-                      <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
-                        <!-- <a style="padding-left:5px;" href="< ?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br> -->
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                          <?php if($rows->status==1){?> 
-                              <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
-                              <a style="padding-left:5px; " href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">Delete</a>
-                       
-                      </div>
+                      <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                          <a href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">
+                            <b class="text-success">Approved</b>
+                          </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="<?php echo $rows->status == 2 ?'d-hidden':''?>">
+                          <a href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">
+                            <b class="text-danger">Rejected</b>
+                          </a>
+                        </li>
+                        <li class="divider <?php echo $rows->status == 2 ?'d-hidden':''?>"></li>
+                        <li>
+                          <a href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">
+                            <b class="text-danger">Delete</b>
+                          </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="<?php echo ($rows->status == 4) || ($rows->status == 1) ?'d-hidden':''?>">
+                            <a style="padding-left:5px;" href="<?= base_url('admin/inventory/hand_over/'.$rows->id);?>">
+                            <b class="text-info">Delivered</b>
+                          </a>
+                        </li>
+                      </ul>
                     </div>
-                    <?php } ?>
-                </td>
-            </tr>
-  <?php  }}?>
+                  </td>
+            </tr>      
+          <?php }?>         
         </tbody>
       </table>
+
     </div>
   </div>
+
 </div>
+
 <script type="text/javascript">
-   $(document).ready(function() {
-
-      $('#purchase_table').DataTable();
-   });   
-
-  </script>
+  $(document).ready(function() {
+    $('#purchase_tables').DataTable();
+  });   
+</script>
