@@ -65,7 +65,7 @@
       product_id = $(this).val();
       // console.log($(this).find('option[value="' +$(this).val() + '"]').text());
       $.ajax({
-        type: "POST",
+        type: "GET",
         url: "<?php echo base_url('admin/inventory/get_product_by_ajax/');?>" + product_id,
         success: function(response)
         {
@@ -88,7 +88,7 @@
 
           items+= '<td><input name="quantity[]" class="form-control input-sm" required /></td>';
 
-          items+= '<td> <a href="javascript:void();" class="label label-important text-danger" onclick="removeRow(this)"><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
+          items+= '<td> <a class="label label-important text-danger" onclick="removeRow(this)"><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
           items+= '</tr>';
           $('#appRowDiv tr:last').after(items);
 

@@ -507,8 +507,8 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-        $empid = $this->input->post('selectedValue');
-        $paymonth = $this->input->post('paymonth');
+        $empid = $this->input->get('selectedValue');
+        $paymonth = $this->input->get('paymonth');
         // dd($empid.''.$paymonth);
 
         $lunch_payment = $this->db->query("SELECT lp.*, e.first_name, e.last_name
@@ -529,11 +529,11 @@ class Lunch extends MY_Controller {
             redirect('admin/');
         }
         // status
-        $firstDate =date('Y-m-d', strtotime($this->input->post('firstDate')));
+       $firstDate =date('Y-m-d', strtotime($this->input->get('firstDate')));
 
-        $secondDate = $this->input->post('secondDate');
-        $probable_date = $this->input->post('probable_date');
-        if($this->input->post('status')==1){
+       $secondDate = $this->input->get('secondDate');
+       $probable_date = $this->input->get('probable_date');
+       if($this->input->get('status')==1){
         $this->db->where('from_date', $firstDate);
         $this->db->where('end_date', $secondDate);
         $this->db->delete('lunch_payment');
@@ -544,10 +544,10 @@ class Lunch extends MY_Controller {
     }
     public function submit_payment() {
         // Retrieve the form data from the POST request
-        $empid = $this->input->post('empid');
-        $pay_month = $this->input->post('pay_month');
-        $p_month_pay = $this->input->post('p_month_pay');
-        $status = $this->input->post('status');
+        $empid = $this->input->get('empid');
+        $pay_month = $this->input->get('pay_month');
+        $p_month_pay = $this->input->get('p_month_pay');
+        $status = $this->input->get('status');
         $data = array(
             'pay_amount' => $p_month_pay,
             'status' => $status,

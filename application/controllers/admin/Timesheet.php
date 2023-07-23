@@ -490,6 +490,10 @@ class Timesheet extends MY_Controller {
 			redirect('admin/');
 		}
 
+		if($session['role_id'] == 3) {
+			redirect('admin/leave/emp_leave');
+		}
+
 		$data['title'] = $this->lang->line('left_leave').' | '.$this->Xin_model->site_title();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		$data['all_leave_types'] = $this->Timesheet_model->all_leave_types();

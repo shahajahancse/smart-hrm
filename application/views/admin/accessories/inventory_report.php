@@ -13,17 +13,19 @@
 	    <div class=" table-responsive table-striped">
 	      <table class="table table-bordered bg-light">
 	        <thead >
-                <td >Sl. No.</td>
-				<td>Item Name</td>
-				<td>Category</td>
-				<td>Model</td>
-				<td>Details</td>
-				<td>Purpose</td>
-				<td>Status</td>
-				<td>User</td>
-				<td>Image</td>
+               <td >Sl. No.</td>
+							<td>Item Name</td>
+							<td>Category</td>
+							<td>Model</td>
+							<td>Details</td>
+							<td>Purpose</td>
+							<td>Status</td>
+							<td>User</td>
+							<?php if ($type == 1) { ?>
+							<td>Image</td>
+							<?php } ?>
 	        </thead>
-            <tbody>
+        <tbody>
 				<?php  $i=1; foreach($reports as $report){ ?>
 				<tr>
 					<td><?php echo $i++?></td>
@@ -34,7 +36,10 @@
 					<td><?php echo $report->remark?></td>
 					<td><?php echo $report->status=='1'?"<span class='label label-success'>On Working</span>":($report->status==2?"<span class='label label-primaary'>Stocked</span>":($report->status==3?"<span class='label label-warning'>Servicing</span>":"<span class='label label-danger'>Destroy</span>"));?></td>
 					<td><?php echo $report->first_name.' 	'.$report->last_name?></td>
+
+					<?php if ($type == 1) { ?>
 					<td><img style="height:60px;width:60px" src="<?php echo (empty($report->image)) ? base_url("uploads/no_image.png"): base_url("uploads/accessory_images/".$report->image)?>"></td>
+					<?php } ?>
 				</tr>
 				<?php }?>
             </tbody>

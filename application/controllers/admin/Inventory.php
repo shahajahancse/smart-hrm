@@ -1264,7 +1264,6 @@ class Inventory extends MY_Controller {
 
 	
  public function equipment_list(){
-	// dd("ok");
 	$session = $this->session->userdata('username');
 	if(empty($session)){ 
 		redirect('admin/');
@@ -1283,32 +1282,6 @@ function requisition_list(){
 	$data['products'] 	= $this->Inventory_model->requisition_list($session);
 	$data['subview']    = $this->load->view("admin/inventory/requisition_list", $data);
 }
-
-
-
-
- public function equipment_card(){
-	// dd("ok");
-	$session = $this->session->userdata('username');
-	if(empty($session)){ 
-		redirect('admin/');
-	}
-	$data['session']    = $session;
-	// $data['equipments'] = $this->Inventory_model->equipment_list($session['user_id']);
-	$this->load->view("admin/inventory/equip_card", $data);
-}
-
-function requisition_card(){
-	$session = $this->session->userdata('username');
-	if(empty($session)){ 
-		redirect('admin/');
-	}
-	$data['session']    = $session;
-	// $data['products'] 	= $this->Inventory_model->requisition_list($session);
-	$data['subview']    = $this->load->view("admin/inventory/requip_card", $data);
-}
-
-
 
 }
 
