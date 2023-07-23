@@ -155,19 +155,45 @@ textarea {
                 <div></div>
                 <div class="close-icon" onclick="closem()">&times;</div>
             </div>
-<?php if($in_out!=1){?>
+            <?php if($in_out!=1){?>
             <div class="col-md-12 contentss">
                 <input type="hidden" name="location_status" value="<?=($location_status==1)? 1: 2?> ">
 
                 <div class="form-field">
                     <label for="reason">Select Reason of move**</label>
-                    <select id="reason" name="reason" class="col-md-12" style="border: none;" required>
+                    <!-- <select id="reason" name="reason" class="col-md-12" style="border: none;" required>
                         <option> Select Reason of move</option>
                         <option value="option1">Option 1</option>
                         <option value="option2">Option 2</option>
                         <option value="option3">Option 3</option>
+                    </select> -->
+                    <select id="reason" name="reason" class="col-md-12" style="border: none;" required>
+                        <?php $resonedata = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();
+                    
+                    ?>
+                        <option> Select Reason of move</option>
+                        <?php $resonedata = $this->db->get('xin_employee_move_reason')->result();
+                            foreach ($resonedata  as $k => $v) {
+                                ?>
+                        <option value="<?=$v->id ?>"><?= $v->title ?></option>
+                        <?php } ?>
+                        <option value="other">Other</option>
                     </select>
+                    <input type="text" id="otherInput" name="otherInput" style="display: none;margin: 7px 3px;width: 39%;height: 36px;" class="col-md-12"
+                        >
                 </div>
+               <script>
+                   document.getElementById("reason").addEventListener("change", function() {
+                       var selectedOption = this.value;
+                       if (selectedOption === "other") {
+                           document.getElementById("otherInput").style.display = "block";
+                       } else {
+                           document.getElementById("otherInput").style.display = "none";
+                       }
+                   });
+               </script>
+               
+               
                 <div class="form-field">
                     <label for="message">Write Place Adress</label>
                     <textarea id="message" name="place_adress" required></textarea>
@@ -184,7 +210,7 @@ textarea {
 
 
 
-                <?php } ?>
+            <?php } ?>
 
         </div>
     </form>
@@ -201,7 +227,8 @@ textarea {
     </div>
     <?php if($in_out==0){ ?>
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
-        <div class="heading">Are you want to go Outside <?=($location_status==1)? 'Office': 'Dhaka'?> ? Please Make Sure your Checking & entry Purpose</div>
+        <div class="heading">Are you want to go Outside <?=($location_status==1)? 'Office': 'Dhaka'?> ? Please Make Sure
+            your Checking & entry Purpose</div>
         <div class="heading2">
             <a class="btn" onclick="move_modal()"> <?=($location_status==1)? 'Check In': 'Request'?></a>
         </div>
@@ -209,23 +236,25 @@ textarea {
     <?php }else{ ?>
 
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
-        <div class="heading" style="font-size: 12px!important;color: red;">Your Check In time  <span
-                style="color: #599AE7;"><?= $timeDifferenceFormatted ?></span>. Make Sure when You Come back to office & Check out
+        <div class="heading" style="font-size: 12px!important;color: red;">Your Check In time <span
+                style="color: #599AE7;"><?= $timeDifferenceFormatted ?></span>. Make Sure when You Come back to office &
+            Check out
         </div>
-        <div class="heading2"><a class="btn" href="<?= base_url('admin/attendance/checkout/')?><?=($location_status==1)? 1: 2 ?> "
+        <div class="heading2"><a class="btn"
+                href="<?= base_url('admin/attendance/checkout/')?><?=($location_status==1)? 1: 2 ?> "
                 style="width: 146px;height: 32px;border-radius: 2px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);color: white;font-weight: bold;">Check
                 Out</a></div>
     </div>
     <?php } ?>
 </div>
 
-    <?php if($this->session->flashdata('success')):?>
-        <div class="col-md-12" style="gap: 4px;margin: 2px;align-items: end;">
-            <div class="alert alert-success" id="flash_message">
-              <?php echo $this->session->flashdata('success');?>
-            </div>
-        </div>
-    <?php endif; ?> 
+<?php if($this->session->flashdata('success')):?>
+<div class="col-md-12" style="gap: 4px;margin: 2px;align-items: end;">
+    <div class="alert alert-success" id="flash_message">
+        <?php echo $this->session->flashdata('success');?>
+    </div>
+</div>
+<?php endif; ?>
 
 
 <div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
@@ -233,10 +262,12 @@ textarea {
         <a href="<?= base_url('admin/attendance/employee_movement') ?>" class="cboton ">Floor wise Movement</a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
-        <a href="<?= base_url('admin/attendance/employee_movement/1') ?>" class="cboton <?=($location_status==1)? 'cactive': ''?>">Outside office </a>
+        <a href="<?= base_url('admin/attendance/employee_movement/1') ?>"
+            class="cboton <?=($location_status==1)? 'cactive': ''?>">Outside office </a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
-        <a href="<?= base_url('admin/attendance/employee_movement/2') ?>" class="cboton <?=($location_status==1)? '': 'cactive'?>">Outside Dhaka</a>
+        <a href="<?= base_url('admin/attendance/employee_movement/2') ?>"
+            class="cboton <?=($location_status==1)? '': 'cactive'?>">Outside Dhaka</a>
     </div>
     <div class="col-md-2 divform-group">
     </div>
