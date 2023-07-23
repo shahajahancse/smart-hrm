@@ -199,7 +199,7 @@ p {
 
 </div>
 <div class="addbox" style="margin-bottom: 11px;min-height: 119px;font-size: 15px;">
-    <div class="col-md-12 serchbox">
+    <div class="col-md-12 serchbox" style="box-shadow: inset 0px 0px 5px 4px #e5e5e5;">
         <?php $pass_data = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row(); 
     ?>
         <div>
