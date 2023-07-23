@@ -777,7 +777,6 @@ class Attendance extends MY_Controller {
 		$this->db->where_in('user_role_id', array(2,3,4,5))->where_in('status', array(1,4,5,6));
         $data['emp_floor']=$this->db->get('xin_employees')->result();
 
-
 		$this->db->select("*");
 		$this->db->where("user_id", $userid);
 		if ($firstdate!=null && $seconddate!=null){
@@ -878,6 +877,19 @@ class Attendance extends MY_Controller {
 			$osd_status=1;
 		}
 
+		$selectedOption = $this->input->post('reason');
+		$reason=$selectedOption;
+		if ($selectedOption === 'other') {
+            $reasondata = $this->input->post('otherInput');
+			$data = array(
+				'title' => $reasondata
+			);
+			
+			$this->db->insert('xin_employee_move_reason', $data);
+			$insert_id = $this->db->insert_id();
+			$reason=$insert_id;
+        }
+		
 		$data = array(
 			'employee_id' => $userid,
 			'date' => date('Y-m-d'),
@@ -889,7 +901,7 @@ class Attendance extends MY_Controller {
 			'status' => 0,
 			'astatus' => 1,
 			'osd_status' => $osd_status,
-			'reason' => $this->input->post('reason'),
+			'reason' => $reason,
 			'location_status' => $this->input->post('location_status'),
 			'in_out' => 1,
 			'place_adress' => $this->input->post('place_adress'),

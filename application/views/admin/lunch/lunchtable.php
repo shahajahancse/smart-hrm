@@ -1,4 +1,4 @@
-<table class="table" id="myTable" style="text-align: center;">
+<table class="table" id="myTable" >
     <thead>
         <tr>
             <th>SL</th>
@@ -6,7 +6,7 @@
             <th>Meal Qty</th>
             <th>Amount</th>
             <th>Remarks</th>
-            <th>Action</th>
+            <th style="text-align: right;">Action</th>
 
         </tr>
     </thead>
@@ -19,10 +19,10 @@
             <td><?php echo $row->amount;?></td>
 
             <?php if($row->remarks){ ?>
-            <td style="text-align: center;" title="<?php echo $row->remarks; ?>">
+            <td  title="<?php echo $row->remarks; ?>">
                 <?php echo implode(' ', array_slice(explode(' ', $row->remarks ), 0, 4)); ?></td>
             <?php }else{ ?>
-            <td style="text-align: center;">...</td>
+            <td >...</td>
             <?php } ?>
             <td>
                 <div class="dropdown">
