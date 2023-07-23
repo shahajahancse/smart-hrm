@@ -94,7 +94,10 @@
 }
 
 th {
-    text-align: center;
+    text-align: left;
+}
+td {
+    text-align: left;
 }
 
 p {
@@ -153,7 +156,18 @@ p {
 </style>
 
 <!-- Modal -->
-
+<div class="addbox" style="margin-bottom: 11px;min-height: 138px;font-size: 15px;width: 28%;">
+    <?php $pass_data = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row(); 
+    ?>
+    <table>
+        <tr><th>Last Calculate Date : </th> <td><?= $pass_data->to_date?> </td> </tr>
+        <tr><th>Previous Due: </th> <td><?= $pass_data->previous_due?> </td></tr>
+        <tr><th>Total Meal : </th> <td><?= $pass_data->total_meal?> </td></tr>
+        <tr><th>Total Amount : </th> <td> <?= $pass_data->net_payment?></td></tr>
+        <tr><th>Paid:  </th> <td><?= $pass_data->paid_amount?></td></tr>
+        <tr><th>Due: </th> <td> <?= $pass_data->due?></td></tr>
+    </table>
+</div>
 <div class="addbox">
     <p class="p" style="font-size: 25px; font-weight: bold; float: left;">Vendor Meal List</p>
     <a class="btn btn-primary accordion" onclick="togglePaymentBox()">Add Meal</a>
@@ -198,43 +212,12 @@ p {
 
 
 </div>
-<div class="addbox" style="margin-bottom: 11px;min-height: 119px;font-size: 15px;">
-<div class="col-md-12 serchbox">
-    <?php $pass_data = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row(); 
-    ?>
-        <div>
-            <label for="">Last Calculate Date</label>
-            <input class="inputb" type="date" value="<?= $pass_data->to_date ?>" disabled>
-        </div>
-        <div>
-            <label for=""> Total Meal </label>
-            <input class="inputb" type="number" value="<?= $pass_data->total_meal ?>" disabled>
-        </div>
-        <div>
-            <label for="">Total Amount </label>
-            <input class="inputb" type="number"  value="<?= $pass_data->total_meal*90 ?>" disabled>
-        </div>
-        <div>
-            <label for="">Paid Amount </label>
-            <input class="inputb" type="number"  value="<?= $pass_data->paid_amount ?>" disabled>
-        </div>
-        <div>
-            <label for="">Deu</label>
-            <input class="inputb" type="number"  value="<?= $pass_data->due ?>" disabled>
-        </div>
-        <div>
-            <br>
-            <a class="btn btn-primary accordion" href="<?= base_url('admin/lunch/vendor_payment') ?>">View Payment</a>
-        </div>
-    </div>
-</div>
-
 <div class="list_box">
     <div class="col-md-12 serchbox">
         <div>
             <label for="">First Date</label>
             <input class="inputb" onchange="calmeal()" type="date" name="" id="from_date"
-                max="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
+                max="<?php echo date('Y-m-d'); ?>" value="<?= $pass_data->to_date?>">
         </div>
         <div>
             <label for=""> Last Date</label>
@@ -434,4 +417,9 @@ function calmeal() {
         }
     });
 }
+</script>
+<script>
+    $(document).ready(function() {
+        calmeal();
+    });
 </script>
