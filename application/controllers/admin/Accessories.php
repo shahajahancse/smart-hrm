@@ -36,6 +36,7 @@ class Accessories extends MY_Controller {
 
     }
 
+
     public function category($id = null){
          $data = $this->page_loads();
          $data['title'] = 'Add Category'.' | '.$this->Xin_model->site_title();
@@ -209,24 +210,15 @@ class Accessories extends MY_Controller {
                     $this->session->set_flashdata('success', 'Sorry Something Wrong.');
                      echo $this->item;
                 }
-            }
-        }
 
         if($id != null) {
-            // dd($id);
-            $data['row']  = $this->Accessories_model->get_product_reports_info($id); // get id wise data 
-            // dd($data['row']); 
+          $data['row'] = $this->db->where('id',$id)->get("product_accessory_categories")->row();
         }   
-        $data['categories'] = $this->db->select('*')->get('product_accessory_categories')->result(); //showing category list
-        $data['models']     = $this->db->select('*')->get('product_accessories_model')->result(); //showing model list
-        $data['users']      = $this->db->select('*')->where_in('status',[1,4])->get('xin_employees')->result(); //showing model list
-        $data['numbers']     = $this->db->select('*')->get('mobile_numbers')->result(); //showing number list
-        $data['results']    = $this->Accessories_model->get_cat_model_info(); //showing data 
-        $datas['subview']   = $this->load->view('admin/accessories/item_add',$data,TRUE);  
-                              $this->load->view('admin/layout/layout_main', $datas); 
 
-    } 
-
+         $data['results']=$this->db->select('*')->get('product_accessory_categories')->result();
+         $datas['subview']= $this->load->view('admin/accessories/category',$data,TRUE);  
+         $this->load->view('admin/layout/layout_main', $datas); 
+    }
 
 
     public function delete($id,$table,$url){
@@ -234,85 +226,44 @@ class Accessories extends MY_Controller {
         if($delete){
             $this->session->set_flashdata('success', 'Successfully Delete Done');
             redirect('admin/accessories/'.$url,['msg'=>1]);
-        } else {
+        } else{
             $this->session->set_flashdata('success', 'Sorry Something Wrong.');
             redirect('admin/accessories/'.$url);
-
         }
 
     }
-
 
     public function reports(){
         $data = $this->page_loads();
         $data['title'] = 'Report'.' | '.$this->Xin_model->site_title();
-        $data['breadcrumbs'] = "Report";
-        // $data['path_url'] = "Report";    
+        $data['breadcrumbs'] = "Report"; 
         $datas['subview'] = $this->load->view('admin/accessories/reports',$data,TRUE);  
                             $this->load->view('admin/layout/layout_main', $datas); 
     }
 
-    public function inventory_report($type=null){
-
-        $session = $this->session->userdata('username');
-        if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
-            redirect('admin/');
-        }
+    public function inventory_report($status=null,$category=null){
         $data = $this->page_loads();
         $data['title']       = 'On Working'.' | '.$this->Xin_model->site_title();
         $data['breadcrumbs'] = "On Working";
-        $status = ($_GET['status'] == 'null' || $_GET['status'] == '')? null:$_GET['status'];
-        $category = ($_GET['category'] == 'null' || $_GET['category'] == '')? null:$_GET['category'];
-
-        $data    = $this->Accessories_model->get_product_reports_info(null, $status,$category);
-
-        if(empty($data))
-        {
-            echo  "<p style='text-align: center; color: red' >Records not founds</p>";
+        $status = @$_POST['status'];
+        $category= @$_POST['category'];
+        if($status!=null && $category!=null){
+            $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$status,$category);
+        } else{
+            $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$status=null,$category=null);
         }
-        else
-        {	
-            $data['reports'] = $data;
-            $data['type'] = $type;
-            $this->load->view('admin/accessories/inventory_report',$data);
+        if(is_string($data["reports"])){
+         echo $data["reports"];
+        } else{	
+         $this->load->view('admin/accessories/inventory_report',$data);
         }
     }
 
 
-
-    public function user_report($user_id = null){
-        // $data = $this->page_loads();
-        $data['title']       = 'User Report'.' | '.$this->Xin_model->site_title();
-
-        $user_id = ($_GET['user_id'] == 'null' || $_GET['user_id'] == '')? null:$_GET['user_id'];
-
-        if($user_id != null){
-            $data['reports'] = $this->Accessories_model->get_user_reports_info($user_id);
-           $this->load->view('admin/accessories/user_report',$data);
-
-        } else {
-            $data['reports'] = $this->Accessories_model->get_user_reports_info($user_id);
-            $this->load->view('admin/accessories/all_user_report',$data);
-
-            // dd($data);
-        }
-        // if(is_string($data["reports"]))
-        // {
-        //  echo $data["reports"];
-        // }
-        // else
-        // {	
-        // //  dd($data);
-        // }
-    }
-
-
-
-
-     public function get_model($id = null){
+    public function get_model($id = null){
         $rows = $this->db->select('*')->where('cat_id',$id)->get('product_accessories_model')->result();
         $this->load->view('admin/accessories/get_model', array('rows'=>$rows));
-     }
+    }
 
 
 }
