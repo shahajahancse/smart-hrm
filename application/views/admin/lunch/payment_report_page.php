@@ -122,6 +122,7 @@ $newDate = $date->format('Y-m-d');
                     <th>Collection Day</th>
                     <th>Collection Amount</th>
                     <th>Status</th>
+                    <th>Signature</th>
                 </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -144,6 +145,7 @@ $newDate = $date->format('Y-m-d');
                     <td style="color: <?php echo $employee->status == 1 ? '#26ab31' : 'red'; ?>">
                         <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
                     </td>
+                    <td></td>
 
                 </tr>
                 <?php endforeach; ?>

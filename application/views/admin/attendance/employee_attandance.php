@@ -146,7 +146,7 @@ function getdata(status) {
     }
     $.ajax({
         url: '<?php echo base_url('admin/attendance/employee_attendance'); ?>',
-        method: 'POST',
+        method: 'GET',
         data: {
             firstdate: firstdate,
             seconddate: seconddate

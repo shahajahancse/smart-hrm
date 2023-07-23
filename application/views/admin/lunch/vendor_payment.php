@@ -167,7 +167,7 @@
 
                 <input type="date" class="form-control" id="from_date" type="text"
                     value="<?= isset($result->to_date) ? date('Y-m-d',strtotime($result->to_date . ' +1 day')) : '0' ?>"
-                    style="border-radius: 6px;">
+                    style="border-radius: 6px;" disabled>
             </div>
             <div class="form-group col-md-3">
                 <p class="levels">To Date</p>
@@ -333,23 +333,12 @@ function calmeal() {
         method: 'POST',
         data: data,
         success: function(response) {
-            if (response == 0) {
                 document.getElementById('total_meal').value = response;
                 var total_amount = response * 90
                 document.getElementById('total_amount').value = total_amount;
                 var pre_due = document.getElementById('pre_due').value;
                 var payable_amount = parseInt(parseInt(total_amount) + parseInt(pre_due));
                 document.getElementById('payable_amount').value = payable_amount;
-            } else {
-
-                document.getElementById('total_meal').value = response;
-                var total_amount = response * 90
-                document.getElementById('total_amount').value = total_amount;
-                var pre_due = document.getElementById('pre_due').value;
-                var payable_amount = parseInt(parseInt(total_amount) + parseInt(pre_due));
-                document.getElementById('payable_amount').value = payable_amount;
-            }
-
         },
         error: function(xhr, status, error) {
             // Handle errors

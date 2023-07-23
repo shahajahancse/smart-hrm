@@ -170,7 +170,8 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                     d="M18.0002 4H6.41453C6.15184 3.99995 5.89172 4.05167 5.64903 4.15221C5.40634 4.25275 5.18585 4.40013 5.00016 4.58594L0.292969 9.29281C-0.0976562 9.68344 -0.0976562 10.3166 0.292969 10.7069L5.00016 15.4141C5.37516 15.7891 5.88391 16 6.41422 16H18.0002C19.1048 16 20.0002 15.1047 20.0002 14V6C20.0002 4.89531 19.1048 4 18.0002 4ZM15.3536 11.9394C15.5489 12.1347 15.5489 12.4513 15.3536 12.6466L14.6467 13.3534C14.4514 13.5487 14.1348 13.5487 13.9395 13.3534L12.0002 11.4141L10.0608 13.3534C9.86547 13.5487 9.54891 13.5487 9.35359 13.3534L8.64672 12.6466C8.45141 12.4513 8.45141 12.1347 8.64672 11.9394L10.5861 10L8.64672 8.06063C8.45141 7.86531 8.45141 7.54875 8.64672 7.35344L9.35359 6.64656C9.54891 6.45125 9.86547 6.45125 10.0608 6.64656L12.0002 8.58594L13.9395 6.64656C14.1348 6.45125 14.4514 6.45125 14.6467 6.64656L15.3536 7.35344C15.5489 7.54875 15.5489 7.86531 15.3536 8.06063L13.4142 10L15.3536 11.9394Z"
                     fill="#858A8F" />
             </svg></span>
-        <form id="movementform1">
+            <?php $attributes = array('id' => 'movementform1');?>
+            <?php echo form_open('', $attributes);?>
             <div class="col-md-12">
                 <div class="col-md-6">
                     <div class="input">
@@ -210,7 +211,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
 
 
     </div>
-    </form>
+    <?php echo form_close(); ?>
 </div>
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
@@ -303,7 +304,7 @@ function getdata(status) {
     }
     $.ajax({
         url: '<?php echo base_url('admin/attendance/employee_movement_flor'); ?>',
-        method: 'POST',
+        method: 'GET',
         data: {
             firstdate: firstdate,
             seconddate: seconddate

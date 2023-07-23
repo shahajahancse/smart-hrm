@@ -286,7 +286,7 @@ function getdata(status) {
     }
     $.ajax({
         url: '<?php echo base_url('admin/attendance/employee_movement_outside_')?><?=($location_status==1)? 'Office': 'dhaka'?> ',
-        method: 'POST',
+        method: 'GET',
         data: {
             firstdate: firstdate,
             seconddate: seconddate

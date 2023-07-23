@@ -720,8 +720,8 @@ class Attendance extends MY_Controller {
 		}
 		$session = $this->session->userdata( 'username' );
 		$userid  = $session[ 'user_id' ];
-		$firstdate = $this->input->post('firstdate');
-		$seconddate = $this->input->post('seconddate');
+		$firstdate = $this->input->get('firstdate');
+		$seconddate = $this->input->get('seconddate');
 
 		$this->db->select("*");
 		$this->db->where("employee_id", $userid);
@@ -776,7 +776,7 @@ class Attendance extends MY_Controller {
 		$this->db->where('floor_status !=', $data['empinfo']->floor_status);
 		$this->db->where_in('user_role_id', array(2,3,4,5))->where_in('status', array(1,4,5,6));
         $data['emp_floor']=$this->db->get('xin_employees')->result();
-		
+
 
 		$this->db->select("*");
 		$this->db->where("user_id", $userid);
@@ -807,8 +807,8 @@ class Attendance extends MY_Controller {
 		$userid  = $session[ 'user_id' ];
 		$location_status=1;
 		$data['location_status'] = $location_status;
-		$firstdate = $this->input->post('firstdate');
-		$seconddate = $this->input->post('seconddate');
+		$firstdate = $this->input->get('firstdate');
+		$seconddate = $this->input->get('seconddate');
 		$this->db->select("*");
 		$this->db->where("employee_id", $userid);
 		$this->db->where("location_status", 1);

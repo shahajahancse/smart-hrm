@@ -528,7 +528,6 @@ class Lunch extends MY_Controller {
         if (empty($session)) {
             redirect('admin/');
         }
-      
         // status
        $firstDate =date('Y-m-d', strtotime($this->input->get('firstDate')));
 
@@ -539,9 +538,9 @@ class Lunch extends MY_Controller {
         $this->db->where('end_date', $secondDate);
         $this->db->delete('lunch_payment');
     };
-   
-       $data['lunch_data'] = $this->Lunch_model->process($firstDate,$secondDate,$probable_date);
-       echo json_encode('success');
+
+        $data['lunch_data'] = $this->Lunch_model->process($firstDate,$secondDate,$probable_date);
+        echo json_encode('success');
     }
     public function submit_payment() {
         // Retrieve the form data from the POST request
@@ -588,6 +587,19 @@ class Lunch extends MY_Controller {
        echo $total_m= $this->Lunch_model->chack_meal($this->input->post('first_date'),$this->input->post('second_date'));
    
     }
+   public function get_payment_data_list() {
+       $total_m = $this->Lunch_model->chack_meal($this->input->post('first_date'),$this->input->post('second_date'));
+       $data['payment_data']= $this->Lunch_model->chack_meal_data($this->input->post('first_date'),$this->input->post('second_date'));
+       $table= $this->load->view("admin/lunch/lunchtable", $data, TRUE);
+       $response = array(
+        'total_m' => $total_m,
+        'table' => $table
+       );
+   
+       header('Content-Type: application/json');
+       echo json_encode($response);
+   }
+   
     public function make_payment() {
        
         $pre_due=$this->input->post('pre_due');
@@ -881,10 +893,11 @@ public function pay_vend_ajax_request()
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch Vendor Meal';
         $data['path_url'] = 'lunch';
+        $this->db->order_by('date', 'desc');
         $data['payment_data'] = $this->db->get('lunch_vendor_meal')->result();
-       
-     
         if (!empty($session)) {
+
+            $data['lunchtable'] = $this->load->view("admin/lunch/lunchtable", $data, TRUE);
             $data['subview'] = $this->load->view("admin/lunch/vendor_lunch_list", $data, TRUE);
             $this->load->view('admin/layout/layout_main', $data); //page load
         } else {
