@@ -13,7 +13,7 @@ foreach ($emp_data['emp_data'] as $r) {
    
     $taken_meal+=$r->meal_amount;
 }
-$paymeal=($data1->pay_amount-$data1->prev_amount)/45;
+$paymeal=$data1->pay_amount/45;
 $balanceMeal= $paymeal-$taken_meal;
 }
 ?>
@@ -31,7 +31,7 @@ if (count($empdata)>0){
 <div class="divrow col-md-12">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
         <div class="heading">Total Lunch</div>
-        <div class="heading2"><?= (isset($paymeal))? $paymeal:'0' ?></div>
+        <div class="heading2"><?= (isset($data1->pay_amount))? $data1->pay_amount/45:'0' ?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
         <div class="heading">Total Payment</div>

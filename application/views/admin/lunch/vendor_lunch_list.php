@@ -179,6 +179,9 @@ p {
 
 </div>
 <div class="list_box">
+    <input type="date" name="" id="">
+    <input type="date" name="" id="">
+    <input type="date" name="" id="">
     <table class="table" id="myTable" style="text-align: center;">
         <thead>
             <tr>

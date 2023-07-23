@@ -720,8 +720,8 @@ class Attendance extends MY_Controller {
 		}
 		$session = $this->session->userdata( 'username' );
 		$userid  = $session[ 'user_id' ];
-		$firstdate = $this->input->post('firstdate');
-		$seconddate = $this->input->post('seconddate');
+		$firstdate = $this->input->get('firstdate');
+		$seconddate = $this->input->get('seconddate');
 
 		$this->db->select("*");
 		$this->db->where("employee_id", $userid);
@@ -768,8 +768,8 @@ class Attendance extends MY_Controller {
 	public function employee_movement_flor(){
 		$session = $this->session->userdata('username');
 		$userid  = $session[ 'user_id' ];
-		$firstdate = $this->input->post('firstdate');
-		$seconddate = $this->input->post('seconddate');
+		$firstdate = $this->input->get('firstdate');
+		$seconddate = $this->input->get('seconddate');
 							$this->db->select('floor_status');
 							$this->db->where('company_id',1);
 							$this->db->where('user_id',$userid );
@@ -813,8 +813,8 @@ class Attendance extends MY_Controller {
 		$userid  = $session[ 'user_id' ];
 		$location_status=1;
 		$data['location_status'] = $location_status;
-		$firstdate = $this->input->post('firstdate');
-		$seconddate = $this->input->post('seconddate');
+		$firstdate = $this->input->get('firstdate');
+		$seconddate = $this->input->get('seconddate');
 		$this->db->select("*");
 		$this->db->where("employee_id", $userid);
 		$this->db->where("location_status", 1);

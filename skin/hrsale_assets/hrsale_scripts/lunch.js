@@ -141,7 +141,9 @@ function conempmeal(r)
 
 function paymentreport(status,r=null) {
 {
-  
+  // alert(status+r);
+  // return false;
+
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest = new XMLHttpRequest();
   var data = '&status='+status;

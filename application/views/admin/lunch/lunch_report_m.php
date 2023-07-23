@@ -13,7 +13,7 @@
     $daysInMonth = cal_days_in_month(0, $month, $year);
 
     $monthName = date('F', mktime(0, 0, 0, $month, 1));
-   
+    exit();
    
 ?>
 
