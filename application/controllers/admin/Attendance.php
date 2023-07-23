@@ -752,12 +752,9 @@ class Attendance extends MY_Controller {
 	public function employee_movement($type = null){
 		if ($type == null) {
 			$data = $this->employee_movement_flor();
-		}
-		
-		if ($type == 1) {
+		} else if ($type == 1) {
 			$data = $this->employee_movement_outside_office();
-		}
-		if ($type == 2) {
+		} else {
 			$data = $this->employee_movement_outside_dhaka();
 		}
 
@@ -770,18 +767,15 @@ class Attendance extends MY_Controller {
 		$userid  = $session[ 'user_id' ];
 		$firstdate = $this->input->post('firstdate');
 		$seconddate = $this->input->post('seconddate');
-							$this->db->select('floor_status');
-							$this->db->where('company_id',1);
-							$this->db->where('user_id',$userid );
-        $data['empinfo']=$this->db->get('xin_employees')->result();
-							$this->db->select('first_name,last_name');
-							$this->db->where('company_id',1);
-							$this->db->where('floor_status',3);
-        $data['emp3rd']=$this->db->get('xin_employees')->result();
-		                    $this->db->select('first_name,last_name');
-							$this->db->where('company_id',1);
-							$this->db->where('floor_status',5);
-        $data['emp5th']=$this->db->get('xin_employees')->result();
+
+		$this->db->select('floor_status');
+		$this->db->where('user_id',$userid );
+        $data['empinfo']=$this->db->get('xin_employees')->row();
+
+		$this->db->select('user_id, first_name,last_name');
+		$this->db->where('floor_status !=', $data['empinfo']->floor_status);
+		$this->db->where_in('user_role_id', array(2,3,4,5))->where_in('status', array(1,4,5,6));
+        $data['emp_floor']=$this->db->get('xin_employees')->result();
 		
 
 		$this->db->select("*");
