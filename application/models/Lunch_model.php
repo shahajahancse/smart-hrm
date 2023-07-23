@@ -308,6 +308,15 @@ class Lunch_model extends CI_Model {
             return 0;
         }
     } 
+    public function chack_meal_data($first_date, $second_date) {
+        $this->db->select('*');
+        $this->db->where('date >=', $first_date);
+        $this->db->where('date <=', $second_date);
+        $this->db->order_by('date', 'desc');
+        $data = $this->db->get('lunch_vendor_meal')->result();
+        return $data;
+    }
+    
     
     public function vendor_status_report($first_date,$second_date){
         $this->db->select('*');
