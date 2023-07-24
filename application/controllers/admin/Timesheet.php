@@ -656,6 +656,9 @@ class Timesheet extends MY_Controller {
 			
 			if ($result == TRUE) {
 				$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave_added'));
+				if($session['role_id'] == 3) {
+					redirect('admin/leave/emp_leave');
+				}
 
 				redirect('admin/timesheet/leave');
 

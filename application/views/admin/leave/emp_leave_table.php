@@ -37,9 +37,25 @@
 
             <td>Admin</td>
             <td>
-                <a href="<?= base_url('admin/timesheet/leave_details/id/'.$data->leave_id.'/')?>">
-                Details
-                </a>
+                <div class="btn-group" >
+                  <button type="button" class="dropdown-toggle" data-toggle="dropdown" style="border: none; background: transparent;">
+                    <span><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span> 
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                      <a href="<?= base_url('admin/timesheet/leave_details/id/'.$data->leave_id.'/')?>">
+                        <b class="text-success">Details</b> </a>
+                    </li>
+                    <?php if ($data->status == '1') { ?>
+                    <li class="divider"></li>
+                    <li class="">
+                      <a href="<?= base_url('admin/leave/leave_delete/'.$data->leave_id);?>"><b class="text-danger">Delete</b>
+                      </a>
+                    </li>
+                    <?php } ?>
+                  </ul>
+                </div>
+
             </td>
         </tr>
         <?php  }?>

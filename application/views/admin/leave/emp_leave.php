@@ -97,9 +97,9 @@ body {
                     <div class="pseudo6">
                         <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;"
                             required>
-                            <option>Select Leave Type**</option>
-                            <option value="1">Casual Leave</option>
-                            <option value="2">Medical Leave</option>
+                            <option value="" >Select Leave Type**</option>
+                            <option value="1">Earn Leave</option>
+                            <option value="2">Sick Leave</option>
                         </select>
                     </div>
                 </div>
@@ -160,20 +160,20 @@ body {
 
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
-        <div class="heading">Total Annual Leave</div>
+        <div class="heading">Total Earn Leave</div>
         <div class="heading2">12</div>
     </div>
 
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
-        <div class="heading">Total Medical Leave</div>
+        <div class="heading">Total Sick Leave</div>
         <div class="heading2">4</div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">
-        <div class="heading">Remaining Annual Leave</div>
+        <div class="heading">Remaining Earn Leave</div>
         <div class="heading2"><?=  $leave_calel?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
-        <div class="heading">Remaining Medical Leave</div>
+        <div class="heading">Remaining Sick Leave</div>
         <div class="heading2"><?=$leave_calsl?></div>
     </div>
 </div>
@@ -229,6 +229,19 @@ body {
    </div>
    
 </div>
+
+
+<div style="clear: both;">
+    <?php if($this->session->flashdata('success')):?>
+    <div class="alert alert-danger" id="flash_message" style="text-align: center;padding: 6px;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      <?php echo $this->session->flashdata('success');?>
+    </div>
+    <?php endif; ?> 
+</div>
+
 <div id="datatable">
     <?php echo $tablebody;?>
 </div>
