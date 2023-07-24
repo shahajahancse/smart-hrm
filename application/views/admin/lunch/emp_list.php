@@ -25,54 +25,55 @@ th {}
 td {}
 </style>
 <div style="display: flex;flex-direction: column;">
-    <div class="col-md-12">
-        <div class="col-md-4 card">
-            <h5 class="card-title" style="text-align: center;">Summary Of <span
-                    style="color: blue;"><?= $first_date ?></span> to <span style="color: blue;"><?= $second_date?>
-                </span></h5>
-            <div class="card-body">
-                <table class="col-md-12">
-                    <tr>
-                        <th>Total Meal</th>
-                        <td>:</td>
-                        <td><?= $total_amount ?></td>
-                    </tr>
-                    <tr>
-                        <th>Total Amount</th>
-                        <td>:</td>
-                        <td><?= $total_amount ?></td>
-                    </tr>
-                    <tr>
-                        <th>Collected Amount</th>
-                        <td>:</td>
-                        <td><?= $paid_amount ?></td>
-                    </tr>
-                    <tr>
-                        <th>Unpaid Amount</th>
-                        <td>:</td>
-                        <td><?= $un_paid_amount ?></td>
-                    </tr>
-                    <tr>
-                        <th>Total Employee</th>
-                        <td>:</td>
-                        <td><?= $total_emp ?></td>
-                    </tr>
-                    <tr>
-                        <th>Paid Employee</th>
-                        <td>:</td>
-                        <td><?= $paid_total_emp ?></td>
-                    </tr>
-                    <tr>
-                        <th>Unpaid Employee</th>
-                        <td>:</td>
-                        <td><?= $un_paid_emp ?></td>
-                    </tr>
-                </table>
+    <div>
+        <div class="col-md-6 card">
+            <h5 class="card-title" style="text-align: center;margin: 7px 0px 0px 0px;">Summary Of <span
+                    style="color: blue;"><?= $first_date ?></span> to <span
+                    style="color: blue;"><?= $second_date ?></span></h5>
+            <div class="card-body" style="margin: 0;padding: 5px 0px 9px 0px;">
+
+              <table class="col-md-6">
+                  <tr>
+                      <th style="padding: 3px;">Total Meal</th>
+                      <td style="padding: 3px;">:</td>
+                      <td style="padding: 3px;"><?= $total_amount ?></td>
+                  </tr>
+                  <tr>
+                      <th style="padding: 3px;">Total Amount</th>
+                      <td style="padding: 3px;">:</td>
+                      <td style="padding: 3px;"><?= $total_amount ?></td>
+                  </tr>
+                  <tr>
+                      <th style="padding: 3px;">Collected Amount</th>
+                      <td style="padding: 3px;">:</td>
+                      <td style="padding: 3px;"><?= $paid_amount ?></td>
+                  </tr>
+              </table>
+              
+              <table class="col-md-6">
+                  <tr>
+                      <th style="padding: 3px;">Unpaid Amount</th>
+                      <td style="padding: 3px;">:</td>
+                      <td style="padding: 3px;"><?= $un_paid_amount ?></td>
+                  </tr>
+                  <tr>
+                      <th style="padding: 3px;">Paid Employee</th>
+                      <td style="padding: 3px;">:</td>
+                      <td style="padding: 3px;"><?= $paid_total_emp ?></td>
+                  </tr>
+                  <tr>
+                      <th style="padding: 3px;">Unpaid Employee</th>
+                      <td style="padding: 3px;">:</td>
+                      <td style="padding: 3px;"><?= $un_paid_emp ?></td>
+                  </tr>
+              </table>
+              
 
             </div>
         </div>
     </div>
-    <div class="col-md-12">
+
+    <div>
         <div class="card">
 
             <div class="card-body">
