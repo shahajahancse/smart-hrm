@@ -240,7 +240,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
             <span style="color: #599AE7;"><?= ($empinfo->floor_status!=3)? '5rd floor':'3th floor'?></span> Make Sure
             when You Come back Check out
         </div>
-        <div class="heading2"><a class="btn" href="<?= base_url('admin/floor_movement/informsub') ?>"
+        <div class="heading2"><a class="btn" href="<?= base_url('admin/movement_floor/informsub') ?>"
                 style="width: 146px;height: 32px;border-radius: 2px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);color: white;font-weight: bold;">Check
                 Out</a></div>
     </div>
@@ -335,7 +335,7 @@ $('#movementform1').on('submit', function(event) {
 
     // Make an AJAX post request to the controller
     $.ajax({
-        url: '<?= base_url('admin/floor_movement/outformsub') ?>', // Replace 'controller/method' with your actual controller and method
+        url: '<?= base_url('admin/movement_floor/outformsub') ?>', // Replace 'controller/method' with your actual controller and method
         method: 'POST',
         data: formData,
         success: function(response) {

@@ -147,7 +147,7 @@
       var data = "attendance_date="+attendance_date+"&sql="+sql;
       
       // console.log(data); return;
-      url = base_url + "/floor_movement";
+      url = base_url + "/movement_floor";
       ajaxRequest.open("POST", url, true);
       ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
       ajaxRequest.send(data);

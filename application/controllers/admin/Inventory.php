@@ -29,48 +29,42 @@ class Inventory extends MY_Controller {
 
 	
 	//================= Requisition here =======================
+	// public function index($id = null){
+	// 	// dd($id);
+	// 	$session = $this->session->userdata('username');
+	// 	if(empty($session)){ 
+	// 		redirect('admin/');
+	// 	}
+	// 	$data['title'] = 'Store | '.$this->Xin_model->site_title();
+	// 	$data['breadcrumbs'] = 'Store';
+	// 	$data['session']     = $session;
+
+	// 	// if( $session['role_id'] = 3){
+	// 	// 	$data['products'] 	= $this->Inventory_model->requisition_list($session);
+	// 	// 	$data['equipments'] 	= $this->Inventory_model->equipment_list($session['user_id']);
+	// 	// 	$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
+	// 	// }else{
+	// 	// }
+	// 	if($session['role_id'] ==3){
+	// 		$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
+	// 	}
+	// 	$this->load->view('admin/layout/layout_main', $data); //page load 
+	// }
+
 	public function index($id = null){
-		// dd($id);
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['title'] = 'Store | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store';
-		$data['session']     = $session;
-
-		// if( $session['role_id'] = 3){
-		// 	$data['products'] 	= $this->Inventory_model->requisition_list($session);
-		// 	$data['equipments'] 	= $this->Inventory_model->equipment_list($session['user_id']);
-		// 	$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
-		// }else{
-		// }
-		
-		$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load 
-	}
-
-	public function index1(){
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
 		$data['title'] = 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store';
 		if($session['role_id']== 1 || $session['role_id']== 2 || $session['role_id']== 4 ){
 			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-	    //    dd($data['products']);
-		}
-		if( $session['role_id'] == 3) {
-			// $data['results'] 	= $this->Inventory_model->requisition_details($session['user_id'],$id=null);
-		    // dd($data['results']);
-			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-		    //   dd($data['products']);
 		}
 		$data['user_role_id'] 	= $session['role_id'];
-		// dd($data);
 		if(!empty($session)){ 
-			$data['subview'] = $this->load->view("admin/inventory/index1", $data, TRUE);
+			if($session['role_id'] ==3){
+				$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
+			}else{
+				$data['subview'] = $this->load->view("admin/inventory/index1", $data, TRUE);
+			}
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/');
@@ -253,7 +247,7 @@ class Inventory extends MY_Controller {
 	// dd($id);
 		$log_user=$_SESSION['username']['user_id'];
 		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
-		$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
+		$approved = $this->db->where('id',$id)->update('products_requisition_details',['status'=>2]);
 		if($approved){
 			$this->db->where('requisition_id',$id)->update('products_requisition_details',['status'=>2]);
 
@@ -265,10 +259,10 @@ class Inventory extends MY_Controller {
 	public function requsition_rejected($id){
 		// dd($id);
 		$log_user=$_SESSION['username']['user_id'];
-		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
-		$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>4]);
+		$this->db->where('id',$id)->update('products_requisition_details',['updated_by'=>$log_user]);
+		$approved = $this->db->where('id',$id)->update('products_requisition_details',['status'=>4]);
 		if($approved){
-			$this->db->where('requisition_id',$id)->update('products_requisition_details',['status'=>4]);
+			$this->db->where('id',$id)->update('products_requisition_details',['status'=>4]);
 
 			 $this->session->set_flashdata('warning', ' Requsition Status Rejected .');
 		     redirect("admin/inventory/index","refresh");
@@ -281,7 +275,7 @@ class Inventory extends MY_Controller {
 		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
 		$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
 		if($approved){
-			$this->db->where('requisition_id',$id)->update('products_requisition_details',['status'=>2]);
+			$this->db->where('id',$id)->update('products_requisition_details',['status'=>2]);
 
 			 $this->session->set_flashdata('success', ' Requsition Status Approved .');
 		     redirect("admin/inventory/index","refresh");
@@ -303,17 +297,13 @@ class Inventory extends MY_Controller {
 		
 		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Requsition ';
-		// $data['path_url']    = 'inventory';
-
 	    $data['results'] 	 = $this->Inventory_model->requisition_details($user_id=null,$id);
-        //  dd($data['results'] );
-
-		if(!empty($data['results'])){
-			$data['requisition_id'] 	 = $data['results'][0]->requisition_id;
-		}else{
-			$data['requisition_id'] 	 = '';
-		}
 		// dd($data);
+		if(!empty($data['results'])){
+			$data['requisition_id'] = $data['results'][0]->id;
+		}else{
+			$data['requisition_id'] = '';
+		}
 		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data);
 	}
@@ -322,7 +312,7 @@ class Inventory extends MY_Controller {
 	public function persial_approved($id){
 		
 		$session = $this->session->userdata('username');
-		$all_detail=$this->db->where('requisition_id',$id)->get('products_requisition_details')->result();
+		$all_detail=$this->db->where('id',$id)->get('products_requisition_details')->result();
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
 		}
@@ -332,7 +322,7 @@ class Inventory extends MY_Controller {
 		foreach($d1 as $k=>$v){
 			if(isset($_POST['first_step'])){
 				$log_user=$_SESSION['username']['user_id'];
-				$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user,'status'=>5]);
+				$this->db->where('id',$id)->update('products_requisition_details',['updated_by'=>$log_user,'status'=>5]);
 				foreach($quantity as $key=>$value){
 					$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value,'status'=>5]); 
 				}
@@ -354,7 +344,7 @@ class Inventory extends MY_Controller {
 					if($d1[$k]->quantity >= $quantity[$k]) {
 						foreach($quantity as $key=>$value){
 							$log_user=$_SESSION['username']['user_id'];
-							$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
+							$this->db->where('id',$id)->update('products_requisition_details',['updated_by'=>$log_user]);
 							$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]);
 						}
 					} else{
@@ -377,9 +367,9 @@ class Inventory extends MY_Controller {
 
 		}
 			if($session['role_id'] == 1){
-			$approved = $this->db->where('id',$id)->update('products_requisitions',['status'=>2]);
+			$approved = $this->db->where('id',$id)->update('products_requisition_details',['status'=>2]);
 				if($approved){
-					$this->db->where('requisition_id',$id)->update('products_requisition_details',['status'=>2]);
+					$this->db->where('id',$id)->update('products_requisition_details',['status'=>2]);
 
 							$this->session->set_flashdata('success', 'Updated Successfully.');
 							redirect("admin/inventory/index","refresh");
@@ -390,7 +380,7 @@ class Inventory extends MY_Controller {
 
 	public function hand_over($id=null){
 		
-		$pr1=$this->db->where('requisition_id',$id)->get('products_requisition_details')->result();
+		$pr1=$this->db->where('id',$id)->get('products_requisition_details')->result();
 					
 			$mergedArray = [];
 			foreach ($pr1 as $item) {
@@ -420,17 +410,16 @@ class Inventory extends MY_Controller {
 			}
 
 			foreach ($result as $row) {
-				
 				$data = array(
 					'id' => $row->product_id,
-				'quantity' => $row->total_quantity,
+					'quantity' => $row->total_quantity,
 				); 
 				$this->db->where('id',$row->product_id)->update('products', $data);
 			}		
 
-			$deliver=$this->db->where('id',$id)->update('products_requisitions',['status'=>3]);
+			$deliver=$this->db->where('id',$id)->update('products_requisition_details',['status'=>3]);
 			if($deliver){
-				$this->db->where('requisition_id',$id)->update('products_requisition_details',['status'=>3]);
+				$this->db->where('id',$id)->update('products_requisition_details',['status'=>3]);
 
 				$this->session->set_flashdata('success', 'Handover Successfully.');
 				redirect("admin/inventory/index","refresh");

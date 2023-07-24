@@ -45,7 +45,7 @@ $timeDifferenceFormatted=$timeDiff->format('%d day, %H:%i:%s');
     margin: 5% 28%;
     overflow: auto;
     width: 52%;
-    height: 407px;
+    height: auto;
     position: relative;
 }
 
@@ -350,7 +350,7 @@ $('#movementform1').on('submit', function(event) {
 
     // Make an AJAX post request to the controller
     $.ajax({
-        url: '<?= base_url('admin/floor_movement/outformsub') ?>', // Replace 'controller/method' with your actual controller and method
+        url: '<?= base_url('admin/movement_floor/outformsub') ?>', // Replace 'controller/method' with your actual controller and method
         method: 'POST',
         data: formData,
         success: function(response) {

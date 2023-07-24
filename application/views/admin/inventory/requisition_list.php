@@ -1,5 +1,20 @@
+<style>
+  .using {
+    display: inline-flex;
+    padding: 4.5px 14.3px 5.5px 9px;
+    align-items: center;
+    gap: 9px;
+    border-radius: 50px;
+    border: 1px solid #CCC;
+    background: #FFF;
+   
+}
+</style>
 
-<div class="card" style="margin-left:15px;margin-top:15px;margin-right: 15px;border-radius: 0px;">
+
+
+<?php $get_animate = $this->Xin_model->get_content_animate();?>
+<div class="card <?= $get_animate?>" style="margin-left:15px;margin-top:15px;margin-right: 15px;border-radius: 0px;">
   <div class="card-body">
     <table class="datatables-demo table table-striped table-bordered" id="table_id" style="width: 100%;background: white;margin-left: 0px;">
       <thead>
@@ -15,20 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($products as $key => $row) { 
-          $status = '';
-          if ($row->status == 1) {
-            $status = 'Pending';
-          } else if ($row->status == 2) {
-            $status = 'Approved';
-          } else if ($row->status == 3) {
-            $status = 'Hand Over';
-          } else if ($row->status == 4) {
-            $status = 'Rejected';
-          } else if ($row->status == 5) {
-            $status = 'First Approved';
-          }
-        ?>
+        <?php foreach ($products as $key => $row) { ?>
           <tr>
             <td class="text-center"><?= $key + 1 ?></td>
             <td class="text-center"><?= $row->product_name ?></td>
@@ -36,7 +38,12 @@
             <td class="text-center"><?= $row->category_name ?></td>
             <td class="text-center"><?= $row->quantity ?></td>
             <td class="text-center"><?= $row->approved_qty ?></td>
-            <td class="text-center"><?= $status ?></td>
+            <td class="text-center">
+              <span class="using">
+                <i class="fa fa-dot-circle-o"></i> 
+                <?= $row->status==1 ?'':($row->status==1)?>
+              </span>
+            </td>
             <td class="text-center">
               <?php if($row->status == 1){?> 
                 <div class="dropdown" >

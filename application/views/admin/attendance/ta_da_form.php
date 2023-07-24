@@ -67,7 +67,7 @@
 $g_place_array=json_decode($movedata->g_place);
 $g_transportation_array=json_decode($movedata->g_transportation);
 $g_costing_array=json_decode($movedata->g_costing);
-
+$get_animate = $this->Xin_model->get_content_animate();
 $c_place_array=json_decode($movedata->c_place);
 $c_transportation_array=json_decode($movedata->c_transportation);
 $c_costing_array=json_decode($movedata->c_costing);
@@ -77,127 +77,130 @@ $c_costing_array=json_decode($movedata->c_costing);
 
 ?>
 
+<div class="box <?php echo $get_animate;?>" style="display: flex;">
+    <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
+    <?php echo form_open_multipart(base_url('admin/attendance/add_ta_da'), $attributes);?>
 
+        <input type="hidden" name="move_id" value="<?= $move_id ?>">
+        <div class="col-md-12" style="padding: 26px;display: flex;gap: 25px;">
+            <div class="col-md-6 boxx">
+                <span class="heading">Going Way</span>
+                <div class="col-md-12" style="padding: 12px;">
+                    <?php if(count($g_place_array)>0){
+                    foreach ($g_place_array as $key => $value) {
+                    ?>
 
-<form action="<?= base_url('admin/attendance/add_ta_da') ?>" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="move_id" value="<?= $move_id ?>">
-    <div class="col-md-12" style="padding: 26px;display: flex;gap: 25px;">
-        <div class="col-md-6 boxx">
-            <span class="heading">Going Way</span>
-            <div class="col-md-12" style="padding: 12px;">
-                <?php if(count($g_place_array)>0){
-                foreach ($g_place_array as $key => $value) {
-                ?>
-
-                <div class=" remove pway">
-                    <input class=" col-md-3 input" placeholder="Place" name="gonig_way_place[]" value="<?= $value?>"
-                        type="text" required>
-                    <select class="col-md-4 input" name="gonig_way_transport[]" required>
-                        <option value="">Select transportation method</option>
-                        <option <?= ($g_transportation_array[$key]=='CNG')? 'selected': '' ?> value="CNG">CNG</option>
-                        <option <?= ($g_transportation_array[$key]=='rickshaw')? 'selected': '' ?> value="rickshaw">
-                            Rickshaw</option>
-                        <option <?= ($g_transportation_array[$key]=='car')? 'selected': '' ?> value="car">Car</option>
-                        <option <?= ($g_transportation_array[$key]=='bus')? 'selected': '' ?> value="bus">Bus</option>
-                        <option <?= ($g_transportation_array[$key]=='train')? 'selected': '' ?> value="train">Train
-                        </option>
-                        <option <?= ($g_transportation_array[$key]=='plane')? 'selected': '' ?> value="plane">Plane
-                        </option>
-                        <option <?= ($g_transportation_array[$key]=='Others')? 'selected': '' ?> value="Others">Others
-                        </option>
-                    </select>
-                    <input class=" col-md-3 input" placeholder="Cost" name="gonig_way_costing[]"
-                        value="<?= $g_costing_array[$key]?>" type="number" required>
-                        <a href="#" class="remove-field sideb col-md-1 btn-remove-gonig_way"> - </a>                </div>
-                <?php   };
-            } ?>
-                <div class="going_way pway">
-                    <input class=" col-md-3 input" placeholder="Place" name="gonig_way_place[]" type="text" <?= (count($g_place_array)>0)? '': 'required' ?> >
-                    <select class="col-md-4 input" name="gonig_way_transport[]" <?= (count($g_place_array)>0)? '': 'required' ?> >
-                        <option value="">Select transportation method</option>
-                        <option value="CNG">CNG</option>
-                        <option value="rickshaw">Rickshaw</option>
-                        <option value="car">Car</option>
-                        <option value="bus">Bus</option>
-                        <option value="train">Train</option>
-                        <option value="plane">Plane</option>
-                        <option value="Others">Others</option>
-                    </select>
-                    <input class=" col-md-3 input" placeholder="Cost" name="gonig_way_costing[]" type="number" <?= (count($g_place_array)>0)? '': 'required' ?> >
-                    <a class="extra-fields-gonig_way col-md-1 sideb" href="#">+</a>
+                    <div class=" remove pway">
+                        <input class=" col-md-3 input" placeholder="Place" name="gonig_way_place[]" value="<?= $value?>"
+                            type="text" required>
+                        <select class="col-md-4 input" name="gonig_way_transport[]" required>
+                            <option value="">Select transportation method</option>
+                            <option <?= ($g_transportation_array[$key]=='CNG')? 'selected': '' ?> value="CNG">CNG</option>
+                            <option <?= ($g_transportation_array[$key]=='rickshaw')? 'selected': '' ?> value="rickshaw">
+                                Rickshaw</option>
+                            <option <?= ($g_transportation_array[$key]=='car')? 'selected': '' ?> value="car">Car</option>
+                            <option <?= ($g_transportation_array[$key]=='bus')? 'selected': '' ?> value="bus">Bus</option>
+                            <option <?= ($g_transportation_array[$key]=='train')? 'selected': '' ?> value="train">Train
+                            </option>
+                            <option <?= ($g_transportation_array[$key]=='plane')? 'selected': '' ?> value="plane">Plane
+                            </option>
+                            <option <?= ($g_transportation_array[$key]=='Others')? 'selected': '' ?> value="Others">Others
+                            </option>
+                        </select>
+                        <input class=" col-md-3 input" placeholder="Cost" name="gonig_way_costing[]"
+                            value="<?= $g_costing_array[$key]?>" type="number" required>
+                            <a href="#" class="remove-field sideb col-md-1 btn-remove-gonig_way"> - </a>                </div>
+                    <?php   };
+                } ?>
+                    <div class="going_way pway">
+                        <input class=" col-md-3 input" placeholder="Place" name="gonig_way_place[]" type="text" <?= (count($g_place_array)>0)? '': 'required' ?> >
+                        <select class="col-md-4 input" name="gonig_way_transport[]" <?= (count($g_place_array)>0)? '': 'required' ?> >
+                            <option value="">Select transportation method</option>
+                            <option value="CNG">CNG</option>
+                            <option value="rickshaw">Rickshaw</option>
+                            <option value="car">Car</option>
+                            <option value="bus">Bus</option>
+                            <option value="train">Train</option>
+                            <option value="plane">Plane</option>
+                            <option value="Others">Others</option>
+                        </select>
+                        <input class=" col-md-3 input" placeholder="Cost" name="gonig_way_costing[]" type="number" <?= (count($g_place_array)>0)? '': 'required' ?> >
+                        <a class="extra-fields-gonig_way col-md-1 sideb" href="#">+</a>
+                    </div>
+                    <div class="going_way_dynamic pway"></div>
                 </div>
-                <div class="going_way_dynamic pway"></div>
+            </div>
+            <div class="col-md-6 boxx">
+                <span class="heading">Coming Way</span>
+                <div class="col-md-12" style="padding: 12px;">
+                <?php if(count($c_place_array)>0){
+                    foreach ($c_place_array as $k => $v) {
+                    ?>
+                    <div class="remove pway">
+                        <input class=" col-md-3 input" placeholder="Place" name="coming_way_place[]" value="<?= $v?>" type="text" required>
+                        <select class="col-md-4 input" name="coming_way_transport[]" required>
+                            <option value="">Select transportation method</option>
+                            <option <?= ($c_transportation_array[$k]=='CNG')? 'selected': '' ?> value="CNG">CNG</option>
+                            <option <?= ($c_transportation_array[$k]=='rickshaw')? 'selected': '' ?> value="rickshaw">
+                                Rickshaw</option>
+                            <option <?= ($c_transportation_array[$k]=='car')? 'selected': '' ?> value="car">Car</option>
+                            <option <?= ($c_transportation_array[$k]=='bus')? 'selected': '' ?> value="bus">Bus</option>
+                            <option <?= ($c_transportation_array[$k]=='train')? 'selected': '' ?> value="train">Train
+                            </option>
+                            <option <?= ($c_transportation_array[$k]=='plane')? 'selected': '' ?> value="plane">Plane
+                            </option>
+                            <option <?= ($c_transportation_array[$k]=='Others')? 'selected': '' ?> value="Others">Others
+                            </option>
+                        </select>
+                        <input class=" col-md-3 input"  value="<?= $c_costing_array[$k]?>" placeholder="Cost" name="coming_way_costing[]" type="number"
+                            required>
+                        <a href="#" class="remove-field sideb col-md-1 btn-remove-gonig_way"> - </a>
+                    </div>
+                    <?php   };
+                } ?>
+                    <div class="coming_way pway">
+                        <input class=" col-md-3 input" placeholder="Place" name="coming_way_place[]" type="text" <?= (count($c_place_array)>0)? '': 'required' ?> >
+                        <select class="col-md-4 input" name="coming_way_transport[]" <?= (count($c_place_array)>0)? '': 'required' ?> >
+                            <option value="">Select transportation method</option>
+                            <option value="CNG">CNG</option>
+                            <option value="rickshaw">Rickshaw</option>
+                            <option value="car">Car</option>
+                            <option value="bus">Bus</option>
+                            <option value="train">Train</option>
+                            <option value="plane">Plane</option>
+                            <option value="Others">Others</option>
+
+                        </select>
+                        <input class=" col-md-3 input" placeholder="Cost" name="coming_way_costing[]" type="number"
+                        <?= (count($c_place_array)>0)? '': 'required' ?> >
+                        <a class="extra-fields-coming_way col-md-1 sideb" href="#">+</a>
+                    </div>
+                    <div class="coming_way_dynamic pway"></div>
+                </div>
             </div>
         </div>
-        <div class="col-md-6 boxx">
-            <span class="heading">Coming Way</span>
-            <div class="col-md-12" style="padding: 12px;">
-            <?php if(count($c_place_array)>0){
-                foreach ($c_place_array as $k => $v) {
-                ?>
-                <div class="remove pway">
-                    <input class=" col-md-3 input" placeholder="Place" name="coming_way_place[]" value="<?= $v?>" type="text" required>
-                    <select class="col-md-4 input" name="coming_way_transport[]" required>
-                        <option value="">Select transportation method</option>
-                        <option <?= ($c_transportation_array[$k]=='CNG')? 'selected': '' ?> value="CNG">CNG</option>
-                        <option <?= ($c_transportation_array[$k]=='rickshaw')? 'selected': '' ?> value="rickshaw">
-                            Rickshaw</option>
-                        <option <?= ($c_transportation_array[$k]=='car')? 'selected': '' ?> value="car">Car</option>
-                        <option <?= ($c_transportation_array[$k]=='bus')? 'selected': '' ?> value="bus">Bus</option>
-                        <option <?= ($c_transportation_array[$k]=='train')? 'selected': '' ?> value="train">Train
-                        </option>
-                        <option <?= ($c_transportation_array[$k]=='plane')? 'selected': '' ?> value="plane">Plane
-                        </option>
-                        <option <?= ($c_transportation_array[$k]=='Others')? 'selected': '' ?> value="Others">Others
-                        </option>
-                    </select>
-                    <input class=" col-md-3 input"  value="<?= $c_costing_array[$k]?>" placeholder="Cost" name="coming_way_costing[]" type="number"
-                        required>
-                    <a href="#" class="remove-field sideb col-md-1 btn-remove-gonig_way"> - </a>
+        <div class="col-md-12" style="padding: 4px 22px;display: flex;gap: 25px;">
+            <div class="col-md-12 boxx">
+                <span class="heading">Additional Cost </span>
+                <div class="col-md-12" style="display: flex;padding: 19px;">
+                    <input class="input" style="width: 48%;"  value="<?= $movedata->additional_cost?>" placeholder="Additional Cost " name="additional_cost" type="number">
+                    <label for="" style="padding: 10px;"> Add File :</label>
+                    <input class="" style="width: 38%;display: inline-block;padding: 11px;" placeholder="Invoice"
+                        name="additional_invoice" accept=".gif, .jpg, .png, .pdf" type="file">
                 </div>
-                <?php   };
-            } ?>
-                <div class="coming_way pway">
-                    <input class=" col-md-3 input" placeholder="Place" name="coming_way_place[]" type="text" <?= (count($c_place_array)>0)? '': 'required' ?> >
-                    <select class="col-md-4 input" name="coming_way_transport[]" <?= (count($c_place_array)>0)? '': 'required' ?> >
-                        <option value="">Select transportation method</option>
-                        <option value="CNG">CNG</option>
-                        <option value="rickshaw">Rickshaw</option>
-                        <option value="car">Car</option>
-                        <option value="bus">Bus</option>
-                        <option value="train">Train</option>
-                        <option value="plane">Plane</option>
-                        <option value="Others">Others</option>
+            </div>
+        </div>
+        <span style="padding: 0px 29px;font-size: 17px;font-weight: bold;">Remark : </span><br>
+        <div class="col-md-12" style="padding: 4px 22px;display: flex;gap: 25px;">
+            <textarea name="remark" id="" style="width: 100%;height: 116px;border-radius: 5px;" value="<?= $movedata->remark?>"></textarea>
+        </div>
+        <div class="col-md-12" style="padding: 2px 26px; display: flex; justify-content: flex-end; gap: 25px;">
+            <input type="submit" value="Submit" class="btn"
+                style="width: 151px;margin: 5px;background: #27eaff;color: black;font-weight: bold;">
+        </div>
+    </form>
+</div>
 
-                    </select>
-                    <input class=" col-md-3 input" placeholder="Cost" name="coming_way_costing[]" type="number"
-                    <?= (count($c_place_array)>0)? '': 'required' ?> >
-                    <a class="extra-fields-coming_way col-md-1 sideb" href="#">+</a>
-                </div>
-                <div class="coming_way_dynamic pway"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12" style="padding: 4px 22px;display: flex;gap: 25px;">
-        <div class="col-md-12 boxx">
-            <span class="heading">Additional Cost </span>
-            <div class="col-md-12" style="display: flex;padding: 19px;">
-                <input class="input" style="width: 48%;"  value="<?= $movedata->additional_cost?>" placeholder="Additional Cost " name="additional_cost" type="number">
-                <label for="" style="padding: 10px;"> Add File :</label>
-                <input class="" style="width: 38%;display: inline-block;padding: 11px;" placeholder="Invoice"
-                    name="additional_invoice" accept=".gif, .jpg, .png, .pdf" type="file">
-            </div>
-        </div>
-    </div>
-    <span style="padding: 0px 29px;font-size: 17px;font-weight: bold;">Remark : </span><br>
-    <div class="col-md-12" style="padding: 4px 22px;display: flex;gap: 25px;">
-        <textarea name="remark" id="" style="width: 100%;height: 116px;border-radius: 5px;" value="<?= $movedata->remark?>"></textarea>
-    </div>
-    <div class="col-md-12" style="padding: 2px 26px; display: flex; justify-content: flex-end; gap: 25px;">
-        <input type="submit" value="Submit" class="btn"
-            style="width: 151px;margin: 5px;background: #27eaff;color: black;font-weight: bold;">
-    </div>
-</form>
 <script>
 $('.extra-fields-gonig_way').click(function() {
     $('.going_way').clone().appendTo('.going_way_dynamic');

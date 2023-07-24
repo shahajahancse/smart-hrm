@@ -191,7 +191,7 @@ if($theme[0]->sub_menu_icons != ''){
           <?php } ?> 
 
           <?php if(in_array('123',$role_resources_ids)) { ?>
-            <li class="sidenav-link <?php if(!empty($arr_mod['emp_move_active']))echo $arr_mod['emp_move_active'];?>"> <a href="<?php echo site_url("admin/attendance/employee_movement/1");?>"><i class="fa <?php echo $submenuicon;?>"></i>Movement</a></li>
+            <li class="sidenav-link <?php if(!empty($arr_mod['emp_move_active']))echo $arr_mod['emp_move_active'];?>"> <a href="<?php echo site_url("admin/attendance/employee_movement");?>"><i class="fa <?php echo $submenuicon;?>"></i>Movement</a></li>
           <?php } ?> 
 
           <?php if(in_array('124',$role_resources_ids)) { ?>
@@ -269,7 +269,7 @@ if($theme[0]->sub_menu_icons != ''){
           <?php } ?>
 
           <?php if(in_array('1059',$role_resources_ids)) { ?>
-          <li class="sidenav-link <?php if(!empty($arr_mod['lemp_list_active']))echo $arr_mod['lemp_list_active'];?>"> <a href="<?php echo site_url('admin/lunch/employee_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Employee List </a> </li>
+          <li class="sidenav-link <?php if(!empty($arr_mod['lemp_list_active']))echo $arr_mod['lemp_list_active'];?>"> <a href="<?php echo site_url('admin/lunch/employee_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Collection Sheet </a> </li>
           <?php } ?> 
 
           <?php if(in_array('1053',$role_resources_ids)) { ?>

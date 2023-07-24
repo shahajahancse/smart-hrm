@@ -808,20 +808,23 @@ class Attendance extends MY_Controller {
 		$data['location_status'] = $location_status;
 		$firstdate = $this->input->get('firstdate');
 		$seconddate = $this->input->get('seconddate');
-		$this->db->select("*");
+		$this->db->select("em.*, mr.title as reason");
+		$this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
 		$this->db->where("employee_id", $userid);
 		$this->db->where("location_status", 1);
+
 		if ($firstdate!=null && $seconddate!=null){
 			$f1_date=date('Y-m-d',strtotime($firstdate));
 			$f2_date=date('Y-m-d',strtotime($seconddate));
 			$this->db->where("date BETWEEN '$f1_date' AND '$f2_date'");
 			$this->db->order_by("id", "desc");
-			$data['alldata']   = $this->db->get('xin_employee_move_register')->result();
+			$data['alldata']   = $this->db->get('xin_employee_move_register as em')->result();
 			$data['tablebody'] = $this->load->view("admin/attendance/employee_movement_outside_office_table", $data, TRUE);
 			echo $data['tablebody'] ;
+			exit;
 		}else{
 			$this->db->order_by("id", "desc");
-			$data['alldata'] = $this->db->get('xin_employee_move_register')->result();
+			$data['alldata'] = $this->db->get('xin_employee_move_register as em')->result();
 
 			$data['session']     = $session;
 			$data['title'] 		 = 'Outside Office Movements';
