@@ -3,17 +3,25 @@
 
 <body style="width:800px;">
     <?php
+    	$filename = "Lunch_Report.xls";
+    	header('Content-Type: application/vnd.ms-excel'); // Mime type
+    	header('Content-Disposition: attachment;filename="'.$filename.'"'); // Tell the browser the file name
+    	header('Cache-Control: max-age=0'); // No cache
+    ?>
 
-	$filename = "Lunch_Report.xls";
-	header('Content-Type: application/vnd.ms-excel'); // Mime type
-	header('Content-Disposition: attachment;filename="'.$filename.'"'); // Tell the browser the file name
-	header('Cache-Control: max-age=0'); // No cache
-?>
-    <?php $date = new DateTime($lunch_data[0]->end_date);
-$date->add(new DateInterval('P1M'));
-$newDate = $date->format('Y-m-d');
 
-?>
+
+    <?php 
+        if (empty($lunch_data)) {
+            echo "<p style='text-align: center; color: red'>Record not found</p>";
+            exit;
+        }
+
+        $date = new DateTime($lunch_data[0]->end_date);
+        $date->add(new DateInterval('P1M'));
+        $newDate = $date->format('Y-m-d');
+
+    ?>
 
     <body>
 
@@ -86,7 +94,6 @@ $newDate = $date->format('Y-m-d');
             </tfoot>
             <?php } ?>
         </table>
-        </div>
 
     </body>
 

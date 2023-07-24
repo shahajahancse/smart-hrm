@@ -1,8 +1,4 @@
-<?php $date = new DateTime($lunch_data[0]->end_date);
-$date->add(new DateInterval('P1M'));
-$newDate = $date->format('Y-m-d');
 
-?>
 <!DOCTYPE html>
 <html>
 
@@ -84,17 +80,24 @@ $newDate = $date->format('Y-m-d');
 
 <body>
 
+    <?php 
+        if (empty($lunch_data)) {
+            echo "<p style='text-align: center; color: red'>Record not found</p>";
+            exit;
+        }
+
+        $date = new DateTime($lunch_data[0]->end_date);
+        $date->add(new DateInterval('P1M'));
+        $newDate = $date->format('Y-m-d');
+    ?>
+
     <div class="container">
-        <a onclick="window.print()" class="btn btn-primary" style="float: right;margin-top: 26px;">Pritn</a>
-
-
+        <a onclick="window.print()" class="btn btn-primary" style="float: right;margin-top: 26px;">Print</a>
         <div class="export-button">
-            <form style="float: right;margin-top: 27px;margin-right: 5px;"
-                action="<?php echo base_url();?>admin/Lunch/paymentreport" method="post">
+            <form style="float: right;margin-top: 27px;margin-right: 5px;" action="<?php echo base_url();?>admin/Lunch/paymentreport" method="post">
                 <input type="hidden" name="status" value="<?php echo $status; ?>"></input>
                 <input type="hidden" name="excel" value="1"></input>
-                <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS
-                    Export</button>
+                <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS Export</button>
             </form>
         </div>
 
@@ -110,6 +113,7 @@ $newDate = $date->format('Y-m-d');
             <?= isset($lunch_data[0]->end_date) ? $convertedDate1 : ''; ?> to
             <?= isset($newDate) ? $convertedDate2: ''; ?> </div>
     </div>
+    
     <div class="table-responsive" style="margin-top: 0px; padding:10px;">
         <table class="table table-bordered table-hover table-striped">
             <thead style="text-align: center;">
@@ -171,7 +175,6 @@ $newDate = $date->format('Y-m-d');
             </tfoot>
             <?php } ?>
         </table>
-    </div>
     </div>
 
 
