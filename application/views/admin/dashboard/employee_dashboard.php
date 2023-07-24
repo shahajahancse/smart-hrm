@@ -128,12 +128,13 @@ $balanceMeal= $paymeal-$taken_meal;
 
 
       $holidays= $this->db->select('*')->get('xin_holidays')->result();
-      $holidayss= $this->db->select('*')->limit(4)->where("start_date > '".date('Y-m-d')."'")->get('xin_holidays')->result();
+      $holidayss= $this->db->select('*')->limit(5)->where("start_date > '".date('Y-m-d')."'")->get('xin_holidays')->result();
       // dd($this->db->last_query());   
       $leave_calel=get_cal_leave($userid,1);
       $leave_calsl=get_cal_leave($userid,2);  
       $totaluseleave=$leave_calel+$leave_calsl;
       $all_notice = $this->db->select('*')->get('xin_events')->result();
+
     //   dd($all_notice);
 ?>
 
@@ -650,13 +651,13 @@ hr {
                                         mask="url(#path-1-inside-1_172_2542)" />
                                 </svg>
                             </div>
-                            <span class="text-center text-success"><b>Taking Lunch</b></span>
+                            <span class="text-center text-success"><b>Taken Lunch</b></span>
                             <span class="text-center"><b><?=  $taken_meal ?></b></span>
                         </div>
                     </div>
                     <div class="text-center">
                         <a href="<?= base_url('admin/lunch/lunch_emp_bill') ?>"
-                            style="margin-top:15px;color:#5442A8;">View All</a>
+                            style="margin-top:15px;color:#5442A8;">Details</a>
                     </div>
                     <h5 class="card-title" style="margin-top: 20px;margin-left: 13px;font-weight:600">Leave Balance</h5>
                     
@@ -694,7 +695,7 @@ hr {
             <div class="card" style=" padding-bottom: 18px;">
                 <span style="margin-left:20px;padding-top: 1.25rem;font-weight: 600;">Notice Board</span>
                 <hr>
-                <?php $notice = $this->db->limit(10,0)->get('xin_office_notice')->result(); ?>
+                <?php $notice = $this->db->limit(5)->order_by('id','DESC')->get('xin_office_notice')->result(); ?>
                 <?php foreach ($notice as $key => $row) { ?>
                     <div class="row">
                         <div class="col-md-4"
@@ -703,8 +704,8 @@ hr {
                             <span class="text_s"><?php echo date("M", strtotime($row->created_at))?></span>
                         </div>
                         <div class="col-md-8">
-                            <span style="font-weight: 500;cursor: pointer;"  data-toggle="modal" data-target="#myModals" onclick="myfunc(this)" data-title="<?php echo $row->title?>" data-description="<?php echo $row->description?>"><?= $row->title ?></span>
-                            <span style="color:#929292;font-size:13px"><?= substr($row->description, 0, 20) ?></span>
+                            <span style="font-weight: 500;cursor: pointer;"  data-toggle="modal" data-target="#myModals" onclick="myfunc(this)" data-title="<?php echo $row->title?>" data-description="<?php echo $row->description?>"><?php echo  substr($row->title,0,20)."..."?></span>
+                            <span style="color:#929292;font-size:13px"><?= substr($row->description, 0, 30) ?></span>
                         </div>
                     </div>
                     <hr>
@@ -741,13 +742,16 @@ hr {
                         <span class="text_s" style="padding-top: 4px;"><?php echo date("d",strtotime($holiday->start_date))?></span>
                         <span class="text_s"><?php echo date("M",strtotime($holiday->start_date))?></span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-8">
                         <span style="font-weight: 500;"><?php echo $holiday->event_name ?></span>
-                        <span style="color:#929292"><?php echo date("l",strtotime($holiday->start_date))?></span>
+                        <p>
+                            <span style="color:#929292"><?php echo date("l",strtotime($holiday->start_date))?></span>
+                            <span style="color:#8D8D8D; float:right" ><?php echo $daysLeft?> days left</span> 
+                        </p>
                     </div>
-                    <div class="col-md-d" style="float: right;margin-right: 36px;">
-                        <span style="color:#8D8D8D"><?php echo $daysLeft?> days left</span>
-                    </div>
+                    <!-- <div class="col-md-4" style="float: right;">
+                       
+                    </div> -->
                 </div>
                 <hr>
                 <?php }?>

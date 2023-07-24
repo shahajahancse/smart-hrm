@@ -71,8 +71,8 @@ $session = $this->session->userdata('username');
 
   <div class="col-md-12" style="display:flex;">
     <div class="col-md-5" style="padding-left: 0px;margin-left: 0px;">
-    <a href="#" class="btn" id="listButton">Using List</a>
-    <a href="#" class="btn" style="margin-left:10px;" id="infoButton">Request Information</a>
+    <a href="#" class="btn btn-success" id="listButton">Using List</a>
+    <a href="#" class="btn btn-info" style="margin-left:10px;" id="infoButton">Request Information</a>
     </div>
     <div class="col-md-5 <?php echo $get_animate;?>">
       <?php if($this->session->flashdata('success')):?>
