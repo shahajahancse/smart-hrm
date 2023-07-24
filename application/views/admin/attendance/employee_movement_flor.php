@@ -170,7 +170,8 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                     d="M18.0002 4H6.41453C6.15184 3.99995 5.89172 4.05167 5.64903 4.15221C5.40634 4.25275 5.18585 4.40013 5.00016 4.58594L0.292969 9.29281C-0.0976562 9.68344 -0.0976562 10.3166 0.292969 10.7069L5.00016 15.4141C5.37516 15.7891 5.88391 16 6.41422 16H18.0002C19.1048 16 20.0002 15.1047 20.0002 14V6C20.0002 4.89531 19.1048 4 18.0002 4ZM15.3536 11.9394C15.5489 12.1347 15.5489 12.4513 15.3536 12.6466L14.6467 13.3534C14.4514 13.5487 14.1348 13.5487 13.9395 13.3534L12.0002 11.4141L10.0608 13.3534C9.86547 13.5487 9.54891 13.5487 9.35359 13.3534L8.64672 12.6466C8.45141 12.4513 8.45141 12.1347 8.64672 11.9394L10.5861 10L8.64672 8.06063C8.45141 7.86531 8.45141 7.54875 8.64672 7.35344L9.35359 6.64656C9.54891 6.45125 9.86547 6.45125 10.0608 6.64656L12.0002 8.58594L13.9395 6.64656C14.1348 6.45125 14.4514 6.45125 14.6467 6.64656L15.3536 7.35344C15.5489 7.54875 15.5489 7.86531 15.3536 8.06063L13.4142 10L15.3536 11.9394Z"
                     fill="#858A8F" />
             </svg></span>
-        <form id="movementform1">
+            <?php $attributes = array('id' => 'movementform1');?>
+            <?php echo form_open('', $attributes);?>
             <div class="col-md-12">
                 <div class="col-md-6">
                     <div class="input">
@@ -184,7 +185,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                         </div>
                     </div>
                 </div>
-                <input type="hidden" name="area" value="<?= ($empinfo[0]->floor_status!=3)? '2':'1'?>">
+                <input type="hidden" name="area" value="<?= ($empinfo->floor_status!=3)? '2':'1'?>">
                 <div class="col-md-6">
                     <div class="input">
                         <div class="level">Select Meeting People**</div>
@@ -192,14 +193,8 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                             <select id="leave_type" name="meet_with" style="width: 98%;border: none;cursor: pointer;"
                                 required>
                                 <option>Select Meeting People**</option>
-
-                                <?php
-                                 if($empinfo[0]->floor_status!=3){
-                                    $data=$emp3rd;
-                                    }else{
-                                        $data=$emp5th ;}; foreach($data as $emp){?>
-                                <option value="<?= $emp->first_name ?> <?= $emp->last_name ?> "><?= $emp->first_name ?>
-                                    <?= $emp->last_name ?> </option>
+                                <?php foreach($emp_floor as $emp){?>
+                                <option value="<?= $emp->user_id ?>"><?= $emp->first_name .' '. $emp->last_name ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -216,7 +211,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
 
 
     </div>
-    </form>
+    <?php echo form_close(); ?>
 </div>
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
@@ -231,7 +226,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
     <?php if($inout==0){ ?>
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
         <div class="heading" style="font-size: 12px!important;">Are you want to go to the <span
-                style="color: #599AE7;"><?= ($empinfo[0]->floor_status!=3)? '3rd floor?':'5th floor?'?></span> Please
+                style="color: #599AE7;"><?= ($empinfo->floor_status!=3)? '3rd floor?':'5th floor?'?></span> Please
             Make Sure your Check In & entry Purpose </div>
         <div class="heading2"><a class="btn" id="openModal"
                 style="width: 146px;height: 32px;border-radius: 2px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);color: white;font-weight: bold;">Check
@@ -242,10 +237,10 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
         <div class="heading" style="font-size: 12px!important;color: red;">Your Check In time <span
                 style="color: #599AE7;"><?= (isset($timeDifferenceFormatted))? $timeDifferenceFormatted:''?> m</span> on
-            <span style="color: #599AE7;"><?= ($empinfo[0]->floor_status!=3)? '5rd floor':'3th floor'?></span> Make Sure
+            <span style="color: #599AE7;"><?= ($empinfo->floor_status!=3)? '5rd floor':'3th floor'?></span> Make Sure
             when You Come back Check out
         </div>
-        <div class="heading2"><a class="btn" href="<?= base_url('admin/floor_movement/informsub') ?>"
+        <div class="heading2"><a class="btn" href="<?= base_url('admin/movement_floor/informsub') ?>"
                 style="width: 146px;height: 32px;border-radius: 2px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);color: white;font-weight: bold;">Check
                 Out</a></div>
     </div>
@@ -253,13 +248,13 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
 </div>
 <div class="col-md-12 medelbar" style="gap: 4px;margin: 2px;align-items: end;">
     <div class="col-md-2 divform-group " style="padding: 0;">
-        <a href="<?= base_url('admin/attendance/employee_movement/0') ?>" class="cboton cactive">Floor wise Movement</a>
+        <a href="<?= base_url('admin/attendance/employee_movement') ?>" class="cboton cactive">Floor wise Movement</a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
         <a href="<?= base_url('admin/attendance/employee_movement/1') ?>" class="cboton">Outside office </a>
     </div>
     <div class="col-md-2 divform-group" style="padding: 0;">
-        <a href="" class="cboton">Outside Dhaka</a>
+        <a href="<?= base_url('admin/attendance/employee_movement/2') ?>" class="cboton">Outside Dhaka</a>
     </div>
     <div class="col-md-2 divform-group">
     </div>
@@ -277,6 +272,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
 <div id="datatable">
     <?php echo $tablebody;?>
 </div>
+
 <script>
 function getdata(status) {
 
@@ -308,7 +304,7 @@ function getdata(status) {
     }
     $.ajax({
         url: '<?php echo base_url('admin/attendance/employee_movement_flor'); ?>',
-        method: 'POST',
+        method: 'GET',
         data: {
             firstdate: firstdate,
             seconddate: seconddate
@@ -320,6 +316,7 @@ function getdata(status) {
     });
 }
 </script>
+
 <script>
 document.getElementById("openModal").addEventListener("click", function() {
     document.getElementById("customModal").style.display = "block";
@@ -338,7 +335,7 @@ $('#movementform1').on('submit', function(event) {
 
     // Make an AJAX post request to the controller
     $.ajax({
-        url: '<?= base_url('admin/floor_movement/outformsub') ?>', // Replace 'controller/method' with your actual controller and method
+        url: '<?= base_url('admin/movement_floor/outformsub') ?>', // Replace 'controller/method' with your actual controller and method
         method: 'POST',
         data: formData,
         success: function(response) {

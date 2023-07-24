@@ -94,7 +94,10 @@
 }
 
 th {
-    text-align: center;
+    text-align: left;
+}
+td {
+    text-align: left;
 }
 
 p {
@@ -131,14 +134,45 @@ p {
 .btn {
     padding: 3px !important;
 }
+
+.serchbox {
+    padding: 18px;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 13px;
+    gap: 62px;
+    border-radius: 6px;
+    box-shadow: 0px 0px 5px 4px #e5e5e5;
+}
+
+.inputb {
+    height: 34px;
+    padding: 8px;
+    width: 100%;
+    border-radius: 6px;
+    border: 0;
+    box-shadow: inset 4px 2px 20px 3px #dcdcdc;
+}
 </style>
 
 <!-- Modal -->
-
+<div class="addbox" style="margin-bottom: 11px;min-height: 138px;font-size: 15px;width: 28%;">
+    <?php $pass_data = $this->db->order_by('id', 'desc')->get('lunch_payment_vendor', 1)->row(); 
+    ?>
+    <table>
+        <tr><th>Last Calculate Date : </th> <td><?= $pass_data->to_date?> </td> </tr>
+        <tr><th>Previous Due: </th> <td><?= $pass_data->previous_due?> </td></tr>
+        <tr><th>Total Meal : </th> <td><?= $pass_data->total_meal?> </td></tr>
+        <tr><th>Total Amount : </th> <td> <?= $pass_data->net_payment?></td></tr>
+        <tr><th>Paid:  </th> <td><?= $pass_data->paid_amount?></td></tr>
+        <tr><th>Due: </th> <td> <?= $pass_data->due?></td></tr>
+    </table>
+</div>
 <div class="addbox">
     <p class="p" style="font-size: 25px; font-weight: bold; float: left;">Vendor Meal List</p>
     <a class="btn btn-primary accordion" onclick="togglePaymentBox()">Add Meal</a>
 </div>
+
 <div class="panels payment_box" id="paymentBox">
     <section class="section_box">
         <div class="col-md-12">
@@ -179,58 +213,29 @@ p {
 
 </div>
 <div class="list_box">
-    <table class="table" id="myTable" style="text-align: center;">
-        <thead>
-            <tr>
-                <th>SL</th>
-                <th>Date</th>
-                <th>Meal Qty</th>
-                <th>Amount</th>
-
-                <th>Remarks</th>
-                <th>Action</th>
-
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($payment_data as $key=>$row): ?>
-            <tr>
-                <td><?php echo $key+1 ?></td>
-                <td><?php echo $row->date; ?></td>
-                <td><?php echo $row->meal_qty; ?></td>
-                <td><?php echo $row->amount;?></td>
-
-                <?php if($row->remarks){ ?>
-                <td style="text-align: center;" title="<?php echo $row->remarks; ?>">
-                    <?php echo implode(' ', array_slice(explode(' ', $row->remarks ), 0, 4)); ?></td>
-                <?php }else{ ?>
-                <td style="text-align: center;">...</td>
-                <?php } ?>
-                <td>
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="actionButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Action
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right list-group" aria-labelledby="actionButton">
-                            <a class="dropdown-item list-group-item" onclick="edit_vendor_data(<?php echo $row->id;?>)"
-                                class="btn btn-primary">Edit</a>
-                            <a class="dropdown-item list-group-item" href="<?php echo base_url($row->file);?>"
-                                class="btn btn-primary">View File </a>
-                            <a class="dropdown-item list-group-item" href="<?php echo base_url($row->file);?>"
-                                class="btn btn-primary" download>Download</a>
-                        </div>
-                    </div>
-
-
-
-
-                </td>
-
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <div class="col-md-12 serchbox">
+        <div>
+            <label for="">First Date</label>
+            <input class="inputb" onchange="calmeal()" type="date" name="" id="from_date"
+                max="<?php echo date('Y-m-d'); ?>" value="<?= $pass_data->to_date?>">
+        </div>
+        <div>
+            <label for=""> Last Date</label>
+            <input class="inputb" type="date" onchange="calmeal()" name="" id="to_date"
+                max="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
+        </div>
+        <div>
+            <label for="">Total Meal</label>
+            <input class="inputb" type="text" name="" id="total_meals" disabled>
+        </div>
+        <div>
+            <label for="">Total Amount</label>
+            <input class="inputb" type="text" name="" id="total_amounts" disabled>
+        </div>
+    </div>
+    <div id="tablebody">
+        <?php echo $lunchtable  ?>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 <script>
@@ -252,16 +257,8 @@ function togglePaymentBox() {
     });
 }
 </script>
-<script>
-$(document).ready(function() {
-    $('#myTable').DataTable({
-        "order": [
-            [2, "desc"]
-        ]
-    });
 
-});
-</script>
+
 <script>
 function changemeal() {
     var inputData = $("#total_meal").val();
@@ -388,4 +385,41 @@ function edit_vendor_data(id) {
         }
     });
 }
+</script>
+<script>
+function calmeal() {
+    document.getElementById('tablebody').innerHTML = '';
+    // alert('hello');
+    // return false;
+
+    var first_date = $('#from_date').val();
+    var second_date = $('#to_date').val();
+    // Prepare the data object
+    var data = {
+        first_date: first_date,
+        second_date: second_date
+    };
+    url = '<?= base_url('/admin/lunch/get_payment_data_list/')?>'
+    // Send AJAX request
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+            console.log(response);
+            document.getElementById('tablebody').innerHTML = response.table;
+            document.getElementById('total_meals').value = response.total_m;
+            document.getElementById('total_amounts').value = parseInt(response.total_m) * 90;
+        },
+        error: function(xhr, status, error) {
+            // Handle errors
+            console.log(xhr.responseText);
+        }
+    });
+}
+</script>
+<script>
+    $(document).ready(function() {
+        calmeal();
+    });
 </script>

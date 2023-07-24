@@ -720,8 +720,8 @@ class Attendance extends MY_Controller {
 		}
 		$session = $this->session->userdata( 'username' );
 		$userid  = $session[ 'user_id' ];
-		$firstdate = $this->input->post('firstdate');
-		$seconddate = $this->input->post('seconddate');
+		$firstdate = $this->input->get('firstdate');
+		$seconddate = $this->input->get('seconddate');
 
 		$this->db->select("*");
 		$this->db->where("employee_id", $userid);
@@ -752,12 +752,9 @@ class Attendance extends MY_Controller {
 	public function employee_movement($type = null){
 		if ($type == null) {
 			$data = $this->employee_movement_flor();
-		}
-		
-		if ($type == 1) {
+		} else if ($type == 1) {
 			$data = $this->employee_movement_outside_office();
-		}
-		if ($type == 2) {
+		} else {
 			$data = $this->employee_movement_outside_dhaka();
 		}
 
@@ -770,19 +767,15 @@ class Attendance extends MY_Controller {
 		$userid  = $session[ 'user_id' ];
 		$firstdate = $this->input->post('firstdate');
 		$seconddate = $this->input->post('seconddate');
-							$this->db->select('floor_status');
-							$this->db->where('company_id',1);
-							$this->db->where('user_id',$userid );
-        $data['empinfo']=$this->db->get('xin_employees')->result();
-							$this->db->select('first_name,last_name');
-							$this->db->where('company_id',1);
-							$this->db->where('floor_status',3);
-        $data['emp3rd']=$this->db->get('xin_employees')->result();
-		                    $this->db->select('first_name,last_name');
-							$this->db->where('company_id',1);
-							$this->db->where('floor_status',5);
-        $data['emp5th']=$this->db->get('xin_employees')->result();
-		
+
+		$this->db->select('floor_status');
+		$this->db->where('user_id',$userid );
+        $data['empinfo']=$this->db->get('xin_employees')->row();
+
+		$this->db->select('user_id, first_name,last_name');
+		$this->db->where('floor_status !=', $data['empinfo']->floor_status);
+		$this->db->where_in('user_role_id', array(2,3,4,5))->where_in('status', array(1,4,5,6));
+        $data['emp_floor']=$this->db->get('xin_employees')->result();
 
 		$this->db->select("*");
 		$this->db->where("user_id", $userid);
@@ -813,22 +806,25 @@ class Attendance extends MY_Controller {
 		$userid  = $session[ 'user_id' ];
 		$location_status=1;
 		$data['location_status'] = $location_status;
-		$firstdate = $this->input->post('firstdate');
-		$seconddate = $this->input->post('seconddate');
-		$this->db->select("*");
+		$firstdate = $this->input->get('firstdate');
+		$seconddate = $this->input->get('seconddate');
+		$this->db->select("em.*, mr.title as reason");
+		$this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
 		$this->db->where("employee_id", $userid);
 		$this->db->where("location_status", 1);
+
 		if ($firstdate!=null && $seconddate!=null){
 			$f1_date=date('Y-m-d',strtotime($firstdate));
 			$f2_date=date('Y-m-d',strtotime($seconddate));
 			$this->db->where("date BETWEEN '$f1_date' AND '$f2_date'");
 			$this->db->order_by("id", "desc");
-			$data['alldata']   = $this->db->get('xin_employee_move_register')->result();
+			$data['alldata']   = $this->db->get('xin_employee_move_register as em')->result();
 			$data['tablebody'] = $this->load->view("admin/attendance/employee_movement_outside_office_table", $data, TRUE);
 			echo $data['tablebody'] ;
+			exit;
 		}else{
 			$this->db->order_by("id", "desc");
-			$data['alldata'] = $this->db->get('xin_employee_move_register')->result();
+			$data['alldata'] = $this->db->get('xin_employee_move_register as em')->result();
 
 			$data['session']     = $session;
 			$data['title'] 		 = 'Outside Office Movements';
@@ -884,6 +880,19 @@ class Attendance extends MY_Controller {
 			$osd_status=1;
 		}
 
+		$selectedOption = $this->input->post('reason');
+		$reason=$selectedOption;
+		if ($selectedOption === 'other') {
+            $reasondata = $this->input->post('otherInput');
+			$data = array(
+				'title' => $reasondata
+			);
+			
+			$this->db->insert('xin_employee_move_reason', $data);
+			$insert_id = $this->db->insert_id();
+			$reason=$insert_id;
+        }
+		
 		$data = array(
 			'employee_id' => $userid,
 			'date' => date('Y-m-d'),
@@ -895,7 +904,7 @@ class Attendance extends MY_Controller {
 			'status' => 0,
 			'astatus' => 1,
 			'osd_status' => $osd_status,
-			'reason' => $this->input->post('reason'),
+			'reason' => $reason,
 			'location_status' => $this->input->post('location_status'),
 			'in_out' => 1,
 			'place_adress' => $this->input->post('place_adress'),

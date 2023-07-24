@@ -918,7 +918,7 @@ if($out>0){
 
           // Make an AJAX post request to the controller
           $.ajax({
-            url: '<?= base_url('admin/floor_movement/outformsub') ?>', // Replace 'controller/method' with your actual controller and method
+            url: '<?= base_url('admin/movement_floor/outformsub') ?>', // Replace 'controller/method' with your actual controller and method
             method: 'POST',
             data: formData,
             success: function(response) {
@@ -944,7 +944,7 @@ if($out>0){
 
           // Make an AJAX post request to the controller
           $.ajax({
-            url: '<?= base_url('admin/floor_movement/informsub') ?>', // Replace 'controller/method' with your actual controller and method
+            url: '<?= base_url('admin/movement_floor/informsub') ?>', // Replace 'controller/method' with your actual controller and method
             method: 'POST',
             data: formData,
             success: function(response) {
