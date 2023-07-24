@@ -83,24 +83,24 @@ $session = $this->session->userdata('username');
                         <span>Action</span> 
                       </button>
                       <ul class="dropdown-menu dropdown-menu-right">
-                        <li>
+                        <li class="<?php echo ($rows->status == 2) ?'d-hidden':''?>">
                           <a href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">
                             <b class="text-success">Approved</b>
                           </a>
                         </li>
-                        <li class="divider"></li>
-                        <li class="<?php echo $rows->status == 2 ?'d-hidden':''?>">
+                        <li class="divider <?php echo ($rows->status == 2  || $rows->status == 4) ?'d-hidden':''?>"></li>
+                        <li class="<?php echo ($rows->status == 2  || $rows->status == 4) ?'d-hidden':''?>">
                           <a href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">
                             <b class="text-danger">Rejected</b>
                           </a>
                         </li>
                         <li class="divider <?php echo $rows->status == 2 ?'d-hidden':''?>"></li>
-                        <li>
+                        <li class="<?php echo $rows->status == 2 ?'d-hidden':''?>">
                           <a href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">
                             <b class="text-danger">Delete</b>
                           </a>
                         </li>
-                        <li class="divider"></li>
+                        <li class="divider <?php echo $rows->status == 2 || $rows->status == 4 || $rows->status == 1  ?'d-hidden':''?>"></li>
                         <li class="<?php echo ($rows->status == 4) || ($rows->status == 1) ?'d-hidden':''?>">
                             <a style="padding-left:5px;" href="<?= base_url('admin/inventory/hand_over/'.$rows->id);?>">
                             <b class="text-info">Delivered</b>
