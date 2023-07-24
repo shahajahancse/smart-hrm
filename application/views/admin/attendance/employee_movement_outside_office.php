@@ -45,7 +45,7 @@ $timeDifferenceFormatted=$timeDiff->format('%d day, %H:%i:%s');
     margin: 5% 28%;
     overflow: auto;
     width: 52%;
-    height: 407px;
+    height: auto;
     position: relative;
 }
 
