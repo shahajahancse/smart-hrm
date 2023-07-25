@@ -79,6 +79,7 @@ class Lunch_model extends CI_Model {
         $prev_amount=$prev_pay-$prev_cost;
         $probable_meal=$this->chackprobalemeal($secondDate,$probable_date);
         $pay_amount=$probable_meal*45;
+        $collection_amount=$pay_amount-$prev_amount;
         $from_date=$firstDate;
         $end_date=$secondDate;
         $status=0;
@@ -91,6 +92,7 @@ class Lunch_model extends CI_Model {
             'prev_amount' => $prev_amount,
             'pay_amount' => $pay_amount,
             'probable_meal' => $probable_meal,
+            'collection_amount' => $collection_amount,
             'from_date' => $from_date,
             'end_date' => $end_date,
             'next_date' => $probable_date,

@@ -138,7 +138,7 @@
 
         <tfoot style="text-align: center;font-weight: bold;">
             <tr>
-                <td colspan="4">Total</td>
+                <td colspan="5">Total</td>
                 <td colspan="1"><?= $previouspay ?></td>
             </tr>
         </tfoot>
@@ -149,7 +149,7 @@
         <?php }else{ ?>
         <tfoot style="text-align: center;font-weight: bold;">
             <tr>
-                <td colspan="6">Total</td>
+                <td colspan="5">Total</td>
                 <td colspan="1"><?= $totalamount ?></td>
             </tr>
         </tfoot>
