@@ -265,7 +265,7 @@ class Accessories extends MY_Controller {
             $data['row'] = $this->db->where('id',$id)->get("product_accessory_categories")->row();
             }   
             $data['results']=$this->db->select('*')->get('product_accessory_categories')->result();
-            $datas['subview']= $this->load->view('admin/accessories/category',$data,TRUE);  
+            $datas['subview']= $this->load->view('admin/accessories/item_add',$data,TRUE);  
             $this->load->view('admin/layout/layout_main', $datas); 
     }
 }
