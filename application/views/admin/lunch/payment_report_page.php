@@ -123,7 +123,7 @@
                     <th>Current M. Lunch day</th>
                     <th>Stock Lunch Balance</th>
                     <th>Balance Days</th>
-                  
+                    <th>Collection Day</th>
                     <th>Collection Amount</th>
                     <th>Status</th>
                     <th>Signature</th>
@@ -134,7 +134,7 @@
                 <?php  $totalamount=0;$previouspay=0; foreach ($lunch_data as $key=>$employee): ?>
                 <?php 
                     $pbm=($employee->prev_amount/45);
-                    $totalamount+=($employee->probable_meal-$pbm)*45;
+                    $totalamount+=$employee->pay_amount;
                     $previouspay+=$employee->prev_pay;
                     ?>
                 <tr>
@@ -144,7 +144,8 @@
                     <td><?php echo $employee->probable_meal;?></td>
                     <td><?php echo $pbm;?></td>
                     <td><?php echo $employee->probable_meal-$pbm;?></td>
-                    <td><?php echo ($employee->probable_meal-$pbm)*45;?></td>
+                    <td><?php echo $employee->pay_amount/45;?></td>
+                    <td><?php echo $employee->pay_amount;?></td>
                     <td style="color: <?php echo $employee->status == 1 ? '#26ab31' : 'red'; ?>">
                         <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
                     </td>
@@ -157,7 +158,7 @@
 
             <tfoot style="text-align: center;font-weight: bold;">
                 <tr>
-                    <td colspan="5">Total</td>
+                    <td colspan="6">Total</td>
                     <td colspan="1"><?= $totalamount ?></td>
                 </tr>
             </tfoot>
