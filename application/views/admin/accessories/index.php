@@ -19,7 +19,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
   .dropup .dropdown-menu{
     top: 20px;
     bottom: inherit;
-    right: 50px !important;
+    right: 15px !important;
     left: auto !important;
     min-width: 100px !important;
   }
@@ -64,18 +64,17 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
               </td>
               <td>
                  <?php 
-                      echo    $row->status; 
+                    echo $row->status; 
                   ?>
               </td>
               <td>
                 <div class="dropup">
-                  <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" >
+                  <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" >
                       Action
-                      <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    <li><a class="btn btn-sm btn-info" href="<?= base_url('admin/accessories/item_add/'.$row->a_id);?>">Edit</a></li>
-                    <li><a class="btn btn-sm btn-danger" href="<?= base_url('admin/accessories/delete/'.$row->a_id.'/product_accessories/index');?>" onclick="return confirm('Are you sure to delete!!!')">delete</a></li>
+                    <li><a  href="<?= base_url('admin/accessories/item_add/'.$row->a_id);?>"><span class="text-info"><b>Edit</b></span></a></li>
+                    <li><a  href="<?= base_url('admin/accessories/delete/'.$row->a_id.'/product_accessories/index');?>" onclick="return confirm('Are you sure to delete!!!')"><span class="text-danger"><b>delete</b></span></a></li>
                   </ul>
                 </div>
               </td>

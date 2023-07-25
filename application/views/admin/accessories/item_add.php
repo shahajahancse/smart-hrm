@@ -1,4 +1,5 @@
 <?php 
+// dd($row);
   $session = $this->session->userdata('username');
   $eid = $this->uri->segment(4);
   $get_animate = $this->Xin_model->get_content_animate();
@@ -34,28 +35,21 @@
             
             <input type="hidden" name="hidden_id" value="<?php echo isset($row->a_id)? $row->a_id:''; ?>">
 
-            <div class="col-md-2" >
+            <div class="col-md-3" >
               <div class="form-group">
                 <label for="description">Device Number</label>
                 <input class="form-control" placeholder="Device Number" name="device_name_id"  type="text" value="<?php echo isset($row->device_name_id)? $row->device_name_id:''; ?>" > 
               </div>
             </div>
 
-            <div class="col-md-2" >
+            <div class="col-md-3" >
               <label for="Status">Device Model</label>
               <select name="device_model" class="form-control" id="model_name">  
                 <option value="">Select Model</option>
               </select>
             </div>
-            
-            <div class="col-md-3" >
-              <div class="form-group">
-                <label for="description">Image</label>
-                <input class="form-control" name="image" type="file" value="<?php echo (isset($row->image))? $row->image:''; ?>">
-              </div>
-            </div>     
 
-            <div class="col-md-2" >
+            <div class="col-md-3" >
               <label for="Status">Item Status</label>
               <select name="status" class="form-control"  id="status">  
                 <option value="">Select status</option>
@@ -88,6 +82,11 @@
                 <?php foreach ($users as $key => $user) {?>
                 <option value="<?php echo $user->user_id ?>" <?php echo (isset($row->user_id) && $row->user_id == $user->user_id)? 'selected':''; ?> ><?php echo $user->first_name.' '.$user->last_name ?></option>
                 <?php }?>
+                <option value="sr_1">Server Room</option>
+                <option value="uh_2">Using Home</option>
+                <option value="fc_3">3rd Floor Common</option>
+                <option value="fc_4">5th Floor Common</option>
+                
               </select>
             </div>   
           </div>
@@ -111,9 +110,7 @@
             </div>
           </div>
           </div>        
-
           </div>
-          
           <?php if(isset($row->a_id)==null){?>
                 <input type="submit" name="submit" class="btn btn-success" style="float:right" value="Add Item"/>
                 <?php }else{?>
@@ -128,15 +125,20 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 
 <script>
-  
-	// function category(val) {
-  //       var category = $('#cat_id').find(":selected").text();  
 
-  //   // var sim = category.search(/sim/i); 
+<?php if(isset($row)){?>
+var val = $('#cat_id').find(":selected").val();  
+var url ='<?php echo base_url('admin/accessories/get_model/')?>'+val+'/'+<?=  isset($row->device_model) ?>;
+$.ajax({
+  type: "GET",
+  url: url,
+  data:'cat_id='+val,
+  success: function(data){
+    $("#model_name").html(data);
+  }
+});
+<?php }?>
 
-  //    alert(category);return;
-
-	// }
 
 $('#cat_id').on('change',function(){
   var val = $('#cat_id').find(":selected").val();  
