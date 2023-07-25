@@ -46,3 +46,5 @@
 <script>
     $('#equipment_list').DataTable();
 </script>    
+
+

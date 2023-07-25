@@ -71,6 +71,34 @@ class Inventory extends MY_Controller {
 		}
 	}
 
+	public function index1(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store';
+		if($session['role_id']== 1 || $session['role_id']== 2 || $session['role_id']== 4 ){
+			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+	    //    dd($data['products']);
+		}
+		if( $session['role_id'] == 3) {
+			// $data['results'] 	= $this->Inventory_model->requisition_details($session['user_id'],$id=null);
+		    // dd($data['results']);
+			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		    //   dd($data['products']);
+		}
+		$data['user_role_id'] 	= $session['role_id'];
+		// dd($data);
+		if(!empty($session)){ 
+			$data['subview'] = $this->load->view("admin/inventory/index1", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+
 	public function create($id = null) {
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -83,34 +111,23 @@ class Inventory extends MY_Controller {
 
 		//Validate and input data
 		if ($this->form_validation->run() == true){
-			$hid = $this->input->post('hidden_id');
-			if($hid == null && empty($hid)) {
-				$ids = $this->Inventory_model->save('products_requisitions', ['user_id'=>$session['user_id']]);
-				$last_id = $this->db->insert_id();
-			} else {
-				$last_id = $hid;
-			}
-
 			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
 				$form_data[] = array(
+					'user_id' 		 => $session['user_id'],
 					'cat_id'		 => $_POST['cat_id'][$i],
 					'sub_cate_id'	 => $_POST['sub_cate_id'][$i],
 					'product_id'	 => $_POST['product_id'][$i],
 					'quantity'		 => $_POST['quantity'][$i],
-					'requisition_id' => $last_id,
+					'status'		 => 1,
 				);
 			}  
 			
-			if ($hid != null && !empty($hid)) {
-				$this->db->where('id', $hid)->update_batch('products_requisition_details', $form_data);
-				$this->session->set_flashdata('success', 'Successfully Updated Done');
+			if($this->db->insert_batch('products_requisition_details', $form_data)){
+				$this->session->set_flashdata('success', 'Successfully Insert Done');
 			} else {
-				if($this->db->insert_batch('products_requisition_details', $form_data)){
-					$this->session->set_flashdata('success', 'Successfully Insert Done');
-				} else {
-					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
-				}
-			}	
+				$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+			} 
+
 			return redirect('admin/inventory');
 		}
 

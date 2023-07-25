@@ -52,26 +52,11 @@ $get_animate = $this->Xin_model->get_content_animate();
         </tbody>
       </table>
       <?php if(!empty($results)){?>
-      <?php if($session['role_id']==1) {?>
+      <?php if($session['role_id']!=3) {?>
       <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-      <?php } ?>
-      <?php if($session['role_id']==4){?>
-      <input type="submit" name="first_step" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-         <?php }else{?>
-          <input type="submit" name="update" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Update">
+      <?php } }?>
 
-      <?php }?>
-      <?php }?>
         <?php echo form_close()?>
     </div>
   </div>
 </div>
-
-<script>
-// $(document).ready(function () {
-//     $('#details').DataTable();
-// });
-
-
-</script>
-

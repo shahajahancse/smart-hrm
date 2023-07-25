@@ -487,7 +487,7 @@ hr {
                             <li class="step-wizard-item <?=$in_time_class?>">
                                 <span class="progress-label-top">Punch In</span>
                                 <span class="progress-count"><i class="icon-time"></i></span>
-                                <span class="progress-label"><?php echo $in_time?></span>
+                                <span class="progress-label"><?php echo $schedule->in_time?></span>
                             </li>
                             <li class="step-wizard-item <?=$lunch_start_class?>">
                                 <span class="progress-label-top">Lunch Time</span>

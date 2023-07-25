@@ -18,6 +18,15 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Leave extends MY_Controller
 {
+	
+	public function __construct()
+   {
+      parent::__construct();
+      //load the login model
+      $this->load->model('Company_model');
+		$this->load->model('Xin_model');
+		$this->load->model('Timesheet_model');
+   }
 
    /*Function to set JSON output*/
 	public function output($Return=array()){
@@ -27,15 +36,7 @@ class Leave extends MY_Controller
 		/*Final JSON response*/
 		exit(json_encode($Return));
 	}
-	
-	public function __construct()
-     {
-          parent::__construct();
-          //load the login model
-          $this->load->model('Company_model');
-		  $this->load->model('Xin_model');
-		  $this->load->model('Timesheet_model');
-     }
+
 	
 	//leave calendar
 	public function calendar() {
@@ -91,6 +92,15 @@ class Leave extends MY_Controller
 			$data['subview'] 		= $this->load->view("admin/leave/emp_leave", $data, TRUE);
 									$this->load->view('admin/layout/layout_main', $data); 
 	    }
+   }
+
+
+   public function leave_delete($id)
+   {
+		$this->db->where('leave_id', $id);
+		$this->db->delete('xin_leave_applications');
+		$this->session->set_flashdata('success', 'Successfully Delete Done');
+		redirect('admin/leave/emp_leave');
    }
 	
    public function emp_holyday(){

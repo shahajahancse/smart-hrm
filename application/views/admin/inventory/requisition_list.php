@@ -40,22 +40,20 @@
             <td class="text-center"><?= $row->approved_qty ?></td>
             <td class="text-center">
               <span class="using">
-                <i class="fa fa-dot-circle-o"></i> 
-                <?= $row->status==1 ?'':($row->status==1)?>
+                <?= $row->status==1 ?"<i class='fa fa-dot-circle-o' style='color:#ffda00'></i> Pending":($row->status==2?"<i class='fa fa-dot-circle-o' style='color:#6ebe09'></i> Approved":($row->status==3?"<i class='fa fa-dot-circle-o' style='color:#09bea9'></i>  Handover":($row->status==4?"<i class='fa fa-dot-circle-o' style='color:#de0000'></i> Rejected":"First Step Approved")))?>
               </span>
             </td>
             <td class="text-center">
               <?php if($row->status == 1){?> 
+               
                 <div class="dropdown" >
-                  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Action
-                  </button>
+                  <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                   <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                     <a class='req_id' data-id="<?= $row->id ?>" data-p="<?= $row->product_name ?>" data-c="<?= $row->category_name ?>" data-q="<?= $row->quantity ?>" data-toggle="modal" data-target="#requisition_edit" style="padding-left:5px; cursor: pointer">Edit</a><br>
                     <a style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_requsiton/'.$row->id);?>">Delete</a>
                   </div>
                 </div>
-              <?php } else { echo "..."; } ?>
+              <?php } else { echo ""; } ?>
             </td>
           </tr>
         <?php }?>

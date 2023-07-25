@@ -508,10 +508,5 @@ public function equipment_list($id){
     return $data;          
 }
 
-
-
 }
-
-	
 ?>
- 

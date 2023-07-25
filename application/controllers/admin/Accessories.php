@@ -149,77 +149,8 @@ class Accessories extends MY_Controller {
          $this->load->view('admin/layout/layout_main', $datas); 
     }
 
-    public function item_add($id = null){
-        // dd($_POST);
-        $data = $this->page_loads();
-        $data['title']         = 'Add Item'.' | '.$this->Xin_model->site_title();
-    	$data['breadcrumbs']   = "Add Item";
-    	// $data['path_url']      = "Item";
-        $this->form_validation->set_rules('cat_id', 'Category Name', 'required|trim');
-
-        if ($this->form_validation->run() == true){
-
-                if(!empty($_FILES['image']['name'])){
-                $config['upload_path'] = 'uploads/accessory_images/';
-                $config['allowed_types'] = 'jpg|jpeg|png|gif';
-                $config['file_name'] = $_FILES['image']['name'];
-                //Load upload library and initialize configuration
-                $this->load->library('upload',$config);
-                $this->upload->initialize($config);
-                
-                if($this->upload->do_upload('image')){
-                    $uploadData = $this->upload->data();
-                    $picture = $uploadData['file_name'];
-                }else{
-                    $picture = '';
-                }
-                }else{
-                    $picture = '';
-                }
-
-            if($this->input->post('status')==1){
-             $user_id = $this->input->post('user_id');
-            }
-            else{
-                $user_id=null;
-            }
-
-            $form_data = array(
-                                'cat_id'         => $this->input->post('cat_id'),
-                                'device_name_id' => $this->input->post('device_name_id'),
-                                'device_model'   => $this->input->post('device_model'),
-                                'description'    => $this->input->post('description'),
-                                'remark'         => $this->input->post('remark'),
-                                'image'          => $picture,
-                                'user_id'        => $user_id,
-                                'status'         => $this->input->post('status'),
-                                'use_number'     => $this->input->post('use_number'),
-                                'number'         => $this->input->post('number'),
-            );    
-
-            // dd($form_data);
-            if ($hid = $this->input->post('hidden_id')) {
-                $this->db->where('id', $hid)->update('product_accessories', $form_data);
-                $this->session->set_flashdata('success', 'Successfully Updated Done');
-                 echo $this->item;
-            } else {
-                if($this->Accessories_model->add_device('product_accessories', $form_data)){
-                    $this->session->set_flashdata('success', 'Successfully Insert Done');
-                     echo $this->item;
-                } else {
-                    $this->session->set_flashdata('success', 'Sorry Something Wrong.');
-                     echo $this->item;
-                }
-
-        if($id != null) {
-          $data['row'] = $this->db->where('id',$id)->get("product_accessory_categories")->row();
-        }   
-
-         $data['results']=$this->db->select('*')->get('product_accessory_categories')->result();
-         $datas['subview']= $this->load->view('admin/accessories/category',$data,TRUE);  
-         $this->load->view('admin/layout/layout_main', $datas); 
-    }
-
+   
+  
 
     public function delete($id,$table,$url){
         $delete= $this->db->where('id',$id)->delete($table);
@@ -266,9 +197,77 @@ class Accessories extends MY_Controller {
     }
 
 
+
+ public function item_add($id = null){
+        // dd($_POST);
+        $data = $this->page_loads();
+        $data['title']         = 'Add Item'.' | '.$this->Xin_model->site_title();
+    	$data['breadcrumbs']   = "Add Item";
+    	// $data['path_url']      = "Item";
+        $this->form_validation->set_rules('cat_id', 'Category Name', 'required|trim');
+
+        if ($this->form_validation->run() == true){
+
+            if(!empty($_FILES['image']['name'])){
+                $config['upload_path'] = 'uploads/accessory_images/';
+                $config['allowed_types'] = 'jpg|jpeg|png|gif';
+                $config['file_name'] = $_FILES['image']['name'];
+                //Load upload library and initialize configuration
+                $this->load->library('upload',$config);
+                $this->upload->initialize($config);
+                
+                if($this->upload->do_upload('image')){
+                    $uploadData = $this->upload->data();
+                    $picture = $uploadData['file_name'];
+                }else{
+                    $picture = '';
+                }
+                
+                if($this->input->post('status')==1){
+                    $user_id = $this->input->post('user_id');
+                }
+                else{
+                    $user_id=null;
+                }
+
+                $form_data = array(
+                    'cat_id'         => $this->input->post('cat_id'),
+                    'device_name_id' => $this->input->post('device_name_id'),
+                    'device_model'   => $this->input->post('device_model'),
+                    'description'    => $this->input->post('description'),
+                    'remark'         => $this->input->post('remark'),
+                    'image'          => $picture,
+                    'user_id'        => $user_id,
+                    'status'         => $this->input->post('status'),
+                    'use_number'     => $this->input->post('use_number'),
+                    'number'         => $this->input->post('number'),
+                );    
+            
+                // dd($form_data);
+                if ($hid = $this->input->post('hidden_id')) {
+                    $this->db->where('id', $hid)->update('product_accessories', $form_data);
+                    $this->session->set_flashdata('success', 'Successfully Updated Done');
+                    echo $this->item;
+                } 
+                else {
+                    if($this->Accessories_model->add_device('product_accessories', $form_data)){
+                        $this->session->set_flashdata('success', 'Successfully Insert Done');
+                        echo $this->item;
+                    } 
+                else{
+                        $this->session->set_flashdata('success', 'Sorry Something Wrong.');
+                        echo $this->item;
+                    }   
+                }               
+            }
+        }
+            if($id != null) {
+            $data['row'] = $this->db->where('id',$id)->get("product_accessory_categories")->row();
+            }   
+            $data['results']=$this->db->select('*')->get('product_accessory_categories')->result();
+            $datas['subview']= $this->load->view('admin/accessories/item_add',$data,TRUE);  
+            $this->load->view('admin/layout/layout_main', $datas); 
+    }
 }
-
-
-
 
 ?>
