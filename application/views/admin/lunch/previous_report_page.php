@@ -127,7 +127,6 @@
                     </thead>
                     <tbody style="text-align: center;">
 
-<<<<<<< HEAD
                         <?php  $totalamount=0;$previouspay=0; foreach ($lunch_data as $key=>$employee): ?>
                         <?php 
                                 $pbm=($employee->prev_amount/45);
@@ -146,38 +145,12 @@
                         <?php endforeach; ?>
                     </tbody>
                     <?php if($r==1){?>
-
-                    <tfoot style="text-align: center;font-weight: bold;">
-                        <tr>
-                            <td colspan="4">Total</td>
-                            <td colspan="1"><?= $previouspay ?></td>
-                        </tr>
-                    </tfoot>
-=======
-        <tfoot style="text-align: center;font-weight: bold;">
-            <tr>
-                <td colspan="5">Total</td>
-                <td colspan="1"><?= $previouspay ?></td>
-            </tr>
-        </tfoot>
->>>>>>> 0a8140bdf705bc4bebd0635c641bcb1d2e07d9f3
-
-
-
-
-<<<<<<< HEAD
-                    <?php }else{ ?>
-                    <tfoot style="text-align: center;font-weight: bold;">
-                        <tr>
-                            <td colspan="6">Total</td>
-                            <td colspan="1"><?= $totalamount ?></td>
-                        </tr>
-                    </tfoot>
-                    <?php } ?>
-                </table>
-            </div>
-        </div>
-=======
+                        <tfoot style="text-align: center;font-weight: bold;">
+                            <tr>
+                                <td colspan="5">Total</td>
+                                <td colspan="1"><?= $previouspay ?></td>
+                            </tr>
+                        </tfoot>
         <?php }else{ ?>
         <tfoot style="text-align: center;font-weight: bold;">
             <tr>
@@ -189,8 +162,6 @@
     </table>
     </div>
     </div>
-    </div>
->>>>>>> 0a8140bdf705bc4bebd0635c641bcb1d2e07d9f3
     </div>
 
     <!-- Include Bootstrap JS -->
