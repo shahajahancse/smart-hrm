@@ -473,37 +473,43 @@ public function low_inv_allProduct_status_report($statusC = null) {
 // 	}
 // }
 
-public function equipment_list($id){
-	$this->db->select('
-		product_accessories.id AS a_id,
-		product_accessories.cat_id,
-		product_accessories.device_model,
-		product_accessories.device_name_id,
-		product_accessories.description,
-		product_accessories.status,
-		product_accessories.remark,
-		product_accessories.use_number,
-		product_accessories.number,
-		product_accessories.image,
-		product_accessories.user_id,
-		product_accessory_categories.cat_name,
-		product_accessory_categories.cat_short_name,
-		MAX(product_accessories_model.model_name) AS model_name,
-		MAX(mobile_numbers.number) AS mobile_number,
-		MAX(xin_employees.first_name) AS first_name,
-		MAX(xin_employees.last_name) AS last_name,
-		product_accessories_working.provide_date
-		
-	');
-	$this->db->from('product_accessories');
-	$this->db->join('product_accessories_model', 'product_accessories.device_model = product_accessories_model.id', 'left');
-	$this->db->join('product_accessory_categories', 'product_accessories.cat_id = product_accessory_categories.id', 'left');
-	$this->db->join('mobile_numbers', 'product_accessories.number = mobile_numbers.id', 'left');
-	$this->db->join('product_accessories_working', 'product_accessories.user_id = product_accessories_working.user_id', 'left');
-	$this->db->join('xin_employees', 'product_accessories_working.provide_by = xin_employees.user_id', 'left');
-	$this->db->group_by('product_accessories.id');
+public function equipment_list($session = null){
 
+	$this->db->select('
+		pa.id AS a_id,
+		pa.cat_id,
+		pa.device_model,
+		pa.device_name_id,
+		pa.description,
+		pa.status,
+		pa.remark,
+		pa.use_number,
+		pa.number,
+		pa.image,
+		pa.user_id,
+		pac.cat_name,
+		pac.cat_short_name,
+		MAX(pam.model_name) AS model_name,
+		MAX(mobile_numbers.number) AS mobile_number,
+		MAX(e.first_name) AS first_name,
+		MAX(e.last_name) AS last_name,
+		paw.provide_date
+	');
+
+	$this->db->from('product_accessories as pa');
+	$this->db->join('product_accessories_model as pam', 'pa.device_model = pam.id', 'left');
+	$this->db->join('product_accessory_categories as pac', 'pa.cat_id = pac.id', 'left');
+	$this->db->join('mobile_numbers', 'pa.number = mobile_numbers.id', 'left');
+	$this->db->join('product_accessories_working as paw', 'pa.user_id = paw.user_id', 'left');
+	$this->db->join('xin_employees as e', 'paw.provide_by = e.user_id', 'left');
+	/*if ($session['role_id'] == 3 && $session != null) {
+		$this->db->where('pa.id', $session['user_id']);
+	}*/
+
+	$this->db->group_by('pa.id');
 	$data = $this->db->get()->result();
+
+	// dd($data);
 
     return $data;          
 }

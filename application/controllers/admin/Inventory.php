@@ -60,7 +60,7 @@ class Inventory extends MY_Controller {
 		}
 		$data['user_role_id'] 	= $session['role_id'];
 		if(!empty($session)){ 
-			if($session['role_id'] ==3){
+			if($session['role_id'] == 3){
 				$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
 			}else{
 				$data['subview'] = $this->load->view("admin/inventory/index1", $data, TRUE);
@@ -1275,7 +1275,7 @@ class Inventory extends MY_Controller {
 		redirect('admin/');
 	}
 	$data['session']    = $session;
-	$data['equipments'] = $this->Inventory_model->equipment_list($session['user_id']);
+	$data['equipments'] = $this->Inventory_model->equipment_list($session);
 	$this->load->view("admin/inventory/equipment_list", $data);
 }
 

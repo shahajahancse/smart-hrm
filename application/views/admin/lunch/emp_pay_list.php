@@ -287,7 +287,7 @@ $(document).ready(function() {
                 formHtml += '<div class="form-group col-md-3">';
                 formHtml += '<label for="dateOfBirth">Previous Month Balance</label>';
                 formHtml +=
-                    '<input type="number" class="form-control" id="prev_balance" value="' +
+                    '<input type="number" class="form-control" id="prev_balance" name="prev_amount" value="' +
                     responseData[0].prev_amount + '" readonly>';
                 formHtml += '</div>';
                 formHtml += '</div>';
@@ -308,7 +308,7 @@ $(document).ready(function() {
                 formHtml += '<label for="gender">Collection Amount</label>';
                 formHtml +=
                     '<input type="text" class="form-control" id="p_month_pay" name="p_month_pay" value="' +
-                    pay_m + '" readonly>';
+                    responseData[0].collection_amount + '" readonly>';
                 formHtml += '</div>';
 
                 formHtml += '<div class="form-group col-md-3">';

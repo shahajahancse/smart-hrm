@@ -546,10 +546,12 @@ class Lunch extends MY_Controller {
         // Retrieve the form data from the POST request
         $empid = $this->input->get('empid');
         $pay_month = $this->input->get('pay_month');
+        $prev_amount = $this->input->get('prev_amount');
         $p_month_pay = $this->input->get('p_month_pay');
         $status = $this->input->get('status');
         $data = array(
-            'pay_amount' => $p_month_pay,
+            'pay_amount' => ($p_month_pay+$prev_amount),
+            'collection_amount' => $p_month_pay,
             'status' => $status,
             'updated_at' => date('Y-m-d H:i:s')
         );

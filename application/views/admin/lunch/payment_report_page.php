@@ -134,8 +134,7 @@
                 <?php  $totalamount=0;$previouspay=0; foreach ($lunch_data as $key=>$employee): ?>
                 <?php 
                     $pbm=($employee->prev_amount/45);
-                    $totalamount+=$employee->pay_amount;
-                    $previouspay+=$employee->prev_pay;
+                    $totalamount+=$employee->collection_amount;
                     ?>
                 <tr>
                     <td><?php echo $key+1 ?></td>
@@ -144,8 +143,8 @@
                     <td><?php echo $employee->probable_meal;?></td>
                     <td><?php echo $pbm;?></td>
                     <td><?php echo $employee->probable_meal-$pbm;?></td>
-                    <td><?php echo $employee->pay_amount/45;?></td>
-                    <td><?php echo $employee->pay_amount;?></td>
+                    <td><?php echo $employee->collection_amount/45;?></td>
+                    <td><?php echo $employee->collection_amount;?></td>
                     <td style="color: <?php echo $employee->status == 1 ? '#26ab31' : 'red'; ?>">
                         <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
                     </td>
@@ -162,10 +161,6 @@
                     <td colspan="1"><?= $totalamount ?></td>
                 </tr>
             </tfoot>
-
-
-
-
             <?php }else{ ?>
             <tfoot style="text-align: center;font-weight: bold;">
                 <tr>
