@@ -1061,7 +1061,24 @@ class Attendance_model extends CI_Model {
     
  
 
+    public function get_move_place() {
+        $query = $this->db->get('xin_employee_move_place');
+        return $query->result();
+    }
 
+    public function add_move_place($data) {
+        $this->db->insert('xin_employee_move_place', $data);
+    }
+
+    public function update_move_place($place_id, $data) {
+        $this->db->where('place_id', $place_id);
+        $this->db->update('xin_employee_move_place', $data);
+    }
+
+    public function delete_move_place($place_id) {
+        $this->db->where('place_id', $place_id);
+        $this->db->delete('xin_employee_move_place');
+    }
 
 
 
