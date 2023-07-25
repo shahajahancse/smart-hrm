@@ -529,19 +529,14 @@ class Lunch extends MY_Controller {
             redirect('admin/');
         }
         // status
-       $firstDate =date('Y-m-d', strtotime($this->input->get('firstDate')));
+        $firstDate =date('Y-m-d', strtotime($this->input->get('firstDate')));
 
-       $secondDate = $this->input->get('secondDate');
-       $probable_date = $this->input->get('probable_date');
-       if($this->input->get('status')==1){
-        $this->db->where('from_date', $firstDate);
-        $this->db->where('end_date', $secondDate);
-        $this->db->delete('lunch_payment');
-    };
-
+        $secondDate = $this->input->get('secondDate');
+        $probable_date = $this->input->get('probable_date');
         $data['lunch_data'] = $this->Lunch_model->process($firstDate,$secondDate,$probable_date);
         echo json_encode('success');
     }
+    
     public function submit_payment() {
         // Retrieve the form data from the POST request
         $empid = $this->input->get('empid');

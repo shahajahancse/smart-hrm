@@ -43,10 +43,10 @@ class Lunch_model extends CI_Model {
         return $query->result();
     }
 
-    public function process($firstDate,$secondDate,$probable_date)
+    public function process($firstDate, $secondDate, $probable_date)
     {
 
-      $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
+      $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4, 5)")->result();
       foreach($query as $row){
 
         $this->db->where('date >=', $firstDate);
@@ -82,9 +82,9 @@ class Lunch_model extends CI_Model {
         $collection_amount=$pay_amount-$prev_amount;
         $from_date=$firstDate;
         $end_date=$secondDate;
-        $status=0;
+        $status = 0;
 
-         $data = array(
+        $data = array(
             'emp_id' => $emp_id,
             'prev_meal' => $prev_meal,
             'prev_cost' => $prev_cost,
@@ -98,8 +98,26 @@ class Lunch_model extends CI_Model {
             'next_date' => $probable_date,
             'status' => $status
         );
-        $this->db->insert('lunch_payment', $data);
+
+        $this->db->where('from_date', $firstDate);
+        $this->db->where('end_date', $secondDate);
+        $this->db->where('emp_id', $row->user_id);
+        $rc = $this->db->get('lunch_payment');
+
+        if ($rc->num_rows() > 0) {
+            $r = $rc->row();
+            $data['status'] = $r->status;
+            $data['pay_amount'] = $r->pay_amount;
+            $data['collection_amount'] = $r->collection_amount;
+
+            $this->db->where('id', $r->id);
+            $this->db->update('lunch_payment', $data);
+        } else {
+            $this->db->insert('lunch_payment', $data);
+        }
+
       }
+
     }
 
     public function chackprobalemeal($first_date,$second_date ) {
