@@ -161,12 +161,6 @@ textarea {
 
                 <div class="form-field">
                     <label for="reason">Select Reason of move**</label>
-                    <!-- <select id="reason" name="reason" class="col-md-12" style="border: none;" required>
-                        <option> Select Reason of move</option>
-                        <option value="option1">Option 1</option>
-                        <option value="option2">Option 2</option>
-                        <option value="option3">Option 3</option>
-                    </select> -->
                     <select id="reason" name="reason" class="col-md-12" style="border: none;" required>
                         <?php $resonedata = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();
                     
@@ -195,8 +189,20 @@ textarea {
                
                
                 <div class="form-field">
-                    <label for="message">Write Place Adress</label>
-                    <textarea id="message" name="place_adress" required></textarea>
+                    <label for="message" >Write Place Adress</label>
+                    <?php
+                  
+                        $moveplace = $this->db->where('place_status', $location_status)->get('xin_employee_move_place')->result();
+                
+                    ?>
+                   <select id="message" name="place_adress" class="col-md-12" style="border: none;" required>
+                     <option>Select Place Address</option>
+                     <?php foreach($moveplace as $place){ ?>
+                        <option value="<?= $place->place_id ?>"> <?= $place->place_title ?> </option>
+                     <?php } ?>
+                   
+                   </select>
+                    <!-- <textarea id="message" name="place_adress" required></textarea> -->
                 </div>
                 <div class="actions">
                     <input type="submit" class="btn" style="background: #39a3ff;" value="Move Outside">

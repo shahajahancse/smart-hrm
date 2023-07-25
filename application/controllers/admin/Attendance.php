@@ -983,84 +983,155 @@ public function ta_da_form($id){
 		$this->load->view('admin/layout/layout_main', $data); 
 
 }
-public function add_ta_da()
-{
-    $session = $this->session->userdata('username');
-    if (empty($session)) {
-        redirect('admin/');
+	public function add_ta_da()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$userid = $session['user_id'];
+
+		$this->load->library('upload');
+
+		$move_id = $this->input->post('move_id');
+		$gonig_way_place = json_encode($this->input->post('gonig_way_place'));
+		$gonig_way_transport = json_encode($this->input->post('gonig_way_transport'));
+		$gonig_way_costing = json_encode($this->input->post('gonig_way_costing'));
+		$coming_way_place = json_encode($this->input->post('coming_way_place'));
+		$coming_way_transport = json_encode($this->input->post('coming_way_transport'));
+		$coming_way_costing = json_encode($this->input->post('coming_way_costing'));
+		$additional_cost = $this->input->post('additional_cost');
+		$remark = $this->input->post('remark');
+		$total_cost=0;
+		$goingcosrarray=$this->input->post('gonig_way_costing');
+		$comingcostrarray=$this->input->post('coming_way_costing');
+		foreach ($goingcosrarray as  $value) {
+			$total_cost+=$value;
+		};
+		foreach ($comingcostrarray as  $v) {
+			$total_cost+=$v;
+		};
+		$total_cost+=$additional_cost;
+		
+		$data1 = array(
+			'request_amount' => $total_cost, // Add the file location to the data array
+			'status' => 1 
+		);
+		$this->db->where('id', $move_id);
+		$this->db->update('xin_employee_move_register', $data1);
+		// File Upload Configuration
+		$config['upload_path'] = './uploads/move_file/'; // Modify this path as needed
+		$config['allowed_types'] = 'gif|jpg|png|pdf'; // Add more allowed file types as needed
+		$config['encrypt_name'] = TRUE; // Generate a unique encrypted filename
+		$config['max_size'] = 10048; // Set maximum file size in kilobytes (2MB in this case)
+
+		$this->upload->initialize($config);
+
+		if ($this->upload->do_upload('additional_invoice')) {
+			// File uploaded successfully
+			$fileData = $this->upload->data();
+			$fileLocation = base_url('uploads/move_file/') . $fileData['file_name'];
+
+			$data = array(
+				'g_place' => $gonig_way_place,
+				'g_transportation' => $gonig_way_transport,
+				'g_costing' => $gonig_way_costing,
+				'c_place' => $coming_way_place,
+				'c_transportation' => $coming_way_transport,
+				'c_costing' => $coming_way_costing,
+				'additional_cost' => $additional_cost,
+				'remark' => $remark,
+				'costing_invoice' => $fileLocation // Add the file location to the data array
+			);
+		} else {
+			// File upload failed or no file was uploaded
+			$data = array(
+				'g_place' => $gonig_way_place,
+				'g_transportation' => $gonig_way_transport,
+				'g_costing' => $gonig_way_costing,
+				'c_place' => $coming_way_place,
+				'c_transportation' => $coming_way_transport,
+				'c_costing' => $coming_way_costing,
+				'additional_cost' => $additional_cost,
+				'remark' => $remark,
+			);
+		}
+
+		// Update the database
+		$this->db->where('move_id', $move_id);
+		$this->db->update('xin_employee_move_details', $data);
+		redirect('admin/attendance/employee_movement/1');
+	}
+
+
+	public function moveplace() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$userid  = $session[ 'user_id' ];
+		$data['session']     = $session;
+		$data['title'] 		 = 'Attendance | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Attendance';
+
+        $data['employees'] = $this->Attendance_model->get_move_place();
+		$data['subview'] 	 =  $this->load->view('admin/attendance/move_place', $data,TRUE);
+		$this->load->view('admin/layout/layout_main', $data); 
+    }
+	public function get_employees_ajax() {
+        // Assuming you have a model called 'Attendance_model'
+        $this->load->model('Attendance_model');
+
+        // Fetch employee data from the model (adjust the method name as per your model)
+        $employees = $this->Attendance_model->get_move_place();
+
+        // Prepare the response data
+        $response = array('status' => 'success', 'employees' => $employees);
+
+        // Return the response as JSON
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    $userid = $session['user_id'];
 
-    $this->load->library('upload');
+    public function manage_moveplace($action = null) {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$userid  = $session[ 'user_id' ];
+		$data['session']     = $session;
+		$data['title'] 		 = 'Attendance | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Attendance';
+        if ($action === 'add') {
+            $data = array(
+                'place_status' => $this->input->post('place_status'),
+                'place_title' => $this->input->post('place_title'),
+                'place_discreption' => $this->input->post('place_discreption')
+            );
+            $this->Attendance_model->add_move_place($data);
+            echo json_encode(['status' => 'success']);
+        } elseif ($action === 'update') {
+            $data = array(
+                'place_status' => $this->input->post('place_status'),
+                'place_title' => $this->input->post('place_title'),
+                'place_discreption' => $this->input->post('place_discreption')
+            );
 
-    $move_id = $this->input->post('move_id');
-    $gonig_way_place = json_encode($this->input->post('gonig_way_place'));
-    $gonig_way_transport = json_encode($this->input->post('gonig_way_transport'));
-    $gonig_way_costing = json_encode($this->input->post('gonig_way_costing'));
-    $coming_way_place = json_encode($this->input->post('coming_way_place'));
-    $coming_way_transport = json_encode($this->input->post('coming_way_transport'));
-    $coming_way_costing = json_encode($this->input->post('coming_way_costing'));
-    $additional_cost = $this->input->post('additional_cost');
-    $remark = $this->input->post('remark');
-    $total_cost=0;
-	$goingcosrarray=$this->input->post('gonig_way_costing');
-	$comingcostrarray=$this->input->post('coming_way_costing');
-	foreach ($goingcosrarray as  $value) {
-		$total_cost+=$value;
-	};
-	foreach ($comingcostrarray as  $v) {
-		$total_cost+=$v;
-	};
-	$total_cost+=$additional_cost;
-	
-	$data1 = array(
-		'request_amount' => $total_cost, // Add the file location to the data array
-		'status' => 1 
-	);
-	$this->db->where('id', $move_id);
-    $this->db->update('xin_employee_move_register', $data1);
-    // File Upload Configuration
-    $config['upload_path'] = './uploads/move_file/'; // Modify this path as needed
-    $config['allowed_types'] = 'gif|jpg|png|pdf'; // Add more allowed file types as needed
-    $config['encrypt_name'] = TRUE; // Generate a unique encrypted filename
-    $config['max_size'] = 10048; // Set maximum file size in kilobytes (2MB in this case)
-
-    $this->upload->initialize($config);
-
-    if ($this->upload->do_upload('additional_invoice')) {
-        // File uploaded successfully
-        $fileData = $this->upload->data();
-        $fileLocation = base_url('uploads/move_file/') . $fileData['file_name'];
-
-        $data = array(
-            'g_place' => $gonig_way_place,
-            'g_transportation' => $gonig_way_transport,
-            'g_costing' => $gonig_way_costing,
-            'c_place' => $coming_way_place,
-            'c_transportation' => $coming_way_transport,
-            'c_costing' => $coming_way_costing,
-            'additional_cost' => $additional_cost,
-            'remark' => $remark,
-            'costing_invoice' => $fileLocation // Add the file location to the data array
-        );
-    } else {
-        // File upload failed or no file was uploaded
-        $data = array(
-            'g_place' => $gonig_way_place,
-            'g_transportation' => $gonig_way_transport,
-            'g_costing' => $gonig_way_costing,
-            'c_place' => $coming_way_place,
-            'c_transportation' => $coming_way_transport,
-            'c_costing' => $coming_way_costing,
-            'additional_cost' => $additional_cost,
-            'remark' => $remark,
-        );
+            $place_id = $this->input->post('place_id');
+            $this->Attendance_model->update_move_place($place_id, $data);
+            echo json_encode(['status' => 'success']);
+        } elseif ($action === 'delete') {
+            $place_id = $this->input->post('place_id');
+            $this->Attendance_model->delete_move_place($place_id);
+            echo json_encode(['status' => 'success']);
+        } else {
+            // Handle invalid action or show the view for other actions
+            $data['employees'] = $this->Attendance_model->get_move_place();
+			$data['subview'] 	 =  $this->load->view('admin/attendance/move_place', $data);
+			$this->load->view('admin/layout/layout_main', $data); 
+        }
     }
 
-    // Update the database
-    $this->db->where('move_id', $move_id);
-    $this->db->update('xin_employee_move_details', $data);
-	redirect('admin/attendance/employee_movement/1');
-}
+
 }
