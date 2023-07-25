@@ -79,8 +79,8 @@ $session = $this->session->userdata('username');
                   </td>
                   <td>
                     <div class="btn-group <?php echo $rows->status == 3?'d-hidden':''?>" >
-                      <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-                        <span>Action</span> 
+                      <button type="button" class="btn btn-sm dropdown-toggle" style="background: transparent;box-shadow:none !important" data-toggle="dropdown">
+                        <span><i class="fa fa-ellipsis-v" ></i></span> 
                       </button>
                       <ul class="dropdown-menu dropdown-menu-right">
                         <li class="<?php echo ($rows->status == 2) ?'d-hidden':''?>">

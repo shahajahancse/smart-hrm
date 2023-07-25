@@ -45,16 +45,15 @@
             </td>
             <td class="text-center">
               <?php if($row->status == 1){?> 
+               
                 <div class="dropdown" >
-                  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Action
-                  </button>
+                  <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                   <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                     <a class='req_id' data-id="<?= $row->id ?>" data-p="<?= $row->product_name ?>" data-c="<?= $row->category_name ?>" data-q="<?= $row->quantity ?>" data-toggle="modal" data-target="#requisition_edit" style="padding-left:5px; cursor: pointer">Edit</a><br>
                     <a style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_requsiton/'.$row->id);?>">Delete</a>
                   </div>
                 </div>
-              <?php } else { echo "..."; } ?>
+              <?php } else { echo ""; } ?>
             </td>
           </tr>
         <?php }?>

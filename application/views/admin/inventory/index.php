@@ -29,6 +29,12 @@ $session = $this->session->userdata('username');
     background: #FFF;
 }
 
+ .btn.active {
+    /* Add your custom styling for the active button here */
+    background-color: #ff0000; /* For example, change background color to red */
+    color: #ffffff; /* For example, change text color to white */
+  }
+
 </style>
 
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
@@ -96,6 +102,16 @@ $session = $this->session->userdata('username');
 
 
 <script>
+  $(document).ready(function() {
+    // Handle click event for the buttons
+    $('#listButton, #infoButton').click(function() {
+      // Remove the 'active' class from all buttons within the container
+      $('#listButton, #infoButton').removeClass('active');
+      
+      // Add the 'active' class to the clicked button
+      $(this).addClass('active');
+    });
+  });
   $(document).ready(function(){
     $("#list_data").load("<?php echo base_url("admin/inventory/equipment_list")?>");
   });
