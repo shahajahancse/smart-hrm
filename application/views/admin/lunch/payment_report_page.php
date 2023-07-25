@@ -119,7 +119,7 @@ $newDate = $date->format('Y-m-d');
                     <th>Current M. Lunch day</th>
                     <th>Stock Lunch Balance</th>
                     <th>Balance Days</th>
-                    <th>Collection Day</th>
+                  
                     <th>Collection Amount</th>
                     <th>Status</th>
                     <th>Signature</th>
@@ -140,8 +140,7 @@ $newDate = $date->format('Y-m-d');
                     <td><?php echo $employee->probable_meal;?></td>
                     <td><?php echo $pbm;?></td>
                     <td><?php echo $employee->probable_meal-$pbm;?></td>
-                    <td><?php echo $employee->pay_amount/45;?></td>
-                    <td><?php echo $employee->pay_amount;?></td>
+                    <td><?php echo ($employee->probable_meal-$pbm)/45;?></td>
                     <td style="color: <?php echo $employee->status == 1 ? '#26ab31' : 'red'; ?>">
                         <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
                     </td>
