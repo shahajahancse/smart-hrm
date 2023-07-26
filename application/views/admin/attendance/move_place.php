@@ -52,8 +52,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="place_title_modal">Place Title:</label>
-                        <input type="text" class="form-control" name="place_title_modal" id="place_title_modal"
+                        <label for="address_modal">Place Title:</label>
+                        <input type="text" class="form-control" name="address_modal" id="address_modal"
                             required>
                     </div>
                     <div class="form-group">
@@ -94,8 +94,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="place_title_modal">Place Title:</label>
-                        <input type="text" class="form-control" name="place_title_modal" id="place_title_modale"
+                        <label for="address_modal">Place Title:</label>
+                        <input type="text" class="form-control" name="address_modal" id="address_modale"
                             required>
                     </div>
                     <div class="form-group">
@@ -154,7 +154,7 @@ function updateEmployeeTable() {
                                 <tr>
                                     <td>${i}</td>
                                     <td>${employee.place_status === '1' ? 'Outside Office' : 'Outside Dhaka'}</td>
-                                    <td>${employee.place_title}</td>
+                                    <td>${employee.address}</td>
                                     <td>${employee.place_discreption}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary update-btn" data-toggle="modal" data-target="#editEmployeeModal">Edit</button>
@@ -180,16 +180,16 @@ function updateEmployeeTable() {
 $('#addEmployeeFormModal').submit(function(event) {
     event.preventDefault();
     var place_status = $('#place_status_modal').val();
-    var place_title = $('#place_title_modal').val();
+    var address = $('#address_modal').val();
     var place_discreption = $('#place_discreption_modal').val();
 
-    if (place_title !== '') {
+    if (address !== '') {
         $.ajax({
             url: '<?php echo base_url('admin/attendance/manage_moveplace/add'); ?>',
             type: 'POST',
             data: {
                 place_status: place_status,
-                place_title: place_title,
+                address: address,
                 place_discreption: place_discreption
             },
             dataType: 'json',
@@ -200,7 +200,7 @@ $('#addEmployeeFormModal').submit(function(event) {
                     updateEmployeeTable();
                     // Reset the form fields
                     $('#place_status_modal').val('1');
-                    $('#place_title_modal').val('');
+                    $('#address_modal').val('');
                     $('#place_discreption_modal').val('');
                     // Close the modal
                     $('#addEmployeeModal').modal('hide');
@@ -219,12 +219,12 @@ $('#addEmployeeFormModal').submit(function(event) {
 function showUpdateForm(row) {
     var place_id = row.find('td:eq(0)').text();
     var place_status = row.find('td:eq(1)').text();
-    var place_title = row.find('td:eq(2)').text();
+    var address = row.find('td:eq(2)').text();
     var place_discreption = row.find('td:eq(3)').text();
 
     $('#editEmployeeModal').find('#place_id_modale').val(place_id);
     $('#editEmployeeModal').find('#place_status_modale').val(place_status === 'Outside Office' ? '1' : '2');
-    $('#editEmployeeModal').find('#place_title_modale').val(place_title);
+    $('#editEmployeeModal').find('#address_modale').val(address);
     $('#editEmployeeModal').find('#place_discreption_modale').val(place_discreption);
 
 }
@@ -242,10 +242,10 @@ $('#editEmployeeFormModal').submit(function(event) {
    
     var place_id = $('#place_id_modale').val();
     var place_status = $('#place_status_modale').val();
-    var place_title = $('#place_title_modale').val();
+    var address = $('#address_modale').val();
     var place_discreption = $('#place_discreption_modale').val();
 
-    if (place_title !== '') {
+    if (address !== '') {
      
         $.ajax({
             url: '<?php echo base_url('admin/attendance/manage_moveplace/update'); ?>',
@@ -253,7 +253,7 @@ $('#editEmployeeFormModal').submit(function(event) {
             data: {
                 place_id: place_id,
                 place_status: place_status,
-                place_title: place_title,
+                address: address,
                 place_discreption: place_discreption
             },
             dataType: 'json',
