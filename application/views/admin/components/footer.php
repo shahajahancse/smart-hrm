@@ -195,3 +195,32 @@ if($theme[0]->fixed_layout=='true') {
   <!-- /.modal-dialog -->
 </div>
 <!-- /.control-sidebar --> 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+
+<script>
+// Function to show a SweetAlert success message
+function showSuccessAlert(message) {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: message,
+        timer: 2000,
+        showConfirmButton: false
+    }).then(function() {
+        location.reload();
+    });
+}
+
+// Function to show a SweetAlert error message
+function showErrorAlert(message) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: message,
+        timer: 2000,
+        showConfirmButton: false
+    }).then(function() {
+        location.reload();
+    });
+}
+</script>

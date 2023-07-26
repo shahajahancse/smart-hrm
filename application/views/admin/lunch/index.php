@@ -167,8 +167,7 @@ function hrp(id, status) {
             status: status,
         },
         success: function(response) {
-            console.log(response);
-            location.reload();
+            showSuccessAlert(response);
         },
         error: function(xhr, status, error) {
             console.log(error);

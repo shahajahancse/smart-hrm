@@ -360,17 +360,10 @@ $('#movementform1').on('submit', function(event) {
         method: 'POST',
         data: formData,
         success: function(response) {
-            // Handle the success response
-
-            alert(response);
-            location.reload();
-            // Process the response data returned from the controller
+            showSuccessAlert(response)
         },
         error: function(xhr, status, error) {
-            // Handle any errors that occur during the request
-
-            alert(error);
-            location.reload();
+            showErrorAlert(response)
         }
     });
 });
