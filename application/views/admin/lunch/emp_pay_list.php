@@ -425,19 +425,7 @@ $(document).ready(function() {
             success: function(response) {
                 // Handle the success response from the server
                 document.getElementById("loading").style.visibility = "hidden";
-
-                console.log(response);
-                Swal.fire({
-                    title: 'Success!',
-                    text: response,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.reload();
-                    }
-                });
-
+                showSuccessAlert(response);
             },
             error: function(xhr, status, error) {
                 // Handle the error response from the server
@@ -470,19 +458,7 @@ function updateprocess() {
             success: function(response) {
                 // Handle the success response from the server
                 document.getElementById("loading").style.visibility = "hidden";
-
-                console.log(response);
-                Swal.fire({
-                    title: 'Success!',
-                    text: response,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.reload();
-                    }
-                });
-
+                showSuccessAlert(response);
             },
             error: function(xhr, status, error) {
                 // Handle the error response from the server

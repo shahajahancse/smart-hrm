@@ -326,16 +326,8 @@ function submit() {
         processData: false,
         contentType: false,
         success: function(response) {
-            Swal.fire({
-                title: 'Success!',
-                text: response,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.reload();
-                }
-            });
+            showSuccessAlert(response);
+
         },
         error: function(xhr, status, error) {
             // Handle the error

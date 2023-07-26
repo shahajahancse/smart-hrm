@@ -1110,16 +1110,16 @@ public function ta_da_form($id){
         if ($action === 'add') {
             $data = array(
                 'address' => $this->input->post('address'),
-                'place_discreption' => $this->input->post('place_discreption')
-                'place_status' => $this->input->post('place_status'),
+                'place_discreption' => $this->input->post('place_discreption'),
+                'place_status' => $this->input->post('place_status')
             );
             $this->Attendance_model->add_move_place($data);
             echo json_encode(['status' => 'success']);
         } elseif ($action === 'update') {
             $data = array(
                 'address' => $this->input->post('address'),
-                'place_discreption' => $this->input->post('place_discreption')
-                'place_status' => $this->input->post('place_status'),
+                'place_discreption' => $this->input->post('place_discreption'),
+                'place_status' => $this->input->post('place_status')
             );
 
             $place_id = $this->input->post('place_id');

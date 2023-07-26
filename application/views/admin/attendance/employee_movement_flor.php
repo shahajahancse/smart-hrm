@@ -196,11 +196,10 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                     </div>
                 </div>
             </div>
-            <div class="col-md-6" id="otherInput"  style="display: none;">
+            <div class="col-md-6" id="otherInput" style="display: none;">
                 <div class="input">
                     <div class="level">Select Reason of move**</div>
-                    <input type="text" id="inputt" name="otherInput"
-                       class="col-md-12">
+                    <input type="text" id="inputt" name="otherInput" class="col-md-12">
 
                 </div>
             </div>
@@ -371,17 +370,12 @@ $('#movementform1').on('submit', function(event) {
         method: 'POST',
         data: formData,
         success: function(response) {
-            // Handle the success response
-
-            alert(response);
-            location.reload();
-            // Process the response data returned from the controller
+            showSuccessAlert(response)
         },
-        error: function(xhr, status, error) {
-            // Handle any errors that occur during the request
+        
 
-            alert(error);
-            location.reload();
+        error: function(xhr, status, error) {
+            showErrorAlert(error)
         }
     });
 });

@@ -392,16 +392,7 @@ function submit() {
         type: 'POST',
         data: inputData,
         success: function(response) {
-            Swal.fire({
-                title: 'Success!',
-                text: response,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.reload();
-                }
-            });
+            showSuccessAlert(response);
         },
         error: function(xhr, status, error) {
             // Handle the error
@@ -449,17 +440,7 @@ function make_id_payment() {
         data: data,
         success: function(response) {
             $('#mcloss').click();
-            Swal.fire({
-                title: 'Success!',
-                text: response,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.reload();
-                }
-            });
-
+            showSuccessAlert(response);
         },
         error: function(xhr, status, error) {
             // Handle errors
