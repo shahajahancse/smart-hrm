@@ -45,43 +45,46 @@
             </tr>
         </thead>
         <tbody style="text-align: center;">
-
-            <?php  $totalamount=0;$previouspay=0; foreach ($lunch_data as $key=>$employee): ?>
-            <?php 
+            <?php  $totalamount=0; $previouspay=0; $totalprev_meal=0; $totalprev_cost=0; $totalprev_amt=0;
+            foreach ($lunch_data as $key=>$employee):  
                 $pbm=($employee->prev_amount/45);
+
+                $totalprev_meal+=$employee->prev_meal;
+                $totalprev_cost+=$employee->prev_cost;
+                $previouspay   +=$employee->prev_pay;  
+                $totalprev_amt +=$employee->prev_amount;  
+
                 $totalamount+=$employee->pay_amount;
-                $previouspay+=$employee->prev_pay;
                 ?>
-            <tr>
-                <td style="text-align: center;"><?php echo $key+1 ?></td>
-                <td>&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
-                <td style="text-align: center;"><?php echo $employee->prev_meal;?></td>
-                <td style="text-align: center;"><?php echo $employee->prev_cost;?></td>
-                <td style="text-align: center;"><?php echo $employee->prev_pay;?></td>
-                <td style="text-align: center;"><?php echo $employee->prev_amount;?></td>
-            </tr>
+
+                <tr>
+                    <td style="text-align: center;"><?php echo $key+1 ?></td>
+                    <td>&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_meal;?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_cost;?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_pay;?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_amount;?></td>
+                </tr>
             <?php endforeach; ?>
         </tbody>
-        <?php if($r==1){?>
-
-        <tfoot style="text-align: center;font-weight: bold;">
-            <tr>
-                <td colspan="4" style="text-align: center;">Total</td>
-                <td colspan="1" style="text-align: center;"><?= $previouspay ?></td>
-            </tr>
-        </tfoot>
-
-
-
-
-        <?php }else{ ?>
-        <tfoot style="text-align: center;font-weight: bold;">
-            <tr>
-                <td colspan="6">Total</td>
-                <td colspan="1"><?= $totalamount ?></td>
-            </tr>
-        </tfoot>
-        <?php } ?>
+            <?php if($r==1){?>
+            <tfoot style="text-align: center;font-weight: bold;">
+                <tr>
+                    <td colspan="2">Total</td>
+                    <td colspan="1"><?= $totalprev_meal ?></td>
+                    <td colspan="1"><?= $totalprev_cost ?></td>
+                    <td colspan="1"><?= $previouspay ?></td>
+                    <td colspan="1"><?= $totalprev_amt ?></td>
+                </tr>
+            </tfoot>
+            <?php }else{ ?>
+            <tfoot style="text-align: center;font-weight: bold;">
+                <tr>
+                    <td colspan="5">Total</td>
+                    <td colspan="1"><?= $totalamount ?></td>
+                </tr>
+            </tfoot>
+            <?php } ?>
     </table>
     </div>
 

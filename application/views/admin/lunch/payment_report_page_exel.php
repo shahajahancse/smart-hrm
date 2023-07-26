@@ -51,13 +51,15 @@
                 </tr>
             </thead>
             <tbody style="text-align: center;">
+                <?php  $totalamount=0; $previouspay=0; $total_cl_ml=0;
+                foreach ($lunch_data as $key=>$employee):  
+                    $pbm = ($employee->prev_amount/45);
 
-                <?php  $totalamount=0;$previouspay=0; foreach ($lunch_data as $key=>$employee): ?>
-                <?php 
-                    $pbm=($employee->prev_amount/45);
-                    $totalamount+=$employee->pay_amount;
+                    $total_cl_ml += ($employee->collection_amount/45);
+                    $totalamount += $employee->collection_amount;
                     $previouspay+=$employee->prev_pay;
                     ?>
+
                 <tr>
                     <td style="text-align:center"><?php echo $key+1 ?></td>
                     <td><?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
@@ -69,32 +71,17 @@
                     <td style="color: <?php echo $employee->status == 1 ? 'blue' : 'red'; ?> text-align:center">
                         <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
                     </td>
-
                 </tr>
                 <?php endforeach; ?>
             </tbody>
-            <?php if($r==1){?>
-
             <tfoot style="text-align: center;font-weight: bold;">
                 <tr>
-                    <td colspan="6">Total</td>
+                    <td style="text-align: center; margin-right: 5px;" colspan="5">Total</td>
+                    <td colspan="1"><?= $total_cl_ml ?></td>
                     <td colspan="1"><?= $totalamount ?></td>
                 </tr>
             </tfoot>
-
-
-
-
-            <?php }else{ ?>
-            <tfoot style="text-align: center;font-weight: bold;">
-                <tr>
-                    <td colspan="6">Total</td>
-                    <td colspan="1"><?= $totalamount ?></td>
-                </tr>
-            </tfoot>
-            <?php } ?>
         </table>
-
     </body>
 
 
