@@ -1062,7 +1062,7 @@ class Attendance_model extends CI_Model {
  
 
     public function get_move_place() {
-        $query = $this->db->get('xin_employee_move_place');
+        $query = $this->db->order_by('place_id', 'DESC')->get('xin_employee_move_place');
         return $query->result();
     }
 
