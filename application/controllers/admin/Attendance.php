@@ -1082,7 +1082,8 @@ public function ta_da_form($id){
 		$data['subview'] 	 =  $this->load->view('admin/attendance/move_place', $data,TRUE);
 		$this->load->view('admin/layout/layout_main', $data); 
     }
-	public function get_employees_ajax() {
+
+	public function get_moveplace_ajax() {
         // Assuming you have a model called 'Attendance_model'
         $this->load->model('Attendance_model');
 
@@ -1108,17 +1109,17 @@ public function ta_da_form($id){
 		$data['breadcrumbs'] = 'Attendance';
         if ($action === 'add') {
             $data = array(
-                'place_status' => $this->input->post('place_status'),
                 'address' => $this->input->post('address'),
                 'place_discreption' => $this->input->post('place_discreption')
+                'place_status' => $this->input->post('place_status'),
             );
             $this->Attendance_model->add_move_place($data);
             echo json_encode(['status' => 'success']);
         } elseif ($action === 'update') {
             $data = array(
-                'place_status' => $this->input->post('place_status'),
                 'address' => $this->input->post('address'),
                 'place_discreption' => $this->input->post('place_discreption')
+                'place_status' => $this->input->post('place_status'),
             );
 
             $place_id = $this->input->post('place_id');

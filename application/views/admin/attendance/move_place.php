@@ -4,28 +4,31 @@
         padding: 2px 5px;
     }
 </style>
-<div class="mt-5">
-    <h1>Move Place List</h1>
-    <!-- "Add Employee" button -->
-    <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addEmployeeModal">Add Place</button>
+
+<div class="box">
+    <div class="box-header" style="padding-bottom: 0px !important;">
+        <h1 style="float: left; margin-top: 10px !important;">Move Place List</h1>
+        <!-- "Add Employee" button -->
+        <span style="float: right; margin-top: 15px !important;">
+            <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addEmployeeModal">Add Place</button>
+        </span>
+    </div>
 
     <!-- Bootstrap card to display the employee table -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>SL</th>
-                        <th>Place Status</th>
-                        <th>Place Title</th>
-                        <th>Place Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
+    <div class="box-body">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>SL</th>
+                    <th>Place Address</th>
+                    <th>Place Description</th>
+                    <th>Place Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -52,7 +55,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="address_modal">Place Title:</label>
+                        <label for="address_modal">Place Address:</label>
                         <input type="text" class="form-control" name="address_modal" id="address_modal"
                             required>
                     </div>
@@ -94,7 +97,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="address_modal">Place Title:</label>
+                        <label for="address_modal">Place Address:</label>
                         <input type="text" class="form-control" name="address_modal" id="address_modale"
                             required>
                     </div>
@@ -141,7 +144,7 @@ function showErrorAlert(message) {
 // Function to update the employee table content
 function updateEmployeeTable() {
     $.ajax({
-        url: '<?php echo base_url('admin/attendance/get_employees_ajax'); ?>',
+        url: '<?php echo base_url('admin/attendance/get_moveplace_ajax'); ?>',
         type: 'GET',
         dataType: 'json',
         success: function(response) {
@@ -151,11 +154,11 @@ function updateEmployeeTable() {
                 $.each(response.employees, function(index, employee) {
                     
                     tableBody += `
-                                <tr>
+                                <tr id="${employee.place_id}">
                                     <td>${i}</td>
-                                    <td>${employee.place_status === '1' ? 'Outside Office' : 'Outside Dhaka'}</td>
                                     <td>${employee.address}</td>
                                     <td>${employee.place_discreption}</td>
+                                    <td>${employee.place_status === '1' ? 'Outside Office' : 'Outside Dhaka'}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary update-btn" data-toggle="modal" data-target="#editEmployeeModal">Edit</button>
                                         <button type="button" class="btn btn-danger delete-btn" onclick=deleteplace(${employee.place_id})>Delete</button>
@@ -217,10 +220,10 @@ $('#addEmployeeFormModal').submit(function(event) {
 
 // AJAX to update an employee
 function showUpdateForm(row) {
-    var place_id = row.find('td:eq(0)').text();
-    var place_status = row.find('td:eq(1)').text();
-    var address = row.find('td:eq(2)').text();
-    var place_discreption = row.find('td:eq(3)').text();
+    var place_id =  row.attr('id');
+    var place_status = row.find('td:eq(3)').text();
+    var address = row.find('td:eq(1)').text();
+    var place_discreption = row.find('td:eq(2)').text();
 
     $('#editEmployeeModal').find('#place_id_modale').val(place_id);
     $('#editEmployeeModal').find('#place_status_modale').val(place_status === 'Outside Office' ? '1' : '2');
@@ -231,10 +234,10 @@ function showUpdateForm(row) {
 
 // Attach the click event to the document using event delegation
 $(document).on('click', '.update-btn', function(event) {
-        event.preventDefault(); // Prevent the default behavior of the update button
-        var row = $(this).closest('tr');
-        showUpdateForm(row);
-    });
+    event.preventDefault(); // Prevent the default behavior of the update button
+    var row = $(this).closest('tr');
+    showUpdateForm(row);
+});
 
 // AJAX to submit the updated employee details
 $('#editEmployeeFormModal').submit(function(event) {
