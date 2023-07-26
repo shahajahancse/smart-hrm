@@ -892,7 +892,6 @@ class Attendance extends MY_Controller {
 			$insert_id = $this->db->insert_id();
 			$reason=$insert_id;
         }
-		
 		$data = array(
 			'employee_id' => $userid,
 			'date' => date('Y-m-d'),
@@ -949,21 +948,8 @@ class Attendance extends MY_Controller {
 		$this->db->where('id', $alldata->id);
         $this->db->update('xin_employee_move_register', $data);
 
-		$data = array(
-			'move_id' => $alldata->id,
-			'travel_with' =>'[]',
-			'g_place' =>'[]',
-			'g_transportation' =>'[]',
-			'g_costing' =>'[]',
-			'c_place' =>'[]',
-			'c_transportation' =>'[]',
-			'c_costing' =>'[]',
-			'additional_cost' =>'0',
-			'remark' =>'',
-		);
-		if($this->db->insert("xin_employee_move_details" , $data)){
+		
 		redirect('admin/attendance/employee_movement/'.$s);
-	}
 }
 	
 public function ta_da_form($id){
@@ -976,7 +962,12 @@ public function ta_da_form($id){
 
 		$this->db->select("*");
 		$this->db->where("move_id", $id);
-		$data['movedata']   = $this->db->get('xin_employee_move_details')->result()[0];
+		$movedata  = $this->db->get('xin_employee_move_details')->result();
+
+		if (count($movedata) != 0) {
+			$data['movedata'] = $movedata[0];
+		}
+		
 		$data['title'] 		 = 'Outside Office Movements Form';
 		$data['breadcrumbs'] = 'Outside Office Movements Form';
 		$data['subview'] 	 = $this->load->view("admin/attendance/ta_da_form", $data, TRUE);
@@ -1034,6 +1025,7 @@ public function ta_da_form($id){
 			$fileLocation = base_url('uploads/move_file/') . $fileData['file_name'];
 
 			$data = array(
+				'move_id' => $move_id,
 				'g_place' => $gonig_way_place,
 				'g_transportation' => $gonig_way_transport,
 				'g_costing' => $gonig_way_costing,
@@ -1047,6 +1039,7 @@ public function ta_da_form($id){
 		} else {
 			// File upload failed or no file was uploaded
 			$data = array(
+				'move_id' => $move_id,
 				'g_place' => $gonig_way_place,
 				'g_transportation' => $gonig_way_transport,
 				'g_costing' => $gonig_way_costing,
@@ -1059,8 +1052,18 @@ public function ta_da_form($id){
 		}
 
 		// Update the database
-		$this->db->where('move_id', $move_id);
+		
+		$this->db->select("*");
+		$this->db->where("move_id", $move_id);
+		$movedata  = $this->db->get('xin_employee_move_details')->result();
+
+		if (count($movedata) != 0) {
+			$this->db->where('move_id', $move_id);
 		$this->db->update('xin_employee_move_details', $data);
+		}
+		$this->db->insert('xin_employee_move_details', $data);
+
+		
 		redirect('admin/attendance/employee_movement/1');
 	}
 

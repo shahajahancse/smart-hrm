@@ -170,43 +170,75 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                     d="M18.0002 4H6.41453C6.15184 3.99995 5.89172 4.05167 5.64903 4.15221C5.40634 4.25275 5.18585 4.40013 5.00016 4.58594L0.292969 9.29281C-0.0976562 9.68344 -0.0976562 10.3166 0.292969 10.7069L5.00016 15.4141C5.37516 15.7891 5.88391 16 6.41422 16H18.0002C19.1048 16 20.0002 15.1047 20.0002 14V6C20.0002 4.89531 19.1048 4 18.0002 4ZM15.3536 11.9394C15.5489 12.1347 15.5489 12.4513 15.3536 12.6466L14.6467 13.3534C14.4514 13.5487 14.1348 13.5487 13.9395 13.3534L12.0002 11.4141L10.0608 13.3534C9.86547 13.5487 9.54891 13.5487 9.35359 13.3534L8.64672 12.6466C8.45141 12.4513 8.45141 12.1347 8.64672 11.9394L10.5861 10L8.64672 8.06063C8.45141 7.86531 8.45141 7.54875 8.64672 7.35344L9.35359 6.64656C9.54891 6.45125 9.86547 6.45125 10.0608 6.64656L12.0002 8.58594L13.9395 6.64656C14.1348 6.45125 14.4514 6.45125 14.6467 6.64656L15.3536 7.35344C15.5489 7.54875 15.5489 7.86531 15.3536 8.06063L13.4142 10L15.3536 11.9394Z"
                     fill="#858A8F" />
             </svg></span>
-            <?php $attributes = array('id' => 'movementform1');?>
-            <?php echo form_open('', $attributes);?>
-            <div class="col-md-12">
-                <div class="col-md-6">
-                    <div class="input">
-                        <div class="level">Select Reason of move**</div>
-                        <div class="pseudo6">
-                            <select id="leave_type" name="reason" style="width: 98%;border: none;cursor: pointer;"
-                                required>
-                                <option>Select Reason of move**</option>
-                                <option value="Meeting">Meeting</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <input type="hidden" name="area" value="<?= ($empinfo->floor_status!=3)? '2':'1'?>">
-                <div class="col-md-6">
-                    <div class="input">
-                        <div class="level">Select Meeting People**</div>
-                        <div class="pseudo6">
-                            <select id="leave_type" name="meet_with" style="width: 98%;border: none;cursor: pointer;"
-                                required>
-                                <option>Select Meeting People**</option>
-                                <?php foreach($emp_floor as $emp){?>
-                                <option value="<?= $emp->user_id ?>"><?= $emp->first_name .' '. $emp->last_name ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
+        <?php $attributes = array('id' => 'movementform1');?>
+        <?php echo form_open('', $attributes);?>
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <div class="input">
+                    <div class="level">Select Reason of move**</div>
+                    <div class="pseudo6">
+                        <!-- <select id="leave_type" name="reason" style="width: 98%;border: none;cursor: pointer;" required>
+                            <option>Select Reason of move**</option>
+                            <option value="Meeting">Meeting</option>
+                        </select> -->
+                        <select id="reason" name="reason" style="width: 98%;border: none;cursor: pointer;" required>
+                            <?php $resonedata = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();
+                                ?>
+                            <option> Select Reason of move</option>
+                            <?php $resonedata = $this->db->get('xin_employee_move_reason')->result();
+                            foreach ($resonedata  as $k => $v) {
+                                ?>
+                            <option value="<?=$v->id ?>"><?= $v->title ?></option>
+                            <?php } ?>
+                            <option value="other">Other</option>
+                        </select>
+
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="form-actions box-footer">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
+            <div class="col-md-6" id="otherInput"  style="display: none;">
+                <div class="input">
+                    <div class="level">Select Reason of move**</div>
+                    <input type="text" id="inputt" name="otherInput"
+                       class="col-md-12">
+
                 </div>
             </div>
+            <script>
+            document.getElementById("reason").addEventListener("change", function() {
+                var selectedOption = this.value;
+                if (selectedOption === "other") {
+                    document.getElementById("otherInput").style.display = "block";
+                    document.getElementById("inputt").focus();
+                    document.getElementById("inputt").required = true;
+                } else {
+                    document.getElementById("otherInput").style.display = "none";
+                    document.getElementById("inputt").required = false;
+                }
+            });
+            </script>
+            <input type="hidden" name="area" value="<?= ($empinfo->floor_status!=3)? '2':'1'?>">
+            <div class="col-md-6">
+                <div class="input">
+                    <div class="level">Select Meeting People**</div>
+                    <div class="pseudo6">
+                        <select id="leave_type" name="meet_with" style="width: 98%;border: none;cursor: pointer;"
+                            required>
+                            <option>Select Meeting People**</option>
+                            <?php foreach($emp_floor as $emp){?>
+                            <option value="<?= $emp->user_id ?>"><?= $emp->first_name .' '. $emp->last_name ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-actions box-footer">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
+            </div>
+        </div>
 
 
 

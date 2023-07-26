@@ -198,7 +198,7 @@ textarea {
                    <select id="message" name="place_adress" class="col-md-12" style="border: none;" required>
                      <option>Select Place Address</option>
                      <?php foreach($moveplace as $place){ ?>
-                        <option value="<?= $place->place_id ?>"> <?= $place->place_title ?> </option>
+                        <option value="<?= $place->place_id ?>"> <?= $place->address ?> </option>
                      <?php } ?>
                    
                    </select>
