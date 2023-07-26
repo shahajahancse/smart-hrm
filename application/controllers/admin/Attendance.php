@@ -1106,7 +1106,7 @@ public function ta_da_form($id){
         if ($action === 'add') {
             $data = array(
                 'place_status' => $this->input->post('place_status'),
-                'place_title' => $this->input->post('place_title'),
+                'address' => $this->input->post('address'),
                 'place_discreption' => $this->input->post('place_discreption')
             );
             $this->Attendance_model->add_move_place($data);
@@ -1114,7 +1114,7 @@ public function ta_da_form($id){
         } elseif ($action === 'update') {
             $data = array(
                 'place_status' => $this->input->post('place_status'),
-                'place_title' => $this->input->post('place_title'),
+                'address' => $this->input->post('address'),
                 'place_discreption' => $this->input->post('place_discreption')
             );
 
