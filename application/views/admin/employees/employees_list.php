@@ -641,7 +641,7 @@
       var targetUrl = "<?=base_url('admin/employees/emp_left_resign/')?>" + emp_id;
       $.ajax({
           url: targetUrl,
-          type: "GET",
+          type: "POST",
           data: sendData,
           dataType: "json",
           success: function (response) {

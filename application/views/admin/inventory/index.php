@@ -31,7 +31,7 @@ $session = $this->session->userdata('username');
 
  .btn.active {
     /* Add your custom styling for the active button here */
-    background-color: #ff0000; /* For example, change background color to red */
+    background-color: #31b0d5; /* For example, change background color to red */
     color: #ffffff; /* For example, change text color to white */
   }
 
