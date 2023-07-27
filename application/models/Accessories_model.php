@@ -74,6 +74,7 @@ class Accessories_model extends CI_Model {
             $this->db->where('ap.status',$status);
         } 
 
+        $this->db->order_by('pac.cat_name');
         return $this->db->get()->result();         
     }
 
