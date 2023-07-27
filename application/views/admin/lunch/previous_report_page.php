@@ -66,22 +66,17 @@
         .btn {
             display: none;
         }
-
     }
     </style>
 </head>
 
 <body>
-
     <?php 
-
         if (empty($lunch_data)) {
             echo "<p style='text-align: center; color: red'>Record not found</p>";
             exit;
         }
-
     ?>
-
     <div class="container">
         <a onclick="window.print()" class="btn btn-primary" style="float: right;margin-top: 26px;">Pritn</a>
 
@@ -118,7 +113,7 @@
                     <thead style="text-align: center;">
                         <tr style="color:blue;">
                             <th>SL</th>
-                            <th >Name</th>
+                            <th>Name</th>
                             <th>Previous Meal</th>
                             <th>Previous Cost</th>
                             <th>Previous Pay</th>
@@ -145,23 +140,23 @@
                         <?php endforeach; ?>
                     </tbody>
                     <?php if($r==1){?>
-                        <tfoot style="text-align: center;font-weight: bold;">
-                            <tr>
-                                <td colspan="5">Total</td>
-                                <td colspan="1"><?= $previouspay ?></td>
-                            </tr>
-                        </tfoot>
-        <?php }else{ ?>
-        <tfoot style="text-align: center;font-weight: bold;">
-            <tr>
-                <td colspan="5">Total</td>
-                <td colspan="1"><?= $totalamount ?></td>
-            </tr>
-        </tfoot>
-        <?php } ?>
-    </table>
-    </div>
-    </div>
+                    <tfoot style="text-align: center;font-weight: bold;">
+                        <tr>
+                            <td colspan="5">Total</td>
+                            <td colspan="1"><?= $previouspay ?></td>
+                        </tr>
+                    </tfoot>
+                    <?php }else{ ?>
+                    <tfoot style="text-align: center;font-weight: bold;">
+                        <tr>
+                            <td colspan="5">Total</td>
+                            <td colspan="1"><?= $totalamount ?></td>
+                        </tr>
+                    </tfoot>
+                    <?php } ?>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!-- Include Bootstrap JS -->
