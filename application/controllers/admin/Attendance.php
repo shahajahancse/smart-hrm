@@ -757,7 +757,7 @@ class Attendance extends MY_Controller {
 		} else {
 			$data = $this->employee_movement_outside_dhaka();
 		}
-
+		// dd($data['alldata']);
 		$this->load->view('admin/layout/layout_main', $data); 
     }
 
@@ -808,8 +808,9 @@ class Attendance extends MY_Controller {
 		$data['location_status'] = $location_status;
 		$firstdate = $this->input->get('firstdate');
 		$seconddate = $this->input->get('seconddate');
-		$this->db->select("em.*, mr.title as reason");
+		$this->db->select("em.*, mr.title as reason, pl.address as place");
 		$this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
+		$this->db->join("xin_employee_move_place as pl", 'em.place_adress = pl.place_id', 'left');
 		$this->db->where("employee_id", $userid);
 		$this->db->where("location_status", 1);
 
@@ -842,7 +843,9 @@ class Attendance extends MY_Controller {
 		$data['location_status'] = $location_status;
 		$firstdate = $this->input->post('firstdate');
 		$seconddate = $this->input->post('seconddate');
-		$this->db->select("*");
+		$this->db->select("em.*, mr.title as reason, pl.address as place");
+		$this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
+		$this->db->join("xin_employee_move_place as pl", 'em.place_adress = pl.place_id', 'left');
 		$this->db->where("employee_id", $userid);
 		$this->db->where("location_status", $location_status);
 		if ($firstdate!=null && $seconddate!=null){
@@ -850,14 +853,12 @@ class Attendance extends MY_Controller {
 			$f2_date=date('Y-m-d',strtotime($seconddate));
 			$this->db->where("date BETWEEN '$f1_date' AND '$f2_date'");
 			$this->db->order_by("id", "desc");
-			$data['alldata']   = $this->db->get('xin_employee_move_register')->result();
+			$data['alldata']   = $this->db->get('xin_employee_move_register as em')->result();
 			$data['tablebody'] = $this->load->view("admin/attendance/employee_movement_outside_office_table", $data, TRUE);
 			echo $data['tablebody'] ;
 		}else{
 			$this->db->order_by("id", "desc");
-			$data['alldata'] = $this->db->get('xin_employee_move_register')->result();
-	
-
+			$data['alldata']   = $this->db->get('xin_employee_move_register as em')->result();
 			$data['session']     = $session;
 			$data['title'] 		 = 'Outside Office Movements';
 			$data['breadcrumbs'] = 'Outside Office Movements';
@@ -911,24 +912,21 @@ class Attendance extends MY_Controller {
 			'created_at' => date('Y-m-d H:i:s')
 		);
 		if($this->db->insert("xin_employee_move_register" , $data)){
-			$this->session->set_flashdata('success', 'Successfully Insert Done');
+			$this->session->set_flashdata('success', 'Check in Successfully');
 		}else{
-			$this->session->set_flashdata('success', 'Successfully Insert Done');
+			$this->session->set_flashdata('success', 'Check in Successfully');
 		}
-
-      redirect('admin/attendance/employee_movement/'.$this->input->post('location_status'));
+        redirect('admin/attendance/employee_movement/'.$this->input->post('location_status'));
 	}
-
 	function checkout($s){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
 		$userid  = $session[ 'user_id' ];
-
-
 		$this->db->select("*");
 		$this->db->where("employee_id", $userid);
+		$this->db->where("location_status", $s);
 		$this->db->order_by("id", "desc");
 		$this->db->limit(1); // Limit the result to 1 row
 		$alldata = $this->db->get('xin_employee_move_register')->row();
@@ -947,8 +945,7 @@ class Attendance extends MY_Controller {
 		);
 		$this->db->where('id', $alldata->id);
         $this->db->update('xin_employee_move_register', $data);
-
-		
+		$this->session->set_flashdata('success', 'Check Out Successfully');
 		redirect('admin/attendance/employee_movement/'.$s);
 }
 	

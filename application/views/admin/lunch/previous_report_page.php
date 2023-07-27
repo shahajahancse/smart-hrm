@@ -66,25 +66,19 @@
         .btn {
             display: none;
         }
-
     }
     </style>
 </head>
 
 <body>
-
     <?php 
-
         if (empty($lunch_data)) {
             echo "<p style='text-align: center; color: red'>Record not found</p>";
             exit;
         }
-
     ?>
-
     <div class="container">
         <a onclick="window.print()" class="btn btn-primary" style="float: right;margin-top: 26px;">Print</a>
-
 
         <div class="export-button">
             <form style="float: right;margin-top: 27px;margin-right: 5px;"
@@ -102,13 +96,12 @@
         <div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
         <div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;">
             <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
-        <div style="font-size:12px; line-height:15px; text-align:center;">Monthly Lunch Payment Report
-            of
+        <div style="font-size:12px; line-height:15px; text-align:center;">Monthly Lunch Payment Report of
             <?php $convertedDate1 = date('d-m-Y', strtotime($lunch_data[0]->from_date));
-               $convertedDate2 = date('d-m-Y', strtotime($lunch_data[0]->end_date));
-             ?>
+               $convertedDate2 = date('d-m-Y', strtotime($lunch_data[0]->end_date)); ?>
             <?= isset($lunch_data[0]->from_date) ? $convertedDate1 : ''; ?> to
-            <?= isset($lunch_data[0]->end_date) ? $convertedDate2  : ''; ?> </div>
+            <?= isset($lunch_data[0]->end_date) ? $convertedDate2  : ''; ?> 
+        </div>
     </div>
 
     <div class="container">
@@ -118,7 +111,7 @@
                     <thead style="text-align: center;">
                         <tr style="color:blue;">
                             <th>SL</th>
-                            <th >Name</th>
+                            <th>Name</th>
                             <th>Previous Meal</th>
                             <th>Previous Cost</th>
                             <th>Previous Pay</th>
