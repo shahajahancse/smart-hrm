@@ -79,8 +79,6 @@
     ?>
     <div class="container">
         <a onclick="window.print()" class="btn btn-primary" style="float: right;margin-top: 26px;">Pritn</a>
-
-
         <div class="export-button">
             <form style="float: right;margin-top: 27px;margin-right: 5px;"
                 action="<?php echo base_url();?>admin/Lunch/paymentreport/1" method="post">

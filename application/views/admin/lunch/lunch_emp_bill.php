@@ -61,20 +61,24 @@ if (count($empdata)>0){
             <th scope="col">SL</th>
             <th scope="col">Pay Date</th>
             <th scope="col">Total Meal</th>
-            <th scope="col">Total Amount</th>
-            <th scope="col">Stutus</th>
+            <th scope="col">Pay Amount</th>
+            <th scope="col">Previous Balance</th>
+            <th scope="col">Net Amount</th>
+            <th scope="col">Status</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
     <tbody>
-        <?php 
+        <?php
 foreach ($empdataall as $key=>$value){ ?>
         <tr>
             <td scope="row"><?= $key+1 ?></td>
             <td scope="row"><?= date('d-M-Y', strtotime($value->end_date)) ?> to
                 <?= date('d-M-Y', strtotime($value->next_date)) ?></td>
-            <td scope="row"><?= $value->prev_meal ?></td>
-            <td scope="row"><?= $value->prev_pay ?></td>
+            <td scope="row"><?= $value->pay_amount/45 ?></td>
+            <td scope="row"><?= $value->pay_amount ?></td>
+            <td scope="row"><?= $value->prev_amount?></td>
+            <td scope="row"><?= $value->collection_amount ?></td>
             <td scope="row">
                 <?= ($value->status != 1) ? '<span class="danger">Unpaid</span>' : '<span class="suncces">Paid</span>' ?>
             </td>
