@@ -1,44 +1,44 @@
 <?php
 
- $userid  = $session[ 'user_id' ];
- $totalmove_out_array = 0;
- $totalmove_in_array = 0;
- $inout=0;
- if (!empty($todaylog)) {
-     $totalmove_out_array=json_decode($todaylog[0]->out_time);
-     $totalmove_in_array=json_decode($todaylog[0]->in_time);
-     $inout=$todaylog[0]->inout;
-     
-$lastRow = end($totalmove_out_array); // Get the last element of the array
-$currentDateTime = new DateTime(); // Get the current date and time
-$lastRowDateTime = DateTime::createFromFormat('g:i A', $lastRow); // Convert the last row value to DateTime object
+$userid  = $session[ 'user_id' ];
+$totalmove_out_array = 0;
+$totalmove_in_array = 0;
+$inout=0;
+if (!empty($todaylog)) {
+    $totalmove_out_array=json_decode($todaylog[0]->out_time);
+    $totalmove_in_array=json_decode($todaylog[0]->in_time);
+    $inout=$todaylog[0]->inout;
 
-$timeDifference = $currentDateTime->diff($lastRowDateTime); // Calculate the difference between current time and last row time
-$h = $timeDifference->h; // Get the hours from the time difference
-$m = $timeDifference->i; // Get the minutes from the time difference
+    $lastRow = end($totalmove_out_array); // Get the last element of the array
+    $currentDateTime = new DateTime(); // Get the current date and time
+    $lastRowDateTime = DateTime::createFromFormat('g:i A', $lastRow); // Convert the last row value to DateTime object
 
-$timeDifferenceFormatted = sprintf('%02d:%02d', $h, $m); // Format the time difference
+    $timeDifference = $currentDateTime->diff($lastRowDateTime); // Calculate the difference between current time and last row time
+    $h = $timeDifference->h; // Get the hours from the time difference
+    $m = $timeDifference->i; // Get the minutes from the time difference
 
- }
- $totalmove=count($totalmove_out_array);
+    $timeDifferenceFormatted = sprintf('%02d:%02d', $h, $m); // Format the time difference
 
- $totalSpendingTime = array(
-    'hours' => 0,
-    'minutes' => 0,
-    'seconds' => 0
+}
+$totalmove=count($totalmove_out_array);
+
+$totalSpendingTime = array(
+   'hours' => 0,
+   'minutes' => 0,
+   'seconds' => 0
 );
 
 $count = count($totalmove_out_array);
 for ($i = 0; $i < $count; $i++) {
-    if(isset($totalmove_in_array[$i])){
+    if(isset($totalmove_in_array[$i])) {
 
-    $outDateTime = new DateTime($totalmove_out_array[$i]);
-    $inDateTime = new DateTime($totalmove_in_array[$i]);
+        $outDateTime = new DateTime($totalmove_out_array[$i]);
+        $inDateTime = new DateTime($totalmove_in_array[$i]);
 
-    $timeDiff = $inDateTime->diff($outDateTime);
-    $totalSpendingTime['hours'] += $timeDiff->h;
-    $totalSpendingTime['minutes'] += $timeDiff->i;
-    $totalSpendingTime['seconds'] += $timeDiff->s;
+        $timeDiff = $inDateTime->diff($outDateTime);
+        $totalSpendingTime['hours'] += $timeDiff->h;
+        $totalSpendingTime['minutes'] += $timeDiff->i;
+        $totalSpendingTime['seconds'] += $timeDiff->s;
     }
 }
 
@@ -179,24 +179,21 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                     <div class="pseudo6">
                         <select id="reason" onchange="changetother(this)" name="reason"
                             style="width: 98%;border: none;cursor: pointer;" required>
-                            <?php $resonedata = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();
-                                ?>
+                            <?php $resonedata = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();?>
                             <option> Select Reason of move</option>
                             <?php $resonedata = $this->db->get('xin_employee_move_reason')->result();
-                            foreach ($resonedata  as $k => $v) {
-                                ?>
+                              foreach ($resonedata  as $k => $v) {?>
                             <option value="<?=$v->id ?>"><?= $v->title ?></option>
                             <?php } ?>
                             <option value="other">Other</option>
                         </select>
                         <div class="col-md-12" id="otherInput" style="display: none;">
-                                <div class="level">Select Reason of move**</div>
-                                <input type="text" id="inputt" name="otherInput" class="col-md-12">
+                            <div class="level">Select Reason of move**</div>
+                            <input type="text" id="inputt" name="otherInput" class="col-md-12">
                         </div>
                     </div>
                 </div>
             </div>
-
             <script>
             function changetother(raw) {
                 var selectedOption = raw.value;
@@ -210,7 +207,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                 }
             };
             </script>
-            <input type="hidden" name="area" value="<?= ($empinfo->floor_status!=3)? '2':'1'?>">
+            <input type="hidden" name="area" value="<?= ($empinfo->floor_status!=3) ? '2' : '1'?>">
             <div class="col-md-6">
                 <div class="input" style="border: none;height: 66px;">
                     <div class="level">Select Meeting People**</div>
@@ -218,7 +215,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                         <select id="leave_type" name="meet_with" style="width: 98%;border: none;cursor: pointer;"
                             required>
                             <option>Select Meeting People**</option>
-                            <?php foreach($emp_floor as $emp){?>
+                            <?php foreach($emp_floor as $emp) {?>
                             <option value="<?= $emp->user_id ?>"><?= $emp->first_name .' '. $emp->last_name ?></option>
                             <?php } ?>
                         </select>
@@ -228,13 +225,10 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
         </div>
         <div class="col-md-12">
             <div class="form-actions box-footer">
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primar">
                     <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
             </div>
         </div>
-
-
-
     </div>
     <?php echo form_close(); ?>
 </div>
@@ -248,21 +242,22 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
         <div class="heading">Total Spending time</div>
         <div class="heading2"><?= $totaltime ?></div>
     </div>
-    <?php if($inout==0){ ?>
+    <?php if($inout==0) { ?>
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
         <div class="heading" style="font-size: 12px!important;">Are you want to go to the <span
-                style="color: #599AE7;"><?= ($empinfo->floor_status!=3)? '3rd floor?':'5th floor?'?></span> Please
+                style="color: #599AE7;"><?= ($empinfo->floor_status!=3) ? '3rd floor?' : '5th floor?'?></span> Please
             Make Sure your Check In & entry Purpose </div>
         <div class="heading2"><a class="btn" id="openModal"
                 style="width: 146px;height: 32px;border-radius: 2px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);color: white;font-weight: bold;">Check
                 In</a></div>
     </div>
-    <?php }else{ ?>
+    <?php } else { ?>
 
     <div class="divstats-info col-md-6" style="background-color:#FFF;">
         <div class="heading" style="font-size: 12px!important;color: red;">Your Check In time <span
-                style="color: #599AE7;"><?= (isset($timeDifferenceFormatted))? $timeDifferenceFormatted:''?> m</span> on
-            <span style="color: #599AE7;"><?= ($empinfo->floor_status!=3)? '5rd floor':'3th floor'?></span> Make Sure
+                style="color: #599AE7;"><?= (isset($timeDifferenceFormatted)) ? $timeDifferenceFormatted : ''?> m</span>
+            on
+            <span style="color: #599AE7;"><?= ($empinfo->floor_status!=3) ? '5rd floor' : '3th floor'?></span> Make Sure
             when You Come back Check out
         </div>
         <div class="heading2"><a class="btn" href="<?= base_url('admin/movement_floor/informsub') ?>"
