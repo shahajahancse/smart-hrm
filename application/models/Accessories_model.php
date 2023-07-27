@@ -34,8 +34,6 @@ class Accessories_model extends CI_Model {
 
 
     public function get_product_reports_info($id=null, $status=null, $category=null){
-        // dd("Ko");
-        // dd($status);
         $this->db->select(' 
                     ap.id as a_id,
                     ap.cat_id,
@@ -71,9 +69,11 @@ class Accessories_model extends CI_Model {
         } 
 
         if($status != null){
+            // dd($status);
             $this->db->where('ap.status',$status);
+            $this->db->group_by('a_id');
         } 
-
+        $this->db->group_by('a_id');
         return $this->db->get()->result();         
     }
 

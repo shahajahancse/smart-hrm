@@ -253,7 +253,8 @@ class Accessories extends MY_Controller {
                         $lastInsertedId = $this->db->insert_id();
                         $query = $this->db->get_where('product_accessories', array('id' => $lastInsertedId));
                         $result = $query->row();
-                        $data= array(
+                        if($result->user_id !=null){
+                            $data= array(
                             'p_a_id'        => $result->id,
                             'user_id'       => $result->user_id,
                             'provide_by'    => $data['user_id'],
@@ -268,14 +269,18 @@ class Accessories extends MY_Controller {
                         if($insert_data){
                             $this->session->set_flashdata('success', 'Successfully Insert Done');
                             echo $this->item;
-                        }     
+                        }   
+                        }else{
+                            $this->session->set_flashdata('success', 'Successfully Insert Done');
+                            echo $this->item;
+                        }
+
                     }
                 } else{
                     $this->session->set_flashdata('success', 'Sorry Something Wrong.');
                     echo $this->item;
                 }   
             }               
-            
         }
         if($user_id != null) {
             $data['row'] = $this->db->select('*')->where('id',$user_id)->get("product_accessories")->row();
@@ -286,6 +291,127 @@ class Accessories extends MY_Controller {
         $datas['subview']= $this->load->view('admin/accessories/item_add',$data,TRUE);  
         $this->load->view('admin/layout/layout_main', $datas); 
     }
+
+
+public function item_lists($id){
+    // dd($id); 
+    $this->db->select('*')->from('product_accessories');
+    if($id == 1){  
+        $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
+        $this->load->view('admin/accessories/on_working',$data);
+    }
+    if($id == 2){   
+        $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
+        $this->load->view('admin/accessories/on_stored',$data);
+    }
+    if($id == 3){   
+        $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
+        $this->load->view('admin/accessories/on_servicing',$data);
+    }
+    if($id == 4){   
+        $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
+        $this->load->view('admin/accessories/on_destroyed',$data);
+    }
+    if($id == 5){   
+        $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
+        $this->load->view('admin/accessories/on_movement',$data);
+    }
+    if($id == 6){   
+        $data['rows']=$this->Accessories_model->get_product_reports_info(null,null,null); 
+        $this->load->view('admin/accessories/on_all',$data);
+    }
+
+
+}   
+
+public function desk_add(){
+    $data = $this->page_loads();
+    $data['title'] = 'Desk List'.' | '.$this->Xin_model->site_title();
+    $data['breadcrumbs'] = "Desk List";
+    // $data['get_desk_list'] = $this->get_desk_list();
+    // dd($data['get_desk_list']);
+    $datas['subview']= $this->load->view('admin/accessories/desk_add',$data,TRUE);  
+    $this->load->view('admin/layout/layout_main', $datas); 
+
+
+    
+}
+
+public function get_desk_list(){
+    $tableData =$this->db->select('xin_employees.first_name,xin_employees.last_name,xin_employee_desk.*')
+                         ->from('xin_employee_desk')
+                         ->join('xin_employees', 'xin_employees.user_id = xin_employee_desk.user_id', 'left')
+                         ->get()
+                         ->result();
+
+    // Send the data as JSON response
+    header('Content-Type: application/json');
+    echo json_encode($tableData);
+}
+
+public function add_desk(){
+    // dd($_POST);
+    $data['desk_no'] = $_POST['desk_no'];
+    $data['status']  = $_POST['status'];
+
+    $data['user_id'] = $_POST['user_id']==null?'':$_POST['user_id'];
+    $data['floor']   = $_POST['floor'];
+
+    $insert = $this->db->insert('xin_employee_desk',$data);
+    if($insert && $_POST['user_id'] !=null){
+        $this->db->where('user_id',$_POST['user_id'])->update('xin_employees',['floor_status'=>$_POST['floor']]);
+    }
+}
+
+public function get_single_desk(){
+    
+$recordId = $this->input->get('recordId');
+        $recordId = $this->db->escape_str($recordId); // Escape the input to prevent SQL injection
+
+        $query = $this->db->get_where('xin_employee_desk', array('id' => $recordId));
+
+        if ($query->num_rows() > 0) {
+            $row = $query->row_array();
+            echo json_encode($row);
+        } else {
+            echo json_encode(['error' => 'Record not found']);
+        }
+    
+}
+
+
+public function update_desk(){
+    // dd($_POST);
+    if ($this->input->server('REQUEST_METHOD') === 'POST') {
+            $recordId = $this->input->post('recordId');
+            $deskNo = $this->input->post('desk_no');
+            $status = $this->input->post('status');
+            $floor = $this->input->post('floor');
+            $userId = $this->input->post('user_id');
+
+            $data = array(
+                'desk_no' => $deskNo,
+                'status' => $status,
+                'floor' => $floor,
+                'user_id' => $userId
+            );
+
+            $this->db->where('id', $recordId);
+            $result = $this->db->update('xin_employee_desk', $data);
+
+            if ($result) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['error' => 'Update failed']);
+            }
+        } else {
+            echo json_encode(['error' => 'Invalid request']);
+        }
+    
+
+}
+
+
 }
 
 ?>

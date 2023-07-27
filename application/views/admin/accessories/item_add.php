@@ -57,6 +57,7 @@
                 <option value="2" <?php echo (isset($row->status) && $row->status == 2)? 'selected':''; ?> >Stocked   </option>
                 <option value="3" <?php echo (isset($row->status) && $row->status == 3)? 'selected':''; ?> >Servicing </option>
                 <option value="4" <?php echo (isset($row->status) && $row->status == 4)? 'selected':''; ?> >Destroyed </option>
+                <option value="5" <?php echo (isset($row->status) && $row->status == 5)? 'selected':''; ?> >Movement </option>
               </select>
             </div>
           </div>
@@ -80,13 +81,12 @@
               <select name="user_id" id="user_id" class="form-control" disabled>  
                 <option value="">Select User</option>
                 <?php foreach ($users as $key => $user) {?>
-                <option value="<?php echo $user->user_id ?>" <?php echo (isset($row->user_id) && $row->user_id == $user->user_id)? 'selected':''; ?> ><?php echo $user->first_name.' '.$user->last_name ?></option>
+                  <option value="<?php echo $user->user_id ?>" <?php echo (isset($row->user_id) && $row->user_id == $user->user_id)? 'selected':''; ?> ><?php echo $user->first_name.' '.$user->last_name ?></option>
                 <?php }?>
-                <option value="sr_1">Server Room</option>
-                <option value="uh_2">Using Home</option>
-                <option value="fc_3">3rd Floor Common</option>
-                <option value="fc_4">5th Floor Common</option>
-                
+                  <option value="sr_1" <?php echo (isset($row->user_id) && $row->user_id =='sr_1' )? 'selected':''; ?>>Server Room</option>
+                  <option value="uh_2" <?php echo (isset($row->user_id) && $row->user_id == 'uh_2')? 'selected':''; ?>>Using Home</option>
+                  <option value="fc_3" <?php echo (isset($row->user_id) && $row->user_id == 'fc_3')? 'selected':''; ?>>3rd Floor Common</option>
+                  <option value="fc_4" <?php echo (isset($row->user_id) && $row->user_id == 'fc_4')? 'selected':''; ?>>5th Floor Common</option>
               </select>
             </div>   
           </div>
@@ -157,11 +157,10 @@ $('#cat_id').on('change',function(){
     $("#use_number").prop('disabled', true);
     $("#use_number").val(null);
     $("#number").val(null);
-
     $("#number").prop('disabled', true);
   }
 
-    if(mobile !== -1){
+  if(mobile !== -1){
     $("#use_number").prop('disabled', false);
     $('#use_number').on('change',function(){
        var status = $('#use_number').find(":selected").val();  
@@ -191,13 +190,22 @@ $('#status').on('change',function(){
   var status = $('#status').find(":selected").val();  
   if(status==1){
   $("#user_id").prop('disabled', false);
-  // $("#user_id").prop('required', true);
   }else{
   $("#user_id").prop('disabled', true);
     $("#user_id").val(null);
-
   }
 });
 
-// onChange="category(this.value);"
+<?php 
+if(isset($row->status)==1){
+?>
+  var status = $('#status').find(":selected").val();  
+  if(status==1){
+  $("#user_id").prop('disabled', false);
+  }else{
+  $("#user_id").prop('disabled', true);
+    $("#user_id").val(null);
+  }
+<?php }?>
+
 </script>
