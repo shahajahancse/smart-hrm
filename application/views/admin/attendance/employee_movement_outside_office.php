@@ -40,6 +40,9 @@ $timeDifferenceFormatted=$timeDiff->format('%d day, %H:%i:%s');
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+.select2-container {
+    width: 100% !important;
+}
 
 .modal-content {
     margin: 5% 28%;
@@ -59,10 +62,10 @@ $timeDifferenceFormatted=$timeDiff->format('%d day, %H:%i:%s');
 }
 
 .contentss {
-    padding: 30px;
+    padding: 11px;
     display: flex;
-    gap: 28px;
-    flex-direction: column;
+    gap: 17px;
+    flex-direction: row;
 }
 
 .form-field {
@@ -158,14 +161,12 @@ textarea {
             <?php if($in_out!=1){?>
             <div class="col-md-12 contentss">
                 <input type="hidden" name="location_status" value="<?=($location_status==1)? 1: 2?> ">
-
-                <div class="form-field">
+                <div class=" col-md-6 form-field">
                     <label for="reason">Select Reason of move**</label>
-                    <select id="reason" name="reason" class="col-md-12" style="border: none;" required>
-                        <?php $resonedata = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();
-                    
-                    ?>
-                        <option> Select Reason of move</option>
+                    <select id="reason" onchange="changetother(this)" name="reason" class="col-md-12"
+                        style="border: none;" required>
+                        <?php $resonedata = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();?>
+                        <option value=""> Select Reason of move</option>
                         <?php $resonedata = $this->db->get('xin_employee_move_reason')->result();
                             foreach ($resonedata  as $k => $v) {
                                 ?>
@@ -173,49 +174,29 @@ textarea {
                         <?php } ?>
                         <option value="other">Other</option>
                     </select>
-                    <input type="text" id="otherInput" name="otherInput" style="display: none;margin: 7px 3px;width: 39%;height: 36px;" class="col-md-12"
-                        >
+                    <input type="text" id="otherInput" name="otherInput"
+                        style="display: none;margin: 7px 3px;width: 39%;height: 36px;" class="col-md-12">
                 </div>
-               <script>
-                   document.getElementById("reason").addEventListener("change", function() {
-                       var selectedOption = this.value;
-                       if (selectedOption === "other") {
-                           document.getElementById("otherInput").style.display = "block";
-                       } else {
-                           document.getElementById("otherInput").style.display = "none";
-                       }
-                   });
-               </script>
-               
-               
-                <div class="form-field">
-                    <label for="message" >Write Place Adress</label>
+                <div class=" col-md-6 form-field">
+                    <label for="message">Select Place Adress</label>
                     <?php
-                  
                         $moveplace = $this->db->where('place_status', $location_status)->get('xin_employee_move_place')->result();
-                
                     ?>
-                   <select id="message" name="place_adress" class="col-md-12" style="border: none;" required>
-                     <option>Select Place Address</option>
-                     <?php foreach($moveplace as $place){ ?>
+                    <select name="place_adress" id="placea" class="col-md-12" style="border: none;" required>
+                        <option value="">Select Place Address</option>
+                        <?php foreach($moveplace as $place){ ?>
                         <option value="<?= $place->place_id ?>"> <?= $place->address ?> </option>
-                     <?php } ?>
-                   
-                   </select>
-                    <!-- <textarea id="message" name="place_adress" required></textarea> -->
+                        <?php } ?>
+                    </select>
                 </div>
-                <div class="actions">
+
+            </div>
+            <div class="col-md-12 contentss" style="display: block;">
+                <div class="actions" style="float: right;display: flex;gap: 7px;">
                     <input type="submit" class="btn" style="background: #39a3ff;" value="Move Outside">
                     <a class="btn" onclick="closem()">Cancel</a>
                 </div>
             </div>
-            <?php }else{  ?>
-
-
-
-
-
-
             <?php } ?>
 
         </div>
@@ -367,4 +348,23 @@ $('#movementform1').on('submit', function(event) {
         }
     });
 });
+</script>
+<script>
+$(document).ready(function() {
+    $('#reason').select2();
+    $('#placea').select2();
+});
+</script>
+<script>
+function changetother(raw) {
+    var selectedOption = raw.value;
+    if (selectedOption === "other") {
+        document.getElementById("otherInput").style.display = "block";
+        document.getElementById("otherInput").focus();
+        document.getElementById("otherInput").required = true;
+    } else {
+        document.getElementById("otherInput").style.display = "none";
+        document.getElementById("otherInput").required = false;
+    }
+};
 </script>

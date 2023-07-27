@@ -174,14 +174,11 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
         <?php echo form_open('', $attributes);?>
         <div class="col-md-12">
             <div class="col-md-6">
-                <div class="input">
+                <div class="input" style="border: none;height: 66px;">
                     <div class="level">Select Reason of move**</div>
                     <div class="pseudo6">
-                        <!-- <select id="leave_type" name="reason" style="width: 98%;border: none;cursor: pointer;" required>
-                            <option>Select Reason of move**</option>
-                            <option value="Meeting">Meeting</option>
-                        </select> -->
-                        <select id="reason" name="reason" style="width: 98%;border: none;cursor: pointer;" required>
+                        <select id="reason" onchange="changetother(this)" name="reason"
+                            style="width: 98%;border: none;cursor: pointer;" required>
                             <?php $resonedata = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();
                                 ?>
                             <option> Select Reason of move</option>
@@ -192,20 +189,17 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                             <?php } ?>
                             <option value="other">Other</option>
                         </select>
-
+                        <div class="col-md-12" id="otherInput" style="display: none;">
+                                <div class="level">Select Reason of move**</div>
+                                <input type="text" id="inputt" name="otherInput" class="col-md-12">
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6" id="otherInput" style="display: none;">
-                <div class="input">
-                    <div class="level">Select Reason of move**</div>
-                    <input type="text" id="inputt" name="otherInput" class="col-md-12">
 
-                </div>
-            </div>
             <script>
-            document.getElementById("reason").addEventListener("change", function() {
-                var selectedOption = this.value;
+            function changetother(raw) {
+                var selectedOption = raw.value;
                 if (selectedOption === "other") {
                     document.getElementById("otherInput").style.display = "block";
                     document.getElementById("inputt").focus();
@@ -214,11 +208,11 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                     document.getElementById("otherInput").style.display = "none";
                     document.getElementById("inputt").required = false;
                 }
-            });
+            };
             </script>
             <input type="hidden" name="area" value="<?= ($empinfo->floor_status!=3)? '2':'1'?>">
             <div class="col-md-6">
-                <div class="input">
+                <div class="input" style="border: none;height: 66px;">
                     <div class="level">Select Meeting People**</div>
                     <div class="pseudo6">
                         <select id="leave_type" name="meet_with" style="width: 98%;border: none;cursor: pointer;"
@@ -372,11 +366,17 @@ $('#movementform1').on('submit', function(event) {
         success: function(response) {
             showSuccessAlert(response)
         },
-        
+
 
         error: function(xhr, status, error) {
             showErrorAlert(error)
         }
     });
+});
+</script>
+<script>
+$(document).ready(function() {
+    $('#reason').select2();
+    $('#leave_type').select2();
 });
 </script>

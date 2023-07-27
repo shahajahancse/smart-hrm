@@ -58,7 +58,7 @@
             <td><?php echo $data->out_time; ?></td>
             <td><?php echo $data->in_time; ?></td>
             <td><?php echo $data->duration; ?></td>
-            <td><?php echo $data->place_adress; ?> </td>
+            <td><?php echo $data->place; ?> </td>
             <?php
             $status = $data->status;
             $statusMessage = '';
