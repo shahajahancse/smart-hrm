@@ -483,6 +483,10 @@ if($theme[0]->sub_menu_icons != ''){
               <?php if(in_array('1113',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['number_open']))echo $arr_mod['number_open'];?>"> <a href="<?php echo site_url('admin/accessories/number_add');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Add Phone Number</a> </li>
               <?php } ?>
+
+              <?php if(in_array('1114',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['desk_open']))echo $arr_mod['desk_open'];?>"> <a href="<?php echo site_url('admin/accessories/desk_add');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Add Desk</a> </li>
+              <?php } ?>
             </ul>
           </li>
           <?php } ?>

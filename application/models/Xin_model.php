@@ -531,6 +531,11 @@ class Xin_model extends CI_Model {
 			$arr['accsetting_open'] = 'active';
 			$arr['number_open'] = 'active';
 			return $arr;
+		} else if($mClass=='accessories' && $mMethod=='desk_add') {
+			$arr['access_open'] = 'active';
+			$arr['accsetting_open'] = 'active';
+			$arr['desk_open'] = 'active';
+			return $arr;
 		} 
 		
 		// inventory

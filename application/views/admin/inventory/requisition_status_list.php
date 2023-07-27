@@ -63,26 +63,23 @@
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
                 <!-- <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/purchase_details/'.$rows->id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td> -->
                 <td class="text-center">
-                        <div class="dropdown" >
+                  <div class="dropdown" >
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Action
+                    </button>
 
-                      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Action
-                      </button>
-
-                      <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
-                        
-                      <?php 
-                        if($session['role_id'] =1){ ?>
-                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
-                        <?php if($rows->status==2){?> 
-                           <a style="padding-left:5px;" href="<?= base_url('admin/inventory/hand_over/'.$rows->id);?>">Handover</a> <br>
-                       
-                         
-                        <?php } if($rows->status==4 || $rows->status==1){?> 
-                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
+                    <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
+                      
+                    <?php 
+                      if($session['role_id'] =1){ ?>
+                      <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_details/'.$rows->id);?>" >Details</a><br>
+                      <?php if($rows->status==2){?> 
+                          <a style="padding-left:5px;" href="<?= base_url('admin/inventory/hand_over/'.$rows->id);?>">Handover</a> <br>
+                      <?php } if($rows->status==4 || $rows->status==1){?> 
+                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">Edit</a> <br>
                         <a style="padding-left:5px; " href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">Rejecte</a>
-                        <?php }} ?>
-                      </div>
+                      <?php }} ?>
+                  </div>
               </td>
              
                 <?php } ?>
