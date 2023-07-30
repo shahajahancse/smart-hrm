@@ -44,6 +44,8 @@ body {
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/emp_attandenc.css') ?>">
 
 
+
+
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
         <div class="heading">Active Days</div>
@@ -112,7 +114,7 @@ body {
 
     </div>
 </div>
-<div id="datatable">
+<div id="datatable" class="table-responsive">
     <?php echo $tablebody;?>
 </div>
 <script>

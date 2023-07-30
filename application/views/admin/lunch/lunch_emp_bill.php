@@ -20,6 +20,7 @@ $balanceMeal= $paymeal-$taken_meal;
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
+
 <div class="monthname">
     <?php
 if (count($empdata)>0){
@@ -55,6 +56,7 @@ if (count($empdata)>0){
     <input type="month" class="datesec" id="monthYearInput" value="<?= date('Y-m')?>">
     <a class="btn btns">Submit</a>
 </div>
+<div class="table-responsive">
 <table class="table table-striped">
     <thead>
         <tr>
@@ -69,8 +71,8 @@ if (count($empdata)>0){
         </tr>
     </thead>
     <tbody>
-        <?php
-foreach ($empdataall as $key=>$value){ ?>
+                <?php
+        foreach ($empdataall as $key=>$value){ ?>
         <tr>
             <td scope="row"><?= $key+1 ?></td>
             <td scope="row"><?= date('d-M-Y', strtotime($value->end_date)) ?> to
@@ -93,3 +95,4 @@ foreach ($empdataall as $key=>$value){ ?>
 
     </tbody>
 </table>
+</div>

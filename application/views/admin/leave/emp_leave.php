@@ -1,11 +1,11 @@
 <?php
- $userid  = $session[ 'user_id' ];
+$userid  = $session[ 'user_id' ];
 
 ?>
 <?php
 $leavecal=leave_cal($userid);
-$leave_calel=get_cal_leave($userid,1);
-$leave_calsl=get_cal_leave($userid,2);  
+$leave_calel=get_cal_leave($userid, 1);
+$leave_calsl=get_cal_leave($userid, 2);
 ?>
 <style>
 body {
@@ -67,6 +67,32 @@ body {
 .texta {
     padding: 18px;
 }
+.timediv{
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 11px;
+}
+@media screen and (max-width: 992px) {
+    .timediv{
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+.modal-content {
+       padding: 14px;
+    }
+}
+@media screen and (max-width: 762px) {
+    .modal-content {
+        margin: 19% 0% 0% 26%;
+    }
+    .texta{
+        padding: 0;
+
+    }
+}
 </style>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
@@ -84,20 +110,23 @@ body {
 
 
     <div class="modal-content">
-        <span id="close" class="close"><svg style="width: 20px;height: 20px;flex-shrink: 0;"
-                xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path
-                    d="M18.0002 4H6.41453C6.15184 3.99995 5.89172 4.05167 5.64903 4.15221C5.40634 4.25275 5.18585 4.40013 5.00016 4.58594L0.292969 9.29281C-0.0976562 9.68344 -0.0976562 10.3166 0.292969 10.7069L5.00016 15.4141C5.37516 15.7891 5.88391 16 6.41422 16H18.0002C19.1048 16 20.0002 15.1047 20.0002 14V6C20.0002 4.89531 19.1048 4 18.0002 4ZM15.3536 11.9394C15.5489 12.1347 15.5489 12.4513 15.3536 12.6466L14.6467 13.3534C14.4514 13.5487 14.1348 13.5487 13.9395 13.3534L12.0002 11.4141L10.0608 13.3534C9.86547 13.5487 9.54891 13.5487 9.35359 13.3534L8.64672 12.6466C8.45141 12.4513 8.45141 12.1347 8.64672 11.9394L10.5861 10L8.64672 8.06063C8.45141 7.86531 8.45141 7.54875 8.64672 7.35344L9.35359 6.64656C9.54891 6.45125 9.86547 6.45125 10.0608 6.64656L12.0002 8.58594L13.9395 6.64656C14.1348 6.45125 14.4514 6.45125 14.6467 6.64656L15.3536 7.35344C15.5489 7.54875 15.5489 7.86531 15.3536 8.06063L13.4142 10L15.3536 11.9394Z"
-                    fill="#858A8F" />
-            </svg></span>
-        <div class="col-md-12" style="padding: 0;">
-            <div class="col-md-4">
+        <div class="col-md-12" style="height: 30px;">
+            <span id="close" class="close"><svg style="width: 20px;height: 20px;flex-shrink: 0;"
+                    xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path
+                        d="M18.0002 4H6.41453C6.15184 3.99995 5.89172 4.05167 5.64903 4.15221C5.40634 4.25275 5.18585 4.40013 5.00016 4.58594L0.292969 9.29281C-0.0976562 9.68344 -0.0976562 10.3166 0.292969 10.7069L5.00016 15.4141C5.37516 15.7891 5.88391 16 6.41422 16H18.0002C19.1048 16 20.0002 15.1047 20.0002 14V6C20.0002 4.89531 19.1048 4 18.0002 4ZM15.3536 11.9394C15.5489 12.1347 15.5489 12.4513 15.3536 12.6466L14.6467 13.3534C14.4514 13.5487 14.1348 13.5487 13.9395 13.3534L12.0002 11.4141L10.0608 13.3534C9.86547 13.5487 9.54891 13.5487 9.35359 13.3534L8.64672 12.6466C8.45141 12.4513 8.45141 12.1347 8.64672 11.9394L10.5861 10L8.64672 8.06063C8.45141 7.86531 8.45141 7.54875 8.64672 7.35344L9.35359 6.64656C9.54891 6.45125 9.86547 6.45125 10.0608 6.64656L12.0002 8.58594L13.9395 6.64656C14.1348 6.45125 14.4514 6.45125 14.6467 6.64656L15.3536 7.35344C15.5489 7.54875 15.5489 7.86531 15.3536 8.06063L13.4142 10L15.3536 11.9394Z"
+                        fill="#858A8F" />
+                </svg>
+            </span>
+        </div>
+        <div class="col-md-12 timediv" style="padding: 0;" >
+            <div class="col-md-4" style="padding: 0;">
                 <div class="input">
                     <div class="level">Select Leave Type**</div>
                     <div class="pseudo6">
                         <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;"
                             required>
-                            <option value="" >Select Leave Type**</option>
+                            <option value="">Select Leave Type**</option>
                             <option value="1">Earn Leave</option>
                             <option value="2">Sick Leave</option>
                         </select>
@@ -216,7 +245,8 @@ body {
                 <select onchange=getdata(this) id="year" style="width: 98%;border: none;cursor: pointer;">
                     <option>Select Year</option>
                     <?php foreach($years as $year) : ?>
-                    <option <?= ($year==date('Y'))?'selected':'' ?> value="<?php echo $year; ?>"><?php echo $year; ?>
+                    <option <?= ($year==date('Y')) ? 'selected' : '' ?> value="<?php echo $year; ?>">
+                        <?php echo $year; ?>
                     </option>
                     <?php endforeach; ?>
                 </select>
@@ -224,10 +254,10 @@ body {
         </div>
 
     </div>
-   <div class="col-md-3 divform-group">
-       <input type="button" onclick="location.reload();" value="Get All Data" class="input serceb">
-   </div>
-   
+    <div class="col-md-3 divform-group">
+        <input type="button" onclick="location.reload();" value="Get All Data" class="input serceb">
+    </div>
+
 </div>
 
 
@@ -235,14 +265,14 @@ body {
     <?php if($this->session->flashdata('success')):?>
     <div class="alert alert-danger" id="flash_message" style="text-align: center;padding: 6px;">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true">&times;</span>
         </button>
-      <?php echo $this->session->flashdata('success');?>
+        <?php echo $this->session->flashdata('success');?>
     </div>
-    <?php endif; ?> 
+    <?php endif; ?>
 </div>
 
-<div id="datatable">
+<div id="datatable" class="table-responsive">
     <?php echo $tablebody;?>
 </div>
 

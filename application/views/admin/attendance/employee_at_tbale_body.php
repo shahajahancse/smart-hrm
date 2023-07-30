@@ -1,4 +1,4 @@
-<table class="table table-striped" style="border-top: 1px solid #d6d2d2;">
+<table class="table table-responsive table-striped" style="border-top: 1px solid #d6d2d2;">
     <thead>
         <tr>
             <th>Sl</th>

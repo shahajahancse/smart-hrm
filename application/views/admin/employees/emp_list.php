@@ -17,8 +17,8 @@ $success = $this->session->flashdata('success');
   <div class="box-header with-border">
     <h3 class="box-title"> Employee List </h3> 
   </div>
-  <div class="box-body">
-    <div class="box-datatable table-responsive">
+  <div class="box-body table-responsive"">
+    <div class="box-datatable">
       <table class="datatables-demo table table-striped table-bordered" id="emplist">
         <thead>
           <tr>
