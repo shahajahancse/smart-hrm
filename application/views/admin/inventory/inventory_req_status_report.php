@@ -1,4 +1,4 @@
-<!-- < ?php dd($values);?> -->
+<!-- </?php dd($values);?> -->
 <?php
 $statusText = "";
 if ($statusC == 1) {
@@ -23,7 +23,7 @@ if ($statusC == 1) {
 
 	table thead tr th {
 		font-size:12px;
-        color: blue;
+        /* color: blue; */
 		padding: 3px !important;
 	}
 
@@ -35,39 +35,20 @@ if ($statusC == 1) {
         text-align: center;
     }
     
-.btn {
-    background-color: #0890dd;
-    height: 30px;
-    width: 60px;
-    font-size: 15px;
-	padding-right: 5px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    color: #fff;
-    font-family: Arial, sans-serif;
-    /* text-transform: uppercase; */
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease-in-out;
-    margin: 5px;
-}
 .ti1{
     margin-top: 3px;
     margin-bottom: 0px;
     font-size: 15px;
 }
 
-
 	@media print {
 		.box-tools {
 	    margin-right: -5px !important;
 		}
-
 		table thead tr th {
 			font-size: 12px;
 			padding: 3px !important;
 		}
-
 		table tbody tr td {
 			font-size: 14px;
 			padding: 3px !important;
@@ -77,50 +58,48 @@ if ($statusC == 1) {
 </style>
 
 
-<div>
+<div style="float: right;margin-left:10px;margin-top:30px">
+    <button class="btn btn-sm btn-primary" onclick="printPageMove()">Print</button>   
 
-<div  style="float: right;">
+    <form style="float: right;"  action="<?php echo base_url('admin/inventory/inventory_status_report/'.$exc); ?>" method="post">
+    <input type="hidden" name="first_date" value="<?php echo $first_date; ?>">
+    <input type="hidden" name="second_date" value="<?php echo $second_date; ?>">
+    <input type="hidden" name="statusC" value="<?php echo $statusC; ?>">
+    <button class="btn btn-sm btn-info" type="submit">Excel</button>
+    </form>
 
-<button class="btn" onclick="printPageMove()">Print</button>   </div>
-<div>
-<form style="float: right;"  action="<?php echo base_url('admin/inventory/inventory_status_report/'.$exc); ?>" method="post">
-  <input type="hidden" name="first_date" value="<?php echo $first_date; ?>">
-  <input type="hidden" name="second_date" value="<?php echo $second_date; ?>">
-  <input type="hidden" name="statusC" value="<?php echo $statusC; ?>">
- <button class="btn" type="submit">Excel</button>
-</form>
 </div>
-</div>
+
 <div style="clear: both;"></div>
 
-<div class="box" id="print-content">
+<div class="box" id="print-content" style="margin-top:-50px">
   <div style="text-align: center;">
   <?php  $this->load->view('admin/head_bangla'); ?>
-	  <!-- <h5 class="box-title ti1">Daily Unpaid Report</h4> -->
       <h4 class="box-title  ti1"><?php echo $statusText; ?> Report</h4>
-        <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
-        <?php $convertedDate1 = date('d-m-Y', strtotime($first_date));
-               $convertedDate2 = date('d-m-Y', strtotime($second_date)); ?>
-	  <p>Report date: <?php echo $convertedDate1; ?> To <?php echo $convertedDate2; ?> </p>
+        <?php 
+            if($first_date !=null && $second_date !=null){
+             echo "Report date: " .date("d M Y",strtotime($first_date))." to ".date("d M Y",strtotime($second_date)); 
+            }
+        ?>
   </div>
   
 
-  <div class="container">
+  <div class="container" style="margin-top:15px">
   	<div class="box-body" >
 	    <div class="box-datatable ">
 	      <table class="table table-striped table-responsive  table-bordered table-sm">
-                                            <thead>
-                                <th>Sl. No.</th>
-                                <th>Employee Name</th>
-                                <th>Department</th>
-                                <th>Designation</th>
-                                <th>Catagory</th>
-                                <th>Sub Catagory</th>
-                                <th>Product Name</th>
-                                <th>Request Quantity</th>
-                                <th>Approved Quantity</th>
-                                <th>Date </th>
-	        </thead>
+            <thead>
+                <th>Sl. No.</th>
+                <th>Employee Name</th>
+                <th>Department</th>
+                <th>Designation</th>
+                <th>Catagory</th>
+                <th>Sub Catagory</th>
+                <th>Product Name</th>
+                <th>Request Quantity</th>
+                <th>Approved Quantity</th>
+                <!-- <th>Date </th> -->
+            </thead>
             <?php if (!empty($values)): ?>
                     <?php $i = 1; foreach ($values as $row): ?>
                         <tbody>
@@ -134,10 +113,7 @@ if ($statusC == 1) {
                                 <td><?php echo $row->product_name ?></td>
                                 <td><?php echo $row->quantity ?></td>
                                 <td><?php echo $row->approved_qty ?></td>
-                                <td><?php echo !empty($row->created_at) ? date('d-m-Y', strtotime($row->created_at)) : ''; ?></td>
-
-                              
-                                
+                                <!-- <td>< ?php echo !empty($row->created_at) ? date('d-m-Y', strtotime($row->created_at)) : ''; ?></td> -->
                             </tr>
                         </tbody>
                     <?php endforeach; ?>

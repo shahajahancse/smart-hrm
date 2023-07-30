@@ -27,7 +27,54 @@ class Inventory extends MY_Controller
         $this->load->model("Xin_model");
         $this->load->helper('form');
 
+<<<<<<< HEAD
     }
+=======
+	
+	//================= Requisition here =======================
+
+	public function index($id = null){
+		$session = $this->session->userdata('username');
+		$data['title'] = 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store';
+		if($session['role_id']== 1 || $session['role_id']== 2 || $session['role_id']== 4 ){
+			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		}
+		$data['user_role_id'] 	= $session['role_id'];
+		if(!empty($session)){ 
+			if($session['role_id'] == 3){
+				$data['subview'] = $this->load->view("admin/inventory/index", $data, TRUE);
+			}else{
+				$data['subview'] = $this->load->view("admin/inventory/index1", $data, TRUE);
+			}
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+	public function index1(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store';
+		if($session['role_id']== 1 || $session['role_id']== 2 || $session['role_id']== 4 ){
+			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		}
+		if( $session['role_id'] == 3) {
+			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		}
+		$data['user_role_id'] 	= $session['role_id'];
+		if(!empty($session)){ 
+			$data['subview'] = $this->load->view("admin/inventory/index1", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+>>>>>>> a78ae8707ff642cd615eb4ae8f44088f89db2070
 
 
     //================= Requisition here =======================
@@ -113,6 +160,7 @@ class Inventory extends MY_Controller
         $this->form_validation->set_rules('cat_id[]', 'select category', 'required|trim');
         $this->form_validation->set_rules('product_id[]', 'item name', 'required|trim');
         $this->form_validation->set_rules('quantity[]', 'Quantity', 'required|trim');
+<<<<<<< HEAD
 
         //Validate and input data
         if ($this->form_validation->run() == true) {
@@ -135,6 +183,36 @@ class Inventory extends MY_Controller
 
             return redirect('admin/inventory');
         }
+=======
+		//Validate and input data
+		if ($this->form_validation->run() == true){
+			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
+				$form_data[] = array(
+					'user_id' 		 => $session['user_id'],
+					'cat_id'		 => $_POST['cat_id'][$i],
+					'sub_cate_id'	 => $_POST['sub_cate_id'][$i],
+					'product_id'	 => $_POST['product_id'][$i],
+					'quantity'		 => $_POST['quantity'][$i],
+					'status'		 => 1,
+				);
+			}  
+			if($this->db->insert_batch('products_requisition_details', $form_data)){
+				$this->session->set_flashdata('success', 'Successfully Insert Done');
+			} else {
+				$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
+			} 
+			return redirect('admin/inventory');
+		}
+
+		$data['title'] 		    =     'Inventory | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']    =     'Store Create Requisition';
+		$data['products'] 		=     $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+		$data['results'] 		=     $this->Inventory_model->product_list();
+		$data['user_role_id'] 	=     $session['role_id'];
+		$data['subview'] 	    =     $this->load->view("admin/inventory/create", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+>>>>>>> a78ae8707ff642cd615eb4ae8f44088f89db2070
 
         $data['title'] 		    =     'Inventory | '.$this->Xin_model->site_title();
         $data['breadcrumbs']    =     'Store Create Requisition';
@@ -161,6 +239,7 @@ class Inventory extends MY_Controller
     }
 
 
+<<<<<<< HEAD
     public function pending_list()
     {
         $session = $this->session->userdata('username');
@@ -207,10 +286,48 @@ class Inventory extends MY_Controller
         $data['breadcrumbs'] = 'Store Aproved List';
         $data['user_role_id'] 	= $session['role_id'];
         $data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, true);
+=======
+	public function pending_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] 		 = 'Store Pending List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store Pending List';
+		$data['user_role_id'] 	= $session['role_id'];
+		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],1);
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+	public function first_step_aproved_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] 		 = 'Store First Step Aproved | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store First Step Aproved';
+		$data['user_role_id'] 	= $session['role_id'];
+		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],2);
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+	public function aproved_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],2);
+		$data['title'] 		 = 'Store Aproved List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store Aproved List';
+		$data['user_role_id'] 	= $session['role_id'];
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
+>>>>>>> a78ae8707ff642cd615eb4ae8f44088f89db2070
 
         $this->load->view('admin/layout/layout_main', $data); //page load
     }
 
+<<<<<<< HEAD
     public function delivery_list()
     {
         $session = $this->session->userdata('username');
@@ -226,6 +343,20 @@ class Inventory extends MY_Controller
         $data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, true);
         $this->load->view('admin/layout/layout_main', $data); //page load
     }
+=======
+	public function delivery_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],3);
+		$data['title'] 		 = 'Store Handover List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store Handover List';
+		$data['user_role_id'] 	= $session['role_id'];
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+>>>>>>> a78ae8707ff642cd615eb4ae8f44088f89db2070
 
     public function reject_list()
     {
@@ -234,7 +365,11 @@ class Inventory extends MY_Controller
             redirect('admin/');
         }
 
+<<<<<<< HEAD
         $data['products'] 		= $this->Inventory_model->purchase_products_pending($session['user_id'], $session['role_id'], 4);
+=======
+		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],4);
+>>>>>>> a78ae8707ff642cd615eb4ae8f44088f89db2070
 
         $data['title'] 		 = 'Store Reject List | '.$this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Store Reject List';
@@ -246,6 +381,7 @@ class Inventory extends MY_Controller
 
 
 
+<<<<<<< HEAD
     public function requsition_details($id)
     {
         $session = $this->session->userdata('username');
@@ -279,6 +415,38 @@ class Inventory extends MY_Controller
         $approved = $this->db->where('id', $id)->update('products_requisition_details', ['status'=>2]);
         if($approved) {
             $this->db->where('requisition_id', $id)->update('products_requisition_details', ['status'=>2]);
+=======
+	public function requsition_details($id)	{
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+	    if($session['role_id']==3){
+			$user_id=$session['user_id'];
+	    };
+		$data['title'] 		 = 'Requsition Details | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Requsition Details';
+		$data['results']	 = $this->Inventory_model->requisition_details($user_id=null,$id);
+		if(!empty($data['results'])){
+			$data['id'] 	 = $id;
+		}
+		$data['status'] = $this->db->select('status')->where('id',$id)->get('products_requisition_details')->row()->status;								
+		$data['subview'] 	 = $this->load->view("admin/inventory/requsition_details", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+	public function requsition_approved($id){
+	// dd($id);
+		$log_user=$_SESSION['username']['user_id'];
+		$this->db->where('id',$id)->update('products_requisitions',['updated_by'=>$log_user]);
+		$approved = $this->db->where('id',$id)->update('products_requisition_details',['status'=>2]);
+		if($approved){
+			$this->db->where('requisition_id',$id)->update('products_requisition_details',['status'=>2]);
+				$this->session->set_flashdata('warning', ' Requsition Status Rejected .');
+				redirect("admin/inventory/index","refresh");
+		}
+	}
+>>>>>>> a78ae8707ff642cd615eb4ae8f44088f89db2070
 
             $this->session->set_flashdata('warning', ' Requsition Status Rejected .');
             redirect("admin/inventory/index", "refresh");
@@ -308,10 +476,41 @@ class Inventory extends MY_Controller
         if($approved) {
             $this->db->where('id', $id)->update('products_requisition_details', ['status'=>2]);
 
+<<<<<<< HEAD
             $this->session->set_flashdata('success', ' Requsition Status Approved .');
             redirect("admin/inventory/index", "refresh");
         }
     }
+=======
+	// reqisition change status requsition_edit_approved
+	public function requsition_edit_approved($id){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Requsition ';
+	    $data['results'] 	 = $this->Inventory_model->requisition_details($id);
+		// dd($data);
+		if(!empty($data['results'])){
+			$data['requisition_id'] = $data['results'][0]->id;
+		}else{
+			$data['requisition_id'] = '';
+		}
+		// dd($data);
+		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data);
+	}
+	
+	
+	public function persial_approved($id){
+		
+		$session = $this->session->userdata('username');
+		$all_detail=$this->db->where('id',$id)->get('products_requisition_details')->result();
+		foreach($all_detail as $key=>$value){
+			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
+		}
+>>>>>>> a78ae8707ff642cd615eb4ae8f44088f89db2070
 
     // reqisition change status requsition_edit_approved
     public function requsition_edit_approved($id)
@@ -884,6 +1083,7 @@ class Inventory extends MY_Controller
     //====================== Requisition Report=============================
 
 
+<<<<<<< HEAD
     public function report()
     {
         $session = $this->session->userdata('username');
@@ -926,6 +1126,44 @@ class Inventory extends MY_Controller
 
 
         }
+=======
+	public function report(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] 		 = 'Report | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Report';
+		$data['subview'] 	 = $this->load->view("admin/inventory/report", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	
+	}
+
+      //requsition report status and excel file generator same function
+	public function inventory_status_report($exc=null){
+		$first_date = $this->input->post('first_date');
+		$second_date = $this->input->post('second_date');
+		$statusC = $this->input->post('statusC');
+		$data["values"] = $this->Inventory_model->requsition_status_report($first_date, $second_date, $statusC);
+		//  dd($data["values"]);
+		$data['statusC']= $statusC;
+		$data['first_date'] = $first_date;
+		$data['second_date'] = $second_date;
+		if($exc == 1)
+		{
+			$this->load->view("admin/inventory/inventory_req_status_report_excil", $data);
+		}else{
+			if(is_string($data["values"]))
+			{
+				echo $data["values"];
+			}
+			else
+			{	
+				echo $this->load->view("admin/inventory/inventory_req_status_report", $data, TRUE);
+			}
+		}
+  }
+>>>>>>> a78ae8707ff642cd615eb4ae8f44088f89db2070
 
     }
 
@@ -1004,6 +1242,7 @@ class Inventory extends MY_Controller
 
     //====================== End Low inventory and  Stack product report Report=============================
 
+<<<<<<< HEAD
 
     // ================ default ====================
     public function products($id = null)
@@ -1012,6 +1251,20 @@ class Inventory extends MY_Controller
         if(empty($session)) {
             redirect('admin/');
         }
+=======
+	// ================ default ====================
+	public function products($id = null)
+	{
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+      //Validation
+      $this->form_validation->set_rules('cat_id', 'select category', 'required|trim');
+      $this->form_validation->set_rules('sub_cate_id', 'select sub category', 'required|trim');
+      $this->form_validation->set_rules('unit_id', 'select unit', 'required|trim');
+      $this->form_validation->set_rules('product_name', 'item name', 'required|trim');
+>>>>>>> a78ae8707ff642cd615eb4ae8f44088f89db2070
 
         //Validation
         $this->form_validation->set_rules('cat_id', 'select category', 'required|trim');
@@ -1215,6 +1468,7 @@ class Inventory extends MY_Controller
         echo(json_encode($data));
     }
 
+<<<<<<< HEAD
     public function delete_requsiton_item($id, $rid)
     {
 
@@ -1235,6 +1489,19 @@ class Inventory extends MY_Controller
         $this->db->where('id', $id)->delete('products_requisition_details');
         $this->session->set_flashdata('success', 'Requsiton deleted successfully.');
         redirect("admin/inventory/index");
+=======
+	public function delete_requsiton_item($id,$rid){
+		$delete = $this->db->where('id',$id)->delete('products_requisition_details');
+		$this->db->where('id',$id)->delete('products_requisitions');
+		$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
+		redirect("admin/inventory/index");
+	}
+
+    public function delete_requsiton($id){
+		$this->db->where('id',$id)->delete('products_requisition_details');
+		$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
+		redirect("admin/inventory/index");
+>>>>>>> a78ae8707ff642cd615eb4ae8f44088f89db2070
     }
 
 
