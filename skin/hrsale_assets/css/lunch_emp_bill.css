@@ -112,3 +112,25 @@ table {
   text-align: center;
   border: 1px solid #00ff15;
 }
+.table-responsive{
+  overflow-x: inherit;
+}
+@media screen and (max-width: 992px) {
+  .divrow {
+      flex-direction: column;
+  }
+  .table-responsive{
+    overflow-x: auto;
+  }
+
+  .medelbar {
+      flex-direction: column;
+      align-items: normal!important;
+  }
+}
+
+@media screen and (max-width: 523px) {
+    .monthname {
+       left: 37px;
+    }
+}

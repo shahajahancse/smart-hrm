@@ -110,7 +110,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
 
 .modal-content {
     background-color: #fff;
-    margin: 4% auto;
+    margin: 9% 26%;
     padding: 20px;
     border: 1px solid #888;
     width: 60%;
@@ -123,6 +123,8 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    position: inherit;
+    z-index: 9999;
 }
 
 .close:hover,
@@ -155,6 +157,25 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
     color: #FFF;
     background: #2DCA8C;
 }
+@media screen and (max-width: 934px) {
+    .modal-content {
+        margin: 14% 33%;
+    }
+}
+
+@media screen and (max-width: 762px) {
+    .modal-content {
+        margin: 31% 14%;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .modal-content {
+        margin: 57% 14%;
+        padding: 13px 0px 11px 0px;
+    }
+}
+
 </style>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
@@ -289,7 +310,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
     </div>
 
 </div>
-<div id="datatable">
+<div id="datatable" class="table-responsive">
     <?php echo $tablebody;?>
 </div>
 
