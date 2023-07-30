@@ -67,32 +67,44 @@ body {
 .texta {
     padding: 18px;
 }
-.timediv{
+
+.timediv {
     padding: 0;
     display: flex;
     flex-direction: row;
     gap: 11px;
 }
+
 @media screen and (max-width: 992px) {
-    .timediv{
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-}
-.modal-content {
-       padding: 14px;
+    .timediv {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+    }
+
+    .modal-content {
+        padding: 14px;
     }
 }
+
 @media screen and (max-width: 762px) {
     .modal-content {
         margin: 19% 0% 0% 26%;
     }
-    .texta{
-        padding: 0;
 
+    .texta {
+        padding: 0;
     }
 }
+
+@media screen and (max-width: 400px) {
+    .modal-content {
+        margin: 27% 0% 0% 12%;
+        width: 256px;
+    }
+}
+
 </style>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
@@ -119,7 +131,7 @@ body {
                 </svg>
             </span>
         </div>
-        <div class="col-md-12 timediv" style="padding: 0;" >
+        <div class="col-md-12 timediv" style="padding: 0;">
             <div class="col-md-4" style="padding: 0;">
                 <div class="input">
                     <div class="level">Select Leave Type**</div>
