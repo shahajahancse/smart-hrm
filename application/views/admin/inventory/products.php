@@ -38,11 +38,10 @@
 <div class="box mb-4 <?php echo $get_animate;?>">
     <div id="accordion">
         <div class="box-header with-border">
-            <h3 class="box-title"><?php echo $this->lang->line('xin_add_new');?> Product</h3>
+            <h3 class="box-title"><?php echo $this->lang->line('xin_add_new');?> Item</h3>
             <div class="box-tools pull-right">
                 <a class="text-dark collapsed" data-toggle="collapse" href="#add_form" aria-expanded="false">
-                    <button type="button" class="btn btn-xs btn-primary"> <span class="ion ion-md-add"></span>
-                        <?php echo $this->lang->line('xin_add_new');?></button>
+                    <button type="button" class="btn btn-xs btn-primary">Add New</button>
                 </a>
             </div>
         </div>
@@ -136,19 +135,11 @@
                                     type="text"><?php echo !empty($row->short_details)? $row->short_details:''; ?></textarea>
                             </div>
                         </div>
-
-                        <!-- <div class="col-md-4">
-                <label for="p_type">Product Type<i class="hrsale-asterisk" style="color:red !important">*</i></label><br>
-                <label class="radio-inline"><input type="radio" name="p_type" value="1"<?php echo (!empty($row) && $row->p_type == 1)? 'checked':'' ?> >Inventory</label>
-                <label class="radio-inline"><input type="radio" name="p_type" value="0"<?php echo (!empty($row) && $row->p_type == 0)? 'checked':'' ?> >Store</label>
-            </div> -->
-
                     </div>
                 </div>
 
                 <div class="form-actions box-footer" style="margin-top :20px">
-                    <button type="submit" class="btn btn-primary"> <i class="fa fa-check-square-o"></i>
-                        <?php echo $this->lang->line('xin_save');?> </button>
+                    <button type="submit" class="btn btn-sm btn-primary" style="margin-right: -15px;">  Save </button>
                 </div>
                 <?php echo form_close(); ?>
             </div>
@@ -178,7 +169,7 @@ $(function() {
 
 <div class="box <?php echo $get_animate;?>">
     <div class="box-header with-border">
-        <h3 class="box-title">Inventory Product List</h3>
+        <h3 class="box-title">Item List</h3>
     </div>
     <div class="box-body">
         <div class="box-datatable table-responsive">
@@ -203,18 +194,16 @@ $(function() {
                         <td><?php echo $rows->sub_cate_name; ?></td>
                         <td><?php echo $rows->unit_name; ?></td>
                         <td><?php echo $rows->quantity; ?></td>
-                        <td>
+                        <td class="text-center">
                             <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="actionButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Action
+                                <button type="button" class="btn btn-sm dropdown-toggle" style="background: transparent;box-shadow:none !important" data-toggle="dropdown">
+                                    <span><i class="fa fa-ellipsis-v" ></i></span> 
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right list-group"
                                     aria-labelledby="actionButton">
-                                    <a class="dropdown-item list-group-item"
-                                        href="<?= base_url('admin/inventory/product_details/'.$rows->id) ?>">Details</a>
-                                    <a class="dropdown-item list-group-item"
-                                    href="<?= base_url('admin/inventory/products/'.$rows->id);?>">Edit</a>
+                                    <a style="padding-left:5px;"  href="<?= base_url('admin/inventory/product_details/'.$rows->id) ?>">Details</a>
+                                    <hr class="divider">
+                                    <a style="padding-left:5px;" href="<?= base_url('admin/inventory/products/'.$rows->id);?>">Edit</a>
                                 </div>
                             </div>
                         </td>

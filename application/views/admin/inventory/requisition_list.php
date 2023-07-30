@@ -34,7 +34,7 @@
           <tr>
             <td class="text-center"><?= $key + 1 ?></td>
             <td class="text-center"><?= $row->product_name ?></td>
-            <td class="text-center"><?= date("d-m-Y", strtotime($row->created_at)) ?></td>
+            <td class="text-center"><?= date("d M Y", strtotime($row->created_at))?></td>
             <td class="text-center"><?= $row->category_name ?></td>
             <td class="text-center"><?= $row->quantity ?></td>
             <td class="text-center"><?= $row->approved_qty ?></td>
@@ -45,7 +45,6 @@
             </td>
             <td class="text-center">
               <?php if($row->status == 1){?> 
-               
                 <div class="dropdown" >
                   <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                   <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">

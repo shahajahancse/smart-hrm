@@ -525,20 +525,13 @@ function Inv_Report(statusC){
 
         first_date = document.getElementById('process_date').value;
         second_date = document.getElementById('second_date').value;
-        // var checkboxes = document.getElementsByName('select_emp_id[]');
-        // var sql = get_checked_value(checkboxes);
-        // if(sql =='')
-        // {
-        //   alert('Please select employee Id');
-        //   return ;
-        // }
         
-        if(first_date =='')
+        if(second_date !='' && first_date =='' )
         {
           alert('Please select first date');
           return ;
         }
-        if(second_date =='')
+        if(second_date =='' && first_date !=='')
         {
           alert('Please select second date');
           return ;
