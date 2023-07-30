@@ -4,18 +4,7 @@
   $date        = date( "Y-m-01");
   $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
   $leave_stutas  = $this->Salary_model->leave_count_status($userid, $date , $datep, 2);
-//   dd($present_stutas);
-//   stdClass Object
-// (
-//     [attend] => 6
-//     [absent] => 0
-//     [weekend] => 2
-//     [holiday] => 3
-//     [HalfDay] => 0.0
-//     [extra_p] => 0
-//     [late_status] => 0
-// )
-// dd($leave_stutas)
+
 ?>
 <style>
 body {
@@ -42,10 +31,6 @@ body {
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/emp_attandenc.css') ?>">
-
-
-
-
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
         <div class="heading">Active Days</div>

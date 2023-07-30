@@ -414,6 +414,7 @@ class Xin_model extends CI_Model {
 		} else if($mClass=='inventory' && $mMethod=='index') {
 			$arr['invtry_open'] = 'active';
 			$arr['my_requi_active'] = 'active';
+			$arr['iqlist_open'] = 'active';
 			return $arr;
 		}  else if($mClass=='inventory' && $mMethod=='report') {
 			$arr['invtry_open'] = 'active';
