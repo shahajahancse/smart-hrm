@@ -1,8 +1,9 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Attendance_model extends CI_Model {
- 
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class Attendance_model extends CI_Model
+{
     public function __construct()
     {
         parent::__construct();
@@ -11,14 +12,14 @@ class Attendance_model extends CI_Model {
     public function attn_process($process_date, $emp_ids, $status = null)
     {
 
-        $check_day = date("Y-m-d",strtotime("-1 day", strtotime($process_date)));
-        $att_check = $this->db->where('attendance_date',$check_day)->get('xin_attendance_time');
+        $check_day = date("Y-m-d", strtotime("-1 day", strtotime($process_date)));
+        $att_check = $this->db->where('attendance_date', $check_day)->get('xin_attendance_time');
         if($att_check->num_rows() < 1) {
             echo 'Please first process '. $check_day;
-            exit; 
+            exit;
         } elseif (strtotime("+1 day", strtotime(date('Y-m-d'))) < strtotime($process_date)) {
             echo 'Sorry! advanced process not allowed, Please first process '. date('Y-m-d');
-            exit; 
+            exit;
         }
 
         $off_day = $this->dayoff_check($process_date);
@@ -40,7 +41,7 @@ class Attendance_model extends CI_Model {
             $in_time  = '';
             $out_time = '';
             $clock_in_out = 0;
-            $late_status = 0;            
+            $late_status = 0;
             $late_time = 0;
             $production = 0;
             $ot = 0;
@@ -53,13 +54,13 @@ class Attendance_model extends CI_Model {
                 continue;
             }
 
-             // lumch auto off in holiday & weekend
+            // lumch auto off in holiday & weekend
             if (($off_day == true || $holiday_day == true) && $lunch_id != null) {
-                $lst = ($off_day == true)? 'Off Day':'Holiday';
+                $lst = ($off_day == true) ? 'Off Day' : 'Holiday';
                 $lunch_id = $this->lunch_auto_off_details($lunch_id, $emp_id, $lst, $process_date);
             }
             // lumch auto off
-            
+
             $proxi_id   = $this->get_proxi($emp_id);
             if (strtotime('2023-04-29') >= strtotime($process_date)) {
                 $shift_schedule = (object) array(
@@ -105,7 +106,7 @@ class Attendance_model extends CI_Model {
             $lunch_out   = $this->check_in_out_time($proxi_id, $out_start_time, $lunch_end, 'ASC');
             $lunch_in    = $this->check_in_out_time($proxi_id, $lunch_time, $half_evening, 'DESC');
             if (strtotime($lunch_in) > strtotime($lunch_late_time)) {
-                $lunch_late_status = 1; 
+                $lunch_late_status = 1;
             }
 
             // get in time
@@ -114,15 +115,15 @@ class Attendance_model extends CI_Model {
             if ($movement_time->num_rows() > 0) {
                 $move_out_time = $movement_time->row()->in_time;
                 if (strtotime($move_out_time) < strtotime($late_start_time)) {
-                    $in_time = $move_out_time; 
+                    $in_time = $move_out_time;
                 }
 
                 // lunch late check
                 $move_in_time = $movement_time->row()->in_time;
                 if ($move_in_time != '' && strtotime($move_in_time) > strtotime($process_date.' '.$lunch_time)) {
-                    $lunch_late_status = 0; 
+                    $lunch_late_status = 0;
                 }
-            } 
+            }
 
 
             // get out time
@@ -131,15 +132,15 @@ class Attendance_model extends CI_Model {
             if ($movement_time->num_rows() > 0) {
                 $move_in_time = $movement_time->row()->out_time;
                 if ($move_in_time != '' && strtotime($move_in_time) > strtotime($early_out_time)) {
-                    $out_time = $move_in_time; 
+                    $out_time = $move_in_time;
                 }
 
-                 // lunch late check
+                // lunch late check
                 $move_in_time = $movement_time->row()->in_time;
                 if ($move_in_time != '' && strtotime($move_in_time) > strtotime($process_date.' '.$lunch_time)) {
-                    $lunch_late_status = 0; 
+                    $lunch_late_status = 0;
                 }
-            } 
+            }
 
             // check leave
             $leave = $this->leave_chech($process_date, $emp_id);
@@ -152,7 +153,7 @@ class Attendance_model extends CI_Model {
                 $astatus = 'Hleave';
                 $status = 'Hleave';
 
-                // Half day calculation here 
+                // Half day calculation here
                 $half_morning = date("Y-m-d H:i:s", strtotime($process_date.' '.'11:59:59'));
                 if (strtotime($in_time) < strtotime($half_morning) && $in_time != '') {
                     $astatus = 'HalfDay';
@@ -163,7 +164,7 @@ class Attendance_model extends CI_Model {
                 }
                 // half day calculation end
 
-            } else  if ($leave['leave'] == true) {
+            } elseif ($leave['leave'] == true) {
                 $astatus = 'Leave';
                 $status = 'Leave';
             } else {
@@ -175,7 +176,7 @@ class Attendance_model extends CI_Model {
                         $astatus = 'Holiday';
                         $status = 'Holiday';
                     }
-                } else if ($off_day == true) {
+                } elseif ($off_day == true) {
                     if (($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>=strtotime($early_out_time))) {
                         $astatus = 'Present';
                         $status = 'Off Day';
@@ -183,14 +184,14 @@ class Attendance_model extends CI_Model {
                         $astatus = 'Off Day';
                         $status = 'Off Day';
                     }
-                } else  if ($in_time == '' && $out_time == '') {
+                } elseif ($in_time == '' && $out_time == '') {
                     $astatus = 'Absent';
                     $status = 'Absent';
                 } else {
                     $astatus = 'Absent';
                     $status = 'Present';
 
-                    // Half day calculation here 
+                    // Half day calculation here
                     if ($in_time != '' && $out_time != '') {
                         $half_morning = date("Y-m-d H:i:s", strtotime($process_date.' '.'11:59:59'));
                         if (strtotime($in_time) > strtotime($half_morning)) {
@@ -209,11 +210,11 @@ class Attendance_model extends CI_Model {
             // dd($leave);
 
             //// check present statu for meeting
-            $this->db->where('employee_id',$emp_id)->where('date',$process_date)->where('astatus',1);
+            $this->db->where('employee_id', $emp_id)->where('date', $process_date)->where('astatus', 1);
             $num_row = $this->db->get("xin_employee_move_register");
             $num_rows = $num_row->num_rows();
 
-            if($num_rows != 0 && $num_rows != ''){
+            if($num_rows != 0 && $num_rows != '') {
                 $astatus = 'Meeting';
             }
 
@@ -225,7 +226,7 @@ class Attendance_model extends CI_Model {
 
             // check late & calculation late minute
             if (strtotime($in_time) > strtotime($late_start_time) && strtotime($in_time) < strtotime($lunch_time)) {
-                $late_status = 1; 
+                $late_status = 1;
                 $late_time = round((strtotime($in_time) - strtotime($actual_in_time)) / 60);
             }
 
@@ -237,7 +238,7 @@ class Attendance_model extends CI_Model {
                 if($production > $actual_p_time) {
                     $ot = $production - $actual_p_time;
                 }
-            } else if (($astatus == 'HalfDay' || $status == 'HalfDay') && $out_time != null && $in_time != null) {
+            } elseif (($astatus == 'HalfDay' || $status == 'HalfDay') && $out_time != null && $in_time != null) {
                 if (strtotime($in_time) < strtotime($lunch_time)) {
                     $production = round((strtotime($out_time) - strtotime($in_time)) / 60) -  $lunch_minute;
                 } else {
@@ -248,7 +249,7 @@ class Attendance_model extends CI_Model {
 
             // early out status
             if (strtotime($out_time) < strtotime($early_out_time) && strtotime($out_time) != null) {
-                $early_out_status = 1; 
+                $early_out_status = 1;
             }
             // dd($out_time .' '. $early_out_time .' '. $early_out_status);
 
@@ -261,8 +262,8 @@ class Attendance_model extends CI_Model {
                 'production'        => $production,
                 'ot'                => $ot,
                 'late_time'         => $late_time,
-                'lunch_in'          => $lunch_in ? $lunch_in:'',
-                'lunch_out'         => $lunch_out ? $lunch_out:'',
+                'lunch_in'          => $lunch_in ? $lunch_in : '',
+                'lunch_out'         => $lunch_out ? $lunch_out : '',
                 'attendance_status' => $astatus,
                 'status'            => $status,
                 'late_status'       => $late_status,
@@ -270,8 +271,8 @@ class Attendance_model extends CI_Model {
                 'early_out_status'  => $early_out_status,
             );
 
-            $query = $this->db->where('employee_id',$emp_id)->where('attendance_date',$process_date)->get('xin_attendance_time');
-            if($query->num_rows() > 0 ){
+            $query = $this->db->where('employee_id', $emp_id)->where('attendance_date', $process_date)->get('xin_attendance_time');
+            if($query->num_rows() > 0) {
                 $this->db->where('attendance_date', $process_date);
                 $this->db->where('employee_id', $emp_id);
                 $this->db->update('xin_attendance_time', $data);
@@ -283,11 +284,11 @@ class Attendance_model extends CI_Model {
             // dd($query->row());
             // $day = date('D', strtotime($process_date));
             if ($status == 'Absent') {
-                $query = $this->db->where('employee_id',$emp_id)->where('attendance_date',$check_day)->get('xin_attendance_time');
+                $query = $this->db->where('employee_id', $emp_id)->where('attendance_date', $check_day)->get('xin_attendance_time');
                 if($query->row() != null) {
                     if($query->row()->status == 'Holiday') {
                         $this->checking_absent_after_offday_holiday($emp_id, $check_day, array($check_day), 'Holiday');
-                    } else if($query->row()->status == 'Off Day') {
+                    } elseif($query->row()->status == 'Off Day') {
                         $this->checking_absent_after_offday_holiday($emp_id, $check_day, array($check_day), 'Off Day');
                     }
                 }
@@ -296,12 +297,13 @@ class Attendance_model extends CI_Model {
         return 'Successfully Process Done';
     }
 
-    function lunch_auto_off($date) {
+    public function lunch_auto_off($date)
+    {
         $this->db->select("id");
         $this->db->where("date", $date);
         $query = $this->db->get('lunch');
 
-        if($query->num_rows() > 0 ){
+        if($query->num_rows() > 0) {
             return $query->row()->id;
         } else {
             $data = array(
@@ -320,7 +322,8 @@ class Attendance_model extends CI_Model {
         }
     }
 
-    function lunch_auto_off_details($lunch_id, $emp_id, $lst, $date) {
+    public function lunch_auto_off_details($lunch_id, $emp_id, $lst, $date)
+    {
         $form_data = array(
             'lunch_id'      => $lunch_id,
             'emp_id'        => $emp_id,
@@ -334,14 +337,15 @@ class Attendance_model extends CI_Model {
     }
 
 
-    function checking_absent_after_offday_holiday($emp_id, $check_day, $where, $status) {
-        $check_day = date("Y-m-d",strtotime("-1 day", strtotime($check_day)));
-        $query = $this->db->where('employee_id',$emp_id)->where('attendance_date',$check_day)->get('xin_attendance_time');
+    public function checking_absent_after_offday_holiday($emp_id, $check_day, $where, $status)
+    {
+        $check_day = date("Y-m-d", strtotime("-1 day", strtotime($check_day)));
+        $query = $this->db->where('employee_id', $emp_id)->where('attendance_date', $check_day)->get('xin_attendance_time');
 
         if($query->row()->status == $status) {
             array_push($where, $check_day);
             $this->checking_absent_after_offday_holiday($emp_id, $check_day, $where, $status);
-        } else if ($query->row()->status == 'Absent') {            
+        } elseif ($query->row()->status == 'Absent') {
             $this->db->where_in('attendance_date', $where);
             $this->db->where('employee_id', $emp_id);
             $this->db->update('xin_attendance_time', array('status' => 'Absent', 'attendance_status' => 'Absent'));
@@ -349,49 +353,50 @@ class Attendance_model extends CI_Model {
         return true;
     }
 
-    function attn_delete_for_eligibility_failed($emp_id, $att_date){
-        $this->db->where('employee_id',$emp_id);
-        $this->db->where('attendance_date',$att_date); 
-        $this->db->delete('xin_attendance_time'); 
-        return true;     
+    public function attn_delete_for_eligibility_failed($emp_id, $att_date)
+    {
+        $this->db->where('employee_id', $emp_id);
+        $this->db->where('attendance_date', $att_date);
+        $this->db->delete('xin_attendance_time');
+        return true;
     }
 
 
-    function get_shift_schedule($emp_id, $process_date = null, $shift_id = null)
+    public function get_shift_schedule($emp_id, $process_date = null, $shift_id = null)
     {
         $this->db->select("office_shift_id");
         $this->db->where("employee_id", $emp_id);
         $this->db->where("attendance_date", $process_date);
         $query = $this->db->get('xin_attendance_time');
 
-        if($query->num_rows() > 0 ){
+        if($query->num_rows() > 0) {
             $shift_id = $query->row()->office_shift_id;
-        } 
+        }
 
-        return $this->db->where('office_shift_id',$shift_id)->get('xin_office_shift')->row();
+        return $this->db->where('office_shift_id', $shift_id)->get('xin_office_shift')->row();
     }
 
-    function check_in_out_time($proxi_id, $start_time, $end_time, $order)
+    public function check_in_out_time($proxi_id, $start_time, $end_time, $order)
     {
         $date_time = '';
         $this->db->select("date_time");
         $this->db->where("date_time BETWEEN '$start_time' and '$end_time'");
         $this->db->where("proxi_id", $proxi_id);
-        $this->db->order_by("date_time",$order);
+        $this->db->order_by("date_time", $order);
         $this->db->limit("1");
         $query = $this->db->get('xin_att_machine');
 
-        if($query->num_rows() > 0 ){
+        if($query->num_rows() > 0) {
             $date_time = $query->row()->date_time;
-        } 
+        }
         return $date_time;
     }
 
-    function dayoff_check($process_date)
-    {   
+    public function dayoff_check($process_date)
+    {
         if ($process_date == '2023-03-25' || $process_date == '2023-04-15') {
             $off_day = array('Friday','Saturday');
-        } else if (($process_date < '2023-04-20' && $process_date > '2023-03-10') || $process_date == '2023-06-24' || $process_date == '2023-06-10')  {
+        } elseif (($process_date < '2023-04-20' && $process_date > '2023-03-10') || $process_date == '2023-06-24' || $process_date == '2023-06-10') {
             $off_day = array('Friday');
         } else {
             $off_day = array('Friday','Saturday');
@@ -406,19 +411,19 @@ class Attendance_model extends CI_Model {
         }
     }
 
-    function holiday_check($process_date)
+    public function holiday_check($process_date)
     {
         $this->db->where("start_date <=", $process_date);
         $this->db->where("end_date >=", $process_date);
         $query = $this->db->get("xin_holidays");
-        if($query->num_rows() > 0 ){
+        if($query->num_rows() > 0) {
             return true;
         } else {
             return false;
         }
     }
 
-    function leave_chech($process_date, $emp_id)
+    public function leave_chech($process_date, $emp_id)
     {
         // dd($process_date .' = '. $emp_id);
         $this->db->where("from_date <=", $process_date);
@@ -427,13 +432,13 @@ class Attendance_model extends CI_Model {
         $this->db->where("status", 2);
         $query = $this->db->get("xin_leave_applications");
         // dd($query->result());
-        if($query->num_rows() > 0 ){
+        if($query->num_rows() > 0) {
             if ($query->row()->is_half_day == 1) {
                 $leave = array(
                     'Hleave' => true,
                     'leave'  => true
                 );
-            }  else {
+            } else {
                 $leave = array(
                     'Hleave' => false,
                     'leave'  => true
@@ -446,40 +451,40 @@ class Attendance_model extends CI_Model {
             );
         }
         return $leave;
-    }            
+    }
 
-    function check_movement_time($emp_id, $process_date, $order)
+    public function check_movement_time($emp_id, $process_date, $order)
     {
-        $this->db->where('employee_id',$emp_id);
-        $this->db->where('date',$process_date);
-        $this->db->order_by("id",$order);
+        $this->db->where('employee_id', $emp_id);
+        $this->db->where('date', $process_date);
+        $this->db->order_by("id", $order);
         return $this->db->get('xin_employee_move_register');
     }
 
-    function get_employees($emp_ids, $status = null)
+    public function get_employees($emp_ids, $status = null)
     {
         $this->db->select('user_id, office_shift_id as shift_id, date_of_joining');
         /*if ($status != null) {
             $this->db->where('status',$status);
         }*/
-        $this->db->where('company_id',1);
-        $this->db->where_in('user_id',$emp_ids);
+        $this->db->where('company_id', 1);
+        $this->db->where_in('user_id', $emp_ids);
         return $this->db->get('xin_employees')->result();
     }
-    function leaves($emp_ids,$first_date,$second_date,$stutuss)
+    public function leaves($emp_ids, $first_date, $second_date, $stutuss)
     {
         $this->db->select('*');
         $this->db->where_in('employee_id', $emp_ids);
         $this->db->where_in('status', $stutuss);
-        $this->db->where('from_date >=',$first_date);
+        $this->db->where('from_date >=', $first_date);
         $this->db->where('to_date <=', $second_date);
         return $this->db->get('xin_leave_applications')->result();
     }
-    
 
-    function get_proxi($emp_id)
+
+    public function get_proxi($emp_id)
     {
-        $proxi = $this->db->select('proxi_id')->where('emp_id',$emp_id)->get('xin_proxi');
+        $proxi = $this->db->select('proxi_id')->where('emp_id', $emp_id)->get('xin_proxi');
 
         if ($proxi->num_rows() < 1) {
             "Sorry! $emp_id  This Employee ID does not assign to Punch ID";
@@ -516,15 +521,15 @@ class Attendance_model extends CI_Model {
         $this->db->from('xin_employees');
         $this->db->from('xin_departments');
         $this->db->from('xin_designations');
-        $this->db->where('xin_employees.company_id',1);
+        $this->db->where('xin_employees.company_id', 1);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
-        $this->db->where_in('xin_employees.user_id',$emp_ids);
+        $this->db->where_in('xin_employees.user_id', $emp_ids);
         return $this->db->get()->result();
-        
+
     }
 
-     
+
 
 
 
@@ -539,11 +544,11 @@ class Attendance_model extends CI_Model {
         $this->db->from('xin_employees');
         $this->db->where_in('xin_employees.user_id', $emp_ids);
         return $this->db->get()->result();
-        
+
     }
 
     public function daily_report($attendance_date, $emp_id, $status = null, $late_status=null)
-    {   
+    {
 
         $this->db->select('
             xin_employees.user_id as emp_id,
@@ -575,8 +580,8 @@ class Attendance_model extends CI_Model {
 
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
-        if($status[0]!='all'){
-        $this->db->where_in("xin_attendance_time.status", $status);
+        if($status[0]!='all') {
+            $this->db->where_in("xin_attendance_time.status", $status);
         }
         $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
@@ -584,18 +589,15 @@ class Attendance_model extends CI_Model {
         $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
         $this->db->order_by('xin_attendance_time.clock_in', "ASC");
         $data = $this->db->get()->result();
-    
-        if($data)
-        {
+
+        if($data) {
             return $data;
-        }
-        else
-        {
+        } else {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
     public function floor_movement($attendance_date, $emp_id)
-    {   
+    {
 
         $this->db->select('
             xin_employees.user_id as emp_id,
@@ -623,17 +625,14 @@ class Attendance_model extends CI_Model {
         $this->db->where('xin_employees.user_id = xin_employee_floor_move.user_id');
         $data = $this->db->get()->result();
 
-        if($data)
-        {
+        if($data) {
             return $data;
-        }
-        else
-        {
+        } else {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
     public function today_floor_movement($emp_id)
-    {   
+    {
 
         $this->db->select('
             xin_employees.user_id as emp_id,
@@ -699,20 +698,17 @@ class Attendance_model extends CI_Model {
         $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
         $this->db->order_by('xin_attendance_time.clock_in', "ASC");
         $data = $this->db->get()->result();
-    
-        if($data)
-        {
+
+        if($data) {
             return $data;
-        }
-        else
-        {
+        } else {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
 
 
 
-    public function lunch_report($attendance_date,$emp_id,$status=null,$late_status=null)
+    public function lunch_report($attendance_date, $emp_id, $status=null, $late_status=null)
     {
         // dd($late_status);
 
@@ -743,7 +739,7 @@ class Attendance_model extends CI_Model {
             $this->db->where("xin_attendance_time.lunch_late_status", 1);
         }
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
-  
+
         $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
         $this->db->where("xin_attendance_time.attendance_status", "Present");
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
@@ -751,22 +747,19 @@ class Attendance_model extends CI_Model {
         $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
         $data = $this->db->get()->result();
         // dd($data);
-  
-        if($data)
-        {
+
+        if($data) {
             return $data;
-        }
-        else
-        {
+        } else {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
 
 
-   
-    public function early_out_report($attendance_date,$emp_id,$status)
+
+    public function early_out_report($attendance_date, $emp_id, $status)
     {
-        
+
         // dd($out_time);
         // $out_time= $this->db->select('ot_start_time')->from('xin_office_shift')->get()->result();
         $this->db->select('
@@ -786,7 +779,7 @@ class Attendance_model extends CI_Model {
             xin_attendance_time.early_out_status,
         ');
 
-       
+
 
         $this->db->from('xin_employees');
         $this->db->from('xin_departments');
@@ -804,21 +797,18 @@ class Attendance_model extends CI_Model {
 
         $data = $this->db->get()->result();
         // dd($data);
-  
-        if($data)
-        {
+
+        if($data) {
             return $data;
-        }
-        else
-        {
+        } else {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
 
 
-    public function  movement_report($attendance_date,$emp_id)
+    public function movement_report($attendance_date, $emp_id)
     {
-        
+
 
         $this->db->select('
             xin_employee_move_register.employee_id,
@@ -840,13 +830,10 @@ class Attendance_model extends CI_Model {
         $this->db->where('xin_employee_move_register.employee_id = xin_employees.user_id');
         $data = $this->db->get()->result();
         // dd($data);
-  
-        if($data)
-        {
+
+        if($data) {
             return $data;
-        }
-        else
-        {
+        } else {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
@@ -857,9 +844,9 @@ class Attendance_model extends CI_Model {
 
 
 
-    public function movment_status_report($f1_date, $f2_date,$statusC)
+    public function movment_status_report($f1_date, $f2_date, $statusC)
     {
-    $this->db->select('
+        $this->db->select('
         xin_employee_move_register.employee_id,
         xin_employee_move_register.date,
         xin_employee_move_register.out_time,
@@ -876,95 +863,25 @@ class Attendance_model extends CI_Model {
         xin_employees.last_name
     ');
 
-    $this->db->from('xin_employees');
-    $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
-    $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
-    $this->db->join('xin_employee_move_register', 'xin_employee_move_register.employee_id = xin_employees.user_id');
-    $this->db->where('xin_employees.is_active', 1);
-    $this->db->where("xin_employee_move_register.date BETWEEN '$f1_date' AND '$f2_date'");
-    $this->db->where('xin_employee_move_register.status', $statusC);
-    $query = $this->db->get();
-    $data = $query->result();
-   
- 
+        $this->db->from('xin_employees');
+        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+        $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+        $this->db->join('xin_employee_move_register', 'xin_employee_move_register.employee_id = xin_employees.user_id');
+        $this->db->where('xin_employees.is_active', 1);
+        $this->db->where("xin_employee_move_register.date BETWEEN '$f1_date' AND '$f2_date'");
+        $this->db->where('xin_employee_move_register.status', $statusC);
+        $query = $this->db->get();
+        $data = $query->result();
 
-    if ($query->num_rows() > 0) {
-        return $data;
-     
-    } else {
-        return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+
+
+        if ($query->num_rows() > 0) {
+            return $data;
+
+        } else {
+            return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+        }
     }
-}
-
-
-
-
-//movement_unpadid report
-
-// public function movment_unpaid_report($f1_date,$f2_date)
-// {
-    
-
-//     $this->db->select('
-//         xin_employee_move_register.employee_id,
-//         xin_employee_move_register.date,
-//         xin_employee_move_register.out_time,
-//         xin_employee_move_register.in_time,
-//         xin_employee_move_register.reason,
-//         xin_employee_move_register.request_amount,
-//         xin_employee_move_register.payable_amount,
-//         xin_employees.department_id,  
-//         xin_employees.designation_id,
-//         xin_departments.department_name,
-//         xin_designations.designation_name,
-//         xin_employees.employee_id,
-//         xin_employees.first_name,
-//         xin_employees.last_name,
-//         xin_employees.last_name,
-       
-//     ');
-
-//     $this->db->from('xin_employees');
-//     $this->db->from('xin_designations');
-//     $this->db->from('xin_departments');
-//     $this->db->from('xin_employee_move_register');
-//     $this->db->where("xin_employees.is_active", 1);
-//     $this->db->where("xin_employee_move_register.date BETWEEN '$f1_date' AND '$f2_date'");
-//     $this->db->where('xin_employee_move_register.employee_id = xin_employees.user_id');
-//     $this->db->where('xin_employee_move_register.status',3);
-
-//     $data = $this->db->get()->result();
-//     dd($data);
-
-//     if($data)
-//     {
-       
-//         return $data;
-//     }
-//     else
-//     {
-//         return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
-//     }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public function get_movement_register($id = null)
     {
@@ -976,7 +893,7 @@ class Attendance_model extends CI_Model {
         $this->db->from('xin_employees as em');
 
         if ($id != null) {
-            $this->db->where('empm.employee_id',$id);
+            $this->db->where('empm.employee_id', $id);
         }
 
         $this->db->where('em.user_id = empm.employee_id');
@@ -985,71 +902,64 @@ class Attendance_model extends CI_Model {
     }
 
 
-    public function apply_for_ta_da($id,$amount,$details){
+    public function apply_for_ta_da($id, $amount, $details)
+    {
 
-    $this->db->query("UPDATE  xin_employee_move_register 
+        $this->db->query("UPDATE  xin_employee_move_register 
                        SET     `request_amount`  = '$amount', 
                                `reason` = '$details',
                                `status`  = 1
                        WHERE   id        = '$id' 
                     ");
-    return "ok";                
+        return "ok";
     }
 
-    
-    public function update_ta_da($id,$amount,$status){
+
+    public function update_ta_da($id, $amount, $status)
+    {
 
         $this->db->query("UPDATE  xin_employee_move_register 
                            SET     `payable_amount`  = '$amount', 
                                    `status`  = '$status'
                            WHERE   id        = '$id' 
                         ");
-        return "update";                
-        }
-    
-
-    public function modify_for_ta_da($id){
-        $this->db->select("request_amount,reason,status")
-                 ->from('xin_employee_move_register')
-                 ->where('id',$id);   
-        return $result = $this->db->get()->result();        
+        return "update";
     }
-    public function view_ta_da($id){
+
+
+    public function modify_for_ta_da($id)
+    {
+        $this->db->select("request_amount,reason,status")
+                ->from('xin_employee_move_register')
+                ->where('id', $id);
+        return $result = $this->db->get()->result();
+    }
+    public function view_ta_da($id)
+    {
         $this->db->select('emr.*, emd.*, e.first_name, e.last_name')
                 ->from('xin_employee_move_register as emr')
                 ->join('xin_employee_move_details as emd', 'emr.id = emd.move_id')
                 ->join('xin_employees as e', 'emr.employee_id = e.user_id')
                 ->where('emr.id', $id);
-                
+
         $query = $this->db->get();
         return $query->result();
     }
- 
-
-
-
-
-
-
-
-
-
-
-
     public function get_employee_ajax_request($status)
     {
         $this->db->select('user_id as emp_id, first_name, last_name');
         if ($status == 1) {
             $this->db->where_in('status', array(1,4));
         } else {
-            $this->db->where('status',$status);
+            $this->db->where('status', $status);
         }
-        $this->db->where('company_id',1);
+        $this->db->where('company_id', 1);
         $this->db->order_by('user_id', 'asc');
         return $result = $this->db->get('xin_employees')->result();
         // dd($result);
     }
-    public function gettodaylog($date, $user_id) {
+    public function gettodaylog($date, $user_id)
+    {
         $this->db->select('*');
         $this->db->from('xin_attendance_time');
         $this->db->where('employee_id', $user_id);
@@ -1058,29 +968,23 @@ class Attendance_model extends CI_Model {
         $data = $this->db->get()->row();
         return $data;
     }
-    
- 
-
-    public function get_move_place() {
+    public function get_move_place()
+    {
         $query = $this->db->order_by('place_id', 'DESC')->get('xin_employee_move_place');
         return $query->result();
     }
-
-    public function add_move_place($data) {
+    public function add_move_place($data)
+    {
         $this->db->insert('xin_employee_move_place', $data);
     }
-
-    public function update_move_place($place_id, $data) {
+    public function update_move_place($place_id, $data)
+    {
         $this->db->where('place_id', $place_id);
         $this->db->update('xin_employee_move_place', $data);
     }
-
-    public function delete_move_place($place_id) {
+    public function delete_move_place($place_id)
+    {
         $this->db->where('place_id', $place_id);
         $this->db->delete('xin_employee_move_place');
     }
-
-
-
 }
-?>
