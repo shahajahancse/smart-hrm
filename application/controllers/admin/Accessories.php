@@ -85,11 +85,30 @@ class Accessories extends MY_Controller {
          $this->form_validation->set_rules('model_name', 'Device Model', 'required|trim');
          $this->form_validation->set_rules('status', 'Status ', 'required|trim');
         if ($this->form_validation->run() == true){
+
+            
+            if(!empty($_FILES['image']['name'])){
+                $config['upload_path'] = 'uploads/accessory_images/';
+                $config['allowed_types'] = 'jpg|jpeg|png|gif';
+                $config['file_name'] = $_FILES['image']['name'];
+                //Load upload library and initialize configuration
+                $this->load->library('upload',$config);
+                $this->upload->initialize($config);
+                
+                if($this->upload->do_upload('image')){
+                    $uploadData = $this->upload->data();
+                    $picture = $uploadData['file_name'];
+                }else{
+                    $picture = '';
+                }
+            } 
+            
             $form_data = array(
                                 'cat_id'           => $this->input->post('cat_id'),
                                 'model_name'       => $this->input->post('model_name'),
                                 'details'          => $this->input->post('details'),
                                 'status'           => $this->input->post('status'),
+                                'image'            => $picture,
     			            );    
             if ($hid = $this->input->post('hidden_id')) {
                 $this->db->where('id', $hid)->update('product_accessories_model', $form_data);
@@ -207,21 +226,6 @@ class Accessories extends MY_Controller {
 
         if ($this->form_validation->run() == true){
 
-            if(!empty($_FILES['image']['name'])){
-                $config['upload_path'] = 'uploads/accessory_images/';
-                $config['allowed_types'] = 'jpg|jpeg|png|gif';
-                $config['file_name'] = $_FILES['image']['name'];
-                //Load upload library and initialize configuration
-                $this->load->library('upload',$config);
-                $this->upload->initialize($config);
-                
-                if($this->upload->do_upload('image')){
-                    $uploadData = $this->upload->data();
-                    $picture = $uploadData['file_name'];
-                }else{
-                    $picture = '';
-                }
-            } 
             if($this->input->post('status')==1){
                 $user_id = $this->input->post('user_id');
             }else{

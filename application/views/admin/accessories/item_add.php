@@ -151,7 +151,7 @@ $('#cat_id').on('change',function(){
       $("#model_name").html(data);
       }
     });
-  var mobile = category.search(/Mobile/i); 
+  var mobile = category.search(/phone/i); 
   var sim = category.search(/Sim/i); 
   if(mobile==-1 || sim ==-1){
     $("#use_number").prop('disabled', true);
@@ -188,7 +188,7 @@ $('#cat_id').on('change',function(){
 // able/disable user name list according to item status [ 1 == able , else disable ]
 $('#status').on('change',function(){
   var status = $('#status').find(":selected").val();  
-  if(status==1){
+  if(status==1 || status==5){
   $("#user_id").prop('disabled', false);
   }else{
   $("#user_id").prop('disabled', true);

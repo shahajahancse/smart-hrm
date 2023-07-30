@@ -23,17 +23,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
     left: auto !important;
     min-width: 100px !important;
   }
-  /* .using {
-  display: inline-flex;
-  /* padding: 4.5px 14.3px 5.5px 9px; */
-  /* align-items: center;
-  gap: 9px;
-  border-radius: 50px;
-  border: 1px solid #CCC;
-  background: #FFF; */
-  
-   
-/* } */ 
+
 </style>
 
 
@@ -79,7 +69,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
         </div>
         <div class="modal-body">
           <!-- Input fields in the modal body -->
-          <div class="form-group">
+          <div class="form-group" id="desk_noo">
             <label for="desk_no">Desk No:</label>
             <input type="text" class="form-control" id="desk_no" name="desk_no" placeholder="Enter desk no.">
             <input type="hidden" id="recordId" name="recordId" value="">
@@ -91,6 +81,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
               <option value="">Select</option>
               <option value="1">Used</option>
               <option value="0">Not Used</option>
+              <option value="2">External Used</option>
             </select>
           </div>
 
@@ -114,6 +105,9 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
               <option value="<?= $row->user_id ?>"><?= $row->first_name.' '.$row->last_name ?></option>
               <?php }?>
             </select>
+          </div>
+          <div id="description" style="display:none">
+            <textarea name="description"  cols="82" rows="3"></textarea>
           </div>
 
         </div>

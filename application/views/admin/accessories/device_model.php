@@ -1,5 +1,5 @@
 <?php 
-// dd($row);
+// dd($results);
 $session = $this->session->userdata('username');
 $eid = $this->uri->segment(4);
 $get_animate = $this->Xin_model->get_content_animate();
@@ -17,7 +17,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
         <?php $hidden = array('user_id' => $session['user_id']);?>
         <?php echo form_open_multipart('admin/accessories/device_model', $attributes, $hidden);?>
           <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
               <label for="Status">Category Name</label>
               <select name="cat_id" class="form-control" required>  
                 <option value="">Select</option>
@@ -26,7 +26,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
                 <?php }?>
               </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
               <div class="form-group">
                 <label >Model Name</label>
                 <input class="form-control" required name="model_name" placeholder="Model Name" type="text" value="<?php echo !empty($row->model_name)? $row->model_name:''; ?>">
@@ -34,13 +34,16 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             </div>
             <input type="hidden" name="hidden_id" value="<?php echo !empty($row->id)? $row->id:''; ?>">
 
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="form-group">
                 <label for="description">Description</label>
                 <input class="form-control" placeholder="Description" name="details" type="text" value="<?php echo !empty($row->details)? $row->details:''; ?>">
               </div>
             </div>
-            <div class="col-md-2">
+            
+          </div>
+          <div class="row">
+            <div class="col-md-3">
               <label for="Status">Model Status</label>
               <select name="status" class="form-control" required>  
                 <option value=""  selected>Select status</option>
@@ -48,9 +51,11 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
                 <option value="0" <?php echo (isset($row->status) && $row->status == 0)? 'selected':''; ?> >Inactive</option>
              </select>
             </div>
-
-
-            <div class="col-md-2">
+            <div class="col-md-4">
+                <label for="Status">Image</label>
+              <input class="form-control" type="file" name="image">
+            </div>
+            <div class="col-md-3">
               <div class="form-group"> &nbsp;
                 <label for="">&nbsp;</label><br />
                 <?php if(isset($row->id)==null){?>
@@ -89,6 +94,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             <th class="text-center" style="width:100px;">Model Name</th>
             <th class="text-center" style="width:100px;">Description</th>
             <th class="text-center" style="width:100px;">Status</th>
+            <th class="text-center" style="width:100px;">Image</th>
             <th class="text-center" style="width:100px;">Action</th>
           </tr>
         </thead>
@@ -100,6 +106,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
               <td><?= $row->model_name; ?></td>
               <td><?= $row->details; ?></td>
               <td><?= $row->status=='1'?"<span class='label label-success'>Active</span>":"<span class='label label-danger'>Inctive</span>"; ?></td>
+               <td><img src="<?php echo (empty($row->image)) ? base_url("uploads/no_image.png"): base_url("uploads/accessory_images/".$row->image)?>" width="80px" height="80px"> 
               <td>
                 <a class="btn btn-sm btn-info" href="<?= base_url('admin/accessories/device_model/'.$row->id);?>">Edit</a>
                 <a class="btn btn-sm btn-danger" href="<?= base_url('admin/accessories/delete/'.$row->id.'/product_accessories_model'.'/device_model');?>" onclick="return confirm('Are you sure to delete!!!')">Delete</a>
