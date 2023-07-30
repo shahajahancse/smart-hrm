@@ -144,6 +144,42 @@ textarea {
     justify-content: right !important;
     display: flex !important;
 }
+@media screen and (max-width: 1080px) {
+    .modal-content {
+        margin: 24% 33%;
+    }
+}
+@media screen and (max-width: 992px) {
+    .contentss{
+        flex-direction: column!important;
+    }
+    .btn{
+        margin-bottom: 7px;
+    }
+}
+
+
+@media screen and (max-width: 762px) {
+    .modal-content {
+        margin: 31% 14%;
+    }
+}
+@media screen and (max-width: 635px) {
+    .actions{
+        flex-direction: column;
+    width: 100%;
+    }
+    .btn{
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .modal-content {
+        margin: 57% 14%;
+    }
+}
+
 </style>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
@@ -270,7 +306,7 @@ textarea {
 
 </div>
 <div id="msg"><?php echo (isset($msg)) ? $msg : ''; ?></div>
-<div id="datatable">
+<div id="datatable" class="table-responsive">
     <?php echo $tablebody;?>
 </div>
 <script>

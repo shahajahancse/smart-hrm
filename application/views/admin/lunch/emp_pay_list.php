@@ -182,15 +182,19 @@ input[type="email"] {
                 <div class="form-group col-md-3" style="padding: 0px;margin: 0px;">
                     <label for="process_date">First Date</label>
                     <input class="form-control attendance_date" id="process_date" name="process_date" type="text"
-                        value="<?php echo isset($last_prement->from_date)? date('Y-m-d', strtotime($last_prement->end_date . ' +1 day')):'';?>" disabled>
+                        value="<?php echo isset($last_prement->from_date)? date('Y-m-d', strtotime($last_prement->end_date . ' +1 day')):'';?>"
+                        disabled>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="process_date">Second Date</label>
-                    <input class="form-control" min="<?php echo date('Y-m-d', strtotime($last_prement->end_date . ' +1 day')); ?>" id="second_date" name="second_date" type="date" autocomplete="off">
+                    <input class="form-control"
+                        min="<?php echo date('Y-m-d', strtotime($last_prement->end_date . ' +1 day')); ?>"
+                        id="second_date" name="second_date" type="date" autocomplete="off">
                 </div>
                 <div class=" col-md-3">
                     <label for="process_date">Next Pay Date</label>
-                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="probable_date" name="probable_date" type="date" autocomplete="off">
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_select_date');?>"
+                        id="probable_date" name="probable_date" type="date" autocomplete="off">
                 </div>
                 <div class="form-group col-md-3" style="margin: 0px;padding: 0px;float:right;">
                     <label for="" style="color: whitesmoke!important;">.</label>
@@ -243,8 +247,8 @@ $(document).ready(function() {
                 }
                 var pay_m = parseInt(responseData[0].pay_amount) - parseInt(responseData[0]
                     .prev_amount);
-                  var payday =parseInt(pay_m)/45
-                 
+                var payday = parseInt(pay_m) / 45
+
 
 
                 // Generate the form dynamically
@@ -388,8 +392,7 @@ function calculatePayment() {
     document.getElementById("p_month_pay").value = parseInt(p_month_day * 45);
 }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
 $(document).ready(function() {
     $('#search-select').select2();

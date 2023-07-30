@@ -50,7 +50,8 @@ class Auth extends MY_Controller
 	}
 	 
 	public function login() {
-	
+
+	// dd($this->input->post('iusername'));
 		$this->form_validation->set_rules('iusername', 'Username', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('ipassword', 'Password', 'trim|required|xss_clean');
 		//$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
