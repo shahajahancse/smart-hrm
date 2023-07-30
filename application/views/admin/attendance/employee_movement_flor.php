@@ -157,6 +157,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
     color: #FFF;
     background: #2DCA8C;
 }
+
 @media screen and (max-width: 934px) {
     .modal-content {
         margin: 14% 33%;
@@ -171,11 +172,11 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
 
 @media screen and (max-width: 400px) {
     .modal-content {
-        margin: 57% 14%;
+        margin: 44% 14%;
         padding: 13px 0px 11px 0px;
+        width: 250px;
     }
 }
-
 </style>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">

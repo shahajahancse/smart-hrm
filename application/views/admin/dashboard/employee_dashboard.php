@@ -1,27 +1,27 @@
 <?php
-$session = $this->session->userdata( 'username' );
+$session = $this->session->userdata('username');
 $get_animate = $this->Xin_model->get_content_animate();
 $userid  = $session[ 'user_id' ];
- $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
+$result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
 
- $empdata = $this->db
- ->select('lunch_payment.*, xin_employees.first_name, xin_employees.last_name, xin_designations.designation_name')
- ->from('lunch_payment')
- ->join('xin_employees', 'lunch_payment.emp_id = xin_employees.user_id')
- ->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id')
- ->where('lunch_payment.end_date', $result->end_date)
- ->where('lunch_payment.emp_id', $session['user_id'])
- ->order_by('lunch_payment.id', 'desc')
- ->get()
- ->result();
+$empdata = $this->db
+->select('lunch_payment.*, xin_employees.first_name, xin_employees.last_name, xin_designations.designation_name')
+->from('lunch_payment')
+->join('xin_employees', 'lunch_payment.emp_id = xin_employees.user_id')
+->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id')
+->where('lunch_payment.end_date', $result->end_date)
+->where('lunch_payment.emp_id', $session['user_id'])
+->order_by('lunch_payment.id', 'desc')
+->get()
+->result();
 
 $data1=$empdata[0];
 $taken_meal=0;
 $this->load->model("Lunch_model");
-$emp_data = $this->Lunch_model->get_data_date_wise($data1->end_date,$data1->next_date, $data1->emp_id);
+$emp_data = $this->Lunch_model->get_data_date_wise($data1->end_date, $data1->next_date, $data1->emp_id);
 
 foreach ($emp_data['emp_data'] as $r) {
-   
+
     $taken_meal+=$r->meal_amount;
 }
 $paymeal=$data1->pay_amount/45;
@@ -31,111 +31,111 @@ $balanceMeal= $paymeal-$taken_meal;
 
 
 <?php
-    
-    
-    // get month january to current month             
-    $currentMonth = date('n'); 
-    $monthNames = array();
-    for ($i = 1; $i <= $currentMonth; $i++) {
-      $monthNames[] = date('F', mktime(0, 0, 0, $i, 1)); 
-    }
-    // end
-
-    // get employee shift schedule information
-    $schedule = $this->db->get('xin_office_shift')->row();
-    
-    // get employee salary from january to current month
-    $salarys = $this->db->select('salary_month,grand_net_salary')
-                        ->where('employee_id', $userid)
-                        ->get('xin_salary_payslips')
-                        ->result();
-    $salary = array();
-    $salary_month = array();
-    foreach ($salarys as $salaryObj) {
-        $salary[] = $salaryObj->grand_net_salary;
-        $salary_month[] = date('M',strtotime($salaryObj->salary_month));
-    }
-    // end 
-    // dd($salary_month);
-    // punch time
-    $in_time = "00:00";
-    $out_time = "00:00";
-    $punch_time = $this->db->select('clock_in, clock_out')
-                          ->where('employee_id', $userid)
-                          ->where('attendance_date',date('Y-m-d'))
-                          ->get('xin_attendance_time')
-                          ->row();
-    if (!empty($punch_time)) {
-      $in_time = date('h.i A',strtotime($punch_time->clock_in));
-      $out_time = date('h.i A',strtotime($punch_time->clock_out));
-    } 
-    // end punch time
-
-    //get employee name
-    $name = $this->db->select('first_name,last_name')
-                ->where('user_id', $userid)
-                ->get('xin_employees')
-                ->row();
-    // dd($name);            
-
-      // Get the current Unix timestamp
-      $currentTimestamp = time();
-
-      // Specify the other specific time
-      $inTime = strtotime($in_time); 
-      $outTime = strtotime($out_time);
-      $out_Time = strtotime(date('h.i A',strtotime('6.30')));
-
-      // dd($outTime);
-
-      // Calculate the time difference in seconds
-      $workingHour = $currentTimestamp - $inTime;
-      $over_time   = $outTime - $out_Time;
-      // dd($over_time);
-
-      $hours = floor($workingHour / 3600);
-      $minutes = floor(($workingHour % 3600) / 60);
 
 
-      $hourss = floor($over_time / 3600);
-      $minutess = floor(($over_time % 3600) / 60);
-      // $seconds = $workingHour % 60;
+    // get month january to current month
+    $currentMonth = date('n');
+$monthNames = array();
+for ($i = 1; $i <= $currentMonth; $i++) {
+    $monthNames[] = date('F', mktime(0, 0, 0, $i, 1));
+}
+// end
 
-      // Output the time difference
-      $total_working_hour = $hours . "." . $minutes;
-      $total_over_time_hour = $hourss . "." . $minutess;
-      $first_date = date('Y-m-01');
-      $second_date = date('Y-m-d');
+// get employee shift schedule information
+$schedule = $this->db->get('xin_office_shift')->row();
 
-      $count_p = $this->db->select('COUNT(status) AS count_p')
+// get employee salary from january to current month
+$salarys = $this->db->select('salary_month,grand_net_salary')
+                    ->where('employee_id', $userid)
+                    ->get('xin_salary_payslips')
+                    ->result();
+$salary = array();
+$salary_month = array();
+foreach ($salarys as $salaryObj) {
+    $salary[] = $salaryObj->grand_net_salary;
+    $salary_month[] = date('M', strtotime($salaryObj->salary_month));
+}
+// end
+// dd($salary_month);
+// punch time
+$in_time = "00:00";
+$out_time = "00:00";
+$punch_time = $this->db->select('clock_in, clock_out')
                       ->where('employee_id', $userid)
-                      ->where('status', 'present')
-                      ->where("attendance_date BETWEEN '".$first_date."' AND '".$second_date."'")
+                      ->where('attendance_date', date('Y-m-d'))
                       ->get('xin_attendance_time')
-                      ->row()->count_p;
-      $count_a = $this->db->select('COUNT(status) AS count_a')
+                      ->row();
+if (!empty($punch_time)) {
+    $in_time = date('h.i A', strtotime($punch_time->clock_in));
+    $out_time = date('h.i A', strtotime($punch_time->clock_out));
+}
+// end punch time
+
+//get employee name
+$name = $this->db->select('first_name,last_name')
+            ->where('user_id', $userid)
+            ->get('xin_employees')
+            ->row();
+// dd($name);
+
+// Get the current Unix timestamp
+$currentTimestamp = time();
+
+// Specify the other specific time
+$inTime = strtotime($in_time);
+$outTime = strtotime($out_time);
+$out_Time = strtotime(date('h.i A', strtotime('6.30')));
+
+// dd($outTime);
+
+// Calculate the time difference in seconds
+$workingHour = $currentTimestamp - $inTime;
+$over_time   = $outTime - $out_Time;
+// dd($over_time);
+
+$hours = floor($workingHour / 3600);
+$minutes = floor(($workingHour % 3600) / 60);
+
+
+$hourss = floor($over_time / 3600);
+$minutess = floor(($over_time % 3600) / 60);
+// $seconds = $workingHour % 60;
+
+// Output the time difference
+$total_working_hour = $hours . "." . $minutes;
+$total_over_time_hour = $hourss . "." . $minutess;
+$first_date = date('Y-m-01');
+$second_date = date('Y-m-d');
+
+$count_p = $this->db->select('COUNT(status) AS count_p')
                 ->where('employee_id', $userid)
-                ->where('status', 'absent')
+                ->where('status', 'present')
                 ->where("attendance_date BETWEEN '".$first_date."' AND '".$second_date."'")
                 ->get('xin_attendance_time')
-                ->row()->count_a;                
-      $count_late = $this->db->select('COUNT(status) AS count_late')
-                ->where('employee_id', $userid)
-                ->where('late_status', '1')
-                ->where("attendance_date BETWEEN '".$first_date."' AND '".$second_date."'")
-                ->get('xin_attendance_time')
-                ->row()->count_late;                
+                ->row()->count_p;
+$count_a = $this->db->select('COUNT(status) AS count_a')
+          ->where('employee_id', $userid)
+          ->where('status', 'absent')
+          ->where("attendance_date BETWEEN '".$first_date."' AND '".$second_date."'")
+          ->get('xin_attendance_time')
+          ->row()->count_a;
+$count_late = $this->db->select('COUNT(status) AS count_late')
+          ->where('employee_id', $userid)
+          ->where('late_status', '1')
+          ->where("attendance_date BETWEEN '".$first_date."' AND '".$second_date."'")
+          ->get('xin_attendance_time')
+          ->row()->count_late;
 
 
-      $holidays= $this->db->select('*')->get('xin_holidays')->result();
-      $holidayss= $this->db->select('*')->limit(5)->where("start_date > '".date('Y-m-d')."'")->get('xin_holidays')->result();
-      // dd($this->db->last_query());   
-      $leave_calel=get_cal_leave($userid,1);
-      $leave_calsl=get_cal_leave($userid,2);  
-      $totaluseleave=$leave_calel+$leave_calsl;
-      $all_notice = $this->db->select('*')->get('xin_events')->result();
+$holidays= $this->db->select('*')->get('xin_holidays')->result();
+$holidayss= $this->db->select('*')->limit(5)->where("start_date > '".date('Y-m-d')."'")->get('xin_holidays')->result();
+// dd($this->db->last_query());
+$leave_calel=get_cal_leave($userid, 1);
+$leave_calsl=get_cal_leave($userid, 2);
+$totaluseleave=$leave_calel+$leave_calsl;
+$all_notice = $this->db->select('*')->get('xin_events')->result();
 
-    //   dd($all_notice);
+//   dd($all_notice);
 ?>
 
 
@@ -407,6 +407,40 @@ hr {
     background-color: #f8f8f8;
     padding: 10px 0;
 }
+
+@media screen and (max-width: 1234px) {
+    .equal-height-row {
+        flex-direction: column;
+    }
+
+    .todayac {
+        margin-left: 0 !important;
+        margin: 1px 2px 23px 1px;
+    }
+
+    .timeac {
+        width: 314px !important;
+    }
+
+    .col_style {
+        width: 606px
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .widght {
+        width: 47% !important;
+    }
+}
+
+@media screen and (max-width: 595px) {
+    .widght {
+        width: 100% !important;
+    }
+    .timeshet{
+
+    }
+}
 </style>
 
 <div class=" <?php echo $get_animate;?>">
@@ -421,7 +455,7 @@ hr {
                 <div class="breadcrumb-wrapper col-xs-12">
                     <ol class="breadcrumb" style="margin-bottom: 10px; margin-left: -25px; margin-top: -5px;">
                         <li class="breadcrumb-item"><a
-                            href="<?php echo site_url('admin/dashboard/');?>"><?php echo $this->lang->line('xin_e_details_home');?></a>
+                                href="<?php echo site_url('admin/dashboard/');?>"><?php echo $this->lang->line('xin_e_details_home');?></a>
                         </li>
                         <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
@@ -433,7 +467,7 @@ hr {
     <!-- Today attendance info -->
     <div class="row equal-height-row " style="margin-top:10px">
         <div class="col-sm-4 col_style">
-            <div class="card" style="width: 250px;">
+            <div class="card timeac" style="width: 250px;">
                 <div class="card-body flex-container" style="margin-top: -8px;margin-bottom: -20px;">
                     <h5 class="card-title flex-item " style="font-weight: 600;">Timesheet</h5>
                     <h6 class="card-title flex-item " style="margin-left: 86px;"><?php echo date('d M Y')?></h6>
@@ -442,9 +476,9 @@ hr {
                     <div style="border-radius: 4px;border: 1px solid #E3E3E3;background: #F9F9F9; padding: 5px 0px;">
                         <span style="padding: 11px 0px 16px 12px">Punch In At</span><br>
                         <?php if ($in_time == '00:00') {
-                $in_time = "<span class='text-danger' >00:00</span>";
-                $total_working_hour = '0.0';
-            } ?>
+                            $in_time = "<span class='text-danger' >00:00</span>";
+                            $total_working_hour = '0.0';
+                        } ?>
                         <span style="padding: 0px 0px 0px 12px"><?php echo date('D, jS M Y ').$in_time?><span>
                     </div>
                 </div>
@@ -459,73 +493,76 @@ hr {
         </div>
 
         <!-- step bar -->
-        <div class="col-sm-8 col_style">
-            <div class="card" style="margin-left: -82px;">
-                <div class="card-header" style="border-bottom: 0px !important;">
-                    <h5 class="card-title flex-item " style="font-weight: 600;margin-left:10px;">Today Activity<i
-                            class="fa icon-time"></i></h5>
-                </div>
-                <div class="card-body">
-                    <?php 
-                        $lunch_end = date('h:i A', strtotime("$schedule->lunch_minute minutes", strtotime($schedule->lunch_time)));
-                        $in_time_class = '';
-                        $lunch_start_class = '';
-                        $lunch_end_class = '';
-                        $out_time_class = '';
-                        if (date('H:i:s') > $schedule->in_start_time && date('H:i:s') < $schedule->in_time) {
-                          $in_time_class = 'current-item';
-                        } else if (date('H:i:s') > $schedule->in_time && date('H:i:s') < $schedule->lunch_time) {
-                          $lunch_start_class = 'current-item';
-                        } else if (date('H:i:s') > $schedule->lunch_time && date('H:i:s') < date("H:i:s", strtotime($lunch_end))) {
-                          $lunch_end_class = 'current-item';
-                        } else if (date('H:i:s') > date("H:i:s", strtotime($lunch_end)) && date('H:i:s') < $schedule->ot_start_time) {
-                          $out_time_class = 'current-item';
-                        }
-                    ?>
-                    <section class="step-wizard" style="margin-top: -15px;">
-                        <ul class="step-wizard-list" style="margin-left: -48px;">
-                            <li class="step-wizard-item <?=$in_time_class?>">
-                                <span class="progress-label-top">Punch In</span>
-                                <span class="progress-count"><i class="icon-time"></i></span>
-                                <span class="progress-label"><?php echo $schedule->in_time?></span>
-                            </li>
-                            <li class="step-wizard-item <?=$lunch_start_class?>">
-                                <span class="progress-label-top">Lunch Time</span>
-                                <span class="progress-count"><i class="fa fa-clock-o" aria-hidden="true"></i></i></span>
-                                <span
-                                    class="progress-label"><?php echo date('h:i A', strtotime($schedule->lunch_time)); ?></span>
-                            </li>
-                            <li class="step-wizard-item <?=$lunch_end_class?>">
-                                <span class="progress-label-top">Lunch End</span>
-                                <span class="progress-count"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                <span class="progress-label"><?php echo $lunch_end; ?></span>
-                            </li>
-                            <li class="step-wizard-item <?=$out_time_class?>">
-                                <span class="progress-label-top">Punch Out</span>
-                                <span class="progress-count"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                <span
-                                    class="progress-label "><?php echo date('h:i A', strtotime($schedule->ot_start_time)); ?></span>
-                            </li>
-                        </ul>
-                    </section>
-
-                    <div class="row" style="margin-left: -8px;margin-top: 45px;">
-                        <div class="col-sm-3">
-                            <p><span style="font-weight:600">Status : </span><span>On Time</span></p>
-                        </div>
-                        <div class="col-sm-4">
-                            <p><span style="font-weight:600">Lunch Time : </span><span>1 Hour</span></p>
-                        </div>
-                        <div class="col-sm-5">
-                            <?php $in = date("h:i A", strtotime($schedule->in_time)); 
-                            $out = date("h:i A", strtotime($schedule->ot_start_time)); ?>
-                            <p>
-                                <span style="font-weight:600">Working Time: </span>
-                                <span><?= $in .'  -  '. $out; ?></span>
-                            </p>
-                        </div>
+        <div class="col-sm-8 timeshet">
+            <div class="col-sm-12 col_style">
+                <div class="card todayac" style="margin-left: -82px;">
+                    <div class="card-header" style="border-bottom: 0px !important;">
+                        <h5 class="card-title flex-item " style="font-weight: 600;margin-left:10px;">Today Activity<i
+                                class="fa icon-time"></i></h5>
                     </div>
+                    <div class="card-body">
+                        <?php
+                                    $lunch_end = date('h:i A', strtotime("$schedule->lunch_minute minutes", strtotime($schedule->lunch_time)));
+                            $in_time_class = '';
+                            $lunch_start_class = '';
+                            $lunch_end_class = '';
+                            $out_time_class = '';
+                            if (date('H:i:s') > $schedule->in_start_time && date('H:i:s') < $schedule->in_time) {
+                                $in_time_class = 'current-item';
+                            } elseif (date('H:i:s') > $schedule->in_time && date('H:i:s') < $schedule->lunch_time) {
+                                $lunch_start_class = 'current-item';
+                            } elseif (date('H:i:s') > $schedule->lunch_time && date('H:i:s') < date("H:i:s", strtotime($lunch_end))) {
+                                $lunch_end_class = 'current-item';
+                            } elseif (date('H:i:s') > date("H:i:s", strtotime($lunch_end)) && date('H:i:s') < $schedule->ot_start_time) {
+                                $out_time_class = 'current-item';
+                            }
+                            ?>
+                        <section class="step-wizard" style="margin-top: -15px;">
+                            <ul class="step-wizard-list" style="margin-left: -48px;">
+                                <li class="step-wizard-item <?=$in_time_class?>">
+                                    <span class="progress-label-top">Punch In</span>
+                                    <span class="progress-count"><i class="icon-time"></i></span>
+                                    <span class="progress-label"><?php echo $schedule->in_time?></span>
+                                </li>
+                                <li class="step-wizard-item <?=$lunch_start_class?>">
+                                    <span class="progress-label-top">Lunch Time</span>
+                                    <span class="progress-count"><i class="fa fa-clock-o"
+                                            aria-hidden="true"></i></i></span>
+                                    <span
+                                        class="progress-label"><?php echo date('h:i A', strtotime($schedule->lunch_time)); ?></span>
+                                </li>
+                                <li class="step-wizard-item <?=$lunch_end_class?>">
+                                    <span class="progress-label-top">Lunch End</span>
+                                    <span class="progress-count"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                    <span class="progress-label"><?php echo $lunch_end; ?></span>
+                                </li>
+                                <li class="step-wizard-item <?=$out_time_class?>">
+                                    <span class="progress-label-top">Punch Out</span>
+                                    <span class="progress-count"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                    <span
+                                        class="progress-label "><?php echo date('h:i A', strtotime($schedule->ot_start_time)); ?></span>
+                                </li>
+                            </ul>
+                        </section>
 
+                        <div class="row" style="margin-left: -8px;margin-top: 45px;">
+                            <div class="col-sm-3">
+                                <p><span style="font-weight:600">Status : </span><span>On Time</span></p>
+                            </div>
+                            <div class="col-sm-4">
+                                <p><span style="font-weight:600">Lunch Time : </span><span>1 Hour</span></p>
+                            </div>
+                            <div class="col-sm-5">
+                                <?php $in = date("h:i A", strtotime($schedule->in_time));
+                                $out = date("h:i A", strtotime($schedule->ot_start_time)); ?>
+                                <p>
+                                    <span style="font-weight:600">Working Time: </span>
+                                    <span><?= $in .'  -  '. $out; ?></span>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -540,8 +577,8 @@ hr {
                         <h5>Payroll Statistics</h5>
                         <div class="col-md-3">
                             <select class="form-control  form-inline" id="year_id">
-                                <?php for($i=2012;$i<=date('Y');$i++){?>
-                                <option value="<?php echo $i?>" <?php echo $i==date('Y')? 'selected':''?>>
+                                <?php for($i=2012;$i<=date('Y');$i++) {?>
+                                <option value="<?php echo $i?>" <?php echo $i==date('Y') ? 'selected' : ''?>>
                                     <?php echo $i?></option>
                                 <?php }?>
                             </select>
@@ -558,8 +595,8 @@ hr {
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title" style="    margin-left: 13px;font-weight:600">This Month Summary</h5>
-                    <div class="stats-box-row" style="margin-top:40px">
-                        <div class="stats-box col-md-6">
+                    <div class="stats-box-row " style="margin-top:40px">
+                        <div class="stats-box col-md-6 widght">
                             <div class="text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35"
                                     fill="none">
@@ -571,7 +608,7 @@ hr {
                             <span class="text-center text-success"><b>Working Day</b></span>
                             <span class="text-center"><b><?php echo $count_p?> Day</b></span>
                         </div>
-                        <div class="stats-box col-md-6">
+                        <div class="stats-box col-md-6 widght">
                             <div class="text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35"
                                     fill="none">
@@ -585,7 +622,7 @@ hr {
                         </div>
                     </div>
                     <div class="stats-box-row">
-                        <div class="stats-box col-md-6">
+                        <div class="stats-box col-md-6 widght">
                             <div class="text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35"
                                     fill="none">
@@ -597,7 +634,7 @@ hr {
                             <span class="text-warning"><b>Late Coming</b></span>
                             <span><b><?php echo $count_late?> Day</b></span>
                         </div>
-                        <div class="stats-box col-md-6">
+                        <div class="stats-box col-md-6 widght">
                             <div class="text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="33" viewBox="0 0 30 33"
                                     fill="none">
@@ -660,7 +697,7 @@ hr {
                             style="margin-top:15px;color:#5442A8;">Details</a>
                     </div>
                     <h5 class="card-title" style="margin-top: 20px;margin-left: 13px;font-weight:600">Leave Balance</h5>
-                    
+
                     <div class="stats-box-row" style="border:2px solid #E1E1E1;padding:15px 5px;border-radius:5px;">
                         <div class="col-md-4" style="border-right:2px solid #E1E1E1">
                             <span><b>Sick</b></span>
@@ -674,10 +711,10 @@ hr {
 
                         <div class="col-md-4">
                             <?php
-                                $date        = date( "Y-01-01");
-                                $datep       = date( "Y-m-d");
-                                $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
-                            ?>
+    $date        = date("Y-01-01");
+$datep       = date("Y-m-d");
+$present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date, $datep);
+?>
                             <span><b>Absent</b></span>
                             <span><?= $present_stutas->absent ?>/365</span>
                         </div>
@@ -695,26 +732,30 @@ hr {
             <div class="card" style=" padding-bottom: 18px;">
                 <span style="margin-left:20px;padding-top: 1.25rem;font-weight: 600;">Notice Board</span>
                 <hr>
-                <?php $notice = $this->db->limit(5)->order_by('id','DESC')->get('xin_office_notice')->result(); ?>
+                <?php $notice = $this->db->limit(5)->order_by('id', 'DESC')->get('xin_office_notice')->result(); ?>
                 <?php foreach ($notice as $key => $row) { ?>
-                    <div class="row">
-                        <div class="col-md-4"
-                            style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 53px;height: 50px;flex-shrink: 0;">
-                            <span class="text_s" style="padding-top: 4px;"><?php echo date("d", strtotime($row->created_at))?></span>
-                            <span class="text_s"><?php echo date("M", strtotime($row->created_at))?></span>
-                        </div>
-                        <div class="col-md-8">
-                            <span style="font-weight: 500;cursor: pointer;"  data-toggle="modal" data-target="#myModals" onclick="myfunc(this)" data-title="<?php echo $row->title?>" data-description="<?php echo $row->description?>"><?php echo  substr($row->title,0,20)."..."?></span>
-                            <span style="color:#929292;font-size:13px"><?= substr($row->description, 0, 30) ?></span>
-                        </div>
+                <div class="row">
+                    <div class="col-md-4"
+                        style="margin-left:33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 53px;height: 50px;flex-shrink: 0;">
+                        <span class="text_s"
+                            style="padding-top: 4px;"><?php echo date("d", strtotime($row->created_at))?></span>
+                        <span class="text_s"><?php echo date("M", strtotime($row->created_at))?></span>
                     </div>
-                    <hr>
+                    <div class="col-md-8">
+                        <span style="font-weight: 500;cursor: pointer;" data-toggle="modal" data-target="#myModals"
+                            onclick="myfunc(this)" data-title="<?php echo $row->title?>"
+                            data-description="<?php echo $row->description?>"><?php echo  substr($row->title, 0, 20)."..."?></span>
+                        <span style="color:#929292;font-size:13px"><?= substr($row->description, 0, 30) ?></span>
+                    </div>
+                </div>
+                <hr>
                 <?php } ?>
-                <a href="<?php echo base_url('admin/events/notice')?>" style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
+                <a href="<?php echo base_url('admin/events/notice')?>"
+                    style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
         </div>
 
-       
+
 
 
 
@@ -726,7 +767,7 @@ hr {
             <div class="card" style="    padding-bottom: 18px;">
                 <span style="margin-left:20px;padding-top: 1.25rem;font-weight: 600;">Upcoming Holidays</span>
                 <hr>
-                <?php foreach($holidayss as $holiday){
+                <?php foreach($holidayss as $holiday) {
                     $today = new DateTime();  // Current date
                     $date = $holiday->start_date;
                     $futureDate = new DateTime($date);  // Future date
@@ -735,18 +776,20 @@ hr {
                     } else {
                         $interval = date_diff($today, $futureDate);
                         $daysLeft = $interval->format('%a');
-                    }  
-                ?>
+                    }
+                    ?>
                 <div class="row">
-                    <div class="col-md-4" style="padding-left: 5px;padding-right: 5px;margin-left: 33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;">
-                        <span class="text_s" style="padding-top: 4px;"><?php echo date("d",strtotime($holiday->start_date))?></span>
-                        <span class="text_s"><?php echo date("M",strtotime($holiday->start_date))?></span>
+                    <div class="col-md-4"
+                        style="padding-left: 5px;padding-right: 5px;margin-left: 33px;border-radius: 5px;background: rgba(186, 155, 252, 0.24);width: 50px;height: 50px;">
+                        <span class="text_s"
+                            style="padding-top: 4px;"><?php echo date("d", strtotime($holiday->start_date))?></span>
+                        <span class="text_s"><?php echo date("M", strtotime($holiday->start_date))?></span>
                     </div>
                     <div class="col-md-8">
                         <span style="font-weight: 500;"><?php echo $holiday->event_name ?></span>
                         <p>
-                            <span style="color:#929292"><?php echo date("l",strtotime($holiday->start_date))?></span>
-                            <span style="color:#8D8D8D; float:right" ><?php echo $daysLeft?> days left</span> 
+                            <span style="color:#929292"><?php echo date("l", strtotime($holiday->start_date))?></span>
+                            <span style="color:#8D8D8D; float:right"><?php echo $daysLeft?> days left</span>
                         </p>
                     </div>
                     <!-- <div class="col-md-4" style="float: right;">
@@ -756,9 +799,9 @@ hr {
                 <hr>
                 <?php }?>
                 <!-- Buttons with data-attributes -->
-                
 
-                
+
+
                 <!-- <button class="btn btn-sm">View All</button> -->
                 <a href="#" class="" data-toggle="modal" data-target=".bs-example-modal-lg"
                     style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
@@ -771,24 +814,24 @@ hr {
 
 
 
- <!-- notice modal -->
+<!-- notice modal -->
 
 
 <!-- Modal -->
 <div id="myModals" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Notice</h4>
-        </div>
-        <div class="modal-body">
-            <p id="title" class="h4 text-center"></p>
-            <p id="description" class="text-justify"></p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger btn-sm " data-dismiss="modal">Close</button>
-        </div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Notice</h4>
+            </div>
+            <div class="modal-body">
+                <p id="title" class="h4 text-center"></p>
+                <p id="description" class="text-justify"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm " data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
@@ -815,27 +858,27 @@ hr {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
+                    <?php
       $i=1;
-      // $holidays= $this->db->select('*')->get('xin_holidays')->result();
-      foreach($holidays as $holiday){
-      $today = new DateTime();  // Current date
-      $date = $holiday->start_date;
-      $futureDate = new DateTime($date);  // Future date
+// $holidays= $this->db->select('*')->get('xin_holidays')->result();
+foreach($holidays as $holiday) {
+    $today = new DateTime();  // Current date
+    $date = $holiday->start_date;
+    $futureDate = new DateTime($date);  // Future date
 
-      if ($futureDate < $today) {
-          $daysLeft = 0;
-      } else {
-          $interval = date_diff($today, $futureDate);
-          $daysLeft = $interval->format('%a');
-      }
+    if ($futureDate < $today) {
+        $daysLeft = 0;
+    } else {
+        $interval = date_diff($today, $futureDate);
+        $daysLeft = $interval->format('%a');
+    }
 
-      ?>
+    ?>
                     <tr class="text-center">
                         <td><?php echo $i++ ?></td>
                         <td><?php echo $holiday->event_name?></td>
                         <td><?php echo $holiday->start_date?></td>
-                        <td><?php echo date("l",strtotime($holiday->start_date))?></td>
+                        <td><?php echo date("l", strtotime($holiday->start_date))?></td>
                         <td><?php echo $daysLeft?></td>
                         <!-- <td><?php echo $daysLeft?></td> -->
                     </tr>
@@ -856,12 +899,12 @@ hr {
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
 
 <script>
-function myfunc(e){
-  var title= e.getAttribute('data-title');
-  var description= e.getAttribute('data-description');
-  $("#title").text(title);
-  $("#description").text(description);
-}    
+function myfunc(e) {
+    var title = e.getAttribute('data-title');
+    var description = e.getAttribute('data-description');
+    $("#title").text(title);
+    $("#description").text(description);
+}
 // Get the canvas element
 var ctx = document.getElementById('myChart').getContext('2d');
 
@@ -903,5 +946,4 @@ $('#year_id').on('change', function() {
 $(document).ready(function() {
     $('#datatbale').DataTable();
 });
-
 </script>
