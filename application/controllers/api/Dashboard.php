@@ -18,11 +18,15 @@ class Dashboard extends API_Controller
      */
     public function test()
     {
-        $user_info = api_auth('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZ');
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
         if ($user_info['status'] == true) {
-            // code...
+            echo json_encode($user_info);
+            exit();
+        }else{
+            echo json_encode($user_info);
+            exit();
         }
-        dd($user_info);
     }
 
     /**
