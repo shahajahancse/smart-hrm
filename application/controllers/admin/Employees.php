@@ -2502,7 +2502,6 @@ class Employees extends MY_Controller {
 			if ($query->num_rows() > 0) {
 				$data=['proxi_id'=>$proxi_id];
 				$this->db->where('emp_id', $id)->update('xin_proxi',$data);
-				return true;
 			} else {
 				$this->db->query("INSERT INTO `xin_proxi`( `emp_id`, `proxi_id`, `status`) VALUES ('$id','$proxi_id',1)");
 			}
@@ -2629,6 +2628,7 @@ class Employees extends MY_Controller {
 		}
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_employee_basic_info_updated');
+		
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
 		}
