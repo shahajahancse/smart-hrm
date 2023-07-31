@@ -32,11 +32,13 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
     <h3 class="box-title">Desk list</h3>
     <a class="btn btn-sm btn-info modalbuttons" style="float:right" href="#" type="button" data-toggle="modal" data-target="#myModals">Add Desk</a>
   </div>
+
   <div class="card <?php echo $get_animate?>">
     <div class="card-body">
       <table class="datatables-demo table table-striped table-bordered" id="myTables">
         <thead>
           <tr>
+            <!-- <th  style="width:60px;" class="text-center">Sl.</th> -->
             <th  style="width:60px;" class="text-center">Sl. No.</th>
             <th  style="width:60px;" class="text-center">Employee Name</th>
             <th  style="width:60px;" class="text-center">Desk No.</th>
@@ -122,6 +124,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 <script>
 $(document).ready(function() {
   loadTableData();
+  
 $('#user_id').change(function() {
   var selectedUserId = $(this).val();
   $('#hidden_user_id').val(selectedUserId);
@@ -200,6 +203,7 @@ function loadTableData() {
       return '<span style="padding: 4.5px 14.3px 5.5px 9px; border-radius: 50px;border: 1px solid #CCC;background: #FFF;"> <b> <i class=" fa fa-dot-circle-o" style="color:red"></i> Not Using</b></span>';
     }
   }
+  
   $('.modalbuttons').on('click', function () {
       $('#myForm')[0].reset();
   });
@@ -233,6 +237,7 @@ function fetchRowData(recordId) {
         $("#saveButton").hide();
         $("#updateButton").show();
       }
+        
     },
     error: function(xhr, status, error) {
       console.log('Error fetching row data:', error);
@@ -245,15 +250,5 @@ $(".modalbuttons").click(function() {
   $("#saveButton").show();
   $('#recordId').val(''); // Clear the recordId when the modal is opened for adding new data
 }); 
-
-
-  $('#status').on('change', function() {
-    var status = $(this).val();
-    if(status == 2){
-        
-    }
-  });
-
-
 
 </script>

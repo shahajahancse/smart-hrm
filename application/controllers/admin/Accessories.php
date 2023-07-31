@@ -297,36 +297,36 @@ class Accessories extends MY_Controller {
     }
 
 
-public function item_lists($id){
-    // dd($id); 
-    $this->db->select('*')->from('product_accessories');
-    if($id == 1){  
-        $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
-        $this->load->view('admin/accessories/on_working',$data);
-    }
-    if($id == 2){   
-        $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
-        $this->load->view('admin/accessories/on_stored',$data);
-    }
-    if($id == 3){   
-        $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
-        $this->load->view('admin/accessories/on_servicing',$data);
-    }
-    if($id == 4){   
-        $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
-        $this->load->view('admin/accessories/on_destroyed',$data);
-    }
-    if($id == 5){   
-        $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
-        $this->load->view('admin/accessories/on_movement',$data);
-    }
-    if($id == 6){   
-        $data['rows']=$this->Accessories_model->get_product_reports_info(null,null,null); 
-        $this->load->view('admin/accessories/on_all',$data);
-    }
+    public function item_lists($id){
+        // dd($id); 
+        $this->db->select('*')->from('product_accessories');
+        if($id == 1){  
+            $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
+            $this->load->view('admin/accessories/on_working',$data);
+        }
+        if($id == 2){   
+            $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
+            $this->load->view('admin/accessories/on_stored',$data);
+        }
+        if($id == 3){   
+            $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
+            $this->load->view('admin/accessories/on_servicing',$data);
+        }
+        if($id == 4){   
+            $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
+            $this->load->view('admin/accessories/on_destroyed',$data);
+        }
+        if($id == 5){   
+            $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
+            $this->load->view('admin/accessories/on_movement',$data);
+        }
+        if($id == 6){   
+            $data['rows']=$this->Accessories_model->get_product_reports_info(null,null,null); 
+            $this->load->view('admin/accessories/on_all',$data);
+        }
 
 
-}   
+    }   
 
     public function desk_add(){
         $data = $this->page_loads();
