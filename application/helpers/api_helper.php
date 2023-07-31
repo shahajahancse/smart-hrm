@@ -13,7 +13,7 @@ if ( ! function_exists('api_auth'))
     function api_auth($var)
     {
         $CI =&  get_instance();
-        $CI->db->from('api_keys');
+        $CI->db->from('api_keys')->where('api_key', $var);
         $q = $CI->db->get()->row();
 
         if (!empty($q)) {

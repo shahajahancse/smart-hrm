@@ -8,7 +8,7 @@ class Auth extends API_Controller
         parent::__construct();        
 
         // Load Authorization Library or Load in autoload config file
-        $this->load->library('authorization_token');
+        $this->load->library('Authorization_Token');
     }
 
     /**
