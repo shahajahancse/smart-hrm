@@ -332,8 +332,6 @@ class Accessories extends MY_Controller {
         $data = $this->page_loads();
         $data['title'] = 'Desk List'.' | '.$this->Xin_model->site_title();
         $data['breadcrumbs'] = "Desk List";
-        // $data['get_desk_list'] = $this->get_desk_list();
-        // dd($data['get_desk_list']);
         $datas['subview']= $this->load->view('admin/accessories/desk_add',$data,TRUE);  
         $this->load->view('admin/layout/layout_main', $datas); 
     }
@@ -354,13 +352,15 @@ class Accessories extends MY_Controller {
         // dd($_POST);
         $data['desk_no'] = $_POST['desk_no'];
         $data['status']  = $_POST['status'];
-
         $data['user_id'] = $_POST['user_id']==null?'':$_POST['user_id'];
         $data['floor']   = $_POST['floor'];
 
+        // dd($_POST);
         $insert = $this->db->insert('xin_employee_desk',$data);
         if($insert && $_POST['user_id'] !=null){
-            $this->db->where('user_id',$_POST['user_id'])->update('xin_employees',['floor_status'=>$_POST['floor']]);
+            $this->db->where('user_id',$_POST['user_id'])->update('xin_employees',['floor_status'=>$_POST['floor']]);  
+            header('Content-Type: application/json');
+            echo json_encode("Desk added successfully");
         }
     }
 
@@ -388,25 +388,41 @@ class Accessories extends MY_Controller {
             $status = $this->input->post('status');
             $floor = $this->input->post('floor');
             $userId = $this->input->post('user_id');
-
             $data = array(
                 'desk_no' => $deskNo,
                 'status' => $status,
                 'floor' => $floor,
                 'user_id' => $userId
             );
-
             $this->db->where('id', $recordId);
             $result = $this->db->update('xin_employee_desk', $data);
-
+            $msg = "Update successfully";
+            $err = 'Update failed';
+            $inval = 'Invalid request';
             if ($result) {
-                echo json_encode(['success' => true]);
+                header('Content-Type: application/json');
+                echo json_encode($msg);
             } else {
-                echo json_encode(['error' => 'Update failed']);
+                header('Content-Type: application/json');
+                echo json_encode($err);
             }
         } else {
-            echo json_encode(['error' => 'Invalid request']);
+            header('Content-Type: application/json');
+            echo json_encode($inval);
         }
+    }
+
+    public function check_duplicate($id){
+       $this->db->select('*');
+       $this->db->where('desk_no', $id);
+       $query = $this->db->get('xin_employee_desk');
+
+        $num_rows = $query->num_rows();
+       if($num_rows > 0 ){
+            header('Content-Type: application/json');
+            echo json_encode(['status'=>'true']);
+       }
+
     }
 
 

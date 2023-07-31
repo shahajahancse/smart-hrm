@@ -23,16 +23,19 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
     left: auto !important;
     min-width: 100px !important;
   }
-
+  .border-red {
+      box-shadow: 0px 1px 0px red;
+  }
 </style>
 
 
-<div class="box <?php echo $get_animate;?>">
+<div class="box <?php echo $get_animate;?>" style="padding-bottom:3px;">
   <div class="box-header with-border">
     <h3 class="box-title">Desk list</h3>
     <a class="btn btn-sm btn-info modalbuttons" style="float:right" href="#" type="button" data-toggle="modal" data-target="#myModals">Add Desk</a>
   </div>
-  <div class="card <?php echo $get_animate?>">
+
+  <div class="card <?php echo $get_animate?>" style="margin:14px">
     <div class="card-body">
       <table class="datatables-demo table table-striped table-bordered" id="myTables">
         <thead>
@@ -67,12 +70,6 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
         </div>
         <div class="modal-body">
           <!-- Input fields in the modal body -->
-          <div class="form-group" id="desk_noo">
-            <label for="desk_no">Desk No:</label>
-            <input type="text" class="form-control" id="desk_no" name="desk_no" placeholder="Enter desk no.">
-            <input type="hidden" id="recordId" name="recordId" value="">
-          </div>
-
           <div class="form-group">
             <label for="user_id">Status</label>
             <select class="form-control" id="status" name="status">
@@ -83,6 +80,21 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             </select>
           </div>
 
+          <div class="form-group" id="desk_noo">
+            <label for="desk_no">Desk No</label>
+            <input type="number" class="form-control" id="desk_no" name="desk_no" placeholder="Enter desk no.">
+            <input type="hidden" id="recordId" name="recordId" value="">
+            <span type="text" class="text-danger" id="error"></span>
+          </div>
+
+          <div class="form-group" id="ex_desk_noo">
+            <label for="desk_no">After Desk</label>
+            <input type="text" class="form-control" id="ex_desk_no" name="ex_desk_no" placeholder="Enter desk no.">
+
+          </div>
+
+
+
           <div class="form-group">
             <label for="user_id">Select Floor</label>
             <select class="form-control" id="floor" name="floor">
@@ -92,7 +104,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             </select>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" id="user_idd">
             <label for="user_id">Select User Name</label>
             <select class="form-control" id="user_id" name="user_id">
               <option value="">Select</option>
@@ -105,6 +117,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             </select>
           </div>
           <div id="description" style="display:none">
+            <label >Description</label>
             <textarea name="description"  cols="82" rows="3"></textarea>
           </div>
 
@@ -122,6 +135,9 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 <script>
 $(document).ready(function() {
   loadTableData();
+  $('#ex_desk_noo').hide();
+  $('#error').empty();
+  
 $('#user_id').change(function() {
   var selectedUserId = $(this).val();
   $('#hidden_user_id').val(selectedUserId);
@@ -143,9 +159,11 @@ $("#myForm").submit(function(event) {
     data: formData,
     success: function(response) {
       if (recordId === '') {
-        alert('Added Successfully');
+        // alert('Added Successfully');
+        showSuccessAlert(response);
       } else {
-        alert('Updated Successfully');
+        showSuccessAlert(response);
+        // alert('Updated Successfully');
       }
       $('#myModals').modal('hide');
       loadTableData();
@@ -240,20 +258,77 @@ function fetchRowData(recordId) {
   });
 }
 
-$(".modalbuttons").click(function() {
-  $("#updateButton").hide();
-  $("#saveButton").show();
-  $('#recordId').val(''); // Clear the recordId when the modal is opened for adding new data
-}); 
+  $(".modalbuttons").click(function() {
+    $('#desk_no').removeClass("border-red");
+    $('#error').text('');
+    $("#updateButton").hide();
+    $("#saveButton").show();
+     disable_field();
+    $('#recordId').val('');
+  }); 
 
 
   $('#status').on('change', function() {
     var status = $(this).val();
     if(status == 2){
-        
+      $('#description').show(500);
+      $('#ex_desk_noo').show(500);
+      $('#user_idd').hide(500);
+       $('#user_id').val('');
+    }else{
+      $('#description').hide(500);
+      $('#user_idd').show(500);
+      $('#ex_desk_noo').hide(500);
     }
+
   });
 
+    $("#desk_no").keyup(function() {
+        var inputValue = $(this).val();
+
+        if(inputValue !=""){
+          url = "<?php echo base_url('admin/accessories/check_duplicate/')?>"+inputValue;
+          $.ajax({
+            type: "POST",
+            url: url,
+            success: function(response) {
+              // alert(response);
+                if(response.status == 'true'){
+                $('#desk_no').addClass("border-red");
+                $('#desk_no').blur();
+                $('#error').text('Already Used');
+                disable_field(1);
+              }
+              else{
+                $('#desk_no').removeClass("border-red");
+                $('#error').text('');
+                disable_field();
+
+              }
+              // console.log(response);
+            },
+            error: function(xhr, status, error) {
+              alert("Error submitting the form. Please try again.");
+            }
+          });
+        }else{
+          $('#error').text('');
+        }
+
+    });
+
+
+  function disable_field(status=null){
+    
+    if(status == 1){
+    $("#user_id").prop("disabled", true);
+    $("#floor").prop("disabled", true);
+    }else{
+    $("#user_id").prop("disabled", false);
+    $("#floor").prop("disabled", false);
+    }
+  
+  }
 
 
 </script>
