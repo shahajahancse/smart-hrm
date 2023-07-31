@@ -367,9 +367,8 @@ public function add_desk(){
     }
 }
 
-public function get_single_desk(){
-    
-$recordId = $this->input->get('recordId');
+public function get_single_desk(){  
+ $recordId = $this->input->get('recordId');
         $recordId = $this->db->escape_str($recordId); // Escape the input to prevent SQL injection
 
         $query = $this->db->get_where('xin_employee_desk', array('id' => $recordId));
