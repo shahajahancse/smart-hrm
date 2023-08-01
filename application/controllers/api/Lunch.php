@@ -47,20 +47,16 @@ class Lunch extends API_Controller
             $data['first_date']=$result->end_date;
             $data['second_date']=$result->next_date;
             $data['lunch_data'] = $this->db
-                                ->select('lunch_payment.*, xin_employees.first_name, xin_employees.last_name, xin_designations.designation_name')
+                                ->select('lunch_payment.*')
                                 ->from('lunch_payment')
-                                ->join('xin_employees', 'lunch_payment.emp_id = xin_employees.user_id')
-                                ->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id')
                                 ->where('lunch_payment.end_date', $result->end_date)
                                 ->where('lunch_payment.emp_id', $user_data->user_id)
                                 ->order_by('lunch_payment.id', 'desc')
                                 ->get()
                                 ->result();
             $data['Lunch_data_table'] = $this->db
-                                ->select('lunch_payment.*, xin_employees.first_name, xin_employees.last_name, xin_designations.designation_name')
+                                ->select('*')
                                 ->from('lunch_payment')
-                                ->join('xin_employees', 'lunch_payment.emp_id = xin_employees.user_id')
-                                ->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id')
                                 ->where('lunch_payment.emp_id', $user_data->user_id)
                                 ->order_by('lunch_payment.id', 'desc')
                                 ->get()
@@ -78,6 +74,38 @@ class Lunch extends API_Controller
             $data['total_payment']  =   $total_payment;
             $data['saved_lunch']    =   $saved_lunch;
             $data['taken_lunch' ]   =   $taken_lunch;
+            $this->api_return([
+                'success'    =>  true,
+                'message'    =>  'successful',
+                'status'     =>  200,
+                'data'       =>  $data,
+            ], 200);
+        } else {
+            $this->api_return([
+                'success'  =>   false,
+                'message'  =>   'Unsuccessful',
+                'status'   =>   404,
+                'data'     =>   [],
+            ], 404);
+        }
+    }
+    public function lunch_search()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $First_date = date('Y-m-d', strtotime($this->input->post('First_date')));
+        $Last_date = date('Y-m-d', strtotime($this->input->post('Last_date')));
+        $user_info = api_auth($authorization);
+        $user_data=$user_info['user_info'];
+        if ($user_info['status'] == true) {
+            $data['Lunch_data_table'] = $this->db
+                                ->select('*')
+                                ->from('lunch_payment')
+                                ->where('lunch_payment.emp_id', $user_data->user_id)
+                                ->where('lunch_payment.end_date >=', $First_date)
+                                ->where('lunch_payment.end_date<=', $Last_date)
+                                ->order_by('lunch_payment.id', 'desc')
+                                ->get()
+                                ->result();
             $this->api_return([
                 'success'    =>  true,
                 'message'    =>  'successful',
