@@ -340,6 +340,7 @@ class Accessories extends MY_Controller {
         $tableData =$this->db->select('xin_employees.first_name,xin_employees.last_name,xin_employee_desk.*')
                              ->from('xin_employee_desk')
                              ->join('xin_employees', 'xin_employees.user_id = xin_employee_desk.user_id', 'left')
+                             ->order_by('desk_no','ASC')
                              ->get()
                              ->result();
 
