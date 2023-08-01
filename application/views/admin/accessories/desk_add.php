@@ -109,7 +109,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             <select class="form-control" id="user_id" name="user_id">
               <option value="">Select</option>
               <?php 
-                $rows = $this->db->select('user_id, first_name, last_name')->where_in('status', [1, 4, 5])->where('floor_status',null)->get('xin_employees')->result();
+                $rows = $this->db->select('user_id, first_name, last_name')->where_in('status', [1, 4, 5])->get('xin_employees')->result();
                 foreach ($rows as $row) {
               ?>
               <option value="<?= $row->user_id ?>"><?= $row->first_name.' '.$row->last_name ?></option>
