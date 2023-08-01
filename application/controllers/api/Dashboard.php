@@ -8,7 +8,6 @@ class Dashboard extends API_Controller
         parent::__construct();  
         $this->load->helper('api_helper');      
     }
-
     /**
      * demo method 
      *

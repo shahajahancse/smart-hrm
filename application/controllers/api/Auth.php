@@ -1,14 +1,18 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
 class Auth extends API_Controller
 {
-    public function __construct() {
-        parent::__construct();        
+    public function __construct()
+    {
+        parent::__construct();
 
         // Load Authorization Library or Load in autoload config file
         $this->load->library('Authorization_Token');
+        $this->load->helper('api_helper');
     }
 
     /**
@@ -25,7 +29,7 @@ class Auth extends API_Controller
 
 
     /**
-     * login method 
+     * login method
      *
      * @link [api/user/login]
      * @method POST
@@ -63,62 +67,63 @@ class Auth extends API_Controller
             } else {
                 $this->db->where('user_id', $auth['user_id'])->update('api_keys', array('api_key' => $token));
             }
+            $user_info = api_auth($token);
 
-            // return data
-            $this->api_return(
-                [
-                    'status' => true,
-                    "result" => [
-                        'token' => $token,
-                    ],
-                    
-                ],
-                200
-            );
+            if ($user_info) {
+                $user_info['user_info']->token = $token;
+                $this->api_return([
+                    'success' => true,
+                    'message' => 'User login successful.',
+                    'status' => 200,
+                    'data' => $user_info['user_info'],
+                ], 200);
+            } else {
+                $this->api_return([
+                    'success' => false,
+                    'message' => 'User login unsuccessful.',
+                    'status' => 404,
+                    'data' => [],
+                ], 404);
+            }
 
-        } else {
-            // return data
-            $this->api_return(
-                [
-                    'status' => false,
-                    "result" => [
-                        'token' => '',
-                    ],
-                    
-                ],
-                404
-            );      
+        }else {
+            $this->api_return([
+                'success' => false,
+                'message' => 'User login unsuccessful.',
+                'status' => 404,
+                'data' => [],
+            ], 404);
         }
     }
 
     // Read data using username and password
-    private function login_auth($data) {
-     
+    private function login_auth($data)
+    {
         $sql = 'SELECT * FROM xin_employees WHERE username = ? AND is_active = ?';
         $binds = array($data['username'],1);
         $query = $this->db->query($sql, $binds);
-                
-        
+
+
         $options = array('cost' => 12);
         $password_hash = password_hash($data['password'], PASSWORD_BCRYPT, $options);
         if ($query->num_rows() > 0) {
             $rw_password = $query->result();
-            if(password_verify($data['password'],$rw_password[0]->password)){
+            if(password_verify($data['password'], $rw_password[0]->password)) {
                 $data = array(
-                    'user_id' => $rw_password[0]->user_id, 
+                    'user_id' => $rw_password[0]->user_id,
                     'status' => true,
                 );
                 return $data;
             } else {
                 $data = array(
-                    'user_id' => '', 
+                    'user_id' => '',
                     'status' => false,
                 );
                 return $data;
             }
         } else {
             $data = array(
-                'user_id' => '', 
+                'user_id' => '',
                 'status' => false,
             );
             return $data;
@@ -127,7 +132,7 @@ class Auth extends API_Controller
 
 
     /**
-     * demo method 
+     * demo method
      *
      * @link [api/user/demo]
      * @method POST
@@ -155,14 +160,15 @@ class Auth extends API_Controller
              */
             'key' => ['POST', $this->key() ], // type, {key}|table (by default)
         ]);
-        
+
         // return data
         $this->api_return(
             [
                 'status' => true,
                 "result" => "Return API Response",
             ],
-        200);
+            200
+        );
     }
 
     /**
@@ -190,6 +196,7 @@ class Auth extends API_Controller
                     'user_data' => $user_data['token_data']
                 ],
             ],
-        200);
+            200
+        );
     }
 }
