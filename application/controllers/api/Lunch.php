@@ -75,16 +75,14 @@ class Lunch extends API_Controller
             $data['saved_lunch']    =   $saved_lunch;
             $data['taken_lunch' ]   =   $taken_lunch;
             $this->api_return([
-                'success'    =>  true,
+                'status'    =>  true,
                 'message'    =>  'successful',
-                'status'     =>  200,
                 'data'       =>  $data,
             ], 200);
         } else {
             $this->api_return([
-                'success'  =>   false,
+                'status'  =>   false,
                 'message'  =>   'Unsuccessful',
-                'status'   =>   404,
                 'data'     =>   [],
             ], 404);
         }
@@ -107,16 +105,14 @@ class Lunch extends API_Controller
                                 ->get()
                                 ->result();
             $this->api_return([
-                'success'    =>  true,
+                'status'    =>  true,
                 'message'    =>  'successful',
-                'status'     =>  200,
                 'data'       =>  $data,
             ], 200);
         } else {
             $this->api_return([
-                'success'  =>   false,
+                'status'  =>   false,
                 'message'  =>   'Unsuccessful',
-                'status'   =>   404,
                 'data'     =>   [],
             ], 404);
         }

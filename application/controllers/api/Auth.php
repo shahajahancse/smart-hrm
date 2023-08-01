@@ -72,25 +72,22 @@ class Auth extends API_Controller
             if ($user_info) {
                 $user_info['user_info']->token = $token;
                 $this->api_return([
-                    'success' => true,
+                    'status' => true,
                     'message' => 'User login successful.',
-                    'status' => 200,
                     'data' => $user_info['user_info'],
                 ], 200);
             } else {
                 $this->api_return([
-                    'success' => false,
+                    'status' => false,
                     'message' => 'User login unsuccessful.',
-                    'status' => 404,
                     'data' => [],
                 ], 404);
             }
 
         } else {
             $this->api_return([
-                'success' => false,
+                'status' => false,
                 'message' => 'User login unsuccessful.',
-                'status' => 404,
                 'data' => [],
             ], 404);
         }
@@ -108,27 +105,24 @@ class Auth extends API_Controller
                 $this->db->where('id', $existingKey->id)->delete('api_keys');
                 // Success response
                 $this->api_return([
-                    'success' => true,
+                    'status' => true,
                     'message' => 'User logout successful.',
-                    'status' => 200,
                     'data' => [],
                 ], 200);
                 
             } else {
                 // Error response for invalid API key
                 $this->api_return([
-                    'success' => false,
+                    'status' => false,
                     'message' => 'User logout unsuccessful.',
-                    'status' => 404,
                     'data' => [],
                 ], 404);
             }
         } else {
             // Error response for missing or invalid authorization header
             $this->api_return([
-                'success' => false,
+                'status' => false,
                 'message' => 'User logout unsuccessful.',
-                'status' => 404,
                 'data' => [],
             ], 404);
         }
