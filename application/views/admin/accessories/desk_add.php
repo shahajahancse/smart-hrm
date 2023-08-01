@@ -23,9 +23,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
     left: auto !important;
     min-width: 100px !important;
   }
-  .border-red {
-      box-shadow: 0px 1px 0px red;
-  }
+
 </style>
 
 
@@ -40,12 +38,14 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
       <table class="datatables-demo table table-striped table-bordered" id="myTables">
         <thead>
           <tr>
-            <th  style="width:60px;" class="text-center">Sl. No.</th>
-            <th  style="width:60px;" class="text-center">Employee Name</th>
-            <th  style="width:60px;" class="text-center">Desk No.</th>
-            <th  style="width:60px;" class="text-center">Floor</th>
-            <th  style="width:60px;" class="text-center">Status</th>
-            <th  style="width:60px;" class="text-center">Action</th>
+            <th  style="width:60px;" class="text-center">Sl.</th>
+            <th  class="text-center">Emp Name</th>
+            <th  class="text-center">Desk No.</th>
+            <th  class="text-center">After Desk</th>
+            <th  class="text-center">Floor</th>
+            <th  class="text-center">Details</th>
+            <th  class="text-center">Status</th>
+            <th  class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -66,7 +66,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
         <!-- <input type="hidden" value=""> -->
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Add Desk</h4>
+          <h4 class="modal-title" id="modal_title"></h4>
         </div>
         <div class="modal-body">
           <!-- Input fields in the modal body -->
@@ -84,12 +84,12 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             <label for="desk_no">Desk No</label>
             <input type="number" class="form-control" id="desk_no" name="desk_no" placeholder="Enter desk no.">
             <input type="hidden" id="recordId" name="recordId" value="">
-            <span type="text" class="text-danger" id="error"></span>
+            <!-- <span type="text" class="text-danger" id="error"></span> -->
           </div>
 
           <div class="form-group" id="ex_desk_noo">
             <label for="desk_no">After Desk</label>
-            <input type="text" class="form-control" id="ex_desk_no" name="ex_desk_no" placeholder="Enter desk no.">
+            <input type="text" class="form-control" id="after_desk" name="after_desk" placeholder="Enter desk no.">
 
           </div>
 
@@ -116,9 +116,9 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
               <?php }?>
             </select>
           </div>
-          <div id="description" style="display:none">
+          <div>
             <label >Description</label>
-            <textarea name="description"  cols="82" rows="3"></textarea>
+            <textarea name="description" id="description"  cols="82" rows="3"></textarea>
           </div>
 
         </div>
@@ -136,7 +136,8 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 $(document).ready(function() {
   loadTableData();
   $('#ex_desk_noo').hide();
-  $('#error').empty();
+   $('#modal_title').text('Add Desk');
+  // $('#error').empty();
   
 $('#user_id').change(function() {
   var selectedUserId = $(this).val();
@@ -195,7 +196,9 @@ function loadTableData() {
         tableHtml += '<td class="text-center">' + serialCounter + '</td>';
         tableHtml += '<td class="text-center">' + firstName + ' ' + lastName + '</td>';
         tableHtml += '<td class="text-center">' + row.desk_no + '</td>';
+        tableHtml += '<td class="text-center">' + row.after_desk + '</td>';
         tableHtml += '<td class="text-center">' + floor + '</td>';
+        tableHtml += '<td class="text-center">' + row.description + '</td>';
         tableHtml += '<td class="text-center using">' + statusIconHtml + '</td>';
         tableHtml += '<td class="text-center"><button class="btn btn-sm btn-info editButton" data-record-id="' + id + '">Edit</button></td>';
         tableHtml += '</tr>';
@@ -225,6 +228,11 @@ function loadTableData() {
 
 $(document).on('click', '.editButton', function() {
   var recordId = $(this).attr('data-record-id');
+  if($(this).click){
+    $('#modal_title').text('Update Desk');
+  }else{
+    $('#modal_title').text('Add Desk');
+  }
   $('#recordId').val(recordId); // Set the recordId in the form
   fetchRowData(recordId);
 });
@@ -238,8 +246,10 @@ function fetchRowData(recordId) {
     success: function(data) {
       // Populate the modal form with data
       $('#desk_no').val(data.desk_no);
+      $('#after_desk').val(data.after_desk);
       $('#status').val(data.status);
       $('#floor').val(data.floor);
+      $('#description').val(data.description);
       $('#user_id').val(data.user_id);
       // Show the modal
       $('#myModals').modal('show');
@@ -259,8 +269,6 @@ function fetchRowData(recordId) {
 }
 
   $(".modalbuttons").click(function() {
-    $('#desk_no').removeClass("border-red");
-    $('#error').text('');
     $("#updateButton").hide();
     $("#saveButton").show();
      disable_field();
@@ -285,41 +293,28 @@ function fetchRowData(recordId) {
 
     $("#desk_no").keyup(function() {
         var inputValue = $(this).val();
-
         if(inputValue !=""){
           url = "<?php echo base_url('admin/accessories/check_duplicate/')?>"+inputValue;
           $.ajax({
             type: "POST",
             url: url,
             success: function(response) {
-              // alert(response);
                 if(response.status == 'true'){
-                $('#desk_no').addClass("border-red");
-                $('#desk_no').blur();
-                $('#error').text('Already Used');
                 disable_field(1);
               }
               else{
-                $('#desk_no').removeClass("border-red");
-                $('#error').text('');
                 disable_field();
-
               }
-              // console.log(response);
             },
             error: function(xhr, status, error) {
               alert("Error submitting the form. Please try again.");
             }
           });
-        }else{
-          $('#error').text('');
         }
-
     });
 
 
   function disable_field(status=null){
-    
     if(status == 1){
     $("#user_id").prop("disabled", true);
     $("#floor").prop("disabled", true);
@@ -327,8 +322,5 @@ function fetchRowData(recordId) {
     $("#user_id").prop("disabled", false);
     $("#floor").prop("disabled", false);
     }
-  
   }
-
-
 </script>

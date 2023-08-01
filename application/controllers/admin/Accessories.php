@@ -354,6 +354,8 @@ class Accessories extends MY_Controller {
         $data['status']  = $_POST['status'];
         $data['user_id'] = $_POST['user_id']==null?'':$_POST['user_id'];
         $data['floor']   = $_POST['floor'];
+        $data['after_desk']   = $_POST['after_desk'];
+        $data['description']   = $_POST['description'];
 
         // dd($_POST);
         $insert = $this->db->insert('xin_employee_desk',$data);
@@ -383,22 +385,26 @@ class Accessories extends MY_Controller {
     public function update_desk(){
         // dd($_POST);
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            $recordId = $this->input->post('recordId');
-            $deskNo = $this->input->post('desk_no');
-            $status = $this->input->post('status');
-            $floor = $this->input->post('floor');
-            $userId = $this->input->post('user_id');
+            $recordId    = $this->input->post('recordId');
+            $deskNo      = $this->input->post('desk_no');
+            $after_desk  = $this->input->post('after_desk');
+            $status      = $this->input->post('status');
+            $floor       = $this->input->post('floor');
+            $description = $this->input->post('description');
+            $userId      = $this->input->post('user_id');
             $data = array(
                 'desk_no' => $deskNo,
+                'after_desk' => $after_desk,
                 'status' => $status,
                 'floor' => $floor,
+                'description' => $description,
                 'user_id' => $userId
             );
             $this->db->where('id', $recordId);
             $result = $this->db->update('xin_employee_desk', $data);
-            $msg = "Update successfully";
-            $err = 'Update failed';
-            $inval = 'Invalid request';
+            $msg    = "Update successfully";
+            $err    = 'Update failed';
+            $inval  = 'Invalid request';
             if ($result) {
                 header('Content-Type: application/json');
                 echo json_encode($msg);

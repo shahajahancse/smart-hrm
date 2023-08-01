@@ -14,7 +14,7 @@ if ( ! function_exists('api_auth'))
     {
         $CI =&  get_instance();
         $CI->db->from('api_keys');
-        $q = $CI->db->get()->row();
+        $q = $CI->db->where('api_key',$var)->get()->row();
 
         if (!empty($q)) {
             $CI->db->from('xin_employees')->where('user_id', $q->user_id);
