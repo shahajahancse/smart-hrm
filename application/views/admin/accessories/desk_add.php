@@ -87,7 +87,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             <!-- <span type="text" class="text-danger" id="error"></span> -->
           </div>
 
-          <div class="form-group" id="ex_desk_noo">
+          <div class="form-group" id="after_desks">
             <label for="desk_no">After Desk</label>
             <input type="text" class="form-control" id="after_desk" name="after_desk" placeholder="Enter desk no.">
 
@@ -109,7 +109,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
             <select class="form-control" id="user_id" name="user_id">
               <option value="">Select</option>
               <?php 
-                $rows = $this->db->select('user_id, first_name, last_name')->where_in('status', [1, 4, 5])->where('floor_status',null)->get('xin_employees')->result();
+                $rows = $this->db->select('user_id, first_name, last_name')->where_in('status', [1, 4, 5])->get('xin_employees')->result();
                 foreach ($rows as $row) {
               ?>
               <option value="<?= $row->user_id ?>"><?= $row->first_name.' '.$row->last_name ?></option>
@@ -137,7 +137,7 @@ $(document).ready(function() {
   loadTableData();
   $('#ex_desk_noo').hide();
    $('#modal_title').text('Add Desk');
-  // $('#error').empty();
+  $('#after_desks').hide();
   
 $('#user_id').change(function() {
   var selectedUserId = $(this).val();
@@ -187,6 +187,8 @@ function loadTableData() {
         var firstName = row.first_name ? row.first_name : '..';
         var lastName  = row.last_name ? row.last_name : '...';
         var floor     = row.floor == 3 ? '3rd Floor' : '5th Floor';
+        var desk_noo  = row.after_desk > 0 ? 'External Desk '+ row.desk_no : row.desk_no;  
+        var after_deskk  = row.after_desk > 0 ? + row.after_desk: '-';  
         var id        = row.id;
 
         var statusIconHtml = getStatusIcon(row.status);
@@ -195,8 +197,8 @@ function loadTableData() {
         tableHtml += '<tr>';
         tableHtml += '<td class="text-center">' + serialCounter + '</td>';
         tableHtml += '<td class="text-center">' + firstName + ' ' + lastName + '</td>';
-        tableHtml += '<td class="text-center">' + row.desk_no + '</td>';
-        tableHtml += '<td class="text-center">' + row.after_desk + '</td>';
+        tableHtml += '<td class="text-center">' + desk_noo +'</td>';
+        tableHtml += '<td class="text-center">' + after_deskk + '</td>';
         tableHtml += '<td class="text-center">' + floor + '</td>';
         tableHtml += '<td class="text-center">' + row.description + '</td>';
         tableHtml += '<td class="text-center using">' + statusIconHtml + '</td>';
@@ -217,8 +219,10 @@ function loadTableData() {
   function getStatusIcon(status) {
     if (status == 1) {
       return '<span style="padding: 4.5px 14.3px 5.5px 9px; border-radius: 50px;border: 1px solid #CCC;background: #FFF;"> <b> <i class=" fa fa-dot-circle-o" style="color:green"></i> Using</b></span>';
-    } else {
+    } else if (status == 0){
       return '<span style="padding: 4.5px 14.3px 5.5px 9px; border-radius: 50px;border: 1px solid #CCC;background: #FFF;"> <b> <i class=" fa fa-dot-circle-o" style="color:red"></i> Not Using</b></span>';
+    } else{
+      return '<span style="padding: 4.5px 14.3px 5.5px 9px; border-radius: 50px;border: 1px solid #CCC;background: #FFF;"> <b> <i class=" fa fa-dot-circle-o" style="color:blue"></i> External</b></span>';
     }
   }
   $('.modalbuttons').on('click', function () {
@@ -228,6 +232,8 @@ function loadTableData() {
 
 $(document).on('click', '.editButton', function() {
   var recordId = $(this).attr('data-record-id');
+  disable_field();
+
   if($(this).click){
     $('#modal_title').text('Update Desk');
   }else{
@@ -279,39 +285,40 @@ function fetchRowData(recordId) {
   $('#status').on('change', function() {
     var status = $(this).val();
     if(status == 2){
-      $('#description').show(500);
-      $('#ex_desk_noo').show(500);
+      // $('#description').show(500);
+      $('#after_desks').show(500);
       $('#user_idd').hide(500);
        $('#user_id').val('');
+       disable_field();
     }else{
-      $('#description').hide(500);
+      // $('#description').hide(500);
       $('#user_idd').show(500);
-      $('#ex_desk_noo').hide(500);
+      $('#after_desks').hide(500);
     }
 
   });
 
-    $("#desk_no").keyup(function() {
-        var inputValue = $(this).val();
-        if(inputValue !=""){
-          url = "<?php echo base_url('admin/accessories/check_duplicate/')?>"+inputValue;
-          $.ajax({
-            type: "POST",
-            url: url,
-            success: function(response) {
-                if(response.status == 'true'){
-                disable_field(1);
-              }
-              else{
-                disable_field();
-              }
-            },
-            error: function(xhr, status, error) {
-              alert("Error submitting the form. Please try again.");
-            }
-          });
-        }
-    });
+    // $("#desk_no").keyup(function() {
+    //     var inputValue = $(this).val();
+    //     if(inputValue !=""){
+    //       url = "<?php echo base_url('admin/accessories/check_duplicate/')?>"+inputValue;
+    //       $.ajax({
+    //         type: "POST",
+    //         url: url,
+    //         success: function(response) {
+    //             if(response.status == 'true'){
+    //             disable_field(1);
+    //           }
+    //           else{
+    //             disable_field();
+    //           }
+    //         },
+    //         error: function(xhr, status, error) {
+    //           alert("Error submitting the form. Please try again.");
+    //         }
+    //       });
+    //     }
+    // });
 
 
   function disable_field(status=null){
