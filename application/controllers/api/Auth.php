@@ -86,7 +86,7 @@ class Auth extends API_Controller
                 ], 404);
             }
 
-        }else {
+        } else {
             $this->api_return([
                 'success' => false,
                 'message' => 'User login unsuccessful.',
@@ -95,7 +95,44 @@ class Auth extends API_Controller
             ], 404);
         }
     }
-
+    public function logout()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        // Validate and sanitize the authorization value
+        if (!empty($authorization) && is_string($authorization)) {
+            $authorization = trim($authorization);
+            // Verify the validity of the API key before deleting it
+            $existingKey = $this->db->where('api_key', $authorization)->get('api_keys')->row();
+            if ($existingKey) {
+                // Delete the API key record
+                $this->db->where('id', $existingKey->id)->delete('api_keys');
+                // Success response
+                $this->api_return([
+                    'success' => true,
+                    'message' => 'User logout successful.',
+                    'status' => 200,
+                    'data' => [],
+                ], 200);
+                
+            } else {
+                // Error response for invalid API key
+                $this->api_return([
+                    'success' => false,
+                    'message' => 'User logout unsuccessful.',
+                    'status' => 404,
+                    'data' => [],
+                ], 404);
+            }
+        } else {
+            // Error response for missing or invalid authorization header
+            $this->api_return([
+                'success' => false,
+                'message' => 'User logout unsuccessful.',
+                'status' => 404,
+                'data' => [],
+            ], 404);
+        }
+    }
     // Read data using username and password
     private function login_auth($data)
     {
