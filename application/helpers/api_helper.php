@@ -13,11 +13,37 @@ if ( ! function_exists('api_auth'))
     function api_auth($var)
     {
         $CI =&  get_instance();
-        $CI->db->from('api_keys');
-        $q = $CI->db->where('api_key',$var)->get()->row();
+        $CI->db->from('api_keys')->where('api_key', $var);
+        $q = $CI->db->get()->row();
 
+        
         if (!empty($q)) {
-            $CI->db->from('xin_employees')->where('user_id', $q->user_id);
+            $CI->db->select('
+                    e.user_id, 
+                    e.employee_id, 
+                    e.first_name, 
+                    e.last_name, 
+                    e.email, 
+                    e.date_of_birth, 
+                    e.gender, 
+                    e.status,  
+                    e.user_role_id, 
+                    e.department_id, 
+                    e.designation_id,  
+                    e.date_of_joining, 
+                    e.notify_incre_prob, 
+                    e.notify_incre_prob, 
+                    e.marital_status, 
+                    e.salary, 
+                    e.basic_salary,
+                    e.floor_status, 
+                    d.department_name,
+                    de.designation_name
+                ');
+            $CI->db->from('xin_employees AS e');
+            $CI->db->join('xin_departments AS d', 'e.department_id = d.department_id', 'inner');
+            $CI->db->join('xin_designations AS de', 'e.designation_id = de.designation_id', 'inner');
+            $CI->db->where('e.user_id', $q->user_id);
             $query = $CI->db->get()->row();
 
             $data = array(

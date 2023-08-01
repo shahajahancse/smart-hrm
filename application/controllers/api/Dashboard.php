@@ -8,7 +8,6 @@ class Dashboard extends API_Controller
         parent::__construct();  
         $this->load->helper('api_helper');      
     }
-
     /**
      * demo method 
      *
@@ -20,6 +19,7 @@ class Dashboard extends API_Controller
     {
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
+
         if ($user_info['status'] == true) {
             echo json_encode($user_info);
             exit();
