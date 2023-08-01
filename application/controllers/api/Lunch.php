@@ -86,8 +86,12 @@ class Lunch extends API_Controller
             ], 200);
 
         }else{
-            echo json_encode($user_info);
-            exit();
+            $this->api_return([
+                'success' => false,
+                'message' => 'Unsuccessful',
+                'status' => 404,
+                'data' =>[],
+            ], 404);
         }
     }
 }
