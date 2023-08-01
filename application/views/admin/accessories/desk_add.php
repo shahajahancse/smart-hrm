@@ -118,7 +118,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
           </div>
           <div>
             <label >Description</label>
-            <textarea name="description" id="description"  cols="82" rows="3"></textarea>
+            <textarea class="form-control" name="description" id="description"  ></textarea>
           </div>
 
         </div>
