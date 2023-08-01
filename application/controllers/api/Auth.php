@@ -11,9 +11,8 @@ class Auth extends API_Controller
         parent::__construct();
 
         // Load Authorization Library or Load in autoload config file
-        $this->load->library('authorization_token');
+        $this->load->library('Authorization_Token');
         $this->load->helper('api_helper');
-
     }
 
     /**
@@ -53,8 +52,6 @@ class Auth extends API_Controller
 
 
         if ($auth['status'] == true) {
-            
-
             // you user authentication code will go here, you can compare the user with the database or whatever
             $payload = [
                 'id' => $this->input->post('username'),
@@ -102,7 +99,6 @@ class Auth extends API_Controller
     // Read data using username and password
     private function login_auth($data)
     {
-
         $sql = 'SELECT * FROM xin_employees WHERE username = ? AND is_active = ?';
         $binds = array($data['username'],1);
         $query = $this->db->query($sql, $binds);
