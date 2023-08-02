@@ -3,19 +3,17 @@
 $get_animate = $this->Xin_model->get_content_animate();
 ?>
 <div class="<?php echo $get_animate?>">
-<table class="datatables-demo table table-striped table-bordered" id="example">
-    <thead class="text-center">
+<table class=" table table-striped table-bordered" id="table_two">
+    <thead >
         <tr>
-        <th  style="width:60px;">No.</th>
-        <th style="width:100px;">Category</th>
-        <th style="width:80px;">Device</th>
-        <th style="width:80px;">Model</th>
-        <th style="width:80px;">Number</th>
-        <th style="width:120px;">Description</th>
-        <th style="width:80px;">Purpose</th>
-        <th style="width:80px;">Image</th>
-        <th style="width:80px;">Status</th>
-        <th style="width:100px;">Action</th>
+            <th class="text-center">No.</th>
+            <th class="text-center">Category</th>
+            <th class="text-center">Device</th>
+            <th class="text-center">Model</th>
+            <th class="text-center">Number</th>
+            <th class="text-center">Image</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -27,9 +25,7 @@ $get_animate = $this->Xin_model->get_content_animate();
             <td><?= "MHL ".$row->cat_short_name.'-'.$row->device_name_id; ?></td>
             <td><?= $row->model_name?></td>
             <td><?= $row->number?></td>
-            <td><?= $row->description; ?></td>
-            <td><?= $row->remark; ?></td>
-            <td><img src="<?php echo (empty($row->image)) ? base_url("uploads/no_image.png"): base_url("uploads/accessory_images/".$row->image)?>"> 
+            <td><img height= "50px" src="<?php echo (empty($row->image)) ? base_url("uploads/no_image.png"): base_url("uploads/accessory_images/".$row->image)?>"> 
             </td>
             <td>
             <span class="using">
@@ -52,3 +48,8 @@ $get_animate = $this->Xin_model->get_content_animate();
     </tbody>
 </table>
 </div>
+
+
+<script>
+  $('#table_two').DataTable();
+</script> 

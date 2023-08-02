@@ -60,8 +60,8 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
     <br>
     <hr>
     <div class="container">
-      <button class="btn btn-primary"  style="" onclick="inventory_report(2)">All Report</button>
-      <button class="btn btn-info"  style="" onclick="inventory_report(1)">Report</button>
+      <button class="btn btn-primary"  style="" onclick="inventory_report(1)">All Report</button>
+      <button class="btn btn-info"  style="" onclick="inventory_report(2)">Report</button>
       <button class="btn btn-info"  style="" onclick="user_report(1)">Single User Report</button>
       <button class="btn btn-primary"  style="" onclick="user_report(2)">All User's Report</button>
     </div>
@@ -69,22 +69,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
     <br>
     <br>
   </div>
-
-
-  <!-- <div class="box-header with-border" id="report_title">
-    <h3 class="box-title" id="report">Report User Wise</h3>
-  </div>
-  <div class="box-body" id="emp_report">
-  </div> -->
-
 </div>
-
-
-
-
-
-
-
   
 </div>
 </div>
@@ -103,6 +88,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
     var status      = $('#status').val();
     var category    = $('#category').val();
     
+    // alert(first_date+" === " +second_date+" ==== "+status+"==="+category);return false;
     if(report == 1 && status == null){
       alert('Please select status');
       return;
@@ -111,23 +97,13 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
       alert('Please select categroy');
       return;
     }
-
-
-    // var statuss = $('#status').find(":selected").text();  
-    // var servicing = statuss.search(/servicing/i); 
-    // var destroy = statuss.search(/destroy/i); 
-    // if(servicing !== -1 || destroy!=-1){
-    //   if(first_date ==null || second_date ==null){
-    //      alert('Please select first date and second date');
-    //   }else{ alert('ok')}
-    // }
-
-    
     // console.log(data); return;
-    var data = "status="+status+'&category='+category;
+    var data = "first_date="+first_date+"&second_date="+second_date+"&status="+status+'&category='+category;
+
+    // alert(data);return false;
 
     url = base_url + "/inventory_report/"+report+"?"+data;
-    ajaxRequest.open("GET", url, true);
+    ajaxRequest.open("POST", url, true);
     ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
     ajaxRequest.send(data);
     ajaxRequest.onreadystatechange = function(){
@@ -141,7 +117,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
 
     function user_report(report){
-    var ajaxRequest;  // The variable that makes Ajax possible!
+    var ajaxRequest; 
     ajaxRequest     = new XMLHttpRequest();
 
     var user_id = $('#users').val();
