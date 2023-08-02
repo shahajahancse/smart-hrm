@@ -50,17 +50,16 @@ class Lunch_model extends CI_Model {
 
       foreach($query as $row){
 
+        $emp_id = $row->user_id;
+
+        $this->db->select('SUM(meal_amount) as prev_meal');
         $this->db->where('date >=', $firstDate);
         $this->db->where('date <=', $secondDate);
-        $this->db->where('emp_id', $row->user_id);
-        $result = $this->db->get('lunch_details')->result();
+        $this->db->where('emp_id', $emp_id);
+        $result = $this->db->get('lunch_details')->row();
     
-        $emp_id=$row->user_id;
+        $prev_meal = isset($result->prev_meal)? $result->prev_meal:0;
 
-        $prev_meal=0;
-        foreach($result as $data){
-            $prev_meal+=$data->meal_amount;
-        };
         $prev_cost=$prev_meal*45;
         $prev_pay=0;
 
@@ -70,15 +69,12 @@ class Lunch_model extends CI_Model {
         $preepay= $this->db->get('lunch_payment')->result();
 
         //   dd( $preepay);
-        if (count($preepay)>0){
-            if($preepay[0]->status==1){
-
-                $prev_pay+=$preepay[0]->pay_amount;
-            };
+        if (count($preepay)>0 && $preepay[0]->status==1){
+            $prev_pay+=$preepay[0]->pay_amount;
         };
 
         $prev_amount=$prev_pay-$prev_cost;
-        $probable_meal=$this->chackprobalemeal($secondDate,$probable_date);
+        $probable_meal=$this->chackprobalemeal($secondDate,$probable_date, $emp_id);
         $pay_amount=$probable_meal*45;
         $collection_amount=$pay_amount-$prev_amount;
         $from_date=$firstDate;
@@ -121,12 +117,20 @@ class Lunch_model extends CI_Model {
 
     }
 
-    public function chackprobalemeal($first_date,$second_date ) {
+    public function chackprobalemeal($first_date, $second_date, $emp_id = null) {
+
+        if (in_array($emp_id, array(70, 71)) && $second_date < '2023-08-16') {
+            $first_date = '2023-07-23';
+        } else if (in_array($emp_id, array(72,73,74,75)) && $second_date < '2023-08-16') {
+            $first_date = '2023-07-24';
+        }
+
         $date1 = new DateTime($first_date);
-        $date2 = new DateTime($second_date );
+        $date2 = new DateTime($second_date);
         $interval = $date1->diff($date2);
         $count = $interval->days + 1;
         $total_day = 0;
+
         $off_day = array('Friday','Saturday');
         for ($i=0; $i < $count; $i++) { 
             $process_date = date("Y-m-d", strtotime("+{$i} day", strtotime($first_date)));

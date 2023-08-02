@@ -96,7 +96,8 @@ if (isset($success)) {
                         <th scope="row"><?php echo $this->lang->line('xin_attachment');?></th>
                         <td class="text-right">
                         <?php if($leave_attachment!='' && $leave_attachment!='NULL'):?>
-                        <a href="<?php echo site_url()?>admin/download?type=leave&filename=<?php echo $leave_attachment;?>"><?php echo $this->lang->line('xin_download');?></a>
+                        <a href="<?= base_url('/').$leave_attachment ?>" download><?php echo $this->lang->line('xin_download');?></a>
+                        <a href="<?= base_url('/').$leave_attachment ?>" > View </a>
                         <?php else:?>
                         
                         <?php endif;?></td>

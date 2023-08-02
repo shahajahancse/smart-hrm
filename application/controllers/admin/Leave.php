@@ -57,7 +57,7 @@ class Leave extends MY_Controller
 		}
 	}
 	
-	// attandancevied code here
+	// attandance view code here
 	public function emp_leave(){
       $session = $this->session->userdata('username');
 		//  dd($session['user_id']);
