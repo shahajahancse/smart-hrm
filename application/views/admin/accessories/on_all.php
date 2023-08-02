@@ -11,7 +11,7 @@ $get_animate = $this->Xin_model->get_content_animate();
             <th class="text-center">Device</th>
             <th class="text-center">Model</th>
             <th class="text-center">Number</th>
-            <th class="text-center">Image</th>
+            <th class="text-center">Remark</th>
             <th class="text-center">Status</th>
             <th class="text-center">Action</th>
           </tr>
@@ -25,7 +25,8 @@ $get_animate = $this->Xin_model->get_content_animate();
               <td><?= "MHL ".$row->cat_short_name.'-'.$row->device_name_id; ?></td>
               <td><?= $row->model_name?></td>
               <td><?= $row->number?></td>
-              <td><img height= "50px" src="<?php echo (empty($row->image)) ? base_url("uploads/no_image.png"): base_url("uploads/accessory_images/".$row->image)?>"> 
+              <td><?= $row->remark?></td>
+              <!-- <td><img height= "50px" src="< ?php echo (empty($row->image)) ? base_url("uploads/no_image.png"): base_url("uploads/accessory_images/".$row->image)?>">  -->
               </td>
               <td>
                 <span class="using">
