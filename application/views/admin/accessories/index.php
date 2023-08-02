@@ -67,7 +67,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
     <div class="tab-pane fade " id="working">
       <div class="box-body">
-        <div class="box-datatable table-responsive">
+        <div class="box-datatable">
           <div id="on_working"></div>
         </div>
       </div>
@@ -75,7 +75,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
     <div class="tab-pane fade" id="movementttt">
       <div class="box-body">
-        <div class="box-datatable table-responsive">
+        <div class="box-datatable">
           <div id="on_movement"></div>
         </div>
       </div>
@@ -83,7 +83,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
     <div class="tab-pane fade" id="stored">
       <div class="box-body">
-        <div class="box-datatable table-responsive">
+        <div class="box-datatable">
           <div id="on_stored"></div>
         </div>
       </div>
@@ -91,7 +91,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
     <div class="tab-pane fade" id="servicing">
        <div class="box-body">
-        <div class="box-datatable table-responsive">
+        <div class="box-datatable">
           <div id="on_servicing"></div>
         </div>
       </div>
@@ -99,7 +99,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
     <div class="tab-pane fade" id="destroyed">
       <div class="box-body">
-        <div class="box-datatable table-responsive">
+        <div class="box-datatable ">
           <div id="on_destroyed"></div>
         </div>
       </div>
@@ -108,7 +108,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
   <div class="tab-pane fade in active" id="all">
     <div class="box-body">
-        <div class="box-datatable table-responsive">
+        <div class="box-datatable">
           <div id="on_all"></div>
         </div>
       </div>

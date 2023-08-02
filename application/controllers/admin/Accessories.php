@@ -86,7 +86,6 @@ class Accessories extends MY_Controller {
          $this->form_validation->set_rules('status', 'Status ', 'required|trim');
         if ($this->form_validation->run() == true){
 
-            
             if(!empty($_FILES['image']['name'])){
                 $config['upload_path'] = 'uploads/accessory_images/';
                 $config['allowed_types'] = 'jpg|jpeg|png|gif';
@@ -104,12 +103,12 @@ class Accessories extends MY_Controller {
             } 
             
             $form_data = array(
-                                'cat_id'           => $this->input->post('cat_id'),
-                                'model_name'       => $this->input->post('model_name'),
-                                'details'          => $this->input->post('details'),
-                                'status'           => $this->input->post('status'),
-                                'image'            => $picture,
-    			            );    
+                'cat_id'    => $this->input->post('cat_id'),
+                'model_name'=> $this->input->post('model_name'),
+                'details'   => $this->input->post('details'),
+                'status'    => $this->input->post('status'),
+                'image'     => $picture,
+            );    
             if ($hid = $this->input->post('hidden_id')) {
                 $this->db->where('id', $hid)->update('product_accessories_model', $form_data);
                 $this->session->set_flashdata('success', 'Successfully Updated Done');
@@ -168,9 +167,6 @@ class Accessories extends MY_Controller {
          $this->load->view('admin/layout/layout_main', $datas); 
     }
 
-   
-  
-
     public function delete($id,$table,$url){
         $delete= $this->db->where('id',$id)->delete($table);
         if($delete){
@@ -191,17 +187,16 @@ class Accessories extends MY_Controller {
                             $this->load->view('admin/layout/layout_main', $datas); 
     }
 
-    public function inventory_report($status=null,$category=null){
+    public function inventory_report($id){
         $data = $this->page_loads();
-        $data['title']       = 'On Working'.' | '.$this->Xin_model->site_title();
-        $data['breadcrumbs'] = "On Working";
-        $status = @$_POST['status'];
-        $category= @$_POST['category'];
-        if($status!=null && $category!=null){
-            $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$status,$category);
-        } else{
-            $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$status=null,$category=null);
-        }
+        // dd($_POST);
+        $first_date  = @$_POST['first_date'];
+        $second_date = @$_POST['second_date'];
+        $status      = @$_POST['status'];
+        $category    = @$_POST['category'];
+        
+
+        $data['reports']     = $this->Accessories_model->get_product_reports_info($id=null,$status,$category);
         if(is_string($data["reports"])){
          echo $data["reports"];
         } else{	
@@ -215,9 +210,7 @@ class Accessories extends MY_Controller {
         $this->load->view('admin/accessories/get_model', array('models'=>$rows,'deivice_id'=>$dem));
     }
 
-
-
- public function item_add($user_id = null){
+    public function item_add($user_id = null){
     
         $data = $this->page_loads();
         $data['title']         = 'Add Item'.' | '.$this->Xin_model->site_title();
@@ -299,7 +292,6 @@ class Accessories extends MY_Controller {
 
     public function item_lists($id){
         // dd($id); 
-        $this->db->select('*')->from('product_accessories');
         if($id == 1){  
             $data['rows']=$this->Accessories_model->get_product_reports_info(null,$id,null); 
             $this->load->view('admin/accessories/on_working',$data);
