@@ -10,19 +10,8 @@ class Leave extends API_Controller
     {
         parent::__construct();
         $this->load->helper('api_helper');
-        $this->load->model("Attendance_model");
         $this->load->model("Timesheet_model");
-		$this->load->model("Employees_model");
-		$this->load->model("Xin_model");
-		$this->load->library('email');
 		$this->load->library('upload');
-		$this->load->model("Department_model");
-		$this->load->model("Designation_model");
-		$this->load->model("Roles_model");
-		$this->load->model("Project_model");
-		$this->load->model("Location_model");
-		$this->load->model('Salary_model');
-
     }
     /**
      * demo method
@@ -104,7 +93,7 @@ class Leave extends API_Controller
 				if($date->from_date == $start_date && $date->to_date == $end_date) {
                     $this->api_return([
                         'status'  =>   false,
-                        'message'  =>   "Half Leave Can't applied",
+                        'message'  =>   " Can't applied For This Date, Leave Already Have For This Date",
                         'data'     =>   [],
                     ], 404);
                     exit();
@@ -139,7 +128,7 @@ class Leave extends API_Controller
 					if($no_of_days > $total){
                         $this->api_return([
                             'status'  =>   false,
-                            'message'  =>   " Can't applied For This Date Leave Already Have For This Date",
+                            'message'  =>   "Half Leave Can't applied  more than 1 day",
                             'data'     =>   [],
                         ], 404);
                         exit();
