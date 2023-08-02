@@ -113,7 +113,7 @@ body {
 
 
 <div id="customModal">
-    <?php $attributes = array('name' => 'add_leave', 'autocomplete' => 'off');?>
+    <?php $attributes = array('name' => 'add_leave', 'autocomplete' => 'off', 'enctype'=>'multipart/form-data');?>
     <?php $hidden = array('_user' => $session['user_id']);?>
     <?php echo form_open('admin/timesheet/add_leave', $attributes, $hidden);?>
     <input type="hidden" name="company_id" id="company_id" value="1" />
@@ -181,6 +181,16 @@ body {
                     id="reason" required></textarea>
             </div>
         </div>
+        
+        <div class="col-md-9" style="padding: 0;margin: 1%;">
+                <div class="input">
+                    <div class="level">Select A file **</div>
+                    <div class="pseudo6">
+                        <input name="attachment" value="<?= date('Y-m-d') ?>" class="col-md-12"
+                            style="width: 98%;border: none;cursor: pointer;" type="file" name="" accept=".png, .jpg, .jpeg, .pdf" id="end_date">
+                    </div>
+                </div>
+            </div>
         <div class="col-md-12">
             <div class="form-actions box-footer">
                 <button type="submit" class="btn btn-primary">

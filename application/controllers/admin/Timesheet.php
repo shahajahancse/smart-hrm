@@ -25,6 +25,7 @@ class Timesheet extends MY_Controller {
 		$this->load->model("Employees_model");
 		$this->load->model("Xin_model");
 		$this->load->library('email');
+		$this->load->library('upload');
 		$this->load->model("Department_model");
 		$this->load->model("Designation_model");
 		$this->load->model("Roles_model");
@@ -517,6 +518,7 @@ class Timesheet extends MY_Controller {
 	 
 	// Validate and add info in database
 	public function add_leave() {
+	
 
 			$start_date = $this->input->post('start_date');
 			$end_date = $this->input->post('end_date');
@@ -610,28 +612,20 @@ class Timesheet extends MY_Controller {
 			} else {
 				$leave_half_day_opt = $this->input->post('leave_half_day');
 			}
-
-			/*if(is_uploaded_file($_FILES['attachment']['tmp_name'])) {
-				$allowed =  array('png','jpg','jpeg','pdf','gif');
-				$filename = $_FILES['attachment']['name'];
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+			
+			if($_FILES['attachment']['tmp_name']!='') {
 				
-				if(in_array($ext,$allowed)){
-					$tmp_name = $_FILES["attachment"]["tmp_name"];
-					$profile = "uploads/leave/";
-					$set_img = base_url()."uploads/leave/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
-					$name = basename($_FILES["attachment"]["name"]);
-					$newfilename = 'leave_'.round(microtime(true)).'.'.$ext;
-					move_uploaded_file($tmp_name, $profile.$newfilename);
-					$fname = $newfilename;			
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_attatchment_type');
-				}
+				$config['upload_path'] = './uploads/leave/'; // Modify this path as needed
+				$config['allowed_types'] = 'gif|jpg|png|pdf'; // Add more allowed file types as needed
+				$config['encrypt_name'] = true; // Generate a unique encrypted filename
+				$config['max_size'] = 10048; // Set maximum file size in kilobytes (2MB in this case)
+				$this->upload->initialize($config);
+				$this->upload->do_upload('attachment');
+					$fileData = $this->upload->data();
+					$fileLocation ='uploads/leave/'.$fileData['file_name'];
 			} else {
-				$fname = '';
-			}*/
+				$fileLocation = '';
+			}
 			
 			$data = array(
 			'employee_id' => $this->input->post('employee_id'),
@@ -643,7 +637,7 @@ class Timesheet extends MY_Controller {
 			'applied_on' => date('Y-m-d h:i:s'),
 			'reason' => $this->input->post('reason'),
 			'qty' => $no_of_days,
-			'leave_attachment' => '',
+			'leave_attachment' => $fileLocation,
 			'status' => '1',
 			'notify_leave' => '1',
 			'is_half_day' => $leave_half_day_opt,
