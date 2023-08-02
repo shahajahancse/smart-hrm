@@ -287,7 +287,7 @@ class Leave extends API_Controller
         );
         $this->api_return([
             'status'    =>  true,
-            'message'    =>  'Data Not found',
+            'message'    =>  'Successfull',
             'data'       =>  $data,
         ], 200);
     }
