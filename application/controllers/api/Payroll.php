@@ -87,7 +87,7 @@ class Payroll extends API_Controller
             $status = 1;
             $emp_id =$userid;
             $d["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
-            // dd($salary_month);
+        
             $d['status']= 1;
             $d["salary_month"] = $salary_month;
             $d["emp_id"] = $emp_id;
@@ -95,9 +95,10 @@ class Payroll extends API_Controller
             {
                 $this->api_return([
                     'status'   =>   false,
-                    'message'  =>   'Unsuccessfulllllll',
+                    'message'  =>   'Data not found',
                     'data'     =>   [],
                 ], 404);
+                exit();
             }
             else
             {	
@@ -112,10 +113,10 @@ class Payroll extends API_Controller
 
         } else {
             $this->api_return([
-                'status'   =>   false,
-                'message'  =>   'Unsuccessful',
+                'status'  =>   false,
+                'message'  =>   'Unauthorized User',
                 'data'     =>   [],
-            ], 404);
+            ], 401);
         }
     	
     
