@@ -94,14 +94,14 @@ class Timesheet extends MY_Controller {
     public function upload_attn_file($upload_file = array())
     {
 		if($upload_file["name"] != ''){
-            $config['upload_path'] = './attn_data/';
+            $config['upload_path'] = realpath(APPPATH . '../attn_data'); //'./attn_data/';
             $config['allowed_types'] = 'txt';
             $config['max_size'] = '20000';
             $config['max_width']  = '10000';
             $config['max_height']  = '10000';
             $this->load->library('upload', $config);
+			$this->upload->initialize($config);
             if ( ! $this->upload->do_upload('upload_file')){
-                // exit('gdfg');
                 $error = array('error' => $this->upload->display_errors());
                 // echo $error["error"];
             }else{
