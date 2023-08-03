@@ -91,7 +91,10 @@
               <td><?= $row->sub_cate_name; ?></td>
               <td><?= $row->category_name; ?></td>
               <td><?= $row->status; ?></td>
-              <td><a href="<?= base_url('admin/inventory/sub_category/'.$row->id);?>">Edit</a></td>
+              <td>
+                <a class="btn- btn-sm btn-info" href="<?= base_url('admin/inventory/sub_category/'.$row->id);?>">Edit</a>
+                <a class="btn- btn-sm btn-danger" href="<?= base_url('admin/inventory/delete_sub_category/'.$row->id);?>">Delete</a>
+             </td>
             </tr>
           <?php } ?>
         </tbody>

@@ -85,7 +85,10 @@
               <td><?= $row->category_name; ?></td>
               <td><?= $row->description; ?></td>
               <td><?= $row->status=='Enable'?"<span class='label label-success'>Active</span>":"<span class='label label-danger'>Inctive</span>"; ?></td>
-              <td><a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/category/'.$row->id);?>">Edit</a></td>
+              <td>
+                <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/category/'.$row->id);?>">Edit</a>
+                <a class="btn btn-sm btn-danger" href="<?= base_url('admin/inventory/delete_category/'.$row->id);?>">Delete</a>
+              </td>
             </tr>
           <?php } ?>
         </tbody>
