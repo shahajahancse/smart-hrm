@@ -12,11 +12,11 @@ if ( ! function_exists('api_auth'))
 {
     function api_auth($var)
     {
-        $CI =&  get_instance();
-        $CI->db->from('api_keys')->where('api_key', $var);
-        $q = $CI->db->get()->row();
+        $Token = str_replace('Bearer ', '', $var);
 
-        
+        $CI =&  get_instance();
+        $CI->db->from('api_keys')->where('api_key', $Token);
+        $q = $CI->db->get()->row();
         if (!empty($q)) {
             $CI->db->select('
                     e.user_id, 

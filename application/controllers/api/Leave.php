@@ -218,9 +218,9 @@ class Leave extends API_Controller
         } else {
             $this->api_return([
                 'status'  =>   false,
-                'message'  =>   'Unsuccessful',
+                'message'  =>   'Unauthorized User',
                 'data'     =>   [],
-            ], 404);
+            ], 401);
         }
     }
     public function leave_details()
