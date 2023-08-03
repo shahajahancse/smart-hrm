@@ -3,12 +3,11 @@ $total_amount=0;
 $paid_amount=0;
 $total_emp=0;
 $paid_total_emp=0;
-
 foreach ($empdata as $i => $value) {
-    $total_amount+=$value->pay_amount;
+    $total_amount+=$value->collection_amount;
     $total_emp+=1;
     if($value->status == 1){
-        $paid_amount+=$value->pay_amount;
+        $paid_amount+=$value->collection_amount;
         $paid_total_emp+=1;
     }
 }
@@ -67,8 +66,6 @@ td {}
                         <td style="padding: 3px;"><?= $un_paid_emp ?></td>
                     </tr>
                 </table>
-
-
             </div>
         </div>
     </div>
