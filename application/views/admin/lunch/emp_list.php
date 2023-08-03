@@ -3,12 +3,11 @@ $total_amount=0;
 $paid_amount=0;
 $total_emp=0;
 $paid_total_emp=0;
-
 foreach ($empdata as $i => $value) {
-    $total_amount+=$value->pay_amount;
+    $total_amount+=$value->collection_amount;
     $total_emp+=1;
     if($value->status == 1){
-        $paid_amount+=$value->pay_amount;
+        $paid_amount+=$value->collection_amount;
         $paid_total_emp+=1;
     }
 }
@@ -27,48 +26,46 @@ td {}
 <div style="display: flex;flex-direction: column;">
     <div>
         <div class="col-md-6 card">
-            <h5 class="card-title" style="text-align: center;margin: 7px 0px 0px 0px;">Summary Of <span
+            <h4 class="card-title" style="text-align: center;margin: 7px 0px 0px 0px;">Summary Of <span
                     style="color: blue;"><?= $first_date ?></span> to <span
-                    style="color: blue;"><?= $second_date ?></span></h5>
+                    style="color: blue;"><?= $second_date ?></span></h4>
             <div class="card-body" style="margin: 0;padding: 5px 0px 9px 0px;">
 
-              <table class="col-md-6">
-                  <tr>
-                      <th style="padding: 3px;">Total Meal</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $total_amount ?></td>
-                  </tr>
-                  <tr>
-                      <th style="padding: 3px;">Total Amount</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $total_amount ?></td>
-                  </tr>
-                  <tr>
-                      <th style="padding: 3px;">Collected Amount</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $paid_amount ?></td>
-                  </tr>
-              </table>
-              
-              <table class="col-md-6">
-                  <tr>
-                      <th style="padding: 3px;">Unpaid Amount</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $un_paid_amount ?></td>
-                  </tr>
-                  <tr>
-                      <th style="padding: 3px;">Paid Employee</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $paid_total_emp ?></td>
-                  </tr>
-                  <tr>
-                      <th style="padding: 3px;">Unpaid Employee</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $un_paid_emp ?></td>
-                  </tr>
-              </table>
-              
+                <table class="col-md-6">
+                    <tr>
+                        <th style="padding: 3px;">Total Meal</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $total_amount/45 ?></td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 3px;">Total Amount</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $total_amount ?></td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 3px;">Collected Amount</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $paid_amount ?></td>
+                    </tr>
+                </table>
 
+                <table class="col-md-6">
+                    <tr>
+                        <th style="padding: 3px;">Unpaid Amount</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $un_paid_amount ?></td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 3px;">Paid Employee</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $paid_total_emp ?></td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 3px;">Unpaid Employee</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $un_paid_emp ?></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

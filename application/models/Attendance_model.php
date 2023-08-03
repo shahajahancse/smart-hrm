@@ -913,7 +913,25 @@ class Attendance_model extends CI_Model
                     ");
         return "ok";
     }
-
+    public function late_id($first_date, $second_date, $emp_id)
+    {
+        $this->db->select('xin_attendance_time.employee_id');
+        $this->db->from('xin_attendance_time');
+        $this->db->where('xin_attendance_time.attendance_date >=', $first_date);
+        $this->db->where('xin_attendance_time.attendance_date <=', $second_date);
+        $this->db->where('xin_attendance_time.late_status', 1);
+        $this->db->where_in('xin_attendance_time.employee_id', $emp_id);
+        $this->db->group_by('xin_attendance_time.employee_id');
+        $subquery = $this->db->get_compiled_select();
+        $this->db->select('employee_id');
+        $this->db->from("($subquery) as subquery");
+        $data = $this->db->get()->result();
+        $lateid = array();
+        foreach ($data as $row) {
+            $lateid[] = $row->employee_id;
+        }
+       return $lateid;
+    }
 
     public function update_ta_da($id, $amount, $status)
     {

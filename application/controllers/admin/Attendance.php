@@ -528,8 +528,17 @@ class Attendance extends MY_Controller
         echo $this->load->view("admin/attendance/job_card", $data, true);
 
     }
-
-
+    public function late_details()
+    {
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $data['late_id'] = $emp_id;
+        echo $this->load->view("admin/attendance/late_details", $data, true);
+    }
     public function movment_status_report()
     {
         $first_date = $this->input->post('first_date');

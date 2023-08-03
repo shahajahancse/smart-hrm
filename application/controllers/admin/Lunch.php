@@ -40,18 +40,19 @@ class Lunch extends MY_Controller
         if (empty($session)) {
             redirect('admin/');
         }
-        $data['results'] = $this->Lunch_model->get_all_data();
-        // dd($data['results']);
-        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
-        $data['breadcrumbs'] = 'Lunch';
-        $data['path_url'] = 'lunch';
-        $data['session'] = $session;
-        if (!empty($session)) {
-            $data['subview'] = $this->load->view("admin/lunch/index", $data, true);
-            $this->load->view('admin/layout/layout_main', $data); //page load
-        } else {
-            redirect('admin/');
-        }
+            $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
+            $data['first_date']=$result->end_date;
+            $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+            $data['breadcrumbs'] = 'Lunch';
+            $data['path_url'] = 'lunch';
+            $data['session'] = $session;
+            if (!empty($session)) {
+                $data['subview'] = $this->load->view("admin/lunch/index", $data, true);
+                $this->load->view('admin/layout/layout_main', $data); //page load
+            } else {
+                redirect('admin/');
+            }
+        
     }
     public function today_lunch($id = null)
     {
@@ -522,6 +523,24 @@ class Lunch extends MY_Controller
         );
         header('Content-Type: application/json');
         echo json_encode($response);
+    }
+    public function get_data_list()
+    {
+        $data['session'] = $this->session->userdata('username');
+        $total_m = $this->Lunch_model->chack_meal_employee($this->input->post('first_date'), $this->input->post('second_date'));
+        $data['results'] = $this->db
+        ->select('lunch.*,')
+        ->from('lunch')
+        ->where('lunch.date >=', $this->input->post('first_date'))
+        ->where('lunch.date <=', $this->input->post('second_date'))
+        ->order_by('lunch.id', 'desc')
+        ->get()
+        ->result();
+        $lunch_list_table= $this->load->view('admin/lunch/lunch_list_table', $data, true);
+        $d['total']=$total_m;
+        $d['tolunch_list_tabletal']=$lunch_list_table;
+        header('Content-Type: application/json');
+        echo json_encode($d);
     }
     public function make_payment()
     {
