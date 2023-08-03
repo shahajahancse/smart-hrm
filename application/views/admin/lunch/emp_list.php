@@ -32,42 +32,42 @@ td {}
                     style="color: blue;"><?= $second_date ?></span></h5>
             <div class="card-body" style="margin: 0;padding: 5px 0px 9px 0px;">
 
-              <table class="col-md-6">
-                  <tr>
-                      <th style="padding: 3px;">Total Meal</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $total_amount ?></td>
-                  </tr>
-                  <tr>
-                      <th style="padding: 3px;">Total Amount</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $total_amount ?></td>
-                  </tr>
-                  <tr>
-                      <th style="padding: 3px;">Collected Amount</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $paid_amount ?></td>
-                  </tr>
-              </table>
-              
-              <table class="col-md-6">
-                  <tr>
-                      <th style="padding: 3px;">Unpaid Amount</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $un_paid_amount ?></td>
-                  </tr>
-                  <tr>
-                      <th style="padding: 3px;">Paid Employee</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $paid_total_emp ?></td>
-                  </tr>
-                  <tr>
-                      <th style="padding: 3px;">Unpaid Employee</th>
-                      <td style="padding: 3px;">:</td>
-                      <td style="padding: 3px;"><?= $un_paid_emp ?></td>
-                  </tr>
-              </table>
-              
+                <table class="col-md-6">
+                    <tr>
+                        <th style="padding: 3px;">Total Meal</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $total_amount/45 ?></td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 3px;">Total Amount</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $total_amount ?></td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 3px;">Collected Amount</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $paid_amount ?></td>
+                    </tr>
+                </table>
+
+                <table class="col-md-6">
+                    <tr>
+                        <th style="padding: 3px;">Unpaid Amount</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $un_paid_amount ?></td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 3px;">Paid Employee</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $paid_total_emp ?></td>
+                    </tr>
+                    <tr>
+                        <th style="padding: 3px;">Unpaid Employee</th>
+                        <td style="padding: 3px;">:</td>
+                        <td style="padding: 3px;"><?= $un_paid_emp ?></td>
+                    </tr>
+                </table>
+
 
             </div>
         </div>
