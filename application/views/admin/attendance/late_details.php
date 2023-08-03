@@ -60,10 +60,10 @@
 
 <body>
     <?php $this->load->view('admin/head_bangla')?>
-    <span style="width: 100%;display: block;text-align: center;margin-bottom: 7px;">Late Report Of <?= $first_date ?>  to <?= $second_date ?> </span>
+    <span style="width: 100%;display: block;text-align: center;margin-bottom: 7px;">Late Report Of   <?= date('d M Y',strtotime($first_date)) ?>   to  <?= date('d M Y',strtotime($second_date)) ?> </span>
     <?php 
     foreach ($late_id as $id) {
-        $this->db->select('xin_attendance_time.attendance_date, xin_attendance_time.clock_in, xin_attendance_time.clock_out, xin_attendance_time.production, xin_employees.first_name, xin_employees.last_name');
+        $this->db->select('xin_attendance_time.attendance_date, xin_attendance_time.clock_in, xin_attendance_time.clock_out, xin_attendance_time.late_time, xin_employees.first_name, xin_employees.last_name');
         $this->db->from('xin_attendance_time');
         $this->db->join('xin_employees', 'xin_attendance_time.employee_id = xin_employees.user_id');
         $this->db->where([
@@ -84,25 +84,26 @@
                         <th>Date</th>
                         <th>In Time</th>
                         <th>Out Time</th>
-                        <th>Production Time</th>
+                        <th>Time</th>
                     </tr>
-                </thead>
+                </thead> 
                 <tbody>
-                    <?php $i = 0; foreach ($data as $key => $d) { $i++; ?>
+                    <?php $i = 0; $t=0; foreach ($data as $key => $d) { $i++; $t+=$d->late_time?>
                     <tr>
                         <td><?= $key + 1 ?></td>
                         <td><?= $d->attendance_date ?></td>
-                        <td><?= $d->clock_in ?></td>
-                        <td><?= $d->clock_out ?></td>
-                        <td><?= $d->production ?></td>
+                        <td><?= date('h:i:s A',strtotime($d->clock_in)) ?></td>
+                        <td><?= date('h:i:s A',strtotime($d->clock_out ))?></td>
+                        <td><?= $d->late_time ?></td>
                     </tr>
                     <?php } ?>
                 </tbody>
                 <tfoot>
                     
                     <tr>
-                        <th colspan="3">Total Late Day</th>
-                        <td colspan="2"><?= $i ?></th>
+                        <th colspan="3">Total</th>
+                        <td colspan="1"><?= $i ?></th>
+                        <td colspan="1"><?= $t?></th>
                     </tr>
                 </tfoot>
             </table>
