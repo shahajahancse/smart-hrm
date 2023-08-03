@@ -26,9 +26,9 @@ td {}
 <div style="display: flex;flex-direction: column;">
     <div>
         <div class="col-md-6 card">
-            <h5 class="card-title" style="text-align: center;margin: 7px 0px 0px 0px;">Summary Of <span
+            <h6 class="card-title" style="text-align: center;margin: 7px 0px 0px 0px;">Summary Of <span
                     style="color: blue;"><?= $first_date ?></span> to <span
-                    style="color: blue;"><?= $second_date ?></span></h5>
+                    style="color: blue;"><?= $second_date ?></span></h6>
             <div class="card-body" style="margin: 0;padding: 5px 0px 9px 0px;">
 
                 <table class="col-md-6">
