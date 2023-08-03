@@ -72,11 +72,11 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 </div>
 
 <?php echo validation_errors(); ?>
-<?php if($this->session->flashdata('msg')):?>
-    <div class="alert alert-success" style="width: 250px;">       
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <?php echo $this->session->flashdata('msg');?>
-    </div>
+<?php if($this->session->flashdata('success')):?>
+  <div class="alert alert-success" style="width:250px">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>  
+      <?php echo $this->session->flashdata('success');?>
+  </div>
 <?php endif; ?> 
 
 
