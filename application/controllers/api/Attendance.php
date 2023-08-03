@@ -62,9 +62,9 @@ class Attendance extends API_Controller
         } else {
             $this->api_return([
                 'status'  =>   false,
-                'message'  =>   'Unauthorized User',
+                'message'  =>   'Unsuccessful',
                 'data'     =>   [],
-            ], 401);
+            ], 404);
         }
     }
     public function attendance_search()
@@ -90,9 +90,9 @@ class Attendance extends API_Controller
         } else {
             $this->api_return([
                 'status'  =>   false,
-                'message'  =>   'Unauthorized User',
+                'message'  =>   'Unsuccessful',
                 'data'     =>   [],
-            ], 401);
+            ], 404);
         }
     }
 }

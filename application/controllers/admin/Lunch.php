@@ -33,37 +33,25 @@ class Lunch extends MY_Controller
         $this->load->library('form_validation');
         $this->load->helper('date');
     }
+
     public function index()
     {
         $session = $this->session->userdata('username');
         if (empty($session)) {
             redirect('admin/');
         }
-        $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
-        $data['first_date']=$result->end_date;
-        $data['second_date']=$result->next_date;
-        $data['results'] = $this->db
-                        ->select('lunch.*,')
-                        ->from('lunch')
-                        ->where('lunch.date >=', $result->end_date)
-                        ->where('lunch.date <=', $result->next_date)
-                        ->order_by('lunch.id', 'desc')
-                        ->get()
-                        ->result();
+        $data['results'] = $this->Lunch_model->get_all_data();
+        // dd($data['results']);
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch';
         $data['path_url'] = 'lunch';
         $data['session'] = $session;
-        $data['lunch_list_table'] = $this->load->view('admin/lunch/lunch_list_table',$data,true);
         if (!empty($session)) {
             $data['subview'] = $this->load->view("admin/lunch/index", $data, true);
             $this->load->view('admin/layout/layout_main', $data); //page load
         } else {
             redirect('admin/');
         }
-    }
-    public function get_lunch_table_ajax(){
-
     }
     public function today_lunch($id = null)
     {
