@@ -36,7 +36,7 @@ td {}
                     <tr>
                         <th style="padding: 3px;">Total Meal</th>
                         <td style="padding: 3px;">:</td>
-                        <td style="padding: 3px;"><?= $total_amount ?></td>
+                        <td style="padding: 3px;"><?= $total_amount/45 ?></td>
                     </tr>
                     <tr>
                         <th style="padding: 3px;">Total Amount</th>
