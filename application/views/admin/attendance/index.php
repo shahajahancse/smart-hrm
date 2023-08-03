@@ -172,6 +172,7 @@
         <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="leavecal(3,[1,4])">Leave Panding</button>
         <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="leavecal(3,[2])">Leave Approved</button>
         <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="leavecal(3,[3])">Leave Rejected</button>
+        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="latecount()">Late</button>
       </div>
 
     </div>
