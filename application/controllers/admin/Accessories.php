@@ -142,9 +142,9 @@ class Accessories extends MY_Controller {
         $this->form_validation->set_rules('status', 'Number', 'required|trim');
         if ($this->form_validation->run() == true){
         $form_data = array(
-                            'number'   => $this->input->post('number'),
-                            'status'   => $this->input->post('status'),
-                    );    
+            'number'   => $this->input->post('number'),
+            'status'   => $this->input->post('status'),
+        );    
             if ($hid = $this->input->post('hidden_id')) {
             $this->db->where('id', $hid)->update('mobile_numbers', $form_data);
             $this->session->set_flashdata('success', 'Successfully Updated Done');

@@ -54,19 +54,18 @@
   </div>
 </div>
 
-            <?php echo validation_errors(); ?>
-            <?php if($this->session->flashdata('success')):?>
-              <div class="alert alert-success">
-                <?php echo $this->session->flashdata('success');?>
-              </div>
-            <?php endif; ?> 
+<?php echo validation_errors(); ?>
+<?php if($this->session->flashdata('success')):?>
+  <div class="alert alert-success">
+    <?php echo $this->session->flashdata('success');?>
+  </div>
+<?php endif; ?> 
 
-            <?php if($this->session->flashdata('warning')):?>
-              <div class="alert alert-warning">
-                <?php echo $this->session->flashdata('warning');?>
-              </div>
-            <?php endif; ?> 
-
+<?php if($this->session->flashdata('warning')):?>
+  <div class="alert alert-warning">
+    <?php echo $this->session->flashdata('warning');?>
+  </div>
+<?php endif; ?> 
 
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border">
@@ -102,12 +101,8 @@
     </div>
   </div>
 </div>
-
- 
 <script>
-
   $(document).ready(function() {
     $('#example').DataTable();
   });
-
 </script>

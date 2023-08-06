@@ -3474,4 +3474,81 @@ class Payroll extends MY_Controller {
 		$data['subview'] 		= $this->load->view("admin/payroll/selary_emp", $data, TRUE);
 								  $this->load->view('admin/layout/layout_main', $data); 
     }
+
+
+
+
+
+
+
+	public function advanced_salary(){
+		$data['session'] = $this->session->userdata('username');
+		// dd($data['session']);
+		if(empty($data['session'])){ 
+			redirect('admin/');
+		}
+		$data['title'] 			= 'Advanced Salary | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Advanced Salary ';
+		$data['results']= $this->db->select('xin_advance_salaries.*,xin_employees.first_name,xin_employees.last_name,xin_departments.department_name,xin_designations.designation_name')
+							->from('xin_employees,xin_advance_salaries,xin_departments,xin_designations')
+							->where('xin_employees.user_id = xin_advance_salaries.emp_id')
+							->where('xin_employees.designation_id = xin_designations.designation_id')
+							->where('xin_employees.department_id = xin_departments.department_id')
+							->get()
+							->result();
+		if($data['session']['role_id'] == 3){
+			$data['subview'] = $this->load->view("admin/payroll/emp_advanced_salary", $data, TRUE);
+		}else{
+			$data['subview'] = $this->load->view("admin/payroll/advanced_salary", $data, TRUE);
+		}
+						   $this->load->view('admin/layout/layout_main', $data); 
+	}
+
+	public function advanced_salary_add(){
+
+		if( isset($_POST['btn_advanced'])){
+			// dd($_POST);
+			$data['requested_amonut']  = $_POST['requested_amonut'];
+			$data['effective_month'] = $_POST['effective_month'];
+			$data['reason']   = $_POST['reason'];
+			$data['emp_id']   = $_POST['user_id'];
+
+			$insert = $this->db->insert('xin_advance_salaries',$data);
+			if($insert){
+			 $this->session->set_flashdata('success', 'Successfully Insert Done');
+			}else{
+				 $this->session->set_flashdata('success', 'Error!!!');
+			}
+			redirect('admin/payroll/advanced_salary');
+		}
+	}
+
+	
+	public function update_salary(){
+		// dd($id);
+
+		// if( isset($_POST['save_data'])){
+
+			$data['requested_amonut']  = $_POST['requested_amonut'];
+			$data['effective_month'] = $_POST['effective_month'];
+			$data['reason']   = $_POST['reason'];
+			$data['emp_id']   = $_POST['user_id'];
+			$data['id']   	  = $_POST['rowId'];
+
+			$insert = $this->db->update('xin_advance_salaries',$data);
+			if($insert){
+			 $this->session->set_flashdata('success', 'Successfully Insert Done');
+			}else{
+				 $this->session->set_flashdata('success', 'Error!!!');
+			}
+			redirect('admin/payroll/advanced_salary');
+		// }
+	}
+
+	public function delete_list($id){
+		// dd($id);
+		$this->db->where('id',$id)->from('xin_advance_salaries')->delete();
+		 $this->session->set_flashdata('delete', 'Successfully Delete Done');
+		 redirect('admin/payroll/advanced_salary');
+	}
 }

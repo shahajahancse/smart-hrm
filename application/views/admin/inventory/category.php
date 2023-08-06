@@ -96,12 +96,9 @@
     </div>
   </div>
 </div>
-
  
 <script>
-
   $(document).ready(function() {
     $('#example').DataTable();
   });
-
 </script>
