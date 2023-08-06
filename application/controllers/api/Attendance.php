@@ -49,12 +49,15 @@ class Attendance extends API_Controller
             $date        = date( "Y-m-01");
             $data['present_stutas']  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
             $yfirst=date("Y-01-01");
-            $data['leave_stutas']  = $this->Salary_model->leave_count_status($userid, $yfirst , $date, 2);  
-            $data["today_attendance"]    = $this->Attendance_model->gettodaylog(date("Y-m-d"), $userid);   
+            $ysecond=date("Y-m-d");
+            $data['leave_stutas']  = $this->Salary_model->leave_count_status($userid, $yfirst , $ysecond, 2);  
+            $data["today_attendance"]    = $this->Attendance_model->gettodaylog(date("Y-m-d"), $userid); 
+
             $mfirst=date("Y-m-d",strtotime('-1 month'));
+            $msecond=date("Y-m-d");
             $this->db->select("*");
             $this->db->where("employee_id", $userid);
-            $this->db->where("attendance_date BETWEEN '$mfirst' AND '$date'");
+            $this->db->where("attendance_date BETWEEN '$mfirst' AND '$msecond'");
             $this->db->order_by("time_attendance_id", "desc");
             $data['all_attendance'] = $this->db->get('xin_attendance_time')->result();
             $this->api_return([
