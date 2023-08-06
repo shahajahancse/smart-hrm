@@ -94,12 +94,12 @@
                         <td><?= $d->attendance_date ?></td>
                         <td><?= date('h:i:s A',strtotime($d->clock_in)) ?></td>
                         <td><?= date('h:i:s A',strtotime($d->clock_out ))?></td>
-                        <?php if ($d->late_time >= 60) { ?>
+                        <?php if ($d->late_time >= 59) { ?>
                             <td>
                                 <?php $minutes = $d->late_time;
                                     $hours = floor($minutes / 60);
                                     $minutes %= 60;
-                                    echo $hours . ':' . $minutes; ?>
+                                    echo $hours . ':' . sprintf("%02s",$minutes); ?>
                             </td>
                         <?php } else { ?>
                             <td><?= $d->late_time ?></td>
@@ -113,14 +113,17 @@
                     <tr>
                         <th colspan="3">Total</th>
                         <td colspan="1"><?= $i ?></th>
-                        <?php if($t>=60){?>
-                        <td><?php $minutes= $t;
-                            $hours = floor($minutes / 60);
-                            $minutes %= 60; ?>
-                            <?= $hours.':'.$minutes ?> h</td>
-                            <?php }else{?>
-                                <td><?=  $t ?> m</td>
-                                <?php } ?>
+                            <?php if ($d->late_time >= 60) { ?>
+                                <td>
+                                    <?php 
+                                    $minutes = $d->late_time;
+                                    $hours = floor($minutes / 60);
+                                    $minutes %= 60;
+                                    echo $hours . ':' . sprintf("%02d", $minutes); ?>
+                                </td>
+                            <?php } else { ?>
+                                <td><?= $d->late_time ?></td>
+                            <?php } ?>
                     </tr>
                 </tfoot>
             </table>
