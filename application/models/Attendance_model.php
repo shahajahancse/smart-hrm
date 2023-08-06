@@ -631,7 +631,7 @@ class Attendance_model extends CI_Model
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
-    public function today_floor_movement($emp_id)
+    public function today_floor_movement($emp_id,$date=null)
     {
 
         $this->db->select('
@@ -653,7 +653,11 @@ class Attendance_model extends CI_Model
         $this->db->from('xin_designations');
         $this->db->from('xin_employee_floor_move');
         $this->db->where("xin_employees.is_active", 1);
-        $this->db->where("xin_employee_floor_move.date", date('Y-m-d'));
+        if($date!=null) {
+            $this->db->where("xin_employee_floor_move.date", $date);
+        }else{
+            $this->db->where("xin_employee_floor_move.date", date('Y-m-d'));
+        }
         $this->db->where("xin_employee_floor_move.user_id", $emp_id);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
@@ -665,7 +669,6 @@ class Attendance_model extends CI_Model
     }
     public function latecomment($attendance_date, $emp_id)
     {
-
         $this->db->select('
             xin_employees.user_id as emp_id,
             xin_employees.employee_id,
