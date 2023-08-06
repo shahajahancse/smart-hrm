@@ -47,12 +47,16 @@ class Attendance extends API_Controller
             $data['user_data']=$user_data;
             $datep        = date( "Y-m-d");
             $date        = date( "Y-m-01");
-            $data['present_stutas']  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
+            $present_stutas = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
+            $details['active_day']=$present_stutas->attend;
+            $details['late_day']=$present_stutas->late_status;
+            $details['absent_day']=$present_stutas->absent;
             $yfirst=date("Y-01-01");
             $ysecond=date("Y-m-d");
-            $data['leave_stutas']  = $this->Salary_model->leave_count_status($userid, $yfirst , $ysecond, 2);  
+            $leave_stutas = $this->Salary_model->leave_count_status($userid, $yfirst , $ysecond, 2);
+            $details['leave']=$leave_stutas->el+$leave_stutas->sl;
+            $data['card_details']=$details;
             $data["today_attendance"]    = $this->Attendance_model->gettodaylog(date("Y-m-d"), $userid); 
-
             $mfirst=date("Y-m-d",strtotime('-1 month'));
             $msecond=date("Y-m-d");
             $this->db->select("*");
