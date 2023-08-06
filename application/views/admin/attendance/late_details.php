@@ -94,7 +94,9 @@
                         <td><?= $d->attendance_date ?></td>
                         <td><?= date('h:i:s A',strtotime($d->clock_in)) ?></td>
                         <td><?= date('h:i:s A',strtotime($d->clock_out ))?></td>
-                        <td><?= $d->late_time ?></td>
+                        <td><?php $hours = floor($d->late_time / 60);
+                            $minutes %= 60; ?>
+                            <?= $hours.':'.$minutes ?></td>
                     </tr>
                     <?php } ?>
                 </tbody>
