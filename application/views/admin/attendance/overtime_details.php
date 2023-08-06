@@ -60,20 +60,20 @@
 
 <body>
     <?php $this->load->view('admin/head_bangla')?>
-    <span style="width: 100%;display: block;text-align: center;margin-bottom: 7px;">Late Report Of   <?= date('d M Y',strtotime($first_date)) ?>   to  <?= date('d M Y',strtotime($second_date)) ?> </span>
+    <span style="width: 100%;display: block;text-align: center;margin-bottom: 7px;">Overtime Report Of   <?= date('d M Y',strtotime($first_date)) ?>   to  <?= date('d M Y',strtotime($second_date)) ?> </span>
     <?php 
     foreach ($late_id as $id) {
-        $this->db->select('xin_attendance_time.attendance_date, xin_attendance_time.clock_in, xin_attendance_time.clock_out, xin_attendance_time.late_time, xin_employees.first_name, xin_employees.last_name');
+        $this->db->select('xin_attendance_time.attendance_date, xin_attendance_time.clock_in, xin_attendance_time.clock_out, xin_attendance_time.ot, xin_employees.first_name, xin_employees.last_name');
         $this->db->from('xin_attendance_time');
         $this->db->join('xin_employees', 'xin_attendance_time.employee_id = xin_employees.user_id');
         $this->db->where([
-            'xin_attendance_time.late_status' => 1,
+            'xin_attendance_time.late_status' => 0,
             'xin_attendance_time.employee_id' => $id
         ]);
         $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
-        
+        $this->db->where("xin_attendance_time.ot >= '$minute'");
         $data = $this->db->get()->result();
-
+        
         if (!empty($data)) {
             ?>
             <span class="employee-name"><?= $data[0]->first_name ?> <?= $data[0]->last_name ?></span>
@@ -88,21 +88,21 @@
                     </tr>
                 </thead> 
                 <tbody>
-                    <?php $i = 0; $t=0; foreach ($data as $key => $d) { $i++; $t+=$d->late_time?>
+                    <?php $i = 0; $t=0; foreach ($data as $key => $d) { $i++; $t+=$d->ot?>
                     <tr>
                         <td><?= $key + 1 ?></td>
                         <td><?= $d->attendance_date ?></td>
                         <td><?= date('h:i:s A',strtotime($d->clock_in)) ?></td>
                         <td><?= date('h:i:s A',strtotime($d->clock_out ))?></td>
-                        <?php if ($d->late_time >= 59) { ?>
+                        <?php if ($d->ot >= 59) { ?>
                             <td>
-                                <?php $minutes = $d->late_time;
+                                <?php $minutes = $d->ot;
                                     $hours = floor($minutes / 60);
                                     $minutes %= 60;
                                     echo $hours . ':' . sprintf("%02s",$minutes); ?>
                             </td>
                         <?php } else { ?>
-                            <td><?= $d->late_time ?></td>
+                            <td><?= $d->ot ?></td>
                         <?php } ?>
                       
                     </tr>
@@ -122,7 +122,7 @@
                                     echo $hours . ':' . sprintf("%02d", $minutes); ?>
                                 </td>
                             <?php } else { ?>
-                                <td><?= $t?></td>
+                                <td><?= $t ?></td>
                             <?php } ?>
                     </tr>
                 </tfoot>

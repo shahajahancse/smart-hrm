@@ -539,6 +539,19 @@ class Attendance extends MY_Controller
         $data['late_id'] = $emp_id;
         echo $this->load->view("admin/attendance/late_details", $data, true);
     }
+    public function overtime_details()
+    {
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $minute = $this->input->post('minute');
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $data['minute'] = $minute;
+        $data['late_id'] = $emp_id;
+        echo $this->load->view("admin/attendance/overtime_details", $data, true);
+    }
     public function movment_status_report()
     {
         $first_date = $this->input->post('first_date');
