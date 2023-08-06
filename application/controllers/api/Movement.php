@@ -30,8 +30,6 @@ class Movement extends API_Controller
             exit();
 
 
-
-
         } else {
             echo json_encode($user_info);
             exit();
@@ -44,7 +42,6 @@ class Movement extends API_Controller
         if ($user_info['status'] == true) {
             $userid = $user_info['user_info']->user_id;
             $data['user_data'] = $user_info['user_info'];
-            
             $data['resonedata'] = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();
             $empinfo = $this->db->select('floor_status')->where('user_id', $userid)->get('xin_employees')->row();
             $data['Meet_with'] = $this->db->select('user_id, first_name, last_name')
@@ -118,15 +115,14 @@ class Movement extends API_Controller
                 ], 404);
                 exit();
             }
-
-            $user_data=$user_info['user_info'];                 
+            $user_data=$user_info['user_info'];
             $user_id=$user_data->user_id;
             $this->db->select('floor_status');
             $this->db->where('user_id', $user_id);
             $empinfo=$this->db->get('xin_employees')->row();
-            if($empinfo->floor_status==5){
+            if($empinfo->floor_status==5) {
                 $input_location=3;
-            }else{
+            } else {
                 $input_location=5;
             }
             $current_date=date('Y-m-d');
@@ -152,9 +148,6 @@ class Movement extends API_Controller
                 array_push($location_array, $input_location);
                 array_push($reason_array, $input_reason);
                 array_push($meet_with_array, $input_meet_with);
-        
-        
-        
                 $out_time=json_encode($out_time_array);
                 $location=json_encode($location_array);
                 $reason=json_encode($reason_array);
@@ -178,57 +171,48 @@ class Movement extends API_Controller
                         'message' => 'Unable to Insert',
                     ], 404);
                 };
-        
             } else {
-              
-        
-                    $selectedOption = $this->input->post('reason');
-                    $reason=$selectedOption;
-                    $input_reason=$reason;
-                    $meet_with=$this->input->post('meet_with');
-        
-                    $out_time_array=[];
-                    $in_time_array=[];
-                    $location_array=[];
-                    $reason_array=[];
-                    $meetwith_array=[];
-                    $currentDateTime = date('g:i A');
-                    array_push($out_time_array, $currentDateTime);
-                    array_push($location_array, $input_location);
-                    array_push($reason_array, $input_reason);
-                    array_push($meetwith_array, $meet_with);
-               
-        
-                    $out_time=json_encode($out_time_array);
-                    $mettwithh=json_encode($meetwith_array);
-        
-                    $in_time=json_encode($in_time_array);
-                    $location=json_encode($location_array);
-                    $reason=json_encode($reason_array);
-        
-                    $data = array(
-                        'user_id' => $user_id,
-                        'out_time' => $out_time,
-                        'in_time' => $in_time,
-                        'location' => $location,
-                        'reason' => $reason,
-                        'meet_with' => $mettwithh,
-                        'date' => $current_date,
-                    );
-                    if($this->db->insert('xin_employee_floor_move', $data)) {
-                        $this->api_return([
-                            'status' => true,
-                            'message' => 'successful',
-                        ], 200);
-                    } else {
-                        $this->api_return([
-                            'status' => false,
-                            'message' => 'Unable to Insert',
-                        ], 404);
-                    };
-        
-                }
-        }else {
+                $selectedOption = $this->input->post('reason');
+                $reason=$selectedOption;
+                $input_reason=$reason;
+                $meet_with=$this->input->post('meet_with');
+                $out_time_array=[];
+                $in_time_array=[];
+                $location_array=[];
+                $reason_array=[];
+                $meetwith_array=[];
+                $currentDateTime = date('g:i A');
+                array_push($out_time_array, $currentDateTime);
+                array_push($location_array, $input_location);
+                array_push($reason_array, $input_reason);
+                array_push($meetwith_array, $meet_with);
+                $out_time=json_encode($out_time_array);
+                $mettwithh=json_encode($meetwith_array);
+                $in_time=json_encode($in_time_array);
+                $location=json_encode($location_array);
+                $reason=json_encode($reason_array);
+                $data = array(
+                    'user_id' => $user_id,
+                    'out_time' => $out_time,
+                    'in_time' => $in_time,
+                    'location' => $location,
+                    'reason' => $reason,
+                    'meet_with' => $mettwithh,
+                    'date' => $current_date,
+                );
+                if($this->db->insert('xin_employee_floor_move', $data)) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Unable to Insert',
+                    ], 404);
+                };
+            }
+        } else {
             $this->api_return([
                 'status'  =>   false,
                 'message'  =>   'Unauthorized User',
@@ -240,47 +224,46 @@ class Movement extends API_Controller
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
         if ($user_info['status'] == true) {
-            $user_data=$user_info['user_info'];                 
+            $user_data=$user_info['user_info'];
             $user_id=$user_data->user_id;
             $current_date=date('Y-m-d');
-       
             $this->db->select("*");
             $this->db->where("user_id", $user_id);
             $this->db->where("date", $current_date);
             $this->db->limit("1");
             $user_movement = $this->db->get('xin_employee_floor_move')->result();
-    
             $in_time_array=json_decode($user_movement[0]->in_time);
-            $currentDateTime = date('g:i A'); 
-            array_push($in_time_array,$currentDateTime);
+            $currentDateTime = date('g:i A');
+            array_push($in_time_array, $currentDateTime);
             $in_time=json_encode($in_time_array);
             $movementid=$user_movement[0]->id;
             $data = array(
                 'in_time' => $in_time,
                 'inout' => 0,
             );
-             $this->db->where('id', $movementid);
+            $this->db->where('id', $movementid);
             $this->db->update('xin_employee_floor_move', $data);
             $this->api_return([
                 'status' => true,
                 'message' => 'successful',
             ], 200);
-        }else {
+        } else {
             $this->api_return([
                 'status'  =>   false,
                 'message'  =>   'Unauthorized User',
             ], 401);
         }
     }
-    public function floor_table_search(){
+    public function floor_table_search()
+    {
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
         if ($user_info['status'] == true) {
-            $user_data=$user_info['user_info'];                 
+            $user_data=$user_info['user_info'];
             $user_id=$user_data->user_id;
             $date=$this->input->post('date');
             $tableay = [];
-            $todaylog = $this->Attendance_model->today_floor_movement($user_id,$date);
+            $todaylog = $this->Attendance_model->today_floor_movement($user_id, $date);
             $todaylog = $todaylog[0];
             $out_time_array = json_decode($todaylog->out_time);
             $in_time_array = json_decode($todaylog->in_time);
@@ -303,7 +286,7 @@ class Movement extends API_Controller
                 'message' => 'successful',
                 'data' => $data,
             ], 200);
-        }else {
+        } else {
             $this->api_return([
                 'status'  =>   false,
                 'message'  =>   'Unauthorized User',
@@ -312,3 +295,4 @@ class Movement extends API_Controller
         }
     }
 }
+
