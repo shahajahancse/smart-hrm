@@ -94,9 +94,14 @@
                         <td><?= $d->attendance_date ?></td>
                         <td><?= date('h:i:s A',strtotime($d->clock_in)) ?></td>
                         <td><?= date('h:i:s A',strtotime($d->clock_out ))?></td>
-                        <td><?php $hours = floor($d->late_time / 60);
+                        <?php if($d->late_time>=60){?>
+                        <td><?php $minutes=$d->late_time;
+                            $hours = floor($minutes / 60);
                             $minutes %= 60; ?>
                             <?= $hours.':'.$minutes ?></td>
+                            <?php }else{?>
+                                <td><?= $d->late_time ?></td>
+                                <?php } ?>
                     </tr>
                     <?php } ?>
                 </tbody>
@@ -105,7 +110,14 @@
                     <tr>
                         <th colspan="3">Total</th>
                         <td colspan="1"><?= $i ?></th>
-                        <td colspan="1"><?= $t?></th>
+                        <?php if($t>=60){?>
+                        <td><?php $minutes= $t;
+                            $hours = floor($minutes / 60);
+                            $minutes %= 60; ?>
+                            <?= $hours.':'.$minutes ?></td>
+                            <?php }else{?>
+                                <td><?=  $t ?></td>
+                                <?php } ?>
                     </tr>
                 </tfoot>
             </table>
