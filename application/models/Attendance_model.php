@@ -669,7 +669,6 @@ class Attendance_model extends CI_Model
     }
     public function latecomment($attendance_date, $emp_id)
     {
-
         $this->db->select('
             xin_employees.user_id as emp_id,
             xin_employees.employee_id,

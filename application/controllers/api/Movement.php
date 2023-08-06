@@ -110,8 +110,25 @@ class Movement extends API_Controller
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
         if ($user_info['status'] == true) {
+            if ($this->input->post('reason') == '' || $this->input->post('meet_with') == '') {
+                // dd('hello');
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Data is required',
+                ], 404);
+                exit();
+            }
+
             $user_data=$user_info['user_info'];                 
             $user_id=$user_data->user_id;
+            $this->db->select('floor_status');
+            $this->db->where('user_id', $user_id);
+            $empinfo=$this->db->get('xin_employees')->row();
+            if($empinfo->floor_status==5){
+                $input_location=3;
+            }else{
+                $input_location=5;
+            }
             $current_date=date('Y-m-d');
             $this->db->select("*");
             $this->db->where("user_id", $user_id);
@@ -120,10 +137,8 @@ class Movement extends API_Controller
             $user_movement = $this->db->get('xin_employee_floor_move')->result();
             // dd($user_movement);
             if(count($user_movement)>0) {
-        
                 $selectedOption = $this->input->post('reason');
                 $reason=$selectedOption;
-                $input_location=$this->input->post('area');
                 $input_reason=$reason;
                 $input_meet_with=$this->input->post('meet_with');
                 $currentDateTime = date('g:i A');
@@ -169,18 +184,6 @@ class Movement extends API_Controller
         
                     $selectedOption = $this->input->post('reason');
                     $reason=$selectedOption;
-                    if ($selectedOption === 'other') {
-                        $reasondata = $this->input->post('otherInput');
-                        $data = array(
-                            'title' => $reasondata
-                        );
-        
-                        $this->db->insert('xin_employee_move_reason', $data);
-                        $insert_id = $this->db->insert_id();
-                        $reason=$insert_id;
-                    }
-        
-                    $input_location=$this->input->post('area');
                     $input_reason=$reason;
                     $meet_with=$this->input->post('meet_with');
         
@@ -194,7 +197,7 @@ class Movement extends API_Controller
                     array_push($location_array, $input_location);
                     array_push($reason_array, $input_reason);
                     array_push($meetwith_array, $meet_with);
-                    $user_id=$session['user_id'];
+               
         
                     $out_time=json_encode($out_time_array);
                     $mettwithh=json_encode($meetwith_array);
