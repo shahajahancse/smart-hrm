@@ -114,9 +114,9 @@
                         <td><?php $minutes= $t;
                             $hours = floor($minutes / 60);
                             $minutes %= 60; ?>
-                            <?= $hours.':'.$minutes ?></td>
+                            <?= $hours.':'.$minutes ?> h</td>
                             <?php }else{?>
-                                <td><?=  $t ?></td>
+                                <td><?=  $t ?> m</td>
                                 <?php } ?>
                     </tr>
                 </tfoot>
