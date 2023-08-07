@@ -3508,7 +3508,7 @@ class Payroll extends MY_Controller {
 
 		if( isset($_POST['btn_advanced'])){
 			// dd($_POST);
-			$data['requested_amonut']  = $_POST['requested_amonut'];
+			$data['requested_amount']  = $_POST['requested_amount'];
 			$data['effective_month'] = $_POST['effective_month'];
 			$data['reason']   = $_POST['reason'];
 			$data['emp_id']   = $_POST['user_id'];
@@ -3525,21 +3525,21 @@ class Payroll extends MY_Controller {
 
 	
 	public function update_salary(){
-		// dd($id);
+		// dd($_POST);
 
 		// if( isset($_POST['save_data'])){
 
-			$data['requested_amonut']  = $_POST['requested_amonut'];
-			$data['effective_month'] = $_POST['effective_month'];
-			$data['reason']   = $_POST['reason'];
-			$data['emp_id']   = $_POST['user_id'];
-			$data['id']   	  = $_POST['rowId'];
-
-			$insert = $this->db->update('xin_advance_salaries',$data);
+			$data['requested_amount']  	= $_POST['requestedAmount'];
+			$data['effective_month'] 	= $_POST['effectiveMonth'];
+			$data['reason']   			= $_POST['reason'];
+			$data['id']   	  			= $_POST['rowId'];
+			// dd($data);
+			$insert = $this->db->where('id',$_POST['rowId'])->update('xin_advance_salaries',$data);
+			
 			if($insert){
-			 $this->session->set_flashdata('success', 'Successfully Insert Done');
+				return 'success';
 			}else{
-				 $this->session->set_flashdata('success', 'Error!!!');
+				return 'error';	
 			}
 			redirect('admin/payroll/advanced_salary');
 		// }

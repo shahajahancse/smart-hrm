@@ -28,7 +28,7 @@
         <div class="row">
             <div class="form-group col-md-2">
                 <label for="formGroupExampleInput">Amount</label>
-                <input type="text" class="form-control form-control-sm" id="formGroupExampleInput" name="requested_amonut"placeholder="Set Amount" required>
+                <input type="text" class="form-control form-control-sm" id="formGroupExampleInput" name="requested_amount"placeholder="Set Amount" required>
             </div>
             <div class="form-group col-md-2">
                 <label for="formGroupExampleInput2">Effective Month</label>
@@ -85,10 +85,7 @@
                 <?php $i=1; foreach($results as $row){ ?>
                     <tr class="text-center">
                         <td><?php echo $i++?></td>
-                        <!-- <td><?= $row->first_name.' '.$row->last_name?></td>
-                        <td><?= $row->department_name?></td>
-                        <td><?= $row->designation_name?></td> -->
-                        <td><?= $row->requested_amonut?></td>
+                        <td><?= $row->requested_amount?></td>
                         <td><?= $row->approved_amount?></td>
                         <td><?= date("d M Y",strtotime($row->effective_month))?></td>
                         <td><?= $row->reason?></td>
@@ -98,7 +95,7 @@
                             </span>
                         </td>
                         <td>
-                            <a href="" class="btn btn-sm btn-info">Edit</a>
+                            <a href="#" class="btn btn-sm btn-info edit-data-btn" data-id="<?=  $row->id ?>" data-amount="<?= $row->requested_amount?>" data-effect-month="<?=$row->effective_month?>" data-details="<?=$row->reason?>" data-toggle="modal" data-target="#myModalsss">Edit</a>
                             <a href="<?php echo base_url('admin/payroll/delete_list/'.$row->id)?>" onclick="return confirm('Are you sure to delete')" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
@@ -111,9 +108,80 @@
 
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="myModalsss" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Edit Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form>
+            <div class="modal-body">
+                <label for="requestedAmount">Requested Amount:</label>
+                <input type="text" id="requestedAmount" class="form-control" value="">
+                <input type="hidden" id="row_id" class="form-control" value="">
+                <label for="effectiveMonth">Effective Month:</label>
+                <input type="text" id="effectiveMonth" class="form-control attendance_date" value="">
+                <label for="reason">Reason:</label>
+                <textarea id="reason" class="form-control"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success btn-sm" id="save_dataaa">Save</button>
+            </div>
+            <form>
+        </div>
+    </div>
+</div>
+
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('#table_id').DataTable();
-        // $("#e_m_date").datepicker();
-    });  
-</script>    
+    });
+
+    $('.edit-data-btn').on('click', function () {
+        var rowId = $(this).data("id");
+        var amount = $(this).data("amount");
+        var effectMonth = $(this).data("effect-month");
+        var details = $(this).data("details");
+
+        $('#requestedAmount').val(amount);
+        $('#effectiveMonth').val(effectMonth);
+        $('#reason').val(details);
+        $('#row_id').val(rowId);
+    });
+
+    $('#save_dataaa').on('click', function () {
+
+        var rowId = $('#row_id').val();
+        var requestedAmount = $('#requestedAmount').val();
+        var effectiveMonth = $('#effectiveMonth').val();
+        var reason = $('#reason').val();
+        var dataToSend = {
+            rowId: rowId,
+            requestedAmount: requestedAmount,
+            effectiveMonth: effectiveMonth,
+            reason: reason
+        };
+        // alert(dataToSend.rowId); return false;
+        var url = "<?php echo base_url('admin/payroll/update_salary/')?>" + rowId;
+        $.ajax({
+            type: "POST",
+            url: url, 
+            data: dataToSend,
+            success: function (response) {
+                 console.log(response);
+                showSuccessAlert("Update Successfully");
+                $('#myModalsss').modal('hide');
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX error:", error);
+            }
+    });
+
+});
+</script>

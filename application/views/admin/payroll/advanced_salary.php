@@ -40,7 +40,7 @@
                         <td><?= $row->first_name.' '.$row->last_name?></td>
                         <td><?= $row->department_name?></td>
                         <td><?= $row->designation_name?></td>
-                        <td><?= $row->requested_amonut?></td>
+                        <td><?= $row->requested_amount?></td>
                         <td><?= $row->approved_amount?></td>
                         <td><?= date("d M Y", strtotime($row->effective_month))?></td>
                         <td><?= $row->reason?></td>
@@ -50,7 +50,8 @@
                             </span>
                         </td>
                         <td>
-                            <a href="#" class="btn btn-sm btn-info edit-data-btn" data-id="<?=  $row->id ?>" data-amount="<?= $row->requested_amonut?>" data-effect-month="<?=$row->effective_month?>" data-details="<?=$row->reason?>" data-toggle="modal" data-target="#myModalsss">Edit</a>
+                            <a href="#" class="btn btn-sm btn-info edit-data-btn" data-id="<?=  $row->id ?>" data-amount="<?= $row->requested_amount?>" data-effect-month="<?=$row->effective_month?>" data-details="<?=$row->reason?>" data-toggle="modal" data-target="#myModalsss">Edit</a>
+                            <a href="#" class="btn btn-sm btn-info approved_data" data-id="<?=  $row->id ?>" data-amount="<?= $row->requested_amount?>" data-effect-month="<?=$row->effective_month?>" data-details="<?=$row->reason?>" data-toggle="modal" data-target="#myModalss">Approved</a>
                             <a href="<?php echo base_url('admin/payroll/delete_list/'.$row->id)?>" onclick="return confirm('Are you sure to delete')" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
@@ -71,8 +72,8 @@
                 </button>
             </div>
             <?php $attributes = array('id' => 'unit_insert', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
-            <?php $hidden = array('user_id' => $session['user_id'],'user_id' => $session['user_id']);?>
-            <?php echo form_open_multipart('admin/payroll/advanced_salary_add', $attributes, $hidden);?>
+            <?php $hidden = array('user_id' => $session['user_id']);?>
+            <?php echo form_open_multipart('admin/payroll/advanced_salary', $attributes, $hidden);?>
             <div class="modal-body">
                 <label for="requestedAmount">Requested Amount:</label>
                 <input type="text" id="requestedAmount" class="form-control" value="">
@@ -81,6 +82,35 @@
                 <input type="text" id="effectiveMonth" class="form-control attendance_date" value="">
                 <label for="reason">Reason:</label>
                 <textarea id="reason" class="form-control"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success btn-sm" id="save_data">Save</button>
+            </div>
+            <?php echo form_close(); ?>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModalss" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Approved</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php $attributes = array('id' => 'unit_insert', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
+            <?php $hidden = array('user_id' => $session['user_id']);?>
+            <?php echo form_open_multipart('admin/payroll/advanced_salary', $attributes, $hidden);?>
+            <div class="modal-body">
+                <label for="requestedAmount">Requested Amount:</label>
+                <input type="text" id="requestedAmount" class="form-control" value="">
+                <input type="hidden" id="row_id" class="form-control" value="">
+
+                <label for="requestedAmount">Approved Amount:</label>
+                <input type="text" id="ap_amount" class="form-control" value="">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
@@ -108,6 +138,18 @@
         $('#row_id').val(rowId);
     });
 
+    $('.approved_data').on('click', function () {
+        var rowId = $(this).data("id");
+        var amount = $(this).data("amount");
+        var effectMonth = $(this).data("effect-month");
+        var details = $(this).data("details");
+
+        $('#requested_amount').val(amount);
+        $('#effective_month').val(effectMonth);
+        $('#reasons').val(details);
+        $('#row_idd').val(rowId);
+    });
+
     $('#save_data').on('click', function () {
         var rowId = $('#row_id').val();
         var requestedAmount = $('#requestedAmount').val();
@@ -129,12 +171,13 @@
             data: dataToSend,
             // dataType: "json", 
             success: function (response) {
-                if (response.success) {
-                    console.log(response);
-                } else {
-                    console.error("Update failed.");
-                }
-                // $('#myModalsss').modal('hide');
+                 console.log(response);
+                // if (response.success) {
+                    showSuccessAlert("Update Successfully");
+                // } else {
+                //     showErrorAlert("Update failed.");
+                // }
+                $('#myModalsss').modal('hide');
             },
             error: function (xhr, status, error) {
                 console.error("AJAX error:", error);
