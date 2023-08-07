@@ -161,6 +161,8 @@ public function purchase_products_status($id,$role_id,$status){
 		return	$this->db->get()->result();
 	} 
 	public function product_requisition($id,$role_id,$status){
+
+		// dd($id);
 		
 		// if($role_id==3){
 			
@@ -187,7 +189,7 @@ public function purchase_products_status($id,$role_id,$status){
 			
 		// }
 
-		if($role_id==1){
+		// if($role_id==1){
 			// dd($status);
 		   $this->db->select("
 			   		xin_employees.first_name,
@@ -201,7 +203,7 @@ public function purchase_products_status($id,$role_id,$status){
 			->where('products_requisition_details.status',$status)
 			->group_by('products_requisition_details.id')
 			->order_by('products_requisition_details.id', 'desc');
-		}
+		// }
 		return	$this->db->get()->result();
 	} 
 

@@ -126,6 +126,7 @@ class Inventory extends MY_Controller {
 
 
 	public function pending_list(){
+		// dd('KO');
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
