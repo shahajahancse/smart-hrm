@@ -298,8 +298,8 @@ textarea {
         <div class="input">
             <div class="level">Select Date</div>
             <div class="pseudo6">
-                <input onchange=getdata(this) style="width: 98%;border: none;cursor: pointer;" type="date" name=""
-                    value="<?= date('Y-m-d') ?>" id="datef">
+                <input onchange=getdata(this) style="width: 98%;border: none;cursor: pointer;" type="month" name=""
+                    value="<?= date('Y-m') ?>" id="month">
             </div>
         </div>
     </div>
@@ -318,10 +318,7 @@ function getdata(status) {
         var seconddate = document.getElementById('datef').value
     } else if (status.id == 'month') {
         var date = new Date(document.getElementById('month').value);
-
-
         var firstDate = new Date(date.getFullYear(), date.getMonth(), 2);
-
         // Get the last date of the month by setting the day to 0 (which gives the last day of the previous month) and adding 1 day
         var lastDate = new Date(date.getFullYear(), date.getMonth() + 1, 1);
 
@@ -338,14 +335,16 @@ function getdata(status) {
         var firstdate = firstDate.toDateString();
         var seconddate = lastDate.toDateString();
     }
+
     $.ajax({
         url: '<?php echo base_url('admin/attendance/employee_movement_outside_')?><?=($location_status==1)? 'Office': 'dhaka'?> ',
-        method: 'GET',
+        method: 'POST',
         data: {
             firstdate: firstdate,
             seconddate: seconddate
         },
         success: function(resp) {
+            console.log(resp);
             $('#datatable').empty();
             $('#datatable').html(resp);
         }

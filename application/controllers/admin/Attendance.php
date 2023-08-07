@@ -805,8 +805,9 @@ class Attendance extends MY_Controller
         $userid  = $session[ 'user_id' ];
         $location_status=1;
         $data['location_status'] = $location_status;
-        $firstdate = $this->input->get('firstdate');
-        $seconddate = $this->input->get('seconddate');
+        $firstdate = $this->input->post('firstdate');
+        $seconddate = $this->input->post('seconddate');
+        // dd('qkjfgnmdfnjbfnzdjkb z');
         $this->db->select("em.*, mr.title as reason, pl.address as place");
         $this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
         $this->db->join("xin_employee_move_place as pl", 'em.place_adress = pl.place_id', 'left');
@@ -909,7 +910,7 @@ class Attendance extends MY_Controller
         if($this->db->insert("xin_employee_move_register", $data)) {
             $this->session->set_flashdata('success', 'Check in Successfully');
         } else {
-            $this->session->set_flashdata('success', 'Check in Successfully');
+            $this->session->set_flashdata('error', 'Check in Unuccessfully');
         }
         redirect('admin/attendance/employee_movement/'.$this->input->post('location_status'));
     }
