@@ -427,6 +427,22 @@ class Salary_model extends CI_Model {
     
         
     }
+    public function getall_salary_with_idap_this_y($emp_id)
+    {
+        $this->db->select('
+            sp.payslip_id,
+            sp.salary_month,
+            sp.grand_net_salary,
+            eb.account_number,
+        ');
+        $this->db->from('xin_salary_payslips as sp');
+        $this->db->join('xin_employee_bankaccount as eb', 'sp.employee_id = eb.employee_id', 'left');
+        $this->db->where("sp.employee_id", $emp_id);
+        $this->db->where("sp.salary_month BETWEEN '".date('Y-01')."' AND '".date('Y-m')."'");
+        $this->db->order_by('sp.payslip_id', "DESC");
+        $data = $this->db->get()->result();
+         return $data;
+    }
 
 
 

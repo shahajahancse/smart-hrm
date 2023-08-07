@@ -10,6 +10,7 @@ class Movement extends API_Controller
     {
         parent::__construct();
         $this->load->helper('api_helper');
+        $this->load->library('upload');
         $this->load->model("Salary_model");
         $this->load->model("Attendance_model");
 
@@ -120,6 +121,7 @@ class Movement extends API_Controller
             $this->db->select('floor_status');
             $this->db->where('user_id', $user_id);
             $empinfo=$this->db->get('xin_employees')->row();
+
             if($empinfo->floor_status==5) {
                 $input_location=3;
             } else {
@@ -131,7 +133,13 @@ class Movement extends API_Controller
             $this->db->where("date", $current_date);
             $this->db->limit("1");
             $user_movement = $this->db->get('xin_employee_floor_move')->result();
-            // dd($user_movement);
+            if($user_movement[0]->in_out!=0){
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Sorry, You currently on out of Your Desk',
+                ], 404);
+                exit();
+            };
             if(count($user_movement)>0) {
                 $selectedOption = $this->input->post('reason');
                 $reason=$selectedOption;
@@ -291,6 +299,564 @@ class Movement extends API_Controller
                 'status'  =>   false,
                 'message'  =>   'Unauthorized User',
                 'data'     =>   [],
+            ], 401);
+        }
+    }
+    public function outside_office_movement_get()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            $user_data=$user_info['user_info'];
+            $userid=$user_data->user_id;
+                $this->db->select("em.*, mr.title as reason, pl.address as place");
+                $this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
+                $this->db->join("xin_employee_move_place as pl", 'em.place_adress = pl.place_id', 'left');
+                $this->db->where("employee_id", $userid);
+                $this->db->where("location_status", 1);
+                $this->db->order_by("id", "desc");
+                $alldata= $this->db->get('xin_employee_move_register as em')->result();
+                $totalRows = count($alldata);
+                $in_out=0;
+                if ($totalRows>0) {
+                    $in_out=$alldata[0]->in_out;
+                    $outtime=$alldata[0]->out_time;
+                    $payable_amount=0;
+                    foreach ($alldata as $d) {
+                        $payable_amount+= $d->payable_amount;
+                    }
+                    $data['total_move']=$totalRows;
+                    $data['in_out']=$in_out;
+                    if($in_out!=0) {
+                        $data['outtime']=$outtime;
+                    }
+                    $data['payable_amount']=$payable_amount;
+                }else{
+                    $data['Total_move']=0;
+                    $data['in_out']=$in_out;
+                    $data['payable_amount']=0;
+                }  
+                $f1_date=date("Y-m-d",strtotime('-1 month'));
+                $f2_date=date('Y-m-d');
+                $this->db->select("em.*, mr.title as reason, pl.address as place");
+                $this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
+                $this->db->join("xin_employee_move_place as pl", 'em.place_adress = pl.place_id', 'left');
+                $this->db->where("date BETWEEN '$f1_date' AND '$f2_date'");
+                $this->db->where("employee_id", $userid);
+                $this->db->where("location_status", 1);
+                $this->db->order_by("id", "desc");
+                $data['Table_data'] = $this->db->get('xin_employee_move_register as em')->result();
+                $data['resonedata'] = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();
+                $data['moveplace'] = $this->db->where('place_status', 1)->get('xin_employee_move_place')->result();
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                    'data' => $data,
+                ], 200);
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function outside_office_movement_search()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            $user_data=$user_info['user_info'];
+            $userid=$user_data->user_id;
+            $date=$this->input->post('date');
+            $f1_date = date("Y-m-01", strtotime($date));
+            $f2_date = date("Y-m-t", strtotime($date));
+                $this->db->select("em.*, mr.title as reason, pl.address as place");
+                $this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
+                $this->db->join("xin_employee_move_place as pl", 'em.place_adress = pl.place_id', 'left');
+                $this->db->where("date BETWEEN '$f1_date' AND '$f2_date'");
+                $this->db->where("employee_id", $userid);
+                $this->db->where("location_status", 1);
+                $this->db->order_by("id", "desc");
+                $data['Table_data'] = $this->db->get('xin_employee_move_register as em')->result();
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                    'data' => $data,
+                ], 200);
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function outside_office_movement_add()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($this->input->post('reason') == '' || $this->input->post('place_adress') == '') {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Data is required',
+                ], 404);
+                exit();
+            }
+            $user_data=$user_info['user_info'];
+            $userid=$user_data->user_id;
+
+            $location_status=1;
+            $this->db->select("*");
+            $this->db->where("employee_id", $userid);
+            $this->db->where("location_status", $location_status);
+            $this->db->order_by("id", "desc");
+            $this->db->limit(1); // Limit the result to 1 row
+            $alldata = $this->db->get('xin_employee_move_register')->row();
+            if($alldata->in_out!=0){
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Sorry, You currently on out of office',
+                ], 404);
+                exit();
+            };
+            if($location_status==2) {
+                $osd_status=0;
+            } else {
+                $osd_status=1;
+            }
+            $reason=$this->input->post('reason');
+            $data = array(
+                'employee_id' => $userid,
+                'date' => date('Y-m-d'),
+                'out_time' => date('Y-m-d H:i:s'),
+                'in_time' => date('Y-m-d H:i:s'),
+                'duration' => '00:00:00',
+                'request_amount' => 0,
+                'payable_amount' => 0,
+                'status' => 0,
+                'astatus' => 1,
+                'osd_status' => $osd_status,
+                'reason' => $reason,
+                'location_status' => $location_status ,
+                'in_out' => 1,
+                'place_adress' => $this->input->post('place_adress'),
+                'updated_at' => date('Y-m-d H:i:s'),
+                'created_at' => date('Y-m-d H:i:s')
+            );
+
+            if($this->db->insert("xin_employee_move_register", $data)) {
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                ], 200);
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unsuccessful',
+                ], 404);
+            }
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function outside_office_movement_checkout()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            $user_data=$user_info['user_info'];
+            $userid=$user_data->user_id;
+            $location_status=1;
+            $this->db->select("*");
+            $this->db->where("employee_id", $userid);
+            $this->db->where("location_status", $location_status);
+            $this->db->order_by("id", "desc");
+            $this->db->limit(1); // Limit the result to 1 row
+            $alldata = $this->db->get('xin_employee_move_register')->row();
+            $targetDate = new DateTime($alldata->out_time);
+            // Get the current date and time
+            $currentDate = new DateTime();
+            // Calculate the time difference
+            $timeDiff = $currentDate->diff($targetDate);
+            $timeDifferenceFormatted=$timeDiff->format('%d day, %H:%i:%s');
+            $data = array(
+                'in_time' => date('Y-m-d H:i:s'),
+                'duration' => $timeDifferenceFormatted,
+                'in_out' => 0,
+                'updated_at' => date('Y-m-d H:i:s'),
+            );
+            $this->db->where('id', $alldata->id);
+            if($this->db->update('xin_employee_move_register', $data)) {
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                ], 200);
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unsuccessful',
+                ], 404);
+            }
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function outside_dhaka_movement_get()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            $user_data=$user_info['user_info'];
+            $userid=$user_data->user_id;
+                $this->db->select("em.*, mr.title as reason, pl.address as place");
+                $this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
+                $this->db->join("xin_employee_move_place as pl", 'em.place_adress = pl.place_id', 'left');
+                $this->db->where("employee_id", $userid);
+                $this->db->where("location_status", 2);
+                $this->db->order_by("id", "desc");
+                $alldata= $this->db->get('xin_employee_move_register as em')->result();
+                $totalRows = count($alldata);
+                $in_out=0;
+                if ($totalRows>0) {
+                    $in_out=$alldata[0]->in_out;
+                    $outtime=$alldata[0]->out_time;
+                    $payable_amount=0;
+                    foreach ($alldata as $d) {
+                        $payable_amount+= $d->payable_amount;
+                    }
+                    $data['total_move']=$totalRows;
+                    $data['in_out']=$in_out;
+                    if($in_out!=0) {
+                        $data['outtime']=$outtime;
+                    }
+                    $data['payable_amount']=$payable_amount;
+                }else{
+                    $data['Total_move']=0;
+                    $data['in_out']=$in_out;
+                    $data['payable_amount']=0;
+                }  
+                $f1_date=date("Y-m-d",strtotime('-1 month'));
+                $f2_date=date('Y-m-d');
+                $this->db->select("em.*, mr.title as reason, pl.address as place");
+                $this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
+                $this->db->join("xin_employee_move_place as pl", 'em.place_adress = pl.place_id', 'left');
+                $this->db->where("date BETWEEN '$f1_date' AND '$f2_date'");
+                $this->db->where("employee_id", $userid);
+                $this->db->where("location_status", 2);
+                $this->db->order_by("id", "desc");
+                $data['Table_data'] = $this->db->get('xin_employee_move_register as em')->result();
+                $data['resonedata'] = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();
+                $data['moveplace'] = $this->db->where('place_status', 2)->get('xin_employee_move_place')->result();
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                    'data' => $data,
+                ], 200);
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function outside_dhaka_movement_search()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            $user_data=$user_info['user_info'];
+            $userid=$user_data->user_id;
+            $date=$this->input->post('date');
+            $f1_date = date("Y-m-01", strtotime($date));
+            $f2_date = date("Y-m-t", strtotime($date));
+                $this->db->select("em.*, mr.title as reason, pl.address as place");
+                $this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
+                $this->db->join("xin_employee_move_place as pl", 'em.place_adress = pl.place_id', 'left');
+                $this->db->where("date BETWEEN '$f1_date' AND '$f2_date'");
+                $this->db->where("employee_id", $userid);
+                $this->db->where("location_status", 2);
+                $this->db->order_by("id", "desc");
+                $data['Table_data'] = $this->db->get('xin_employee_move_register as em')->result();
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                    'data' => $data,
+                ], 200);
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function outside_dhaka_movement_add()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($this->input->post('reason') == '' || $this->input->post('place_adress') == '') {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Data is required',
+                ], 404);
+                exit();
+            }
+            $user_data=$user_info['user_info'];
+            $userid=$user_data->user_id;
+
+            $location_status=2;
+            $this->db->select("*");
+            $this->db->where("employee_id", $userid);
+            $this->db->where("location_status", $location_status);
+            $this->db->order_by("id", "desc");
+            $this->db->limit(1); // Limit the result to 1 row
+            $alldata = $this->db->get('xin_employee_move_register')->row();
+            if($alldata->in_out!=0){
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Sorry, You currently on out of office',
+                ], 404);
+                exit();
+            };
+            if($location_status==2) {
+                $osd_status=0;
+            } else {
+                $osd_status=1;
+            }
+            $reason=$this->input->post('reason');
+            $data = array(
+                'employee_id' => $userid,
+                'date' => date('Y-m-d'),
+                'out_time' => date('Y-m-d H:i:s'),
+                'in_time' => date('Y-m-d H:i:s'),
+                'duration' => '00:00:00',
+                'request_amount' => 0,
+                'payable_amount' => 0,
+                'status' => 0,
+                'astatus' => 1,
+                'osd_status' => $osd_status,
+                'reason' => $reason,
+                'location_status' => $location_status ,
+                'in_out' => 1,
+                'place_adress' => $this->input->post('place_adress'),
+                'updated_at' => date('Y-m-d H:i:s'),
+                'created_at' => date('Y-m-d H:i:s')
+            );
+
+            if($this->db->insert("xin_employee_move_register", $data)) {
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                ], 200);
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unsuccessful',
+                ], 404);
+            }
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function outside_dhaka_movement_checkout()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            $user_data=$user_info['user_info'];
+            $userid=$user_data->user_id;
+            $location_status=2;
+            $this->db->select("*");
+            $this->db->where("employee_id", $userid);
+            $this->db->where("location_status", $location_status);
+            $this->db->order_by("id", "desc");
+            $this->db->limit(1); // Limit the result to 1 row
+            $alldata = $this->db->get('xin_employee_move_register')->row();
+            $targetDate = new DateTime($alldata->out_time);
+            // Get the current date and time
+            $currentDate = new DateTime();
+            // Calculate the time difference
+            $timeDiff = $currentDate->diff($targetDate);
+            $timeDifferenceFormatted=$timeDiff->format('%d day, %H:%i:%s');
+            $data = array(
+                'in_time' => date('Y-m-d H:i:s'),
+                'duration' => $timeDifferenceFormatted,
+                'in_out' => 0,
+                'updated_at' => date('Y-m-d H:i:s'),
+            );
+            $this->db->where('id', $alldata->id);
+            if($this->db->update('xin_employee_move_register', $data)) {
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                ], 200);
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unsuccessful',
+                ], 404);
+            }
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+            ], 401);
+        }
+    }
+    public function ta_da_form()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            $user_data=$user_info['user_info'];
+            $userid=$user_data->user_id;
+            $data['move_id']= $this->input->get('move_id');
+            $move_id= $this->input->get('id');
+            $this->db->select("*");
+            $this->db->where("move_id", $data['move_id']);
+            $movedata  = $this->db->get('xin_employee_move_details')->row();
+            if($movedata != null || $movedata!='') {
+                $data['move_id'] = $movedata->move_id;
+                $going_way_place = json_decode($movedata->g_place);
+                $going_way_transportation = json_decode($movedata->g_transportation);
+                $going_way_costing = json_decode($movedata->g_costing);
+                $coming_way_place = json_decode($movedata->c_place);
+                $coming_way_transportation = json_decode($movedata->c_transportation);
+                $coming_way_costing = json_decode($movedata->c_costing);
+            }
+                // Accessing the decoded values
+            $data['going_way_place'] = isset($going_way_place) ? $going_way_place : null;
+            $data['going_way_transportation'] = isset($going_way_transportation) ? $going_way_transportation : null;
+            $data['going_way_costing'] = isset($going_way_costing) ? $going_way_costing : null;
+            $data['coming_way_place'] = isset($coming_way_place) ? $coming_way_place : null;
+            $data['coming_way_transportation'] = isset($coming_way_transportation) ? $coming_way_transportation : null;
+            $data['coming_way_costing'] = isset($coming_way_costing) ? $coming_way_costing : null;
+            $data['additional_cost'] = isset($movedata->additional_cost) ? $movedata->additional_cost : null;
+            $data['costing_invoice'] = isset($movedata->costing_invoice) ? $movedata->costing_invoice : null;
+            $data['remark'] = isset($movedata->remark) ? $movedata->remark : null;
+            $this->api_return([
+                'status' => true,
+                'message' => 'successful',
+                'data' => $data,
+            ], 200);
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function add_ta_da()
+    {
+
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            $user_data=$user_info['user_info'];
+            $userid=$user_data->user_id;
+            if ($this->input->post('move_id') == '') {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Data is required',
+                ], 404);
+                exit();
+            }
+            $move_id = $this->input->post('move_id');
+            $gonig_way_place =$this->input->post('going_way_place');
+            $gonig_way_transport =$this->input->post('going_way_transport');
+            $gonig_way_costing =$this->input->post('going_way_cost');
+            $coming_way_place =$this->input->post('coming_way_place');
+            $coming_way_transport =$this->input->post('coming_way_transport');
+            $coming_way_costing =$this->input->post('coming_way_cost');
+            $additional_cost = $this->input->post('additional_cost');
+            $remark = $this->input->post('remark');
+            $total_cost=0;
+            $goingcosrarray=json_decode($this->input->post('going_way_cost'));
+            $comingcostrarray=json_decode($this->input->post('coming_way_cost'));
+            foreach ($goingcosrarray as  $value) {
+                $total_cost+=$value;
+            };
+            foreach ($comingcostrarray as  $v) {
+                $total_cost+=$v;
+            };
+            $total_cost+=$additional_cost;
+            $data1 = array(
+                'request_amount' => $total_cost, // Add the file location to the data array
+                'status' => 1
+            );
+            $this->db->where('id', $move_id);
+            $this->db->update('xin_employee_move_register', $data1);
+            // File Upload Configuration
+            $config['upload_path'] = './uploads/move_file/'; // Modify this path as needed
+            $config['allowed_types'] = 'gif|jpg|png|pdf'; // Add more allowed file types as needed
+            $config['encrypt_name'] = true; // Generate a unique encrypted filename
+            $config['max_size'] = 10048; // Set maximum file size in kilobytes (2MB in this case)
+            $this->upload->initialize($config);
+            if ($this->upload->do_upload('additional_invoice')) {
+                // File uploaded successfully
+                $fileData = $this->upload->data();
+                $fileLocation = base_url('uploads/move_file/') . $fileData['file_name'];
+                $data = array(
+                    'move_id' => $move_id,
+                    'g_place' => $gonig_way_place,
+                    'g_transportation' => $gonig_way_transport,
+                    'g_costing' => $gonig_way_costing,
+                    'c_place' => $coming_way_place,
+                    'c_transportation' => $coming_way_transport,
+                    'c_costing' => $coming_way_costing,
+                    'additional_cost' => $additional_cost,
+                    'remark' => $remark,
+                    'costing_invoice' => $fileLocation // Add the file location to the data array
+                );
+            } else {
+                // File upload failed or no file was uploaded
+                $data = array(
+                    'move_id' => $move_id,
+                    'g_place' => $gonig_way_place,
+                    'g_transportation' => $gonig_way_transport,
+                    'g_costing' => $gonig_way_costing,
+                    'c_place' => $coming_way_place,
+                    'c_transportation' => $coming_way_transport,
+                    'c_costing' => $coming_way_costing,
+                    'additional_cost' => $additional_cost,
+                    'remark' => $remark,
+                );
+            }
+            // Update the database
+            $this->db->select("*");
+            $this->db->where("move_id", $move_id);
+            $movedata  = $this->db->get('xin_employee_move_details')->result();
+            if (count($movedata) != 0) {
+                $this->db->where('move_id', $move_id);
+                $this->db->update('xin_employee_move_details', $data);
+            }else{
+                    $this->db->insert('xin_employee_move_details', $data);
+                }
+            $this->api_return([
+                'status' => true,
+                'message' => 'successful',
+            ], 200);
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
             ], 401);
         }
     }
