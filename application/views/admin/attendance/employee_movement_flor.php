@@ -346,7 +346,7 @@ function getdata(status) {
     }
     $.ajax({
         url: '<?php echo base_url('admin/attendance/employee_movement_flor'); ?>',
-        method: 'GET',
+        method: 'POST',
         data: {
             firstdate: firstdate,
             seconddate: seconddate

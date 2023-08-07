@@ -123,6 +123,8 @@ class Lunch_model extends CI_Model {
             $first_date = '2023-07-23';
         } else if (in_array($emp_id, array(72,73,74,75)) && $second_date < '2023-08-16') {
             $first_date = '2023-07-24';
+        } else if (in_array($emp_id, array(76,77,79)) && $second_date < '2023-08-16') {
+            $first_date = '2023-08-02';
         }
 
         $date1 = new DateTime($first_date);
@@ -146,6 +148,10 @@ class Lunch_model extends CI_Model {
                     $total_day = $total_day + 1;
                 }
             }
+        }
+
+        if ($emp_id == 78) {
+            return 0;
         }
         return $count - $total_day;
     }
