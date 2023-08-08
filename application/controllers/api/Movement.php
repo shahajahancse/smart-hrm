@@ -423,13 +423,14 @@ class Movement extends API_Controller
             $this->db->order_by("id", "desc");
             $this->db->limit(1); // Limit the result to 1 row
             $alldata = $this->db->get('xin_employee_move_register')->row();
-            if($alldata->in_out!=0){
+            if (isset($alldata->in_out) && $alldata->in_out != 0) {
                 $this->api_return([
                     'status' => false,
-                    'message' => 'Sorry, You currently on out of office',
+                    'message' => 'Sorry, You are currently out of office',
                 ], 404);
-                exit();
-            };
+                return;
+            }
+            
             if($location_status==2) {
                 $osd_status=0;
             } else {
@@ -474,6 +475,7 @@ class Movement extends API_Controller
             ], 401);
         }
     }
+    
     public function outside_office_movement_checkout()
     {
         $authorization = $this->input->get_request_header('Authorization');
