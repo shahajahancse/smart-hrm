@@ -62,11 +62,11 @@ class Movement extends API_Controller
                 $reason_array = isset($todaylog->reason) ? json_decode($todaylog->reason) : null;
                 $meet_with = isset($todaylog->meet_with) ? json_decode($todaylog->meet_with) : null;
             }else{
-                $out_time_array = null;
-                $in_time_array = null;
-                $location_array =  null;
-                $reason_array = null;
-                $meet_with =null;
+                $out_time_array = [];
+                $in_time_array = [];
+                $location_array = [];
+                $reason_array = [];
+                $meet_with =[];
             }
             
             $totalSpendingTime = [
