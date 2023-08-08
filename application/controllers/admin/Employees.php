@@ -502,6 +502,7 @@ class Employees extends MY_Controller {
 		}
 
 		if ($this->db->insert('xin_employee_incre_prob', $form_data)) {
+
 			if ($this->input->post('status') != 2) {
 				$data = array(
 					'status' => 1,
@@ -509,11 +510,15 @@ class Employees extends MY_Controller {
 					'designation_id' => $this->input->post('new_desig_id'),
 					'basic_salary' => $this->input->post('new_salary'),
 					'notify_incre_prob' => $this->input->post('notify_incre_prob'),
+					'nda_status' => 0,
+					'letter_status' => 0
 				);
 			} else {
 				$data = array(
 					'basic_salary' => $this->input->post('new_salary'),
 					'notify_incre_prob' => $this->input->post('notify_incre_prob'),
+					'nda_status' => 0,
+					'letter_status' => 0
 				);
 			}
 
@@ -527,7 +532,6 @@ class Employees extends MY_Controller {
 			}
 			$this->output($Return);
 		}
-
 		exit;
     }
 
@@ -1324,6 +1328,7 @@ class Employees extends MY_Controller {
 			redirect('admin/');
 		}
 		$id = $this->uri->segment(4);
+		
 		$result = $this->Employees_model->read_employee_information($id);
 		// dd($result[0]->proxi_id);
 		if(is_null($result)){
@@ -1341,7 +1346,7 @@ class Employees extends MY_Controller {
 		//$role_resources_ids = $this->Xin_model->user_role_resource();
 		//$data['breadcrumbs'] = $this->lang->line('xin_employee_details');
 		//$data['path_url'] = 'employees_detail';	
-
+	
 		$data = array(
 			'breadcrumbs' => $this->lang->line('xin_employee_detail'),
 			'path_url' => 'employees_detail',
@@ -1404,7 +1409,15 @@ class Employees extends MY_Controller {
 			'all_leave_types' => $this->Timesheet_model->all_leave_types(),
 			);
 		// dd($data);
-		
+			if($result[0]->nda_status!=0) {
+				$this->db->where('emp_id', $id)->limit(1);
+				$r = $this->db->get('xin_employees_nda')->row();
+				$data['nda_start_date'] = $r->from_date;
+				$data['nda_end_date'] = $r->to_date;
+				$data['nda_id'] = $r->id;
+			}
+
+
 		$data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 		
@@ -2744,36 +2757,37 @@ class Employees extends MY_Controller {
 		}
 	}	
 	
-	public function nda() {
-		if($this->input->post('type')=='social_info') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
-		$Return['result'] = 'hi';
-		$this->output($Return);
-		exit;
+public function nda() {
+	$session = $this->session->userdata('username');
+	$userid = $_POST['user_id'];
+	if ($_POST['nda_status'] == 0) {
+			if ($_POST['ndaid'] != '') {
+				$this->db->where('id', $_POST['ndaid']);
+				$this->db->delete('xin_employees_nda');
+			}
+		$this->db->where('user_id', $userid);
+		$this->db->update('xin_employees', array('nda_status' => 0));
+	} else {
+		$this->db->where('user_id', $userid);
+		$this->db->update('xin_employees', array('nda_status' => 1));
+
 		$data = array(
-		'facebook_link' => $this->input->post('facebook_link'),
-		'twitter_link' => $this->input->post('twitter_link'),
-		'blogger_link' => $this->input->post('blogger_link'),
-		'linkdedin_link' => $this->input->post('linkdedin_link'),
-		'google_plus_link' => $this->input->post('google_plus_link'),
-		'instagram_link' => $this->input->post('instagram_link'),
-		'pinterest_link' => $this->input->post('pinterest_link'),
-		'youtube_link' => $this->input->post('youtube_link')
+			'emp_id' => $userid,
+			'from_date' => $this->input->post('nda_start_date'),
+			'to_date' => $this->input->post('nda_end_date')
 		);
-		$id = $this->input->post('user_id');
-		$result = $this->Employees_model->social_info($data,$id);
-		if ($result == TRUE) {
-			$Return['result'] = $this->lang->line('xin_success_update_social_info');
+
+		$ndaid = $this->input->post('ndaid');
+		$this->db->where('id', $ndaid)->limit(1);
+		$result = $this->db->get('xin_employees_nda')->row();
+		if (count($result) > 0) {
+			$this->db->where('id', $ndaid);
+			$this->db->update('xin_employees_nda', $data);
 		} else {
-			$Return['error'] = $this->lang->line('xin_error_msg');
+			$this->db->insert('xin_employees_nda', $data);
 		}
-		$this->output($Return);
-		exit;
-		}
-	}	
-	
+	}
+}
 	// Validate and update info in database // contact info
 	public function update_contacts_info() {
 	

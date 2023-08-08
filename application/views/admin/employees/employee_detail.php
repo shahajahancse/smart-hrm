@@ -2107,16 +2107,11 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                       </div>
                       <div class="box-body pb-2">
                       <?php $attributes = array('name' => 'nda_info', 'id' => 'nda_info', 'autocomplete' => 'off');?>
-                        <?php $hidden = array('u_basic_info' => 'UPDATE');?>
-                        <?php echo form_open('admin/employees/nda', $attributes, $hidden);?>
-                        <?php
-                            $data_usr4 = array(
-                              'type'  => 'hidden',
-                              'name'  => 'user_id',
-                              'value' => $user_id,
-                          );
-                          echo form_input($data_usr4);
-                          ?>
+                        <?php echo form_open('admin/employees/nda', $attributes);?>
+
+                        <input type="hidden" name="ndaid" value="<?= isset($nda_id) ? $nda_id : '' ?>">
+                        <input type="hidden" name="user_id" value="<?= $user_id?>">
+
                         <div class="row">
                           <div class="col-md-12">
                             <div class="col-md-4">
@@ -2131,13 +2126,13 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                             <div class="col-md-4" id="nda_start" >
                                 <div class="form-group">
                                   <label for="email" class="control-label">NDA Start Date</label>
-                                  <input class="form-control date"  name="nda_start_date" placeholder="NDA Start Date" autocomplete="off" type="text" value="">
+                                  <input class="form-control date"  name="nda_start_date" placeholder="NDA Start Date" autocomplete="off" type="text" value="<?= isset($nda_start_date) ? $nda_start_date : '' ?>">
                                 </div>
                             </div>
                             <div class="col-md-4" id="nda_end">
                                 <div class="form-group">
                                   <label for="email" class="control-label">NDA End date</label>
-                                  <input class="form-control date"  name="nda_end_date" placeholder="NDA End Date" autocomplete="off" type="text" value="">
+                                  <input class="form-control date"  name="nda_end_date" placeholder="NDA End Date" autocomplete="off" type="text" value="<?= isset($nda_end_date) ? $nda_end_date : '' ?>">
                                 </div>
                             </div>
                             <div class="row">
@@ -3118,16 +3113,13 @@ $leave_user = $this->Xin_model->read_user_info($eid);
         // Bind submit event of the form
         $('#nda_info').submit(function(e) {
             e.preventDefault(); // Prevent form submission
-
             // Get the form data
             var formData = $(this).serialize();
-
             // Send AJAX request
             $.ajax({
                 url: '<?php echo site_url("admin/Employees/nda"); ?>',
                 type: 'POST',
                 data: formData,
-                dataType: 'json',
                 success: function(response) {
                     // Handle the response from the server
                     console.log(response);
@@ -3138,9 +3130,9 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                         confirmButtonText: 'OK'
                     });
                 },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
-                }
+                // error: function(xhr, status, error) {
+                //     console.log(xhr.responseText);
+                // }
             });
         });
     });
@@ -3156,4 +3148,5 @@ $leave_user = $this->Xin_model->read_user_info($eid);
         $('#nda_end').fadeOut(500);
       }
     }
+    nda_update_click()
 </script>
