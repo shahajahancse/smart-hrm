@@ -68,7 +68,6 @@ class Movement extends API_Controller
                 $reason_array = [];
                 $meet_with =[];
             }
-            
             $totalSpendingTime = [
                 'hours' => 0,
                 'minutes' => 0,
@@ -143,13 +142,13 @@ class Movement extends API_Controller
             $this->db->where("date", $current_date);
             $this->db->limit("1");
             $user_movement = $this->db->get('xin_employee_floor_move')->result();
-            if($user_movement[0]->in_out!=0){
+            if (isset($user_movement[0]->in_out) && $user_movement[0]->in_out != 0) {
                 $this->api_return([
                     'status' => false,
-                    'message' => 'Sorry, You currently on out of Your Desk',
+                    'message' => 'Sorry, You are currently out of Your Desk',
                 ], 404);
-                exit();
-            };
+                return;
+            }
             if(count($user_movement)>0) {
                 $selectedOption = $this->input->post('reason');
                 $reason=$selectedOption;
