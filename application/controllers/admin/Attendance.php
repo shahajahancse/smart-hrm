@@ -532,12 +532,25 @@ class Attendance extends MY_Controller
     {
         $first_date = $this->input->post('first_date');
         $second_date = $this->input->post('second_date');
+        $type = $this->input->post('type');
         $sql = $this->input->post('sql');
         $emp_id = explode(',', trim($sql));
         $data['first_date'] = $first_date;
         $data['second_date'] = $second_date;
         $data['late_id'] = $emp_id;
+        $data['type'] = $type;
         echo $this->load->view("admin/attendance/late_details", $data, true);
+    }
+    public function nda_report()
+    {
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+        $this->db->select('e.first_name, e.last_name, deg.designation_name, dep.department_name, e.nda_status, e.letter_status');
+        $this->db->join('xin_departments as dep', 'e.department_id = dep.department_id');
+        $this->db->join('xin_designations as deg', 'e.designation_id = deg.designation_id');
+        $this->db->where_in('e.user_id', $emp_id);
+        $data['emp_data'] = $this->db->get('xin_employees as e')->result();
+        echo $this->load->view("admin/attendance/nda_report", $data, true);
     }
     public function overtime_details()
     {
