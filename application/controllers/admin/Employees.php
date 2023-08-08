@@ -1387,8 +1387,8 @@ class Employees extends MY_Controller {
 			'linkdedin_link' => $result[0]->linkdedin_link,
 			'google_plus_link' => $result[0]->google_plus_link,
 			'instagram_link' => $result[0]->instagram_link,
-			'pinterest_link' => $result[0]->pinterest_link,
-			'youtube_link' => $result[0]->youtube_link,
+			'nda_status' => $result[0]->nda_status,
+			'letter_status' => $result[0]->letter_status,
 			'leave_categories' => $result[0]->leave_categories,
 			'view_companies_id' => $result[0]->view_companies_id,
 			'all_countries' => $this->Xin_model->get_countries(),
@@ -2416,7 +2416,9 @@ class Employees extends MY_Controller {
 			 $Return['error'] = $this->lang->line('xin_employee_error_contact_number');
 		} else if(!preg_match('/^([0-9]*)$/', $this->input->post('contact_no'))) {
 			 $Return['error'] = $this->lang->line('xin_hr_numeric_error');
-		}
+		} else if(!preg_match('/^([0-9]*)$/', $this->input->post('letter_status'))) {
+			$Return['error'] = $this->lang->line('xin_hr_letter_error');
+	   }
 				
 		if($Return['error']!=''){
        		$this->output($Return);
@@ -2492,6 +2494,7 @@ class Employees extends MY_Controller {
 			'is_active' => $this->input->post('is_active'),
 			'status' => $this->input->post('status'),
 			'floor_status' => $this->input->post('floor_status'),
+			'letter_status' => $this->input->post('letter_status'),
 		);
 		// dd($data);
 		$id = $this->input->post('user_id');
@@ -2719,26 +2722,36 @@ class Employees extends MY_Controller {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
-		if ($this->input->post('facebook_link')!=='' && !filter_var($this->input->post('facebook_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_fb_field_error');
-		} else if ($this->input->post('twitter_link')!=='' && !filter_var($this->input->post('twitter_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_twitter_field_error');
-		} else if ($this->input->post('blogger_link')!=='' && !filter_var($this->input->post('blogger_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_blogger_field_error');
-		} else if ($this->input->post('linkdedin_link')!=='' && !filter_var($this->input->post('linkdedin_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_linkedin_field_error');
-		} else if ($this->input->post('google_plus_link')!=='' && !filter_var($this->input->post('google_plus_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_gplus_field_error');
-		} else if ($this->input->post('instagram_link')!=='' && !filter_var($this->input->post('instagram_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_instagram_field_error');
-		} else if ($this->input->post('pinterest_link')!=='' && !filter_var($this->input->post('pinterest_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_pinterest_field_error');
-		} else if ($this->input->post('youtube_link')!=='' && !filter_var($this->input->post('youtube_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_youtube_field_error');
+		$data = array(
+		'facebook_link' => $this->input->post('facebook_link'),
+		'twitter_link' => $this->input->post('twitter_link'),
+		'blogger_link' => $this->input->post('blogger_link'),
+		'linkdedin_link' => $this->input->post('linkdedin_link'),
+		'google_plus_link' => $this->input->post('google_plus_link'),
+		'instagram_link' => $this->input->post('instagram_link'),
+		'pinterest_link' => $this->input->post('pinterest_link'),
+		'youtube_link' => $this->input->post('youtube_link')
+		);
+		$id = $this->input->post('user_id');
+		$result = $this->Employees_model->social_info($data,$id);
+		if ($result == TRUE) {
+			$Return['result'] = $this->lang->line('xin_success_update_social_info');
+		} else {
+			$Return['error'] = $this->lang->line('xin_error_msg');
 		}
-		if($Return['error']!=''){
-			$this->output($Return);
+		$this->output($Return);
+		exit;
 		}
+	}	
+	
+	public function nda() {
+		if($this->input->post('type')=='social_info') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
+		$Return['result'] = 'hi';
+		$this->output($Return);
+		exit;
 		$data = array(
 		'facebook_link' => $this->input->post('facebook_link'),
 		'twitter_link' => $this->input->post('twitter_link'),

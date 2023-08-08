@@ -20,6 +20,14 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+<style>
+  #nda_start{
+    display: none;
+  }
+  #nda_end{
+    display: none;
+  }
+</style>
 <div class="row">
 
   <div class="col-md-12">
@@ -34,7 +42,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
         <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_core_hr"><?php echo $this->lang->line('xin_hr');?></a> </li> -->
         <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_projects"><?php echo $this->lang->line('xin_hr_m_project_task');?></a> </li> -->
         <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_payslips"><?php echo $this->lang->line('left_payslips');?></a> </li>       -->
-        <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#device">Device</a> </li>       -->
+        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#NDA">NDA</a> </li>      
      </ul>
       <div class="tab-content">
         <div class="tab-pane <?php echo $get_animate;?> active" id="xin_general">
@@ -365,6 +373,17 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                               <div class="form-group">
                                 <label for="address"><?php echo $this->lang->line('xin_employee_address');?></label>
                                 <input type="text" class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_address');?>" name="address" value="<?php echo $address;?>" />
+                              </div>
+                            </div>
+                          </div>  
+                          <div class="row">
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label for="email" class="control-label">Give Letter</label>
+                                <select class="form-control" name="letter_status" data-plugin="select_hrm">
+                                    <option value="0" <?php echo ($letter_status == 0) ? 'selected' : ''; ?> >No</option>
+                                    <option value="1" <?php echo ($letter_status == 1) ? 'selected' : ''; ?> >Yes</option>
+                                </select>
                               </div>
                             </div>
                           </div>  
@@ -1134,20 +1153,6 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                 <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_insta_profile');?>" name="instagram_link" type="text" value="<?php echo $instagram_link;?>">
                               </div>
                             </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="linkdedin_profile"><?php echo $this->lang->line('xin_e_details_pintrst_profile');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_pintrst_profile');?>" name="pinterest_link" type="text" value="<?php echo $pinterest_link;?>">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="linkdedin_profile"><?php echo $this->lang->line('xin_e_details_utube_profile');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_utube_profile');?>" name="youtube_link" type="text" value="<?php echo $youtube_link;?>">
-                              </div>
-                            </div>
                           </div>
                           <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_save'))); ?> </div>
                         </div>
@@ -1911,7 +1916,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                             </div>
                           </div>
                         </div>
-                        <?php echo form_close(); ?> </div>
+                        <?php echo form_close(); ?> 
+                      </div>
                       
                     </div>
 
@@ -1988,8 +1994,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                             </div>
                           </div>
                           <?php
-							} }
-							?>
+                } }
+                ?>
                         </div>
                       </div>
                       <?php $leave = $this->Timesheet_model->get_employee_leaves($user_id); ?>
@@ -2085,6 +2091,65 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                           </table>
                         </div>
                       </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane <?php echo $get_animate;?>" id="NDA">
+          <div class="box-body">
+            <div class="row no-gutters row-bordered row-border-light">
+              <div class="col-md-12">
+                <div class="tab-content">
+                      <div class="box-header with-border">
+                        <h3 class="box-title">NDA</h3>
+                      </div>
+                      <div class="box-body pb-2">
+                      <?php $attributes = array('name' => 'nda_info', 'id' => 'nda_info', 'autocomplete' => 'off');?>
+                        <?php $hidden = array('u_basic_info' => 'UPDATE');?>
+                        <?php echo form_open('admin/employees/nda', $attributes, $hidden);?>
+                        <?php
+                            $data_usr4 = array(
+                              'type'  => 'hidden',
+                              'name'  => 'user_id',
+                              'value' => $user_id,
+                          );
+                          echo form_input($data_usr4);
+                          ?>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="email" class="control-label">NDA Status</label>
+                                  <select class="form-control" name="nda_status" data-plugin="select_hrm" id="nda_status" onchange="nda_update_click()">
+                                      <option value="0" <?php echo ($nda_status == 0) ? 'selected' : ''; ?> >No</option>
+                                      <option value="1" <?php echo ($nda_status == 1) ? 'selected' : ''; ?> >Yes</option>
+                                  </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4" id="nda_start" >
+                                <div class="form-group">
+                                  <label for="email" class="control-label">NDA Start Date</label>
+                                  <input class="form-control date"  name="nda_start_date" placeholder="NDA Start Date" autocomplete="off" type="text" value="">
+                                </div>
+                            </div>
+                            <div class="col-md-4" id="nda_end">
+                                <div class="form-group">
+                                  <label for="email" class="control-label">NDA End date</label>
+                                  <input class="form-control date"  name="nda_end_date" placeholder="NDA End Date" autocomplete="off" type="text" value="">
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_save'))); ?> </div>
+                                </div>
+                              </div>
+                            </div>
+                            <?php echo form_close(); ?> 
+                          </div>
+                        </div>
                     </div>
                 </div>
               </div>
@@ -3001,54 +3066,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                         <h3 class="box-title"> <?php echo $this->lang->line('xin_list_all');?> <?php echo $this->lang->line('left_payment_history');?> </h3>
                       </div>
                       <?php $history = $this->Payroll_model->get_payroll_slip($user_id); ?>
-                      <div class="box-body">
-                        <div class="box-datatable table-responsive" style="display: flex;justify-content: center;">
-                         <?php
-                      if($device==''){
-                        $devicearray=[];
-
-                      }else{
-                         $devicearray=json_decode($device);
-                      }
-                         ?>
-                         <div class="col-md-6" style="border-radius: 7px;background: #ffffff;box-shadow: inset 1px 0px 3px #cbcbcb, inset -2px -1px 5px #cdc3c3;padding: 14px;">
-                                     <div class="col-md-6" style="text-align: center;">
-                                     <form id="devicein" >
-                                      <input type="hidden" name="emp_id" value="<?= $user_id ?>">
-                                            <table class="table">
-                                              <tbody>
-                                                <tr><th><input type="checkbox" name="laptop" id="" <?= in_array(1,$devicearray)?'checked':'' ?>></th><td>Laptop</td></tr>
-                                                <tr><th><input type="checkbox" name="laptop_cherger" id="" <?= in_array(2,$devicearray)?'checked':'' ?>></th><td>Laptop Cherger</td></tr>
-                                                <tr><th><input type="checkbox" name="mouse" id="" <?= in_array(3,$devicearray)?'checked':'' ?>></th><td>Mouse</td></tr>
-                                                <tr><th><input type="checkbox" name="converter" id="" <?= in_array(4,$devicearray)?'checked':'' ?>></th><td>Converter</td></tr>
-                                                <tr><th><input type="checkbox" name="Headphone" id="" <?= in_array(5,$devicearray)?'checked':'' ?>></th><td> Headphone</td></tr>
-                                                <tr><th><input type="checkbox" name="extra_monitor" id="" <?= in_array(6,$devicearray)?'checked':'' ?>></th><td>Extra-monitor</td></tr>
-                                   
-                                              </tbody>
-
-                                            </table>
-                                        
-                                        </div>
-                                          <div class="col-md-6" style="text-align: center;">
-                                                <table class="table">
-                                                     <tbody>
-                                                         <tr><th><input type="checkbox" name="cpu" id="" <?= in_array(7,$devicearray)?'checked':'' ?>></th><td>CPU</td></tr>
-                                                         <tr><th><input type="checkbox" name="ups" id="" <?= in_array(8,$devicearray)?'checked':'' ?>></th><td>UPS</td></tr>
-                                                         <tr><th><input type="checkbox" name="power_cable" id="" <?= in_array(9,$devicearray)?'checked':'' ?>></th><td>Power Cable</td></tr>
-                                                         <tr><th><input type="checkbox" name="vga_cable" id="" <?= in_array(10,$devicearray)?'checked':'' ?>></th><td>VGA Cable</td></tr>
-                                                         <tr><th><input type="checkbox" name="smart_phone" id="" <?= in_array(11,$devicearray)?'checked':'' ?>></th><td>Smart Phone</td></tr>
-                                                         <tr><th><input type="checkbox" name="bpws" id="" <?= in_array(12,$devicearray)?'checked':'' ?>></th><td>Botton Phone With Sim</td></tr>
-                                                       
-                                                      </tbody>
-
-                                              </table>
-                                              <button type="submit" class="btn btn-primary">Submit</button>
-                                              
-                                          </form>
-                                      </div>
-                            </div>
-                        </div>
-                      </div>                                        
+                                                        
                 </div>  
                 </div> 
             </div>
@@ -3093,4 +3111,49 @@ $leave_user = $this->Xin_model->read_user_info($eid);
             });
         });
     });
+</script>
+
+<script>
+    $(document).ready(function() {
+        // Bind submit event of the form
+        $('#nda_info').submit(function(e) {
+            e.preventDefault(); // Prevent form submission
+
+            // Get the form data
+            var formData = $(this).serialize();
+
+            // Send AJAX request
+            $.ajax({
+                url: '<?php echo site_url("admin/Employees/nda"); ?>',
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    // Handle the response from the server
+                    console.log(response);
+                     Swal.fire({
+                        title: 'Success!',
+                        text: response,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    function nda_update_click(){
+      var active = $('#nda_status').val();
+      if(active == 1) {
+        $('#nda_start').fadeIn(500);
+        $('#nda_end').fadeIn(500);
+      } else {
+        $('#nda_start').fadeOut(500);
+        $('#nda_end').fadeOut(500);
+      }
+    }
 </script>
