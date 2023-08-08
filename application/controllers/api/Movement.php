@@ -53,12 +53,22 @@ class Movement extends API_Controller
                 ->result();
             $tableay = [];
             $todaylog = $this->Attendance_model->today_floor_movement($userid);
-            $todaylog = $todaylog[0];
-            $out_time_array = json_decode($todaylog->out_time);
-            $in_time_array = json_decode($todaylog->in_time);
-            $location_array = json_decode($todaylog->location);
-            $reason_array = json_decode($todaylog->reason);
-            $meet_with = json_decode($todaylog->meet_with);
+            if (isset($todaylog[0])) {
+                $todaylog = $todaylog[0];
+            
+                $out_time_array = isset($todaylog->out_time) ? json_decode($todaylog->out_time) : null;
+                $in_time_array = isset($todaylog->in_time) ? json_decode($todaylog->in_time) : null;
+                $location_array = isset($todaylog->location) ? json_decode($todaylog->location) : null;
+                $reason_array = isset($todaylog->reason) ? json_decode($todaylog->reason) : null;
+                $meet_with = isset($todaylog->meet_with) ? json_decode($todaylog->meet_with) : null;
+            }else{
+                $out_time_array = [];
+                $in_time_array = [];
+                $location_array = [];
+                $reason_array = [];
+                $meet_with =[];
+            }
+            
             $totalSpendingTime = [
                 'hours' => 0,
                 'minutes' => 0,
