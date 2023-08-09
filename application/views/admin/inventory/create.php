@@ -77,7 +77,7 @@
           sub_cat_id = response.sub_cate_id;
 
           let items = '';
-          items+= '<><tr>';
+          items+= '<tr>';
           items+= '<input name="product_id[]" value="'+product_id+'" type="hidden" required>';
           items+= '<input name="sub_cate_id[]" value="'+sub_cat_id+'" type="hidden" required>';
           items+= '<input name="cat_id[]" value="'+cat_id+'" type="hidden" required>';
