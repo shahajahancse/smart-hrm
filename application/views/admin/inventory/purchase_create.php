@@ -18,26 +18,6 @@
         <?php $hidden = array('user_id' => $session['user_id']);?>
         <?php echo form_open('admin/inventory/purchase', $attributes, $hidden);?>
             <table class="table table-bordered table-sm table-striped " id="appRowDiv">
-                <!-- <tr>
-                    <th class="text-center">Comany Name</th>
-                    <th class="text-center">Supplier Name</th>
-                </tr>
-                <tr>
-                    <td>
-                        <select name="cmp_name" class="form-control" id="cmp_name" required>
-                            <option id="cmp" value="">Select Company Name</option>
-                            <?php foreach($company as $cmp): ?>
-                                <option value="<?php echo $cmp->company; ?>"><?php echo $cmp->company; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </td>
-                    <td>
-                        <select name="spl_name" class="form-control" id="spl_name" required>
-                            <option id="spl" value="">Select Supplier Name</option>
-                        </select>
-                    </td>
-                </tr> -->
-
                 <tr>
                     <th class="text-center">Category Name</th>
                     <th class="text-center">Sub Category Name</th>
