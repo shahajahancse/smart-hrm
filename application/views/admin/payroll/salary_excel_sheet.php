@@ -194,8 +194,6 @@
 		</td>
 		<td colspan="5" style="text-align:center; font-size:16px; font-weight:bold;">
 			<div>Aproved By(Managing Director)</div>
-
-
 		</td>
 	</tr>
 	</table>

@@ -74,13 +74,15 @@ class Movement extends API_Controller
                 'seconds' => 0
             ];
             foreach ($out_time_array as $i => $out_time) {
+                $meetwithname=$this->getnamewithid($meet_with[$i]);
+                $reasonname=$this->getResonewithid($reason_array[$i]);
                 $tableay[$i] = [
                     'date' => date('Y-m-d'),
                     'out_time' => $out_time,
                     'in_time' => isset($in_time_array[$i]) ? $in_time_array[$i] : '',
                     'location' => $location_array[$i],
-                    'reason' => $reason_array[$i],
-                    'meet_with' => $meet_with[$i]
+                    'reason' => $reasonname,
+                    'meet_with' => $meetwithname
                 ];
                 if (isset($in_time_array[$i])) {
                     $outDateTime = new DateTime($out_time);
@@ -873,5 +875,25 @@ class Movement extends API_Controller
             ], 401);
         }
     }
+
+
+    public function getnamewithid($id) {
+        $this->db->select('first_name, last_name');
+        $this->db->where('user_id', $id);
+        $data = $this->db->get('xin_employees')->row();
+
+        $fullname = $data->first_name . ' ' . $data->last_name;
+        return $fullname;
+    }
+
+
+    public function getResonewithid($id) {
+        $this->db->select('title');
+        $this->db->where('id', $id);
+        $data = $this->db->get('xin_employee_move_reason')->row();
+
+        return $data->title;
+    }
+
 }
 
