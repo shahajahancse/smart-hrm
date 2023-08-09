@@ -120,7 +120,7 @@ public function purchase_products_requisition($id,$role_id){
 	// ************* purchase part end ********************
 
 public function purchase_products_status($id,$role_id,$status){
-	if($role_id==1 || $role_id==2 ||4 ){
+	if($role_id==1 || $role_id==2 || $role_id==4 ){
 		$this->db->select('
 			xin_employees.first_name,
 			xin_employees.last_name, 

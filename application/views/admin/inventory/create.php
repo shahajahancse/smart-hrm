@@ -32,7 +32,7 @@
         <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
         <?php $hidden = array('user_id' => $session['user_id']);?>
         <?php echo form_open(current_url(), $attributes, $hidden);?>
-          <table class="table table-bordered table-sm table-striped " id="appRowDiv">
+          <table class="table table-bordered table-sm table-striped " id="appRowDiv" style="width: 85.5%;">
             <tr>
               <th class="text-left">Category Name</th>
               <th class="text-left">Sub Category Name</th>
@@ -43,7 +43,7 @@
             </tr>
             <tr></tr>
           </table>
-          <button name="btn" type="submit" class="btn btn-primary btn-sm text-right" style="float: right;margin-right: 92px;margin-bottom: 20px;" > <i class="fa fa-check-square-o"></i><?php echo $this->lang->line('xin_save');?></button>
+          <button name="btn" type="submit" class="btn btn-primary btn-sm text-right" style="float: right;margin-right: 165px;margin-bottom: 20px;" > <i class="fa fa-check-square-o"></i><?php echo $this->lang->line('xin_save');?></button>
         <?php echo form_close(); ?> 
       </div>
   </div>
