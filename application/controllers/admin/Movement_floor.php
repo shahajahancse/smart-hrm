@@ -57,7 +57,15 @@ class Movement_floor extends MY_Controller {
             $reason=$insert_id;
         }
 
-        $input_location=$this->input->post('area');
+            $this->db->select('floor_status');
+            $this->db->where('user_id', $user_id);
+            $empinfo=$this->db->get('xin_employees')->row();
+
+            if($empinfo->floor_status==5) {
+                $input_location=3;
+            } else {
+                $input_location=5;
+            }
         $input_reason=$reason;
         $input_meet_with=$this->input->post('meet_with');
         $currentDateTime = date('g:i A');
