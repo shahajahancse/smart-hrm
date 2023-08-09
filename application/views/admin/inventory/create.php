@@ -37,12 +37,12 @@
               <th class="text-left">Category Name</th>
               <th class="text-left">Sub Category Name</th>
               <th class="text-left">Product Name</th>
+              <th class="text-left">Unit</th>
               <th class="text-left">Quantity</th>
               <th class="text-left">Action</th>
             </tr>
             <tr></tr>
           </table>
-              <!-- <input type="submit" name="btn" class="" value="Save"> -->
           <button name="btn" type="submit" class="btn btn-primary btn-sm text-right" style="float: right;margin-right: 92px;margin-bottom: 20px;" > <i class="fa fa-check-square-o"></i><?php echo $this->lang->line('xin_save');?></button>
         <?php echo form_close(); ?> 
       </div>
@@ -84,7 +84,8 @@
 
           items+= '<td>'+category_name+'</td>';
           items+= '<td>'+sub_cat_name+'</td>';
-          items+= '<td>'+product_name+' '+unit_name+'</td>';
+          items+= '<td>'+product_name+'</td>';
+          items+= '<td>'+unit_name+'</td>';
 
           items+= '<td><input name="quantity[]" class="form-control input-sm" required /></td>';
 

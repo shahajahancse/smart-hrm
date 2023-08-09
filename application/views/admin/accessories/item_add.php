@@ -33,7 +33,7 @@
               </select>
             </div>
             
-            <input type="hidden" name="hidden_id" value="<?php echo isset($row->a_id)? $row->a_id:''; ?>">
+            <input type="hidden" name="hidden_id" value="<?php echo isset($row->id)? $row->id:''; ?>">
 
             <div class="col-md-3" >
               <div class="form-group">
@@ -46,6 +46,15 @@
               <label for="Status">Device Model</label>
               <select name="device_model" class="form-control" id="model_name">  
                 <option value="">Select Model</option>
+                <?php  if($row->id != null){
+                    if(!empty($models)) { ?>
+                        <option value="" >Select</option>
+                        <?php foreach($models as $model) {?>
+                            <option value="<?php echo $model->id; ?>" <?php echo $model->id == $row->device_model ? 'selected':'' ?> > <?php echo $model->model_name?> </option>
+                        <?php  }
+                    } else { ?>
+                        <option value="" >Select</option>
+                  <?php } }?>
               </select>
             </div>
 
@@ -103,7 +112,7 @@
               <label for="Status">Select Sim Number</label>
               <select name="number" id="number"  class="form-control" disabled>  
                 <option value="">Select Number</option>
-                <?php foreach($numbers as $number){?>
+                <?php $numbers =$this->db->select('*')->get('mobile_numbers')->result(); foreach($numbers as $number){?>
                 <option value="<?php echo $number->id?>" <?php echo (isset($row->number) && $row->number == $number->number )? 'selected':''; ?> ><?php echo $number->number?></option>
                 <?php }?>
               </select>
@@ -111,12 +120,12 @@
           </div>
           </div>        
           </div>
-          <?php if(isset($row->a_id)==null){?>
-                <input type="submit" name="submit" class="btn btn-success" style="float:right" value="Add Item"/>
-                <?php }else{?>
-                <input type="submit" name="submit" class="btn btn-primary" style="float:right" value="Update Item"/>
-                <?php }?>
-          <?php echo form_close(); ?> </div>
+          <?php if(isset($row->id)==null){?>
+            <input type="submit" name="submit" class="btn btn-md btn-success" style="float:right" value="Add Item"/>
+            <?php } else{?>
+            <input type="submit" name="submit" class="btn btn-md btn-primary" style="float:right" value="Update Item"/>
+            <?php }?>
+          <?php echo form_close(); ?></div>
     </div>
   </div>
 </div>

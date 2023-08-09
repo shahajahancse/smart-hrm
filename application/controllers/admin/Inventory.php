@@ -1217,6 +1217,17 @@ function requisition_list(){
 	$data['subview']    = $this->load->view("admin/inventory/requisition_list", $data);
 }
 
+
+public function delete_category($id){
+   $this->db->from('products_categories')->where('id',$id)->delete();
+	redirect('admin/inventory/category');
+}
+
+public function delete_sub_category($id){
+   $this->db->from('products_sub_categories')->where('id',$id)->delete();
+	redirect('admin/inventory/sub_category');
+}
+
 }
 
 

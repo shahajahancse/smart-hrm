@@ -310,7 +310,7 @@ if($theme[0]->sub_menu_icons != ''){
 
     <!-- Payroll -->
     <?php //if($system[0]->module_payroll=='yes'){?>
-    <?php  if(in_array('32',$role_resources_ids) || in_array('33',$role_resources_ids) || in_array('34',$role_resources_ids) || in_array('35',$role_resources_ids) || in_array('36',$role_resources_ids) || in_array('37',$role_resources_ids) || in_array('38',$role_resources_ids) || in_array('39',$role_resources_ids) || in_array('125',$role_resources_ids) || in_array('126',$role_resources_ids) || in_array('390',$role_resources_ids)) {?>
+    <?php  if(in_array('32',$role_resources_ids) || in_array('33',$role_resources_ids) || in_array('34',$role_resources_ids) || in_array('35',$role_resources_ids) || in_array('36',$role_resources_ids) || in_array('37',$role_resources_ids) || in_array('38',$role_resources_ids) || in_array('39',$role_resources_ids) || in_array('125',$role_resources_ids) || in_array('126',$role_resources_ids)|| in_array('127',$role_resources_ids) || in_array('390',$role_resources_ids)) {?>
       <li class="<?php if(!empty($arr_mod['payrl_open']))echo $arr_mod['payrl_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> <span><?php echo $this->lang->line('left_payroll');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
 
@@ -319,6 +319,10 @@ if($theme[0]->sub_menu_icons != ''){
           <?php } ?>  
           <?php if(in_array('126',$role_resources_ids)) { ?>
             <li class="sidenav-link <?php if(!empty($arr_mod['emp_bonus_active']))echo $arr_mod['emp_bonus_active'];?>"> <a href="<?php echo site_url('admin/payroll/employee_bonus');?>"><i class="fa <?php echo $submenuicon;?>"></i>Bonus </a> </li>
+          <?php } ?>  
+
+          <?php if(in_array('127',$role_resources_ids)) { ?>
+            <li class="sidenav-link <?php if(!empty($arr_mod['emp_advanced_sal']))echo $arr_mod['emp_advanced_sal'];?>"> <a href="<?php echo site_url('admin/payroll/advanced_salary');?>"><i class="fa <?php echo $submenuicon;?>"></i>Advanced Salary </a> </li>
           <?php } ?>  
 
           <?php if(in_array('390',$role_resources_ids)) { ?>

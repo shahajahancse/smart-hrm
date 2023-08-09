@@ -33,6 +33,7 @@ class Lunch extends MY_Controller
         $this->load->library('form_validation');
         $this->load->helper('date');
     }
+
     public function index()
     {
         $session = $this->session->userdata('username');

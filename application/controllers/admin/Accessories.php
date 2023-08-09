@@ -36,7 +36,6 @@ class Accessories extends MY_Controller {
 
     }
 
-
     public function category($id = null){
          $data = $this->page_loads();
          $data['title'] = 'Add Category'.' | '.$this->Xin_model->site_title();
@@ -75,7 +74,6 @@ class Accessories extends MY_Controller {
          $this->load->view('admin/layout/layout_main', $datas); 
     }
 
-
     public function device_model($id = null){
          $data = $this->page_loads();
          $data['title'] = 'Add Device Model'.' | '.$this->Xin_model->site_title();
@@ -100,7 +98,9 @@ class Accessories extends MY_Controller {
                 }else{
                     $picture = '';
                 }
-            } 
+            } else{
+                    $picture = '';
+            }
             
             $form_data = array(
                 'cat_id'    => $this->input->post('cat_id'),
@@ -142,9 +142,9 @@ class Accessories extends MY_Controller {
         $this->form_validation->set_rules('status', 'Number', 'required|trim');
         if ($this->form_validation->run() == true){
         $form_data = array(
-                            'number'   => $this->input->post('number'),
-                            'status'   => $this->input->post('status'),
-                    );    
+            'number'   => $this->input->post('number'),
+            'status'   => $this->input->post('status'),
+        );    
             if ($hid = $this->input->post('hidden_id')) {
             $this->db->where('id', $hid)->update('mobile_numbers', $form_data);
             $this->session->set_flashdata('success', 'Successfully Updated Done');
@@ -204,19 +204,27 @@ class Accessories extends MY_Controller {
         }
     }
 
-
     public function get_model($id = null,$dem=null){
         $rows = $this->db->select('*')->where('cat_id',$id)->get('product_accessories_model')->result();
         $this->load->view('admin/accessories/get_model', array('models'=>$rows,'deivice_id'=>$dem));
     }
 
-    public function item_add($user_id = null){
-    
+    public function item_add($id=null){
+        // dd($id);
         $data = $this->page_loads();
-        $data['title']         = 'Add Item'.' | '.$this->Xin_model->site_title();
-    	$data['breadcrumbs']   = "Add Item";
-        $this->form_validation->set_rules('cat_id', 'Category Name', 'required|trim');
+        if($id !=null){
+            $data['title']         = 'Update Item'.' | '.$this->Xin_model->site_title();
+            $data['breadcrumbs']   = "Update Item";
+        }else{
+            $data['title']         = 'Add Item'.' | '.$this->Xin_model->site_title();
+            $data['breadcrumbs']   = "Add Item";
+        }
 
+        $this->form_validation->set_rules('cat_id', 'Category Name', 'required|trim');
+        
+        if($id != null) {
+            $data['row'] = $this->db->select('*')->where('id',$id)->get("product_accessories")->row();
+        }  
         if ($this->form_validation->run() == true){
 
             if($this->input->post('status')==1){
@@ -237,7 +245,7 @@ class Accessories extends MY_Controller {
                 'use_number'     => $this->input->post('use_number'),
                 'number'         => $this->input->post('number'),
             );    
-        
+
             // dd($form_data);
             if ($hid = $this->input->post('hidden_id')) {
                 $this->db->where('id', $hid)->update('product_accessories', $form_data);
@@ -271,7 +279,6 @@ class Accessories extends MY_Controller {
                             $this->session->set_flashdata('success', 'Successfully Insert Done');
                             echo $this->item;
                         }
-
                     }
                 } else{
                     $this->session->set_flashdata('success', 'Sorry Something Wrong.');
@@ -279,16 +286,13 @@ class Accessories extends MY_Controller {
                 }   
             }               
         }
-        if($user_id != null) {
-            $data['row'] = $this->db->select('*')->where('id',$user_id)->get("product_accessories")->row();
-        }   
+ 
 
         $data['categories']=$this->db->select('*')->get('product_accessory_categories')->result();
         $data['users']=$this->db->select('*')->get('xin_employees')->result();
         $datas['subview']= $this->load->view('admin/accessories/item_add',$data,TRUE);  
         $this->load->view('admin/layout/layout_main', $datas); 
     }
-
 
     public function item_lists($id){
         // dd($id); 
@@ -374,7 +378,6 @@ class Accessories extends MY_Controller {
     
     }
 
-
     public function update_desk(){
         // dd($_POST);
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
@@ -423,7 +426,6 @@ class Accessories extends MY_Controller {
        }
 
     }
-
 
 }
 
