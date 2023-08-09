@@ -3493,7 +3493,7 @@ class Payroll extends MY_Controller {
 							->where('xin_employees.user_id = xin_advance_salaries.emp_id')
 							->where('xin_employees.designation_id = xin_designations.designation_id')
 							->where('xin_employees.department_id = xin_departments.department_id')
-							->order_by('id','desc');
+							->order_by('xin_advance_salaries.id','desc');
 
 		if($data['session']['role_id'] == 3){
 			$this->db->where('xin_advance_salaries.emp_id',$data['session']['user_id']);
