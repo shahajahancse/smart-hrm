@@ -70,9 +70,9 @@
             <thead>
                 <tr>
                 <th scope="col" class="text-center">Sl. No.</th>
-                <!-- <th scope="col" class="text-center">Name</th>
-                <th scope="col" class="text-center">Dept</th>
-                <th scope="col" class="text-center">Desig</th> -->
+                <th scope="col" class="text-center">Approved By</th>
+                <!-- <th scope="col" class="text-center">Dept</th> -->
+                <!-- <th scope="col" class="text-center">Desig</th> -->
                 <th scope="col" class="text-center">Req. Amount</th>
                 <th scope="col" class="text-center">App. Amount</th>
                 <th scope="col" class="text-center">Effective Month</th>
@@ -85,6 +85,7 @@
                 <?php $i=1; foreach($results as $row){ ?>
                     <tr class="text-center">
                         <td><?php echo $i++?></td>
+                        <td><?= $admin_name->first_name .' '.$admin_name->last_name?></td>
                         <td><?= $row->requested_amount?></td>
                         <td><?= $row->approved_amount?></td>
                         <td><?= date("d M Y",strtotime($row->effective_month))?></td>
@@ -95,7 +96,9 @@
                             </span>
                         </td>
                         <td>
+                            <?php if($row->status != 2){?>
                             <a href="#" class="btn btn-sm btn-info edit-data-btn" data-id="<?=  $row->id ?>" data-amount="<?= $row->requested_amount?>" data-effect-month="<?=$row->effective_month?>" data-details="<?=$row->reason?>" data-toggle="modal" data-target="#myModalsss">Edit</a>
+                            <?php }?>
                             <a href="<?php echo base_url('admin/payroll/delete_list/'.$row->id)?>" onclick="return confirm('Are you sure to delete')" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>

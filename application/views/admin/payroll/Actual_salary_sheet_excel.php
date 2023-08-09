@@ -132,7 +132,7 @@ tbody{
                         <th style='width: 190px;'>Status</th>
                         <th style='width: 55px;'>Leave</th>
                         <th  style='width:55px;'>Late</th>
-                        <th style='width: 139px;'>Deduction</th>
+                        <th style='width: 150px;'>Deduction</th>
                         <th  class='bnb' style="width: 37px;">Net Salary</th>
                         <th  class='bnb' style="width: 37px;">Extra Pay</th>
                          <th  class='bnb' style="width: 28px;">D.A Day</th>
@@ -183,6 +183,7 @@ tbody{
                                         <th  class=''>Late</th>
                                         <th  class=''>Abse</th>
                                         <th  class=''>BA</th>
+                                        <th  class=''>Adv</th>
                                     </tr>
                                 </table>
                             </th>
@@ -246,6 +247,7 @@ tbody{
                                     <td  class='cat4'><?=$values[$i]->late_deduct?></td>
                                     <td  class='cat4'><?=$values[$i]->absent_deduct?></td>
                                     <td  class='cat4'><?=$values[$i]->aba_deduct?></td>
+                                    <td class='colors1'><?=$values[$i]->advanced_salary?></td>
                                 </tr>
                             </table>
                         </td>
@@ -400,6 +402,7 @@ tbody{
                                             <th  class=''>Late</th>
                                             <th  class=''>Abse</th>
                                             <th  class=''>BA</th>
+                                            <th  class=''>Adn</th>
 
                                         </tr>
                                     </table>

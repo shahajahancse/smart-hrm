@@ -162,7 +162,6 @@ class Payroll extends MY_Controller {
 	// generate salary excel sheet 
     public function Actual_salary_sheet_excel()
     {  
-		
     	$excel = $this->input->post('excel');
     	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
 		$status = $this->input->post('status');
@@ -3487,18 +3486,26 @@ class Payroll extends MY_Controller {
 		if(empty($data['session'])){ 
 			redirect('admin/');
 		}
-		$data['title'] 			= 'Advanced Salary | '.$this->Xin_model->site_title();
-		$data['breadcrumbs']	= 'Advanced Salary ';
-		$data['results']= $this->db->select('xin_advance_salaries.*,xin_employees.first_name,xin_employees.last_name,xin_departments.department_name,xin_designations.designation_name')
+		$data['title'] 		 = 'Advanced Salary | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Advanced Salary ';
+        $this->db->select('xin_advance_salaries.*,xin_employees.first_name,xin_employees.last_name,xin_departments.department_name,xin_designations.designation_name')
 							->from('xin_employees,xin_advance_salaries,xin_departments,xin_designations')
 							->where('xin_employees.user_id = xin_advance_salaries.emp_id')
 							->where('xin_employees.designation_id = xin_designations.designation_id')
 							->where('xin_employees.department_id = xin_departments.department_id')
-							->get()
-							->result();
+							->order_by('id','desc');
+
 		if($data['session']['role_id'] == 3){
+			$this->db->where('xin_advance_salaries.emp_id',$data['session']['user_id']);
+			$data['results'] =	$this->db->get()->result();
+			$data['admin_name']= $this->db->select('first_name,last_name')
+									  ->from('xin_employees,xin_advance_salaries')
+								      ->where('xin_employees.user_id = xin_advance_salaries.approved_by')
+									  ->get()->row();
+
 			$data['subview'] = $this->load->view("admin/payroll/emp_advanced_salary", $data, TRUE);
 		}else{
+			$data['results'] =	$this->db->get()->result();
 			$data['subview'] = $this->load->view("admin/payroll/advanced_salary", $data, TRUE);
 		}
 						   $this->load->view('admin/layout/layout_main', $data); 
@@ -3507,18 +3514,23 @@ class Payroll extends MY_Controller {
 	public function advanced_salary_add(){
 
 		if( isset($_POST['btn_advanced'])){
-			// dd($_POST);
-			$data['requested_amount']  = $_POST['requested_amount'];
-			$data['effective_month'] = $_POST['effective_month'];
-			$data['reason']   = $_POST['reason'];
-			$data['emp_id']   = $_POST['user_id'];
-
-			$insert = $this->db->insert('xin_advance_salaries',$data);
-			if($insert){
-			 $this->session->set_flashdata('success', 'Successfully Insert Done');
+			$session = $this->session->userdata('username');
+			// dd($session);
+			if( $session->role_id != 3 ){
+				$data['emp_id']            = $_POST['user_id'];
+				$data['requested_amount']  = $_POST['requested_amount'];
+				$data['approved_amount']   = $_POST['requested_amount'];
+				$data['effective_month']   = $_POST['effective_month'];
+				$data['reason']            = $_POST['reason'];
+				$data['approved_by']       = $session['user_id'];
+				$data['status']            = 2;
 			}else{
-				 $this->session->set_flashdata('success', 'Error!!!');
+				$data['emp_id']   		   = $_POST['user_id'];
+				$data['requested_amount']  = $_POST['requested_amount'];
+				$data['effective_month']   = $_POST['effective_month'];
+				$data['reason']   		   = $_POST['reason'];
 			}
+			$insert = $this->db->insert('xin_advance_salaries',$data);
 			redirect('admin/payroll/advanced_salary');
 		}
 	}
@@ -3550,5 +3562,13 @@ class Payroll extends MY_Controller {
 		$this->db->where('id',$id)->from('xin_advance_salaries')->delete();
 		 $this->session->set_flashdata('delete', 'Successfully Delete Done');
 		 redirect('admin/payroll/advanced_salary');
+	}
+
+	public function approved_amount(){
+		$data['approved_amount'] 	= $_POST['approved_amount'];
+		$data['id']   	  			= $_POST['rowId'];
+		$data['status']   	  		= 2;
+		$insert = $this->db->where('id',$_POST['rowId'])->update('xin_advance_salaries',$data);
+		redirect('admin/payroll/advanced_salary');
 	}
 }
