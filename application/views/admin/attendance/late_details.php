@@ -60,20 +60,19 @@
 
 <body>
     <?php $this->load->view('admin/head_bangla')?>
-    <span style="width: 100%;display: block;text-align: center;margin-bottom: 7px;">Late Report Of   <?= date('d M Y',strtotime($first_date)) ?>   to  <?= date('d M Y',strtotime($second_date)) ?> </span>
+    <span style="width: 100%;display: block;text-align: center;margin-bottom: 7px;"><?= $type==1?'':'No' ?> Late Report Of   <?= date('d M Y',strtotime($first_date)) ?>   to  <?= date('d M Y',strtotime($second_date)) ?> </span>
     <?php 
     foreach ($late_id as $id) {
         $this->db->select('xin_attendance_time.attendance_date, xin_attendance_time.clock_in, xin_attendance_time.clock_out, xin_attendance_time.late_time, xin_employees.first_name, xin_employees.last_name');
         $this->db->from('xin_attendance_time');
         $this->db->join('xin_employees', 'xin_attendance_time.employee_id = xin_employees.user_id');
         $this->db->where([
-            'xin_attendance_time.late_status' => 1,
-            'xin_attendance_time.employee_id' => $id
+            'xin_attendance_time.late_status' => $type,
+            'xin_attendance_time.employee_id' => $id,
+            'xin_attendance_time.status' => 'Present'
         ]);
         $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
-        
         $data = $this->db->get()->result();
-
         if (!empty($data)) {
             ?>
             <span class="employee-name"><?= $data[0]->first_name ?> <?= $data[0]->last_name ?></span>

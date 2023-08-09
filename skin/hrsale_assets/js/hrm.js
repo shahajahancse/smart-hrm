@@ -425,7 +425,7 @@
         }
       }
   }
-    function latecount()
+    function latecount(type)
     {
       var ajaxRequest;  // The variable that makes Ajax possible!
       ajaxRequest = new XMLHttpRequest();
@@ -451,7 +451,7 @@
         return ;
       }
       
-      var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql;
+      var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql+'&type='+type;
 
       url = base_url + "/late_details";
       ajaxRequest.open("POST", url, true);
@@ -503,6 +503,34 @@
       var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql+'&minute='+minute;
 
       url = base_url + "/overtime_details";
+      ajaxRequest.open("POST", url, true);
+      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+       ajaxRequest.send(data);
+        // alert(url); return;
+
+      ajaxRequest.onreadystatechange = function(){
+        if(ajaxRequest.readyState == 4){
+          // console.log(ajaxRequest.responseText); return;
+          var resp = ajaxRequest.responseText;
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+          a.document.write(resp);
+          // a.close();
+        }
+      }
+  }
+    function nda_report()
+    {
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+      var checkboxes = document.getElementsByName('select_emp_id[]');
+      var sql = get_checked_value(checkboxes);
+      if(sql =='')
+      {
+        alert('Please select employee Id');
+        return ;
+      }
+      var data = '&sql='+sql;
+      url = base_url + "/nda_report";
       ajaxRequest.open("POST", url, true);
       ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
        ajaxRequest.send(data);
