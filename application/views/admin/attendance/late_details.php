@@ -68,7 +68,8 @@
         $this->db->join('xin_employees', 'xin_attendance_time.employee_id = xin_employees.user_id');
         $this->db->where([
             'xin_attendance_time.late_status' => $type,
-            'xin_attendance_time.employee_id' => $id
+            'xin_attendance_time.employee_id' => $id,
+            'xin_attendance_time.status' => 'Present'
         ]);
         $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
         $data = $this->db->get()->result();

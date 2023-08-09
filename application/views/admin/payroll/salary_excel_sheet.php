@@ -96,7 +96,7 @@
 	?>
 		<tr>
 			<td><?= $key + 1 ?></td>
-			<td><?= $row->first_name . "<br>" . $row->last_name ?></td>
+			<td><?= $row->first_name ?> <?=$row->last_name ?></td>
 			<td><?= $row->designation_name ?></td>
 			<td><?= $row->date_of_joining ?></td>
 			<td><?= $row->basic_salary ?></td>
