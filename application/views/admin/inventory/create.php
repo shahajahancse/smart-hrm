@@ -20,7 +20,7 @@
             <div class="form-group">
               <!-- <label for="department"><?php echo $this->lang->line('left_department');?></label> -->
               <select class="form-control" id="select_item" name="select_item" data-plugin="select_hrm" placeholder="Search Item" >
-                <option><-- Search Item --></option>
+                <option><-- Search Item --> </option>
                 <?php foreach ($results as $key => $row) { ?>
                   <option value="<?= $row->id ?>"><?= $row->category_name .' >> '. $row->sub_cate_name .' >> '. $row->product_name ?></option>
                 <?php } ?>
@@ -67,6 +67,40 @@
       $.ajax({
         type: "GET",
         url: "<?php echo base_url('admin/inventory/get_product_by_ajax/');?>" + product_id,
+        success: function(response)
+        {
+          product_name = response.product_name;
+          unit_name = response.unit_name;
+          category_name = response.category_name;
+          cat_id = response.cat_id;
+          sub_cat_name = response.sub_cate_name;
+          sub_cat_id = response.sub_cate_id;
+
+          let items = '';
+          items+= '<tr>';
+          items+= '<input name="product_id[]" value="'+product_id+'" type="hidden" required>';
+          items+= '<input name="sub_cate_id[]" value="'+sub_cat_id+'" type="hidden" required>';
+          items+= '<input name="cat_id[]" value="'+cat_id+'" type="hidden" required>';
+
+          items+= '<td>'+category_name+'</td>';
+          items+= '<td>'+sub_cat_name+'</td>';
+          items+= '<td>'+product_name+'</td>';
+          items+= '<td>'+unit_name+'</td>';
+
+          items+= '<td><input name="quantity[]" class="form-control input-sm" required /></td>';
+
+          items+= '<td> <a class="label label-important text-danger" onclick="removeRow(this)"><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
+          items+= '</tr>';
+          $('#appRowDiv tr:last').after(items);
+
+        }
+     });
+    })
+
+    $('#select_item').change(function(e) {
+      $.ajax({
+        type: "GET",
+        url: "<?php echo base_url('admin/inventory/get_product_by_ajax/');?>",
         success: function(response)
         {
           product_name = response.product_name;
