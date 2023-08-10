@@ -1286,6 +1286,23 @@ public function delete_sub_category($id){
 	redirect('admin/inventory/sub_category');
 }
 
+
+public function low_product_list(){
+
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['title'] = 'Low Quantity of Products | '.$this->Xin_model->site_title();
+	$data['breadcrumbs'] = 'Low Quantity Product Details';
+	// $data['results'] = $this->Inventory_model->product_details(null);
+	$data['results'] = $this->db->select('product_name,quantity,order_level')->where('quantity < order_level')->get('products')->result();
+	// dd($data['results']);
+	$data['subview'] = $this->load->view("admin/inventory/low_product_list", $data, TRUE);
+	$this->load->view('admin/layout/layout_main', $data); //page load
+
+}
+
 }
 
 

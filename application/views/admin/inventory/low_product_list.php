@@ -41,11 +41,8 @@ $get_animate = $this->Xin_model->get_content_animate();
         <thead>
           <tr>
               <th class="text-center" >No.</th>
-                <!-- <th class="text-center" >Name Supplier</th>
-                <th class="text-center" > Company</th> -->
                 <th class="text-center" >Product Name</th>
-                <th class="text-center" > Req Quantity</th>
-                <th class="text-center" > Apv Quantity</th>
+                <th class="text-center" >Quantity</th>
           </tr>
         </thead>
         <tbody>
@@ -53,11 +50,8 @@ $get_animate = $this->Xin_model->get_content_animate();
             <?php $i=1;foreach($results as $row){?>
             <tr class="text-center">
                 <td><?php echo $i++?></td>
-                <!-- <td><?php echo $row->name?></td>
-                <td><?php echo $row->company?></td> -->
                 <td><?php echo $row->product_name?></td>
                 <td><?php echo $row->quantity?></td>
-                <td><?php echo $row->ap_quantity?></td>
             </tr>
             <?php }?>
         </tbody>
