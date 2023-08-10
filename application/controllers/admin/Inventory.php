@@ -1285,6 +1285,10 @@ public function delete_sub_category($id){
    $this->db->from('products_sub_categories')->where('id',$id)->delete();
 	redirect('admin/inventory/sub_category');
 }
+public function product_purchase_delete($id){
+   $this->db->from('products_sub_categories')->where('id',$id)->delete();
+	redirect('admin/inventory/purchase');
+}
 
 
 public function low_product_list(){
