@@ -6,7 +6,7 @@
             <th>Punch In</th>
             <th>Punch Out</th>
             <th>Late</th>
-            <th>Production</th>
+            <th>Office Hour</th>
             <th>Break</th>
         </tr>
     </thead>

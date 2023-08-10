@@ -198,7 +198,7 @@ class Employees extends MY_Controller {
 		foreach($employee->result() as $r) {
 			  
 			// get start date and end date
-			$user = $this->Xin_model->redeuser($r->user_id);
+			$user = $this->Xin_model->redeuserforu($r->user_id);
 			if(!is_null($user)){
 				$full_name = $user[0]->first_name. ' '.$user[0]->last_name;
 				$email = $user[0]->email;
