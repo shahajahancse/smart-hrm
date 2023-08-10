@@ -342,10 +342,6 @@ if($theme[0]->sub_menu_icons != ''){
 
           <?php if(in_array('1021',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['salary_active']))echo $arr_mod['salary_active'];?>"> <a href="<?php echo site_url('admin/payroll/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Generate Salary </a> </li>
-          <?php } ?> 
-
-          <?php if(in_array('1021',$role_resources_ids)) { ?>
-          <li class="sidenav-link <?php if(!empty($arr_mod['salary_active']))echo $arr_mod['salary_active'];?>"> <a href="<?php echo site_url('admin/payroll/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Generate Salary </a> </li>
           <?php } ?>        
 
           <?php if(in_array('1022',$role_resources_ids)) { ?>
@@ -445,6 +441,10 @@ if($theme[0]->sub_menu_icons != ''){
           <?php if(in_array('1041',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['insetting_open']))echo $arr_mod['insetting_open'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Settings <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
+              <?php if($user_info[0]->user_role_id != 3) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['insetting_open']))echo $arr_mod['insetting_open'];?>"> <a href="<?php echo site_url('admin/inventory/daily_pkg');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Supplier </a> </li>
+              <?php } ?>
+
               <?php if(in_array('1046',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['supplier_open']))echo $arr_mod['supplier_open'];?>"> <a href="<?php echo site_url('admin/inventory/supplier');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Supplier </a> </li>
               <?php } ?>
