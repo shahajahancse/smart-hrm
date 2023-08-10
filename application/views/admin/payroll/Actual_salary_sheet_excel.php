@@ -418,7 +418,7 @@ tbody{
                                             <th  class=''>Late</th>
                                             <th  class=''>Abse</th>
                                             <th  class=''>BA</th>
-                                            <th  class=''>Adn</th>
+                                            <th  class=''>Adv</th>
 
                                         </tr>
                                     </table>
