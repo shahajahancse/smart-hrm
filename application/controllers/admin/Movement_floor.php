@@ -68,7 +68,7 @@ class Movement_floor extends MY_Controller {
             }
         $input_reason=$reason;
         $input_meet_with=$this->input->post('meet_with');
-        $currentDateTime = date('g:i A');
+        $currentDateTime = date('H:i:s');
         $movementid=$user_movement[0]->id;
         $out_time_array=json_decode($user_movement[0]->out_time);
         $location_array=json_decode($user_movement[0]->location);
@@ -126,7 +126,7 @@ class Movement_floor extends MY_Controller {
             $location_array=[];
             $reason_array=[];
             $meetwith_array=[];
-            $currentDateTime = date('g:i A');
+            $currentDateTime = date('H:i:s');
             array_push($out_time_array, $currentDateTime);
             array_push($location_array, $input_location);
             array_push($reason_array, $input_reason);
