@@ -25,7 +25,7 @@
             <td class="p0"><?= $outtime?></td>
             <td class="p0"><?= (isset($in_time_array[$k])) ? $in_time_array[$k] : ''?></td>
             <td class="p0">
-                <?= ($location_array[$k]==5) ? '5th Floor' : (($location_array[$k]==3) ? '3rd Floor' : 'Out Side');?>
+                <?= ($location_array[$k]==5) ? '5th Floor' : (($location_array[$k]==3) ? '3rd Floor' :'');?>
             </td>
             <?php $resonedata = $this->db->where('id', $reason_array[$k])->get('xin_employee_move_reason')->result();
                 ?>
