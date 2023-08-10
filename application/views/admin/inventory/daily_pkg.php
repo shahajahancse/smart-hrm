@@ -1,5 +1,7 @@
 <div class="container">
     <div class="row">
+    <img src="<?= base_url('skin/img/loader.gif')?>" alt="loading" id="loader" style="height: 25px;width: 25px;display: none;">
+
         <div class="col-md-4">
             <div class="form-group">
                 <select class="form-control" id="select_item" name="select_item" data-plugin="select_hrm"
@@ -15,7 +17,6 @@
             </div>
         </div>
         <div class="col-md-11">
-        <img src="<?= base_url('skin/img/loader.gif')?>" alt="loading" style="height: 25px;width: 25px;float: right;display: none;">
             <div class="box" style="padding:10px;">
                 <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
                 <?php echo form_open(current_url(),$attributes);?>
@@ -113,13 +114,13 @@ function removeRow(id) {
 </script>
 <script>
    function subfrom(){
+        $('#loader').fadeIn();
         $.ajax({
             url: "<?php echo base_url('admin/inventory/add_daily_package/');?>", // Specify your API endpoint URL
             method: 'POST',
             data: $('#product-form').serialize(), // Send the form data
             success: function(response) {
-                // Handle the response from the server
-                console.log(response);
+                $('#loader').fadeOut();
             },
             error: function(xhr, textStatus, errorThrown) {
                 // Handle any errors that occurred during the request
