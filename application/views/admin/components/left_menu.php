@@ -443,7 +443,7 @@ if($theme[0]->sub_menu_icons != ''){
           <li class="<?php if(!empty($arr_mod['insetting_open']))echo $arr_mod['insetting_open'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Settings <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
               <?php if($user_info[0]->user_role_id != 3) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['insetting_open']))echo $arr_mod['insetting_open'];?>"> <a href="<?php echo site_url('admin/inventory/daily_pkg');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Supplier </a> </li>
+              <li class="sidenav-link <?php if(!empty($arr_mod['insetting_open']))echo $arr_mod['insetting_open'];?>"> <a href="<?php echo site_url('admin/inventory/daily_pkg');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Requisition Package </a> </li>
               <?php } ?>
 
               <?php if(in_array('1046',$role_resources_ids)) { ?>
