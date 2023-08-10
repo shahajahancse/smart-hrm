@@ -229,7 +229,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                 }
             };
             </script>
-            <input type="hidden" name="area" value="<?= ($empinfo->floor_status!=3) ? '2' : '1'?>">
+            <input type="hidden" name="area" value="<?= ($empinfo->floor_status==3) ? 3 : 5?>">
             <div class="col-md-6">
                 <div class="input" style="border: none;height: 66px;">
                     <div class="level">Select Meeting People**</div>
