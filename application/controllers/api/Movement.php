@@ -881,7 +881,6 @@ class Movement extends API_Controller
         $this->db->select('first_name, last_name');
         $this->db->where('user_id', $id);
         $data = $this->db->get('xin_employees')->row();
-
         $fullname = $data->first_name . ' ' . $data->last_name;
         return $fullname;
     }
