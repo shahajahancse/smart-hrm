@@ -35,7 +35,6 @@ class floor_movement extends MY_Controller {
         $session = $this->session->userdata('username'); 
 		$user_id = $session['user_id'];
         $current_date=date('Y-m-d');
-       
         $this->db->select("*");
         $this->db->where("user_id", $user_id);
         $this->db->where("date", $current_date);
@@ -46,12 +45,13 @@ class floor_movement extends MY_Controller {
             $input_location=$this->input->post('area');
             $input_reason=$this->input->post('reason');
             $input_meet_with=$this->input->post('meet_with');
-            $currentDateTime = date('g:i A'); 
-           $movementid=$user_movement[0]->id;
-           $out_time_array=json_decode($user_movement[0]->out_time);
-           $location_array=json_decode($user_movement[0]->location);
-           $reason_array=json_decode($user_movement[0]->reason);
-           $meet_with_array=json_decode($user_movement[0]->meet_with);
+            $currentDateTime = date('H:i:s'); 
+            dd($currentDateTime);
+            $movementid=$user_movement[0]->id;
+            $out_time_array=json_decode($user_movement[0]->out_time);
+            $location_array=json_decode($user_movement[0]->location);
+            $reason_array=json_decode($user_movement[0]->reason);
+            $meet_with_array=json_decode($user_movement[0]->meet_with);
         //    dd($meet_with_array);
             array_push($out_time_array,$currentDateTime);
             array_push($location_array,$input_location);
@@ -89,7 +89,8 @@ class floor_movement extends MY_Controller {
             $location_array=[];
             $reason_array=[];
             $meetwith_array=[];
-            $currentDateTime = date('g:i A');
+            $currentDateTime = date('H:i:s');
+          
             array_push($out_time_array,$currentDateTime);
             array_push($location_array,$input_location);
             array_push($reason_array,$input_reason);
