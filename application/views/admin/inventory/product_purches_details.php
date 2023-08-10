@@ -67,9 +67,9 @@ $get_animate = $this->Xin_model->get_content_animate();
 </div>
 
 <script>
-$(document).ready(function () {
-    $('#table_data').DataTable();
-});
+// $(document).ready(function () {
+//     $('#table_data').DataTable();
+// });
 
 </script>
 
