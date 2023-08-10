@@ -94,6 +94,7 @@ class Inventory extends MY_Controller {
 					'quantity'		   => $_POST['quantity'][$i],
 					'requisition_date' => $_POST['requisition_date'],
 					'status'		   => 1,
+					'created_at'     => date("y-m-d"),
 				);
 			}  
 			if($this->db->insert_batch('products_requisition_details', $form_data)){
