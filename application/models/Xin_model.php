@@ -970,20 +970,6 @@ class Xin_model extends CI_Model {
 	}
 		
 	}
-	public function redeuserforu($id) {
-	
-		$query = $this->db
-		->select('*') 
-		->where('user_id', $this->db->escape_str($id)) // Escaping the input value
-		->where_in('status', [1, 4, 5])
-		->order_by('basic_salary', 'DESC')
-		->get('xin_employees');    if ($query->num_rows() > 0) {
-      return $query->result();
-    }else{
-      return null;
-	}
-		
-	}
 
 	// get single user
 	public function read_user_xuinfo($id) {

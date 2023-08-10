@@ -192,13 +192,10 @@ class Employees extends MY_Controller {
 		$data = array();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);	
-		$employee = $this->Timesheet_model->get_emplist();
-		// dd($user_info);
-		
+		$employee = $this->Timesheet_model->get_emplistforemp();
 		foreach($employee->result() as $r) {
-			  
 			// get start date and end date
-			$user = $this->Xin_model->redeuserforu($r->user_id);
+			$user = $this->Xin_model->redeuser($r->user_id);
 			if(!is_null($user)){
 				$full_name = $user[0]->first_name. ' '.$user[0]->last_name;
 				$email = $user[0]->email;

@@ -208,8 +208,11 @@
 	}
 
 	public function get_emplist() {
-		
 		return $this->db->get("xin_employees");
+	}
+	public function get_emplistforemp() {
+	$this->db->where_in('status', [1, 4, 5]);// Replace "column1, column2, column3" with the actual columns you need
+	return $this->db->get("xin_employees");
 	}
 	// get company leaves
 	public function filter_company_leaves($company_id) {
