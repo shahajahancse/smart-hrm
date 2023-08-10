@@ -164,22 +164,29 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label for="employee_id" class="control-label"><?php echo $this->lang->line('dashboard_employee_id');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
-                <input class="form-control" placeholder="<?php echo $this->lang->line('dashboard_employee_id');?>" name="employee_id" type="text" value="">
+                <input class="form-control" placeholder="<?php echo $this->lang->line('dashboard_employee_id');?>" name="employee_id" type="text" value="" >
               </div>
             </div>
 
             <div class="col-md-2">
               <div class="form-group">
-                <label for="proxi_id" class="control-label"><?php echo"Proxi Id";?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
-                <input class="form-control" placeholder="Punch device id" name="proxi_id" type="text" value="">
+                <label for="proxi_id" class="control-label">Punch id<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                <input class="form-control" placeholder="Punch device id" name="proxi_id" type="text" value="" required>
               </div>
             </div>
+           
             <input type="hidden" name="company_id" value="1">
             <input type="hidden" name="location_id" value="1">
           </div>
 
           <div class="row">
-            <div class="col-md-4">
+          <div class="col-md-2">
+              <div class="form-group">
+                <label for="proxi_id" class="control-label">Set Salary<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                <input class="form-control" placeholder="Set Salary" name="salary" type="text" value="" required>
+              </div>
+            </div>
+            <div class="col-md-3">
               <div class="form-group" id="ajx_department">
                 <label for="designation"><?php echo $this->lang->line('xin_hr_main_department');?><i class="hrsale-asterisk">*</i></label>
                 <select class="select2" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_select_department');?>" name="department_id" id="aj_subdepartments" >
@@ -190,7 +197,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-4" id="designation_ajax">
+            <div class="col-md-3" id="designation_ajax">
               <div class="form-group">
                 <label for="designation"><?php echo $this->lang->line('xin_designation');?><i class="hrsale-asterisk">*</i></label>
                 <select class="form-control" name="designation_id" data-plugin="select_hrm" disabled="disabled" data-placeholder="<?php echo $this->lang->line('xin_designation');?>">

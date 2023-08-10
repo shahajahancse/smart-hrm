@@ -87,12 +87,13 @@ class Inventory extends MY_Controller {
 		if ($this->form_validation->run() == true){
 			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
 				$form_data[] = array(
-					'user_id' 		 => $session['user_id'],
-					'cat_id'		 => $_POST['cat_id'][$i],
-					'sub_cate_id'	 => $_POST['sub_cate_id'][$i],
-					'product_id'	 => $_POST['product_id'][$i],
-					'quantity'		 => $_POST['quantity'][$i],
-					'status'		 => 1,
+					'user_id' 		   => $session['user_id'],
+					'cat_id'		   => $_POST['cat_id'][$i],
+					'sub_cate_id'	   => $_POST['sub_cate_id'][$i],
+					'product_id'	   => $_POST['product_id'][$i],
+					'quantity'		   => $_POST['quantity'][$i],
+					'requisition_date' => $_POST['requisition_date'],
+					'status'		   => 1,
 				);
 			}  
 			if($this->db->insert_batch('products_requisition_details', $form_data)){

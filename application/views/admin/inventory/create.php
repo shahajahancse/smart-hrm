@@ -11,6 +11,7 @@
     <div class="box-header with-border">
         <h3 class="box-title">Add Requisition</h3>
         <?php if($user_role_id!=3){?>
+          
         <a class="btn btn-primary" onclick="adddaily_req()" style="padding: 4px;float: right;">Daily requisition</a>
         <?php } ?>
     </div>
@@ -35,6 +36,14 @@
         <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
         <?php $hidden = array('user_id' => $session['user_id']);?>
         <?php echo form_open(current_url(), $attributes, $hidden);?>
+        <?php if($user_role_id!=3){?>
+          <div style="float: right;right: 91px;position: relative;">
+          <label for="">Requisition Date</label>
+          <input type="date" value="<?= date('Y-m-d') ?>" name="requisition_date">
+          </div>
+          <?php }else{?>
+           <input type="hidden" value="<?= date('Y-m-d') ?>" name="requisition_date">
+            <?php } ?>
           <table class="table table-bordered table-sm table-striped " id="appRowDiv">
             <tr>
               <th class="text-left">Category Name</th>

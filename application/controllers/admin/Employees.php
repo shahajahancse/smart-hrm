@@ -2141,7 +2141,11 @@ class Employees extends MY_Controller {
 			 $Return['error'] = $this->lang->line('xin_employee_error_username');
 		} else if($this->Employees_model->check_employee_username($this->input->post('username')) > 0) {
 			 $Return['error'] = $this->lang->line('xin_employee_username_already_exist');
-		} 
+		}  else if($this->input->post('proxi_id')==='') {
+			$Return['error'] = "punche id not specified";
+	   } else if($this->input->post('salary')==='') {
+		$Return['error'] = "salary not specified";
+	   }
 
 		/*else if($this->input->post('email')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_email');
@@ -2237,6 +2241,7 @@ class Employees extends MY_Controller {
 			'department_id' => $this->input->post('department_id'),
 			'sub_department_id' => $this->input->post('subdepartment_id'),
 			'designation_id' => $this->input->post('designation_id'),
+			'salary' => $this->input->post('salary'),
 			'date_of_joining' => $date_of_joining,
 			'notify_incre_prob' => $probation_end,
 			'contact_no' => $contact_no,
