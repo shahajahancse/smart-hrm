@@ -126,6 +126,7 @@ class Inventory extends MY_Controller {
 	}
 
 
+
 	public function pending_list(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -181,6 +182,16 @@ public function add_daily_package()
 	$mas="success";
 	return $mas;
 }
+
+	public function adddaily_req(){
+		$this->db->select('requisition_package.*, products.product_name, products_categories.category_name, products_sub_categories.sub_cate_name');
+		$this->db->from('requisition_package');
+		$this->db->join('products', 'requisition_package.product_id = products.id');
+		$this->db->join('products_categories', 'requisition_package.cat_id = products_categories.id');
+		$this->db->join('products_sub_categories', 'requisition_package.sub_cate_id = products_sub_categories.id');
+		$data= $this->db->get()->result();
+		echo json_encode($data);
+	}
 
 	public function first_step_aproved_list(){
 		$session = $this->session->userdata('username');

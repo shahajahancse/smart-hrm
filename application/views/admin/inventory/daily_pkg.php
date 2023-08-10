@@ -15,7 +15,8 @@
             </div>
         </div>
         <div class="col-md-11">
-            <div class="box" style="padding:28px;">
+        <img src="<?= base_url('skin/img/loader.gif')?>" alt="loading" style="height: 25px;width: 25px;float: right;display: none;">
+            <div class="box" style="padding:10px;">
                 <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
                 <?php echo form_open(current_url(),$attributes);?>
                 <table class="table table-bordered table-sm table-striped " id="appRowDiv">
