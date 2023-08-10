@@ -11,7 +11,7 @@ if (!empty($todaylog)) {
 
     $lastRow = end($totalmove_out_array); // Get the last element of the array
     $currentDateTime = new DateTime(); // Get the current date and time
-    $lastRowDateTime = DateTime::createFromFormat('g:i A', $lastRow); // Convert the last row value to DateTime object
+    $lastRowDateTime = DateTime::createFromFormat('H:i:s', $lastRow); // Convert the last row value to DateTime object
 
     $timeDifference = $currentDateTime->diff($lastRowDateTime); // Calculate the difference between current time and last row time
     $h = $timeDifference->h; // Get the hours from the time difference
