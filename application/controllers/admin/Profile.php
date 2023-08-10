@@ -96,8 +96,6 @@ class Profile extends MY_Controller {
 			'linkdedin_link' => $result[0]->linkdedin_link,
 			'google_plus_link' => $result[0]->google_plus_link,
 			'instagram_link' => $result[0]->instagram_link,
-			'pinterest_link' => $result[0]->pinterest_link,
-			'youtube_link' => $result[0]->youtube_link,
 			'last_login_date' => $result[0]->last_login_date,
 			'last_login_date' => $result[0]->last_login_date,
 			'last_login_ip' => $result[0]->last_login_ip,
