@@ -78,6 +78,7 @@ class Inventory extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+	
 		//Validation
         $this->form_validation->set_rules('cat_id[]', 'select category', 'required|trim');
         $this->form_validation->set_rules('product_id[]', 'item name', 'required|trim');
@@ -137,6 +138,50 @@ class Inventory extends MY_Controller {
 		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+	public function daily_pkg(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$this->db->select('requisition_package.*, products.product_name, products_categories.category_name, products_sub_categories.sub_cate_name');
+		$this->db->from('requisition_package');
+		$this->db->join('products', 'requisition_package.product_id = products.id');
+		$this->db->join('products_categories', 'requisition_package.cat_id = products_categories.id');
+		$this->db->join('products_sub_categories', 'requisition_package.sub_cate_id = products_sub_categories.id');
+		$data['productdata'] = $this->db->get()->result();
+		$data['title'] 		 = 'Daily Package | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Daily Package ';
+		$data['session'] =$session ;
+		$data['results'] 		=     $this->Inventory_model->product_list();
+		$data['subview'] 	 = $this->load->view("admin/inventory/daily_pkg", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+public function add_daily_package()
+{
+	// Delete all data from the 'requisition_package' table
+	$this->db->truncate('requisition_package');
+	// Access the values from $_POST
+	$productIds = $_POST['product_id'];
+	$subCateIds = $_POST['sub_cate_id'];
+	$catIds = $_POST['cat_id'];
+	$quantities = $_POST['quantity'];
+	$unit_name = $_POST['unit_name'];
+	// Loop through the arrays to insert the data into the table
+	for ($i = 0; $i < count($productIds); $i++) {
+		$data = array(
+			'product_id' => $productIds[$i],
+			'sub_cate_id' => $subCateIds[$i],
+			'cat_id' => $catIds[$i],
+			'quantity' => $quantities[$i],
+			'unit_name' => $unit_name[$i]
+		);
+		$this->db->insert('requisition_package', $data);
+	}
+	$this->db->query("ALTER TABLE requisition_package AUTO_INCREMENT = 1");
+	$mas="success";
+	return $mas;
+}
+
 	public function first_step_aproved_list(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 

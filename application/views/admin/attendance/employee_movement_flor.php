@@ -314,7 +314,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
 <div id="datatable" class="table-responsive">
     <?php echo $tablebody;?>
 </div>
-<!-- 
+
 <script>
 function getdata(status) {
     $('#datatable').empty();
@@ -357,7 +357,7 @@ function getdata(status) {
         }
     });
 }
-</script> -->
+</script>
 
 <script>
 document.getElementById("openModal").addEventListener("click", function() {

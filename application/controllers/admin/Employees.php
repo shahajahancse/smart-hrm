@@ -170,10 +170,8 @@ class Employees extends MY_Controller {
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		$data['breadcrumbs'] = $this->lang->line('xin_employees');
 		$data['path_url'] = 'employees';
-		// dd($user_info);
 		
 			if(!empty($session)){ 
-				// $data['subview'] = $this->load->view("admin/timesheet/leave_04_01_2023", $data, TRUE);
 				$data['subview'] = $this->load->view("admin/employees/emp_list", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -195,6 +193,7 @@ class Employees extends MY_Controller {
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);	
 		$employee = $this->Timesheet_model->get_emplist();
+		// dd($user_info);
 		
 		foreach($employee->result() as $r) {
 			  
@@ -348,7 +347,7 @@ class Employees extends MY_Controller {
 				if(in_array('203',$role_resources_ids)) {
 					$del_opt = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'">
 					<button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fa fa-trash"></span>
-					</button></span>';
+					</button></span><hr>';
 				} else {
 					$del_opt = '';
 				}
@@ -359,12 +358,12 @@ class Employees extends MY_Controller {
 			// <a href="'.site_url().'admin/employees/left_resign/'.$r->user_id.'"></a>
 			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
 				if($r->status==1 || $r->status==4){
-					$lr_opt = '<span onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign">
+					$lr_opt = '<hr><span onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign">
 									<button type="button" class="btn btn-xs btn-info"><span class="fa fa-arrow-circle-right"></span></button>
-								</span>
+								</span><hr>
 								<span data-toggle="tooltip" data-placement="top" title="Increment/Promotion">
 									<button type="button" class="btn btn-xs btn-success" onclick="incrementFun('. $r->user_id . ')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-								</span>';
+								</span><hr>';
 				} else {
 					$lr_opt = '';
 				}			
@@ -384,10 +383,10 @@ class Employees extends MY_Controller {
 			if($r->status == 1 || $r->status == 4 || $r->status == 5) {
 				$lrip = '<a onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign"> 
                         <button type="button" class="btn btn-xs btn-info"><span class="fa fa-arrow-circle-right"> </span></button> Left / Resign </a><br>
-
-                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Increment"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Increment</a><br></hr>
-
-                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Promotion"> <button type="button" class="btn btn-xs btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Promotion</a><br>';
+						
+                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Increment"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Increment</a><hr>
+						<hr>
+                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Promotion"> <button type="button" class="btn btn-xs btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Promotion</a><hr>';
 			} else {
 				$lrip = '';
 			}
@@ -397,14 +396,15 @@ class Employees extends MY_Controller {
                     <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Action
                     </button>
-                    <div class="dropdown-menu" style=" min-width: 180px !important;border-radius:0;line-height: 1.7;" aria-labelledby="dropdownMenuButton">
-
-                        <a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a><br>
+                    <div class="dropdown-menu  pull-left" style=" min-width: 180px !important;border-radius:0;line-height: 1.7;" aria-labelledby="dropdownMenuButton">
+						
+                        <a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a><hr>
 
                         '. $lrip .'
 
                         <a> <button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"> <span class="fa fa-trash"></span>  </button>   Delete </a>
-                    </div>
+						
+						</div>
                 </div>';
 
 
