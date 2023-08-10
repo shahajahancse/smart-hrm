@@ -174,7 +174,7 @@ class Movement_floor extends MY_Controller {
         $user_movement = $this->db->get('xin_employee_floor_move')->result();
 
         $in_time_array=json_decode($user_movement[0]->in_time);
-        $currentDateTime = date('g:i A'); 
+        $currentDateTime = date('H:i:s'); 
         array_push($in_time_array,$currentDateTime);
         $in_time=json_encode($in_time_array);
         $movementid=$user_movement[0]->id;
