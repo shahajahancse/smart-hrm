@@ -203,6 +203,7 @@ class Employees extends MY_Controller {
 				$full_name = $user[0]->first_name. ' '.$user[0]->last_name;
 				$email = $user[0]->email;
 				$contact_no = $user[0]->contact_no;
+				$contact_no = $user[0]->contact_no;
 			
 				// department
 				$department = $this->Department_model->read_department_information($user[0]->department_id);

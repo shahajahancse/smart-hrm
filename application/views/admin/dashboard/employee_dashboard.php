@@ -135,7 +135,9 @@ $leave_calsl=get_cal_leave($userid, 2);
 $totaluseleave=$leave_calel+$leave_calsl;
 $all_notice = $this->db->select('*')->get('xin_events')->result();
 
-//   dd($all_notice);
+$leavemonth=$this->Salary_model->leave_count_status($userid,date('Y-m-01'),date('Y-m-t'), 2);
+$totalleavem=$leavemonth->el+$leavemonth->sl;
+
 ?>
 
 
@@ -644,7 +646,7 @@ hr {
                                 </svg>
                             </div>
                             <span class="text-center"><b>Leave</b></span>
-                            <span class="text-center" style="color:red"><b><?= 16-$totaluseleave ?></b></span>
+                            <span class="text-center" style="color:red"><b><?= $totalleavem?></b></span>
                         </div>
 
                     </div>

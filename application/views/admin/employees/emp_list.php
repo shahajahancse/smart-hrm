@@ -27,6 +27,7 @@ $success = $this->session->flashdata('success');
             <th>Designation</th>
             <th>Contact Number</th>
             <th>Email</th>
+            <th>Blood Group</th>
           </tr>
         </thead>
       </table>
