@@ -17,7 +17,6 @@ class Salary_model extends CI_Model {
         // dd($process_month);
 
         $num_of_days = date("t", strtotime($process_month));
-        $first_date  = date("Y-m-d", strtotime($process_month));
         $end_date    = date("Y-m", strtotime($process_month)).'-'.$num_of_days;
 
         $get_employee = $this->get_employee_info($grid_emp_id);
@@ -29,6 +28,7 @@ class Salary_model extends CI_Model {
             $designation_id  = $row->designation_id;
             $salary          = $row->salary;
 
+            $first_date  = date("Y-m-d", strtotime($process_month));
             // skip salary proccess
             if($salary < 1) {
                 continue;
