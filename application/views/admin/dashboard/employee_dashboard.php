@@ -439,9 +439,8 @@ hr {
     .widght {
         width: 100% !important;
     }
-    .timeshet{
 
-    }
+    .timeshet {}
 }
 </style>
 
@@ -648,15 +647,12 @@ hr {
                             <span class="text-center"><b>Leave</b></span>
                             <span class="text-center" style="color:red"><b><?= $totalleavem?></b></span>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="row equal-height-row " style="margin-top:-10px">
-
         <div class="col-sm-4 col_style">
             <div class="card">
                 <div class="card-body">
@@ -675,7 +671,6 @@ hr {
                             <span class="text-center text-info"><b>Total Lunch</b></span>
                             <span class="text-center"><b><?= $paymeal ?></b></span>
                         </div>
-
                         <div class="stats-box col-md-6">
                             <div class="text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38"
@@ -699,24 +694,21 @@ hr {
                             style="margin-top:15px;color:#5442A8;">Details</a>
                     </div>
                     <h5 class="card-title" style="margin-top: 20px;margin-left: 13px;font-weight:600">Leave Balance</h5>
-
                     <div class="stats-box-row" style="border:2px solid #E1E1E1;padding:15px 5px;border-radius:5px;">
                         <div class="col-md-4" style="border-right:2px solid #E1E1E1">
                             <span><b>Sick</b></span>
                             <span><?= $leave_calsl ?>/4</span>
                         </div>
-
                         <div class="col-md-4" style="border-right:2px solid #E1E1E1">
                             <span><b>Casual</b></span>
                             <span><?= $leave_calel ?>/12</span>
                         </div>
-
                         <div class="col-md-4">
                             <?php
-    $date        = date("Y-01-01");
-$datep       = date("Y-m-d");
-$present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date, $datep);
-?>
+                                $date        = date("Y-01-01");
+                                $datep       = date("Y-m-d");
+                                $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $date, $datep);
+                            ?>
                             <span><b>Absent</b></span>
                             <span><?= $present_stutas->absent ?>/365</span>
                         </div>
@@ -725,11 +717,9 @@ $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $d
                         <a href="<?= base_url('admin/attendance/employee_attendance') ?>"
                             style="margin-top:15px;color:#5442A8;">View All</a>
                     </div>
-
                 </div>
             </div>
         </div>
-
         <div class="col-sm-4 col_style">
             <div class="card" style=" padding-bottom: 18px;">
                 <span style="margin-left:20px;padding-top: 1.25rem;font-weight: 600;">Notice Board</span>
@@ -756,15 +746,7 @@ $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $d
                     style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
         </div>
-
-
-
-
-
-
-
         <!-- upcomming holidays -->
-
         <div class="col-md-4 col_style">
             <div class="card" style="    padding-bottom: 18px;">
                 <span style="margin-left:20px;padding-top: 1.25rem;font-weight: 600;">Upcoming Holidays</span>
@@ -795,23 +777,17 @@ $present_stutas  = $this->Salary_model->count_attendance_status_wise($userid, $d
                         </p>
                     </div>
                     <!-- <div class="col-md-4" style="float: right;">
-                       
                     </div> -->
                 </div>
                 <hr>
                 <?php }?>
                 <!-- Buttons with data-attributes -->
-
-
-
                 <!-- <button class="btn btn-sm">View All</button> -->
                 <a href="#" class="" data-toggle="modal" data-target=".bs-example-modal-lg"
                     style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
-
         </div>
     </div>
-
 </div>
 
 
