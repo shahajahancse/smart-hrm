@@ -382,9 +382,9 @@ class Employees extends MY_Controller {
 				$lrip = '<a onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign"> 
                         <button type="button" class="btn btn-xs btn-info"><span class="fa fa-arrow-circle-right"> </span></button> Left / Resign </a><br>
 						
-                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Increment"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Increment</a><hr>
-						<hr>
-                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Promotion"> <button type="button" class="btn btn-xs btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Promotion</a><hr>';
+                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Increment"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Increment</a><br>
+						<brr>
+                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Promotion"> <button type="button" class="btn btn-xs btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Promotion</a><br>';
 			} else {
 				$lrip = '';
 			}
@@ -396,7 +396,7 @@ class Employees extends MY_Controller {
                     </button>
                     <div class="dropdown-menu  pull-left" style=" min-width: 180px !important;border-radius:0;line-height: 1.7;" aria-labelledby="dropdownMenuButton">
 						
-                        <a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a><hr>
+                        <a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a><br>
 
                         '. $lrip .'
 
@@ -2102,6 +2102,8 @@ class Employees extends MY_Controller {
 		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
 			redirect('admin/');
 		}
+
+	
 	
 		if($this->input->post('add_type')=='employee') {		
 		/* Define return | here result is used to return user data and error for error message */
@@ -2220,7 +2222,27 @@ class Employees extends MY_Controller {
 		$probation = $this->input->post('probation');
 		$probation_end = date("Y-m-d",strtotime("+ $probation months",strtotime($date_of_joining)));
 		$probation_end = ($date_of_joining > $probation_end) ? $date_of_joining:$probation_end;
-
+		if($_FILES['p_file']['size']!=0){
+			//checking image type
+			$allowed =  array('png','jpg','jpeg','pdf','gif');
+			$filename = $_FILES['p_file']['name'];
+			$ext = pathinfo($filename, PATHINFO_EXTENSION);
+			
+				if(in_array($ext,$allowed)){
+					
+					$tmp_name = $_FILES["p_file"]["tmp_name"];
+					$profile = "uploads/profile/";
+					$set_img = base_url()."uploads/profile/";
+					// basename() may prevent filesystem traversal attacks;
+					// further validation/sanitation of the filename may be appropriate
+					$name = basename($_FILES["p_file"]["name"]);
+					$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
+					move_uploaded_file($tmp_name, $profile.$newfilename);
+					$fname = $newfilename;
+			}
+		}else{
+			$fname = '';
+		}
 		$data = array(
 			'employee_id' => $employee_id,
 			'office_shift_id' => $this->input->post('office_shift_id'),
@@ -2246,11 +2268,34 @@ class Employees extends MY_Controller {
 			'address' => $address,
 			'is_active' => 1,
 			'leave_categories' => $cat_ids,
+			'profile_picture' => $fname,
 			'created_at' => date('Y-m-d h:i:s')
 		);
 		// dd($data);
 
 		$iresult = $this->Employees_model->add($data);
+	
+			$emdata = array(
+				'employee_id' => $iresult,
+				'relation' => $this->input->post('relation'),
+				'is_primary' => '',
+				'is_dependent' => '',
+				'contact_name' => $this->input->post('contact_name'),
+				'work_phone' => '',
+				'work_phone_extension' =>'',
+				'mobile_phone' => $this->input->post('e_phone_number'),
+				'home_phone' => '',
+				'work_email' => '',
+				'personal_email' =>'',
+				'address_1' => $this->input->post('address_1'),
+				'address_2' =>'',
+				'city' => '',
+				'state' => '',
+				'zipcode' =>'',
+				'country' => '',
+				'created_at' => date('Y-m-d H:i:s')
+			);
+			$this->db->insert('xin_employee_contacts',$emdata);
 		if ($iresult) {
 			
 			$id = $iresult;
@@ -2360,6 +2405,9 @@ class Employees extends MY_Controller {
 				hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$this->input->post('email'),$subject,$message);				
 			}
 			$Return['result'] = $this->lang->line('xin_success_add_employee');
+
+
+
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
 		}

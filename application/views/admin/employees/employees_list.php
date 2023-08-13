@@ -224,7 +224,7 @@
 
             <div class="col-md-3">
               <div class="form-group">
-                <label for="probition" class="control-label">Probation month<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                <label for="probition" class="control-label">Intern/Probation month<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                 <input class="form-control" placeholder="Number of probition month" name="probation" type="text" value="">
               </div>
             </div>
@@ -349,18 +349,63 @@
               </div>
             </div>
           </div>
-
+          <div class="row">
+            <div class="col-md-12">
+            <h4>Emergency Contact</h4>
+              <div class="col-md-3">
+                <div class="form-group">
+                    <label for="relation"><?php echo $this->lang->line('xin_e_details_relation');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                    <select class="form-control" name="relation" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_select_one');?>" required>
+                      <option value=""><?php echo $this->lang->line('xin_select_one');?></option>
+                      <option value="Self"><?php echo $this->lang->line('xin_self');?></option>
+                      <option value="Parent"><?php echo $this->lang->line('xin_parent');?></option>
+                      <option value="Spouse"><?php echo $this->lang->line('xin_spouse');?></option>
+                      <option value="Child"><?php echo $this->lang->line('xin_child');?></option>
+                      <option value="Sibling"><?php echo $this->lang->line('xin_sibling');?></option>
+                      <option value="In Laws"><?php echo $this->lang->line('xin_in_laws');?></option>
+                    </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="name" class="control-label"><?php echo $this->lang->line('xin_name');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_name');?>" name="contact_name" type="text" required>
+                </div>
+              </div>
+            <div class="col-md-3">
+              <div class="form-group" id="designation_ajax">
+                <label for="address_1" class="control-label"><?php echo $this->lang->line('xin_address');?></label>
+                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address');?>" name="address_1" type="text" required>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="work_phone"><?php echo $this->lang->line('xin_phone');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_phone');?>" name="e_phone_number" type="text" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-12">
+                <div class='form-group'>
+                  <fieldset class="form-group">
+                    <label for="logo">Profile Picture<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                    <input type="file" class="form-control-file" id="p_file" name="p_file" accept=".gif, .png, .jpg, .jpeg">
+                    <small><?php echo $this->lang->line('xin_e_details_picture_type');?></small>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
           <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_save'))); ?> </div>
-
         </div>
-
-
         <?php $count_module_attributes = $this->Custom_fields_model->count_module_attributes();?>
         <?php $module_attributes = $this->Custom_fields_model->all_hrsale_module_attributes();?>
-
         <?php if($count_module_attributes > 0):?>
           <div class="row">
-           <?php foreach($module_attributes as $mattribute):?>
+            <?php foreach($module_attributes as $mattribute):?>
             <?php if($mattribute->attribute_type == 'date'){?>
             <div class="col-md-4">
               <div class="form-group">
@@ -417,6 +462,7 @@
             <?php endforeach;?>
           </div>
         <?php endif;?>
+    
 
         <?php echo form_close(); ?> 
 

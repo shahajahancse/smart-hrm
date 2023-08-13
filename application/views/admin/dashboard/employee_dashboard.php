@@ -789,12 +789,7 @@ hr {
         </div>
     </div>
 </div>
-
-
-
 <!-- notice modal -->
-
-
 <!-- Modal -->
 <div id="myModals" class="modal fade" role="dialog">
     <div class="modal-dialog">
