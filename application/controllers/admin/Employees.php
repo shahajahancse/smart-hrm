@@ -501,9 +501,19 @@ class Employees extends MY_Controller {
 
 		if ($this->db->insert('xin_employee_incre_prob', $form_data)) {
 
-			if ($this->input->post('status') != 2) {
+			if ($this->input->post('status') == 1 || $this->input->post('status') == 3 || $this->input->post('status') ==5) {
 				$data = array(
 					'status' => 1,
+					'department_id' => $this->input->post('new_dept_id'),
+					'designation_id' => $this->input->post('new_desig_id'),
+					'basic_salary' => $this->input->post('new_salary'),
+					'notify_incre_prob' => $this->input->post('notify_incre_prob'),
+					'nda_status' => 0,
+					'letter_status' => 0
+				);
+			}elseif ($this->input->post('status') == 4) {
+				$data = array(
+					'status' => 5,
 					'department_id' => $this->input->post('new_dept_id'),
 					'designation_id' => $this->input->post('new_desig_id'),
 					'basic_salary' => $this->input->post('new_salary'),
