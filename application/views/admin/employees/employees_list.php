@@ -562,7 +562,7 @@
           <div class="tab-pane fade" id="resign" role="tabpanel" aria-labelledby="resign-tab">
           <div class="box-body">
             <div class="box-datatable">
-              <table class="datatables-demo table table-striped table-bordered table-responsive" id="resign_table">
+              <table class="datatables-demo table table-striped table-bordered" id="resign_table">
                   <?php 
                         if(count($resigns)==''){
                             echo "<h3 class='text-center text-danger'>Data not Found</h3>";
