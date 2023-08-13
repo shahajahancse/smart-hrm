@@ -11,7 +11,6 @@
     <div class="box-header with-border">
         <h3 class="box-title">Add Requisition</h3>
         <?php if($user_role_id!=3){?>
-          
         <a class="btn btn-primary" onclick="adddaily_req()" style="padding: 4px;float: right;">Daily requisition</a>
         <?php } ?>
     </div>
@@ -19,7 +18,6 @@
         <div class="row">
           <div class="col-md-3">
           </div>
-
           <div class="col-md-4">
             <div class="form-group">
               <!-- <label for="department"><?php echo $this->lang->line('left_department');?></label> -->
@@ -76,7 +74,6 @@
 
     $('#select_item').change(function(e) {
       product_id = $(this).val();
-      // console.log($(this).find('option[value="' +$(this).val() + '"]').text());
       $.ajax({
         type: "GET",
         url: "<?php echo base_url('admin/inventory/get_product_by_ajax/');?>" + product_id,

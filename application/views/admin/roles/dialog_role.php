@@ -453,6 +453,8 @@ dataSource: [
 		
 		{ id: "", class: "role-checkbox", text: "Advanced Salary",  add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", value: "127",check: "<?php if(isset($_GET['role_id'])) { if(in_array('127',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 		
+		{ id: "", class: "role-checkbox", text: "Festival Bonus",  add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", value: "128",check: "<?php if(isset($_GET['role_id'])) { if(in_array('127',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+		
 		{ id: "", class: "role-checkbox", text: "Employee Lunch Bill",  add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", value: "390",check: "<?php if(isset($_GET['role_id'])) { if(in_array('390',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 
 		{ id: "", class: "role-checkbox-modal", text: "Generate Salary",  add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", value: "1021", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1021',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>", items: [

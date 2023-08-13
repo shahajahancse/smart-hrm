@@ -76,7 +76,7 @@ public function requisition_list($session){
 	$this->db->select("
 		p.product_name, 
 		pc.category_name, 
-		prd.id,
+		prd.id as prd_id,
 		prd.quantity,
 		prd.approved_qty,
 		prd.status,
@@ -85,7 +85,7 @@ public function requisition_list($session){
 	$this->db->from("products_requisition_details as prd");
 	$this->db->from("products as p");
 	$this->db->from("products_categories as pc");
-	$this->db->where("p.id = prd.id");
+	$this->db->where("p.id = prd.product_id");
 	$this->db->where("pc.id = prd.cat_id");	
 	if( $session['role_id'] == 3) {
 		$this->db->where("prd.user_id", $session['user_id']);
@@ -120,21 +120,22 @@ public function purchase_products_requisition($id,$role_id){
 	// ************* purchase part end ********************
 
 public function purchase_products_status($id,$role_id,$status){
+	// dd($status);
 	if($role_id==1 || $role_id==2 || $role_id==4 ){
 		$this->db->select('
 			xin_employees.first_name,
 			xin_employees.last_name, 
-			products_purches.id,
-			products_purches.user_id,
-			products_purches.status,
-			products_purches.created_at,
-			products_purches.updated_by
+			products_purches_details.id,
+			products_purches_details.user_id,
+			products_purches_details.status,
+			products_purches_details.created_at,
+			products_purches_details.updated_by
 		')
-		->from('products_purches')
+		->from('products_purches_details')
 		->from('xin_employees')
-		->where("products_purches.user_id = xin_employees.user_id")
-		->where("products_purches.status =$status")
-		->order_by('products_purches.id', 'desc');
+		->where("products_purches_details.user_id = xin_employees.user_id")
+		->where("products_purches_details.status =$status")
+		->order_by('products_purches_details.id', 'desc');
 		}
 	return	$this->db->get()->result();
 } 

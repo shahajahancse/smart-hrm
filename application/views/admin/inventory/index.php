@@ -1,6 +1,9 @@
 <?php
 // dd($session); 
 $session = $this->session->userdata('username');
+$using_list = $this->db->select('COUNT(user_id) as using_list')->where('user_id',$session['user_id'])->get('product_accessories')->row()->using_list;
+$requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(status) as status')->where('user_id',$session['user_id'])->get('products_requisition_details')->row();
+// dd($requisition_list);
 ?>
 
 <style>
@@ -48,12 +51,12 @@ $session = $this->session->userdata('username');
     <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
         <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
             <div class="h5">Total Using Items</div>
-            <div class="h5"><?= 0 ?></div>
+            <div class="h5"><?= $using_list ?></div>
         </div>
 
         <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
             <div class="h5">Total Requisition</div>
-            <div class="h5"><?= 0  ?></div>
+            <div class="h5"><?= $requisition_list->using_list  ?></div>
         </div>
         <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">
             <div class="h5">Return Items</div>
@@ -61,7 +64,7 @@ $session = $this->session->userdata('username');
         </div>
         <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
             <div class="h5">Pending Items</div>
-            <div class="h5"><?= 0 ?></div>
+            <div class="h5"><?= $requisition_list->status ?></div>
         </div>
     </div>
 </div>

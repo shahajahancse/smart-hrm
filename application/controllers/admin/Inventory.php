@@ -50,27 +50,27 @@ class Inventory extends MY_Controller {
 		}
 	}
 
-	public function index1(){
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['title'] = 'Store | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store';
-		if($session['role_id']== 1 || $session['role_id']== 2 || $session['role_id']== 4 ){
-			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-		}
-		if( $session['role_id'] == 3) {
-			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-		}
-		$data['user_role_id'] 	= $session['role_id'];
-		if(!empty($session)){ 
-			$data['subview'] = $this->load->view("admin/inventory/index1", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/');
-		}
-	}
+	// public function index1(){
+	// 	$session = $this->session->userdata('username');
+	// 	if(empty($session)){ 
+	// 		redirect('admin/');
+	// 	}
+	// 	$data['title'] = 'Store | '.$this->Xin_model->site_title();
+	// 	$data['breadcrumbs'] = 'Store';
+	// 	if($session['role_id']== 1 || $session['role_id']== 2 || $session['role_id']== 4 ){
+	// 		$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+	// 	}
+	// 	if( $session['role_id'] == 3) {
+	// 		$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
+	// 	}
+	// 	$data['user_role_id'] 	= $session['role_id'];
+	// 	if(!empty($session)){ 
+	// 		$data['subview'] = $this->load->view("admin/inventory/index1", $data, TRUE);
+	// 		$this->load->view('admin/layout/layout_main', $data); //page load
+	// 	} else {
+	// 		redirect('admin/');
+	// 	}
+	// }
 
 
 	public function create($id = null) {
@@ -571,7 +571,6 @@ public function add_daily_package()
 			$data['breadcrumbs']	= 'purchase Pending';
 			$data['categorys']		= $this->db->get("products_categories")->result();
 			$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],1);
-
 			// dd($data['products']);
 			$data['results'] 		= $this->Inventory_model->product_list();
 			$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
@@ -1272,6 +1271,7 @@ function requisition_list(){
 	}
 	$data['session']    = $session;
 	$data['products'] 	= $this->Inventory_model->requisition_list($session);
+
 	$data['subview']    = $this->load->view("admin/inventory/requisition_list", $data);
 }
 

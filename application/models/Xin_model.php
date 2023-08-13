@@ -399,7 +399,12 @@ class Xin_model extends CI_Model {
 			$arr['emp_advanced_sal'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
-		} else if($mMethod=='advance_salary_report') {
+		}else if($mMethod=='festival_bonus' && $mClass=='payroll' ) {
+			$arr['emp_festival_bonus'] = 'active';
+			$arr['payrl_open'] = 'active';
+			return $arr;
+		}  
+		else if($mMethod=='advance_salary_report') {
 			$arr['pay_advn_rpt_active'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
