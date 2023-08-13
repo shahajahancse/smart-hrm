@@ -224,7 +224,7 @@
 
             <div class="col-md-3">
               <div class="form-group">
-                <label for="probition" class="control-label">Probation month<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                <label for="probition" class="control-label">Intern/Probation month<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                 <input class="form-control" placeholder="Number of probition month" name="probation" type="text" value="">
               </div>
             </div>
