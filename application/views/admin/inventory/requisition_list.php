@@ -21,9 +21,9 @@
         <tr>
           <th class="text-center" style="width: 50px;">No.</th>
           <th class="text-center">Item Name</th>
-          <th class="text-center">Request Date</th>
+          <th class="text-center">Req Date</th>
           <th class="text-center">Category</th>
-          <th class="text-center">Request Qty</th>
+          <th class="text-center">Req Qty</th>
           <th class="text-center">Approved Qty</th>
           <th class="text-center">Status</th>
           <th class="text-center">Action</th>
@@ -48,8 +48,8 @@
                 <div class="dropdown" >
                   <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                   <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
-                    <a class='req_id' data-id="<?= $row->id ?>" data-p="<?= $row->product_name ?>" data-c="<?= $row->category_name ?>" data-q="<?= $row->quantity ?>" data-toggle="modal" data-target="#requisition_edit" style="padding-left:5px; cursor: pointer">Edit</a><br>
-                    <a style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_requsiton/'.$row->id);?>">Delete</a>
+                    <a class='req_id text-info' data-id="<?= $row->prd_id ?>" data-p="<?= $row->product_name ?>" data-c="<?= $row->category_name ?>" data-q="<?= $row->quantity ?>" data-toggle="modal" data-target="#requisition_edit" style="padding-left:5px; cursor: pointer"><b>Edit</b></a><br>
+                    <a class="text-danger"style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_requsiton/'.$row->prd_id);?>"><b>Delete</b></a>
                   </div>
                 </div>
               <?php } else { echo ""; } ?>

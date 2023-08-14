@@ -39,18 +39,10 @@ $(function() {
                 <thead>
                     <tr>
                         <th class="text-center" style="width:20px;">No.</th>
-                        <?php if($user_role_id==1) {?>
                         <th class="text-center" style="width:100px;">Requisition By</th>
                         <th class="text-center" style="width:20px;">Status</th>
                         <th class="text-center" style="width:20px;">Request Date</th>
                         <th class="text-center" style="width:50px;">Action</th>
-                        <?php }?>
-                        <?php if($user_role_id==4) {?>
-                        <th class="text-center" style="width:100px;">Requesition By</th>
-                        <th class="text-center" style="width:20px;">Status</th>
-                        <th class="text-center" style="width:20px;">Request Date</th>
-                        <th class="text-center" style="width:50px;">Action</th>
-                        <?php }?>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,66 +59,27 @@ $(function() {
                         <td class="text-center"><?php echo date('d-m-Y', strtotime($rows->created_at)); ?></td>
                         <!-- <td class="text-center"> <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>"><i class="fa fa-info" aria-hidden="true"></i> Details</td> -->
                         <td class="text-center">
-                            <!-- <div class="dropdown">
-                      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Action
-                      </button>
-                      <div class="dropdown-menu" style=" min-width:110px !important;border-radius:0;line-height: 1.7;"  aria-labelledby="dropdownMenuButton">
-                        
-                       
-                        <a style="padding-left:10px;" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a> <hr>
-                       <?php if($rows->status==1) {?>
-                         <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a> <hr>
-                         <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_delete/'.$rows->id);?>">Delete</a>
-                        <?php }?>
-                       
-                        
-                    
-                      </div>
-                 </div> -->
-
-
-
                             <div class="dropdown">
-
-                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Action
                                 </button>
-
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-
+                                <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                                     <?php
                                       if($session['role_id'] =1) { ?>
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-
-
+                                    <a style="padding-left:5px;" class="text-primary"  href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>"><b>Details</b></a><br>
                                     <?php if($rows->status==4 || $rows->status==1) {?>
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a>
+                                    <a style="padding-left:5px;"  href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>"><b>Edit</b></a>
                                     <br>
-                                    <a style="padding-left:5px; "
-                                        href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Rejected</a>
+                                    <a style="padding-left:5px; " class="text-danger" href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>"><b>Rejected</b></a>
                                     <?php }?> <?php if($rows->status==2) {?>
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_delivered/'.$rows->id);?>">Order
-                                        Received</a> <br>
+                                    <a style="padding-left:5px;"   href="<?= base_url('admin/inventory/product_purchase_delivered/'.$rows->id);?>"><b>Order Received</b></a> <br>
                                     <?php }
                                     } ?>
                                 </div>
-
+                            </div>
                         </td>
 
-
-
-
-
-                        <?php } ?>
-                        <?php if($user_role_id==4) {?>
+                        <?php }  if($user_role_id==4) {?>
                         <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                         <td class="text-center"><?php echo $rows->status==1 ? "
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" :
@@ -134,41 +87,22 @@ $(function() {
                             ?></td>
                         <td class="text-center"><?php echo $rows->created_at; ?></td>
                         <td class="text-center">
-                            <!-- <a class="btn btn-sm btn-info" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>"><i class="fa fa-eye" aria-hidden="true"></i>Edit</a> -->
-
-
                             <div class="dropdown">
-
-                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Action
                                 </button>
-
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-
-                                    <?php
-                              if($session['role_id'] =2) { ?>
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-
-
+                                <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
+                                    <?php if($session['role_id'] =2) { ?>
+                                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
                                     <?php if($rows->status==1) {?>
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a>
+                                    <a style="padding-left:5px;" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a>
                                     <br>
-
-                                    <?php }
-                                    } ?>
+                                    <?php } } ?>
                                 </div>
-
-
+                            </div>
                         </td>
                     </tr>
-                    <?php }
-                        } ?>
+                    <?php }} ?>
                 </tbody>
             </table>
         </div>
@@ -176,8 +110,6 @@ $(function() {
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-    //Load First row
-
     $('#purchase_table').DataTable();
 });
 </script>

@@ -100,18 +100,15 @@ public function purchase_products_requisition($id,$role_id){
 	$this->db->select('
 		p.id,
 		p.user_id,
-		p.supplier,
 		p.status,
 		p.created_at,
 		p.updated_by,
 		emp.first_name,
-		emp.last_name, 
-		ps.name,
-		ps.company,
+		emp.last_name
 	')
-	->from('products_purches as p')
+	->from('products_purches_details as p')
 	->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left')
-	->join('product_supplier as ps', 'ps.id = p.supplier', 'left')
+	// ->join('product_supplier as ps', 'ps.id = p.supplier', 'left')
 	->order_by('p.id', 'desc');
 	return	$this->db->get()->result();
 } 
@@ -214,28 +211,23 @@ public function purchase_products_status($id,$role_id,$status){
 		$this->db->select('
 		            xin_employees.first_name,
 		            xin_employees.last_name,
-				
-					products_purches.status,
 					products.product_name,
 					products_purches_details.quantity,
 					products_purches_details.ap_quantity,
 					products_purches_details.id,
 					products_purches_details.amount,
-					products_purches_details.purches_id,
 					products_purches_details.created_at
 				')
 
 		// ->from('product_supplier')
-		->from('products_purches')
+		// ->from('products_purches')
 		->from('products')
 		->from('products_purches_details')
 		->from('xin_employees')
-		->where("products_purches.user_id = xin_employees.user_id")
+		->where("products_purches_details.user_id = xin_employees.user_id")
 		->where("products_purches_details.product_id = products.id")
-		->where("products_purches_details.purches_id=products_purches.id")
-		->where("products_purches_details.purches_id",$id)
-
-		->order_by('products_purches_details.purches_id', 'desc');
+		->where("products_purches_details.id",$id)
+		->order_by('products_purches_details.id', 'desc');
 		
 		
 			
@@ -247,24 +239,21 @@ public  function product_requisition_details($id){
 	$this->db->select('
 		xin_employees.first_name,
 		xin_employees.last_name,
-		products_purches.status,
+		products_purches_details.status,
 		products.product_name,
 		products_purches_details.quantity,
 		products_purches_details.ap_quantity,
 		products_purches_details.id,
 		products_purches_details.amount,
-		products_purches_details.purches_id,
 		products_purches_details.created_at
 	')
-	->from('products_purches')
 	->from('products')
 	->from('products_purches_details')
 	->from('xin_employees')
-	->where("products_purches.user_id = xin_employees.user_id")
+	->where("products_purches_details.user_id = xin_employees.user_id")
 	->where("products_purches_details.product_id = products.id")
-	->where("products_purches_details.purches_id=products_purches.id")
-	->where("products_purches_details.purches_id",$id)
-	->order_by('products_purches_details.purches_id', 'desc');
+	->where("products_purches_details.id",$id)
+	->order_by('products_purches_details.id', 'desc');
 	return $this->db->get()->result();
 }
 
@@ -366,7 +355,6 @@ public function perches_status_report($f1_date, $f2_date,$statusC) {
 	$this->db->select(" 
 		products_purches_details.id,
 		products_purches.created_at,
-		products_purches_details.purches_id,
 		products_purches_details.quantity,
 		products_purches_details.ap_quantity,
 		products_purches.status,
@@ -392,7 +380,6 @@ public function perches_status_report($f1_date, $f2_date,$statusC) {
 	->where("products_categories.id     = products.cat_id")	
 	->where("products_sub_categories.id = products.sub_cate_id")	
 	->where("products.id 				= products_purches_details.product_id")	
-	->where("products_purches.id 			= products_purches_details.purches_id")	
 	->where("xin_employees.user_id 		= products_purches.user_id")
 	->where("products_purches.created_at BETWEEN '$f1_date' AND '$f2_date'")
 	->where("products_purches.status 		= $statusC")

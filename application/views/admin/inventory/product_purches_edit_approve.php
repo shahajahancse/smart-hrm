@@ -1,6 +1,6 @@
 <?php 
 $session = $this->session->userdata('username');
-// dd($results);
+// dd($results); 
 $get_animate = $this->Xin_model->get_content_animate();
 ?>
 <style>
@@ -22,38 +22,28 @@ $get_animate = $this->Xin_model->get_content_animate();
         <thead>
           <tr>
               <th class="text-center" >No.</th>
-                <!-- <th class="text-center" >Supplier</th>
-                <th class="text-center" >Company</th> -->
                 <th class="text-center" >Product Name</th>
                 <th class="text-center" >Quantity</th>
           </tr>
         </thead>
-        <?php echo form_open('admin/inventory/product_persial_approved/'.$purches_id)?>
+        <?php echo form_open('admin/inventory/product_persial_approved/'.$id)?>
         <tbody>
             <?php $i=1;foreach($results as $row){?>
             <tr class="text-center">
                 <td><?php echo $i++?></td>
-                <!-- <td><?php echo $row->name?></td>
-                <td><?php echo $row->company?></td> -->
                 <td><?php echo $row->product_name?></td>
                 <td><input type="number" id="quantity" name="qunatity[]" min="1" style="width:20%" value="<?php echo $row->quantity?>"></td>
-                <!-- <?php if($session['role_id']!=3) {?> -->
-                <td><a href="<?php echo base_url('admin/inventory/delete_purches_item/'.$row->id.'/'.$purches_id)?>">Delete</a></td>
-                <!-- <?php }?> -->
+                <td><a href="<?php echo base_url('admin/inventory/delete_purches_item/'.$row->id.'/'.$id)?>">Delete</a></td>
                 <input type="hidden" name="r_id[]" value="<?php echo $row->id?>" >
-
             </tr>
             <?php }?>
         </tbody>
       </table>
       <input type="hidden" name="update_a" id="update_a" value="0">
-      <!-- <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/persial_approved/'.$requisition_id);?>">Approved</a> -->
-      <?php if(!empty($results)){?>
+     <?php if(!empty($results)){?>
         <?php if($session['role_id']==1) {?>
           <input type="button"  class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" onclick="upsub()" value="update">
-
           <input type="submit" id="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-         
       <?php }else{?>
         <input type="submit" id="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px; display: none;" value="Approved">
         <input  type="button" id="submit"   class="btn btn-sm btn-success pull-right" onclick="upsub()" style="margin-right: 10px;" value="update">
@@ -64,9 +54,6 @@ $get_animate = $this->Xin_model->get_content_animate();
 </div>
 
 <script>
-// $(document).ready(function () {
-//     $('#details').DataTable();
-// });
 
 function upsub(){
   document.getElementById('update_a').value = 1;
