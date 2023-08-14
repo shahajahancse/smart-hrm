@@ -61,7 +61,7 @@
     </div>
 </div>
 
-<?php if($user_info[0]->user_role_id==1){ ?>
+<?php if($user_info[0]->user_role_id==1) { ?>
 <div id="filter_hrsale" class="collapse add-formd <?php echo $get_animate;?>" data-parent="#accordion" style="">
     <div class="box mb-4 <?php echo $get_animate;?>">
         <div class="box-header  with-border">
@@ -79,15 +79,15 @@
                     <?php $hidden = array('user_id' => $session['user_id']);?>
                     <?php echo form_open('admin/employees/employees_list', $attributes, $hidden);?>
                     <?php
-  			$data = array(
-  			  'type'        => 'hidden',
-  			  'name'        => 'date_format',
-  			  'id'          => 'date_format',
-  			  'value'       => $this->Xin_model->set_date_format(date('Y-m-d')),
-  			  'class'       => 'form-control',
-  			);
-  			echo form_input($data);
-  			?>
+            $data = array(
+              'type'        => 'hidden',
+              'name'        => 'date_format',
+              'id'          => 'date_format',
+              'value'       => $this->Xin_model->set_date_format(date('Y-m-d')),
+              'class'       => 'form-control',
+            );
+    echo form_input($data);
+    ?>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -147,7 +147,7 @@
 <?php } ?>
 
 
-<?php if(in_array('201',$role_resources_ids)) {?>
+<?php if(in_array('201', $role_resources_ids)) {?>
 <div class="box mb-4 <?php echo $get_animate;?>">
     <div id="accordion">
         <div class="box-header  with-border">
@@ -355,10 +355,10 @@
                                     data-placeholder="<?php echo $this->lang->line('xin_employee_role');?>">
                                     <option value=""></option>
                                     <?php foreach($all_user_roles as $role) {?>
-                                    <?php if($user_info[0]->user_role_id==1){?>
+                                    <?php if($user_info[0]->user_role_id==1) {?>
                                     <option value="<?php echo $role->role_id?>"><?php echo $role->role_name?></option>
                                     <?php } else {?>
-                                    <?php if($role->role_id!=1){?>
+                                    <?php if($role->role_id!=1) {?>
                                     <option value="<?php echo $role->role_id?>"><?php echo $role->role_name?></option>
                                     <?php } ?>
                                     <?php } ?>
@@ -506,7 +506,7 @@
                 <?php if($count_module_attributes > 0):?>
                 <div class="row">
                     <?php foreach($module_attributes as $mattribute):?>
-                    <?php if($mattribute->attribute_type == 'date'){?>
+                    <?php if($mattribute->attribute_type == 'date') {?>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label
@@ -515,7 +515,7 @@
                                 name="<?php echo $mattribute->attribute;?>" type="text">
                         </div>
                     </div>
-                    <?php } else if($mattribute->attribute_type == 'select'){?>
+                    <?php } elseif($mattribute->attribute_type == 'select') {?>
                     <div class="col-md-4">
                         <?php $iselc_val = $this->Custom_fields_model->get_attribute_selection_values($mattribute->custom_field_id);?>
                         <div class="form-group">
@@ -530,7 +530,7 @@
                             </select>
                         </div>
                     </div>
-                    <?php } else if($mattribute->attribute_type == 'multiselect'){?>
+                    <?php } elseif($mattribute->attribute_type == 'multiselect') {?>
                     <div class="col-md-4">
                         <?php $imulti_selc_val = $this->Custom_fields_model->get_attribute_selection_values($mattribute->custom_field_id);?>
                         <div class="form-group">
@@ -546,7 +546,7 @@
                             </select>
                         </div>
                     </div>
-                    <?php } else if($mattribute->attribute_type == 'textarea'){?>
+                    <?php } elseif($mattribute->attribute_type == 'textarea') {?>
                     <div class="col-md-8">
                         <div class="form-group">
                             <label
@@ -555,7 +555,7 @@
                                 name="<?php echo $mattribute->attribute;?>" type="text">
                         </div>
                     </div>
-                    <?php } else if($mattribute->attribute_type == 'fileupload'){?>
+                    <?php } elseif($mattribute->attribute_type == 'fileupload') {?>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label
@@ -592,7 +592,7 @@
     <div class="box-header with-border">
 
         <h3 class="box-title">Employee List</h3>
-        <?php if($user_info[0]->user_role_id==1){ ?>
+        <?php if($user_info[0]->user_role_id==1) { ?>
         <div class="box-tools pull-right">
             <button class="btn btn-sm btn-info" id="inactive">Left Or Resign List</button>
             <a class="text-dark collapsed" data-toggle="collapse" href="#filter_hrsale" aria-expanded="false">
@@ -652,10 +652,10 @@
                             <div class="box-datatable ">
                                 <table class="datatables-demo table table-responsive table-striped table-bordered"
                                     id="left_table">
-                                    <?php 
-                if(count($lefts)==''){
-                  echo "<h3 class='text-center text-danger'>Data not Found</h3>";
-                }else{?>
+                                    <?php
+        if(count($lefts)=='') {
+            echo "<h3 class='text-center text-danger'>Data not Found</h3>";
+        } else {?>
                                     <thead>
                                         <tr>
                                             <th class="text-center" scope="col">Sl. No.</th>
@@ -667,7 +667,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $i=1; foreach($lefts as $left){?>
+                                        <?php $i=1;
+            foreach($lefts as $left) {?>
                                         <tr>
                                             <td class="text-center" scope="row"><?php echo $i++?></td>
                                             <td class="text-center"><?php echo $left->first_name.' '.$left->last_name?>
@@ -679,7 +680,8 @@
                                                     href="<?php echo base_url('admin/employees/detail/').$left->user_id?>"><i
                                                         class="fa fa-eye"></i> Details</a></td>
                                         </tr>
-                                        <?php }}?>
+                                        <?php }
+            }?>
                                     </tbody>
                                 </table>
                             </div>
@@ -690,10 +692,10 @@
                         <div class="box-body">
                             <div class="box-datatable">
                                 <table class="datatables-demo table table-striped table-bordered" id="resign_table">
-                                    <?php 
-                        if(count($resigns)==''){
-                            echo "<h3 class='text-center text-danger'>Data not Found</h3>";
-                        }else{?>
+                                    <?php
+                    if(count($resigns)=='') {
+                        echo "<h3 class='text-center text-danger'>Data not Found</h3>";
+                    } else {?>
                                     <thead>
                                         <tr>
                                             <th class="text-center" scope="col">Sl. No.</th>
@@ -705,7 +707,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $i=1; foreach($resigns as $resign){?>
+                                        <?php $i=1;
+                        foreach($resigns as $resign) {?>
                                         <tr>
                                             <td class="text-center" scope="row"><?php echo $i++?></td>
                                             <td class="text-center">
@@ -717,7 +720,8 @@
                                                     href="<?php echo base_url('admin/employees/detail/').$resign->user_id?>"><i
                                                         class="fa fa-eye"></i> Details</a></td>
                                         </tr>
-                                        <?php } }?>
+                                        <?php }
+                        }?>
                                     </tbody>
                                 </table>
                             </div>
