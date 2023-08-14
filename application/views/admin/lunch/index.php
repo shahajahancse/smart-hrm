@@ -157,7 +157,7 @@ function hrp(id, status) {
             status: status,
         },
         success: function(response) {
-            showSuccessAlert(response);
+            showSuccessAlert(response);         
         },
         error: function(xhr, status, error) {
             console.log(error);
@@ -182,19 +182,11 @@ function calmeal() {
         method: 'POST',
         data: data,
         success: function(response) {
-            // {
-            //     "total_m": 524,
-            //     "total_emp_m": 503,
-            //     "total_emp_cost": 22635,
-            //     "total_ge_m": 21,
-            //     "total_ge_cost": 1890,
-            //     "total_cost": 24525
-            // }
+            
             $('#total_meals').val(response.total.total_m);
             $('#total_emp_m').val(response.total.total_emp_m);
             $('#total_ge_m').val(response.total.total_ge_m);
             $('#total_amounts').val(response.total.total_cost);
-
             $('#f_date').html(response.total.first_date);
             $('#l_date').html(response.total.second_date);
             $('#e_m').html(response.total.total_emp_m);
