@@ -40,19 +40,19 @@ class Lunch extends MY_Controller
         if (empty($session)) {
             redirect('admin/');
         }
-            $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
-            $data['first_date']=$result->end_date;
-            $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
-            $data['breadcrumbs'] = 'Lunch';
-            $data['path_url'] = 'lunch';
-            $data['session'] = $session;
-            if (!empty($session)) {
-                $data['subview'] = $this->load->view("admin/lunch/index", $data, true);
-                $this->load->view('admin/layout/layout_main', $data); //page load
-            } else {
-                redirect('admin/');
-            }
-        
+        $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
+        $data['first_date']=$result->end_date;
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch';
+        $data['path_url'] = 'lunch';
+        $data['session'] = $session;
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/index", $data, true);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+
     }
     public function today_lunch($id = null)
     {
@@ -805,9 +805,6 @@ class Lunch extends MY_Controller
         } else {
             echo $this->load->view("admin/lunch/v_report", $data, true);
         }
-
-
-
     }
 
 
@@ -840,7 +837,6 @@ class Lunch extends MY_Controller
         $this->db->order_by('date', 'desc');
         $data['payment_data'] = $this->db->get('lunch_vendor_meal')->result();
         if (!empty($session)) {
-
             $data['lunchtable'] = $this->load->view("admin/lunch/lunchtable", $data, true);
             $data['subview'] = $this->load->view("admin/lunch/vendor_lunch_list", $data, true);
             $this->load->view('admin/layout/layout_main', $data); //page load
@@ -850,7 +846,7 @@ class Lunch extends MY_Controller
     }
 
 
-    // ============================ Vendor Pakage Payment ============================
+    // ============================ Vendor Package Payment ============================
 
     public function lunch_menu($id = null)
     {
