@@ -33,12 +33,12 @@
                 aria-selected="false">Promotion List</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="InternToRegularList-tab" data-toggle="tab" href="#InternToRegularList" role="tab" aria-controls="messages"
-                aria-selected="false">Intern To Regular List</a>
+            <a class="nav-link" id="InternToRegularList-tab" data-toggle="tab" href="#InternToRegularList" role="tab"
+                aria-controls="messages" aria-selected="false">Intern To Regular List</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="InternToProbationList-tab" data-toggle="tab" href="#InternToProbationList" role="tab" aria-controls="messages"
-                aria-selected="false">Intern To Probation List</a>
+            <a class="nav-link" id="InternToProbationList-tab" data-toggle="tab" href="#InternToProbationList"
+                role="tab" aria-controls="messages" aria-selected="false">Intern To Probation List</a>
         </li>
     </ul>
     <!-- Tab panes -->
@@ -63,7 +63,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($results as $key => $row) { if($row->status==1){?>
+                            <?php foreach ($results as $key => $row) {
+                                if($row->status==1) {?>
                             <tr>
                                 <td><?php echo $key + 1; ?></td>
                                 <td><?php echo $row->first_name .' '. $row->last_name; ?></td>
@@ -72,9 +73,10 @@
                                 <td><?php echo $row->date_of_joining; ?></td>
                                 <td><?php echo $row->old_salary; ?></td>
                                 <td><?php echo $row->new_salary; ?></td>
-                                <td><?php echo $row->letter_status == 1 ? "Yes":"No"; ?></td>
+                                <td><?php echo $row->letter_status == 1 ? "Yes" : "No"; ?></td>
                             </tr>
-                            <?php } }?>
+                            <?php }
+                                }?>
                         </tbody>
                     </table>
                 </div>
@@ -97,7 +99,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($results as $key => $row) {  if($row->status==2){?>
+                            <?php foreach ($results as $key => $row) {
+                                if($row->status==2) {?>
                             <tr>
                                 <td><?php echo $key + 1; ?></td>
                                 <td><?php echo $row->first_name .' '. $row->last_name; ?></td>
@@ -106,9 +109,10 @@
                                 <td><?php echo $row->date_of_joining; ?></td>
                                 <td><?php echo $row->old_salary; ?></td>
                                 <td><?php echo $row->new_salary; ?></td>
-                                <td><?php echo $row->letter_status == 1 ? "Yes":"No"; ?></td>
+                                <td><?php echo $row->letter_status == 1 ? "Yes" : "No"; ?></td>
                             </tr>
-                            <?php }} ?>
+                            <?php }
+                                } ?>
                         </tbody>
                     </table>
                 </div>
@@ -131,7 +135,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($results as $key => $row) {  if($row->status==3){?>
+                            <?php foreach ($results as $key => $row) {
+                                if($row->status==3) {?>
                             <tr>
                                 <td><?php echo $key + 1; ?></td>
                                 <td><?php echo $row->first_name .' '. $row->last_name; ?></td>
@@ -140,10 +145,11 @@
                                 <td><?php echo $row->date_of_joining; ?></td>
                                 <td><?php echo $row->old_salary; ?></td>
                                 <td><?php echo $row->new_salary; ?></td>
-                                <td><?php echo $row->letter_status == 1 ? "Yes":"No"; ?></td>
+                                <td><?php echo $row->letter_status == 1 ? "Yes" : "No"; ?></td>
                                 <!-- <td><a href="<?php echo base_url('admin/employees/pip_letter_pdf/'.$row->id); ?>" class="btn btn-info btn-sm">Print PDF</a></td> -->
                             </tr>
-                            <?php } }?>
+                            <?php }
+                                }?>
                         </tbody>
                     </table>
                 </div>
@@ -166,7 +172,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($results as $key => $row) {  if($row->status==5){?>
+                            <?php foreach ($results as $key => $row) {
+                                if($row->status==5) {?>
                             <tr>
                                 <td><?php echo $key + 1; ?></td>
                                 <td><?php echo $row->first_name .' '. $row->last_name; ?></td>
@@ -175,10 +182,11 @@
                                 <td><?php echo $row->date_of_joining; ?></td>
                                 <td><?php echo $row->old_salary; ?></td>
                                 <td><?php echo $row->new_salary; ?></td>
-                                <td><?php echo $row->letter_status == 1 ? "Yes":"No"; ?></td>
+                                <td><?php echo $row->letter_status == 1 ? "Yes" : "No"; ?></td>
                                 <!-- <td><a href="<?php echo base_url('admin/employees/pip_letter_pdf/'.$row->id); ?>" class="btn btn-info btn-sm">Print PDF</a></td> -->
                             </tr>
-                            <?php } }?>
+                            <?php }
+                                }?>
                         </tbody>
                     </table>
                 </div>
@@ -201,7 +209,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($results as $key => $row) {  if($row->status==4){?>
+                            <?php foreach ($results as $key => $row) {
+                                if($row->status==4) {?>
                             <tr>
                                 <td><?php echo $key + 1; ?></td>
                                 <td><?php echo $row->first_name .' '. $row->last_name; ?></td>
@@ -210,19 +219,17 @@
                                 <td><?php echo $row->date_of_joining; ?></td>
                                 <td><?php echo $row->old_salary; ?></td>
                                 <td><?php echo $row->new_salary; ?></td>
-                                <td><?php echo $row->letter_status == 1 ? "Yes":"No"; ?></td>
+                                <td><?php echo $row->letter_status == 1 ? "Yes" : "No"; ?></td>
                                 <!-- <td><a href="<?php echo base_url('admin/employees/pip_letter_pdf/'.$row->id); ?>" class="btn btn-info btn-sm">Print PDF</a></td> -->
                             </tr>
-                            <?php } }?>
+                            <?php }
+                                }?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
     </div>
-
-
 </div>
 
 
@@ -235,29 +242,16 @@ $(document).ready(function() {
     const button2 = document.getElementById("profile-tab");
     const button3 = document.getElementById("messages-tab");
     const input = document.getElementById("status");
-
     // Add an event listener to the button
     button1.addEventListener("click", function() {
-
         input.value = "1";
     });
     button2.addEventListener("click", function() {
-
         input.value = "2";
     });
     button3.addEventListener("click", function() {
-
         input.value = "3";
     });
-
-
-
-
-
-
-
-
-
 });
 </script>
 <script>
@@ -265,9 +259,7 @@ function monthly_report() {
 
     var ajaxRequest; // The variable that makes Ajax possible!
     ajaxRequest = new XMLHttpRequest();
-
     status = document.getElementById('status').value;
-
     // if(status)
     // {
 

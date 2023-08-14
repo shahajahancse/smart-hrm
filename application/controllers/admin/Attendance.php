@@ -790,7 +790,7 @@ class Attendance extends MY_Controller
         $this->db->where('floor_status !=', $data['empinfo']->floor_status);
         $this->db->where_in('user_role_id', array(2,3,4,5))->where_in('status', array(1,4,5,6));
         $data['emp_floor']=$this->db->get('xin_employees')->result();
-        $this->db->select("*");
+        $this->db->select("xin_employee_floor_move.*");
         $this->db->where("user_id", $userid);
         if ($firstdate!=null && $seconddate!=null) {
             $f1_date=date('Y-m-d', strtotime($firstdate));
@@ -1121,3 +1121,4 @@ class Attendance extends MY_Controller
         }
     }
 }
+
