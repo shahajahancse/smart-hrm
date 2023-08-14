@@ -64,8 +64,8 @@ $(function() {
                                     Action
                                 </button>
                                 <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
-                                    <?php
-                                      if($session['role_id'] =1) { ?>
+                                    <!-- < ? php
+                                    //   if($session['role_id'] =1) { ?> -->
                                     <a style="padding-left:5px;" class="text-primary"  href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>"><b>Details</b></a><br>
                                     <?php if($rows->status==4 || $rows->status==1) {?>
                                     <a style="padding-left:5px;"  href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>"><b>Edit</b></a>
@@ -73,8 +73,8 @@ $(function() {
                                     <a style="padding-left:5px; " class="text-danger" href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>"><b>Rejected</b></a>
                                     <?php }?> <?php if($rows->status==2) {?>
                                     <a style="padding-left:5px;"   href="<?= base_url('admin/inventory/product_purchase_delivered/'.$rows->id);?>"><b>Order Received</b></a> <br>
-                                    <?php }
-                                    } ?>
+                                    <!-- < ?php } -->
+                                    <!-- // } ?> -->
                                 </div>
                             </div>
                         </td>
@@ -102,7 +102,7 @@ $(function() {
                             </div>
                         </td>
                     </tr>
-                    <?php }} ?>
+                    <?php }}} ?>
                 </tbody>
             </table>
         </div>
