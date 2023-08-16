@@ -886,23 +886,26 @@ class Attendance_model extends CI_Model
         }
     }
 
-    public function get_movement_register($id = null)
-    {
-        $this->db->select('
-                empm.id, em.first_name, em.last_name, empm.employee_id as emp_id, empm.date, empm.out_time, empm.in_time, empm.reason, empm.status
-            ');
-
-        $this->db->from('xin_employee_move_register as empm');
-        $this->db->from('xin_employees as em');
-
-        if ($id != null) {
-            $this->db->where('empm.employee_id', $id);
-        }
-
-        $this->db->where('em.user_id = empm.employee_id');
-        $this->db->order_by('empm.id', 'DESC');
-        return $result = $this->db->get()->result();
-    }
+  public function get_movement_register($id = null)
+  {
+      $this->db->select('
+          empm.id, mr.title AS title, em.first_name, em.last_name, empm.employee_id AS emp_id, empm.date, empm.out_time, empm.in_time, empm.status
+      ');
+  
+      $this->db->from('xin_employee_move_register as empm');
+  
+      if ($id != null) {
+          $this->db->where('empm.employee_id', $id);
+      }
+  
+      $this->db->join('xin_employees as em', 'em.user_id = empm.employee_id');
+      $this->db->join('xin_employee_move_reason as mr', 'empm.reason = mr.id');
+  
+      $this->db->order_by('empm.id', 'DESC');
+  
+      return $this->db->get()->result();
+  }
+  
 
 
     public function apply_for_ta_da($id, $amount, $details)
