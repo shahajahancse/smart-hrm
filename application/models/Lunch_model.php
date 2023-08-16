@@ -46,10 +46,14 @@ class Lunch_model extends CI_Model {
                     unset($data[$k]);
                 }
             }
-        }        
+        }
+        
         return $data;
     }
-    public function all_employees()
+
+
+
+    public function all_employees($date)
     {
         $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4, 5) AND user_id NOT IN (27,30,46,63)");
 
@@ -59,7 +63,7 @@ class Lunch_model extends CI_Model {
     public function process($firstDate, $secondDate, $probable_date)
     {
 
-      $query = $this->all_employees();
+      $query = $this->all_employees($firstDate);
 
       foreach($query as $row){
 

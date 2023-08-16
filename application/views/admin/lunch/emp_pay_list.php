@@ -460,10 +460,13 @@ function updateprocess() {
                 probable_date: next_date,
                 status: 1
             },
-            success: function(response) {
-                // Handle the success response from the server
-                document.getElementById("loading").style.visibility = "hidden";
-                showSuccessAlert(response);
+            success: function(res) {
+                var response = JSON.parse(res);
+                if (response.error !== undefined) {
+                    showErrorAlert(response.error);
+                }else{
+                    showSuccessAlert(response.success);
+                }
             },
             error: function(xhr, status, error) {
                 // Handle the error response from the server
