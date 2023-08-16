@@ -1,4 +1,5 @@
 <?php 
+
 $total_amount=0;
 $paid_amount=0;
 $total_emp=0;
@@ -94,6 +95,8 @@ td {}
                             <th>Designation</th>
                             <th>Collection.M</th>
                             <th>Amount</th>
+                            <th>Previous Amount</th>
+                            <th>Net Amount</th>
                             <th>Taken.M</th>
                             <th>Taken.A</th>
                             <th>Balance.M</th>
@@ -128,7 +131,8 @@ td {}
                             <td><?= $data->designation_name ?></td>
                             <td><?= $data->pay_amount/45?></td>
                             <td><?= $data->pay_amount?></td>
-
+                            <td><?= $data->prev_amount?></td>
+                            <td><?= $data->collection_amount?></td>
                             <td><?= $taken_meal ?></td>
                             <td><?= $taken_meal*45 ?></td>
                             <td><?= $balanceMeal?></td>
