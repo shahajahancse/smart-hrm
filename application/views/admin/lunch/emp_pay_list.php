@@ -425,16 +425,18 @@ $(document).ready(function() {
                 secondDate: secondDate,
                 probable_date: probable_date
             },
-            success: function(response) {
-                // Handle the success response from the server
-                document.getElementById("loading").style.visibility = "hidden";
-                showSuccessAlert(response);
+            success: function(res) {
+                var response = JSON.parse(res);
+                if (response.error !== undefined) {
+                    showErrorAlert(response.error);
+                }else{
+                    showSuccessAlert(response.success);
+                }
             },
+            
             error: function(xhr, status, error) {
-                // Handle the error response from the server
                 console.log(error);
                 document.getElementById("loading").style.visibility = "hidden";
-
             }
         });
     });

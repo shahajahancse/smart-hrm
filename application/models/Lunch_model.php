@@ -14,12 +14,13 @@ class Lunch_model extends CI_Model {
         $this->db->select('
                     u.user_id as emp_id, 
                     u.first_name, 
+                    u.status, 
                     u.last_name, 
                     at.status as p_stutus
                 ');
             $this->db->from('xin_employees as u');
             $this->db->join('xin_attendance_time as at', 'u.user_id = at.employee_id', 'left');
-            $this->db->where_in('u.status', array(1,4,5))->where('at.attendance_date', $date)->group_by('u.user_id');
+            $this->db->where('at.attendance_date', $date)->group_by('u.user_id');
             $data = $this->db->order_by('at.status', 'DESC')->get()->result();
 
         if ($status == true) {
@@ -32,10 +33,22 @@ class Lunch_model extends CI_Model {
                 @$data[$key]->lunch_id = $data2->lunch_id;
             }
         }
-        
+        foreach ($data as $k => $r) {
+            if ($r->status == 2 || $r->status == 3) {
+                
+                $this->db->select('effective_date');
+                $this->db->from('xin_employee_left_resign');
+                $this->db->where('emp_id', $r->emp_id);
+                $resign_data = $this->db->get()->row();
+                // If the employee has resigned and effective date is before $date, remove from array
+                if ($resign_data && $resign_data->effective_date < $date) {
+                    // dd($resign_data);
+                    unset($data[$k]);
+                }
+            }
+        }        
         return $data;
     }
-
     public function all_employees()
     {
         $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4, 5) AND user_id NOT IN (27,30,46,63)");
