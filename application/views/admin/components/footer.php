@@ -217,8 +217,7 @@ function showErrorAlert(message) {
         icon: 'error',
         title: 'Error',
         text: message,
-        timer: 2000,
-        showConfirmButton: false
+        showConfirmButton: true
     }).then(function() {
         location.reload();
     });
