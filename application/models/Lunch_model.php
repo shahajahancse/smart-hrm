@@ -91,7 +91,7 @@ class Lunch_model extends CI_Model {
         };
 
         $prev_amount=$prev_pay-$prev_cost;
-        $probable_meal=$this->chackprobalemeal($secondDate,$probable_date, $emp_id);
+        $probable_meal = $this->chackprobalemeal($secondDate,$probable_date, $emp_id);
         $pay_amount=$probable_meal*45;
         $collection_amount=$pay_amount-$prev_amount;
         $from_date=$firstDate;
@@ -136,13 +136,9 @@ class Lunch_model extends CI_Model {
 
     public function chackprobalemeal($first_date, $second_date, $emp_id = null) {
 
-        if (in_array($emp_id, array(70, 71)) && $second_date < '2023-08-16') {
+        /*if (in_array($emp_id, array(70, 71)) && $second_date < '2023-08-16') {
             $first_date = '2023-07-23';
-        } else if (in_array($emp_id, array(72,73,74,75)) && $second_date < '2023-08-16') {
-            $first_date = '2023-07-24';
-        } else if (in_array($emp_id, array(76,77,79)) && $second_date < '2023-08-16') {
-            $first_date = '2023-08-02';
-        }
+        } */
 
         $date1 = new DateTime($first_date);
         $date2 = new DateTime($second_date);
@@ -167,9 +163,6 @@ class Lunch_model extends CI_Model {
             }
         }
 
-        if ($emp_id == 78) {
-            return 0;
-        }
         return $count - $total_day;
     }
     

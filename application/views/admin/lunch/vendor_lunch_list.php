@@ -431,7 +431,7 @@ function calmeal() {
                 to_date: to_date,
             },
             success: function(response) {
-                var newWindow = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+                var newWindow = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1000,height=800');
                 newWindow.document.write(response);
             },
             error: function(xhr, status, error) {
