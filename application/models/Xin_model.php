@@ -46,13 +46,7 @@ class Xin_model extends CI_Model {
 		$this->db->query("UPDATE `xin_salary_payslips` SET `modify_salary`=".$modify_salary." WHERE `employee_id`=".$id);	
 	}
 	public function update_salaryall($id,$modify_salary,$date,$m_day){
-
-	
-
-
-	
 		$this->db->query("UPDATE `xin_salary_payslips` SET `m_pay_day` = '".$m_day."', `modify_salary` = '".$modify_salary."' WHERE `employee_id` = '".$id."' AND `salary_month` = '".$date."'");
-	
 	}
 		
 	// is logged in to system
@@ -398,11 +392,11 @@ class Xin_model extends CI_Model {
 			$arr['payrl_open'] = 'active';
 			return $arr;
 		} else if($mMethod=='currency_converter') {
-			$arr['curren_conv_active'] = 'active';
+			$arr['selary_emp_active'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
-		} else if($mMethod=='advance_salary') {
-			$arr['pay_advn_active'] = 'active';
+		} else if($mMethod=='advanced_salary' && $mClass=='payroll' ) {
+			$arr['emp_advanced_sal'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
 		} else if($mMethod=='advance_salary_report') {
@@ -1287,7 +1281,7 @@ class Xin_model extends CI_Model {
 			$this->db->where('status', $status);
 		}
 		$this->db->where("notify_incre_prob BETWEEN '$start_date' and '$end_date'");
-		$this->db->order_by('notify_incre_prob', 'ASC');
+		$this->db->order_by('notify_incre_prob', 'DESC');
 		$query = $this->db->get('xin_employees');
 		return $query->result();	
 	}
@@ -2982,7 +2976,6 @@ class Xin_model extends CI_Model {
 		// get userinfo and role
 		$user = $this->read_user_info($session['user_id']);
 		$role_user = $this->read_user_role_info($user[0]->user_role_id);
-		
 		$role_resources_ids = explode(',',$role_user[0]->role_resources);
 		return $role_resources_ids;
 	}

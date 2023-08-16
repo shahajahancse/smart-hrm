@@ -123,6 +123,8 @@ class Lunch_model extends CI_Model {
             $first_date = '2023-07-23';
         } else if (in_array($emp_id, array(72,73,74,75)) && $second_date < '2023-08-16') {
             $first_date = '2023-07-24';
+        } else if (in_array($emp_id, array(76,77,79)) && $second_date < '2023-08-16') {
+            $first_date = '2023-08-02';
         }
 
         $date1 = new DateTime($first_date);
@@ -146,6 +148,10 @@ class Lunch_model extends CI_Model {
                     $total_day = $total_day + 1;
                 }
             }
+        }
+
+        if ($emp_id == 78) {
+            return 0;
         }
         return $count - $total_day;
     }
@@ -333,6 +339,54 @@ class Lunch_model extends CI_Model {
             return 0;
         }
     } 
+    public function chack_meal_employee($first_date,$second_date){
+        $this->db->select('*');
+        $this->db->where('date >=', $first_date);
+        $this->db->where('date <=', $second_date);
+        $data = $this->db->get('lunch')->result();
+        if (count($data) > 0) {
+            $total_m = 0;
+            $total_emp_m = 0;
+            $total_emp_cost = 0;
+            $total_ge_m = 0;
+            $total_ge_cost = 0;
+            $total_cost = 0;
+        
+            foreach ($data as $m) {
+                $total_m += $m->total_m;
+                $total_emp_m += $m->emp_m;
+                $total_emp_cost += $m->emp_cost;
+                $total_ge_m += $m->guest_m;
+                $total_ge_cost += $m->guest_cost;
+                $total_cost += $m->total_cost;
+            }
+        
+            $result = [
+                'total_m' => $total_m,
+                'total_emp_m' => $total_emp_m,
+                'total_emp_cost' => $total_emp_cost,
+                'total_ge_m' => $total_ge_m,
+                'total_ge_cost' => $total_ge_cost,
+                'total_cost' => $total_cost,
+                'first_date' => $first_date,
+                'second_date' => $second_date
+            ];
+        } else {
+            $result = [
+                'total_m' => 0,
+                'total_emp_m' => 0,
+                'total_emp_cost' => 0,
+                'total_ge_m' => 0,
+                'total_ge_cost' => 0,
+                'total_cost' => 0,
+                'first_date' => $first_date,
+                'second_date' => $second_date
+            ];
+        }
+        return $result;
+        
+    } 
+
     public function chack_meal_data($first_date, $second_date) {
         $this->db->select('*');
         $this->db->where('date >=', $first_date);

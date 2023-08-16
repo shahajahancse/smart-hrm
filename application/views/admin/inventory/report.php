@@ -47,13 +47,13 @@
     
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
-        <button class="btn btn-info btn-sm"  onclick="Inv_Report(1)">Panding</button>
+        <button class="btn btn-info btn-sm"  onclick="Inv_Report(1)">Pending</button>
         <button class="btn btn-info btn-sm"  onclick="Inv_Report(2)">Approved</button>
         <button class="btn btn-info btn-sm"  onclick="Inv_Report(4)">Reject</button>
         <button class="btn btn-info btn-sm"  onclick="Inv_Report(3)">Delivered Item</button>
       </div>
       <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
-        <button class="btn btn-info btn-sm"  onclick="Per1_Report(1)">Panding</button>
+        <button class="btn btn-info btn-sm"  onclick="Per1_Report(1)">Pending</button>
         <button class="btn btn-info btn-sm"  onclick="Per1_Report(2)">Approved</button>
         <button class="btn btn-info btn-sm"  onclick="Per1_Report(4)">Reject</button>
         <button class="btn btn-info btn-sm"  onclick="Per1_Report(3)">Receive</button>

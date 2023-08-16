@@ -232,6 +232,9 @@ p {
             <label for="">Total Amount</label>
             <input class="inputb" type="text" name="" id="total_amounts" disabled>
         </div>
+        <div>
+            <a class="btn btn-primary btn-sm" onclick="print_vendor_data()">Print</a>
+        </div>
     </div>
     <div id="tablebody">
         <?php echo $lunchtable  ?>
@@ -414,4 +417,27 @@ function calmeal() {
     $(document).ready(function() {
         calmeal();
     });
+</script>
+<script>
+    function print_vendor_data(){
+        var from_date= $('#from_date').val();
+        var to_date= $('#to_date').val();
+        url = '<?= base_url('/admin/lunch/print_vendor_data/')?>';
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                from_date: from_date,
+                to_date: to_date,
+            },
+            success: function(response) {
+                var newWindow = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+                newWindow.document.write(response);
+            },
+            error: function(xhr, status, error) {
+                console.log('AJAX request error');
+                console.log(xhr.responseText);
+            }
+        });
+    }
 </script>

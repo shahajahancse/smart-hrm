@@ -54,19 +54,18 @@
   </div>
 </div>
 
-            <?php echo validation_errors(); ?>
-            <?php if($this->session->flashdata('success')):?>
-              <div class="alert alert-success">
-                <?php echo $this->session->flashdata('success');?>
-              </div>
-            <?php endif; ?> 
+<?php echo validation_errors(); ?>
+<?php if($this->session->flashdata('success')):?>
+  <div class="alert alert-success">
+    <?php echo $this->session->flashdata('success');?>
+  </div>
+<?php endif; ?> 
 
-            <?php if($this->session->flashdata('warning')):?>
-              <div class="alert alert-warning">
-                <?php echo $this->session->flashdata('warning');?>
-              </div>
-            <?php endif; ?> 
-
+<?php if($this->session->flashdata('warning')):?>
+  <div class="alert alert-warning">
+    <?php echo $this->session->flashdata('warning');?>
+  </div>
+<?php endif; ?> 
 
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border">
@@ -91,7 +90,10 @@
               <td><?= $row->sub_cate_name; ?></td>
               <td><?= $row->category_name; ?></td>
               <td><?= $row->status; ?></td>
-              <td><a href="<?= base_url('admin/inventory/sub_category/'.$row->id);?>">Edit</a></td>
+              <td>
+                <a class="btn- btn-sm btn-info" href="<?= base_url('admin/inventory/sub_category/'.$row->id);?>">Edit</a>
+                <a class="btn- btn-sm btn-danger" href="<?= base_url('admin/inventory/delete_sub_category/'.$row->id);?>">Delete</a>
+             </td>
             </tr>
           <?php } ?>
         </tbody>
@@ -99,12 +101,8 @@
     </div>
   </div>
 </div>
-
- 
 <script>
-
   $(document).ready(function() {
     $('#example').DataTable();
   });
-
 </script>

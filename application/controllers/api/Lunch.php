@@ -39,7 +39,6 @@ class Lunch extends API_Controller
     public function index()
     {
         $authorization = $this->input->get_request_header('Authorization');
-        // dd($authorization);
         $user_info = api_auth($authorization);
         if ($user_info['status'] == true) {
             $user_data=$user_info['user_info'];
@@ -82,9 +81,9 @@ class Lunch extends API_Controller
         } else {
             $this->api_return([
                 'status'  =>   false,
-                'message'  =>   'Unauthorized User',
+                'message'  =>   'Unsuccessful',
                 'data'     =>   [],
-            ], 401);
+            ], 404);
         }
     }
     public function lunch_search()
@@ -112,9 +111,9 @@ class Lunch extends API_Controller
         } else {
             $this->api_return([
                 'status'  =>   false,
-                'message'  =>   'Unauthorized User',
+                'message'  =>   'Unsuccessful',
                 'data'     =>   [],
-            ], 401);
+            ], 404);
         }
     }
 }

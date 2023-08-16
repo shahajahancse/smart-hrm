@@ -19,10 +19,13 @@
     color: black !important;
     width: 50%;
 }
+.col-md-3{
+    width: 24%;
+}
 .cat4{
     background-color: #dd8b8c47 !important;
     color: black !important;
-    width: 37%;
+    width: 24%;
 
 }
 thead{
@@ -73,6 +76,8 @@ tbody{
                     $total_net_salary=0;
                     $total_late_deduct=0;
                     $total_absent_deduct=0;
+                    $total_aba_deduct=0;
+                    $total_adv_deduct=0;
                     $total_extra_pay=0;
                     $total_modify_salary=0;
                     // grand total
@@ -81,6 +86,8 @@ tbody{
                     $grand_total_net_salary=0;
                     $grand_total_late_deduct=0;
                     $grand_total_absent_deduct=0;
+                    $grand_total_aba_deduct=0;
+                    $grand_total_adv_deduct=0;
                     $grand_total_extra_pay=0;
                     $grand_total_modify_salary=0;
 
@@ -106,6 +113,8 @@ tbody{
                     $total_net_salary=0;
                     $total_late_deduct=0;
                     $total_absent_deduct=0;
+                    $total_aba_deduct=0;
+                    $total_adv_deduct=0;
                     $total_extra_pay=0;
                     $total_modify_salary=0;
                    
@@ -132,7 +141,7 @@ tbody{
                         <th style='width: 190px;'>Status</th>
                         <th style='width: 55px;'>Leave</th>
                         <th  style='width:55px;'>Late</th>
-                        <th style='width: 139px;'>Deduction</th>
+                        <th style='width: 150px;'>Deduction</th>
                         <th  class='bnb' style="width: 37px;">Net Salary</th>
                         <th  class='bnb' style="width: 37px;">Extra Pay</th>
                          <th  class='bnb' style="width: 28px;">D.A Day</th>
@@ -183,6 +192,7 @@ tbody{
                                         <th  class=''>Late</th>
                                         <th  class=''>Abse</th>
                                         <th  class=''>BA</th>
+                                        <th  class=''>Adv</th>
                                     </tr>
                                 </table>
                             </th>
@@ -246,6 +256,7 @@ tbody{
                                     <td  class='cat4'><?=$values[$i]->late_deduct?></td>
                                     <td  class='cat4'><?=$values[$i]->absent_deduct?></td>
                                     <td  class='cat4'><?=$values[$i]->aba_deduct?></td>
+                                    <td class='cat4'><?=$values[$i]->advanced_salary?></td>
                                 </tr>
                             </table>
                         </td>
@@ -261,6 +272,8 @@ tbody{
                         $total_net_salary+=$values[$i]->net_salary;
                         $total_late_deduct+=$values[$i]->late_deduct;
                         $total_absent_deduct+=$values[$i]->absent_deduct;
+                        $total_aba_deduct+=$values[$i]->aba_deduct;
+                        $total_adv_deduct+=$values[$i]->advanced_salary;
                         $total_extra_pay+=$values[$i]->extra_pay;
                         $total_modify_salary+=$values[$i]->modify_salary;
                         // granttotal
@@ -269,6 +282,8 @@ tbody{
                         $grand_total_net_salary+=$values[$i]->net_salary;
                         $grand_total_late_deduct+=$values[$i]->late_deduct;
                         $grand_total_absent_deduct+=$values[$i]->absent_deduct;
+                        $grand_total_aba_deduct+=$values[$i]->aba_deduct;
+                        $grand_total_adv_deduct+=$values[$i]->advanced_salary;
                         $grand_total_extra_pay+=$values[$i]->extra_pay;
                         $grand_total_modify_salary+=$values[$i]->modify_salary;
                         ?>
@@ -289,9 +304,10 @@ tbody{
                                 <td colspan='1'>
                                     <table>
                                         <tr>
-                                        <td style="width: 37%;font-weight: bold;font-size: 12px;"colspan='1'><?=$total_late_deduct?></td>
-                                        <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?=$total_absent_deduct?></td>
-                                        <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'></td>
+                                        <td class="col-md-3" style="font-weight: bold;font-size: 12px;" colspan='1'><?=intval($total_late_deduct)?></td>
+                                    <td class="col-md-3" style="font-weight: bold;font-size: 12px;" colspan='1'><?=intval($total_absent_deduct)?></td>
+                                    <td class="col-md-3" style="font-weight: bold;font-size: 12px;" colspan='1'><?=intval($total_aba_deduct)?></td>
+                                    <td class="col-md-3" style="font-weight: bold;font-size: 12px;" colspan='1'><?=intval($total_adv_deduct)?></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -310,6 +326,8 @@ tbody{
                                 $total_net_salary=0;
                                 $total_late_deduct=0;
                                 $total_absent_deduct=0;
+                                $total_aba_deduct=0;
+                                $total_adv_deduct=0;
                                 $total_extra_pay=0;
                                 $total_modify_salary=0;
                             ?>
@@ -393,13 +411,14 @@ tbody{
                                         </tr>
                                     </table>
                                         
-                               </th>
+                                </th>
                                 <th>
                                     <table>
                                         <tr>
                                             <th  class=''>Late</th>
                                             <th  class=''>Abse</th>
                                             <th  class=''>BA</th>
+                                            <th  class=''>Adv</th>
 
                                         </tr>
                                     </table>
@@ -416,8 +435,6 @@ tbody{
                 <?php }
                 }
                 ?>
-
-
                 <tfoot style="font-size: 12px;font-weight: bold;">
                     <tr>
                         <td colspan='4'>Total:</td>
@@ -426,9 +443,10 @@ tbody{
                         <td colspan='1'>
                             <table>
                                 <tr>
-                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?=$total_late_deduct?></td>
-                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?=$total_absent_deduct?></td>
-                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'></td>
+                                    <td class="col-md-3" style="font-weight: bold;font-size: 12px;" colspan='1'><?=intval($total_late_deduct)?></td>
+                                    <td class="col-md-3" style="font-weight: bold;font-size: 12px;" colspan='1'><?=intval($total_absent_deduct)?></td>
+                                    <td class="col-md-3" style="font-weight: bold;font-size: 12px;" colspan='1'><?=intval($total_aba_deduct)?></td>
+                                    <td class="col-md-3" style="font-weight: bold;font-size: 12px;" colspan='1'><?=intval($total_adv_deduct)?></td>
                                 </tr>
                             </table>
                         </td>
@@ -448,9 +466,10 @@ tbody{
                         <td colspan='1'>
                             <table>
                                 <tr>
-                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?=$grand_total_late_deduct?></td>
-                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?=$grand_total_absent_deduct?></td>
-                                <td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'></td>
+                                <td style="width: 22%;font-weight: bold;font-size: 12px;" colspan='1'><?=intval($grand_total_late_deduct)?></td>
+                                <td style="width: 22%;font-weight: bold;font-size: 12px;" colspan='1'><?=intval($grand_total_absent_deduct)?></td>
+                                <td style="width: 22%;font-weight: bold;font-size: 12px;" colspan='1'><?=intval($grand_total_aba_deduct)?></td>
+                                <td style="width: 22%;font-weight: bold;font-size: 12px;" colspan='1'><?=intval($grand_total_adv_deduct)?></td>
                                 </tr>
                             </table>
                         </td>

@@ -57,10 +57,18 @@ class Movement_floor extends MY_Controller {
             $reason=$insert_id;
         }
 
-        $input_location=$this->input->post('area');
+            $this->db->select('floor_status');
+            $this->db->where('user_id', $user_id);
+            $empinfo=$this->db->get('xin_employees')->row();
+
+            if($empinfo->floor_status==5) {
+                $input_location=3;
+            } else {
+                $input_location=5;
+            }
         $input_reason=$reason;
         $input_meet_with=$this->input->post('meet_with');
-        $currentDateTime = date('g:i A');
+        $currentDateTime = date('H:i:s');
         $movementid=$user_movement[0]->id;
         $out_time_array=json_decode($user_movement[0]->out_time);
         $location_array=json_decode($user_movement[0]->location);
@@ -118,7 +126,7 @@ class Movement_floor extends MY_Controller {
             $location_array=[];
             $reason_array=[];
             $meetwith_array=[];
-            $currentDateTime = date('g:i A');
+            $currentDateTime = date('H:i:s');
             array_push($out_time_array, $currentDateTime);
             array_push($location_array, $input_location);
             array_push($reason_array, $input_reason);
@@ -166,7 +174,7 @@ class Movement_floor extends MY_Controller {
         $user_movement = $this->db->get('xin_employee_floor_move')->result();
 
         $in_time_array=json_decode($user_movement[0]->in_time);
-        $currentDateTime = date('g:i A'); 
+        $currentDateTime = date('H:i:s'); 
         array_push($in_time_array,$currentDateTime);
         $in_time=json_encode($in_time_array);
         $movementid=$user_movement[0]->id;

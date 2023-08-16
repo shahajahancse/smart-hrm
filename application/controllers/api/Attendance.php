@@ -47,11 +47,21 @@ class Attendance extends API_Controller
             $data['user_data']=$user_data;
             $datep        = date( "Y-m-d");
             $date        = date( "Y-m-01");
-            $data['present_stutas']  = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
-            $data['leave_stutas']  = $this->Salary_model->leave_count_status($userid, $date , $datep, 2);  
-            $data["today_attendance"]    = $this->Attendance_model->gettodaylog(date("Y-m-d"), $userid);
+            $present_stutas = $this->Salary_model->count_attendance_status_wise($userid, $date , $datep);
+            $details['active_day']=$present_stutas->attend;
+            $details['late_day']=$present_stutas->late_status;
+            $details['absent_day']=$present_stutas->absent;
+            $yfirst=date("Y-01-01");
+            $ysecond=date("Y-m-d");
+            $leave_stutas = $this->Salary_model->leave_count_status($userid, $yfirst , $ysecond, 2);
+            $details['leave']=$leave_stutas->el+$leave_stutas->sl;
+            $data['card_details']=$details;
+            $data["today_attendance"]    = $this->Attendance_model->gettodaylog(date("Y-m-d"), $userid); 
+            $mfirst=date("Y-m-d",strtotime('-1 month'));
+            $msecond=date("Y-m-d");
             $this->db->select("*");
             $this->db->where("employee_id", $userid);
+            $this->db->where("attendance_date BETWEEN '$mfirst' AND '$msecond'");
             $this->db->order_by("time_attendance_id", "desc");
             $data['all_attendance'] = $this->db->get('xin_attendance_time')->result();
             $this->api_return([
@@ -62,9 +72,9 @@ class Attendance extends API_Controller
         } else {
             $this->api_return([
                 'status'  =>   false,
-                'message'  =>   'Unauthorized User',
+                'message'  =>   'Unsuccessful',
                 'data'     =>   [],
-            ], 401);
+            ], 404);
         }
     }
     public function attendance_search()
@@ -90,9 +100,9 @@ class Attendance extends API_Controller
         } else {
             $this->api_return([
                 'status'  =>   false,
-                'message'  =>   'Unauthorized User',
+                'message'  =>   'Unsuccessful',
                 'data'     =>   [],
-            ], 401);
+            ], 404);
         }
     }
 }

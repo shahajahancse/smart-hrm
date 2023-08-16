@@ -14,9 +14,9 @@ class Salary_model extends CI_Model {
         set_time_limit(0);
         ini_set('memory_limit', -1);
         ini_set('max_execution_time', 0);
+        // dd($process_month);
 
         $num_of_days = date("t", strtotime($process_month));
-        $first_date  = date("Y-m-d", strtotime($process_month));
         $end_date    = date("Y-m", strtotime($process_month)).'-'.$num_of_days;
 
         $get_employee = $this->get_employee_info($grid_emp_id);
@@ -28,6 +28,7 @@ class Salary_model extends CI_Model {
             $designation_id  = $row->designation_id;
             $salary          = $row->salary;
 
+            $first_date  = date("Y-m-d", strtotime($process_month));
             // skip salary proccess
             if($salary < 1) {
                 continue;
@@ -126,8 +127,15 @@ class Salary_model extends CI_Model {
 
             // pay salary 
             $pay_salary = round(($salary - ($late_deduct + $absent_deduct)), 2);
-
-
+            $advanced_salary = $this->db->select('approved_amount')->where('emp_id',$emp_id )->where('effective_month',$process_month)->get('xin_advance_salaries');
+            if($advanced_salary->num_rows() > 0){
+                $a = $advanced_salary->row()->approved_amount;
+                $advanced = $a;
+            }
+            else{
+                    $advanced = 0;
+            }
+            // dd($advanced);
             $data = array(
                 'employee_id' => $emp_id,
                 'department_id' => $department_id,
@@ -136,7 +144,6 @@ class Salary_model extends CI_Model {
                 'location_id' => 1,
                 'salary_month' => $salary_month,
                 'basic_salary' => $salary,
-
                 'present' => $present,
                 'extra_p' => ($extra_attend != null) ? $extra_attend:0,
                 'ba_absent' => $ba_absent,
@@ -145,7 +152,6 @@ class Salary_model extends CI_Model {
                 'weekend' => ($rows->weekend != null) ? $rows->weekend:0,
                 'earn_leave' => ($leave->el != null) ? $leave->el:0,
                 'sick_leave' => ($leave->sl != null) ? $leave->sl:0,
-
                 'late_count' => ($rows->late_status != null) ? $rows->late_status:0,
                 'd_day'   => $late_day,
                 'late_deduct' => $late_deduct,
@@ -155,8 +161,8 @@ class Salary_model extends CI_Model {
                 'modify_salary' => 0,
                 'other_payment' => $extra_pay,
                 'net_salary' => $pay_salary,
-                'grand_net_salary' => ($pay_salary + $extra_pay),
-
+                'advanced_salary' => $advanced,
+                'grand_net_salary' => (($pay_salary + $extra_pay ) - $advanced),
                 'wages_type' => 1,
                 'is_half_monthly_payroll' => 0,
                 'total_commissions' => 0,
@@ -343,6 +349,7 @@ class Salary_model extends CI_Model {
             sp.late_deduct,
             sp.d_day,
             sp.absent_deduct,
+            sp.advanced_salary,
             sp.other_payment as extra_pay,
             sp.modify_salary,
             sp.net_salary,
@@ -414,6 +421,24 @@ class Salary_model extends CI_Model {
     {
         $this->db->select('
             sp.payslip_id,
+            DATE_FORMAT(STR_TO_DATE(sp.salary_month, "%Y-%m"), "%b %Y") AS salary_month,
+            sp.grand_net_salary,
+            eb.account_number
+        ');
+        $this->db->from('xin_salary_payslips as sp');
+        $this->db->join('xin_employee_bankaccount as eb', 'sp.employee_id = eb.employee_id', 'left');
+        $this->db->where("sp.employee_id", $emp_id);
+        $this->db->order_by('sp.payslip_id', "DESC");
+        $data = $this->db->get()->result();
+        return $data;
+    }
+    
+    
+    
+    public function getall_salary_with_idap_this_y($emp_id)
+    {
+        $this->db->select('
+            sp.payslip_id,
             sp.salary_month,
             sp.grand_net_salary,
             eb.account_number,
@@ -421,11 +446,10 @@ class Salary_model extends CI_Model {
         $this->db->from('xin_salary_payslips as sp');
         $this->db->join('xin_employee_bankaccount as eb', 'sp.employee_id = eb.employee_id', 'left');
         $this->db->where("sp.employee_id", $emp_id);
+        $this->db->where("sp.salary_month BETWEEN '".date('Y-01')."' AND '".date('Y-m')."'");
         $this->db->order_by('sp.payslip_id', "DESC");
         $data = $this->db->get()->result();
          return $data;
-    
-        
     }
 
 

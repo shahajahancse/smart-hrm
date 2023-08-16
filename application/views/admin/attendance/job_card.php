@@ -225,11 +225,11 @@ foreach ($all_employees as $key => $value) {
 				
 				
 				echo "<td>&nbsp;";
-				echo $row->lunch_out==null || $row->lunch_out==''?"": date('h:i:s a',strtotime($row->lunch_out));
+				echo $row->lunch_out!=null? date('h:i:s a',strtotime($row->lunch_out)):'';
 				echo "</td>";
 				
 				echo "<td>&nbsp;";
-				echo $row->lunch_out==null || $row->lunch_out==''?"":  date('h:i:s a',strtotime($row->lunch_in));
+				echo $row->lunch_in!=null?  date('h:i:s a',strtotime($row->lunch_in)):'';
 				echo "</td>";
 
 				echo "<td style='text-transform:uppercase;'>&nbsp;";

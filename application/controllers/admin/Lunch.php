@@ -33,6 +33,7 @@ class Lunch extends MY_Controller
         $this->load->library('form_validation');
         $this->load->helper('date');
     }
+
     public function index()
     {
         $session = $this->session->userdata('username');
@@ -41,28 +42,16 @@ class Lunch extends MY_Controller
         }
         $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
         $data['first_date']=$result->end_date;
-        $data['second_date']=$result->next_date;
-        $data['results'] = $this->db
-                        ->select('lunch.*,')
-                        ->from('lunch')
-                        ->where('lunch.date >=', $result->end_date)
-                        ->where('lunch.date <=', $result->next_date)
-                        ->order_by('lunch.id', 'desc')
-                        ->get()
-                        ->result();
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch';
         $data['path_url'] = 'lunch';
         $data['session'] = $session;
-        $data['lunch_list_table'] = $this->load->view('admin/lunch/lunch_list_table',$data,true);
         if (!empty($session)) {
             $data['subview'] = $this->load->view("admin/lunch/index", $data, true);
             $this->load->view('admin/layout/layout_main', $data); //page load
         } else {
             redirect('admin/');
         }
-    }
-    public function get_lunch_table_ajax(){
 
     }
     public function today_lunch($id = null)
@@ -535,6 +524,24 @@ class Lunch extends MY_Controller
         header('Content-Type: application/json');
         echo json_encode($response);
     }
+    public function get_data_list()
+    {
+        $data['session'] = $this->session->userdata('username');
+        $total_m = $this->Lunch_model->chack_meal_employee($this->input->post('first_date'), $this->input->post('second_date'));
+        $data['results'] = $this->db
+        ->select('lunch.*,')
+        ->from('lunch')
+        ->where('lunch.date >=', $this->input->post('first_date'))
+        ->where('lunch.date <=', $this->input->post('second_date'))
+        ->order_by('lunch.date', 'desc')
+        ->get()
+        ->result();
+        $lunch_list_table= $this->load->view('admin/lunch/lunch_list_table', $data, true);
+        $d['total']=$total_m;
+        $d['tolunch_list_tabletal']=$lunch_list_table;
+        header('Content-Type: application/json');
+        echo json_encode($d);
+    }
     public function make_payment()
     {
         $pre_due=$this->input->post('pre_due');
@@ -798,9 +805,6 @@ class Lunch extends MY_Controller
         } else {
             echo $this->load->view("admin/lunch/v_report", $data, true);
         }
-
-
-
     }
 
 
@@ -833,7 +837,6 @@ class Lunch extends MY_Controller
         $this->db->order_by('date', 'desc');
         $data['payment_data'] = $this->db->get('lunch_vendor_meal')->result();
         if (!empty($session)) {
-
             $data['lunchtable'] = $this->load->view("admin/lunch/lunchtable", $data, true);
             $data['subview'] = $this->load->view("admin/lunch/vendor_lunch_list", $data, true);
             $this->load->view('admin/layout/layout_main', $data); //page load
@@ -841,14 +844,22 @@ class Lunch extends MY_Controller
             redirect('admin/');
         }
     }
-
-
-    // ============================ Vendor Pakage Payment ============================
-
+    public function print_vendor_data()
+    {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $from_date=$this->input->post('from_date');
+        $to_date=$this->input->post('to_date');
+        $data['from_date']=$from_date;
+        $data['to_date']=$to_date;
+        $data['data']= $this->Lunch_model->chack_meal_data($this->input->post('from_date'), $this->input->post('to_date'));
+        $this->load->view('admin/lunch/print_vendor_data', $data);
+    }
+    // ============================ Vendor Package Payment ============================
     public function lunch_menu($id = null)
     {
-
-
         $session = $this->session->userdata('username');
         //  dd($session);
         if(empty($session)) {

@@ -170,10 +170,8 @@ class Employees extends MY_Controller {
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		$data['breadcrumbs'] = $this->lang->line('xin_employees');
 		$data['path_url'] = 'employees';
-		// dd($user_info);
 		
 			if(!empty($session)){ 
-				// $data['subview'] = $this->load->view("admin/timesheet/leave_04_01_2023", $data, TRUE);
 				$data['subview'] = $this->load->view("admin/employees/emp_list", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -194,15 +192,14 @@ class Employees extends MY_Controller {
 		$data = array();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);	
-		$employee = $this->Timesheet_model->get_emplist();
-		
+		$employee = $this->Timesheet_model->get_emplistforemp();
 		foreach($employee->result() as $r) {
-			  
 			// get start date and end date
 			$user = $this->Xin_model->redeuser($r->user_id);
 			if(!is_null($user)){
 				$full_name = $user[0]->first_name. ' '.$user[0]->last_name;
 				$email = $user[0]->email;
+				$contact_no = $user[0]->contact_no;
 				$contact_no = $user[0]->contact_no;
 			
 				// department
@@ -348,7 +345,7 @@ class Employees extends MY_Controller {
 				if(in_array('203',$role_resources_ids)) {
 					$del_opt = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'">
 					<button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fa fa-trash"></span>
-					</button></span>';
+					</button></span><hr>';
 				} else {
 					$del_opt = '';
 				}
@@ -359,12 +356,12 @@ class Employees extends MY_Controller {
 			// <a href="'.site_url().'admin/employees/left_resign/'.$r->user_id.'"></a>
 			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
 				if($r->status==1 || $r->status==4){
-					$lr_opt = '<span onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign">
+					$lr_opt = '<hr><span onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign">
 									<button type="button" class="btn btn-xs btn-info"><span class="fa fa-arrow-circle-right"></span></button>
-								</span>
+								</span><hr>
 								<span data-toggle="tooltip" data-placement="top" title="Increment/Promotion">
 									<button type="button" class="btn btn-xs btn-success" onclick="incrementFun('. $r->user_id . ')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-								</span>';
+								</span><hr>';
 				} else {
 					$lr_opt = '';
 				}			
@@ -382,12 +379,12 @@ class Employees extends MY_Controller {
 			// $function = $view_opt.$lr_opt.$del_opt.'';
 
 			if($r->status == 1 || $r->status == 4 || $r->status == 5) {
-				$lrip = '<a onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign"> 
-                        <button type="button" class="btn btn-xs btn-info"><span class="fa fa-arrow-circle-right"> </span></button> Left / Resign </a><br>
-
-                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Increment"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Increment</a><br></hr>
-
-                        <a onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Promotion"> <button type="button" class="btn btn-xs btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Promotion</a><br>';
+				$lrip = '<a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign"> 
+                        <button type="button" class="btn btn-xs btn-info"><span class="fa fa-arrow-circle-right"> </span></button> Left / Resign </a>
+						
+                        <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Increment"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Increment</a>
+					
+                        <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Promotion"> <button type="button" class="btn btn-xs btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Promotion</a>';
 			} else {
 				$lrip = '';
 			}
@@ -397,14 +394,15 @@ class Employees extends MY_Controller {
                     <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Action
                     </button>
-                    <div class="dropdown-menu" style=" min-width: 180px !important;border-radius:0;line-height: 1.7;" aria-labelledby="dropdownMenuButton">
-
-                        <a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a><br>
+                    <div class="dropdown-menu  pull-left" style="min-width: 123px !important;border-radius: 5px;left: -64px;box-shadow: 0px 0px 5px 1px #8e8e8e;top: 27px;" aria-labelledby="dropdownMenuButton">
+						
+                        <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a>
 
                         '. $lrip .'
 
-                        <a> <button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"> <span class="fa fa-trash"></span>  </button>   Delete </a>
-                    </div>
+                        <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;"> <button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"> <span class="fa fa-trash"></span>  </button>   Delete </a>
+						
+						</div>
                 </div>';
 
 
@@ -502,18 +500,33 @@ class Employees extends MY_Controller {
 		}
 
 		if ($this->db->insert('xin_employee_incre_prob', $form_data)) {
-			if ($this->input->post('status') != 2) {
+
+			if ($this->input->post('status') == 1 || $this->input->post('status') == 3 || $this->input->post('status') ==5) {
 				$data = array(
 					'status' => 1,
 					'department_id' => $this->input->post('new_dept_id'),
 					'designation_id' => $this->input->post('new_desig_id'),
 					'basic_salary' => $this->input->post('new_salary'),
 					'notify_incre_prob' => $this->input->post('notify_incre_prob'),
+					'nda_status' => 0,
+					'letter_status' => 0
+				);
+			}elseif ($this->input->post('status') == 4) {
+				$data = array(
+					'status' => 5,
+					'department_id' => $this->input->post('new_dept_id'),
+					'designation_id' => $this->input->post('new_desig_id'),
+					'basic_salary' => $this->input->post('new_salary'),
+					'notify_incre_prob' => $this->input->post('notify_incre_prob'),
+					'nda_status' => 0,
+					'letter_status' => 0
 				);
 			} else {
 				$data = array(
 					'basic_salary' => $this->input->post('new_salary'),
 					'notify_incre_prob' => $this->input->post('notify_incre_prob'),
+					'nda_status' => 0,
+					'letter_status' => 0
 				);
 			}
 
@@ -527,7 +540,6 @@ class Employees extends MY_Controller {
 			}
 			$this->output($Return);
 		}
-
 		exit;
     }
 
@@ -1324,6 +1336,7 @@ class Employees extends MY_Controller {
 			redirect('admin/');
 		}
 		$id = $this->uri->segment(4);
+		
 		$result = $this->Employees_model->read_employee_information($id);
 		// dd($result[0]->proxi_id);
 		if(is_null($result)){
@@ -1341,7 +1354,7 @@ class Employees extends MY_Controller {
 		//$role_resources_ids = $this->Xin_model->user_role_resource();
 		//$data['breadcrumbs'] = $this->lang->line('xin_employee_details');
 		//$data['path_url'] = 'employees_detail';	
-
+	
 		$data = array(
 			'breadcrumbs' => $this->lang->line('xin_employee_detail'),
 			'path_url' => 'employees_detail',
@@ -1387,8 +1400,8 @@ class Employees extends MY_Controller {
 			'linkdedin_link' => $result[0]->linkdedin_link,
 			'google_plus_link' => $result[0]->google_plus_link,
 			'instagram_link' => $result[0]->instagram_link,
-			'pinterest_link' => $result[0]->pinterest_link,
-			'youtube_link' => $result[0]->youtube_link,
+			'nda_status' => $result[0]->nda_status,
+			'letter_status' => $result[0]->letter_status,
 			'leave_categories' => $result[0]->leave_categories,
 			'view_companies_id' => $result[0]->view_companies_id,
 			'all_countries' => $this->Xin_model->get_countries(),
@@ -1404,7 +1417,15 @@ class Employees extends MY_Controller {
 			'all_leave_types' => $this->Timesheet_model->all_leave_types(),
 			);
 		// dd($data);
-		
+			if($result[0]->nda_status!=0) {
+				$this->db->where('emp_id', $id)->limit(1);
+				$r = $this->db->get('xin_employees_nda')->row();
+				$data['nda_start_date'] = $r->from_date;
+				$data['nda_end_date'] = $r->to_date;
+				$data['nda_id'] = $r->id;
+			}
+
+
 		$data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 		
@@ -2091,6 +2112,8 @@ class Employees extends MY_Controller {
 		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
 			redirect('admin/');
 		}
+
+	
 	
 		if($this->input->post('add_type')=='employee') {		
 		/* Define return | here result is used to return user data and error for error message */
@@ -2128,7 +2151,11 @@ class Employees extends MY_Controller {
 			 $Return['error'] = $this->lang->line('xin_employee_error_username');
 		} else if($this->Employees_model->check_employee_username($this->input->post('username')) > 0) {
 			 $Return['error'] = $this->lang->line('xin_employee_username_already_exist');
-		} 
+		}  else if($this->input->post('proxi_id')==='') {
+			$Return['error'] = "punche id not specified";
+	   } else if($this->input->post('salary')==='') {
+		$Return['error'] = "salary not specified";
+	   }
 
 		/*else if($this->input->post('email')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_email');
@@ -2205,7 +2232,27 @@ class Employees extends MY_Controller {
 		$probation = $this->input->post('probation');
 		$probation_end = date("Y-m-d",strtotime("+ $probation months",strtotime($date_of_joining)));
 		$probation_end = ($date_of_joining > $probation_end) ? $date_of_joining:$probation_end;
-
+		if($_FILES['p_file']['size']!=0){
+			//checking image type
+			$allowed =  array('png','jpg','jpeg','pdf','gif');
+			$filename = $_FILES['p_file']['name'];
+			$ext = pathinfo($filename, PATHINFO_EXTENSION);
+			
+				if(in_array($ext,$allowed)){
+					
+					$tmp_name = $_FILES["p_file"]["tmp_name"];
+					$profile = "uploads/profile/";
+					$set_img = base_url()."uploads/profile/";
+					// basename() may prevent filesystem traversal attacks;
+					// further validation/sanitation of the filename may be appropriate
+					$name = basename($_FILES["p_file"]["name"]);
+					$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
+					move_uploaded_file($tmp_name, $profile.$newfilename);
+					$fname = $newfilename;
+			}
+		}else{
+			$fname = '';
+		}
 		$data = array(
 			'employee_id' => $employee_id,
 			'office_shift_id' => $this->input->post('office_shift_id'),
@@ -2224,17 +2271,41 @@ class Employees extends MY_Controller {
 			'department_id' => $this->input->post('department_id'),
 			'sub_department_id' => $this->input->post('subdepartment_id'),
 			'designation_id' => $this->input->post('designation_id'),
+			'salary' => $this->input->post('salary'),
 			'date_of_joining' => $date_of_joining,
 			'notify_incre_prob' => $probation_end,
 			'contact_no' => $contact_no,
 			'address' => $address,
 			'is_active' => 1,
 			'leave_categories' => $cat_ids,
+			'profile_picture' => $fname,
 			'created_at' => date('Y-m-d h:i:s')
 		);
 		// dd($data);
 
 		$iresult = $this->Employees_model->add($data);
+	
+			$emdata = array(
+				'employee_id' => $iresult,
+				'relation' => $this->input->post('relation'),
+				'is_primary' => '',
+				'is_dependent' => '',
+				'contact_name' => $this->input->post('contact_name'),
+				'work_phone' => '',
+				'work_phone_extension' =>'',
+				'mobile_phone' => $this->input->post('e_phone_number'),
+				'home_phone' => '',
+				'work_email' => '',
+				'personal_email' =>'',
+				'address_1' => $this->input->post('address_1'),
+				'address_2' =>'',
+				'city' => '',
+				'state' => '',
+				'zipcode' =>'',
+				'country' => '',
+				'created_at' => date('Y-m-d H:i:s')
+			);
+			$this->db->insert('xin_employee_contacts',$emdata);
 		if ($iresult) {
 			
 			$id = $iresult;
@@ -2344,6 +2415,9 @@ class Employees extends MY_Controller {
 				hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$this->input->post('email'),$subject,$message);				
 			}
 			$Return['result'] = $this->lang->line('xin_success_add_employee');
+
+
+
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
 		}
@@ -2416,7 +2490,9 @@ class Employees extends MY_Controller {
 			 $Return['error'] = $this->lang->line('xin_employee_error_contact_number');
 		} else if(!preg_match('/^([0-9]*)$/', $this->input->post('contact_no'))) {
 			 $Return['error'] = $this->lang->line('xin_hr_numeric_error');
-		}
+		} else if(!preg_match('/^([0-9]*)$/', $this->input->post('letter_status'))) {
+			$Return['error'] = $this->lang->line('xin_hr_letter_error');
+	   }
 				
 		if($Return['error']!=''){
        		$this->output($Return);
@@ -2492,6 +2568,7 @@ class Employees extends MY_Controller {
 			'is_active' => $this->input->post('is_active'),
 			'status' => $this->input->post('status'),
 			'floor_status' => $this->input->post('floor_status'),
+			'letter_status' => $this->input->post('letter_status'),
 		);
 		// dd($data);
 		$id = $this->input->post('user_id');
@@ -2719,26 +2796,6 @@ class Employees extends MY_Controller {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
-		if ($this->input->post('facebook_link')!=='' && !filter_var($this->input->post('facebook_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_fb_field_error');
-		} else if ($this->input->post('twitter_link')!=='' && !filter_var($this->input->post('twitter_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_twitter_field_error');
-		} else if ($this->input->post('blogger_link')!=='' && !filter_var($this->input->post('blogger_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_blogger_field_error');
-		} else if ($this->input->post('linkdedin_link')!=='' && !filter_var($this->input->post('linkdedin_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_linkedin_field_error');
-		} else if ($this->input->post('google_plus_link')!=='' && !filter_var($this->input->post('google_plus_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_gplus_field_error');
-		} else if ($this->input->post('instagram_link')!=='' && !filter_var($this->input->post('instagram_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_instagram_field_error');
-		} else if ($this->input->post('pinterest_link')!=='' && !filter_var($this->input->post('pinterest_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_pinterest_field_error');
-		} else if ($this->input->post('youtube_link')!=='' && !filter_var($this->input->post('youtube_link'), FILTER_VALIDATE_URL)) {
-			$Return['error'] = $this->lang->line('xin_hr_youtube_field_error');
-		}
-		if($Return['error']!=''){
-			$this->output($Return);
-		}
 		$data = array(
 		'facebook_link' => $this->input->post('facebook_link'),
 		'twitter_link' => $this->input->post('twitter_link'),
@@ -2761,6 +2818,37 @@ class Employees extends MY_Controller {
 		}
 	}	
 	
+public function nda() {
+	$session = $this->session->userdata('username');
+	$userid = $_POST['user_id'];
+	if ($_POST['nda_status'] == 0) {
+			if ($_POST['ndaid'] != '') {
+				$this->db->where('id', $_POST['ndaid']);
+				$this->db->delete('xin_employees_nda');
+			}
+		$this->db->where('user_id', $userid);
+		$this->db->update('xin_employees', array('nda_status' => 0));
+	} else {
+		$this->db->where('user_id', $userid);
+		$this->db->update('xin_employees', array('nda_status' => 1));
+
+		$data = array(
+			'emp_id' => $userid,
+			'from_date' => $this->input->post('nda_start_date'),
+			'to_date' => $this->input->post('nda_end_date')
+		);
+
+		$ndaid = $this->input->post('ndaid');
+		$this->db->where('id', $ndaid)->limit(1);
+		$result = $this->db->get('xin_employees_nda')->row();
+		if (count($result) > 0) {
+			$this->db->where('id', $ndaid);
+			$this->db->update('xin_employees_nda', $data);
+		} else {
+			$this->db->insert('xin_employees_nda', $data);
+		}
+	}
+}
 	// Validate and update info in database // contact info
 	public function update_contacts_info() {
 	

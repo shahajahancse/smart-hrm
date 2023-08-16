@@ -80,6 +80,7 @@
 					<th class=''>Late</th>
 					<th class=''>Abse</th>
 					<th class=''>BA</th>
+					<th class=''>Advance</th>
 				</tr>
 			</table>
 		</th>
@@ -96,7 +97,7 @@
 	?>
 		<tr>
 			<td><?= $key + 1 ?></td>
-			<td><?= $row->first_name . "<br>" . $row->last_name ?></td>
+			<td><?= $row->first_name ?> <?=$row->last_name ?></td>
 			<td><?= $row->designation_name ?></td>
 			<td><?= $row->date_of_joining ?></td>
 			<td><?= $row->basic_salary ?></td>
@@ -135,6 +136,7 @@
 						<td class='cat4'><?= $row->late_deduct ?></td>
 						<td class='cat4'><?= $row->absent_deduct ?></td>
 						<td class='cat4'><?= $row->aba_deduct ?></td>
+						<td class='cat4'><?= $row->absent_deduct ?></td>
 					</tr>
 				</table>
 			</td>
@@ -171,6 +173,7 @@
 					<td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?= $total_late_deduct ?></td>
 					<td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'><?= $total_absent_deduct ?></td>
 					<td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'></td>
+					<td style="width: 37%;font-weight: bold;font-size: 12px;" colspan='1'></td>
 				</tr>
 			</table>
 		</td>
@@ -194,8 +197,6 @@
 		</td>
 		<td colspan="5" style="text-align:center; font-size:16px; font-weight:bold;">
 			<div>Aproved By(Managing Director)</div>
-
-
 		</td>
 	</tr>
 	</table>

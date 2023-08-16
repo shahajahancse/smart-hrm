@@ -631,7 +631,7 @@ class Attendance_model extends CI_Model
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
-    public function today_floor_movement($emp_id)
+    public function today_floor_movement($emp_id,$date=null)
     {
 
         $this->db->select('
@@ -653,7 +653,11 @@ class Attendance_model extends CI_Model
         $this->db->from('xin_designations');
         $this->db->from('xin_employee_floor_move');
         $this->db->where("xin_employees.is_active", 1);
-        $this->db->where("xin_employee_floor_move.date", date('Y-m-d'));
+        if($date!=null) {
+            $this->db->where("xin_employee_floor_move.date", $date);
+        }else{
+            $this->db->where("xin_employee_floor_move.date", date('Y-m-d'));
+        }
         $this->db->where("xin_employee_floor_move.user_id", $emp_id);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
@@ -665,7 +669,6 @@ class Attendance_model extends CI_Model
     }
     public function latecomment($attendance_date, $emp_id)
     {
-
         $this->db->select('
             xin_employees.user_id as emp_id,
             xin_employees.employee_id,
@@ -883,23 +886,26 @@ class Attendance_model extends CI_Model
         }
     }
 
-    public function get_movement_register($id = null)
-    {
-        $this->db->select('
-                empm.id, em.first_name, em.last_name, empm.employee_id as emp_id, empm.date, empm.out_time, empm.in_time, empm.reason, empm.status
-            ');
-
-        $this->db->from('xin_employee_move_register as empm');
-        $this->db->from('xin_employees as em');
-
-        if ($id != null) {
-            $this->db->where('empm.employee_id', $id);
-        }
-
-        $this->db->where('em.user_id = empm.employee_id');
-        $this->db->order_by('empm.id', 'DESC');
-        return $result = $this->db->get()->result();
-    }
+  public function get_movement_register($id = null)
+  {
+      $this->db->select('
+          empm.id, mr.title AS title, em.first_name, em.last_name, empm.employee_id AS emp_id, empm.date, empm.out_time, empm.in_time, empm.status
+      ');
+  
+      $this->db->from('xin_employee_move_register as empm');
+  
+      if ($id != null) {
+          $this->db->where('empm.employee_id', $id);
+      }
+  
+      $this->db->join('xin_employees as em', 'em.user_id = empm.employee_id');
+      $this->db->join('xin_employee_move_reason as mr', 'empm.reason = mr.id');
+  
+      $this->db->order_by('empm.id', 'DESC');
+  
+      return $this->db->get()->result();
+  }
+  
 
 
     public function apply_for_ta_da($id, $amount, $details)
@@ -913,7 +919,25 @@ class Attendance_model extends CI_Model
                     ");
         return "ok";
     }
-
+    public function late_id($first_date, $second_date, $emp_id)
+    {
+        $this->db->select('xin_attendance_time.employee_id');
+        $this->db->from('xin_attendance_time');
+        $this->db->where('xin_attendance_time.attendance_date >=', $first_date);
+        $this->db->where('xin_attendance_time.attendance_date <=', $second_date);
+        $this->db->where('xin_attendance_time.late_status', 1);
+        $this->db->where_in('xin_attendance_time.employee_id', $emp_id);
+        $this->db->group_by('xin_attendance_time.employee_id');
+        $subquery = $this->db->get_compiled_select();
+        $this->db->select('employee_id');
+        $this->db->from("($subquery) as subquery");
+        $data = $this->db->get()->result();
+        $lateid = array();
+        foreach ($data as $row) {
+            $lateid[] = $row->employee_id;
+        }
+       return $lateid;
+    }
 
     public function update_ta_da($id, $amount, $status)
     {

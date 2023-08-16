@@ -1,3 +1,14 @@
+  <style>
+    /* Custom styles for pill-shaped badge */
+    .badge-pill {
+      border-radius: 10px; /* Adjust the value for pill shape */
+    }
+    .badge-danger {
+      background-color: #e42520; /* Bootstrap's default danger color */
+      color: white; /* Text color for visibility */
+    }
+  </style>
+
 <?php
 $session = $this->session->userdata('username');
 $theme = $this->Xin_model->read_theme_info(1);
@@ -310,7 +321,7 @@ if($theme[0]->sub_menu_icons != ''){
 
     <!-- Payroll -->
     <?php //if($system[0]->module_payroll=='yes'){?>
-    <?php  if(in_array('32',$role_resources_ids) || in_array('33',$role_resources_ids) || in_array('34',$role_resources_ids) || in_array('35',$role_resources_ids) || in_array('36',$role_resources_ids) || in_array('37',$role_resources_ids) || in_array('38',$role_resources_ids) || in_array('39',$role_resources_ids) || in_array('125',$role_resources_ids) || in_array('126',$role_resources_ids) || in_array('390',$role_resources_ids)) {?>
+    <?php  if(in_array('32',$role_resources_ids) || in_array('33',$role_resources_ids) || in_array('34',$role_resources_ids) || in_array('35',$role_resources_ids) || in_array('36',$role_resources_ids) || in_array('37',$role_resources_ids) || in_array('38',$role_resources_ids) || in_array('39',$role_resources_ids) || in_array('125',$role_resources_ids) || in_array('126',$role_resources_ids)|| in_array('127',$role_resources_ids) || in_array('390',$role_resources_ids)) {?>
       <li class="<?php if(!empty($arr_mod['payrl_open']))echo $arr_mod['payrl_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> <span><?php echo $this->lang->line('left_payroll');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
 
@@ -321,13 +332,13 @@ if($theme[0]->sub_menu_icons != ''){
             <li class="sidenav-link <?php if(!empty($arr_mod['emp_bonus_active']))echo $arr_mod['emp_bonus_active'];?>"> <a href="<?php echo site_url('admin/payroll/employee_bonus');?>"><i class="fa <?php echo $submenuicon;?>"></i>Bonus </a> </li>
           <?php } ?>  
 
+          <?php if(in_array('127',$role_resources_ids)) { ?>
+            <li class="sidenav-link <?php if(!empty($arr_mod['emp_advanced_sal']))echo $arr_mod['emp_advanced_sal'];?>"> <a href="<?php echo site_url('admin/payroll/advanced_salary');?>"><i class="fa <?php echo $submenuicon;?>"></i>Advanced Salary </a> </li>
+          <?php } ?>  
+
           <?php if(in_array('390',$role_resources_ids)) { ?>
             <li class="sidenav-link <?php if(!empty($arr_mod['emp_lunch_active']))echo $arr_mod['emp_lunch_active'];?>"> <a href="<?php echo site_url('admin/lunch/lunch_emp_bill');?>"><i class="fa <?php echo $submenuicon;?>"></i>Lunch Bill</a> </li>
           <?php } ?>  
-
-          <?php if(in_array('1021',$role_resources_ids)) { ?>
-          <li class="sidenav-link <?php if(!empty($arr_mod['salary_active']))echo $arr_mod['salary_active'];?>"> <a href="<?php echo site_url('admin/payroll/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Generate Salary </a> </li>
-          <?php } ?> 
 
           <?php if(in_array('1021',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['salary_active']))echo $arr_mod['salary_active'];?>"> <a href="<?php echo site_url('admin/payroll/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Generate Salary </a> </li>
@@ -351,16 +362,16 @@ if($theme[0]->sub_menu_icons != ''){
 
     <!-- Store -->
     <?php  if(in_array('1030',$role_resources_ids) || in_array('1031',$role_resources_ids) || in_array('1033',$role_resources_ids) || in_array('1070',$role_resources_ids) || in_array('1071',$role_resources_ids) || in_array('1072',$role_resources_ids) || in_array('1073',$role_resources_ids) || in_array('1074',$role_resources_ids) || in_array('1075',$role_resources_ids) || in_array('1076',$role_resources_ids) || in_array('1080',$role_resources_ids) || in_array('1081',$role_resources_ids) || in_array('1082',$role_resources_ids) || in_array('1083',$role_resources_ids) || in_array('1084',$role_resources_ids) || in_array('1085',$role_resources_ids) || in_array('1041',$role_resources_ids)) {?>
-      <li class="<?php if(!empty($arr_mod['invtry_open']))echo $arr_mod['invtry_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> Store <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>
+      <li class="<?php if(!empty($arr_mod['invtry_open']))echo $arr_mod['invtry_open'];?> treeview"> <a href="#"> <i class="fa fa-calculator"></i> Store <span class="badge badge-pill badge-danger" style="margin-top: 0px;margin-left: 50px;"><?php  $a = $this->db->select('COUNT(id) as id')->where_in('status', array(1, 2))->get('products_requisition_details')->row()->id ;  $b = $this->db->select('COUNT(id) as id')->where_in('status', array(1, 2))->get('products_purches_details')->row()->id ;  echo $a+ $b; ?></span> <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
-
           <?php if(in_array('1031',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['my_requi_active']))echo $arr_mod['my_requi_active'];?>"> <a href="<?php echo site_url('admin/inventory/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Requisition </a> </li>
           <?php } ?>  
 
           <!-- requisition part -->
           <?php if(in_array('1070',$role_resources_ids) || in_array('1070',$role_resources_ids) || in_array('1071',$role_resources_ids) || in_array('1072',$role_resources_ids) || in_array('1073',$role_resources_ids) || in_array('1074',$role_resources_ids) || in_array('1075',$role_resources_ids) || in_array('1076',$role_resources_ids)) { ?>
-          <li class="<?php if(!empty($arr_mod['requi_active']))echo $arr_mod['requi_active'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Requisition <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+          <li class="<?php if(!empty($arr_mod['requi_active']))echo $arr_mod['requi_active'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Requisition
+          <span class="badge badge-pill badge-danger" style="margin-top: 0px;margin-left: 30px;"><?php echo $a = $this->db->select('COUNT(id) as id')->where_in('status', array(1, 2))->get('products_requisition_details')->row()->id ; ?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
               <?php if(in_array('1072',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['iqlist_open']))echo $arr_mod['iqlist_open'];?>"> <a href="<?php echo site_url('admin/inventory/index');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Requisition List </a> </li>
@@ -371,11 +382,11 @@ if($theme[0]->sub_menu_icons != ''){
               <?php } ?>
 
               <?php if(in_array('1033',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['iqpending_open']))echo $arr_mod['iqpending_open'];?>"> <a href="<?php echo site_url('admin/inventory/pending_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Pending List </a> </li>
+              <li class="sidenav-link <?php if(!empty($arr_mod['iqpending_open']))echo $arr_mod['iqpending_open'];?>"> <a href="<?php echo site_url('admin/inventory/pending_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Pending List <span class="badge badge-pill badge-danger" style="margin-top: 0px;margin-left: 30px;"><?php echo $a = $this->db->select('COUNT(id) as id')->where('status', 1)->get('products_requisition_details')->row()->id ; ?></span></a> </li>
               <?php } ?>
 
               <?php if(in_array('1074',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['iqapprove_open']))echo $arr_mod['iqapprove_open'];?>"> <a href="<?php echo site_url('admin/inventory/aproved_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Approved List</a> </li>
+              <li class="sidenav-link <?php if(!empty($arr_mod['iqapprove_open']))echo $arr_mod['iqapprove_open'];?>"> <a href="<?php echo site_url('admin/inventory/aproved_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Approved List <span class="badge badge-pill badge-danger" style="margin-top: 0px;margin-left: 19px;"><?php echo $a = $this->db->select('COUNT(id) as id')->where('status',2)->get('products_requisition_details')->row()->id ; ?></span></a> </li>
               <?php } ?>
               <?php if(in_array('1075',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['iqdelivery_open']))echo $arr_mod['iqdelivery_open'];?>"> <a href="<?php echo site_url('admin/inventory/delivery_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Delivered List</a> </li>
@@ -390,7 +401,7 @@ if($theme[0]->sub_menu_icons != ''){
           <!-- // purchase -->
           <?php if(in_array('1080',$role_resources_ids) || in_array('1081',$role_resources_ids) || in_array('1082',$role_resources_ids) || in_array('1083',$role_resources_ids) || in_array('1084',$role_resources_ids) || in_array('1085',$role_resources_ids)) { ?>
             
-          <li class="<?php if(!empty($arr_mod['puiqu_active']))echo $arr_mod['puiqu_active'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Purchase <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+          <li class="<?php if(!empty($arr_mod['puiqu_active']))echo $arr_mod['puiqu_active'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Purchase <span class="badge badge-pill badge-danger" style="margin-top: 0px;margin-left: 30px;"><?php echo $a = $this->db->select('COUNT(id) as id')->where_in('status', array(1,2))->get('products_purches_details')->row()->id ; ?></span><span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
 
               <?php if(in_array('1081',$role_resources_ids)) { ?>
@@ -398,11 +409,11 @@ if($theme[0]->sub_menu_icons != ''){
               <?php } ?>
 
               <?php if(in_array('1082',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['puspending_open']))echo $arr_mod['puspending_open'];?>"> <a href="<?php echo site_url('admin/inventory/purchase_panding_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Pending List</a> </li>
+              <li class="sidenav-link <?php if(!empty($arr_mod['puspending_open']))echo $arr_mod['puspending_open'];?>"> <a href="<?php echo site_url('admin/inventory/purchase_panding_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Pending List <span class="badge badge-pill badge-danger" style="margin-top: 0px;margin-left: 30px;"><?php echo $a = $this->db->select('COUNT(id) as id')->where('status',1)->get('products_purches_details')->row()->id ; ?></span></a> </li>
               <?php } ?>
 
               <?php if(in_array('1083',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['pusaproved_open']))echo $arr_mod['pusaproved_open'];?>"> <a href="<?php echo site_url('admin/inventory/purchase_aproved_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Approved List</a> </li>
+              <li class="sidenav-link <?php if(!empty($arr_mod['pusaproved_open']))echo $arr_mod['pusaproved_open'];?>"> <a href="<?php echo site_url('admin/inventory/purchase_aproved_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Approved List <span class="badge badge-pill badge-danger" style="margin-top: 0px;margin-left: 30px;"><?php echo $a = $this->db->select('COUNT(id) as id')->where('status', 2)->get('products_purches_details')->row()->id ; ?></span></a> </li>
               <?php } ?>
 
               <?php if(in_array('1084',$role_resources_ids)) { ?>
@@ -431,6 +442,10 @@ if($theme[0]->sub_menu_icons != ''){
           <?php if(in_array('1041',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['insetting_open']))echo $arr_mod['insetting_open'];?> treeview"> <a href="#"><i class="fa fa-circle-o"></i> Settings <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
             <ul class="treeview-menu">
+              <?php if($user_info[0]->user_role_id != 3) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['insetting_open']))echo $arr_mod['insetting_open'];?>"> <a href="<?php echo site_url('admin/inventory/daily_pkg');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Requisition Package </a> </li>
+              <?php } ?>
+
               <?php if(in_array('1046',$role_resources_ids)) { ?>
               <li class="sidenav-link <?php if(!empty($arr_mod['supplier_open']))echo $arr_mod['supplier_open'];?>"> <a href="<?php echo site_url('admin/inventory/supplier');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Supplier </a> </li>
               <?php } ?>

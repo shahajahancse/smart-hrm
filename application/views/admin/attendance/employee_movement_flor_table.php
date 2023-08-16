@@ -12,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-        <?php  foreach ($alldata as $key => $value) {
+        <?php  $i=1; foreach ($alldata as $key => $value) { 
             $out_time_array = json_decode($value->out_time);
             $in_time_array = json_decode($value->in_time);
             $location_array = json_decode($value->location);
@@ -20,12 +20,12 @@
             $meet_with = json_decode($value->meet_with);
             foreach ($out_time_array as $k => $outtime) { ?>
         <tr>
-            <td><?= $k+1?></td>
+            <td><?= $i?></td>
             <td><?= $value->date?></td>
             <td class="p0"><?= $outtime?></td>
             <td class="p0"><?= (isset($in_time_array[$k])) ? $in_time_array[$k] : ''?></td>
             <td class="p0">
-                <?= ($location_array[$k]==1) ? '5th Floor' : (($location_array[$k]==2) ? '3rd Floor' : 'Out Side');?>
+                <?= ($location_array[$k]==5) ? '5th Floor' : (($location_array[$k]==3) ? '3rd Floor' :'');?>
             </td>
             <?php $resonedata = $this->db->where('id', $reason_array[$k])->get('xin_employee_move_reason')->result();
                 ?>
@@ -41,7 +41,7 @@
                 ?>
             <td class="p0"><?= $empn[0]->first_name?> <?= $empn[0]->last_name?></td>
         </tr>
-        <?php } ?>
+        <?php $i++; } ?>
 
         <?php } ?>
     </tbody>

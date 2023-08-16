@@ -77,50 +77,5 @@ class Payroll extends API_Controller
             ], 404);
         }
     }
-    public function payslip(){
-        $authorization = $this->input->get_request_header('Authorization');
-        $user_info = api_auth($authorization);
-        if ($user_info['status'] == true) {
-            $user_data=$user_info['user_info'];
-            $userid=$user_data->user_id;
-            $salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
-            $status = 1;
-            $emp_id =$userid;
-            $d["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
-        
-            $d['status']= 1;
-            $d["salary_month"] = $salary_month;
-            $d["emp_id"] = $emp_id;
-            if(is_string($d["values"]))
-            {
-                $this->api_return([
-                    'status'   =>   false,
-                    'message'  =>   'Data not found',
-                    'data'     =>   [],
-                ], 404);
-                exit();
-            }
-            else
-            {	
-            $data['payslip']=$this->load->view('admin/dashboard/payslip',$d);
-            $this->api_return([
-                'status'    =>  true,
-                'message'    =>  'successful',
-                'data'       =>  $data,
-            ], 200);
-            }
-            
-
-        } else {
-            $this->api_return([
-                'status'  =>   false,
-                'message'  =>   'Unauthorized User',
-                'data'     =>   [],
-            ], 401);
-        }
-    	
     
-
-		
-	}
 }

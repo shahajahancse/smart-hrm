@@ -528,8 +528,43 @@ class Attendance extends MY_Controller
         echo $this->load->view("admin/attendance/job_card", $data, true);
 
     }
-
-
+    public function late_details()
+    {
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $type = $this->input->post('type');
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $data['late_id'] = $emp_id;
+        $data['type'] = $type;
+        echo $this->load->view("admin/attendance/late_details", $data, true);
+    }
+    public function nda_report()
+    {
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+        $this->db->select('e.first_name, e.last_name, deg.designation_name, dep.department_name, e.nda_status, e.letter_status');
+        $this->db->join('xin_departments as dep', 'e.department_id = dep.department_id');
+        $this->db->join('xin_designations as deg', 'e.designation_id = deg.designation_id');
+        $this->db->where_in('e.user_id', $emp_id);
+        $data['emp_data'] = $this->db->get('xin_employees as e')->result();
+        echo $this->load->view("admin/attendance/nda_report", $data, true);
+    }
+    public function overtime_details()
+    {
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $minute = $this->input->post('minute');
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $data['minute'] = $minute;
+        $data['late_id'] = $emp_id;
+        echo $this->load->view("admin/attendance/overtime_details", $data, true);
+    }
     public function movment_status_report()
     {
         $first_date = $this->input->post('first_date');
@@ -755,7 +790,7 @@ class Attendance extends MY_Controller
         $this->db->where('floor_status !=', $data['empinfo']->floor_status);
         $this->db->where_in('user_role_id', array(2,3,4,5))->where_in('status', array(1,4,5,6));
         $data['emp_floor']=$this->db->get('xin_employees')->result();
-        $this->db->select("*");
+        $this->db->select("xin_employee_floor_move.*");
         $this->db->where("user_id", $userid);
         if ($firstdate!=null && $seconddate!=null) {
             $f1_date=date('Y-m-d', strtotime($firstdate));
@@ -783,8 +818,9 @@ class Attendance extends MY_Controller
         $userid  = $session[ 'user_id' ];
         $location_status=1;
         $data['location_status'] = $location_status;
-        $firstdate = $this->input->get('firstdate');
-        $seconddate = $this->input->get('seconddate');
+        $firstdate = $this->input->post('firstdate');
+        $seconddate = $this->input->post('seconddate');
+        // dd('qkjfgnmdfnjbfnzdjkb z');
         $this->db->select("em.*, mr.title as reason, pl.address as place");
         $this->db->join("xin_employee_move_reason as mr", 'em.reason = mr.id', 'left');
         $this->db->join("xin_employee_move_place as pl", 'em.place_adress = pl.place_id', 'left');
@@ -887,7 +923,7 @@ class Attendance extends MY_Controller
         if($this->db->insert("xin_employee_move_register", $data)) {
             $this->session->set_flashdata('success', 'Check in Successfully');
         } else {
-            $this->session->set_flashdata('success', 'Check in Successfully');
+            $this->session->set_flashdata('error', 'Check in Unuccessfully');
         }
         redirect('admin/attendance/employee_movement/'.$this->input->post('location_status'));
     }

@@ -8,33 +8,26 @@ if (!empty($todaylog)) {
     $totalmove_out_array=json_decode($todaylog[0]->out_time);
     $totalmove_in_array=json_decode($todaylog[0]->in_time);
     $inout=$todaylog[0]->inout;
-
     $lastRow = end($totalmove_out_array); // Get the last element of the array
+// dd($lastRow);
     $currentDateTime = new DateTime(); // Get the current date and time
-    $lastRowDateTime = DateTime::createFromFormat('g:i A', $lastRow); // Convert the last row value to DateTime object
-
+    $lastRowDateTime = DateTime::createFromFormat('H:i:s', $lastRow); // Convert the last row value to DateTime object
     $timeDifference = $currentDateTime->diff($lastRowDateTime); // Calculate the difference between current time and last row time
     $h = $timeDifference->h; // Get the hours from the time difference
     $m = $timeDifference->i; // Get the minutes from the time difference
-
     $timeDifferenceFormatted = sprintf('%02d:%02d', $h, $m); // Format the time difference
-
 }
 $totalmove=count($totalmove_out_array);
-
 $totalSpendingTime = array(
    'hours' => 0,
    'minutes' => 0,
    'seconds' => 0
 );
-
 $count = count($totalmove_out_array);
 for ($i = 0; $i < $count; $i++) {
     if(isset($totalmove_in_array[$i])) {
-
         $outDateTime = new DateTime($totalmove_out_array[$i]);
         $inDateTime = new DateTime($totalmove_in_array[$i]);
-
         $timeDiff = $inDateTime->diff($outDateTime);
         $totalSpendingTime['hours'] += $timeDiff->h;
         $totalSpendingTime['minutes'] += $timeDiff->i;
@@ -204,7 +197,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                             <?php $resonedata = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();?>
                             <option> Select Reason of move</option>
                             <?php $resonedata = $this->db->get('xin_employee_move_reason')->result();
-                              foreach ($resonedata  as $k => $v) {?>
+foreach ($resonedata  as $k => $v) {?>
                             <option value="<?=$v->id ?>"><?= $v->title ?></option>
                             <?php } ?>
                             <option value="other">Other</option>
@@ -229,7 +222,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
                 }
             };
             </script>
-            <input type="hidden" name="area" value="<?= ($empinfo->floor_status!=3) ? '2' : '1'?>">
+            <input type="hidden" name="area" value="<?= ($empinfo->floor_status==3) ? 5 : 3?>">
             <div class="col-md-6">
                 <div class="input" style="border: none;height: 66px;">
                     <div class="level">Select Meeting People**</div>
@@ -317,7 +310,7 @@ $totaltime=$totalSpendingTime['hours'].':'.$totalSpendingTime['minutes'].':'.$to
 
 <script>
 function getdata(status) {
-
+    $('#datatable').empty();
     // console.log(status.id);
     if (status.id == 'datef') {
         var firstdate = document.getElementById('datef').value
@@ -346,7 +339,7 @@ function getdata(status) {
     }
     $.ajax({
         url: '<?php echo base_url('admin/attendance/employee_movement_flor'); ?>',
-        method: 'GET',
+        method: 'POST',
         data: {
             firstdate: firstdate,
             seconddate: seconddate
@@ -381,7 +374,8 @@ $('#movementform1').on('submit', function(event) {
         method: 'POST',
         data: formData,
         success: function(response) {
-            showSuccessAlert(response)
+            console.log(response);
+            // showSuccessAlert(response)
         },
 
 
