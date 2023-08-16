@@ -170,35 +170,34 @@ function hrp(id, status) {
 function calmeal() {
     var first_date = $('#from_date').val();
     var second_date = $('#to_date').val();
-    // Prepare the data object
+    var url = '<?= base_url('/admin/lunch/get_data_list/')?>';
+
     var data = {
         first_date: first_date,
         second_date: second_date
     };
-    url = '<?= base_url('/admin/lunch/get_data_list/')?>'
-    // Send AJAX request
+
     $.ajax({
         url: url,
         method: 'POST',
         data: data,
         success: function(response) {
-            
-            $('#total_meals').val(response.total.total_m);
-            $('#total_emp_m').val(response.total.total_emp_m);
-            $('#total_ge_m').val(response.total.total_ge_m);
-            $('#total_amounts').val(response.total.total_cost);
-            $('#f_date').html(response.total.first_date);
-            $('#l_date').html(response.total.second_date);
-            $('#e_m').html(response.total.total_emp_m);
-            $('#t_m').html(response.total.total_m);
-            $('#g_m').html(response.total.total_ge_m);
-            $('#t_a').html(response.total.total_cost);
-            $('#e_a').html(response.total.total_emp_cost);
-            $('#g_a').html(response.total.total_ge_cost);
+            var total = response.total;
+            $('#total_meals').val(total.total_m);
+            $('#total_emp_m').val(total.total_emp_m);
+            $('#total_ge_m').val(total.total_ge_m);
+            $('#total_amounts').val(total.total_cost);
+            $('#f_date').html(total.first_date);
+            $('#l_date').html(total.second_date);
+            $('#e_m').html(total.total_emp_m);
+            $('#t_m').html(total.total_m);
+            $('#g_m').html(total.total_ge_m);
+            $('#t_a').html(total.total_cost);
+            $('#e_a').html(total.total_emp_cost);
+            $('#g_a').html(total.total_ge_cost);
             $('#add_table').html(response.tolunch_list_tabletal);
         },
         error: function(xhr, status, error) {
-            // Handle errors
             console.log(xhr.responseText);
         }
     });

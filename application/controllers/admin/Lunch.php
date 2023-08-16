@@ -533,7 +533,7 @@ class Lunch extends MY_Controller
         ->from('lunch')
         ->where('lunch.date >=', $this->input->post('first_date'))
         ->where('lunch.date <=', $this->input->post('second_date'))
-        ->order_by('lunch.id', 'desc')
+        ->order_by('lunch.date', 'desc')
         ->get()
         ->result();
         $lunch_list_table= $this->load->view('admin/lunch/lunch_list_table', $data, true);

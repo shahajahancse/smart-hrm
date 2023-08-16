@@ -1121,4 +1121,3 @@ class Attendance extends MY_Controller
         }
     }
 }
-
