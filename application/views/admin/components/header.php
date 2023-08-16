@@ -239,8 +239,9 @@ if($user[0]->user_role_id != 3) {
     $start_date = date('Y-m-d', strtotime('-1 month', strtotime(date("Y-m-01"))));
     $end_date = date('Y-m-d', strtotime('+2 month', strtotime(date("Y-m-00"))));
     $incrementapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 1);
-    $probationapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 4);
-    $fcount = count($leaveapp) + count($incrementapp) + count($probationapp);
+    $probationapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 5);
+    $internapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 4);
+    $fcount = count($leaveapp) + count($incrementapp) + count($probationapp) + count($internapp);
 
     // $nproject = $this->Xin_model->get_notify_projects();
     // $ntask = $this->Xin_model->get_notify_tasks();
@@ -404,6 +405,45 @@ if($user[0]->user_role_id != 3) {
                                             <?php echo $row->first_name. ' '.$row->last_name;?> </h4>
                                         <p class="<?php echo ($red_zone < date('Y-m-d')) ? 'nrcolor' : 'ngcolor' ?>">
                                             Increment on <?php echo date("d-M-Y", strtotime($ipdate));?> </p>
+                                    </a>
+                                </li>
+                                <?php } ?>
+                            </ul>
+                            <br>
+                            <?php } ?>
+                            <?php if(count($internapp) > 0) {?>
+                            <ul class="menu">
+                                <div class="callout callout-hrsale" style="background: #0691d3; color: white;">
+                                    <p>Intern notifications <span
+                                            style="color: #d30505; padding: 4px; font-weight: bolder;"><?=count($internapp) ?>
+                                    </p>
+                                </div>
+                                <?php foreach($internapp as $row) {?>
+                                <?php
+                                        $ipdate = $row->notify_incre_prob;
+                                    $red_zone = date('Y-m-d', strtotime('-20 days', strtotime(date($ipdate))));
+                                    ?>
+                                <li class="lir">
+                                    <!-- start message -->
+                                    <a onclick="incrementFun(<?php echo $row->user_id; ?>)">
+                                        <div class="pull-left">
+                                            <?php  if($row->profile_picture!='' && $row->profile_picture!='no file') {?>
+                                            <img src="<?php  echo base_url('uploads/profile/'.$row->profile_picture);?>"
+                                                alt="" id="user_avatar" class="img-circle user_profile_avatar">
+                                            <?php } else {?>
+                                            <?php  if($row->gender=='Male') { ?>
+                                            <?php   $de_file = base_url().'uploads/profile/default_male.jpg';?>
+                                            <?php } else { ?>
+                                            <?php   $de_file = base_url().'uploads/profile/default_female.jpg';?>
+                                            <?php } ?>
+                                            <img src="<?php  echo $de_file;?>" alt="" id="user_avatar"
+                                                class="img-circle user_profile_avatar">
+                                            <?php  } ?>
+                                        </div>
+                                        <h4 class="<?php echo ($red_zone < date('Y-m-d')) ? 'nrcolor' : 'ngcolor' ?>">
+                                            <?php echo $row->first_name. ' '.$row->last_name;?> </h4>
+                                        <p class="<?php echo ($red_zone < date('Y-m-d')) ? 'nrcolor' : 'ngcolor' ?>">
+                                        Intern on <?php echo date("d-M-Y", strtotime($ipdate));?> </p>
                                     </a>
                                 </li>
                                 <?php } ?>

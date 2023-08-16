@@ -1281,7 +1281,7 @@ class Xin_model extends CI_Model {
 			$this->db->where('status', $status);
 		}
 		$this->db->where("notify_incre_prob BETWEEN '$start_date' and '$end_date'");
-		$this->db->order_by('notify_incre_prob', 'ASC');
+		$this->db->order_by('notify_incre_prob', 'DESC');
 		$query = $this->db->get('xin_employees');
 		return $query->result();	
 	}
