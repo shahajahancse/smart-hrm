@@ -214,7 +214,7 @@
                             <td><?php echo $row->date; ?></td>
                             <td><?php echo $row->out_time == "" ? "" : date('h:i A',strtotime($row->out_time)); ?></td>
                             <td><?php echo $row->in_time  == "" ? "" : date('h:i A',strtotime($row->in_time));?></td>
-                            <td><?php echo $row->reason; ?></td>
+                            <td><?php echo $row->title ; ?></td>
                             <?php
                                 $status = $row->status;
                                 $statusMessage = '';

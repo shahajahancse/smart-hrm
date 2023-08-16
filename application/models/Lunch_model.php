@@ -14,12 +14,13 @@ class Lunch_model extends CI_Model {
         $this->db->select('
                     u.user_id as emp_id, 
                     u.first_name, 
+                    u.status, 
                     u.last_name, 
                     at.status as p_stutus
                 ');
             $this->db->from('xin_employees as u');
             $this->db->join('xin_attendance_time as at', 'u.user_id = at.employee_id', 'left');
-            $this->db->where_in('u.status', array(1,4,5))->where('at.attendance_date', $date)->group_by('u.user_id');
+            $this->db->where('at.attendance_date', $date)->group_by('u.user_id');
             $data = $this->db->order_by('at.status', 'DESC')->get()->result();
 
         if ($status == true) {
@@ -32,11 +33,27 @@ class Lunch_model extends CI_Model {
                 @$data[$key]->lunch_id = $data2->lunch_id;
             }
         }
+        foreach ($data as $k => $r) {
+            if ($r->status == 2 || $r->status == 3) {
+                
+                $this->db->select('effective_date');
+                $this->db->from('xin_employee_left_resign');
+                $this->db->where('emp_id', $r->emp_id);
+                $resign_data = $this->db->get()->row();
+                // If the employee has resigned and effective date is before $date, remove from array
+                if ($resign_data && $resign_data->effective_date < $date) {
+                    // dd($resign_data);
+                    unset($data[$k]);
+                }
+            }
+        }
         
         return $data;
     }
 
-    public function all_employees()
+
+
+    public function all_employees($date)
     {
         $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4, 5) AND user_id NOT IN (27,30,46,63)");
 
@@ -46,7 +63,7 @@ class Lunch_model extends CI_Model {
     public function process($firstDate, $secondDate, $probable_date)
     {
 
-      $query = $this->all_employees();
+      $query = $this->all_employees($firstDate);
 
       foreach($query as $row){
 
@@ -74,7 +91,7 @@ class Lunch_model extends CI_Model {
         };
 
         $prev_amount=$prev_pay-$prev_cost;
-        $probable_meal=$this->chackprobalemeal($secondDate,$probable_date, $emp_id);
+        $probable_meal = $this->chackprobalemeal($secondDate,$probable_date, $emp_id);
         $pay_amount=$probable_meal*45;
         $collection_amount=$pay_amount-$prev_amount;
         $from_date=$firstDate;
@@ -119,13 +136,9 @@ class Lunch_model extends CI_Model {
 
     public function chackprobalemeal($first_date, $second_date, $emp_id = null) {
 
-        if (in_array($emp_id, array(70, 71)) && $second_date < '2023-08-16') {
+        /*if (in_array($emp_id, array(70, 71)) && $second_date < '2023-08-16') {
             $first_date = '2023-07-23';
-        } else if (in_array($emp_id, array(72,73,74,75)) && $second_date < '2023-08-16') {
-            $first_date = '2023-07-24';
-        } else if (in_array($emp_id, array(76,77,79)) && $second_date < '2023-08-16') {
-            $first_date = '2023-08-02';
-        }
+        } */
 
         $date1 = new DateTime($first_date);
         $date2 = new DateTime($second_date);
@@ -150,9 +163,6 @@ class Lunch_model extends CI_Model {
             }
         }
 
-        if ($emp_id == 78) {
-            return 0;
-        }
         return $count - $total_day;
     }
     

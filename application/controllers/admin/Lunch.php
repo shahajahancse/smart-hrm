@@ -466,8 +466,29 @@ class Lunch extends MY_Controller
         $firstDate =date('Y-m-d', strtotime($this->input->get('firstDate')));
         $secondDate = $this->input->get('secondDate');
         $probable_date = $this->input->get('probable_date');
+
+        $this->db->where('status', 0);
+        $this->db->where('end_date', date('Y-m-d', strtotime($firstDate . ' -1 day')));
+        $preepay = $this->db->get('lunch_payment')->result();
+
+        if(count($preepay)>0){
+            echo json_encode(['error'=>'There are Unpaid Employee Found , Please Check the Collection Sheet']);
+            exit();
+        };
+
+        $currentDate = strtotime($firstDate);
+        while ($currentDate <= strtotime($secondDate)) {
+            $this->db->where('date',  date("Y-m-d", $currentDate));
+            $ifdate = $this->db->get('lunch')->result();
+            if (count($ifdate) == 0) {
+                echo json_encode(['error' => 'Please first Add Lunch on ' . date("Y-m-d", $currentDate)]);
+                exit();
+            }
+            $currentDate = strtotime("+1 day", $currentDate);
+        }
+
         $data['lunch_data'] = $this->Lunch_model->process($firstDate, $secondDate, $probable_date);
-        echo json_encode('success');
+        echo json_encode(['success'=>'Successfully Processing Done']);
     }
     public function submit_payment()
     {
@@ -533,7 +554,7 @@ class Lunch extends MY_Controller
         ->from('lunch')
         ->where('lunch.date >=', $this->input->post('first_date'))
         ->where('lunch.date <=', $this->input->post('second_date'))
-        ->order_by('lunch.id', 'desc')
+        ->order_by('lunch.date', 'desc')
         ->get()
         ->result();
         $lunch_list_table= $this->load->view('admin/lunch/lunch_list_table', $data, true);
@@ -844,14 +865,22 @@ class Lunch extends MY_Controller
             redirect('admin/');
         }
     }
-
-
+    public function print_vendor_data()
+    {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $from_date=$this->input->post('from_date');
+        $to_date=$this->input->post('to_date');
+        $data['from_date']=$from_date;
+        $data['to_date']=$to_date;
+        $data['data']= $this->Lunch_model->chack_meal_data($this->input->post('from_date'), $this->input->post('to_date'));
+        $this->load->view('admin/lunch/print_vendor_data', $data);
+    }
     // ============================ Vendor Package Payment ============================
-
     public function lunch_menu($id = null)
     {
-
-
         $session = $this->session->userdata('username');
         //  dd($session);
         if(empty($session)) {
