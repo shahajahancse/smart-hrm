@@ -844,14 +844,22 @@ class Lunch extends MY_Controller
             redirect('admin/');
         }
     }
-
-
+    public function print_vendor_data()
+    {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $from_date=$this->input->post('from_date');
+        $to_date=$this->input->post('to_date');
+        $data['from_date']=$from_date;
+        $data['to_date']=$to_date;
+        $data['data']= $this->Lunch_model->chack_meal_data($this->input->post('from_date'), $this->input->post('to_date'));
+        $this->load->view('admin/lunch/print_vendor_data', $data);
+    }
     // ============================ Vendor Package Payment ============================
-
     public function lunch_menu($id = null)
     {
-
-
         $session = $this->session->userdata('username');
         //  dd($session);
         if(empty($session)) {
