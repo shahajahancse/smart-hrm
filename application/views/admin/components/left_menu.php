@@ -435,6 +435,11 @@ if($theme[0]->sub_menu_icons != ''){
           <li class="sidenav-link <?php if(!empty($arr_mod['product_open']))echo $arr_mod['product_open'];?>"> <a href="<?php echo site_url('admin/inventory/products');?>"> <i class="fa fa-product-hunt" style="color:green"></i> Product </a> </li>
           <?php } ?>
 
+
+          <?php if(in_array('1042',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['move_open']))echo $arr_mod['move_open'];?>"> <a href="<?php echo site_url('admin/inventory/moves');?>"> <i class="fa fa-tablet" style="color:green"></i> Device Movements </a> </li>
+          <?php } ?>
+
           <?php if(in_array('1047',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['low_product_list']))echo $arr_mod['low_product_list'];?>"> <a href="<?php echo site_url('admin/inventory/low_product_list');?>"> <i class="fa fa-sort-amount-asc" style="color:#e4d802"></i> Low Product List </a> </li>
           <?php } ?>

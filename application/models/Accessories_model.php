@@ -72,7 +72,7 @@ class Accessories_model extends CI_Model {
             $this->db->where('ap.status',$status);
         } 
 
-        $this->db->order_by('pac.cat_name');
+        $this->db->order_by('ap.status',"ASC");
         $this->db->group_by('ap.id');
 
         return $this->db->get()->result();         

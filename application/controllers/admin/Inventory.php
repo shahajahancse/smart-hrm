@@ -50,28 +50,6 @@ class Inventory extends MY_Controller {
 		}
 	}
 
-	// public function index1(){
-	// 	$session = $this->session->userdata('username');
-	// 	if(empty($session)){ 
-	// 		redirect('admin/');
-	// 	}
-	// 	$data['title'] = 'Store | '.$this->Xin_model->site_title();
-	// 	$data['breadcrumbs'] = 'Store';
-	// 	if($session['role_id']== 1 || $session['role_id']== 2 || $session['role_id']== 4 ){
-	// 		$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-	// 	}
-	// 	if( $session['role_id'] == 3) {
-	// 		$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-	// 	}
-	// 	$data['user_role_id'] 	= $session['role_id'];
-	// 	if(!empty($session)){ 
-	// 		$data['subview'] = $this->load->view("admin/inventory/index1", $data, TRUE);
-	// 		$this->load->view('admin/layout/layout_main', $data); //page load
-	// 	} else {
-	// 		redirect('admin/');
-	// 	}
-	// }
-
 
 	public function create($id = null) {
 		$session = $this->session->userdata('username');
@@ -1275,6 +1253,91 @@ public function low_product_list(){
 	$this->load->view('admin/layout/layout_main', $data); //page load
 
 }
+
+
+public function moves(){
+
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['title'] = 'Device Movement | '.$this->Xin_model->site_title();
+	$data['breadcrumbs'] = 'Device Movement';
+
+	$data['subview'] = $this->load->view("admin/inventory/device_movement", $data, TRUE);
+	$this->load->view('admin/layout/layout_main', $data); //page load
+
+}
+
+public function create_movement(){
+
+	$data['session']= $this->session->userdata('username');
+	if(empty($data['session'])){ 
+		redirect('admin/');
+	}
+
+	$data['title'] = 'Create Movement | '.$this->Xin_model->site_title();
+	$data['breadcrumbs'] = 'Create Movement';
+	$data['users'] = $this->db->select('first_name,last_name,user_id')->where_in('status',[1,4,5])->get('xin_employees')->result();
+	$data['get'] = $this->Inventory_model->movement_list();
+	$data['subview'] = $this->load->view("admin/inventory/create_movement", $data, TRUE);
+	$this->load->view('admin/layout/layout_main', $data); //page load
+
+}
+public function move_create(){
+	// dd($_POST);
+	$data['created_by'] = $_POST['user_id'];
+	$data['device_id']  = $_POST['device_id'];
+	$data['user_id']    = $_POST['emp_id'];
+	$data['purpose']    = $_POST['purpose'];
+	$data['start_time'] = date("Y-m-d H:i:s");
+	$data['status']      = 1;
+    $insert = $this->db->insert('move_list',$data);
+	if($insert){
+		$this->session->set_flashdata('success', 'Successfully Insert Done');
+	}else{
+		$this->session->set_flashdata('error', 'Error to Insert');
+	}
+	redirect('admin/inventory/moves');
+}
+
+
+function requested_list(){
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['session']    = $session;
+	$data['requests']   = $this->Inventory_model->request_list();
+	$data['subview']    = $this->load->view("admin/inventory/request_list", $data);
+}
+
+function active_list(){
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['session']    = $session;
+	$data['requests']   = $this->Inventory_model->active_list();
+	$data['subview']    = $this->load->view("admin/inventory/active", $data);
+}
+function request_edit(){
+	// dd($_POST);
+	$data['status']     = $_POST['status'];
+	$data['floor']      = $_POST['floor'];
+	$data['remark']     = $_POST['remark'];
+	$data['start_time'] = date("Y-m-d H:i:s");
+    $update = $this->db->where('id',$_POST['item_id '])->update('move_list',$data);
+	if($update){
+		$this->session->set_flashdata('success', 'Successfully Update Done');
+	}else{
+		$this->session->set_flashdata('error', 'Error to Update');
+	}
+	return true;
+	// redirect('admin/inventory/moves');
+}
+
+
 
 }
 

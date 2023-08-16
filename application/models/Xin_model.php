@@ -429,7 +429,11 @@ class Xin_model extends CI_Model {
 			// $arr['insetting_open'] = 'active';
 			$arr['product_open'] = 'active';
 			return $arr;
-		} else if($mClass=='inventory' && $mMethod=='low_product_list') {
+		} else if($mClass=='inventory' && $mMethod=='moves') {
+			$arr['invtry_open'] = 'active';
+			$arr['move_open'] = 'active';
+			return $arr;
+		}else if($mClass=='inventory' && $mMethod=='low_product_list') {
 			$arr['invtry_open'] = 'active';
 			$arr['low_product_list'] = 'active';
 			return $arr;

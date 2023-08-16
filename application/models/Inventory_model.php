@@ -501,6 +501,64 @@ public function equipment_list($session = null){
 
     return $data;          
 }
+public function movement_list(){
+
+	$this->db->select('
+		pa.id AS a_id,
+		pa.device_name_id,
+		pac.cat_name,
+		MAX(pam.model_name) AS model_name,
+	');
+
+	$this->db->from('product_accessories as pa');
+	$this->db->join('product_accessories_model as pam', 'pa.device_model = pam.id', 'left');
+	$this->db->join('product_accessory_categories as pac', 'pa.cat_id = pac.id', 'left');
+	$this->db->where('pa.status',5);
+	$this->db->group_by('pa.id');
+	$data = $this->db->get()->result();
+
+    return $data;          
+}
+
+
+
+public function request_list(){
+	$this->db->select("
+		product_accessories_model.model_name, 
+		xin_employees.first_name, 
+		xin_employees.last_name,
+		move_list.*, 
+	");
+
+	$this->db->from("move_list");
+	$this->db->join("product_accessories_model", "move_list.device_id = product_accessories_model.id");
+	$this->db->join("xin_employees", "move_list.user_id = xin_employees.user_id");
+	$this->db->join("product_accessories", "move_list.device_id = product_accessories.id"); // Join the product_accessories table
+	$this->db->where("product_accessories.status", 5);
+
+	return $this->db->get()->result();
+
+} 
+
+
+public function active_list(){
+	$this->db->select("
+		p.product_name, 
+		pc.category_name, 
+		prd.id as prd_id,
+		prd.quantity,
+		prd.approved_qty,
+		prd.status,
+		prd.created_at,
+	");
+	$this->db->from("products_requisition_details as prd");
+	$this->db->from("products as p");
+	$this->db->from("products_categories as pc");
+	$this->db->where("p.id = prd.product_id");
+	$this->db->where("pc.id = prd.cat_id");	
+
+	return	$this->db->get()->result();
+} 
 
 }
 ?>
