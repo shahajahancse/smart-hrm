@@ -265,7 +265,7 @@ tbody{
                         <td><?=$values[$i]->m_pay_day?></td>
                         <td><?=$values[$i]->modify_salary?></td>
                         
-                        <td class='colors4'><?=$values[$i]->grand_net_salary+$values[$i]->modify_salary?></td>
+                        <td class='colors4'><?=$values[$i]->grand_net_salary+$values[$i]->modify_salary-$values[$i]->aba_deduct?></td>
                         <?php
                         $total_grand_net_salary+=$values[$i]->grand_net_salary+$values[$i]->modify_salary;
                         $total_basic_salary+=$values[$i]->basic_salary;
