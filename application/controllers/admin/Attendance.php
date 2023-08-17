@@ -280,7 +280,17 @@ class Attendance extends MY_Controller
         if (!empty($_POST)) {
             $out_time = $_POST['out_time'] ? $_POST['date'] .' '. $_POST['out_time'] : '';
             $in_time = $_POST['in_time'] ? $_POST['date'] .' '. $_POST['in_time'] : '';
-
+            $selectedOption = $this->input->post('reason');
+            $reason=$selectedOption;
+            if ($selectedOption === 'other') {
+                $reasondata = $this->input->post('otherInput');
+                $data = array(
+                    'title' => $reasondata
+                );
+                $this->db->insert('xin_employee_move_reason', $data);
+                $insert_id = $this->db->insert_id();
+                $reason=$insert_id;
+            }
             $targetDate = new DateTime($out_time);
             // Get the current date and time
             $currentDate = new DateTime($in_time);
@@ -302,7 +312,7 @@ class Attendance extends MY_Controller
                 'in_out' => 0,
                 'place_adress' => '',
                 'astatus'     => $session['role_id']==3 ? 1 : 2,
-                'reason'	  => $this->input->post('reason'),
+                'reason'	  => $reason,
                 'updated_at' => date('Y-m-d H:i:s'),
                 'created_at' => date('Y-m-d H:i:s')
             );
@@ -311,7 +321,7 @@ class Attendance extends MY_Controller
                 $comData = array(
                     'out_time'    => $out_time,
                     'in_time'     => $in_time,
-                    'reason'	  => $this->input->post('reason'),
+                    'reason'	  => $reason,
                     'astatus'     => $session['role_id']==3 ? 1 : 2,
                 );
 
