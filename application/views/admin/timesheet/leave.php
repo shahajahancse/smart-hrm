@@ -57,7 +57,7 @@ if (isset($success)) {
                             <label for="employees" class="control-label"> <?php echo $this->lang->line('xin_employee');?> </label>
                             <select class="form-control" name="employee_id" id="employee_id" data-plugin="select_hrm" data-placeholder=" <?php echo $this->lang->line('xin_choose_an_employee');?>" required>
                               <option value=""></option>
-                              <?php  $all_employees = $this->Xin_model->get_employee(1, null, array(1,4));
+                              <?php  $all_employees = $this->Xin_model->get_employee(1, null, array(1,4,5));
                               foreach ($all_employees as $key => $row) { $employee_id = $row->user_id; ?>
                               <option value="<?php echo $employee_id; ?>"> <?php echo $row->first_name .' '. $row->last_name; ?></option>
                               <?php } ?>

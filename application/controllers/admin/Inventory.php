@@ -1280,20 +1280,25 @@ public function create_movement(){
 	$data['breadcrumbs'] = 'Create Movement';
 	$data['users'] = $this->db->select('first_name,last_name,user_id')->where_in('status',[1,4,5])->get('xin_employees')->result();
 	$data['get'] = $this->Inventory_model->movement_list();
+	// dd($data['get']);
 	$data['subview'] = $this->load->view("admin/inventory/create_movement", $data, TRUE);
 	$this->load->view('admin/layout/layout_main', $data); //page load
 
 }
 public function move_create(){
-	// dd($_POST);
 	$data['created_by'] = $_POST['user_id'];
 	$data['device_id']  = $_POST['device_id'];
 	$data['user_id']    = $_POST['emp_id'];
 	$data['purpose']    = $_POST['purpose'];
-	$data['start_time'] = date("Y-m-d H:i:s");
-	$data['status']      = 1;
-    $insert = $this->db->insert('move_list',$data);
+    if($_POST['role_id'] != 3){
+		$data['status']    = $_POST['status'];
+		$data['floor']    = $_POST['floor'];
+		$data['start_time'] = date("Y-m-d H:i:s");
+	}
+	$data['status']      = $_POST['role_id'] != 3 ? 2 : 1;
+	$insert = $this->db->insert('move_list',$data);
 	if($insert){
+		$this->db->where('device_model',$_POST['device_id'])->update('product_accessories',['move_status'=>2]);
 		$this->session->set_flashdata('success', 'Successfully Insert Done');
 	}else{
 		$this->session->set_flashdata('error', 'Error to Insert');
@@ -1321,20 +1326,38 @@ function active_list(){
 	$data['requests']   = $this->Inventory_model->active_list();
 	$data['subview']    = $this->load->view("admin/inventory/active", $data);
 }
+function inactive_list(){
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['session']    = $session;
+	$data['requests']   = $this->Inventory_model->inactive_list();
+	$data['subview']    = $this->load->view("admin/inventory/inactive", $data);
+}
 function request_edit(){
-	// dd($_POST);
 	$data['status']     = $_POST['status'];
 	$data['floor']      = $_POST['floor'];
 	$data['remark']     = $_POST['remark'];
 	$data['start_time'] = date("Y-m-d H:i:s");
-    $update = $this->db->where('id',$_POST['item_id '])->update('move_list',$data);
+    $update = $this->db->where('id',$_POST['item_id'])->update('move_list',$data);
 	if($update){
+		echo "Approved";
+	}else{
+			echo "Something Error!!!";
+	}
+}
+
+function delete_request($id){
+	// dd($_POST);
+
+    $delete = $this->db->where('id',$id)->update('move_list',$data);
+	if($delete){
 		$this->session->set_flashdata('success', 'Successfully Update Done');
 	}else{
 		$this->session->set_flashdata('error', 'Error to Update');
 	}
 	return true;
-	// redirect('admin/inventory/moves');
 }
 
 

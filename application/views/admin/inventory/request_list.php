@@ -20,7 +20,9 @@
       <thead>
         <tr>
           <th class="text-center" style="width: 50px;">No.</th>
+          <th class="text-center">Category</th>
           <th class="text-center">Device Name</th>
+          <th class="text-center">Tag No</th>
           <th class="text-center">User Name</th>
           <th class="text-center">Status</th>
           <th class="text-center">Purpose</th>
@@ -31,26 +33,24 @@
         <?php foreach ($requests as $key => $row) { ?>
           <tr>
             <td class="text-center"><?= $key + 1 ?></td>
+            <td class="text-center"><?= $row->cat_name ?></td>
             <td class="text-center"><?= $row->model_name ?></td>
+            <td class="text-center"><?= "MHL ".$row->cat_short_name.'-'.$row->device_name_id ?></td>
             <td class="text-center"><?= $row->first_name.' '.$row->last_name?></td>
             <td class="text-center">
               <span class="using">
-                <?= $row->status==1 ?"<i class='fa fa-dot-circle-o' style='color:#ffda00'></i> Pending": ""?>
+                <?= $row->status==1 ?"<i class='fa fa-dot-circle-o' style='color:#ffda00'></i> Pending": "<i class='fa fa-dot-circle-o' style='color:green'></i> Active"?>
               </span>
             </td>
             <td class="text-center"><?= $row->purpose?></td>
-
             <td class="text-center">
-              <?php if($row->status == 1){?> 
-                <div class="dropdown" >
-                  <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-                  <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
-                    <a class='req_id text-info'  data-toggle="modal" data-target="#requested_listt" style="padding-left:5px; cursor: pointer"  data-id="<?php echo $row->id?>" data-status="<?php echo $row->status?>"  ><b>Edit</b></a><br>
-                    <a class="text-danger"style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_requsiton/'.$row->id);?>"><b>Delete</b></a>
-                  </div>
+              <div class="dropdown" >
+                <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none;color:black; background: transparent;box-shadow:none !important" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
+                  <a class='req_id text-info'  data-toggle="modal" data-target="#requested_listt" style="padding-left:5px; cursor: pointer"  data-id="<?php echo $row->id?>" data-status="<?php echo $row->status?>"  ><b>Approved</b></a><br>
+                  <a class="text-danger"style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_request/'.$row->id);?>"><b>Delete</b></a>
                 </div>
-              <?php } else { echo ""; } ?>
-            </td>
+              </div>
           </tr>
         <?php }?>
       </tbody>
@@ -80,8 +80,8 @@
                 <input type="hidden" id="item_hid" value="">
                 <td>
                     <select class="form-control status_id" id="statuss">
-                        <option value="2"  >Active</option>
-                        <option value="1" >Pending</option>
+                        <option value="2">Active</option>
+                        <option value="1">Pending</option>
                     </select>
                 </td>
                 <td>
@@ -111,15 +111,11 @@
       $('.req_id').on('click', function (e) {
         var val = $(this).attr("data-id");
         var status = $(this).attr("data-status");
-        // alert(status);
         $('#item_hid').val(val);
         if(status == 1){
             $('#statuss option[value="' + status + '"]').prop('selected', true);
         }
       });
-
-      // Uncomment and customize your AJAX request here
-      
       $('#submit').on('click', function () {
         var item_id = $('#item_hid').val();
         var status  = $('.status_id').val();
@@ -131,15 +127,12 @@
           data: { 'status': status ,'floor': floor ,'remark': remark, 'item_id': item_id },
           url:  url + item_id,
           success: function (response) {
-            
-            // console.log(response);
-            if(response == TRUE){
-                $('#requested_listt').modal('hide');
-                window.location.href ="<?php echo base_url('admin/inventory/moves')?>";
+            if(response){
+              $('#requested_listt').modal('hide');
+              showSuccessAlert(response);
             }
           }
         });
       });
-    
     });
   </script>

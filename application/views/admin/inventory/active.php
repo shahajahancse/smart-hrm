@@ -12,17 +12,20 @@
 </style>
 
 
-
+<!-- < ?php dd($requests);?> -->
 <?php  $get_animate = $this->Xin_model->get_content_animate();?>
 <div class="<?= $get_animate?>" style="margin-left:15px;margin-top:15px;margin-right: 15px;border-radius: 0px;">
   <div class="">
-    <table class="datatables-demo table table-striped table-bordered" id="active_list" style="width: 100%;background: white;margin-left: 0px;">
+    <table class="datatables-demo table table-striped table-bordered" id="requested" style="width: 100%;background: white;margin-left: 0px;">
       <thead>
         <tr>
           <th class="text-center" style="width: 50px;">No.</th>
+          <th class="text-center">Category</th>
           <th class="text-center">Device Name</th>
+          <th class="text-center">Tag</th>
           <th class="text-center">User Name</th>
           <th class="text-center">Status</th>
+          <th class="text-center">Floor</th>
           <th class="text-center">Purpose</th>
           <th class="text-center">Action</th>
         </tr>
@@ -31,25 +34,28 @@
         <?php foreach ($requests as $key => $row) { ?>
           <tr>
             <td class="text-center"><?= $key + 1 ?></td>
-            <td class="text-center"><?= $row->device_id ?></td>
-            <td class="text-center"><?= $row->user_id?></td>
-            <td class="text-center"><?= $row->status?></td>
-            <td class="text-center"><?= $row->purpose?></td>
+            <td class="text-center"><?= $row->cat_name ?></td>
+            <td class="text-center"><?= $row->model_name ?></td>
+            <td class="text-center"><?= "MHL ".$row->cat_short_name.'-'.$row->device_name_id ?></td>
+            <td class="text-center"><?= $row->first_name.' '.$row->last_name?></td>
             <td class="text-center">
               <span class="using">
-                <?= $row->status==1 ?"<i class='fa fa-dot-circle-o' style='color:#ffda00'></i> Pending": ""?>
+                <?= $row->status== 2?"<i class='fa fa-dot-circle-o' style='color:green'></i> Used": ""?>
               </span>
             </td>
+            <td class="text-center"><?= $row->floor == 3 ? "3rd Floor" : "5th Floor"?></td>
+            <td class="text-center"><?= $row->purpose?></td>
+
             <td class="text-center">
-              <?php if($row->status == 1){?> 
+              <!-- < ?php if($row->status == 1){?>  -->
                 <div class="dropdown" >
-                  <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                  <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important;color:black;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                   <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
-                    <a class='req_id text-info'  data-toggle="modal" data-target="#requested_list" style="padding-left:5px; cursor: pointer"><b>Edit</b></a><br>
-                    <a class="text-danger"style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_requsiton/'.$row->id);?>"><b>Delete</b></a>
+                    <a class='req_id text-info'  data-toggle="modal" data-target="#requested_listt" style="padding-left:5px; cursor: pointer"  data-id="<?php echo $row->id?>" data-status="<?php echo $row->status?>"  ><b>Edit</b></a><br>
+                    <a class="text-danger"style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_request/'.$row->id);?>"><b>Delete</b></a>
                   </div>
                 </div>
-              <?php } else { echo ""; } ?>
+              <!-- < ?php } else { echo ""; } ?> -->
             </td>
           </tr>
         <?php }?>
@@ -59,35 +65,47 @@
 </div>
 
 
-<div class="modal fade" id="requested_list" role="dialog">
+<div class="modal fade" id="requested_listt" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Edit Requsiton</h4>
+        <h4 class="modal-title">Edit Requested List</h4>
       </div>
       <div class="modal-body">      
-        <table class="table table-striped table-bordered" style="width:100%">
+        <table class="table table-bordered" style="width:100%">
           <thead>
             <tr>
-              <th class="text-left" style="">Item Name</th>
-              <th class="text-left" >Category</th>
-              <th class="text-left" >Request Qty</th>
+              <th class="text-left" style="">Status</th>
+              <th class="text-left" >Floor</th>
+              <th class="text-left" >Remark</th>
             </tr>
           </thead>
           <tbody>
               <tr>
-                <input type="text" id="item_hid" name="requisition_id" value="">
-                <td id="item"></td>
-                <td id="item_cat"></td>
-                <td><input type="text" id="item_qty" name="quantity"></td>
+                <input type="hidden" id="item_hid" value="">
+                <td>
+                    <select class="form-control status_id" id="statuss">
+                        <option value="2"  >Active</option>
+                        <option value="1" >Pending</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="form-control"  id="floor_id">
+                        <option value="3">3rd Floor</option>
+                        <option value="5">5th Floor</option>
+                    </select>
+                </td>
+                <td>
+                    <textarea name="remark" id="remark" class="form-control"></textarea>
+                </td>
               </tr>
           </tbody>
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <button id="submit" type="submit" class="btn btn-success">Update</button>
+        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+        <button id="submit" type="submit" class="btn btn-sm btn-success">Update</button>
       </div>
     </div>
   </div>
@@ -95,35 +113,6 @@
 
  <script type="text/javascript">
     $(document).ready(function () {
-      $('#active_list').DataTable();
-
-    //   $('.req_id').on('click', function (e) {
-    //     var val = $(this).attr("data-id");
-    //     var pro = $(this).attr("data-p");
-    //     var cat = $(this).attr("data-c");
-    //     var qty = $(this).attr("data-q");
-    //     var purpose = $(this).attr("data-purpose");
-    //     $('#item').text(pro);
-    //     $('#item_cat').text(cat);
-    //     $('#item_qty').val(qty);
-    //     $('#item_hid').val(val);
-    //   });
-
-      // Uncomment and customize your AJAX request here
-      /*
-      $('#submit').on('click', function () {
-        var qty = $('#item_qty').val();
-        var item_id = $('#item_hid').val();
-        $.ajax({
-          type: "POST",
-          data: { 'quantity': qty },
-          url: "<?php echo base_url('admin/inventory/requisition_edit/');?>" + item_id,
-          success: function (response) {
-            $('#requisition_edit').modal('hide');
-            window.location.href = base_url;
-          }
-        });
-      });
-      */
+      $('#requested').DataTable();
     });
-  </script>
+</script>
