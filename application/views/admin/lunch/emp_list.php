@@ -95,7 +95,7 @@ td {}
                             <th>Designation</th>
                             <th>Collection.M</th>
                             <th>Amount</th>
-                            <th>Previous Amount</th>
+                            <th>P.Amount</th>
                             <th>Net Amount</th>
                             <th>Taken.M</th>
                             <th>Taken.A</th>
