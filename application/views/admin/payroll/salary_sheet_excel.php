@@ -90,7 +90,7 @@
 				<td class="text-center px-2"><?=$row->extra_pay?></td>
 				<td class="text-center px-2"><?=$row->m_pay_day?></td>
 				<td class="text-center px-2"><?=$row->modify_salary?></td>
-				<td class="text-center px-2"><?=$row->grand_net_salary + ($row->modify_salary)?></td>
+				<td class="text-center px-2"><?=$row->grand_net_salary + ($row->modify_salary)-$row->aba_deduct?></td>
 			</tr>
 		<?php } ?>
 		<tr>

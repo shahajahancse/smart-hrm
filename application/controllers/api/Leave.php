@@ -168,19 +168,29 @@ class Leave extends API_Controller
 				$leave_half_day_opt = $this->input->post('leave_half_day');
 			}
 			
-			if($_FILES['attachment']['tmp_name']!='') {
-				
-				$config['upload_path'] = './uploads/leave/'; // Modify this path as needed
-				$config['allowed_types'] = 'gif|jpg|png|pdf'; // Add more allowed file types as needed
-				$config['encrypt_name'] = true; // Generate a unique encrypted filename
-				$config['max_size'] = 10048; // Set maximum file size in kilobytes (2MB in this case)
-				$this->upload->initialize($config);
-				$this->upload->do_upload('attachment');
-					$fileData = $this->upload->data();
-					$fileLocation ='uploads/leave/'.$fileData['file_name'];
-			} else {
-				$fileLocation = '';
-			}
+            if ($_POST['attachment']) {
+                // Get the base64 encoded image string
+                $base64String = $_POST['attachment'];
+                // dd($base64String);
+                // Extract file type from base64 string
+                preg_match('/^data:image\/(.*);base64,/', $base64String, $output_array);      
+                // dd($output_array);
+                $fileExtension = $output_array[1];
+                // Remove data:image/...;base64, from the beginning of the string
+                $base64String = preg_replace('/^data:image\/(.*);base64,/', '', $base64String);
+                // Decode the base64 string
+                $imageData = base64_decode($base64String);
+                // Generate a unique filename for the image
+                $filename = 'image_' . time() . '.' . $fileExtension;
+                // Specify the path where you want to save the image
+                $imagePath = FCPATH . 'uploads/leave/' . $filename;
+                // Save the image to the specified path
+                file_put_contents($imagePath, $imageData);
+                $fileLocation = 'uploads/leave/' . $filename;
+            } else {
+                $fileLocation = '';
+            }
+            
 			
 			$data = array(
 			'employee_id' => $userid,

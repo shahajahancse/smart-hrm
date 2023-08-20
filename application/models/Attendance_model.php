@@ -973,7 +973,7 @@ class Attendance_model extends CI_Model
     {
         $this->db->select('user_id as emp_id, first_name, last_name');
         if ($status == 1) {
-            $this->db->where_in('status', array(1,4));
+            $this->db->where_in('status', array(1,4,5));
         } else {
             $this->db->where('status', $status);
         }

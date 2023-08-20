@@ -62,6 +62,7 @@
     <a class="btn" onclick=window.print()>Print</a>
     <?php $this->load->view('admin/head_bangla'); ?>
     <div style="font-size:12px; text-align:center;">Vendor Lunch Data of <?=$from_date?> to <?=$to_date?></div>
+    <br>
 
     <table>
         <thead>
