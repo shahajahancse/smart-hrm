@@ -151,10 +151,10 @@ function submitForm() {
 }
 $(document).ready(function() {
     $('#submit-btn').click(function() {
-        $('#lunchoffmodal').hide();
         document.getElementById("loading").style.visibility = "visible";
         var reason = $('#reason').val();
         if (reason !== '') {
+            $('#lunchoffmodal').hide();
             var reasonValue = document.getElementById('reason').value;
             var dateoffValue = document.getElementById('dateoff').value;
 
@@ -171,7 +171,6 @@ $(document).ready(function() {
                     document.getElementById("loading").style.visibility = "hidden";
                     showSuccessAlert('Success')
                     window.location.href = "<?= base_url('admin/lunch/') ?>"
-                   
                 },
                 error: function(xhr, status, error) {
                     // Handle the error response from the server
