@@ -151,6 +151,7 @@ function submitForm() {
 }
 $(document).ready(function() {
     $('#submit-btn').click(function() {
+        $('#lunchoffmodal').hide();
         document.getElementById("loading").style.visibility = "visible";
         var reason = $('#reason').val();
         if (reason !== '') {
@@ -167,11 +168,10 @@ $(document).ready(function() {
                 },
                 success: function(response) {
                     // Hide the modal
-                    $('#lunchoffmodal').modal('hide');
                     document.getElementById("loading").style.visibility = "hidden";
-
-                  
-                    window.location.href = "<?= base_url('admin/lunch/') ?>";
+                    showSuccessAlert('Success')
+                    window.location.href = "<?= base_url('admin/lunch/') ?>"
+                   
                 },
                 error: function(xhr, status, error) {
                     // Handle the error response from the server
