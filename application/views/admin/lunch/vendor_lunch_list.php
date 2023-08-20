@@ -233,7 +233,8 @@ p {
             <input class="inputb" type="text" name="" id="total_amounts" disabled>
         </div>
         <div>
-            <a class="btn btn-primary btn-sm" onclick="print_vendor_data()">Print</a>
+            <label style=" visibility: hidden; ">.</label>
+            <a class="btn btn-primary" onclick="print_vendor_data()">Print</a>
         </div>
     </div>
     <div id="tablebody">
