@@ -151,10 +151,11 @@ function submitForm() {
 }
 $(document).ready(function() {
     $('#submit-btn').click(function() {
-        document.getElementById("loading").style.visibility = "visible";
         var reason = $('#reason').val();
         if (reason !== '') {
             $('#lunchoffmodal').hide();
+            document.getElementById("loading").style.visibility = "visible";
+
             var reasonValue = document.getElementById('reason').value;
             var dateoffValue = document.getElementById('dateoff').value;
 
