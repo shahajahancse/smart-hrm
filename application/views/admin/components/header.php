@@ -264,6 +264,7 @@ if($user[0]->user_role_id != 3) {
                     $leaveapp = $this->Xin_model->get_notify_leave_applications_by_userid($user[0]->user_id);
                     $incrementapp =[];
                     $probationapp =[];
+                    $internapp=[];
                     $fcount = count($leaveapp) + count($incrementapp) + count($probationapp);
                 }  ?>
                 <style>
