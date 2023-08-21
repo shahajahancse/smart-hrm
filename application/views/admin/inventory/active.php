@@ -47,15 +47,13 @@
             <td class="text-center"><?= $row->purpose?></td>
 
             <td class="text-center">
-              <!-- < ?php if($row->status == 1){?>  -->
                 <div class="dropdown" >
                   <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important;color:black;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                   <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
-                    <a class='req_id text-info'  data-toggle="modal" data-target="#requested_listt" style="padding-left:5px; cursor: pointer"  data-id="<?php echo $row->id?>" data-status="<?php echo $row->status?>"  ><b>Edit</b></a><br>
+                    <a class='req_id text-info'  data-toggle="modal" data-target="#requested_listt" style="padding-left:5px; cursor: pointer"  data-id="<?php echo $row->id?>" data-status="<?php echo $row->status?>"  ><b>Approved</b></a><br>
                     <a class="text-danger"style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_request/'.$row->id);?>"><b>Delete</b></a>
                   </div>
                 </div>
-              <!-- < ?php } else { echo ""; } ?> -->
             </td>
           </tr>
         <?php }?>

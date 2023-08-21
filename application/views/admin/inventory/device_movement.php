@@ -83,9 +83,15 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
 
   <div class="col-md-12" style="display:flex;margin-top:5px">
     <div class="col-md-7" style="padding-left: 0px;margin-left: 0px;">
+      
+      <?php if($session['role_id']==3){?>
+        <a href="#" class="btn btnn" style="margin-left:10px;" id="active_deivce">Active Device</a>
+        <a href="#" class="btn btnn" style="margin-left:10px;" id="move_history">Movement history</a>
+      <?php }else{?>
       <a href="#" class="btn btnn" id="listButton">Request List</a>
-      <a href="#" class="btn btnn" style="margin-left:10px;" id="infoButtonn">Used Deviced</a>
-      <a href="#" class="btn btnn" style="margin-left:10px;" id="infoButtonnn">Unused Deviced</a>
+      <a href="#" class="btn btnn" style="margin-left:10px;" id="infoButtonn">Used Device</a>
+      <a href="#" class="btn btnn" style="margin-left:10px;" id="infoButtonnn">All Device</a>
+      <?php }?>
     </div>
     <div class="col-md-5 <?php echo $get_animate;?>">
       <?php if($this->session->flashdata('success')):?>
@@ -121,8 +127,7 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
 <script>
 
   $(document).ready(function(){
-
-      $('#listButton').addClass('active');
+    $('#listButton').addClass('active');
     $("#list_data").load("<?php echo base_url("admin/inventory/requested_list")?>");
   });
   $('#listButton').click(function () {
@@ -136,12 +141,9 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
     $('#infoButtonnn').click(function () {
     $("#list_data").load("<?php echo base_url("admin/inventory/inactive_list")?>");
   });
-
   setTimeout(function() {
       $("#flash_message").fadeOut();
   }, 3000);
-
-
    $('.btnn').click(function(event) {
       event.preventDefault();
       $('.btnn').removeClass('active');

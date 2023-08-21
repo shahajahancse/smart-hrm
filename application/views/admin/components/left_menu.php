@@ -436,7 +436,7 @@ if($theme[0]->sub_menu_icons != ''){
           <?php } ?>
 
 
-          <?php if(in_array('1042',$role_resources_ids)) { ?>
+          <?php if(in_array('1048',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['move_open']))echo $arr_mod['move_open'];?>"> <a href="<?php echo site_url('admin/inventory/moves');?>"> <i class="fa fa-tablet" style="color:green"></i> Device Movements </a> </li>
           <?php } ?>
 

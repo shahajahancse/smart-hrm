@@ -1286,23 +1286,32 @@ public function create_movement(){
 
 }
 public function move_create(){
-	$data['created_by'] = $_POST['user_id'];
+	dd($_POST);
 	$data['device_id']  = $_POST['device_id'];
-	$data['user_id']    = $_POST['emp_id'];
+	$data['user_id']    = $_POST['user_id'];
 	$data['purpose']    = $_POST['purpose'];
+	$data['floor']      = $_POST['floor'];
+	$data['acc_id']      = $_POST['test'];
+
+
     if($_POST['role_id'] != 3){
-		$data['status']    = $_POST['status'];
-		$data['floor']    = $_POST['floor'];
+    	$data['created_by'] = $_POST['user_id'];
+	    $data['user_id']    = $_POST['emp_id'];
+		$data['status']     = 2;
+		$data['floor']      = $_POST['floor'];
 		$data['start_time'] = date("Y-m-d H:i:s");
 	}
 	$data['status']      = $_POST['role_id'] != 3 ? 2 : 1;
 	$insert = $this->db->insert('move_list',$data);
 	if($insert){
-		$this->db->where('device_model',$_POST['device_id'])->update('product_accessories',['move_status'=>2]);
+		if($_POST['role_id']!=3){
+			$this->db->where('device_model',$_POST['device_id'])->update('product_accessories',['move_status'=>2]);
+		}
 		$this->session->set_flashdata('success', 'Successfully Insert Done');
 	}else{
 		$this->session->set_flashdata('error', 'Error to Insert');
 	}
+
 	redirect('admin/inventory/moves');
 }
 

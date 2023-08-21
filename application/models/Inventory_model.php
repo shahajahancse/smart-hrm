@@ -517,6 +517,7 @@ public function movement_list(){
 	$this->db->join('product_accessories_model as pam', 'pa.device_model = pam.id', 'left');
 	$this->db->join('product_accessory_categories as pac', 'pa.cat_id = pac.id', 'left');
 	$this->db->where('pa.status',5);
+	$this->db->where('pa.move_status',1);
 	$this->db->group_by('pa.id');
 	$data = $this->db->get()->result();
 

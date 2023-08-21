@@ -10,13 +10,6 @@
    
 }
 </style>
-
-
-<?php 
-// $data = $this->db->select('move_list.status')
-// dd($requests);
-
-?>
 <?php  $get_animate = $this->Xin_model->get_content_animate();?>
 <div class="<?= $get_animate?>" style="margin-left:15px;margin-top:15px;margin-right: 15px;border-radius: 0px;">
   <div class="">
@@ -43,7 +36,6 @@
                 <?= $row->status == 5 && $row->move_status == 1 ? "<i class='fa fa-dot-circle-o' style='color:red'></i> Not Used": "<i class='fa fa-dot-circle-o' style='color:green'></i> Used"?>
               </span>
             </td>
-
             <td class="text-center">
                 <div class="dropdown" >
                   <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important;color:black" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
@@ -59,8 +51,6 @@
     </table>
   </div>
 </div>
-
-
 
 <script type="text/javascript">
     $(document).ready(function () {

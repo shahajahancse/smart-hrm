@@ -1,10 +1,14 @@
 <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
-<?php $hidden = array('user_id' => $session['user_id'],'role_id' => $session['role_id']);?>
+<?php $hidden = $session?>
 <?php echo form_open('admin/inventory/move_create', $attributes,$hidden);?>
 <div class="card">
     <div class="card-body">
+    <div class="row">
         <h4 style="margin-left:15px">Creaeted Movement</h4>
-        <div class="col-md-3">
+
+    </div>
+    <div class="row">
+         <div class="col-md-4">
             <div class="form-group">
                 <label>Select Device<i class="hrsale-asterisk" style="color:red !important">*</i></label>
                 <select class="form-control" name="device_id" id="device_id" required>
@@ -15,8 +19,8 @@
                 </select>
             </div>
         </div>
-
-        <div class="col-md-4">
+        <?php if($session['role_id'] != 3){?>
+        <div class="col-md-5">
             <div class="form-group">
                 <label>Employee<i class="hrsale-asterisk" style="color:red !important">*</i></label>
                 <select class="form-control" name="emp_id" id="emp_id" required>
@@ -27,43 +31,54 @@
                 </select>
             </div>
         </div>
-
-        <div class="col-md-5">
+        <?php }?>
+        
+        <div class="col-md-3">
             <div class="form-group">
-                <label for="order_level">Purpose<i class="hrsale-asterisk" style="color:red !important">*</i></label>
-                <textarea class="form-control" placeholder="Purpose" name="purpose" id="purpose" type="text" required value="<?php echo !empty($row->order_level)? $row->order_level:''; ?>"></textarea>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <div class="form-group">
-                <label for="order_level">Floor<i class="hrsale-asterisk" style="color:red !important">*</i></label>
+                <label for="order_level">Place<i class="hrsale-asterisk" style="color:red !important">*</i></label>
                 <select class="form-control" name="floor" id="floor" required value="<?php echo !empty($row->floor)? 'selected':''; ?>">
-                        <option value="">Select Floor</option>
+                        <option value="">Select Place</option>
                         <option value="3">3rd Floor</option>
                         <option value="5">5th Floor</option>
+                        <option value="1">Outside Office</option>
                 </select>
             </div>
         </div>
-
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="order_level">Status<i class="hrsale-asterisk" style="color:red !important">*</i></label>
-                <select class="form-control" name="status" id="status" required value="<?php echo !empty($row->status)?  'Selected':''; ?>">
-                    <option value="">Select Status</option>
-                    <option value="1">Not Used</option>
-                    <option value="2">Used</option>
-                </select>        
+        <?php if($session['role_id']==3){?>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="order_level">Purpose<i class="hrsale-asterisk" style="color:red !important">*</i></label>
+                    <textarea class="form-control" placeholder="Purpose" name="purpose" id="purpose" type="text" required value="<?php echo !empty($row->order_level)? $row->order_level:''; ?>"></textarea>
+                </div>
             </div>
-        </div>
+         <?php }?>   
+       </div>
 
-        <div class="col-md-4">
-            <div class="form-group">
-                <label for="order_level">Remark<i class="hrsale-asterisk" style="color:red !important">*</i></label>
-                <textarea class="form-control" placeholder="remark" name="remark" id="remark" type="text" required value="<?php echo !empty($row->order_level)? $row->order_level:''; ?>"></textarea>
+        <div class="row">
+        <?php if($session['role_id']!=3){?>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="order_level">Purpose<i class="hrsale-asterisk" style="color:red !important">*</i></label>
+                    <textarea class="form-control" placeholder="Purpose" name="purpose" id="purpose" type="text" required value="<?php echo !empty($row->order_level)? $row->order_level:''; ?>"></textarea>
+                </div>
             </div>
-        </div>
-        <button type="submit" class="btn btn-sm btn-primary" style="float:right;margin-right:17px">  Save </button>
+         <?php }?>   
+
+
+            <?php if($session['role_id']!=3){?>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="order_level">Remark<i class="hrsale-asterisk" style="color:red !important">*</i></label>
+                        <textarea class="form-control" placeholder="remark" name="remark" id="remark" type="text" required value="<?php echo !empty($row->order_level)? $row->order_level:''; ?>"></textarea>
+                    </div>
+                </div>
+            <?php }?>
+            </div>
+
+            <!-- <div class="row"> -->
+                <button type="submit" class="btn  btn-primary" style="float:right;"> Save </button>
+            <!-- </div> -->
     </div>
 
 </div>
