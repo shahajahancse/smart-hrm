@@ -155,10 +155,8 @@ $(document).ready(function() {
         if (reason !== '') {
             $('#lunchoffmodal').hide();
             document.getElementById("loading").style.visibility = "visible";
-
             var reasonValue = document.getElementById('reason').value;
             var dateoffValue = document.getElementById('dateoff').value;
-
             var url = '<?= base_url('admin/lunch/lunch_off') ?>';
             $.ajax({
                 url: url,

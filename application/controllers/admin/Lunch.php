@@ -806,21 +806,40 @@ class Lunch extends MY_Controller
         }
 
     }
-
-
+    public function lunch_active_list()
+    {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $this->db->select('user_id,first_name,last_name,active_lunch');
+        $this->db->where_in('status',[1,4,5]);
+        $data['result']=$this->db->order_by('active_lunch', 'desc')->get('xin_employees')->result();
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch Active List';
+        $data['path_url'] = 'lunch';
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/lunch/lunch_active_list", $data, true);
+            $this->load->view('admin/layout/layout_main', $data);
+        } else {
+            redirect('admin/');
+        }
+    }
+    public function change_lunch_status(){
+        $menu_data = array(
+            'active_lunch'		 => $_POST['replace_status'],
+        );
+      
+        $this->db->where('user_id', $_POST['id'])->update('xin_employees', $menu_data);
+    }
     public function pay_vend_ajax_request()
     {
         $id = $this->input->post('id');
         $statusC = $this->input->post('statusC');
-
-
-
         $data["values"] = $this->Lunch_model->pay_vend_ajax_request($id);
-
         $data["from_date"] = $data["values"][0]->from_date;
         $data["to_date"] = $data["values"][0]->to_date;
         $data["f_date"] = $data["values"][0]->date;
-
         if(is_string($data["values"])) {
             echo $data["values"];
         } else {

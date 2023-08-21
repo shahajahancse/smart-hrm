@@ -20,7 +20,8 @@ class Lunch_model extends CI_Model {
                 ');
             $this->db->from('xin_employees as u');
             $this->db->join('xin_attendance_time as at', 'u.user_id = at.employee_id', 'left');
-            $this->db->where('at.attendance_date', $date)->group_by('u.user_id');
+            $this->db->where('at.attendance_date', $date);
+            $this->db->where('u.active_lunch', 1)->group_by('u.user_id');
             $data = $this->db->order_by('at.status', 'DESC')->get()->result();
 
         if ($status == true) {
@@ -50,13 +51,9 @@ class Lunch_model extends CI_Model {
         
         return $data;
     }
-
-
-
     public function all_employees($date)
     {
-        $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4, 5) AND user_id NOT IN (27,30,46,63)");
-
+        $query = $this->db->query("SELECT * FROM xin_employees WHERE active_lunch IN (1) AND user_id NOT IN (27,30,46,63)");
         return $query->result();
     }
 
