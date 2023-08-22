@@ -128,12 +128,47 @@
                     </div>
                 </div>
                 <h4>Contact Details</h4>
+               
+                <h5>Person 1</h5>
                 <div class="col-md-12 p-0 m-0">
                     <div class="col-md-3">
-                        <label for="website"><?php echo $this->lang->line('xin_employee_password');?></label>
+                        <label for="website">Name</label>
                         <input class="form-control"
-                            placeholder="<?php echo $this->lang->line('xin_employee_password');?>" name="password"
+                            placeholder="Name" name="person_name_a"
+                            type="text" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="website">Number</label>
+                        <input class="form-control"
+                            placeholder="Number" name="person_phn_a"
+                            type="number" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="website">Email</label>
+                        <input class="form-control"
+                            placeholder="Email" name="person_email_a"
+                            type="email" required>
+                    </div>
+                </div>
+                <h5>Person 2</h5>
+                <div class="col-md-12 p-0 m-0">
+                    <div class="col-md-3">
+                        <label for="website">Name</label>
+                        <input class="form-control"
+                            placeholder="Name" name="person_name_b"
                             type="text">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="website">Number</label>
+                        <input class="form-control"
+                            placeholder="Number" name="person_phn_b"
+                            type="number">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="website">Email</label>
+                        <input class="form-control"
+                            placeholder="Email" name="person_email_b"
+                            type="email">
                     </div>
                 </div>
                 <div class="form-actions box-footer">
