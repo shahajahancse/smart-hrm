@@ -3009,29 +3009,14 @@ public function nda() {
        		 $Return['error'] = $this->lang->line('xin_employee_error_relation');
 		} else if($this->input->post('contact_name')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_contact_name');
-		} else if(!preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('contact_name'))) {
-		// } else if(!preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('contact_name'))) {
-			$Return['error'] = $this->lang->line('xin_hr_string_error');
-		} else if($this->input->post('contact_no')!=='' && !preg_match('/^([0-9]*)$/', $this->input->post('contact_no'))) {
-			 $Return['error'] = $this->lang->line('xin_hr_numeric_error');
-		} else if($this->input->post('work_phone')!=='' && !preg_match('/^([0-9]*)$/', $this->input->post('work_phone'))) {
-			 $Return['error'] = $this->lang->line('xin_hr_numeric_error');
-		} else if($this->input->post('work_phone_extension')!=='' && !preg_match('/^([0-9]*)$/', $this->input->post('work_phone_extension'))) {
-			 $Return['error'] = $this->lang->line('xin_hr_numeric_error');
 		} else if($this->input->post('mobile_phone')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_mobile');
-		} else if(!preg_match('/^([0-9]*)$/', $this->input->post('mobile_phone'))) {
-			 $Return['error'] = $this->lang->line('xin_hr_numeric_error');
-		} else if($this->input->post('home_phone')!=='' && !preg_match('/^([0-9]*)$/', $this->input->post('home_phone'))) {
-			 $Return['error'] = $this->lang->line('xin_hr_numeric_error');
 		} else if($this->input->post('work_email')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_email');
 		} else if (!filter_var($this->input->post('work_email'), FILTER_VALIDATE_EMAIL)) {
 			$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
 		} else if ($this->input->post('personal_email')!=='' && !filter_var($this->input->post('personal_email'), FILTER_VALIDATE_EMAIL)) {
 			$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
-		} else if($this->input->post('zipcode')!=='' && !preg_match('/^([0-9]*)$/', $this->input->post('zipcode'))) {
-			 $Return['error'] = $this->lang->line('xin_hr_numeric_error');
 		}
 		
 		if(null!=$this->input->post('is_primary')) {
@@ -3044,7 +3029,7 @@ public function nda() {
 		} else {
 			$is_dependent = '';
 		}
-				
+		// $Return['error'] = 'hello';
 		if($Return['error']!=''){
        		$this->output($Return);
     	}

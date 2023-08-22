@@ -53,8 +53,8 @@ class Clients extends MY_Controller
         $data['breadcrumbs'] = $this->lang->line('xin_project_clients');
         $data['path_url'] = 'clients';
         $role_resources_ids = $this->Xin_model->user_role_resource();
-            $data['subview'] = $this->load->view("admin/clients/clients_list", $data, true);
-            $this->load->view('admin/layout/layout_main', $data); //page load
+        $data['subview'] = $this->load->view("admin/clients/clients_list", $data, true);
+        $this->load->view('admin/layout/layout_main', $data); //page load
     }
 
     public function clients_list()
