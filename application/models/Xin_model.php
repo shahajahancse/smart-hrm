@@ -343,6 +343,11 @@ class Xin_model extends CI_Model {
 			$arr['lusetting_open'] = 'active';
 			$arr['lmenu_active'] = 'active';
 			return $arr;
+		} else if($mClass=='lunch' && $mMethod=='lunch_active_list') {
+			$arr['lunch_open'] = 'active';
+			$arr['lusetting_open'] = 'active';
+			$arr['l_active'] = 'active';
+			return $arr;
 		}
 		// lunch
 

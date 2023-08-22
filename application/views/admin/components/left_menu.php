@@ -308,7 +308,10 @@ if($theme[0]->sub_menu_icons != ''){
               <li class="sidenav-link <?php if(!empty($arr_mod['lpackage_active']))echo $arr_mod['lpackage_active'];?>"> <a href="<?php echo site_url('admin/lunch/lunch_package');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Lunch Package </a> </li>
               <?php } ?>
               <?php if(in_array('1058',$role_resources_ids)) { ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['lmenu_active']))echo $arr_mod['lmenu_active'];?>"> <a href="<?php echo site_url('admin/lunch/lunch_menu');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Lunch Package </a> </li>
+              <li class="sidenav-link <?php if(!empty($arr_mod['lmenu_active']))echo $arr_mod['lmenu_active'];?>"> <a href="<?php echo site_url('admin/lunch/lunch_menu');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Lunch Menu </a> </li>
+              <?php } ?>
+              <?php if(in_array('1059',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['l_active']))echo $arr_mod['l_active'];?>"> <a href="<?php echo site_url('admin/lunch/lunch_active_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Active Lunch </a> </li>
               <?php } ?>
             </ul>
           </li>

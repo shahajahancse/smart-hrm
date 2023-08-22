@@ -49,7 +49,7 @@
             <?php } ?>
             <?php } ?>
             <tr>
-                <th>Un Active</th>
+                <th colspan="3" class="text-danger text-center">In Active</th>
             </tr>
             <?php foreach ($result as $key => $row) { ?>
             <?php if (!$row->active_lunch == 1) { ?>
