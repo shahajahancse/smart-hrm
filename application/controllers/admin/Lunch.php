@@ -825,6 +825,16 @@ class Lunch extends MY_Controller
             redirect('admin/');
         }
     }
+    public function get_lunch_status() {
+        $this->db->select('user_id, first_name, last_name, active_lunch');
+        $this->db->where_in('status', [1, 4, 5]);
+        $result = $this->db->order_by('active_lunch', 'desc')->get('xin_employees')->result();
+    
+        // Return the data as JSON
+        header('Content-Type: application/json');
+        echo json_encode($result);
+    }
+    
     public function change_lunch_status(){
         $menu_data = array(
             'active_lunch'		 => $_POST['replace_status'],
