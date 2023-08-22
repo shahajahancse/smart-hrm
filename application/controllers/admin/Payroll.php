@@ -3571,4 +3571,56 @@ class Payroll extends MY_Controller {
 		$insert = $this->db->where('id',$_POST['rowId'])->update('xin_advance_salaries',$data);
 		redirect('admin/payroll/advanced_salary');
 	}
+
+
+
+	// festival bonus
+
+	public function emp_festival_bonus($id = null){
+		$data['session'] = $this->session->userdata('username');
+		// dd($data['session']);
+		if(empty($data['session'])){ 
+			redirect('admin/');
+		}
+		$data['title'] 		 = 'Festival Bonus | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Festival Bonus ';
+		$data['result']= $this->db->select('*')->get('xin_festival_bonus')->result();	
+		if($id != null){
+			$data['row']= $this->db->select('*')->where('id',$id)->get('xin_festival_bonus')->row();
+		}
+		$data['subview'] = $this->load->view('admin/payroll/festival_bonus',$data,TRUE);
+						   $this->load->view('admin/layout/layout_main', $data);
+
+	}
+
+	public function add_festival_bonus(){
+		// dd($_POST);
+		$table  = 'xin_festival_bonus';
+		$data   = array(
+					'festival_name' => $_POST['festival_name'],
+					'festival_date' => $_POST['festival_date'],
+					'status' 		=> $_POST['status'],
+				);
+		$hidden_id = $_POST['hidden_id'] ;	
+		// dd($hidden_id);
+		$insert_update =  $this->Payroll_model->save_update_festival_bonus($table,$data,$hidden_id);
+		if(isset($insert_update) == TRUE){
+			if($hidden_id == null){
+				$this->session->set_flashdata('msg', 'Successfully Insert Done');
+			}else{
+				$this->session->set_flashdata('msg', 'Update Successfully');
+			}
+		}else{
+			$this->session->set_flashdata('msgs', 'Error!!!');
+		}
+		redirect('admin/payroll/emp_festival_bonus');
+	}
+
+	public function festival_bonus_delete($id){
+		$delete = $this->db->where('id',$id)->delete('xin_festival_bonus');
+		if($delete){
+			$this->session->set_flashdata('msgs', 'Delete Successfully');
+		}
+		redirect('admin/payroll/emp_festival_bonus');
+	}
 }

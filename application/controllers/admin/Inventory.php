@@ -50,28 +50,6 @@ class Inventory extends MY_Controller {
 		}
 	}
 
-	public function index1(){
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['title'] = 'Store | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store';
-		if($session['role_id']== 1 || $session['role_id']== 2 || $session['role_id']== 4 ){
-			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-		}
-		if( $session['role_id'] == 3) {
-			$data['products'] 	= $this->Inventory_model->purchase_products($session['user_id'],$session['role_id']);
-		}
-		$data['user_role_id'] 	= $session['role_id'];
-		if(!empty($session)){ 
-			$data['subview'] = $this->load->view("admin/inventory/index1", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/');
-		}
-	}
-
 
 	public function create($id = null) {
 		$session = $this->session->userdata('username');
@@ -460,27 +438,17 @@ public function add_daily_package()
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		
-
-		//Validation
-		// $this->form_validation->set_rules('spl_name', 'Sapplier name', 'required|trim');
-		// $this->form_validation->set_rules('cmp_name', 'select category', 'required|trim');
 		$this->form_validation->set_rules('cat_id[]', 'select category', 'required|trim');
 		$this->form_validation->set_rules('sub_cate_id[]', 'select category', 'required|trim');
 		$this->form_validation->set_rules('product_id[]', 'item name', 'required|trim');
 		$this->form_validation->set_rules('quantity[]', 'Quantity', 'required|trim');
 
 
-		//   //Validate and input data
 		if ($this->form_validation->run() == true){
-			// $supplier_id=$_POST['spl_name'];
-			// $company=$_POST['cmp_name'];
-			$ids=$this->Inventory_model->save('products_purches', ['user_id'=>$session['user_id']]);
-			$last_id = $this->db->insert_id();
 			
 			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
 				$form_data[] = array( 
-					'purches_id'	  => $last_id,
+					'user_id'	      => $session['user_id'],
 					'product_id'	  => $_POST['product_id'][$i],
 					'quantity'		  => $_POST['quantity'][$i],
 					'approx_amount'	  => $_POST['approx_amount'][$i],
@@ -504,18 +472,8 @@ public function add_daily_package()
 		//Dropdown
 		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']	= 'Store';
-		// $data['path_url'] 		= 'inventory';
-		// $data['categorys']		= $this->db->get("products_categories")->result();
 		$data['products'] 		= $this->Inventory_model->purchase_products_requisition($session['user_id'],$session['role_id']);
-
-		// dd($data['products']);
-		/*$data['results'] 		= $this->Inventory_model->product_list();
-		$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-		$data['company'] 		= $this->db->distinct()->select('company')->get("product_supplier")->result();
-		$data['units'] 			= $this->db->get("product_unit")->result();
-		$data['col'] 			= $id;*/
 		$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
-
 		$data['user_role_id'] 	= $session['role_id'];
 		if ($id != null) {
 			$data['row'] 		= $this->db->where('id',$id)->get("products")->row();
@@ -539,7 +497,6 @@ public function add_daily_package()
 		$data['results'] 		= $this->Inventory_model->product_list();
 		$data['categorys']		= $this->db->get("products_categories")->result();
 		$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-		$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
 		$data['units'] 			= $this->db->get("product_unit")->result();
 		$data['col'] 			= $id;
 		$data['user_role_id'] 	= $session['role_id'];
@@ -550,14 +507,6 @@ public function add_daily_package()
 								$this->load->view('admin/layout/layout_main', $data); //page load
     }
 
-    // function product_purchase_edit($id) {
-
-
-    // }
-
-    // function product_purchase_approved($id) {
-    	
-    // }
 
 	public function purchase_panding_list()
 	{
@@ -571,7 +520,6 @@ public function add_daily_package()
 			$data['breadcrumbs']	= 'purchase Pending';
 			$data['categorys']		= $this->db->get("products_categories")->result();
 			$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],1);
-
 			// dd($data['products']);
 			$data['results'] 		= $this->Inventory_model->product_list();
 			$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
@@ -663,10 +611,10 @@ public function add_daily_package()
 			$data['results']	 = $this->Inventory_model->product_purches_details($id);
 			// dd($data['results']);
 			if(!empty($data['results'])){
-				$data['purches_id'] 	 = $data['results'][0]->purches_id;
+				$data['id'] 	 = $data['results'][0]->id;
 			}
 		    $data['status'] = $this->db->select('status')
-			                     ->where('id',$id)->get('products_purches')
+			                     ->where('id',$id)->get('products_purches_details')
 								 ->result()[0]
 								 ->status;			
 		}
@@ -684,8 +632,8 @@ public function add_daily_package()
 	public function product_purchase_rejected($id){
 		// dd($id);
 		$log_user=$_SESSION['username']['user_id'];
-		$this->db->where('id',$id)->update('products_purches',['updated_by'=>$log_user]);
-		$approved = $this->db->where('id',$id)->update('products_purches',['status'=>4]);
+		$this->db->where('id',$id)->update('products_purches_details',['updated_by'=>$log_user]);
+		$approved = $this->db->where('id',$id)->update('products_purches_details',['status'=>4]);
 		if($approved){
 			$this->session->set_flashdata('warning', ' Requsition Status Rejected .');
 		 redirect("admin/inventory/purchase","refresh");
@@ -704,9 +652,9 @@ public function add_daily_package()
 		$data['breadcrumbs'] = 'Purchase';
 	    $data['results'] 	 = $this->Inventory_model->product_requisition_details($id);
 		 if(!empty($data['results'])){
-			$data['purches_id'] 	 = $data['results'][0]->purches_id;
+			$data['id'] 	 = $data['results'][0]->id;
 		}else{
-			$data['purches_id']  	 = '';
+			$data['id']  	 = '';
 		}
 	
 		 
@@ -720,7 +668,7 @@ public function add_daily_package()
 		// dd($id);
 
 	    $session = $this->session->userdata('username');
-		$all_detail=$this->db->where('purches_id',$id)->get('products_purches_details')->result();
+		$all_detail=$this->db->where('id',$id)->get('products_purches_details')->result();
 		// dd($all_detail);
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
@@ -734,14 +682,14 @@ public function add_daily_package()
 				 foreach($quantity as $key=>$value){
 					$log_user=$_SESSION['username']['user_id'];
 					if($session['role_id']!=3 &&  $this->input->post('update_a')==0){
-					$this->db->where('id',$id)->update('products_purches',['updated_by'=>$log_user]);
+					$this->db->where('id',$id)->update('products_purches_details',['updated_by'=>$log_user]);
                     $this->db->where('id',$r_did[$key])->update('products_purches_details',['ap_quantity'=>$value]);}else{
 						$this->db->where('id',$r_did[$key])->update('products_purches_details',['quantity'=>$value]);
 					} }
 			 }
 
 			 if($session['role_id']!=3 && $this->input->post('update_a')==0){ 
-				$approved = $this->db->where('id',$id)->update('products_purches',['status'=>2]);
+				$approved = $this->db->where('id',$id)->update('products_purches_details',['status'=>2]);
 				if($approved){
 					$this->session->set_flashdata('success', 'Updated Successfully.');
 					redirect("admin/inventory/purchase","refresh");
@@ -754,8 +702,9 @@ public function add_daily_package()
 	
 	}
 
-	public function product_purchase_delivered($id){
-        $results = $this->db->where('purches_id',$id)->get('products_purches_details')->result();
+	public function product_purchase_recived(){
+		
+        $results = $this->db->where('id',$_POST['row_id'])->get('products_purches_details')->result();
         foreach ($results as $key => $row) {
         	$product = $this->db->where('id', $row->product_id)->get('products')->row();
         	$quantity = $product->quantity + $row->ap_quantity;	
@@ -764,7 +713,7 @@ public function add_daily_package()
         	$this->db->where('id', $row->id)->update('products_purches_details', array('status' => 3));
         }
 
-		$deliver = $this->db->where('id',$id)->update('products_purches',['status'=>3]);
+		$deliver = $this->db->where('id',$_POST['row_id'])->update('products_purches_details',['status'=>3]);
 		if($deliver){
 			 $this->session->set_flashdata('success', 'Delivered Successfully.');
 			 redirect("admin/inventory/purchase","refresh");
@@ -827,9 +776,7 @@ public function add_daily_package()
 		$data['result'] = $this->db->where('id', $id)->get('product_supplier')->row();
 		$data['title'] 			= 'Supplier Details | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']	= 'Supplier Details';
-		// $data['path_url'] 		= 'inventory';
-	 
-		// dd($data['products']);
+		$data['results']         = $this->db->select('*')->get('product_supplier')->result();
 		$data['subview'] 		= $this->load->view("admin/inventory/supplier_details", $data, TRUE);
 								  $this->load->view('admin/layout/layout_main', $data);
 
@@ -1272,6 +1219,7 @@ function requisition_list(){
 	}
 	$data['session']    = $session;
 	$data['products'] 	= $this->Inventory_model->requisition_list($session);
+
 	$data['subview']    = $this->load->view("admin/inventory/requisition_list", $data);
 }
 
@@ -1285,6 +1233,143 @@ public function delete_sub_category($id){
    $this->db->from('products_sub_categories')->where('id',$id)->delete();
 	redirect('admin/inventory/sub_category');
 }
+public function product_purchase_delete($id){
+   $this->db->from('products_sub_categories')->where('id',$id)->delete();
+	redirect('admin/inventory/purchase');
+}
+
+
+public function low_product_list(){
+
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['title'] = 'Low Quantity of Products | '.$this->Xin_model->site_title();
+	$data['breadcrumbs'] = 'Low Quantity Product Details';
+	$data['results'] = $this->db->select('product_name,quantity,order_level')->where('quantity < order_level')->get('products')->result();
+	// dd($data['results']);
+	$data['subview'] = $this->load->view("admin/inventory/low_product_list", $data, TRUE);
+	$this->load->view('admin/layout/layout_main', $data); //page load
+
+}
+
+
+public function moves(){
+
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['title'] = 'Device Movement | '.$this->Xin_model->site_title();
+	$data['breadcrumbs'] = 'Device Movement';
+
+	$data['subview'] = $this->load->view("admin/inventory/device_movement", $data, TRUE);
+	$this->load->view('admin/layout/layout_main', $data); //page load
+
+}
+
+public function create_movement(){
+
+	$data['session']= $this->session->userdata('username');
+	if(empty($data['session'])){ 
+		redirect('admin/');
+	}
+
+	$data['title'] = 'Create Movement | '.$this->Xin_model->site_title();
+	$data['breadcrumbs'] = 'Create Movement';
+	$data['users'] = $this->db->select('first_name,last_name,user_id')->where_in('status',[1,4,5])->get('xin_employees')->result();
+	$data['get'] = $this->Inventory_model->movement_list();
+	// dd($data['get']);
+	$data['subview'] = $this->load->view("admin/inventory/create_movement", $data, TRUE);
+	$this->load->view('admin/layout/layout_main', $data); //page load
+
+}
+public function move_create(){
+	dd($_POST);
+	$data['device_id']  = $_POST['device_id'];
+	$data['user_id']    = $_POST['user_id'];
+	$data['purpose']    = $_POST['purpose'];
+	$data['floor']      = $_POST['floor'];
+	$data['acc_id']      = $_POST['test'];
+
+
+    if($_POST['role_id'] != 3){
+    	$data['created_by'] = $_POST['user_id'];
+	    $data['user_id']    = $_POST['emp_id'];
+		$data['status']     = 2;
+		$data['floor']      = $_POST['floor'];
+		$data['start_time'] = date("Y-m-d H:i:s");
+	}
+	$data['status']      = $_POST['role_id'] != 3 ? 2 : 1;
+	$insert = $this->db->insert('move_list',$data);
+	if($insert){
+		if($_POST['role_id']!=3){
+			$this->db->where('device_model',$_POST['device_id'])->update('product_accessories',['move_status'=>2]);
+		}
+		$this->session->set_flashdata('success', 'Successfully Insert Done');
+	}else{
+		$this->session->set_flashdata('error', 'Error to Insert');
+	}
+
+	redirect('admin/inventory/moves');
+}
+
+
+function requested_list(){
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['session']    = $session;
+	$data['requests']   = $this->Inventory_model->request_list();
+	$data['subview']    = $this->load->view("admin/inventory/request_list", $data);
+}
+
+function active_list(){
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['session']    = $session;
+	$data['requests']   = $this->Inventory_model->active_list();
+	$data['subview']    = $this->load->view("admin/inventory/active", $data);
+}
+function inactive_list(){
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['session']    = $session;
+	$data['requests']   = $this->Inventory_model->inactive_list();
+	$data['subview']    = $this->load->view("admin/inventory/inactive", $data);
+}
+function request_edit(){
+	$data['status']     = $_POST['status'];
+	$data['floor']      = $_POST['floor'];
+	$data['remark']     = $_POST['remark'];
+	$data['start_time'] = date("Y-m-d H:i:s");
+    $update = $this->db->where('id',$_POST['item_id'])->update('move_list',$data);
+	if($update){
+		echo "Approved";
+	}else{
+			echo "Something Error!!!";
+	}
+}
+
+function delete_request($id){
+	// dd($_POST);
+
+    $delete = $this->db->where('id',$id)->update('move_list',$data);
+	if($delete){
+		$this->session->set_flashdata('success', 'Successfully Update Done');
+	}else{
+		$this->session->set_flashdata('error', 'Error to Update');
+	}
+	return true;
+}
+
+
 
 }
 

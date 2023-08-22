@@ -399,7 +399,12 @@ class Xin_model extends CI_Model {
 			$arr['emp_advanced_sal'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
-		} else if($mMethod=='advance_salary_report') {
+		}else if($mMethod=='festival_bonus' && $mClass=='payroll' ) {
+			$arr['emp_festival_bonus'] = 'active';
+			$arr['payrl_open'] = 'active';
+			return $arr;
+		}  
+		else if($mMethod=='advance_salary_report') {
 			$arr['pay_advn_rpt_active'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
@@ -408,9 +413,14 @@ class Xin_model extends CI_Model {
 		} else if($mClass=='inventory' && $mMethod=='index') {
 			$arr['invtry_open'] = 'active';
 			$arr['my_requi_active'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory' && $mMethod=='index') {
+			$arr['invtry_open'] = 'active';
+			$arr['requi_active'] = 'active';
 			$arr['iqlist_open'] = 'active';
 			return $arr;
-		}  else if($mClass=='inventory' && $mMethod=='report') {
+		}   
+		else if($mClass=='inventory' && $mMethod=='report') {
 			$arr['invtry_open'] = 'active';
 			$arr['inreport_active'] = 'active';
 			return $arr;
@@ -419,7 +429,11 @@ class Xin_model extends CI_Model {
 			// $arr['insetting_open'] = 'active';
 			$arr['product_open'] = 'active';
 			return $arr;
-		} else if($mClass=='inventory' && $mMethod=='low_product_list') {
+		} else if($mClass=='inventory' && $mMethod=='moves') {
+			$arr['invtry_open'] = 'active';
+			$arr['move_open'] = 'active';
+			return $arr;
+		}else if($mClass=='inventory' && $mMethod=='low_product_list') {
 			$arr['invtry_open'] = 'active';
 			$arr['low_product_list'] = 'active';
 			return $arr;

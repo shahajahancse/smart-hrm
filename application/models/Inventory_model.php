@@ -76,7 +76,7 @@ public function requisition_list($session){
 	$this->db->select("
 		p.product_name, 
 		pc.category_name, 
-		prd.id,
+		prd.id as prd_id,
 		prd.quantity,
 		prd.approved_qty,
 		prd.status,
@@ -85,7 +85,7 @@ public function requisition_list($session){
 	$this->db->from("products_requisition_details as prd");
 	$this->db->from("products as p");
 	$this->db->from("products_categories as pc");
-	$this->db->where("p.id = prd.id");
+	$this->db->where("p.id = prd.product_id");
 	$this->db->where("pc.id = prd.cat_id");	
 	if( $session['role_id'] == 3) {
 		$this->db->where("prd.user_id", $session['user_id']);
@@ -100,18 +100,15 @@ public function purchase_products_requisition($id,$role_id){
 	$this->db->select('
 		p.id,
 		p.user_id,
-		p.supplier,
 		p.status,
 		p.created_at,
 		p.updated_by,
 		emp.first_name,
-		emp.last_name, 
-		ps.name,
-		ps.company,
+		emp.last_name
 	')
-	->from('products_purches as p')
+	->from('products_purches_details as p')
 	->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left')
-	->join('product_supplier as ps', 'ps.id = p.supplier', 'left')
+	// ->join('product_supplier as ps', 'ps.id = p.supplier', 'left')
 	->order_by('p.id', 'desc');
 	return	$this->db->get()->result();
 } 
@@ -120,21 +117,22 @@ public function purchase_products_requisition($id,$role_id){
 	// ************* purchase part end ********************
 
 public function purchase_products_status($id,$role_id,$status){
+	// dd($status);
 	if($role_id==1 || $role_id==2 || $role_id==4 ){
 		$this->db->select('
 			xin_employees.first_name,
 			xin_employees.last_name, 
-			products_purches.id,
-			products_purches.user_id,
-			products_purches.status,
-			products_purches.created_at,
-			products_purches.updated_by
+			products_purches_details.id,
+			products_purches_details.user_id,
+			products_purches_details.status,
+			products_purches_details.created_at,
+			products_purches_details.updated_by
 		')
-		->from('products_purches')
+		->from('products_purches_details')
 		->from('xin_employees')
-		->where("products_purches.user_id = xin_employees.user_id")
-		->where("products_purches.status =$status")
-		->order_by('products_purches.id', 'desc');
+		->where("products_purches_details.user_id = xin_employees.user_id")
+		->where("products_purches_details.status =$status")
+		->order_by('products_purches_details.id', 'desc');
 		}
 	return	$this->db->get()->result();
 } 
@@ -213,28 +211,23 @@ public function purchase_products_status($id,$role_id,$status){
 		$this->db->select('
 		            xin_employees.first_name,
 		            xin_employees.last_name,
-				
-					products_purches.status,
 					products.product_name,
 					products_purches_details.quantity,
 					products_purches_details.ap_quantity,
 					products_purches_details.id,
 					products_purches_details.amount,
-					products_purches_details.purches_id,
 					products_purches_details.created_at
 				')
 
 		// ->from('product_supplier')
-		->from('products_purches')
+		// ->from('products_purches')
 		->from('products')
 		->from('products_purches_details')
 		->from('xin_employees')
-		->where("products_purches.user_id = xin_employees.user_id")
+		->where("products_purches_details.user_id = xin_employees.user_id")
 		->where("products_purches_details.product_id = products.id")
-		->where("products_purches_details.purches_id=products_purches.id")
-		->where("products_purches_details.purches_id",$id)
-
-		->order_by('products_purches_details.purches_id', 'desc');
+		->where("products_purches_details.id",$id)
+		->order_by('products_purches_details.id', 'desc');
 		
 		
 			
@@ -246,24 +239,21 @@ public  function product_requisition_details($id){
 	$this->db->select('
 		xin_employees.first_name,
 		xin_employees.last_name,
-		products_purches.status,
+		products_purches_details.status,
 		products.product_name,
 		products_purches_details.quantity,
 		products_purches_details.ap_quantity,
 		products_purches_details.id,
 		products_purches_details.amount,
-		products_purches_details.purches_id,
 		products_purches_details.created_at
 	')
-	->from('products_purches')
 	->from('products')
 	->from('products_purches_details')
 	->from('xin_employees')
-	->where("products_purches.user_id = xin_employees.user_id")
+	->where("products_purches_details.user_id = xin_employees.user_id")
 	->where("products_purches_details.product_id = products.id")
-	->where("products_purches_details.purches_id=products_purches.id")
-	->where("products_purches_details.purches_id",$id)
-	->order_by('products_purches_details.purches_id', 'desc');
+	->where("products_purches_details.id",$id)
+	->order_by('products_purches_details.id', 'desc');
 	return $this->db->get()->result();
 }
 
@@ -365,7 +355,6 @@ public function perches_status_report($f1_date, $f2_date,$statusC) {
 	$this->db->select(" 
 		products_purches_details.id,
 		products_purches.created_at,
-		products_purches_details.purches_id,
 		products_purches_details.quantity,
 		products_purches_details.ap_quantity,
 		products_purches.status,
@@ -391,7 +380,6 @@ public function perches_status_report($f1_date, $f2_date,$statusC) {
 	->where("products_categories.id     = products.cat_id")	
 	->where("products_sub_categories.id = products.sub_cate_id")	
 	->where("products.id 				= products_purches_details.product_id")	
-	->where("products_purches.id 			= products_purches_details.purches_id")	
 	->where("xin_employees.user_id 		= products_purches.user_id")
 	->where("products_purches.created_at BETWEEN '$f1_date' AND '$f2_date'")
 	->where("products_purches.status 		= $statusC")
@@ -513,6 +501,94 @@ public function equipment_list($session = null){
 
     return $data;          
 }
+public function movement_list(){
+
+	$this->db->select('
+		pa.id AS a_id,
+		pa.device_name_id,
+		pa.device_model,
+		pac.cat_name,
+		pac.cat_short_name,
+		pac.id as cat_id,
+		MAX(pam.model_name) AS model_name,
+	');
+
+	$this->db->from('product_accessories as pa');
+	$this->db->join('product_accessories_model as pam', 'pa.device_model = pam.id', 'left');
+	$this->db->join('product_accessory_categories as pac', 'pa.cat_id = pac.id', 'left');
+	$this->db->where('pa.status',5);
+	$this->db->where('pa.move_status',1);
+	$this->db->group_by('pa.id');
+	$data = $this->db->get()->result();
+
+    return $data;          
+}
+
+
+
+public function request_list(){
+	$this->db->select("
+		product_accessories_model.model_name, 
+		product_accessory_categories.cat_name, 
+		product_accessory_categories.cat_short_name, 
+		product_accessories.device_name_id, 
+		xin_employees.first_name, 
+		xin_employees.last_name,
+		move_list.*, 
+	");
+
+	$this->db->from("move_list");
+	$this->db->join("product_accessories_model", "move_list.device_id = product_accessories_model.id");
+	$this->db->join("xin_employees", "move_list.user_id = xin_employees.user_id");
+	$this->db->join("product_accessories", "move_list.device_id = product_accessories.id"); // Join the product_accessories table
+	$this->db->join("product_accessory_categories", "product_accessory_categories.id = product_accessories.cat_id"); // Join the product_accessories table
+	$this->db->where("move_list.status", 1);
+
+	return $this->db->get()->result();
+
+} 
+
+
+public function active_list(){
+		$this->db->select("
+		product_accessories_model.model_name, 
+		product_accessory_categories.cat_name, 
+		product_accessory_categories.cat_short_name, 
+		product_accessories.device_name_id, 
+		xin_employees.first_name, 
+		xin_employees.last_name,
+		move_list.*, 
+	");
+
+	$this->db->from("move_list");
+	$this->db->join("product_accessories_model", "move_list.device_id = product_accessories_model.id");
+	$this->db->join("xin_employees", "move_list.user_id = xin_employees.user_id");
+	$this->db->join("product_accessories", "move_list.device_id = product_accessories.id"); // Join the product_accessories table
+	$this->db->join("product_accessory_categories", "product_accessory_categories.id = product_accessories.cat_id"); // Join the product_accessories table
+	$this->db->where("move_list.status", 2);
+
+	return $this->db->get()->result();
+} 
+
+
+public function inactive_list(){
+		$this->db->select("
+		product_accessories_model.model_name, 
+		product_accessory_categories.cat_name, 
+		product_accessory_categories.cat_short_name, 
+		product_accessories.device_name_id,
+		product_accessories.status,
+		product_accessories.move_status,
+		product_accessories.id,
+	");
+
+	$this->db->from("product_accessories");
+	$this->db->join("product_accessories_model", "product_accessories.device_model = product_accessories_model.id");	
+	$this->db->join("product_accessory_categories", "product_accessory_categories.id = product_accessories.cat_id"); // Join the product_accessories table
+	$this->db->where("product_accessories.status",5);
+
+	return $this->db->get()->result();
+} 
 
 }
 ?>

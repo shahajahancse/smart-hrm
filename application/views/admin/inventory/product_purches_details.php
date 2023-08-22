@@ -16,19 +16,18 @@ $get_animate = $this->Xin_model->get_content_animate();
 
     <?php if($session['role_id']==1){ if($status == 1 || $status == 4){?>
       <?php if(!empty($results)){?>
-         <?php echo form_open('admin/inventory/product_persial_approved/'.$purches_id)?>
+         <?php echo form_open('admin/inventory/product_persial_approved/'.$id)?>
          <?php $i=1;foreach($results as $row){?>
             <input type="hidden" name="r_id[]" value="<?php echo $row->id?>" >
             <input type="hidden" id="quantity" name="qunatity[]" min="1" style="width:20%" value="<?php echo $row->quantity?>">
 
           <?php }?>
           <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-           <!-- <a class="btn btn-sm btn-success pull-right" href="<?php echo base_url('admin/inventory/purchase_approved/'.$results [0]->purches_id .'/'.$results [0]->quantity);?>"> Approved </a> -->
-        <?php echo form_close()?>
+          <?php echo form_close()?>
     
     
-       <a class="btn btn-sm btn-danger pull-right" href="<?php echo base_url('admin/inventory/product_purchase_rejected/'.$results [0]->purches_id);?>" style="margin-right: 10px;">Rejected</a>
-       <a class="btn btn-sm btn-warning pull-right" style="margin-right: 10px;" href="<?php echo base_url('admin/inventory/product_purchase_edit_approved/'.$results [0]->purches_id);?>">Edit & Approved</a>
+       <a class="btn btn-sm btn-danger pull-right" href="<?php echo base_url('admin/inventory/product_purchase_rejected/'.$results [0]->id);?>" style="margin-right: 10px;">Rejected</a>
+       <a class="btn btn-sm btn-warning pull-right" style="margin-right: 10px;" href="<?php echo base_url('admin/inventory/product_purchase_edit_approved/'.$results [0]->id);?>">Edit & Approved</a>
     <?php }}}?>
 
     <button class="btn btn-sm btn-info pull-right" style="margin-right: 10px;" onclick="history.back()"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
@@ -37,7 +36,7 @@ $get_animate = $this->Xin_model->get_content_animate();
   <div class="box-body">
     <div class="box-datatable table-responsive" >
     <input type="hidden" value="1" id="count">
-      <table class="datatables-demo table table-striped table-bordered" id="" style="width:100%">
+      <table class="datatables-demo table table-striped table-bordered" id="table_data" style="width:100%">
         <thead>
           <tr>
               <th class="text-center" >No.</th>
@@ -68,7 +67,7 @@ $get_animate = $this->Xin_model->get_content_animate();
 
 <script>
 // $(document).ready(function () {
-//     $('#details').DataTable();
+//     $('#table_data').DataTable();
 // });
 
 </script>

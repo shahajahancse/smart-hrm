@@ -728,5 +728,15 @@
 			return false;
 		}		
 	}
+
+	public function save_update_festival_bonus($table,$data,$id){
+        // dd($id);
+		if($id !=null){
+			$update = $this->db->where('id',$id)->update($table,$data);	
+		}else{
+			$insert = $this->db->insert($table,$data);	
+		}
+		return TRUE;
+	}
 }
 ?>

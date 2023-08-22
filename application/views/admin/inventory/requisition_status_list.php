@@ -45,7 +45,16 @@
 
 <div class="box <?php echo $get_animate;?>" style="margin-top:20px">
   <div class="box-header with-border">
-    <h3 class="box-title">Rejected List</h3>
+    <h3 class="box-title">
+      <?php 
+            if($products != null || !empty($products)) { 
+              echo $products[0]->status == 1 ? "Pending" : ( $products[0]->status == 2 ? "Approved":( $products[0]->status == 3 ? "Recived" :  "Rejected" ));
+            } else{
+              echo "Rejected";
+            }
+      ?> 
+      List
+    </h3>
   </div>
   <div class="box-body">
     <div class="box-datatable " >

@@ -29,37 +29,44 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
     gap: 9px;
     border-radius: 50px;
     border: 1px solid #CCC;
-    background: #FFF;
+    background:#0fb0d6;
+}
+.btnn {
+  background-color: #0fb0d6;
+  color:white;
+  border: none;
+  cursor: pointer;
+}
+.btnn.active {
+  background-color: #007bff;
+  color: #fff;
+}
+.btnn:hover{
+  color:white;
 }
 
- .btn.active {
-    /* Add your custom styling for the active button here */
-    background-color: #31b0d5; /* For example, change background color to red */
-    color: #ffffff; /* For example, change text color to white */
-  }
+
 
 </style>
-
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
 
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 
-
-<div class="row" >
-
-<div>
-    <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
+<div class="card" >
+    <div class="card-body">
+        
+    <div class="divrow " style="margin-bottom: 27px;">
         <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
-            <div class="h5">Total Using Items</div>
+            <div class="h5">Total Request</div>
             <div class="h5"><?= $using_list ?></div>
         </div>
 
         <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
-            <div class="h5">Total Requisition</div>
+            <div class="h5">Using Device</div>
             <div class="h5"><?= $requisition_list->using_list  ?></div>
         </div>
         <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">
-            <div class="h5">Return Items</div>
+            <div class="h5">Unusing Device</div>
             <div class="h5"><?=  0 ?></div>
         </div>
         <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
@@ -67,21 +74,24 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
             <div class="h5"><?= $requisition_list->status ?></div>
         </div>
     </div>
-</div>
 
-
-</div>
 
 <div class="row <?php echo $get_animate;?>">
   <div class="col-md-12">
-    <span class="t2" >If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
-    <a href="<?= base_url('admin/inventory/create') ?>" class="btn btn-md btn-primary" style="float:right">Requisition</a>
+   <a href="<?= base_url('admin/inventory/create_movement') ?>" class="btn btn-md btn-primary" style="float:right">Crate Movement </a>
   </div>
 
-  <div class="col-md-12" style="display:flex;">
-    <div class="col-md-5" style="padding-left: 0px;margin-left: 0px;">
-    <a href="#" class="btn btn-success" id="listButton">Using List</a>
-    <a href="#" class="btn btn-info" style="margin-left:10px;" id="infoButton">Request Information</a>
+  <div class="col-md-12" style="display:flex;margin-top:5px">
+    <div class="col-md-7" style="padding-left: 0px;margin-left: 0px;">
+      
+      <?php if($session['role_id']==3){?>
+        <a href="#" class="btn btnn" style="margin-left:10px;" id="active_deivce">Active Device</a>
+        <a href="#" class="btn btnn" style="margin-left:10px;" id="move_history">Movement history</a>
+      <?php }else{?>
+      <a href="#" class="btn btnn" id="listButton">Request List</a>
+      <a href="#" class="btn btnn" style="margin-left:10px;" id="infoButtonn">Used Device</a>
+      <a href="#" class="btn btnn" style="margin-left:10px;" id="infoButtonnn">All Device</a>
+      <?php }?>
     </div>
     <div class="col-md-5 <?php echo $get_animate;?>">
       <?php if($this->session->flashdata('success')):?>
@@ -92,6 +102,14 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
           <?php echo $this->session->flashdata('success');?>
         </div>
       <?php endif; ?> 
+        <?php if($this->session->flashdata('error')):?>
+            <div class="alert alert-error" id="flash_message" style="text-align: center;padding: 6px;">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <?php echo $this->session->flashdata('error');?>
+            </div>
+        <?php endif; ?> 
     </div>
   </div>
 </div>
@@ -101,28 +119,34 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
 
   </div>
 </div>
+    </div>
+</div>
   
 
 
 <script>
-  $(document).ready(function() {
-    // Handle click event for the buttons
-    $('#listButton, #infoButton').click(function() {
-      // Remove the 'active' class from all buttons within the container
-      $('#listButton, #infoButton').removeClass('active');
-      
-      // Add the 'active' class to the clicked button
-      $(this).addClass('active');
-    });
-  });
+
   $(document).ready(function(){
-    $("#list_data").load("<?php echo base_url("admin/inventory/equipment_list")?>");
+    $('#listButton').addClass('active');
+    $("#list_data").load("<?php echo base_url("admin/inventory/requested_list")?>");
   });
   $('#listButton').click(function () {
-    $("#list_data").load("<?php echo base_url("admin/inventory/equipment_list")?>");
+    $("#list_data").load("<?php echo base_url("admin/inventory/requested_list")?>");
   });
 
-  $('#infoButton').click(function () {
-    $("#list_data").load("<?php echo base_url("admin/inventory/requisition_list")?>");
+  $('#infoButtonn').click(function () {
+    $("#list_data").load("<?php echo base_url("admin/inventory/active_list")?>");
   });
+
+    $('#infoButtonnn').click(function () {
+    $("#list_data").load("<?php echo base_url("admin/inventory/inactive_list")?>");
+  });
+  setTimeout(function() {
+      $("#flash_message").fadeOut();
+  }, 3000);
+   $('.btnn').click(function(event) {
+      event.preventDefault();
+      $('.btnn').removeClass('active');
+      $(this).addClass('active');
+    });
 </script>

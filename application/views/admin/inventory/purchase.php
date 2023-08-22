@@ -39,8 +39,8 @@ $(function() {
                 </button>
             </div>
             <div class="modal-body">
-                <?php echo form_open('admin/inventory/product_purchase_delivered/')?>
-                <input type="hidden" name="id" id="rawid" value="">
+                <?php echo form_open('admin/inventory/product_purchase_recived/')?>
+                <input type="hidden" name="row_id" id="id" value="">
                 <table>
                     <tr>
                         <th class="text-center">Comany Name</th>
@@ -66,8 +66,8 @@ $(function() {
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-sm btn-primary">Save changes</button>
                 <?php echo form_close()?>
             </div>
 
@@ -80,8 +80,7 @@ $(function() {
 <div class="box <?php echo $get_animate;?>" style="margin-top:20px">
     <div class="box-header with-border">
         <h3 class="box-title">Purchase List</h3>
-        <a class="pull-right btn btn-primary btn-sm" href="<?= base_url('admin/inventory/purchase_create')?>">Add
-            New</a>
+        <a class="pull-right btn btn-primary btn-sm" href="<?= base_url('admin/inventory/purchase_create')?>">Add New</a>
     </div>
     <div class="box-body">
         <div class="box-datatable">
@@ -91,12 +90,12 @@ $(function() {
                     <tr>
                         <th class="text-center" style="width:20px;">No.</th>
                         <?php if($user_role_id==1){?>
-                        <th class="text-center" style="width:100px;">Requisition By</th>
+                        <th class="text-center">Requisition By</th>
                         <?php }?>
-                        <th class="text-center" style="width:100px;">Supplier</th>
-                        <th class="text-center" style="width:20px;">Status</th>
-                        <th class="text-center" style="width:50px;">Request Date</th>
-                        <th class="text-center" style="width:50px;">Action</th>
+                        <th class="text-center">Supplier</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Request Date</th>
+                        <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -106,161 +105,37 @@ $(function() {
                         <?php if($user_role_id==1){?>
                         <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                         <?php } ?>
-                        <td class="text-center"><?php echo $rows->name ?></td>
+                        <td class="text-center"><?php echo isset($rows->name) ?></td>
                         <td class="text-center">
-                            <?php echo $rows->status==1?"
-                <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>": ($rows->status==2?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Deliver</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>")); ?>
+                            <?php echo $rows->status == 1 ?"<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>": ($rows->status == 2 ?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Deliver</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>")); ?>
                         </td>
-
-                        <!-- status==1=Pending status==2=Approved status ==3 Deliver Rejected -->
-
-                        <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
+                        <td class="text-center"><?php echo date('d M Y',strtotime($rows->created_at)); ?></td>
                         <td class="text-center">
-                            <?php if($user_role_id==1 || $user_role_id==2 ){ ?>
                             <div class="dropdown">
-                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Action
                                 </button>
-                                <?php if ($rows->status==1) { ?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a>
-                                    <br>
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Approved</a>
-                                    <br>
-                                    <a style="padding-left:5px; "
-                                        href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Reject</a>
-                                    <br>
-                                    <!-- <a style="padding-left:5px;"
-                                                    href="<?= base_url('admin/inventory/product_purchase_delivered/'.$rows->id);?>">Order
-                                                    Receive</a> <br> -->
+                                <div class="dropdown-menu" style="min-width: 100px !important;border-radius:0;line-height: 2;  " aria-labelledby="dropdownMenuButton">
+                                    <?php if($session['role_id']==4){?>
+                                        <?php if($rows->status == 1){?>
+                                            <a style="padding-left:5px; font-weight:bold" class="text-primary" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
+                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a> <br>
+                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_delete/'.$rows->id);?>">Delete</a> <br>
+                                        <?php }else{?>
+                                            <a style="padding-left:5px; font-weight:bold" class="text-primary" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
+                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_delete/'.$rows->id);?>">Delete</a> <br>
+                                        <?php }?>
+                                    <?php }?>
+                                    <?php if($session['role_id'] == 1 ||  $session['role_id'] == 2){?>
+                                        <?php if($rows->status==1){?>
+                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Approved</a> <br>
+                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-danger" href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Reject</a><br>
+                                        <?php }else{?>
+                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-success" href="#"  data-toggle="modal" data-target="#exampleModalCenter" data-row_id="<?= $rows->id ?>" onclick="openmod(this)">Order Receive</a> <br>
+                                       <?php  }?>
+                                    <?php }?>
                                 </div>
-                                <?php }elseif($rows->status==2) { ?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                    <!-- <a style="padding-left:5px;" 
-                                        href="<?= base_url('admin/inventory/product_purchase_delivered/'.$rows->id);?>">Order
-                                        Receive</a> <br> -->
-                                </div>
-                                <?php }elseif($rows->status==3) { ?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                </div>
-                                <?php }else{?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;"
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                </div>
-                                <?php } ?>
                             </div>
-                            <?php }elseif($user_role_id==4){ ?>
-                            <div class="dropdown">
-                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    Action
-                                </button>
-                                <?php if ($rows->status==1) { ?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a>
-                                    <br>
-
-                                    <a style="padding-left:5px; "
-                                        href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Reject</a>
-                                    <br>
-                                    <!-- <a style="padding-left:5px;"
-                                                    href="<?= base_url('admin/inventory/product_purchase_delivered/'.$rows->id);?>">Order
-                                                    Receive</a> <br> -->
-                                </div>
-                                <?php }elseif($rows->status==2) { ?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                    <a style="padding-left:5px;" data-toggle="modal" data-target="#exampleModalCenter"
-                                        id="<?= $rows->id ?>" onclick="openmod(this)">Order
-                                        Receive</a> <br>
-                                </div>
-                                <?php }elseif($rows->status==3) { ?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                </div>
-                                <?php }else{?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                </div>
-                                <?php } ?>
-                            </div>
-
-                            <?php }elseif($user_role_id==3){ ?>
-                            <div class="dropdown">
-                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    Action
-                                </button>
-                                <?php if ($rows->status==1) { ?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a>
-                                </div>
-                                <?php }elseif($rows->status==2) { ?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-
-                                </div>
-                                <?php }elseif($rows->status==3) { ?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                </div>
-                                <?php }else{?>
-                                <div class="dropdown-menu"
-                                    style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "
-                                    aria-labelledby="dropdownMenuButton">
-                                    <a style="padding-left:5px;"
-                                        href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
-                                </div>
-                                <?php } ?>
-                            </div>
-
-                            <?php } ?>
                         </td>
                     </tr>
                     <?php } ?>
@@ -272,10 +147,10 @@ $(function() {
 <script>
 //Company Supplier
 $(document).ready(function() {
+    $('#purchase_table').DataTable();
     // Handle change event of the company name select field
     $('#cmp_name').change(function() {
         var companyName = $(this).val();
-        // var url = 'fetch_suppliers.php'; // Replace with the URL to fetch suppliers based on the selected company
         var url = '<?php echo base_url('admin/inventory/get_supplier_ajax/');?>'
         // Make an AJAX request to fetch the suppliers
         $.ajax({
@@ -286,17 +161,9 @@ $(document).ready(function() {
             },
             dataType: 'json',
             success: function(func_data) {
-                // console.log(response[0]['name']);
                 var options = '';
-                // $.each(response, function(index, supplier) {
-
-                //     options += '<option value="' + supplier.id + '">' + supplier.name + '</option>';
-                // });
-
                 $.each(func_data, function(id, name) {
-
                     options += '<option value="' + id + '">' + name + '</option>';
-
                 });
                 $('#spl_name').html(options);
             },
@@ -305,11 +172,12 @@ $(document).ready(function() {
             }
         });
     });
+
 });
 </script>
 <script>
-function openmod(data) {
-
-    document.getElementById('rawid').value = data.id;
+function openmod(id) {
+      var rowId = $(id).attr("data-row_id");
+      $("#id").val(rowId); 
 }
 </script>
