@@ -335,12 +335,12 @@ class Clients extends MY_Controller
             'city' => $result[0]->city,
             'state' => $result[0]->state,
 			'zipcode' => $result[0]->zipcode,
-			'person_name_a' => $this->input->post('person_name_a'),
-			'person_phn_a' => $this->input->post('person_phn_a'),
-			'person_email_a' => $this->input->post('person_email_a'),
-			'person_name_b' => $this->input->post('person_name_b'),
-			'person_phn_b' => $this->input->post('person_phn_b'),
-			'person_email_b' => $this->input->post('person_email_b'),
+			'person_name_a' => $result[0]->person_name_a,
+			'person_phn_a' => $result[0]->person_phn_a,
+			'person_email_a' => $result[0]->person_email_a,
+			'person_name_b' => $result[0]->person_name_b,
+			'person_phn_b' => $result[0]->person_phn_b,
+			'person_email_b' =>$result[0]->person_email_b,
             'countryid' => $result[0]->country,
             'is_active' => $result[0]->is_active,
             'all_countries' => $this->Xin_model->get_countries(),
@@ -352,6 +352,7 @@ class Clients extends MY_Controller
     {
 
         if($this->input->post('edit_type') == 'client') {
+
             $id = $this->uri->segment(4);
             // Check validation for user input
             $this->form_validation->set_rules('name', 'Name', 'trim|required|xss_clean');

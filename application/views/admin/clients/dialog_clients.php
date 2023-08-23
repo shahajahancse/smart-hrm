@@ -182,6 +182,8 @@ $(document).ready(function() {
             cache: false,
             processData: false,
             success: function(JSON) {
+                console.log(JSON);
+                return false;
                 if (JSON.error != '') {
                     toastr.error(JSON.error);
                     $('input[name="csrf_hrsale"]').val(JSON.csrf_hash);
