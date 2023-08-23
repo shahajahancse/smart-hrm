@@ -21,7 +21,6 @@
                     <th class="text-center">Sub Category Name</th>
                     <th class="text-center">Product Name</th>
                     <th class="text-center">Quantity</th>
-                    <!-- <th class="text-center">Unit</th> -->
                     <th class="text-center">Approx amount</th>
                     <th class="text-center">Total amount</th>
                     <th class="text-center"> <button type="button" id="addRow"  class="btn btn-sm btn-success">+ Add More</button></th>
@@ -94,12 +93,10 @@
       items+= '<td><select name="sub_cate_id[]"  id="subcategory_'+sl+'" class="sub_category_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
       items+= '<td><select name="product_id[]" class="item_val_'+sl+' form-control input-sm" required><option value="">-- Select One --</option></select></td>';
       items+= '<td><input name="quantity[]" id="quantity_'+sl+'" data-id="'+sl+'" value="0" type="number" class="form-control input-sm" required onChange="change_qty(this)"></td>';
-      // items+= '<td><input name="unit[]" id="unit_'+sl+'" data-id="'+sl+'" type="text" class="form-control input-sm"></td>';
       items+= '<td><input name="approx_amount[]" id="approx_amount_'+sl+'" data-am="'+sl+'" step="0.01" min="0" value="0" type="number" class="form-control input-sm approx_amount" required onChange="change_amount(this)" ></td>';
       items+= '<td><input name="total_amount[]" id="total_amount_'+sl+'" value="0" type="number" class="form-control input-sm" required></td>';
       items+= '<td> <a href="javascript:void();" class="label label-important text-danger" onclick="removeRow(this)"> <i class="fa fa-minus-circle text-danger"></i><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
       items+= '</tr>';
-      // $('#count').val(sl+parseInt(1));
       $('#appRowDiv tr:last').after(items);
       category_dd(sl);
       subcategory_dd(sl);

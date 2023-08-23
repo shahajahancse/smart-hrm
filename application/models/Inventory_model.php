@@ -97,6 +97,7 @@ public function requisition_list($session){
 
 	// ************* purchase part ********************
 public function purchase_products_requisition($id,$role_id){
+	// dd($role_id);
 	$this->db->select('
 		p.id,
 		p.user_id,
@@ -105,12 +106,16 @@ public function purchase_products_requisition($id,$role_id){
 		p.updated_by,
 		emp.first_name,
 		emp.last_name
-	')
-	->from('products_purches_details as p')
-	->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left')
-	// ->join('product_supplier as ps', 'ps.id = p.supplier', 'left')
-	->order_by('p.id', 'desc');
-	return	$this->db->get()->result();
+	')->from('products_purches_details as p')
+	  ->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left');
+	$this->db->order_by('p.id', 'desc');
+	if($role_id == 4){
+		$this->db->where('p.user_id',$id);
+		return	$this->db->get()->result();
+	}
+	if($role_id == 1) {
+		return	$this->db->get()->result();
+	}
 } 
 
 
@@ -245,6 +250,8 @@ public  function product_requisition_details($id){
 		products_purches_details.ap_quantity,
 		products_purches_details.id,
 		products_purches_details.amount,
+		products_purches_details.approx_t_amount,
+		products_purches_details.approx_amount,
 		products_purches_details.created_at
 	')
 	->from('products')
