@@ -229,7 +229,6 @@
                             <?php
                                 $status = $row->status;
                                 $statusMessage = '';
-
                                 switch ($status) {
                                     case 0:
                                         $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:black"></i> Not Applied</span>';

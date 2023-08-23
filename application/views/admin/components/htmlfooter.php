@@ -132,21 +132,26 @@ $(document).ready(function(){
 <script type="text/javascript" src="<?php echo base_url();?>skin/hrsale_assets/vendor/ion.rangeSlider/js/ion-rangeSlider/ion.rangeSlider.min.js"></script>
 <?php }?>
 <?php if($this->router->fetch_method() =='task_details' || $this->router->fetch_method() =='project_details' || ($this->router->fetch_class() =='project' && $this->router->fetch_method() !='projects_calendar')){?>
-<script type="text/javascript">
-$(document).ready(function(){	
-	$("#range_grid").ionRangeSlider({
-		type: "single",
-		min: 0,
-		max: 100,
-		from: '<?php echo $progress;?>',
-		grid: true,
-		force_edges: true,
-		onChange: function (data) {
-			$('#progres_val').val(data.from);
-		}
+<?php
+if (isset($progress)) {
+	echo "<script type='text/javascript'>
+	$(document).ready(function(){ 
+		$('#range_grid').ionRangeSlider({
+			type: 'single',
+			min: 0,
+			max: 100,
+			from: '" . $progress . "',
+			grid: true,
+			force_edges: true,
+			onChange: function (data) {
+				$('#progres_val').val(data.from);
+			}
+		});
 	});
-});
-</script>
+	</script>";
+}
+?>
+
 <?php } ?>
 <script src="<?php echo base_url();?>skin/hrsale_assets/vendor/libs/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
 <?php if($this->router->fetch_class() =='invoices' || $this->router->fetch_class() =='quotes' && ($this->router->fetch_method() =='create' || $this->router->fetch_method() =='edit')) { ?>
