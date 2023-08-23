@@ -438,6 +438,7 @@ dataSource: [
 
 				{ id: "", class: "role-checkbox-modal", text: "Lunch Packag",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1057", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1057',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"}, 
 				{ id: "", class: "role-checkbox-modal", text: "Lunch Menu",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1058", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1058',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"}, 
+				{ id: "", class: "role-checkbox-modal", text: "Active Lunch",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "1059", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1059',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"}, 
 
 			]},
 

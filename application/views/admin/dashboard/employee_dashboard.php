@@ -1,4 +1,4 @@
-<?php
+<?php 
 $session = $this->session->userdata('username');
 $get_animate = $this->Xin_model->get_content_animate();
 $userid  = $session[ 'user_id' ];
@@ -65,6 +65,7 @@ $punch_time = $this->db->select('clock_in, clock_out')
                       ->where('attendance_date', date('Y-m-d'))
                       ->get('xin_attendance_time')
                       ->row();
+// dd($punch_time);                      
 if (!empty($punch_time)) {
     $in_time = date('h.i A', strtotime($punch_time->clock_in));
     $out_time = date('h.i A', strtotime($punch_time->clock_out));
@@ -76,7 +77,7 @@ $name = $this->db->select('first_name,last_name')
             ->where('user_id', $userid)
             ->get('xin_employees')
             ->row();
-// dd($name);
+// dd($in_time);
 
 // Get the current Unix timestamp
 $currentTimestamp = time();
@@ -503,7 +504,7 @@ hr {
                     </div>
                     <div class="card-body">
                         <?php
-                                    $lunch_end = date('h:i A', strtotime("$schedule->lunch_minute minutes", strtotime($schedule->lunch_time)));
+                            $lunch_end = date('h:i A', strtotime("$schedule->lunch_minute minutes", strtotime($schedule->lunch_time)));
                             $in_time_class = '';
                             $lunch_start_class = '';
                             $lunch_end_class = '';
@@ -520,15 +521,14 @@ hr {
                             ?>
                         <section class="step-wizard" style="margin-top: -15px;">
                             <ul class="step-wizard-list" style="margin-left: -48px;">
-                                <li class="step-wizard-item <?=$in_time_class?>">
+                                <li class="step-wizard-item <?= $in_time_class?>">
                                     <span class="progress-label-top">Punch In</span>
                                     <span class="progress-count"><i class="icon-time"></i></span>
-                                    <span class="progress-label"><?php echo $schedule->in_time?></span>
+                                    <span class="progress-label"><?php echo !empty($punch_time) ? $in_time : "Not punch yet"?></span>
                                 </li>
                                 <li class="step-wizard-item <?=$lunch_start_class?>">
                                     <span class="progress-label-top">Lunch Time</span>
-                                    <span class="progress-count"><i class="fa fa-clock-o"
-                                            aria-hidden="true"></i></i></span>
+                                    <span class="progress-count"><i class="fa fa-clock-o"  aria-hidden="true"></i></i></span>
                                     <span
                                         class="progress-label"><?php echo date('h:i A', strtotime($schedule->lunch_time)); ?></span>
                                 </li>
@@ -540,8 +540,7 @@ hr {
                                 <li class="step-wizard-item <?=$out_time_class?>">
                                     <span class="progress-label-top">Punch Out</span>
                                     <span class="progress-count"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                    <span
-                                        class="progress-label "><?php echo date('h:i A', strtotime($schedule->ot_start_time)); ?></span>
+                                    <span class="progress-label "><?php echo !empty($punch_time) ? $out_time : "Not punch yet"; ?></span>
                                 </li>
                             </ul>
                         </section>
