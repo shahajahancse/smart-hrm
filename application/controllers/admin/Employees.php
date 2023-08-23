@@ -2127,7 +2127,7 @@ class Employees extends MY_Controller {
 		$username = $this->Xin_model->clean_post($this->input->post('username'));
 		$date_of_birth = $this->Xin_model->clean_date_post($this->input->post('date_of_birth'));
 		$contact_no = $this->Xin_model->clean_post($this->input->post('contact_no'));
-		$address = $this->Xin_model->clean_post($this->input->post('address'));
+		$address = $this->Xin_model->clean_posts($this->input->post('address'));
 		$per_address = $this->Xin_model->clean_posts($this->input->post('per_address'));
 		$options = array('cost' => 12);
 		$password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
@@ -2419,7 +2419,7 @@ class Employees extends MY_Controller {
 		$username = $this->input->post('username');
 		$date_of_birth = $this->Xin_model->clean_date_post($this->input->post('date_of_birth'));
 		$contact_no = $this->Xin_model->clean_post($this->input->post('contact_no'));
-		$address = $this->Xin_model->clean_post($this->input->post('address'));
+		$address = $this->Xin_model->clean_posts($this->input->post('address'));
 		$per_address = $this->Xin_model->clean_posts($this->input->post('per_address'));
 		$leave_categories = array($this->input->post('leave_categories'));
 		$cat_ids = implode(',',$this->input->post('leave_categories'));
@@ -2931,8 +2931,8 @@ public function nda() {
        		$this->output($Return);
     	}
 		$contact_name = $this->Xin_model->clean_post($this->input->post('contact_name'));
-		$address_1 = $this->Xin_model->clean_post($this->input->post('address_1'));
-		$address_2 = $this->Xin_model->clean_post($this->input->post('address_2'));
+		$address_1 = $this->Xin_model->clean_posts($this->input->post('address_1'));
+		$address_2 = $this->Xin_model->clean_posts($this->input->post('address_2'));
 		$city = $this->Xin_model->clean_post($this->input->post('city'));
 		$state = $this->Xin_model->clean_post($this->input->post('state'));		
 	
