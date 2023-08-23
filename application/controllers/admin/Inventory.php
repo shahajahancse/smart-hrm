@@ -431,10 +431,8 @@ public function add_daily_package()
 
 	//================= Product requsition purches code here =======================
 
-	public function purchase($id = null)
-	{
+	public function purchase($id = null){
 		$session = $this->session->userdata('username');
-		//   dd($session);
 		if(empty($session)){ 
 			redirect('admin/');
 		}
@@ -442,10 +440,7 @@ public function add_daily_package()
 		$this->form_validation->set_rules('sub_cate_id[]', 'select category', 'required|trim');
 		$this->form_validation->set_rules('product_id[]', 'item name', 'required|trim');
 		$this->form_validation->set_rules('quantity[]', 'Quantity', 'required|trim');
-
-
 		if ($this->form_validation->run() == true){
-			
 			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
 				$form_data[] = array( 
 					'user_id'	      => $session['user_id'],
@@ -453,22 +448,21 @@ public function add_daily_package()
 					'quantity'		  => $_POST['quantity'][$i],
 					'approx_amount'	  => $_POST['approx_amount'][$i],
 					'approx_t_amount' => $_POST['total_amount'][$i],
+					// 'status' => [$i],
 				);
 			}
-			//   dd($form_data);
-
 			if ($hid = $this->input->post('hidden_id')) {
 				$this->db->where('id', $hid)->update_batch('products_purches_details', $form_data);
 				$this->session->set_flashdata('success', 'Successfully Updated Done');
 			} else {
 				if($this->db->insert_batch('products_purches_details', $form_data)){
 					$this->session->set_flashdata('success', 'Successfully Insert Done');
+					echo "<script>location.replace('purchase')</script>";
 				} else {
 					$this->session->set_flashdata('warning', 'Sorry Something Wrong.');
 				}
 			}		
 		}
-
 		//Dropdown
 		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']	= 'Store';
@@ -482,18 +476,13 @@ public function add_daily_package()
 								  $this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
-	public function purchase_create($id = null)
-	{
+	public function purchase_create($id = null){
 		$session = $this->session->userdata('username');
-		//   dd($session);
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		//Dropdown
 		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']	= 'Store';
-
-		// dd($data['products']);
 		$data['results'] 		= $this->Inventory_model->product_list();
 		$data['categorys']		= $this->db->get("products_categories")->result();
 		$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
@@ -520,10 +509,9 @@ public function add_daily_package()
 			$data['breadcrumbs']	= 'purchase Pending';
 			$data['categorys']		= $this->db->get("products_categories")->result();
 			$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],1);
-			// dd($data['products']);
 			$data['results'] 		= $this->Inventory_model->product_list();
 			$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-			$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
+			$data['company'] 		= $this->db->distinct()->select('company')->get("product_supplier")->result();
 			$data['units'] 			= $this->db->get("product_unit")->result();
 			$data['user_role_id'] 	= $session['role_id'];
 			$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
@@ -834,16 +822,13 @@ public function add_daily_package()
 		$data['statusC']= $statusC;
 		$data['first_date'] = $first_date;
 		$data['second_date'] = $second_date;
-		if($exc == 1)
-		{
+		if($exc == 1){
 			$this->load->view("admin/inventory/inventory_req_status_report_excil", $data);
 		}else{
-			if(is_string($data["values"]))
-			{
+			if(is_string($data["values"])){
 				echo $data["values"];
 			}
-			else
-			{	
+			else{	
 				echo $this->load->view("admin/inventory/inventory_req_status_report", $data, TRUE);
 			}
 		}
@@ -852,36 +837,27 @@ public function add_daily_package()
    
    public function perches_status_report($exc=null)
 	 {            
-		       
-				$first_date = $this->input->post('first_date');
-				$second_date = $this->input->post('second_date');
+		$first_date = $this->input->post('first_date');
+		$second_date = $this->input->post('second_date');
 
-				$f1_date = date("Y-m-d", strtotime($first_date));
-				$f2_date = date("Y-m-d", strtotime($second_date));
-				$statusC = $this->input->post('statusC');
-				$data["values"] = $this->Inventory_model->perches_status_report($f1_date, $f2_date, $statusC);
+		$f1_date = date("Y-m-d", strtotime($first_date));
+		$f2_date = date("Y-m-d", strtotime($second_date));
+		$statusC = $this->input->post('statusC');
+		$data["values"] = $this->Inventory_model->perches_status_report($f1_date, $f2_date, $statusC);
 
-				$data['statusC']= $statusC;
-				$data['first_date'] = $first_date;
-				$data['second_date'] = $second_date;
-
-				
-			
-				if($exc == 1)
-				{
-					$this->load->view("admin/inventory/perches_status_report_excel", $data);
-				}else{
-					if(is_string($data["values"]))
-					{
-						echo $data["values"];
-					}
-					else
-					{	
-						echo $this->load->view("admin/inventory/perches_status_report", $data, TRUE);
-					}
-
-
-				}
+		$data['statusC']= $statusC;
+		$data['first_date'] = $first_date;
+		$data['second_date'] = $second_date;
+		if($exc == 1){
+			$this->load->view("admin/inventory/perches_status_report_excel", $data);
+		}else{
+			if(is_string($data["values"])){
+				echo $data["values"];
+			}
+			else{	
+				echo $this->load->view("admin/inventory/perches_status_report", $data, TRUE);
+			}
+		}
    	 
  }
 
@@ -1155,16 +1131,11 @@ public function add_daily_package()
 		$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
 		redirect("admin/inventory/index");
     }
-
-
 	public function delete_purches_item($id,$pid){
 		$approved = $this->db->where('id',$id)->delete('products_purches_details');
-		if($approved){
-			$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
-		 redirect("admin/inventory/product_purchase_edit_approved/".$pid);
-		}
+		$this->session->set_flashdata('delete','Requsiton deleted successfully.');
+		redirect("admin/inventory/purchase");
 	}
-
 	public function product_details($id){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -1173,7 +1144,6 @@ public function add_daily_package()
 		$data['title'] = 'Product Details | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Product Details';
 		$data['results'] = $this->Inventory_model->product_details($id);
-		// dd($data['results']);
 		$data['subview'] = $this->load->view("admin/inventory/product_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}

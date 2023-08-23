@@ -79,15 +79,15 @@
                     <?php $hidden = array('user_id' => $session['user_id']);?>
                     <?php echo form_open('admin/employees/employees_list', $attributes, $hidden);?>
                     <?php
-            $data = array(
-              'type'        => 'hidden',
-              'name'        => 'date_format',
-              'id'          => 'date_format',
-              'value'       => $this->Xin_model->set_date_format(date('Y-m-d')),
-              'class'       => 'form-control',
-            );
-    echo form_input($data);
-    ?>
+                        $data = array(
+                        'type'        => 'hidden',
+                        'name'        => 'date_format',
+                        'id'          => 'date_format',
+                        'value'       => $this->Xin_model->set_date_format(date('Y-m-d')),
+                        'class'       => 'form-control',
+                        );
+                        echo form_input($data);
+                    ?>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -430,6 +430,12 @@
                                 <input type="text" class="form-control"
                                     placeholder="<?php echo $this->lang->line('xin_employee_address');?>"
                                     name="address">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="address">Permanent Address</label>
+                                <input type="text" class="form-control" placeholder="Enter Permanent Address"name="per_address">
                             </div>
                         </div>
                     </div>

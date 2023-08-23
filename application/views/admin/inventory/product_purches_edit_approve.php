@@ -42,10 +42,10 @@ $get_animate = $this->Xin_model->get_content_animate();
       <input type="hidden" name="update_a" id="update_a" value="0">
      <?php if(!empty($results)){?>
         <?php if($session['role_id']==1) {?>
-          <input type="button"  class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" onclick="upsub()" value="update">
+          <!-- <input type="button"  class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" onclick="upsub()" value="update"> -->
           <input type="submit" id="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
       <?php }else{?>
-        <input type="submit" id="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px; display: none;" value="Approved">
+        <!-- <input type="submit" id="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px; display: none;" value="Approved"> -->
         <input  type="button" id="submit"   class="btn btn-sm btn-success pull-right" onclick="upsub()" style="margin-right: 10px;" value="update">
     <?php }}?>
       <?php echo form_close()?>

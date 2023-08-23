@@ -80,7 +80,15 @@ class Xin_model extends CI_Model {
 	   $post_name = str_replace($Evalue, '', $name); 
 	   $post_name = preg_replace('/^(\d{1,2}[^0-9])/m', '', $post_name);
 	  // $post_name = htmlspecialchars(trim($post_name), ENT_QUOTES, "UTF-8");
-	   
+	   return $post_name;
+	}
+	
+	
+	public function clean_posts($post_name) {
+	   $name = trim($post_name);
+	   $Evalue = array('alert','<script>','</script>','</php>','<php>','<p>','\r\n','\n','\r','=','cmd','!',);
+	   $post_name = str_replace($Evalue, '', $name); 
+	   $post_name = preg_replace('/^(\d{1,2}[^0-9])/m', '', $post_name);
 	   return $post_name;
 	}
 	
