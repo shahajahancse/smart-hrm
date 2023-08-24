@@ -90,6 +90,7 @@
 .box {
     box-shadow: 0 2px 3px 0px rgba(0, 0, 0, 0.03), 0 1px 4px 0 rgba(0, 0, 0, 0.04), 0 3px 1px -2px rgba(0, 0, 0, 0.04) !important;
 }
+
 .loader {
     position: relative;
     width: 100%;
@@ -102,95 +103,95 @@
 }
 
 .loader:after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: linear-gradient(110deg, rgba(227, 227, 227, 0) 0%, rgba(227, 227, 227, 0) 40%, rgba(227, 227, 227, 0.5) 50%, rgba(227, 227, 227, 0) 60%, rgba(227, 227, 227, 0) 100%);
-  animation: gradient-animation_2 1.2s linear infinite;
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(110deg, rgba(227, 227, 227, 0) 0%, rgba(227, 227, 227, 0) 40%, rgba(227, 227, 227, 0.5) 50%, rgba(227, 227, 227, 0) 60%, rgba(227, 227, 227, 0) 100%);
+    animation: gradient-animation_2 1.2s linear infinite;
 }
 
 .loader .wrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
-.loader .wrapper > div {
-  background-color: #cacaca;
+.loader .wrapper>div {
+    background-color: #cacaca;
 }
 
 .loader .circle {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 }
 
 .loader .button {
-  display: inline-block;
-  height: 32px;
-  width: 75px;
+    display: inline-block;
+    height: 32px;
+    width: 75px;
 }
 
 .loader .line-1 {
-  position: absolute;
-  top: 11px;
-  left: 58px;
-  height: 10px;
-  width: 100px;
+    position: absolute;
+    top: 11px;
+    left: 58px;
+    height: 10px;
+    width: 100px;
 }
 
 .loader .line-2 {
-  position: absolute;
-  top: 34px;
-  left: 58px;
-  height: 10px;
-  width: 150px;
+    position: absolute;
+    top: 34px;
+    left: 58px;
+    height: 10px;
+    width: 150px;
 }
 
 .loader .line-3 {
-  position: absolute;
-  top: 57px;
-  left: 0px;
-  height: 10px;
-  width: 100%;
+    position: absolute;
+    top: 57px;
+    left: 0px;
+    height: 10px;
+    width: 100%;
 }
 
 .loader .line-4 {
-  position: absolute;
-  top: 80px;
-  left: 0px;
-  height: 10px;
-  width: 92%;
+    position: absolute;
+    top: 80px;
+    left: 0px;
+    height: 10px;
+    width: 92%;
 }
 
 @keyframes gradient-animation_2 {
-  0% {
-    transform: translateX(-100%);
-  }
+    0% {
+        transform: translateX(-100%);
+    }
 
-  100% {
-    transform: translateX(100%);
-  }
+    100% {
+        transform: translateX(100%);
+    }
 }
 </style>
 <div class="box col-md-12 p-5 m-0">
     <h4>Project Add Form</h4>
     <div class="col-md-12" style="margin-top: 13px;">
-        <?php $attributes = array('name' => 'add_project', 'id' => 'xin-form', 'autocomplete' => 'off');?>
-        <?php echo form_open('admin/project/add_project', $attributes);?>
+        <?php $attributes = array('name' => 'add_project', 'id' => 'add_project_form', 'autocomplete' => 'off');?>
+        <?php echo form_open('', $attributes);?>
         <div class="col-md-12 bg-white">
             <div class="col-md-3">
                 <div class="inputBox">
-                    <input required type="text">
+                    <input required type="text" name="title">
                     <strong>Project name <b style="color: red;">*</b></strong>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="inputBox">
-                    <select name="" id="client-select" class="col-md-12">
+                    <select name="client_id" id="client-select" class="col-md-12">
                         <option>Select A Client</option>
                         <?php foreach ($all_clients as $client): ?>
                         <option value="<?= $client->client_id ?>"><?= $client->name ?></option>
@@ -201,7 +202,7 @@
             </div>
             <div class="col-md-3">
                 <div class="inputBox">
-                    <select name="" id="emp-select" class="col-md-12">
+                    <select name="assigned_to" id="emp-select" class="col-md-12">
                         <option>Select A Employee</option>
                         <?php foreach ($all_employees as $emp): ?>
                         <option value="<?= $emp->user_id ?>"><?= $emp->first_name ?> <?= $emp->last_name ?></option>
@@ -232,8 +233,7 @@
             </ul>
             <div class="tab-content">
                 <div id="gov" class="box tab-pane fade" style="overflow: hidden;padding: 0px 6px 12px 6px;">
-                    <div id="govfrom"
-                        style="margin:0px;padding: 13px 14px 14px 15px;background: #ffffff;">
+                    <div id="govfrom" style="margin:0px;padding: 13px 14px 14px 15px;background: #ffffff;">
                         <div class="loader">
                             <div class="wrapper">
                                 <div class="circle"></div>
@@ -265,25 +265,7 @@
     </div>
 </div>
 </div>
-<script>
-function serviceEnabled(element) {
-    if (element.checked) {
-        console.log("Checkbox is checked");
-        $('#service_section').animate({
-            opacity: "show",
-            height: "show",
-            display: "inline-block"
-        });
-        $('#Service_type').attr('required', true);
-    } else {
-        $('#service_section').animate({
-            opacity: "hide",
-            height: "hide"
-        });
-        $('#Service_type').removeAttr('required');
-    }
-}
-</script>
+
 <script>
 function getFromClient(type) {
 
@@ -318,5 +300,26 @@ function getFromClient(type) {
 $(document).ready(function() {
     $('#client-select').select2();
     $('#emp-select').select2();
+});
+</script>
+<script>
+$('#add_project_form').submit(function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    var formData = $(this).serialize(); // Serialize the form data
+
+    $.ajax({
+        url: '<?= base_url('admin/project/add_project_n') ?>', // Replace with your actual API endpoint
+        type: 'POST',
+        data: formData,
+        success: function(response) {
+          
+            console.log(response);
+        },
+        error: function(xhr, status, error) {
+            // Handle any errors here
+            console.error(error);
+        }
+    });
 });
 </script>

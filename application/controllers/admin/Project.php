@@ -115,18 +115,19 @@ class Project extends MY_Controller
         $data['subview'] = $this->load->view("admin/project/project_form", $data, true);
         $this->load->view('admin/layout/layout_main', $data); //page load
     }
-    public function getFromClient() {
+    public function getFromClient()
+    {
         $type = $this->input->post("type");
-    
+
         if ($type == 1) {
             $data = $this->load->view('admin/project/govfrom', '', true);
         } elseif ($type == 2) {
             $data = $this->load->view('admin/project/nongovfrom', '', true);
         }
-        
+
         echo $data;
     }
-    
+
 
 
     public function timelogs()
@@ -888,6 +889,73 @@ class Project extends MY_Controller
             $this->output($Return);
             exit;
         }
+    }
+    public function add_project_n()
+    {
+            $projecttype=$this->input->post('projecttype');
+            $title = $this->input->post('title');
+            $project_no = substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 5)), 0, 5);
+            $client_id = $this->input->post('client_id');
+            $company_id = 1;
+            $start_date = $this->input->post('start_date');
+            $end_date = $this->input->post('end_date');
+            $summary = '';
+            $budget_hours = '';
+            $priority = $this->input->post('priority');
+            $assigned_to = $this->input->post('assigned_to');
+            $description = $this->input->post('description');
+            $project_progress = '0';
+            $status = 0;
+            $is_notify = 1;
+            $added_by = 1;
+            $created_at = date('d-m-Y');
+            $software_Budget = $this->input->post('software_Budget');
+            $instalment = $this->input->post('instalment');
+            $hardware_Budget = $this->input->post('hardware_Budget');
+            $hardware_Summary = $this->input->post('hardware_Summary');
+            $serviceEnabled = $this->input->post('serviceEnabled');
+            
+            $service_status = ($serviceEnabled == 'on') ? 1 : 0;
+            
+            $Service_type = $Service_amount = $Service_Increment_Date = '';
+            if ($service_status) {
+                $Service_type = $this->input->post('Service_type');
+                $Service_amount = $this->input->post('Service_amount');
+                $Service_Increment_Date = $this->input->post('Service_Increment_Date');
+            }
+            
+            $data = array(
+                'title' => $title,
+                'project_no' => $project_no,
+                'client_id' => $client_id,
+                'company_id' => $company_id,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'summary' => $summary,
+                'budget_hours' => $budget_hours,
+                'priority' => $priority,
+                'assigned_to' => $assigned_to,
+                'description' => $description,
+                'project_progress' => $project_progress,
+                'status' => $status,
+                'is_notify' => $is_notify,
+                'added_by' => $added_by,
+                'created_at' => $created_at,
+                'software_Budget' => $software_Budget,
+                'instalment' => $instalment,
+                'hardware_Budget' => $hardware_Budget,
+                'hardware_Summary' => $hardware_Summary,
+                'service_status' => $service_status,
+                'serviceEnabled' => $serviceEnabled,
+                'Service_type' => $Service_type,
+                'Service_amount' => $Service_amount,
+                'Service_Increment_Date' => $Service_Increment_Date
+            );
+            
+            $result = $this->Project_model->add($data);
+            echo json_encode($result);
+            
+        
     }
 
     // Validate and add info in database
