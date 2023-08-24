@@ -524,7 +524,7 @@ hr {
                                 <li class="step-wizard-item <?= $in_time_class?>">
                                     <span class="progress-label-top">Punch In</span>
                                     <span class="progress-count"><i class="icon-time"></i></span>
-                                    <span class="progress-label"><?php echo !empty($punch_time) ? $in_time : "Not punch yet"?></span>
+                                    <span class="progress-label"><?php echo !empty($punch_time->clock_in) ? $in_time : "Not punch yet"?></span>
                                 </li>
                                 <li class="step-wizard-item <?=$lunch_start_class?>">
                                     <span class="progress-label-top">Lunch Time</span>
@@ -540,7 +540,7 @@ hr {
                                 <li class="step-wizard-item <?=$out_time_class?>">
                                     <span class="progress-label-top">Punch Out</span>
                                     <span class="progress-count"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                    <span class="progress-label "><?php echo !empty($punch_time) ? $out_time : "Not punch yet"; ?></span>
+                                    <span class="progress-label "><?php echo !empty($punch_time->clock_out)  ? $out_time : "Not punch yet"; ?></span>
                                 </li>
                             </ul>
                         </section>

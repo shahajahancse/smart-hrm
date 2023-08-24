@@ -24,6 +24,8 @@ $get_animate = $this->Xin_model->get_content_animate();
               <th class="text-center" >No.</th>
                 <th class="text-center" >Product Name</th>
                 <th class="text-center" >Quantity</th>
+                <th class="text-center" >Approximate Amount</th>
+                <th class="text-center" >Total Approximate Amount</th>
           </tr>
         </thead>
         <?php echo form_open('admin/inventory/product_persial_approved/'.$id)?>
@@ -32,7 +34,9 @@ $get_animate = $this->Xin_model->get_content_animate();
             <tr class="text-center">
                 <td><?php echo $i++?></td>
                 <td><?php echo $row->product_name?></td>
-                <td><input type="number" id="quantity" name="qunatity[]" min="1" style="width:20%" value="<?php echo $row->quantity?>"></td>
+                <td><input type="number" id="quantity" name="quantity" min="1" style="width:30%" value="<?php echo $row->quantity?>"></td>
+                <td><span id="aprox_amount"><?php echo $row->approx_amount?></span></td>
+                <td><span id="aprox_t_amount"><?php echo $row->approx_t_amount?><span></td>
                 <td><a href="<?php echo base_url('admin/inventory/delete_purches_item/'.$row->id.'/'.$id)?>">Delete</a></td>
                 <input type="hidden" name="r_id[]" value="<?php echo $row->id?>" >
             </tr>
@@ -41,12 +45,10 @@ $get_animate = $this->Xin_model->get_content_animate();
       </table>
       <input type="hidden" name="update_a" id="update_a" value="0">
      <?php if(!empty($results)){?>
-        <?php if($session['role_id']==1) {?>
-          <input type="button"  class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" onclick="upsub()" value="update">
+      <?php if($session['role_id']==1) {?>
           <input type="submit" id="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
       <?php }else{?>
-        <input type="submit" id="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px; display: none;" value="Approved">
-        <input  type="button" id="submit"   class="btn btn-sm btn-success pull-right" onclick="upsub()" style="margin-right: 10px;" value="update">
+         <input  type="button" id="submit"   class="btn btn-sm btn-success pull-right" onclick="upsub()" style="margin-right: 10px;" value="update">
     <?php }}?>
       <?php echo form_close()?>
     </div>
@@ -60,5 +62,13 @@ function upsub(){
   document.getElementById('submit').click();
 }
 
+updateAproxTAmount();
+$('#quantity').on('input', updateAproxTAmount);
+function updateAproxTAmount() {
+  const quantity = parseInt($('#quantity').val());
+  const initialAproxAmount = parseFloat($('#aprox_amount').text());
+  const calculatedAproxTAmount = quantity * initialAproxAmount;
+  $('#aprox_t_amount').text(calculatedAproxTAmount.toFixed(2)); // Display the calculated value
+}
 </script>
 

@@ -377,6 +377,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                             </div>
                           </div>  
                           <div class="row">
+
                             <div class="col-md-4">
                               <div class="form-group">
                                 <label for="email" class="control-label">Give Letter</label>
@@ -386,6 +387,15 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                 </select>
                               </div>
                             </div>
+                            <div class="col-md-8">
+                              <div class="form-group">
+                                <label for="address">Permanent Address</label>
+                                <input type="text" class="form-control" placeholder="Permanent Address" name="per_address" value="<?php echo $per_address;?>" />
+                              </div>
+                            </div> 
+
+
+
                           </div>  
                           </div>
                           <?php $module_attributes = $this->Custom_fields_model->all_hrsale_module_attributes();?>

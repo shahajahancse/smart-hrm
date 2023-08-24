@@ -59,75 +59,6 @@ class Employees extends MY_Controller {
 	}
 
 
-	//password set/ change
-	// this code used to short time
-	/*function password_set(){
-		date_default_timezone_set('Asia/Dhaka');
-
-		$file_name = "resources/Usersp.txt";
-		if (file_exists($file_name)){
-			$lines = file($file_name);
-			$out = array();
-			$id = $ps = 0;
-			foreach(array_values($lines)  as $line) {
-				// dd(preg_split('/\s+/', trim($line)));
-				if (!empty(strlen(chop($line)))) {
-					list($id, $ps) = preg_split('/\s+/', trim($line));
-
-					$this->db->select('user_id, employee_id, first_name, last_name, username');
-					$this->db->where("employee_id", $id);
-					$query = $this->db->get("xin_employees");
-					// dd($query->row());
-
-					$options = array('cost' => 12);
-					$password_hash = password_hash($ps, PASSWORD_BCRYPT, $options);
-					$data = array(
-						'password' => $password_hash
-					);
-
-					$result = $this->Employees_model->change_password($data,$query->row()->user_id);
-
-				}
-			}
-			exit('Done');
-			return true;
-		}else{
-			exit('Please Put the Data File.');
-		}
-	}*/
-
-	//password get 
-	// this code used to short time
-	// function password_get(){
-	// 	date_default_timezone_set('Asia/Dhaka');
-
-	// 	$infos = array();
-	// 	$file_name = "resources/Usersp.txt";
-	// 	if (file_exists($file_name)){
-	// 		$lines = file($file_name);
-	// 		$out = array();
-	// 		$id = $ps = 0;
-	// 		foreach(array_values($lines) as $key => $line) {
-	// 			// dd(preg_split('/\s+/', trim($line)));
-	// 			if (!empty(strlen(chop($line)))) {
-	// 				list($id, $ps) = preg_split('/\s+/', trim($line));
-
-	// 				$this->db->select('user_id, employee_id, first_name, last_name, username');
-	// 				$this->db->where("employee_id", $id);
-	// 				$query = $this->db->get("xin_employees");
-	// 				$infos[$key] = $query->row();
-	// 				$infos[$key]->password = $ps;
-	// 			}
-	// 		}
-	// 		$data['results'] = $infos;
-
-	// 		$this->load->view('admin/employees/password_get', $data);
-	// 		exit();
-	// 	}else{
-	// 		exit('Please Put the Data File.');
-	// 	}
-	// }
-
 
 	
 	 public function index()
@@ -222,11 +153,6 @@ class Employees extends MY_Controller {
 				$contact_no = '--';
 				$email = '--';
 			}
-			 
-		
-			
-		
-	
 		   $data[] = array(
 				$full_name,
 				$department_name,
@@ -243,10 +169,7 @@ class Employees extends MY_Controller {
 	  exit();
      }
 	
-	 
-    public function employees_list()
-    {
-
+    public function employees_list(){
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
@@ -291,10 +214,7 @@ class Employees extends MY_Controller {
 		}
 		
 		$data = array();
-		// dd($employee->result());
-
-        foreach($employee->result() as $key => $r) {		  
-		
+        foreach($employee->result() as $key => $r) {	
 			// get company
 			$company = $this->Xin_model->read_company_info($r->company_id);
 			if(!is_null($company)){
@@ -302,7 +222,6 @@ class Employees extends MY_Controller {
 			} else {
 				$comp_name = '--';	
 			}
-			
 			// user full name 
 			$full_name = $r->first_name.' '.$r->last_name;
 			// user role
@@ -448,9 +367,7 @@ class Employees extends MY_Controller {
 				$role_status,
 				$function,
 			);
-      
 	    }
-
 	    $output = array(
 		   "draw" => $draw,
 			 "recordsTotal" => $employee->num_rows(),
@@ -468,7 +385,6 @@ class Employees extends MY_Controller {
 		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
 			redirect('admin/');
 		}
-
     	$user_info = $this->db->where('user_id', $id)->get('xin_employees')->row();
 
 		if ($this->input->post('status') == 2) {
@@ -1164,7 +1080,6 @@ class Employees extends MY_Controller {
 			</tr>';
 			$assets = $this->Assets_model->get_employee_assets($user[0]->user_id);
 			foreach($assets->result() as $asts) {
-					
 				// get category
 				$assets_category = $this->Assets_model->read_assets_category_info($asts->assets_category_id);
 				if(!is_null($assets_category)){
@@ -1347,14 +1262,6 @@ class Employees extends MY_Controller {
 		if(!in_array('202',$role_resources_ids)) {
 			redirect('admin/employees');
 		}
-		/*if($check_role[0]->user_id!=$result[0]->user_id) {
-			redirect('admin/employees');
-		}*/
-		
-		//$role_resources_ids = $this->Xin_model->user_role_resource();
-		//$data['breadcrumbs'] = $this->lang->line('xin_employee_details');
-		//$data['path_url'] = 'employees_detail';	
-	
 		$data = array(
 			'breadcrumbs' => $this->lang->line('xin_employee_detail'),
 			'path_url' => 'employees_detail',
@@ -1385,6 +1292,7 @@ class Employees extends MY_Controller {
 			'zipcode' => $result[0]->zipcode,
 			'iethnicity_type' => $result[0]->ethnicity_type,
 			'address' => $result[0]->address,
+			'per_address' => $result[0]->per_address,
 			'wages_type' => $result[0]->wages_type,
 			'basic_salary' => $result[0]->basic_salary,
 			'is_active' => $result[0]->is_active,
@@ -1424,7 +1332,6 @@ class Employees extends MY_Controller {
 				$data['nda_end_date'] = $r->to_date;
 				$data['nda_id'] = $r->id;
 			}
-
 
 		$data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
@@ -2113,10 +2020,7 @@ class Employees extends MY_Controller {
 			redirect('admin/');
 		}
 
-	
-	
 		if($this->input->post('add_type')=='employee') {		
-		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();		
 		
@@ -2204,12 +2108,12 @@ class Employees extends MY_Controller {
 		$i=1;
 		if($count_module_attributes > 0){
 			 foreach($module_attributes as $mattribute) {
-				 if($mattribute->validation == 1){
-					 if($i!=1) {
-					 } else if($this->input->post($mattribute->attribute)=='') {
-						$Return['error'] = $this->lang->line('xin_hrsale_custom_field_the').' '.$mattribute->attribute_label.' '.$this->lang->line('xin_hrsale_custom_field_is_required');
-					}
-				 }
+				if($mattribute->validation == 1){
+					if($i!=1) {
+					} else if($this->input->post($mattribute->attribute)=='') {
+					$Return['error'] = $this->lang->line('xin_hrsale_custom_field_the').' '.$mattribute->attribute_label.' '.$this->lang->line('xin_hrsale_custom_field_is_required');
+				}
+				}
 			 }		
 			 if($Return['error']!=''){
 				$this->output($Return);
@@ -2223,8 +2127,8 @@ class Employees extends MY_Controller {
 		$username = $this->Xin_model->clean_post($this->input->post('username'));
 		$date_of_birth = $this->Xin_model->clean_date_post($this->input->post('date_of_birth'));
 		$contact_no = $this->Xin_model->clean_post($this->input->post('contact_no'));
-		$address = $this->Xin_model->clean_post($this->input->post('address'));
-		
+		$address = $this->Xin_model->clean_posts($this->input->post('address'));
+		$per_address = $this->Xin_model->clean_posts($this->input->post('per_address'));
 		$options = array('cost' => 12);
 		$password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
 		$leave_categories = array($this->input->post('leave_categories'));
@@ -2276,6 +2180,7 @@ class Employees extends MY_Controller {
 			'notify_incre_prob' => $probation_end,
 			'contact_no' => $contact_no,
 			'address' => $address,
+			'per_address' => $per_address,
 			'is_active' => 1,
 			'leave_categories' => $cat_ids,
 			'profile_picture' => $fname,
@@ -2493,7 +2398,6 @@ class Employees extends MY_Controller {
 		} else if(!preg_match('/^([0-9]*)$/', $this->input->post('letter_status'))) {
 			$Return['error'] = $this->lang->line('xin_hr_letter_error');
 	   }
-				
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
@@ -2515,7 +2419,8 @@ class Employees extends MY_Controller {
 		$username = $this->input->post('username');
 		$date_of_birth = $this->Xin_model->clean_date_post($this->input->post('date_of_birth'));
 		$contact_no = $this->Xin_model->clean_post($this->input->post('contact_no'));
-		$address = $this->Xin_model->clean_post($this->input->post('address'));
+		$address = $this->Xin_model->clean_posts($this->input->post('address'));
+		$per_address = $this->Xin_model->clean_posts($this->input->post('per_address'));
 		$leave_categories = array($this->input->post('leave_categories'));
 		$cat_ids = implode(',',$this->input->post('leave_categories'));
 		$view_companies_id = implode(',',$this->input->post('view_companies_id'));
@@ -2536,8 +2441,6 @@ class Employees extends MY_Controller {
 				$this->output($Return);
 			}	
 		}
-		
-
 		$data = array(
 			'employee_id' => $employee_id,
 			'office_shift_id' => $this->input->post('office_shift_id'),
@@ -2557,6 +2460,7 @@ class Employees extends MY_Controller {
 			'date_of_joining' => $date_of_joining,
 			'contact_no' => $contact_no,
 			'address' => $address,
+			'per_address' => $per_address,
 			'state' => $this->input->post('estate'),
 			'city' => $this->input->post('ecity'),
 			'zipcode' => $this->input->post('ezipcode'),
@@ -3011,14 +2915,7 @@ public function nda() {
 			$Return['error'] = $this->lang->line('xin_employee_error_contact_name');
 		} else if($this->input->post('mobile_phone')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_mobile');
-		} else if($this->input->post('work_email')==='') {
-			 $Return['error'] = $this->lang->line('xin_employee_error_email');
-		} else if (!filter_var($this->input->post('work_email'), FILTER_VALIDATE_EMAIL)) {
-			$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
-		} else if ($this->input->post('personal_email')!=='' && !filter_var($this->input->post('personal_email'), FILTER_VALIDATE_EMAIL)) {
-			$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
-		}
-		
+		} 
 		if(null!=$this->input->post('is_primary')) {
 			$is_primary = $this->input->post('is_primary');
 		} else {
@@ -3034,8 +2931,8 @@ public function nda() {
        		$this->output($Return);
     	}
 		$contact_name = $this->Xin_model->clean_post($this->input->post('contact_name'));
-		$address_1 = $this->Xin_model->clean_post($this->input->post('address_1'));
-		$address_2 = $this->Xin_model->clean_post($this->input->post('address_2'));
+		$address_1 = $this->Xin_model->clean_posts($this->input->post('address_1'));
+		$address_2 = $this->Xin_model->clean_posts($this->input->post('address_2'));
 		$city = $this->Xin_model->clean_post($this->input->post('city'));
 		$state = $this->Xin_model->clean_post($this->input->post('state'));		
 	

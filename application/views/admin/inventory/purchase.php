@@ -131,7 +131,7 @@ $(function() {
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Approved</a> <br>
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-danger" href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Reject</a><br>
                                         <?php }else{?>
-                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-success" href="#"  data-toggle="modal" data-target="#exampleModalCenter" data-row_id="<?= $rows->id ?>" onclick="openmod(this)">Order Receive</a> <br>
+                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-success" href="#"  data-toggle="modal" data-target="#exampleModalCenter" data-row_id="<?= $rows->id ?>" onclick="openmod(this)">Order Receive</a><br>
                                        <?php  }?>
                                     <?php }?>
                                 </div>
@@ -177,7 +177,7 @@ $(document).ready(function() {
 </script>
 <script>
 function openmod(id) {
-      var rowId = $(id).attr("data-row_id");
-      $("#id").val(rowId); 
+    var rowId = $(id).attr("data-row_id");
+    $("#id").val(rowId); 
 }
 </script>
