@@ -51,7 +51,7 @@ input:focus+.slider {
 input:checked+.slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
-    transform: translateX(85px);
+    transform: translateX(47px);
 }
 
 /*------ ADDED CSS ---------*/
@@ -73,30 +73,31 @@ input:checked+.slider:after {
 
 /*--------- END --------*/
 </style>
+<input type="hidden" name="projecttype" value=2 >
 <div style="display: flex;flex-direction: column;gap: 21px;">
     <div class="row">
         <h5>Software Section</h5>
         <div class="col-md-3">
             <div class="inputBox">
-                <input required type="number">
+                <input required type="number" name="software_Budget">
                 <strong>Software Budget<span style="color: red;">*</span></strong>
             </div>
         </div>
         <div class="col-md-3">
             <div class="inputBox">
-                <input required type="number">
+                <input required type="number" name="instalment">
                 <strong>Instalment<span style="color: red;">*</span></strong>
             </div>
         </div>
         <div class="col-md-3">
             <div class="inputBox">
-                <input required type="date" value="<?= date('Y-m-d') ?>">
+                <input required type="date" value="<?= date('Y-m-d') ?>" name="start_date">
                 <strong>Start Date<span style="color: red;">*</span></strong>
             </div>
         </div>
         <div class="col-md-3">
             <div class="inputBox">
-                <input required="required" type="date" value="<?= date('Y-m-d') ?>">
+                <input required="required" type="date" value="<?= date('Y-m-d') ?>" name="end_date">
                 <strong>End Date<span style="color: red;">*</span></strong>
             </div>
         </div>
@@ -105,13 +106,13 @@ input:checked+.slider:after {
         <h5>Hardware Section</h5>
         <div class="col-md-3">
             <div class="inputBox">
-                <input required type="number">
+                <input required type="number" name="hardware_Budget">
                 <strong>Hardware Budget<span style="color: red;">*</span></strong>
             </div>
         </div>
         <div class="col-md-9">
             <div class="inputBox">
-                <input required type="text">
+                <input required type="text" name="hardware_Summary">
                 <strong>Hardware Summary<span style="color: red;">*</span></strong>
             </div>
         </div>
@@ -119,14 +120,14 @@ input:checked+.slider:after {
     <div class="row" style="display: none;">
         <h5 style="float: left;margin-right: 10px;">Service</h5>
         <label class="switch">
-            <input type="checkbox" onchange="serviceEnabled(this)">
+            <input type="checkbox" onchange="serviceEnabled(this)" name="serviceEnabled">
             <span class="slider"></span>
         </label>
         <div class="col-md-12">
-            <div class="row" style="display: none;" id="service_section">
+            <div class="row" id="service_section" style="padding: 6px;">
                 <div class="col-md-3">
                     <div class="inputBox">
-                        <select name="" id="Service_type" class="col-md-12">
+                        <select name="Service_type" id="Service_type" class="col-md-12">
                             <option>Select Service type</option>
                             <option value="1">Weekly</option>
                             <option value="2">Monthly</option>
@@ -138,7 +139,7 @@ input:checked+.slider:after {
                 <div class="col-md-3">
                     <div class="inputBox">
                         <div class="inputBox">
-                            <input required type="number">
+                            <input required type="number" name="Service_amount">
                             <strong>Service Amount<span style="color: red;">*</span></strong>
                         </div>
                     </div>
@@ -146,7 +147,7 @@ input:checked+.slider:after {
                 <div class="col-md-3">
                     <div class="inputBox">
                         <div class="inputBox">
-                            <input required type="date" value="<?= date('Y-m-d') ?>">
+                            <input required type="date" value="<?= date('Y-m-d') ?>" name="Service_Increment_Date">
                             <strong>Next Increment Date<span style="color: red;">*</span></strong>
                         </div>
                     </div>
@@ -158,7 +159,7 @@ input:checked+.slider:after {
         <h5>Description</h5>
         <div class="col-md-12">
             <div class="inputBox">
-                <input required type="text" style="height: 85px;">
+                <input required type="text" style="height: 85px;" name="description">
                 <strong>Project Description<span style="color: red;">*</span></strong>
             </div>
         </div>
