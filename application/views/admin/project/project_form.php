@@ -176,6 +176,10 @@
         transform: translateX(100%);
     }
 }
+.swal2-container {
+    z-index: 11111;
+}
+
 </style>
 <div class="box col-md-12 p-5 m-0">
     <h4>Project Add Form</h4>
@@ -313,8 +317,13 @@ $('#add_project_form').submit(function(event) {
         type: 'POST',
         data: formData,
         success: function(response) {
-          
             console.log(response);
+            if(response){
+                var urlgo= '<?= base_url('admin/project') ?>';
+                showSuccessAlert('Success',urlgo)
+            }else{
+                showErrorAlert('Error')
+            };
         },
         error: function(xhr, status, error) {
             // Handle any errors here

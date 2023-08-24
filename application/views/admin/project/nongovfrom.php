@@ -139,7 +139,7 @@ input:checked+.slider:after {
                 <div class="col-md-3">
                     <div class="inputBox">
                         <div class="inputBox">
-                            <input required type="number" name="Service_amount">
+                            <input  type="number" name="Service_amount" id="Service_amount">
                             <strong>Service Amount<span style="color: red;">*</span></strong>
                         </div>
                     </div>
@@ -147,7 +147,7 @@ input:checked+.slider:after {
                 <div class="col-md-3">
                     <div class="inputBox">
                         <div class="inputBox">
-                            <input required type="date" value="<?= date('Y-m-d') ?>" name="Service_Increment_Date">
+                            <input  type="date" value="<?= date('Y-m-d') ?>" name="Service_Increment_Date" id="Service_Increment_Date">
                             <strong>Next Increment Date<span style="color: red;">*</span></strong>
                         </div>
                     </div>
@@ -179,12 +179,16 @@ function serviceEn(element) {
             display: "inline-block"
         });
         $('#Service_type').attr('required', true);
+        $('#Service_amount').attr('required', true);
+        $('#Service_Increment_Date').attr('required', true);
     } else {
         $('#service_section').animate({
             opacity: "hide",
             height: "hide"
         });
         $('#Service_type').removeAttr('required');
+        $('#Service_amount').removeAttr('required');
+        $('#Service_Increment_Date').removeAttr('required');
     }
 }
 </script>

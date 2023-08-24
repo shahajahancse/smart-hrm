@@ -199,7 +199,7 @@ if($theme[0]->fixed_layout=='true') {
 
 <script>
 // Function to show a SweetAlert success message
-function showSuccessAlert(message) {
+function showSuccessAlert(message, url = null) {
     Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -207,9 +207,14 @@ function showSuccessAlert(message) {
         timer: 2000,
         showConfirmButton: false
     }).then(function() {
-        location.reload();
+        if (url) {
+            window.location.href = url;
+        } else {
+            location.reload();
+        }
     });
 }
+
 
 // Function to show a SweetAlert error message
 function showErrorAlert(message) {
@@ -218,8 +223,6 @@ function showErrorAlert(message) {
         title: 'Error',
         text: message,
         showConfirmButton: true
-    }).then(function() {
-        location.reload();
-    });
+    })
 }
 </script>

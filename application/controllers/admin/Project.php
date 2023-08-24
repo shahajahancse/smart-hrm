@@ -899,8 +899,9 @@ class Project extends MY_Controller
             $company_id = 1;
             $start_date = $this->input->post('start_date');
             $end_date = $this->input->post('end_date');
+            $total_days = floor((strtotime($end_date) - strtotime($start_date)) / (60 * 60 * 24));
             $summary = '';
-            $budget_hours = '';
+            $budget_hours = $total_days*8;
             $priority = $this->input->post('priority');
             $assigned_to = $this->input->post('assigned_to');
             $description = $this->input->post('description');
@@ -926,6 +927,7 @@ class Project extends MY_Controller
             
             $data = array(
                 'title' => $title,
+                'project_id' => $project_no,
                 'project_no' => $project_no,
                 'client_id' => $client_id,
                 'company_id' => $company_id,
@@ -946,27 +948,22 @@ class Project extends MY_Controller
                 'hardware_Budget' => $hardware_Budget,
                 'hardware_Summary' => $hardware_Summary,
                 'service_status' => $service_status,
-                'serviceEnabled' => $serviceEnabled,
                 'Service_type' => $Service_type,
                 'Service_amount' => $Service_amount,
+                'project_note' =>'',
                 'Service_Increment_Date' => $Service_Increment_Date
             );
-            
             $result = $this->Project_model->add($data);
             echo json_encode($result);
-            
-        
     }
 
     // Validate and add info in database
     public function add_scrum_board_project()
     {
-
         if($this->input->post('add_type') == 'project') {
             /* Define return | here result is used to return user data and error for error message */
             $Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
             $Return['csrf_hash'] = $this->security->get_csrf_hash();
-
             /* Server side PHP input validation */
             $start_date = $this->input->post('start_date');
             $end_date = $this->input->post('end_date');

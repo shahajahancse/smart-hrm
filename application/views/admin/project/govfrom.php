@@ -139,7 +139,7 @@ input:checked+.slider:after {
                 <div class="col-md-3">
                     <div class="inputBox">
                         <div class="inputBox">
-                            <input required type="number" name="Service_amount">
+                            <input  type="number" name="Service_amount" id="Service_amount">
                             <strong>Service Amount<span style="color: red;">*</span></strong>
                         </div>
                     </div>
@@ -147,7 +147,7 @@ input:checked+.slider:after {
                 <div class="col-md-3">
                     <div class="inputBox">
                         <div class="inputBox">
-                            <input required type="date" value="<?= date('Y-m-d') ?>" name="Service_Increment_Date">
+                            <input  type="date" value="<?= date('Y-m-d') ?>" name="Service_Increment_Date" id="Service_Increment_Date">
                             <strong>Next Increment Date<span style="color: red;">*</span></strong>
                         </div>
                     </div>
