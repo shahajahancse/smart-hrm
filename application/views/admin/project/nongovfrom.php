@@ -51,7 +51,7 @@ input:focus+.slider {
 input:checked+.slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
-    transform: translateX(85px);
+    transform: translateX(47px);
 }
 
 /*------ ADDED CSS ---------*/
@@ -168,21 +168,3 @@ input:checked+.slider:after {
     <button type="submit" class="btn btn-primary" style="float: right;"> <i class="fa fa-check-square-o"></i>
         <?php echo $this->lang->line('xin_save');?> </button>
 </div>
-<script>
-function serviceEnabled(element) {
-    if (element.checked) {
-        console.log("Checkbox is checked");
-        $('#service_section').animate({
-            opacity: "show",
-            height: "show"
-        });
-        $('#Service_type').attr('required', true);
-    } else {
-        $('#service_section').animate({
-            opacity: "hide",
-            height: "hide"
-        });
-        $('#Service_type').removeAttr('required');
-    }
-}
-</script>

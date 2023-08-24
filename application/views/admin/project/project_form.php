@@ -266,7 +266,27 @@
 </div>
 </div>
 <script>
+function serviceEnabled(element) {
+    if (element.checked) {
+        console.log("Checkbox is checked");
+        $('#service_section').animate({
+            opacity: "show",
+            height: "show",
+            display: "inline-block"
+        });
+        $('#Service_type').attr('required', true);
+    } else {
+        $('#service_section').animate({
+            opacity: "hide",
+            height: "hide"
+        });
+        $('#Service_type').removeAttr('required');
+    }
+}
+</script>
+<script>
 function getFromClient(type) {
+
     $.ajax({
         url: '<?= base_url('admin/project/getFromClient') ?>',
         type: 'POST',
@@ -274,7 +294,8 @@ function getFromClient(type) {
             type: type
         },
         success: function(response) {
-            console.log(response);
+            $('#govfrom').empty();
+            $('#nongovfrom').empty();
             if (type === 1) {
                 $('#govfrom').fadeOut('fast', function() {
                     $('#govfrom').html(response).fadeIn('fast');
