@@ -2410,6 +2410,7 @@ class Employees extends MY_Controller {
 		} else {
 			$column_shift = $this->input->post('office_shift_id');
 		}*/
+
 		
 		$first_name = $this->Xin_model->clean_post($this->input->post('first_name'));
 		$last_name = $this->Xin_model->clean_post($this->input->post('last_name'));
@@ -2420,6 +2421,7 @@ class Employees extends MY_Controller {
 		$date_of_birth = $this->Xin_model->clean_date_post($this->input->post('date_of_birth'));
 		$contact_no = $this->Xin_model->clean_post($this->input->post('contact_no'));
 		$address = $this->Xin_model->clean_posts($this->input->post('address'));
+		// dd($address);
 		$per_address = $this->Xin_model->clean_posts($this->input->post('per_address'));
 		$leave_categories = array($this->input->post('leave_categories'));
 		$cat_ids = implode(',',$this->input->post('leave_categories'));
