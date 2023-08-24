@@ -15,6 +15,7 @@
 
 .inputBox {
     position: relative;
+    width: 100%;
 }
 
 .inputBox input {
@@ -25,6 +26,7 @@
     color: #000;
     border: 1px solid #7a7a7a;
     font-size: 1em;
+    width: 100%;
 }
 
 .inputBox select {
@@ -35,6 +37,7 @@
     color: #000;
     border: 1px solid #7a7a7a;
     font-size: 1em;
+    width: 100%;
 }
 
 
@@ -52,8 +55,6 @@
 
 }
 
-
-
 .inputBox input:focus~strong,
 .inputBox input:valid~strong {
     font-size: 0.8em;
@@ -62,7 +63,6 @@
     border-radius: 2px;
     background: #fff;
     letter-spacing: 0em;
-
 }
 
 .inputBox select:focus~strong,
@@ -86,6 +86,95 @@
     border-bottom-color: transparent;
 
 }
+
+.box {
+    box-shadow: 0 2px 3px 0px rgba(0, 0, 0, 0.03), 0 1px 4px 0 rgba(0, 0, 0, 0.04), 0 3px 1px -2px rgba(0, 0, 0, 0.04) !important;
+}
+.loader {
+    position: relative;
+    width: 100%;
+    height: 130px;
+    margin-bottom: 10px;
+    border: 1px solid #d3d3d3;
+    padding: 8px;
+    background-color: #e3e3e3;
+    overflow: hidden;
+}
+
+.loader:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(110deg, rgba(227, 227, 227, 0) 0%, rgba(227, 227, 227, 0) 40%, rgba(227, 227, 227, 0.5) 50%, rgba(227, 227, 227, 0) 60%, rgba(227, 227, 227, 0) 100%);
+  animation: gradient-animation_2 1.2s linear infinite;
+}
+
+.loader .wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.loader .wrapper > div {
+  background-color: #cacaca;
+}
+
+.loader .circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.loader .button {
+  display: inline-block;
+  height: 32px;
+  width: 75px;
+}
+
+.loader .line-1 {
+  position: absolute;
+  top: 11px;
+  left: 58px;
+  height: 10px;
+  width: 100px;
+}
+
+.loader .line-2 {
+  position: absolute;
+  top: 34px;
+  left: 58px;
+  height: 10px;
+  width: 150px;
+}
+
+.loader .line-3 {
+  position: absolute;
+  top: 57px;
+  left: 0px;
+  height: 10px;
+  width: 100%;
+}
+
+.loader .line-4 {
+  position: absolute;
+  top: 80px;
+  left: 0px;
+  height: 10px;
+  width: 92%;
+}
+
+@keyframes gradient-animation_2 {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
 </style>
 <div class="box col-md-12 p-5 m-0">
     <h4>Project Add Form</h4>
@@ -101,30 +190,36 @@
             </div>
             <div class="col-md-3">
                 <div class="inputBox">
-                    <input required type="text">
-                    <strong>Project Id<b style="color: red;">*</b></strong>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="inputBox">
                     <select name="" id="client-select" class="col-md-12">
                         <option>Select A Client</option>
                         <?php foreach ($all_clients as $client): ?>
                         <option value="<?= $client->client_id ?>"><?= $client->name ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <strong>Project Id<b style="color: red;">*</b></strong>
+                    <strong>Client<b style="color: red;">*</b></strong>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="inputBox">
-                    <select name="" id="client-select" class="col-md-12">
+                    <select name="" id="emp-select" class="col-md-12">
                         <option>Select A Employee</option>
                         <?php foreach ($all_employees as $emp): ?>
                         <option value="<?= $emp->user_id ?>"><?= $emp->first_name ?> <?= $emp->last_name ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <strong>Project Id<b style="color: red;">*</b></strong>
+                    <strong>Responsible persons<b style="color: red;">*</b></strong>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="inputBox">
+                    <select name="priority" id="Priority-select" class="col-md-12">
+                        <option>Select Priority Level</option>
+                        <option value="1"><?php echo $this->lang->line('xin_highest');?></option>
+                        <option value="2"><?php echo $this->lang->line('xin_high');?></option>
+                        <option value="3"><?php echo $this->lang->line('xin_normal');?></option>
+                        <option value="4"><?php echo $this->lang->line('xin_low');?></option>
+                    </select>
+                    <strong>Priority Level<b style="color: red;">*</b></strong>
                 </div>
             </div>
         </div>
@@ -135,16 +230,33 @@
                 <li class="col-md-6" style="padding: 0;"><a style="text-align: center;" onclick="getFromClient(2)"
                         data-toggle="tab" href="#nongov">Non Government Project</a></li>
             </ul>
-
             <div class="tab-content">
-                <div id="gov" class="tab-pane fade">
+                <div id="gov" class="box tab-pane fade" style="overflow: hidden;padding: 0px 6px 12px 6px;">
                     <div id="govfrom"
-                        style="margin: 41px 0px 0px 0px;padding: 13px 14px 14px 15px;background: #f4f4f4;">
+                        style="margin:0px;padding: 13px 14px 14px 15px;background: #ffffff;">
+                        <div class="loader">
+                            <div class="wrapper">
+                                <div class="circle"></div>
+                                <div class="line-1"></div>
+                                <div class="line-2"></div>
+                                <div class="line-3"></div>
+                                <div class="line-4"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div id="nongov" class="tab-pane fade">
+                <div id="nongov" class="box tab-pane fade" style="overflow: hidden;padding: 0px 6px 12px 6px;">
                     <div id="nongovfrom"
-                        style="margin: 41px 0px 0px 0px;padding: 13px 14px 14px 15px;background: #f4f4f4;">
+                        style="margin: 5px 0px 0px 0px;padding: 13px 14px 14px 15px;background: #ffffff;">
+                        <div class="loader">
+                            <div class="wrapper">
+                                <div class="circle"></div>
+                                <div class="line-1"></div>
+                                <div class="line-2"></div>
+                                <div class="line-3"></div>
+                                <div class="line-4"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -157,18 +269,23 @@
 function getFromClient(type) {
     $.ajax({
         url: '<?= base_url('admin/project/getFromClient') ?>',
-        type: 'POST', // or 'GET' depending on your API
+        type: 'POST',
         data: {
             type: type
         },
         success: function(response) {
             console.log(response);
             if (type === 1) {
-                $('#govfrom').html(response)
-            } else if(type === 2) {
-                $('#nongovfrom').html(response)
+                $('#govfrom').fadeOut('fast', function() {
+                    $('#govfrom').html(response).fadeIn('fast');
+                });
+            } else if (type === 2) {
+                $('#nongovfrom').slideUp('fast', function() {
+                    $('#nongovfrom').html(response).slideDown('fast');
+                });
             }
         },
+
         error: function(error) {
             // Handle error response
         }
@@ -179,5 +296,6 @@ function getFromClient(type) {
 <script>
 $(document).ready(function() {
     $('#client-select').select2();
+    $('#emp-select').select2();
 });
 </script>

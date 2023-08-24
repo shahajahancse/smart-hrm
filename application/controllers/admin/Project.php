@@ -115,18 +115,18 @@ class Project extends MY_Controller
         $data['subview'] = $this->load->view("admin/project/project_form", $data, true);
         $this->load->view('admin/layout/layout_main', $data); //page load
     }
-
-	public function getFromClient(){
-		$type=$this->input->post("type");
-
-		if($type==1){
-			$data="hello this is gov project";
-		} elseif ($type==2) {
-			$data="hello this is nongov project";
-		}
-		echo $data;
-	}
-
+    public function getFromClient() {
+        $type = $this->input->post("type");
+    
+        if ($type == 1) {
+            $data = $this->load->view('admin/project/govfrom', '', true);
+        } elseif ($type == 2) {
+            $data = $this->load->view('admin/project/nongovfrom', '', true);
+        }
+        
+        echo $data;
+    }
+    
 
 
     public function timelogs()
