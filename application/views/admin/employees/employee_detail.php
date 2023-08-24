@@ -1,24 +1,18 @@
-<?php
-// /<span style="color:red">*</span> Employee Details view
-// <span style="color:red">*</span>/
+
+<?php 
+  $session              = $this->session->userdata('username');
+  $system               = $this->Xin_model->read_setting_info(1);
+  $eid                  = $this->uri->segment(4);
+  $eresult              = $this->Employees_model->read_employee_information($eid);
+  $ar_sc                = explode('- ',$system[0]->default_currency_symbol);
+  $sc_show              = $ar_sc[1];
+  $leave_user           = $this->Xin_model->read_user_info($eid);
+  $get_animate          = $this->Xin_model->get_content_animate();
+  $leave_categories_ids = explode(',',$leave_categories);
+  $view_companies_ids   = explode(',',$view_companies_id);
+  $user_info            = $this->Xin_model->read_user_info($session['user_id']);
+  $role_resources_ids   = $this->Xin_model->user_role_resource(); 
 ?>
-<?php $session = $this->session->userdata('username');?>
-<?php $system = $this->Xin_model->read_setting_info(1);?>
-<?php //$default_currency = $this->Xin_model->read_currency_con_info($system[0]->default_currency_id);?>
-<?php
-$eid = $this->uri->segment(4);
-$eresult = $this->Employees_model->read_employee_information($eid);
-?>
-<?php
-$ar_sc = explode('- ',$system[0]->default_currency_symbol);
-$sc_show = $ar_sc[1];
-$leave_user = $this->Xin_model->read_user_info($eid);
-?>
-<?php $get_animate = $this->Xin_model->get_content_animate();?>
-<?php $leave_categories_ids = explode(',',$leave_categories);?>
-<?php $view_companies_ids = explode(',',$view_companies_id);?>
-<?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
-<?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
 <style>
   #nda_start{
@@ -29,7 +23,6 @@ $leave_user = $this->Xin_model->read_user_info($eid);
   }
 </style>
 <div class="row">
-
   <div class="col-md-12">
     <div class="nav-tabs-custom mb-4">
       <ul class="nav nav-tabs">
@@ -39,9 +32,6 @@ $leave_user = $this->Xin_model->read_user_info($eid);
         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_employee_set_salary"><?php echo $this->lang->line('xin_employee_set_salary');?></a> </li>
         <?php }?>
         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_leaves"><?php echo $this->lang->line('left_leaves');?></a> </li>
-        <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_core_hr"><?php echo $this->lang->line('xin_hr');?></a> </li> -->
-        <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_projects"><?php echo $this->lang->line('xin_hr_m_project_task');?></a> </li> -->
-        <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_payslips"><?php echo $this->lang->line('left_payslips');?></a> </li>       -->
         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#NDA">NDA</a> </li>      
      </ul>
       <div class="tab-content">
@@ -371,8 +361,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                             </div>
                             <div class="col-md-8">
                               <div class="form-group">
-                                <label for="address"><?php echo $this->lang->line('xin_employee_address');?></label>
-                                <input type="text" class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_address');?>" name="address" value="<?php echo $address;?>" />
+                                <label for="address">Present Address</label>
+                                <input type="text" class="form-control" placeholder="Present Address" name="address" value="<?php echo $address;?>" />
                               </div>
                             </div>
                           </div>  
@@ -3140,9 +3130,6 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                         confirmButtonText: 'OK'
                     });
                 },
-                // error: function(xhr, status, error) {
-                //     console.log(xhr.responseText);
-                // }
             });
         });
     });
