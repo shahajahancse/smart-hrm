@@ -124,8 +124,8 @@ class Project extends MY_Controller
                         $this->db->join('xin_clients', 'xin_projects.client_id = xin_clients.client_id');
                         $this->db->where('project_id',$project_id);
         $data['project_data'] = $this->db->get()->row();
-                        $this->db->select('project_account.*');
-                        $this->db->from('project_account');
+                        $this->db->select('xin_project_account.*');
+                        $this->db->from('xin_project_account');
                         $this->db->where('project_id',$project_id);
         $data['project_payment'] = $this->db->get()->row();
 
@@ -1012,7 +1012,7 @@ class Project extends MY_Controller
                     'Remaining_Payment_percent' =>100,
                     'update_at' => $update_at
                 );
-                $res =$this->db->insert('project_account', $data);
+                $res =$this->db->insert('xin_project_account', $data);
                 if ($res) {
                     $result=true;
                 }else {

@@ -469,7 +469,7 @@ function getinstallmentfrom() {
         for (var i = 0; i < installmentDates.length; i++) {
             var sequenceWord = numberToWords(i + 1); // Using the numberToWords function
             var inputElement = $(
-                '<div class="row" style="box-shadow: 0px 0px 2px 3px #b0b0b0;padding: 11px;margin: 7px;"><h5>' + sequenceWord +
+                '<div class="row" style="box-shadow: inset 0px 0px 8px 2px #b0b0b0;padding: 21px 23px;margin: 7px;"><h5>' + sequenceWord +
                 ' installment</h5><div class="col-md-6"><div class="inputBox"><input required type="date" name="soft_intmnt_dates[]" value="' +
                 installmentDates[i] + '"><strong>Installment Date<span style="color: red;">*</span></strong></div></div><div class="col-md-6"><div class="inputBox"><input required type="number" name="soft_intmnt_prements[]" value="' +
                 fee_per_installment +
