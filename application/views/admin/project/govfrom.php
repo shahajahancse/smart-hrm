@@ -73,40 +73,52 @@ input:checked+.slider:after {
 
 /*--------- END --------*/
 </style>
-<input type="hidden" name="projecttype" value=2 >
+<input type="hidden" name="projecttype" value=2>
 <div style="display: flex;flex-direction: column;gap: 21px;">
     <div class="row">
         <h5>Software Section</h5>
         <div class="col-md-3">
             <div class="inputBox">
-                <input required type="number" name="software_Budget">
+                <input required type="number" name="software_Budget" id="software_Budget" value=0 onkeyup="setinstallmentdate()">
                 <strong>Software Budget<span style="color: red;">*</span></strong>
             </div>
         </div>
         <div class="col-md-3">
             <div class="inputBox">
-                <input required type="number" name="instalment">
+                <input required type="number" name="instalment" id="instalment" value=1 onkeyup="setinstallmentdate()">
                 <strong>Instalment<span style="color: red;">*</span></strong>
             </div>
         </div>
         <div class="col-md-3">
             <div class="inputBox">
-                <input required type="date" value="<?= date('Y-m-d') ?>" name="start_date">
+                <input required type="date" value="<?= date('Y-m-d') ?>" name="start_date" id="start_date">
                 <strong>Start Date<span style="color: red;">*</span></strong>
             </div>
         </div>
         <div class="col-md-3">
             <div class="inputBox">
-                <input required="required" type="date" value="<?= date('Y-m-d') ?>" name="end_date">
+                <input required="required" type="date" value="<?= date('Y-m-d') ?>" name="end_date" id="end_date"
+                    onchange="getinstallmentfrom()">
                 <strong>End Date<span style="color: red;">*</span></strong>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <h5>Installment Section</h5>
+        <div id="installmentform" style="padding: 1px 22px;">
+            <!-- <div class="col-md-6">
+                <div class="inputBox">
+                    <input required type="number" name="software_Budget">
+                    <strong>Software Budget<span style="color: red;">*</span></strong>
+                </div>
+            </div> -->
         </div>
     </div>
     <div class="row">
         <h5>Hardware Section</h5>
         <div class="col-md-3">
             <div class="inputBox">
-                <input required type="number" name="hardware_Budget">
+                <input required type="number" name="hardware_Budget" >
                 <strong>Hardware Budget<span style="color: red;">*</span></strong>
             </div>
         </div>
@@ -139,7 +151,7 @@ input:checked+.slider:after {
                 <div class="col-md-3">
                     <div class="inputBox">
                         <div class="inputBox">
-                            <input  type="number" name="Service_amount" id="Service_amount">
+                            <input type="number" name="Service_amount" id="Service_amount">
                             <strong>Service Amount<span style="color: red;">*</span></strong>
                         </div>
                     </div>
@@ -147,7 +159,8 @@ input:checked+.slider:after {
                 <div class="col-md-3">
                     <div class="inputBox">
                         <div class="inputBox">
-                            <input  type="date" value="<?= date('Y-m-d') ?>" name="Service_Increment_Date" id="Service_Increment_Date">
+                            <input type="date" value="<?= date('Y-m-d') ?>" name="Service_Increment_Date"
+                                id="Service_Increment_Date">
                             <strong>Next Increment Date<span style="color: red;">*</span></strong>
                         </div>
                     </div>
@@ -169,3 +182,6 @@ input:checked+.slider:after {
     <button type="submit" class="btn btn-primary" style="float: right;"> <i class="fa fa-check-square-o"></i>
         <?php echo $this->lang->line('xin_save');?> </button>
 </div>
+<script>
+    setinstallmentdate()
+</script>

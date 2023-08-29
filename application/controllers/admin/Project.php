@@ -54,10 +54,8 @@ class Project extends MY_Controller
         if($system[0]->module_projects_tasks != 'true') {
             redirect('admin/dashboard');
         }
+        $data['project_data'] = $this->db->get('xin_projects')->result();
         $data['title'] = $this->lang->line('xin_projects').' | '.$this->Xin_model->site_title();
-        $data['all_employees'] = $this->Xin_model->all_employees();
-        $data['all_companies'] = $this->Xin_model->get_companies();
-        $data['all_clients'] = $this->Clients_model->get_all_clients();
         $data['breadcrumbs'] = $this->lang->line('xin_projects');
         $data['path_url'] = 'project';
         $role_resources_ids = $this->Xin_model->user_role_resource();
@@ -115,6 +113,31 @@ class Project extends MY_Controller
         $data['subview'] = $this->load->view("admin/project/project_form", $data, true);
         $this->load->view('admin/layout/layout_main', $data); //page load
     }
+    public function Payment_details($project_id)
+    {
+        $session = $this->session->userdata('username');
+        if(empty($session)) {
+            redirect('admin/');
+        }
+                        $this->db->select('xin_projects.*, xin_clients.name as client_name');
+                        $this->db->from('xin_projects');
+                        $this->db->join('xin_clients', 'xin_projects.client_id = xin_clients.client_id');
+                        $this->db->where('project_id',$project_id);
+        $data['project_data'] = $this->db->get()->row();
+                        $this->db->select('xin_project_account.*');
+                        $this->db->from('xin_project_account');
+                        $this->db->where('project_id',$project_id);
+        $data['project_payment'] = $this->db->get()->row();
+
+
+        $data['title'] = $this->lang->line('xin_projects').' | '.$this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Payment Details';
+        $role_resources_ids = $this->Xin_model->user_role_resource();
+
+
+        $data['subview'] = $this->load->view("admin/project/Payment_details", $data, true);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+    }
     public function getFromClient()
     {
         $type = $this->input->post("type");
@@ -157,7 +180,7 @@ class Project extends MY_Controller
             }
         } else {
             redirect('admin/dashboard');
-        }
+        }     
     }
 
     //projects calendar
@@ -953,7 +976,51 @@ class Project extends MY_Controller
                 'project_note' =>'',
                 'Service_Increment_Date' => $Service_Increment_Date
             );
-            $result = $this->Project_model->add($data);
+            $r =$this->db->insert('xin_projects', $data);
+            if ($r) {
+                $project_id = $this->db->insert_id();
+                $soft_intmnt_dates=json_encode($this->input->post('soft_intmnt_dates'));
+                $soft_intmnt_prements=json_encode($this->input->post('soft_intmnt_prements'));
+                $soft_intmnt_status=json_encode($this->input->post('soft_intmnt_status'));
+                $soft_intmnt_takes=0;
+                $soft_prement_status=0;
+                $hardware_prement_status=0;
+                $if_notify=1;
+                $intmnt_dates=$this->input->post('soft_intmnt_dates');
+                $notify_date_start = date('Y-m-d', strtotime('-3 day', strtotime($intmnt_dates[0])));
+                $update_at=date('Y-m-d');
+                $data = array(
+                    'project_id' => $project_id,
+                    'clint_id' => $client_id,
+                    'software_budget' => $software_Budget,
+                    'hardware_budget' => $hardware_Budget,
+                    'total_budget' => $hardware_Budget+$software_Budget,
+                    'soft_total_installment' => $instalment,
+                    'soft_intmnt_dates' => $soft_intmnt_dates,
+                    'soft_intmnt_prements' => $soft_intmnt_prements,
+                    'soft_intmnt_status' => $soft_intmnt_status,
+                    'soft_intmnt_takes' => $soft_intmnt_takes,
+                    'soft_prement_status' => $soft_prement_status,
+                    'hardware_prement_status' => $hardware_prement_status,
+                    'if_notify' => $if_notify,
+                    'next_installment_date' => $intmnt_dates[0],
+                    'installment_deu' => 0,
+                    'notify_date_start' => $notify_date_start,
+                    'Payment_Received' => 0,
+                    'Remaining_Payment' => $software_Budget+$hardware_Budget,
+                    'Payment_Received_percent' => 0,
+                    'Remaining_Payment_percent' =>100,
+                    'update_at' => $update_at
+                );
+                $res =$this->db->insert('xin_project_account', $data);
+                if ($res) {
+                    $result=true;
+                }else {
+                    $result=false;
+                }   
+            } else {
+                $result=false;
+            }          
             echo json_encode($result);
     }
 
