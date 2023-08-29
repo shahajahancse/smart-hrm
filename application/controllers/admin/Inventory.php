@@ -812,76 +812,63 @@ public function add_daily_package()
   }
 
    
-   public function perches_status_report($exc=null)
-	 {            
-		$first_date = $this->input->post('first_date');
-		$second_date = $this->input->post('second_date');
+public function perches_status_report($exc=null){            
+	$first_date = $this->input->post('first_date');
+	$second_date = $this->input->post('second_date');
+	$f1_date = date("Y-m-d", strtotime($first_date));
+	$f2_date = date("Y-m-d", strtotime($second_date));
+	$statusC = $this->input->post('statusC');
+	$data["values"] = $this->Inventory_model->perches_status_report($f1_date, $f2_date, $statusC);
+	$data['statusC']= $statusC;
+	$data['first_date'] = $first_date;
+	$data['second_date'] = $second_date;
+	if($exc == 1){
+		$this->load->view("admin/inventory/perches_status_report_excel", $data);
+	}else{
+		if(is_string($data["values"])){
+			echo $data["values"];
+		}
+		else{	
+			echo $this->load->view("admin/inventory/perches_status_report", $data, TRUE);
+		}
+	}
+}
 
-		$f1_date = date("Y-m-d", strtotime($first_date));
-		$f2_date = date("Y-m-d", strtotime($second_date));
-		$statusC = $this->input->post('statusC');
-		$data["values"] = $this->Inventory_model->perches_status_report($f1_date, $f2_date, $statusC);
+    //====================== Requisition EndReport=============================//
 
+    //====================== Low inventory and  Stack product report Report=============================
+
+public function low_inv_all_product_status_report($exc=null){
+	$statusC=$this->input->post('statusC');
+	if($statusC==7){
+		$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report();
 		$data['statusC']= $statusC;
-		$data['first_date'] = $first_date;
-		$data['second_date'] = $second_date;
-		if($exc == 1){
-			$this->load->view("admin/inventory/perches_status_report_excel", $data);
+	if($exc == 1){
+		$this->load->view("admin/inventory/low_in_status_report_excel", $data);
+	}else{
+		if(is_string($data["values"])){
+			echo $data["values"];
+		}
+		else{	
+			echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
+		}
+	}
+	}else{
+		$data['statusC']= $statusC;
+		$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report($statusC);
+		// dd($data['values']);
+		if($exc == 2){
+			$this->load->view("admin/inventory/low_in_status_report_excel", $data);
 		}else{
 			if(is_string($data["values"])){
 				echo $data["values"];
 			}
 			else{	
-				echo $this->load->view("admin/inventory/perches_status_report", $data, TRUE);
-			}
+				echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
+			}			
 		}
-   	 
- }
-
-    //====================== Requisition EndReport=============================
-
-
-
-      //====================== Low inventory and  Stack product report Report=============================
-
- public function low_inv_all_product_status_report($exc=null){
-             $statusC=$this->input->post('statusC');
-			 if($statusC==7){
-					$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report();
-					$data['statusC']= $statusC;
-					
-					if($exc == 1){
-						$this->load->view("admin/inventory/low_in_status_report_excel", $data);
-					}else{
-					
-							if(is_string($data["values"]))
-							{
-								echo $data["values"];
-							}
-							else
-							{	
-								echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
-							}
-						}
-			  }else{
-				    $data['statusC']= $statusC;
-					$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report($statusC);
-					// dd($data['values']);
-					if($exc == 2){
-						$this->load->view("admin/inventory/low_in_status_report_excel", $data);
-					 }else{
-							if(is_string($data["values"]))
-									{
-										echo $data["values"];
-									}
-									else
-									{	
-										echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
-									}			
-								}
-			  }
-		   
- }
+	}	   
+}
 
 
       //====================== End Low inventory and  Stack product report Report=============================
