@@ -138,6 +138,90 @@ class Project extends MY_Controller
         $data['subview'] = $this->load->view("admin/project/Payment_details", $data, true);
         $this->load->view('admin/layout/layout_main', $data); //page load
     }
+    public function get_payment_page()
+    {
+        $session = $this->session->userdata('username');
+        if(empty($session)) {
+            redirect('admin/');
+        }
+                        $this->db->select('xin_projects.*');
+                        $this->db->from('xin_projects');
+                        $this->db->from('xin_project_account');
+                        $this->db->where('xin_project_account.if_notify',1);
+                        $this->db->where('xin_project_account.notify_date_start <=',date('Y-m-d'));
+        $data['soft_payment_data'] = $this->db->get()->result();
+                        $this->db->select('xin_project_service.*');
+                        $this->db->from('xin_project_service');
+                        $this->db->where('xin_project_service.next_notify_date <=',date('Y-m-d'));
+        $data['service_payment_data'] = $this->db->get()->result();
+        $data['title'] = $this->lang->line('xin_projects').' | '.$this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Payment In';
+        $data['subview'] = $this->load->view("admin/project/get_payment_page", $data, true);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+    }
+    public function get_software_payment()
+    {
+        $session = $this->session->userdata('username');
+        if(empty($session)) {
+            redirect('admin/');
+        }
+                        $this->db->select('xin_project_account.project_id,xin_projects.title,xin_project_account.notify_date_start,xin_project_account.next_installment_date, xin_clients.name as client_name');
+                        $this->db->from('xin_project_account');
+                        $this->db->join('xin_clients', 'xin_project_account.clint_id = xin_clients.client_id');
+                        $this->db->join('xin_projects', 'xin_project_account.project_id = xin_projects.project_id');
+                        // $this->db->order_by('next_installment_date DESC');
+                        // $this->db->where('xin_project_account.if_notify',1);
+                        $this->db->where('xin_project_account.notify_date_start <=',date('Y-m-d'));
+        $data['soft_payment_data'] = $this->db->get()->result();
+        $data['title'] = $this->lang->line('xin_projects').' | '.$this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Software Payment';
+        $data['subview'] = $this->load->view("admin/project/get_software_payment", $data, true);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+    }
+    public function get_instalment_data(){
+        $project_id=$this->input->post('project_id');
+        $number=$this->input->post('number');
+        $this->db->select('xin_project_account.*');
+                        $this->db->from('xin_project_account');
+                        $this->db->where('xin_project_account.project_id',$project_id);
+        $soft_payment_data = $this->db->get()->row();
+        $data['project_id']=$project_id;
+        $data['soft_payment_data']=$soft_payment_data;
+        $soft_intmnt_dates=json_decode($soft_payment_data->soft_intmnt_dates);
+        $soft_intmnt_payments=json_decode($soft_payment_data->soft_intmnt_prements);
+        $soft_intmnt_status=json_decode($soft_payment_data->soft_intmnt_status);
+        if ($number) {
+            $tableay=array();
+            $i=$number;
+                $intmnt_payments=$soft_intmnt_payments[$i];
+                $intmnt_status=$soft_intmnt_status[$i];
+                $intmnt_dates=$soft_intmnt_dates[$i];
+                $tableay[$i] = [
+                    'intmnt_dates' => $intmnt_dates,
+                    'intmnt_payments' => $intmnt_payments,
+                    'intmnt_status' => $intmnt_status,
+                ];
+        
+            $data['instdata'] = $tableay;
+    
+            echo json_encode($data);
+            exit();
+        }
+        $tableay=array();
+
+        foreach ($soft_intmnt_dates as $i => $intmnt_dates) {
+            $intmnt_payments=$soft_intmnt_payments[$i];
+            $intmnt_status=$soft_intmnt_status[$i];
+            $tableay[$i] = [
+                'intmnt_dates' => $intmnt_dates,
+                'intmnt_payments' => $intmnt_payments,
+                'intmnt_status' => $intmnt_status,
+            ];
+        }
+        $data['instdata'] = $tableay;
+
+        echo json_encode($data);
+    }
     public function getFromClient()
     {
         $type = $this->input->post("type");
@@ -466,9 +550,6 @@ class Project extends MY_Controller
         } else {
             redirect('admin/');
         }
-        /*} else {
-            redirect('dashboard/');
-        }*/
     }
 
     public function project_list()
@@ -573,18 +654,15 @@ class Project extends MY_Controller
                             }
                             $ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.$de_file.'" class="user-image-hr" alt=""></span></a>';
                         }
-                    } ////
+                    }
                     else {
                         $ol .= '';
                     }
                 }
                 $ol .= '';
             }
-
-
             if(in_array('316', $role_resources_ids)) { //edit
                 $edit = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"  data-toggle="modal" data-target=".edit-modal-data"  data-project_id="'. $r->project_id . '"><span class="fa fa-pencil"></span></button></span>';
-
                 $add_users = '<span type="button" data-toggle="modal" data-target=".edit-modal-data"  data-project_id="'. $r->project_id . '"><span class="fa fa-plus"></span></span>';
             } else {
                 $edit = '';
@@ -623,12 +701,12 @@ class Project extends MY_Controller
             // } //}
         }
 
-        $output = array(
-             "draw" => $draw,
-               "recordsTotal" => $project->num_rows(),
-               "recordsFiltered" => $project->num_rows(),
-               "data" => $data
-          );
+            $output = array(
+                "draw" => $draw,
+                "recordsTotal" => $project->num_rows(),
+                "recordsFiltered" => $project->num_rows(),
+                "data" => $data
+            );
         echo json_encode($output);
         exit();
     }
@@ -950,8 +1028,6 @@ class Project extends MY_Controller
             
             $data = array(
                 'title' => $title,
-                'project_id' => $project_no,
-                'project_no' => $project_no,
                 'client_id' => $client_id,
                 'company_id' => $company_id,
                 'start_date' => $start_date,
@@ -979,6 +1055,30 @@ class Project extends MY_Controller
             $r =$this->db->insert('xin_projects', $data);
             if ($r) {
                 $project_id = $this->db->insert_id();
+
+                if ($service_status) {
+                    $Service_type = $this->input->post('Service_type');
+                    $Service_amount = $this->input->post('Service_amount');
+                    $Service_start_Date = $this->input->post('Service_start_Date');
+                    $Service_Increment_Date = $this->input->post('Service_Increment_Date');
+// id	project_id	service_type	start_date	next_payment_date	amount	next_notify_date	next_inc_date	update_at	create_at
+                    $service_data=array(
+                        'project_id' => $project_id,
+                        'client_id' => $client_id,
+                        'service_type' => $Service_type,
+                        'start_date' => $Service_start_Date,
+                        'next_payment_date' => $Service_start_Date,
+                        'amount' => $Service_amount,
+                        'next_notify_date' => date('Y-m-d', strtotime('-2 day', strtotime($Service_start_Date))),
+                        'next_inc_date' => $Service_Increment_Date,
+                        'update_at' =>date('Y-m-d H:i:s'),
+                        'create_at' => date('Y-m-d H:i:s')
+                    );
+                    $addservice =$this->db->insert('xin_project_service', $service_data);
+                    if (!$addservice) {
+                        $result=false;exit();
+                    }
+                }
                 $soft_intmnt_dates=json_encode($this->input->post('soft_intmnt_dates'));
                 $soft_intmnt_prements=json_encode($this->input->post('soft_intmnt_prements'));
                 $soft_intmnt_status=json_encode($this->input->post('soft_intmnt_status'));
