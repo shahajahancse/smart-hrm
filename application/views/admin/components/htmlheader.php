@@ -2,7 +2,7 @@
 <?php $favicon = base_url().'uploads/logo/favicon/'.$company[0]->favicon;?>
 <?php $theme = $this->Xin_model->read_theme_info(1);?>
 <!DOCTYPE html>
-<html>
+<html style="    margin-top: -42px;">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
