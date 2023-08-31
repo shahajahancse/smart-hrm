@@ -180,8 +180,7 @@
 .swal2-container {
     z-index: 11111;
 }
-</style>
-<style>
+
 #loading {
     visibility: hidden;
     position: fixed;

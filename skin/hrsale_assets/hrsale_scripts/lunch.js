@@ -103,8 +103,10 @@ function conempmeal(r)
       return ;
     }
   }else{
-    var sql =1;
+    var sql ='1';
   }
+  // console.log(sql);
+  // return false;
   if(first_date =='')
   {
     alert('Please select first date');

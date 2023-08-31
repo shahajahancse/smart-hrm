@@ -31,6 +31,7 @@ td {
     <img src="<?php echo base_url()?>skin/hrsale_assets/img/loding.gif">
 
 </div>
+<!--  -->
 <!-- Modal -->
 <div id="lunchoffmodal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -124,7 +125,7 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
                     value="<?= isset($guest->guest_m) ? $guest->guest_m : '0'; ?>" style="width: 83px;">
             </td>
             <td>
-                <input type="text" name="guest_comment" id="guest-comment" value="">
+                <input type="text" name="guest_comment" id="guest-comment" value="<?= isset($guest->guest_ref_comment) ? $guest->guest_ref_comment : ''; ?>">
             </td>
         </tr>
     </tbody>

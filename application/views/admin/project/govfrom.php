@@ -159,6 +159,15 @@ input:checked+.slider:after {
                 <div class="col-md-3">
                     <div class="inputBox">
                         <div class="inputBox">
+                            <input type="date" value="<?= date('Y-m-d') ?>" name="Service_start_Date"
+                                id="Service_Increment_Date">
+                            <strong>Service Start Date<span style="color: red;">*</span></strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="inputBox">
+                        <div class="inputBox">
                             <input type="date" value="<?= date('Y-m-d') ?>" name="Service_Increment_Date"
                                 id="Service_Increment_Date">
                             <strong>Next Increment Date<span style="color: red;">*</span></strong>
