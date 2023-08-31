@@ -2355,4 +2355,16 @@ class Project extends MY_Controller
         }
         $this->output($Return);
     }
+
+    public function get_payment_page(){
+        $session = $this->session->userdata('username');
+        if(empty($session)) {
+            redirect('admin/');
+        }
+        $data['title'] = 'Get Payment'.' | '.$this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Get Payment';
+
+        $data['subview'] = $this->load->view("admin/project/get_payment", $data, true);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+    }
 }

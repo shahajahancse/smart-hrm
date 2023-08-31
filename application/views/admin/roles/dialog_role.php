@@ -731,6 +731,7 @@ dataSource: [
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('xin_role_delete');?>",  add_info: "<?php echo $this->lang->line('xin_role_add');?>", value: "329", check: "<?php if(isset($_GET['role_id'])) { if(in_array('329',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>",}
 	]},
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('xin_acc_invoice_payments');?>",  add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", value: "330", check: "<?php if(isset($_GET['role_id'])) { if(in_array('330',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>",},
+	{ id: "", class: "role-checkbox-modal", text: "Get Payment",  add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", value: "3320", check: "<?php if(isset($_GET['role_id'])) { if(in_array('3320',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>",},
 	]},
 
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('xin_lang_settings');?>",  add_info: "<?php echo $this->lang->line('xin_add_edit_delete_role_info');?>", value: "89", check: "<?php if(isset($_GET['role_id'])) { if(in_array('89',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>",items: [
@@ -751,6 +752,7 @@ dataSource: [
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('xin_hr_report_user_roles');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "116", check: "<?php if(isset($_GET['role_id'])) { if(in_array('116',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('xin_hr_report_employees');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "117", check: "<?php if(isset($_GET['role_id'])) { if(in_array('117',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('xin_hr_report_leave_report');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "409", check: "<?php if(isset($_GET['role_id'])) { if(in_array('409',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+	
 	]},
 ]
 });

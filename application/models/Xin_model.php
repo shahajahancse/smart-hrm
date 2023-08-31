@@ -656,7 +656,12 @@ class Xin_model extends CI_Model {
 			$arr['hr_client_invoices_pay_active'] = 'active';
 			$arr['hr_quote_manager_open'] = 'active';
 			return $arr;
-		} else if($mClass=='invoices') {
+		}else if($mMethod=='get_payment_page' && $mClass=='quotes') {
+			$arr['get_payment_page'] = 'active';
+			$arr['hr_quote_manager_open'] = 'active';
+			return $arr;
+		}
+		 else if($mClass=='invoices') {
 			$arr['hr_all_inv_active'] = 'active';
 			$arr['hr_quote_manager_open'] = 'active';
 			return $arr;

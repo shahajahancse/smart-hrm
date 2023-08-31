@@ -574,6 +574,9 @@ if($theme[0]->sub_menu_icons != ''){
         <?php if(in_array('121',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['hr_all_inv_active']))echo $arr_mod['hr_all_inv_active'];?>"> <a href="<?php echo site_url('admin/invoices/');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_invoices_title');?> </a> </li>
         <?php } ?>
+        <?php if(in_array('327',$role_resources_ids)) { ?>
+        <li class="sidenav-link <?php if(!empty($arr_mod['get_payment_page']))echo $arr_mod['get_payment_page'];?>"> <a href="<?php echo site_url('admin/project/get_payment_page');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Get Payment </a> </li>
+        <?php } ?>
        
         <?php if(in_array('330',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['hr_client_invoices_pay_active']))echo $arr_mod['hr_client_invoices_pay_active'];?>"> <a href="<?php echo site_url('admin/invoices/payments_history');?>"> <i class="fa <?php echo $submenuicon;?>"></i><?php echo $this->lang->line('xin_acc_invoice_payments');?> </a> </li>
