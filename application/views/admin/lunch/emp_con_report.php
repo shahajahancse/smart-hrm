@@ -29,6 +29,7 @@
         color: blue;
         padding: 3px !important;
     }
+
     @media print {
         #btn {
             display: none;
@@ -116,14 +117,7 @@
                         $total_emp_cost+=$row->meal_amount*45;
                         $total_offic_cost+=$row->meal_amount*45;
                         $total_cost+=$row->meal_amount*90;
-
-
-
-
-
-
                     }
-
                 
                 ?>
                     <td><?= $active_meal ?></td>
@@ -140,8 +134,6 @@
                 $grand_total_cost    += $total_cost;
             ?>
                 <?php endforeach; ?>
-
-
             </tbody>
             <tfoot>
                 <tr>
@@ -156,70 +148,36 @@
         </table>
     </div>
     <?php }else{?>
-
     <div class="table-responsive" style="margin-top: -17px; padding:10px;">
         <table class="table table-hover table-striped" id="myTable">
             <thead>
                 <tr>
                     <th>SL</th>
-                    <th>Name</th>
-                    <th>Active.M</th>
+                    <th>Date</th>
+                    <th>Meal</th>
                     <th>T.Amount</th>
+                    <th>Comment</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
             $grand_active_meal = 0;
-            $grand_inactive_meal  = 0;
-            $grand_total_emp_cost  = 0;
-            $grand_total_offic_cost   = 0;
-            $grand_total_cost    = 0;
+            $grand_total_cost    = 0;  
+            $this->load->model("Lunch_model"); 
+             $emp_data = $this->Lunch_model->get_data_date_wise_geust($first_date,$second_date);
+             $data=$emp_data['emp_data'];
+        foreach ($data as $key => $row){
+                $grand_active_meal+=$row->guest_m;
+                $grand_total_cost+=$row->guest_m*90;
             ?>
-
-                <?php foreach ($all_employees as $key=>$employee): ?>
                 <tr>
                     <td><?= $key+1 ?></td>
-                    <td>Gest</td>
-
-                    <?php     
-                        $this->load->model("Lunch_model"); 
-                    $emp_data = $this->Lunch_model->get_data_date_wise($first_date,$second_date, $employee->user_id);
-                    $active_meal = 0;
-                    $inactive_meal  = 0;
-                    $total_emp_cost  = 0;
-                    $total_offic_cost   = 0;
-                    $total_cost    = 0;
-
-                    foreach ($emp_data['emp_data'] as $key => $row) {
-                        if($row->meal_amount>0){
-                            $active_meal+=$row->meal_amount;
-                        }else{
-                            $inactive_meal+=1;
-                        };
-                        $total_emp_cost+=$row->meal_amount*45;
-                        $total_offic_cost+=$row->meal_amount*45;
-                        $total_cost+=$row->meal_amount*90;
-
-
-
-
-
-
-                    }
-
-                
-                ?>
-                    <td><?= $active_meal ?></td>
-                    <td><?= $total_cost ?></td>
+                    <td><?= $row->date ?></td>
+                    <td><?= $row->guest_m ?></td>
+                    <td><?= $row->guest_cost ?></td>
+                    <td><?= $row->guest_ref_comment ?></td>
                 </tr>
-                <?php 
-                $grand_active_meal += $active_meal;
-                $grand_inactive_meal += $inactive_meal;
-                $grand_total_emp_cost  += $total_emp_cost;
-                $grand_total_offic_cost   += $total_offic_cost;
-                $grand_total_cost    += $total_cost;
-            ?>
-                <?php endforeach; ?>
+                <?php } ?>
 
 
             </tbody>

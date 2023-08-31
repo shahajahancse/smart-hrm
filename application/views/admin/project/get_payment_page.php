@@ -104,13 +104,18 @@
     display: inline;
 }
 
-.listd{
+.listd {
     box-shadow: 0px 0px 0px 1px #c1c1c1;
     margin: 5px;
 }
 
 .listd:hover {
     box-shadow: 0px 0px 5px 2px #c1c1c1;
+}
+
+td,
+th {
+    padding: 6px !important;
 }
 </style>
 <div class="container">
@@ -142,12 +147,81 @@
                         class="badge badge-danger"><?= count($soft_payment_data) + count($service_payment_data) ?></span>
                 </a>
                 <ul class="dropdown-menu" style="box-shadow: 0px 0px 6px 1px #959595;min-width: 136px !important;"">
-                   <li class="listd"><a href="<?= base_url('admin/project/get_service_payment') ?>">Service Payment <span
-                        class="badge badge-danger"><?=count($service_payment_data) ?></span> </a></li>
-                    <li class="listd"><a href="<?= base_url('admin/project/get_software_payment') ?>">Software Payment <span
-                                class="badge badge-danger"><?= count($soft_payment_data)?></span></a></li>
+                   <li class=" listd"><a href="<?= base_url('admin/project/get_service_payment') ?>">Service Payment
+                        <span class="badge badge-danger"><?=count($service_payment_data) ?></span> </a></li>
+                    <li class="listd"><a href="<?= base_url('admin/project/get_software_payment') ?>">Software Payment
+                            <span class="badge badge-danger"><?= count($soft_payment_data)?></span></a></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
+<div>
+    <script>
+    $(document).ready(function() {
+        $('#invoicesTable').DataTable();
+    });
+    </script>
+    <table id="invoicesTable" class="col-md-12">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Client Name</th>
+                <th>Date</th>
+                <th>Payment Type</th>
+                <th>Payment Way</th>
+                <th>Payment Amount</th>
+                <th>Due</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+            foreach ($invoice_data as $key => $row) {
+                ?>
+            <tr>
+                <td><?= ($key + 1) ?></td>
+                <td><?= $row->title ?></td>
+                <td><?= $row->client_name ?></td>
+                <td><?= $row->date ?></td>
+                <td>
+                    <?php
+                        if ($row->payment_type == 1) {
+                            echo "Software Payment";
+                        } elseif ($row->payment_type == 2) {
+                            echo "Service Payment";
+                        }
+                        ?>
+                </td>
+                <td><?= $row->payment_way ?></td>
+                <td><?= $row->pyment_amount ?></td>
+                <td><?= $row->due ?></td>
+                <td><a onclick="get_invoice_n(<?= $row->id ?>)" ><i class="fa fa-file-text" aria-hidden="true"></i></a>
+                </td>
+            </tr>
+            <?php
+            }
+            ?>
+        </tbody>
+
+    </table>
+</div>
+<script>
+    function get_invoice_n(params) {
+        $.ajax({
+            url: "<?= base_url('admin/project/get_invoice_n/')?>",
+            type: "POST",
+            data: {
+                id: params
+            },
+            success: function(data) {
+            
+                
+                var a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1000,height=800');
+                a.document.write(data);
+            }
+            
+        });
+    }
+</script>
