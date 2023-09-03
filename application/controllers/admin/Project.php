@@ -123,13 +123,12 @@ class Project extends MY_Controller
         $this->db->from('xin_projects');
         $this->db->join('xin_clients', 'xin_projects.client_id = xin_clients.client_id');
         $this->db->where('project_id', $project_id);
+        $this->db->order_by('project_id desc');
         $data['project_data'] = $this->db->get()->row();
         $this->db->select('xin_project_account.*');
         $this->db->from('xin_project_account');
         $this->db->where('project_id', $project_id);
         $data['project_payment'] = $this->db->get()->row();
-
-
         $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Payment Details';
         $role_resources_ids = $this->Xin_model->user_role_resource();
@@ -151,6 +150,7 @@ class Project extends MY_Controller
         $this->db->join('xin_project_account', 'xin_project_account.project_id = xin_projects.project_id');
         $this->db->where('xin_project_account.if_notify', 1);
         $this->db->where('xin_project_account.notify_date_start <=', date('Y-m-d'));
+        $this->db->order_by('xin_project_account.project_id desc');
         $query = $this->db->get();
 
         if ($query) {
@@ -168,6 +168,7 @@ class Project extends MY_Controller
         $this->db->from('xin_project_invoice');
         $this->db->join('xin_clients', 'xin_project_invoice.clint_id = xin_clients.client_id');
         $this->db->join('xin_projects', 'xin_project_invoice.project_id = xin_projects.project_id');
+        $this->db->order_by('xin_project_invoice.project_id desc');
         $data['invoice_data'] = $this->db->get()->result();
         $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Payment In';
