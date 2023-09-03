@@ -1,15 +1,4 @@
-<!-- <?php
-$statusText = "";
-if ($statusC == 1) {
-    $statusText = "Pending";
-} elseif ($statusC == 2) {
-    $statusText = "Approved";
-} elseif ($statusC == 3) {
-    $statusText = "Handover";
-} elseif ($statusC == 4) {
-    $statusText = "Rejected";
-}
-?> -->
+
 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"
     xmlns="http://www.w3.org/TR/REC-html40">
 <?php
@@ -27,7 +16,7 @@ header('Cache-Control: max-age=0'); //no cache
     $convert_f2=date('d-m-Y', strtotime($second_date));     
     ?>
     <div style="font-size:14px;  text-align:center; margin-bottom:3px">Lunch Report </div>
-    <div style="font-size:14px;  text-align:center; margin-bottom:7px"> <?php echo $statusText; ?> Date :
+    <div style="font-size:14px;  text-align:center; margin-bottom:7px"> Date :
         <?php echo $convert_f1; ?> To <?php echo  $convert_f2; ?></div>
     <div style="border: 1px solid black;padding: 0px;margin: 16px;">
         <?php if($status==1){?>
@@ -106,65 +95,44 @@ header('Cache-Control: max-age=0'); //no cache
         <table class="table table-hover table-striped" id="myTable">
             <thead>
                 <tr>
-                    <th style="text-align:center">SL</th>
-                    <th style="text-align:center">Name</th>
-                    <th style="text-align:center">Active.M</th>
-                    <th style="text-align:center">T.Amount</th>
+                    <th>SL</th>
+                    <th>Date</th>
+                    <th>Meal</th>
+                    <th>T.Amount</th>
+                    <th>Comment</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
             $grand_active_meal = 0;
-            $grand_inactive_meal  = 0;
-            $grand_total_emp_cost  = 0;
-            $grand_total_offic_cost   = 0;
-            $grand_total_cost    = 0;
+            $grand_total_cost    = 0;  
+            $this->load->model("Lunch_model"); 
+             $emp_data = $this->Lunch_model->get_data_date_wise_geust($first_date,$second_date);
+             $data=$emp_data['emp_data'];
+        foreach ($data as $key => $row){
+                $grand_active_meal+=$row->guest_m;
+                $grand_total_cost+=$row->guest_m*90;
             ?>
-                <?php foreach ($all_employees as $key=>$employee): ?>
                 <tr>
-                    <td style="text-align:center"><?= $key+1 ?></td>
-                    <td style="text-align:center">Gest</td>
-
-                    <?php     
-                        $this->load->model("Lunch_model"); 
-                    $emp_data = $this->Lunch_model->get_data_date_wise($first_date,$second_date, $employee->user_id);
-                    $active_meal = 0;
-                    $inactive_meal  = 0;
-                    $total_emp_cost  = 0;
-                    $total_offic_cost   = 0;
-                    $total_cost    = 0;
-
-                    foreach ($emp_data['emp_data'] as $key => $row) {
-                        if($row->meal_amount>0){
-                            $active_meal+=$row->meal_amount;
-                        }else{
-                            $inactive_meal+=1;
-                        };
-                        $total_emp_cost+=$row->meal_amount*45;
-                        $total_offic_cost+=$row->meal_amount*45;
-                        $total_cost+=$row->meal_amount*90;
-                    }
-                ?>
-                    <td style="text-align:center"><?= $active_meal ?></td>
-                    <td style="text-align:center"><?= $total_cost ?></td>
+                    <td><?= $key+1 ?></td>
+                    <td><?= $row->date ?></td>
+                    <td><?= $row->guest_m ?></td>
+                    <td><?= $row->guest_cost ?></td>
+                    <td><?= $row->guest_ref_comment ?></td>
                 </tr>
-                <?php 
-                $grand_active_meal += $active_meal;
-                $grand_inactive_meal += $inactive_meal;
-                $grand_total_emp_cost  += $total_emp_cost;
-                $grand_total_offic_cost   += $total_offic_cost;
-                $grand_total_cost    += $total_cost;
-            ?>
-                <?php endforeach; ?>
+                <?php } ?>
+
+
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan=2 style="text-align: center;font-weight: bold;">Total</td>
-                    <td style="text-align:center"><?=  $grand_active_meal?></td>
-                    <td style="text-align:center"><?=  $grand_total_cost?></td>
+                    <td><?=  $grand_active_meal?></td>
+                    <td><?=  $grand_total_cost?></td>
                 </tr>
             </tfoot>
         </table>
+
         <?php } ?>
     </div>
     <!-- Optional JavaScript -->

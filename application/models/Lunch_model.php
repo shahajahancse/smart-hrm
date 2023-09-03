@@ -458,6 +458,23 @@ class Lunch_model extends CI_Model {
 		return $data;
        
     }
+    public function get_data_date_wise_geust($grid_firstdate, $grid_seconddate){
+        $data = array();
+		$grid_firstdate = date("Y-m-d", strtotime($grid_firstdate)); 
+		$grid_seconddate = date("Y-m-d", strtotime($grid_seconddate));
+			
+		$this->db->select('*');
+		$this->db->from('lunch');
+		$this->db->where("date >=", $grid_firstdate);
+		$this->db->where("date <=", $grid_seconddate);
+		$this->db->where("guest_m >", 0);
+		$this->db->order_by("date");				
+		$query = $this->db->get()->result();
+		$data['emp_data'] = $query;
+		// dd($data);
+		return $data;
+       
+    }
     public function save($table, $data){
         return $this->db->insert($table, $data);
      }

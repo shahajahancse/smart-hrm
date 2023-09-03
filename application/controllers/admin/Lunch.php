@@ -169,6 +169,7 @@ class Lunch extends MY_Controller
                 'emp_cost' => $emp_cost,
                 'guest_cost' => $guest_cost,
                 'bigcomment' => $bigcomment,
+                'guest_ref_comment' => $guest_comment,
                 'status' => $status,
             );
             $this->db->where('id', $luncid)->update('lunch', $data2);
@@ -335,7 +336,9 @@ class Lunch extends MY_Controller
         $sql = $this->input->post('sql');
         $status = $this->input->post('status');
         $emp_id = explode(',', trim($sql));
+      
         $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+      
         $data['first_date'] = $first_date;
         $data['second_date'] = $second_date;
         $data['emp_id'] = $emp_id;
@@ -427,7 +430,7 @@ class Lunch extends MY_Controller
         if (empty($session)) {
             redirect('admin/');
         }
-        $data['emplist'] = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
+        $data['emplist'] = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4, 5, 6)")->result();
         $data['last_prement'] = $this->db->query("SELECT * FROM `lunch_payment` ORDER BY id DESC LIMIT 1")->row();
         $data['breadcrumbs'] ='Payment';
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();

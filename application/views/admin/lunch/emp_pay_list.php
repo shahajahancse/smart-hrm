@@ -167,10 +167,11 @@ input[type="email"] {
                 id="next_dateu">
 
             <h2>Add Payment</h2>
+            <?php dd($emplist); ?>
             <select id="search-select">
                 <option value="none">Select Employee</option>
 
-                <?php foreach($emplist as $data){?>
+                <?php  foreach($emplist as $data){?>
                 <option value="<?= $data->user_id ?>"><?= $data->first_name ?> <?= $data->last_name ?></option>
                 <?php } ?>
             </select>

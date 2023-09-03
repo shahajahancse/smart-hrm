@@ -176,7 +176,64 @@
         transform: translateX(100%);
     }
 }
+
+.swal2-container {
+    z-index: 11111;
+}
+
+#loading {
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    /* set z-index higher than other elements */
+    background-color: rgba(255, 255, 255, 0.8);
+    /* semi-transparent background */
+}
+
+#loading img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.sbtn {
+    background: #2393e3eb;
+    color: white;
+    margin-right: 10px;
+    padding: 6px 10px !important;
+    margin-top: 13px;
+}
+
+#loading {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    /* set z-index higher than other elements */
+    background-color: rgba(255, 255, 255, 0.8);
+    /* semi-transparent background */
+}
+
+#loading img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
 </style>
+<div id="loading">
+
+    <img src="<?php echo base_url()?>skin/hrsale_assets/img/loding.gif">
+
+</div>
+
 <div class="box col-md-12 p-5 m-0">
     <h4>Project Add Form</h4>
     <div class="col-md-12" style="margin-top: 13px;">
@@ -305,6 +362,7 @@ $(document).ready(function() {
 <script>
 $('#add_project_form').submit(function(event) {
     event.preventDefault(); // Prevent the default form submission
+    document.getElementById("loading").style.visibility = "visible";
 
     var formData = $(this).serialize(); // Serialize the form data
 
@@ -313,8 +371,15 @@ $('#add_project_form').submit(function(event) {
         type: 'POST',
         data: formData,
         success: function(response) {
-          
+            document.getElementById("loading").style.visibility = "hidden";
+
             console.log(response);
+            if (response) {
+                var urlgo = '<?= base_url('admin/project') ?>';
+                showSuccessAlert('Success', urlgo)
+            } else {
+                showErrorAlert('Error')
+            };
         },
         error: function(xhr, status, error) {
             // Handle any errors here
@@ -322,4 +387,94 @@ $('#add_project_form').submit(function(event) {
         }
     });
 });
+</script>
+
+<script>
+function setinstallmentdate() {
+    var instalment = parseInt($('#instalment').val()); // Convert to a number
+    var start_date = $('#start_date').val();
+
+    if (!isNaN(instalment) && start_date) {
+        var startDateObj = new Date(start_date);
+        startDateObj.setDate(startDateObj.getDate() + instalment);
+        var formattedEndDate = formatDate(startDateObj);
+        $('#end_date').val(formattedEndDate);
+    }
+    getinstallmentfrom()
+}
+
+// Function to convert a number to its corresponding word representation
+function numberToWords(number) {
+    const units = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+    const teens = ['Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen',
+        'Nineteen'];
+    const tens = ['Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+    function convertBelowHundred(num) {
+        if (num < 10) {
+            return units[num];
+        } else if (num < 20) {
+            return teens[num - 11];
+        } else {
+            const tenDigit = Math.floor(num / 10);
+            const unitDigit = num % 10;
+            return `${tens[tenDigit - 1]}${unitDigit !== 0 ? `-${units[unitDigit]}` : ''}`;
+        }
+    }
+
+    if (number < 10) {
+        return units[number];
+    } else if (number < 100) {
+        return convertBelowHundred(number);
+    } else if (number < 1000) {
+        const hundredDigit = Math.floor(number / 100);
+        const remainingDigits = number % 100;
+        return `${units[hundredDigit]} Hundred${remainingDigits !== 0 ? ` and ${convertBelowHundred(remainingDigits)}` : ''}`;
+    } else if (number < 10000) {
+        const thousandDigit = Math.floor(number / 1000);
+        const remainingDigits = number % 1000;
+        return `${units[thousandDigit]} Thousand${remainingDigits !== 0 ? ` ${convertBelowHundred(remainingDigits)}` : ''}`;
+    } else {
+        return 'Number out of range';
+    }
+}
+function formatDate(date) {
+            var year = date.getFullYear();
+            var month = String(date.getMonth() + 1).padStart(2, '0');
+            var day = String(date.getDate()).padStart(2, '0');
+            return year + '-' + month + '-' + day;
+        }
+function getinstallmentfrom() {
+    var instalment = parseInt($('#instalment').val());
+    var software_Budget = parseInt($('#software_Budget').val());
+    var start_date = new Date($('#start_date').val());
+    var end_date = new Date($('#end_date').val());
+    if (!isNaN(instalment) && start_date && end_date) {
+        var fee_per_installment = parseInt(software_Budget / instalment);
+
+        var totalDays = Math.ceil((end_date - start_date) / (1000 * 60 * 60 * 24));
+        var daysPerInstallment = Math.ceil(totalDays / instalment);
+
+        var installmentDates = [];
+        for (var i = 1; i <= instalment; i++) {
+            var installmentDate = new Date(start_date);
+            installmentDate.setDate(installmentDate.getDate() + (i - 1) * daysPerInstallment);
+            installmentDates.push(formatDate(installmentDate));
+        }
+
+        console.log(installmentDates);
+        $('#installmentform').empty();
+        // Append installment input elements to the div with id "installmentform"
+        for (var i = 0; i < installmentDates.length; i++) {
+            var sequenceWord = numberToWords(i + 1); // Using the numberToWords function
+            var inputElement = $(
+                '<div class="row" style="box-shadow: inset 0px 0px 8px 2px #b0b0b0;padding: 21px 23px;margin: 7px;"><h5>' + sequenceWord +
+                ' installment</h5><div class="col-md-6"><div class="inputBox"><input required type="date" name="soft_intmnt_dates[]" value="' +
+                installmentDates[i] + '"><strong>Installment Date<span style="color: red;">*</span></strong></div></div><div class="col-md-6"><div class="inputBox"><input required type="number" name="soft_intmnt_prements[]" value="' +
+                fee_per_installment +
+                '"><strong>installment fee<span style="color: red;">*</span></strong></div><input type="hidden" name="soft_intmnt_status[]" value=0></div></div>');
+            $('#installmentform').append(inputElement);
+        }
+    }
+}
 </script>

@@ -5,27 +5,29 @@ $userid  = $session[ 'user_id' ];
 $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
 
 $empdata = $this->db
-->select('lunch_payment.*, xin_employees.first_name, xin_employees.last_name, xin_designations.designation_name')
-->from('lunch_payment')
-->join('xin_employees', 'lunch_payment.emp_id = xin_employees.user_id')
-->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id')
-->where('lunch_payment.end_date', $result->end_date)
-->where('lunch_payment.emp_id', $session['user_id'])
-->order_by('lunch_payment.id', 'desc')
-->get()
-->result();
+    ->select('lunch_payment.*, xin_employees.first_name, xin_employees.last_name,
+              xin_designations.designation_name')
+    ->from('lunch_payment')
+    ->join('xin_employees', 'lunch_payment.emp_id = xin_employees.user_id')
+    ->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id')
+    ->where('lunch_payment.end_date', $result->end_date)
+    ->where('lunch_payment.emp_id', $session['user_id'])
+    ->order_by('lunch_payment.id', 'desc')
+    ->get()
+    ->result();
 
-$data1=$empdata[0];
-$taken_meal=0;
+$data1 = isset($empdata[0]) ? $empdata[0] : 0;
+$taken_meal = 0;
+
 $this->load->model("Lunch_model");
 $emp_data = $this->Lunch_model->get_data_date_wise($data1->end_date, $data1->next_date, $data1->emp_id);
 
 foreach ($emp_data['emp_data'] as $r) {
-
-    $taken_meal+=$r->meal_amount;
+    $taken_meal += $r->meal_amount;
 }
-$paymeal=$data1->pay_amount/45;
-$balanceMeal= $paymeal-$taken_meal;
+
+$paymeal = isset($data1->pay_amount) ? $data1->pay_amount / 45 : 0;
+$balanceMeal = $paymeal - $taken_meal;
 
 ?>
 
