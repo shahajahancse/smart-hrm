@@ -430,7 +430,7 @@ class Lunch extends MY_Controller
         if (empty($session)) {
             redirect('admin/');
         }
-        $data['emplist'] = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4)")->result();
+        $data['emplist'] = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1, 4, 5, 6)")->result();
         $data['last_prement'] = $this->db->query("SELECT * FROM `lunch_payment` ORDER BY id DESC LIMIT 1")->row();
         $data['breadcrumbs'] ='Payment';
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();

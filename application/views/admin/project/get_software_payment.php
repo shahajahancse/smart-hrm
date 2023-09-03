@@ -303,8 +303,8 @@ $(document).ready(function() {
             data: formData, // Pass the serialized form data
             success: function(response) {
                 console.log(response);
-                var urls='<?php echo base_url('admin/project/get_payment_page');?>',
-                showSuccessAlert(response,urls);
+                var url='<?php echo base_url('admin/project/get_payment_page');?>';
+                showSuccessAlert(response,url);
             },
             error: function(xhr, status, error) {
                 // Handle any errors that occur during the request
