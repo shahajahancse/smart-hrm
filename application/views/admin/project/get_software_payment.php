@@ -203,6 +203,7 @@
 </div>
 <script>
 function get_instdata(project_id) {
+
     $.ajax({
         url: '<?php echo base_url('admin/project/get_instalment_data/');?>',
         type: 'POST',
@@ -212,6 +213,8 @@ function get_instdata(project_id) {
         success: function(data) {
             try {
                 var parsedData = JSON.parse(data); // Parse the JSON response
+                console.log(parsedData.instdata);
+                // return false;
 
                 if (parsedData && parsedData.instdata && Array.isArray(parsedData.instdata)) {
                     var listdataElement = document.getElementById("listdata");
@@ -222,7 +225,7 @@ function get_instdata(project_id) {
                     for (var i = 0; i < parsedData.instdata.length; i++) {
                         var item = parsedData.instdata[i];
                         var li = document.createElement("li");
-                        if (item.intmnt_status === "1") {
+                        if (item.intmnt_status === 1) {
                             li.className = "listprimari"; // Add the listprimari class
                         } else {
                             li.className = "listdanger"; // Add the listdanger class
@@ -234,7 +237,7 @@ function get_instdata(project_id) {
                             .intmnt_payments + "<br><b>Status:</b> " + (item.intmnt_status == 1 ? "Paid" :
                                 "Unpaid");
                         ul.appendChild(li);
-                        if (item.intmnt_status !== "1") {
+                        if (item.intmnt_status !== 1) {
                             break;
                         }
                     }
