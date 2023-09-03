@@ -70,34 +70,7 @@ class Project extends MY_Controller
             redirect('admin/dashboard');
         }
     }
-    //  public function index()
-    //  {
-    // 	$session = $this->session->userdata('username');
-    // 	if(empty($session)){
-    // 		redirect('admin/');
-    // 	}
-    // 	$system = $this->Xin_model->read_setting_info(1);
-    // 	if($system[0]->module_projects_tasks!='true'){
-    // 		redirect('admin/dashboard');
-    // 	}
-    // 	$data['title'] = $this->lang->line('xin_projects').' | '.$this->Xin_model->site_title();
-    // 	$data['all_employees'] = $this->Xin_model->all_employees();
-    // 	$data['all_companies'] = $this->Xin_model->get_companies();
-    // 	$data['all_clients'] = $this->Clients_model->get_all_clients();
-    // 	$data['breadcrumbs'] = $this->lang->line('xin_projects');
-    // 	$data['path_url'] = 'project';
-    // 	$role_resources_ids = $this->Xin_model->user_role_resource();
-    // 	if(in_array('44',$role_resources_ids)) {
-    // 		if(!empty($session)){
-    // 			$data['subview'] = $this->load->view("admin/project/project_list", $data, TRUE);
-    // 			$this->load->view('admin/layout/layout_main', $data); //page load
-    // 		} else {
-    // 			redirect('admin/');
-    // 		}
-    // 	} else {
-    // 		redirect('admin/dashboard');
-    // 	}
-    //  }
+
     public function add_project_form()
     {
         $session = $this->session->userdata('username');

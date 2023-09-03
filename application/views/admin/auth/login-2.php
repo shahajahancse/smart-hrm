@@ -57,11 +57,11 @@ endif;
 <img id="hrload-img" src="<?php echo base_url()?>skin/img/loading.gif" style="" >
 <style type="text/css">
 #hrload-img {
-    display: none;
-    z-index: 87896969;
-    float: right;
-    margin-right: 15px;
-    /* margin-top: 0px; */
+  display: none;
+  z-index: 87896969;
+  float: right;
+  margin-right: 15px;
+  margin-top: 0px;
 }
 </style>
     <!-- Start Preloader -->
