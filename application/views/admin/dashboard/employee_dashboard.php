@@ -28,13 +28,6 @@ foreach ($emp_data['emp_data'] as $r) {
 
 $paymeal = isset($data1->pay_amount) ? $data1->pay_amount / 45 : 0;
 $balanceMeal = $paymeal - $taken_meal;
-
-?>
-
-
-<?php
-
-
     // get month january to current month
     $currentMonth = date('n');
 $monthNames = array();
