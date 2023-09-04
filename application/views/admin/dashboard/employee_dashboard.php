@@ -47,7 +47,7 @@ $salarys = $this->db->select('salary_month,modify_salary,grand_net_salary')
 $salary = array();
 $salary_month = array();
 foreach ($salarys as $salaryObj) {
-    $salary[] = $salaryObj->grand_net_salary + $salaryObj->modify_salary;
+    $salary[] = floor($salaryObj->grand_net_salary + $salaryObj->modify_salary);
     $salary_month[] = date('M', strtotime($salaryObj->salary_month));
 }
 // end

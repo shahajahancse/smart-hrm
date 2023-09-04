@@ -525,38 +525,39 @@ if($theme[0]->sub_menu_icons != ''){
 
     <?php //if($system[0]->module_projects_tasks=='true'){?>
     <?php  if(in_array('44',$role_resources_ids) || in_array('45',$role_resources_ids) || in_array('104',$role_resources_ids) || in_array('119',$role_resources_ids) || in_array('122',$role_resources_ids)) {?>
-    <li class="<?php if(!empty($arr_mod['project_open']))echo $arr_mod['project_open'];?> treeview"> <a href="#"> <i class="fa fa-tasks"></i> <span><?php echo $this->lang->line('xin_project_manager_title');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+    <li class="<?php if(!empty($arr_mod['project_open']))echo $arr_mod['project_open'];?> treeview"> <a href="#"> <i class="fa fa-tasks"></i> <span><?php echo "Projects";?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
       <ul class="treeview-menu">
         <?php if(in_array('119',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['hr_clients_active']))echo $arr_mod['hr_clients_active'];?>"> <a href="<?php echo site_url('admin/clients');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_project_clients');?> </a> </li>
         <?php } ?>
         <?php if(in_array('44',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['project_active']))echo $arr_mod['project_active'];?>"> <a href="<?php echo site_url('admin/project');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('left_projects');?> </a> </li>
+        <li class="sidenav-link <?php if(!empty($arr_mod['project_active']))echo $arr_mod['project_active'];?>"> <a href="<?php echo site_url('admin/project');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Project </a> </li>
         <?php } ?>
         <?php if(in_array('45',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['task_active']))echo $arr_mod['task_active'];?>"> <a href="<?php echo site_url('admin/timesheet/tasks');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('left_tasks');?> </a> </li>
+        <li class="sidenav-link <?php if(!empty($arr_mod['payment_active']))echo $arr_mod['payment_active'];?>"> <a href="<?php echo site_url('admin/project/get_payment_page');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Get Payment </a> </li>
         <?php } ?>  
-        <?php if(in_array('44',$role_resources_ids)) { ?>
+        
+        <!-- < ?php if(in_array('44',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['timelogs_active']))echo $arr_mod['timelogs_active'];?>"> <a href="<?php echo site_url('admin/project/timelogs');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_project_timelogs');?> </a> </li>
-        <?php } ?>  
-        <?php if(in_array('44',$role_resources_ids)) { ?>
+        < ?php } ?>  
+        < ?php if(in_array('44',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['project_cal_active']))echo $arr_mod['project_cal_active'];?>"> <a href="<?php echo site_url('admin/project/projects_calendar');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_projects_calendar');?> </a> </li>
-        <?php } ?> 
-        <?php if(in_array('45',$role_resources_ids)) { ?>
+        < ?php } ?> 
+        < ?php if(in_array('45',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['tasks_cal_active']))echo $arr_mod['tasks_cal_active'];?>"> <a href="<?php echo site_url('admin/project/tasks_calendar');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_tasks_calendar');?> </a> </li>
-        <?php } ?> 
-        <?php if(in_array('45',$role_resources_ids)) { ?>
+        < ?php } ?> 
+        < ?php if(in_array('45',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['tasks_scrum_board_active']))echo $arr_mod['tasks_scrum_board_active'];?>"> <a href="<?php echo site_url('admin/project/tasks_scrum_board');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_tasks_sboard');?> </a> </li>
-        <?php } ?>
-        <?php if(in_array('44',$role_resources_ids)) { ?>
+        < ?php } ?>
+        < ?php if(in_array('44',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['projects_scrum_board_active']))echo $arr_mod['projects_scrum_board_active'];?>"> <a href="<?php echo site_url('admin/project/projects_scrum_board');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_projects_sboard');?> </a> </li>
-        <?php } ?>
-        <?php if(in_array('45',$role_resources_ids)) { ?>
+        < ?php } ?>
+        < ?php if(in_array('45',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['task_cat_active']))echo $arr_mod['task_cat_active'];?>"> <a href="<?php echo site_url('admin/project/task_categories');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_task_categories');?> </a> </li>
-        <?php } ?>    
-        <?php if(in_array('122',$role_resources_ids)) { ?>
+        < ?php } ?>    
+        < ?php if(in_array('122',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['hr_taxes_inv_active']))echo $arr_mod['hr_taxes_inv_active'];?>"> <a href="<?php echo site_url('admin/invoices/taxes/');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_invoice_tax_type');?> </a> </li>
-        <?php } ?>
+        < ?php } ?> -->
       </ul>
     </li>
     <?php //} ?>
