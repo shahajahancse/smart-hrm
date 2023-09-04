@@ -55,11 +55,10 @@ if($theme[0]->sub_menu_icons != ''){
 <?php  } ?>
 <section class="sidebar">
   <!-- Sidebar user panel -->
-  
   <div class="user-panel">
     <div class="image text-center"><img src="<?php echo $cpimg;?>" class="img-circle" alt="<?php echo $user_info[0]->first_name. ' '.$user_info[0]->last_name;?>"> </div>
     <div class="info">
-      <p><?php echo $user_info[0]->first_name. ' '.$user_info[0]->last_name;?></p>
+      <p style="color:white; font-size: 16px;"><?php echo $user_info[0]->first_name. ' '.$user_info[0]->last_name;?></p>
       <a href="<?php echo site_url('admin/profile');?>"><i class="fa fa-user"></i></a>
       <?php if(in_array('60',$role_resources_ids)) { ?>
       <a href="<?php echo site_url('admin/settings');?>"><i class="fa fa-gear"></i></a>
@@ -525,7 +524,7 @@ if($theme[0]->sub_menu_icons != ''){
 
 
     <?php //if($system[0]->module_projects_tasks=='true'){?>
-    <?php  if(in_array('44',$role_resources_ids) || in_array('45',$role_resources_ids) || in_array('104',$role_resources_ids) || in_array('122',$role_resources_ids)) {?>
+    <?php  if(in_array('44',$role_resources_ids) || in_array('45',$role_resources_ids) || in_array('104',$role_resources_ids) || in_array('119',$role_resources_ids) || in_array('122',$role_resources_ids)) {?>
     <li class="<?php if(!empty($arr_mod['project_open']))echo $arr_mod['project_open'];?> treeview"> <a href="#"> <i class="fa fa-tasks"></i> <span><?php echo $this->lang->line('xin_project_manager_title');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
       <ul class="treeview-menu">
         <?php if(in_array('119',$role_resources_ids)) { ?>
@@ -562,12 +561,12 @@ if($theme[0]->sub_menu_icons != ''){
     </li>
     <?php //} ?>
     <?php } ?>
-    <?php  if(in_array('87',$role_resources_ids) || in_array('119',$role_resources_ids) || in_array('410',$role_resources_ids) || in_array('415',$role_resources_ids) || in_array('121',$role_resources_ids) || in_array('330',$role_resources_ids)) {?>
+    <?php  if(in_array('87',$role_resources_ids)  || in_array('410',$role_resources_ids) || in_array('415',$role_resources_ids) || in_array('121',$role_resources_ids) || in_array('330',$role_resources_ids)) {?>
     <li class="<?php if(!empty($arr_mod['hr_quote_manager_open']))echo $arr_mod['hr_quote_manager_open'];?> treeview"> <a href="#"> <i class="fa fa-calendar-plus-o"></i> <span><?php echo $this->lang->line('xin_quote_manager');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
       <ul class="treeview-menu">
-        <!-- <?php if(in_array('119',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['hr_clients_active']))echo $arr_mod['hr_clients_active'];?>"> <a href="<?php echo site_url('admin/clients');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_project_clients');?> </a> </li>
-        <?php } ?> -->
+        <!-- < ?php if(in_array('119',$role_resources_ids)) { ?>
+        <li class="sidenav-link < ?php if(!empty($arr_mod['hr_clients_active']))echo $arr_mod['hr_clients_active'];?>"> <a href="< ?php echo site_url('admin/clients');?>"> <i class="fa < ?php echo $submenuicon;?>"></i>  ?php echo $this->lang->line('xin_project_clients');?> </a> </li>
+        < ?php } ?> -->
         <?php if(in_array('410',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['hr_leads_active']))echo $arr_mod['hr_leads_active'];?>"> <a href="<?php echo site_url('admin/leads');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_leads');?> </a> </li>
         <?php } ?>
