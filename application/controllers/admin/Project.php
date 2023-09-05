@@ -82,7 +82,6 @@ class Project extends MY_Controller
         $data['all_clients'] = $this->Clients_model->get_all_clients();
         $data['breadcrumbs'] = $this->lang->line('xin_projects');
         $role_resources_ids = $this->Xin_model->user_role_resource();
-
         $data['subview'] = $this->load->view("admin/project/project_form", $data, true);
         $this->load->view('admin/layout/layout_main', $data); //page load
     }
@@ -170,13 +169,31 @@ class Project extends MY_Controller
         $this->db->from('xin_project_account');
         $this->db->join('xin_clients', 'xin_project_account.clint_id = xin_clients.client_id');
         $this->db->join('xin_projects', 'xin_project_account.project_id = xin_projects.project_id');
-        // $this->db->order_by('next_installment_date DESC');
-        // $this->db->where('xin_project_account.if_notify',1);
+        $this->db->order_by('next_installment_date DESC');
+        $this->db->where('xin_project_account.if_notify',1);
         $this->db->where('xin_project_account.notify_date_start <=', date('Y-m-d'));
         $data['soft_payment_data'] = $this->db->get()->result();
         $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Software Payment';
         $data['subview'] = $this->load->view("admin/project/get_software_payment", $data, true);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+    }
+    public function get_service_payment()
+    {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $this->db->select('xin_project_service.project_id,xin_projects.title,xin_project_service.next_notify_date,xin_project_service.next_payment_date, xin_clients.name as client_name');
+        $this->db->from('xin_project_service');
+        $this->db->join('xin_clients', 'xin_project_service.client_id = xin_clients.client_id');
+        $this->db->join('xin_projects', 'xin_project_service.project_id = xin_projects.project_id');
+        $this->db->order_by('next_payment_date DESC');
+        $this->db->where('xin_project_service.next_notify_date <=', date('Y-m-d'));
+        $data['service_payment_data'] = $this->db->get()->result();
+        $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Service Payment';
+        $data['subview'] = $this->load->view("admin/project/get_service_payment", $data, true);
         $this->load->view('admin/layout/layout_main', $data); //page load
     }
     public function get_instalment_data()
@@ -223,6 +240,19 @@ class Project extends MY_Controller
         $data['instdata'] = $tableay;
         echo json_encode($data);
     }
+    public function get_service_data()
+    {
+        $project_id = $this->input->post('project_id');
+        $this->db->select('xin_project_service.project_id,xin_project_service.amount,xin_projects.title,xin_project_service.next_notify_date,xin_project_service.next_payment_date, xin_clients.name as client_name');
+        $this->db->from('xin_project_service');
+        $this->db->where('xin_project_service.project_id', $project_id);
+        $this->db->join('xin_clients', 'xin_project_service.client_id = xin_clients.client_id');
+        $this->db->join('xin_projects', 'xin_project_service.project_id = xin_projects.project_id');
+        $service_payment_data = $this->db->get()->row();
+        $data['project_id'] = $project_id;
+        $data['service_payment_data'] = $service_payment_data;
+        echo json_encode($data);
+    }
     public function getFromClient()
     {
         $type = $this->input->post("type");
@@ -234,6 +264,95 @@ class Project extends MY_Controller
         echo $data;
     }
     public function payment_in_form()
+    {
+        $session = $this->session->userdata('username');
+        if (empty($session) && $session['role_id'] == 3) {
+            return false;
+        }
+        $data = array(
+            'project_id' => $_POST['project_id'],
+            'clint_id' => $_POST['client_id'],
+            'payment_type' => 1,
+            'date' => date('Y-m-d'),
+            'payment_way' => $_POST['payment_way'],
+            'pyment_amount' => $_POST['payment'],
+            'due' => $_POST['payment_deu'],
+        );
+        $r = $this->db->insert('xin_project_invoice', $data);
+        if ($r) {
+            $invoice_ids[] = $this->db->insert_id();
+            $project_acount = $this->db->where('project_id', $_POST['project_id'])->get('xin_project_account')->row();
+            $soft_intmnt_dates = json_decode($project_acount->soft_intmnt_dates);
+            $soft_intmnt_prements = json_decode($project_acount->soft_intmnt_prements);
+            $soft_intmnt_status = json_decode($project_acount->soft_intmnt_status);
+            $number = $_POST['number'];
+            $soft_intmnt_dates[$number] = date('Y-m-d');
+            $soft_intmnt_prements[$number] = $_POST['payment'];
+            $soft_intmnt_status[$number] = 1;
+
+            $soft_intmnt_dates_json = json_encode($soft_intmnt_dates);
+            $soft_intmnt_prements_json = json_encode($soft_intmnt_prements);
+            $soft_intmnt_status_json = json_encode($soft_intmnt_status);
+
+
+            $soft_intmnt_takes = $number + 1;
+
+            if ($soft_intmnt_takes == $project_acount->soft_total_installment) {
+                $dtt = array(
+                    'status' => 1,
+                );
+                $this->db->where('project_id', $_POST['project_id']);
+                $ra = $this->db->update('xin_projects', $dtt);
+                $soft_prement_status = 1;
+                $if_notify = 0;
+            } else {
+                $soft_prement_status = 0;
+                $if_notify = 1;
+            }
+            $next_installment_date = $soft_intmnt_dates[$soft_intmnt_takes];
+            $next_payment_amount = $soft_intmnt_prements[$soft_intmnt_takes];
+            $installment_deu = $_POST['payment_deu'];
+            $Payment_Received = 0;
+            for ($i = 0; $i <= $number; $i++) {
+                $Payment_Received = $Payment_Received + $soft_intmnt_prements[$i];
+            }
+            $Remaining_Payment = $project_acount->total_budget - $Payment_Received;
+            $Payment_Received_percent = (($Payment_Received * 100) / $project_acount->total_budget);
+            $Remaining_Payment_percent = (($Remaining_Payment * 100) / $project_acount->total_budget);
+            $notify_date_start = date('Y-m-d', strtotime('-2 day', strtotime($next_installment_date)));
+            $update_at = date('Y-m-d');
+            $dat = array(
+                'soft_intmnt_dates' => $soft_intmnt_dates_json,
+                'soft_intmnt_prements' => $soft_intmnt_prements_json,
+                'soft_intmnt_status' => $soft_intmnt_status_json,
+                'invoice_ids' => json_encode($invoice_ids),
+                'soft_total_installment' => $soft_intmnt_takes,
+                'soft_prement_status' => $soft_prement_status,
+                'if_notify' => $if_notify,
+                'next_installment_date' => $next_installment_date,
+                'next_payment_amount' => $next_payment_amount,
+                'installment_deu' => $installment_deu,
+                'Payment_Received' => $Payment_Received,
+                'Remaining_Payment' => $Remaining_Payment,
+                'Payment_Received_percent' => $Payment_Received_percent,
+                'Remaining_Payment_percent' => $Remaining_Payment_percent,
+                'notify_date_start' => $notify_date_start,
+                'update_at' => $update_at
+            );
+            $this->db->where('project_id', $_POST['project_id']);
+            $ra = $this->db->update('xin_project_account', $dat);
+            if ($ra) {
+                $result = 'Success';
+            } else {
+                $result = 'Error';
+            }
+            echo $result;
+        } else {
+            $result = 'Error';
+            echo $result;
+        }
+    }
+    public function payment_in_form_service()
     {
         $session = $this->session->userdata('username');
         if (empty($session) && $session['role_id'] == 3) {
@@ -1104,9 +1223,12 @@ class Project extends MY_Controller
         if ($service_status) {
             $Service_type = $this->input->post('Service_type');
             $Service_amount = $this->input->post('Service_amount');
+            $Service_start_Date = $this->input->post('Service_start_Date');
             $Service_Increment_Date = $this->input->post('Service_Increment_Date');
-        }
 
+
+
+        }
         $data = array(
             'title' => $title,
             'client_id' => $client_id,
