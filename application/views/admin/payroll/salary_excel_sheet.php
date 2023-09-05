@@ -23,6 +23,7 @@
 
 	<tr>
 		<th class='bnb' style="width: 17px;">SL</th>
+		<th class='bnb' style="width: 17px;">ID</th>
 		<th class='bnb' style="width: 67px;">Name</th>
 		<th class='bnb' style="width: 70px;">Degi</th>
 		<th class='bnb' style="width: 70px;">Join.d</th>
@@ -97,6 +98,7 @@
 	?>
 		<tr>
 			<td><?= $key + 1 ?></td>
+			<td><?= $row->emp_id?></td>
 			<td><?= $row->first_name ?> <?=$row->last_name ?></td>
 			<td><?= $row->designation_name ?></td>
 			<td><?= $row->date_of_joining ?></td>
