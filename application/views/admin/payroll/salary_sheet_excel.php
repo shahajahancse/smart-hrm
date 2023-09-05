@@ -25,6 +25,7 @@
 
 		<tr>
 			<th>SL</th>
+			<th>Id</th>
 			<th>Emp ID</th>
 			<td>Employee Name</td>
 			<td>Department Name</td>
@@ -53,7 +54,7 @@
 			<th>Grand Net Salary</th>
 		</tr>
 
-		<?php  $grand_total = $net_total = $modify_total = $etra_pay = $ab_deduct = $late_deduct = 0;
+		<?php $grand_total = $net_total = $modify_total = $etra_pay = $ab_deduct = $late_deduct = 0;
 		foreach ($values as $key => $row) { 
 			$grand_total =  $grand_total + $row->grand_net_salary + ($row->modify_salary);
 			$net_total =    $net_total + $row->net_salary;
@@ -65,6 +66,7 @@
 			?>
 			<tr>
 				<td class="text-center px-2"><?= ($key + 1) ?>.</td>
+				<td class="text-center px-2"><?=$row->emp_id?></td>
 				<td class="text-center px-2"><?=$row->employee_id?></td>			
 				<td class="text-center px-2"><?=$row->first_name .' '. $row->last_name?></td>			
 				<td class="text-center px-2"><?=$row->department_name?></td>			
