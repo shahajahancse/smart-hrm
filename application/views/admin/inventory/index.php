@@ -38,6 +38,19 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
     color: #ffffff; /* For example, change text color to white */
   }
 
+
+
+    .custom-divider {
+    height: 2px;
+    background-color: #ccc; /* You can adjust the color */
+    margin: 5px 0; /* Adjust margin as needed */
+  }
+  .dropdown-menu a.dropdown-item {
+    color: #333; /* Text color */
+    text-decoration: none; /* Remove underlines */
+    padding: 10px 20px; /* Adjust padding as needed */
+  }
+
 </style>
 
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
@@ -75,13 +88,23 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
 <div class="row <?php echo $get_animate;?>">
   <div class="col-md-12">
     <span class="t2" >If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
-    <a href="<?= base_url('admin/inventory/create') ?>" class="btn btn-md btn-primary" style="float:right">Requisition</a>
+<div class="dropdown" style="float: right;">
+  <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+   Requisition
+  </button>
+  <div class="dropdown-menu dropdown-menu-right">
+    <a href="<?= base_url('admin/inventory/create') ?>" class="dropdown-item">For Equipments</a>
+      <div class="custom-divider"></div>
+    <a href="<?= base_url('admin/inventory/create_phone') ?>" class="dropdown-item">For Mobile Bill </a>
   </div>
+</div>
 
-  <div class="col-md-12" style="display:flex;">
+ </div>
+
+  <div class="col-md-12" style="display:flex;margin-top:40px;">
     <div class="col-md-5" style="padding-left: 0px;margin-left: 0px;">
-    <a href="#" class="btn btn-success" id="listButton">Using List</a>
-    <a href="#" class="btn btn-info" style="margin-left:10px;" id="infoButton">Request Information</a>
+      <a href="#" class="btn btn-success" id="listButton">Using List</a>
+      <a href="#" class="btn btn-info" style="margin-left:10px;" id="infoButton">Request Information</a>
     </div>
     <div class="col-md-5 <?php echo $get_animate;?>">
       <?php if($this->session->flashdata('success')):?>
@@ -96,10 +119,8 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
   </div>
 </div>
 
-<div class="row">
-  <div id="list_data">
-
-  </div>
+<div class="row" >
+  <div id="list_data"></div>
 </div>
   
 

@@ -162,7 +162,9 @@ th {
         $('#invoicesTable').DataTable();
     });
     </script>
-    <table id="invoicesTable" class="col-md-12">
+    <div class="card">
+        <div class="card-body">
+                <table id="invoicesTable" class="col-md-12 table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
@@ -206,6 +208,8 @@ th {
         </tbody>
 
     </table>
+        </div>
+    </div>
 </div>
 <script>
     function get_invoice_n(params) {

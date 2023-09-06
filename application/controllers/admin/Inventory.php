@@ -104,6 +104,20 @@ class Inventory extends MY_Controller {
 		}
 		return true;
 	}
+	public function create_phone($id = null) {
+		$data['session'] = $this->session->userdata('username');
+		if(empty($data['session'])){ 
+			redirect('admin/');
+		}
+		$data['title'] 		 = 'Mobile Bill Requisition | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Mobile Bill Requisition';
+	
+		
+		$data['subview'] 	    =     $this->load->view("admin/inventory/create_phone", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+
 
 
 
@@ -1303,10 +1317,43 @@ function delete_request($id){
 	return true;
 }
 
+public function mobile_bill(){
+	$data['phone_number']  = $this->input->post('phone_number'); 
+	$data['amount']  = $this->input->post('amount'); 
+	$data['user_id'] = $this->input->post('user_id');
+	// $data['crated_at'] =  date('Y-m-d');
+	// dd($data);
+	$insert = $this->db->insert('mobile_bill_requisition',$data);
+	if($insert){
+		$this->session->set_flashdata('success', 'Mobile Bill Successfully Added');
+		redirect('admin/inventory/create_phone','refresh');
+	}else{
+		$this->session->set_flashdata('error', 'Error!!! Try Again');
+		redirect('admin/inventory/create_phone','refresh');
+	}
+}
+public function mobile_delete($id){
 
-
+	$delete = $this->db->where('id',$id)->from('mobile_bill_requisition')->delete();
+	if($delete){
+		$this->session->set_flashdata('delete', 'Successfully Delete');
+		redirect('admin/inventory/create_phone','refresh');
+	}else{
+		$this->session->set_flashdata('error', 'Error!!! Try Again');
+		redirect('admin/inventory/create_phone','refresh');
+	}
 }
 
+public function requisition_equipment_list(){
+		$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['session']    = $session;
+	$data['equipments'] = $this->db->select('*')->get('products_requisition_details')->result();
+	$this->load->view("admin/inventory/requisition_equipment_list", $data);
+}
 
+}
 
 ?>
