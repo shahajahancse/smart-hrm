@@ -101,15 +101,14 @@
             <ul style="list-style: none;background: #e7e7e7;padding: 11px">
                 <?php if (count($service_payment_data)>0){
              foreach ($service_payment_data as $key => $value) { ?>
-                <li class="listdanger" onclick="get_instdata(<?=$value->project_id?>)">
+                <li class="listdanger" onclick="get_instdata(<?=$value->service_id?>)">
                     <span><b>Client Name : </b><?= $value->client_name ?></span><br>
                     <span><b>Project Name : </b><?= $value->title ?></span><br>
-                    <span><b>Payment Date Date:</b><?= $value->next_payment_date ?></span><br>
+                    <span><b>Payment Date Date:</b><?= $value->payment_date ?></span><br>
                 </li>
                 <?php  } }else{ ?>
                 <span> There Is No Data</span>
                 <?php } ?>
-
             </ul>
         </div>
         <div class="col-md-6 column" style="padding:0px;height: 218px;overflow: auto;">
@@ -125,15 +124,17 @@
         <div class="col-md-12 bg-white">
             <h5>Payment Section </h5>
             <form id="payment_in_form" style="display: flex;flex-direction: column;gap: 16px;">
+                <input type="hidden" name="service_id" id="service_id">
                 <input type="hidden" name="project_id" id="project_id">
+                <input type="hidden" name="client_id" id="client_id">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="inputBox">
                             <strong>Client name <b style="color: red;">*</b></strong>
                             <input type="text" id="client_name" disabled>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="inputBox">
                             <strong>Project name <b style="color: red;">*</b></strong>
                             <input type="text" id="title" disabled>
@@ -148,7 +149,7 @@
                     <div class="col-md-2">
                         <div class="inputBox">
                             <strong>Total Payment<b style="color: red;">*</b></strong>
-                            <input type="text" id="total_payment" disabled>
+                            <input type="text" name="amount" id="total_payment"  readonly>
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -157,6 +158,16 @@
                             <input type="text" name="payment_way" required>
                         </div>
                     </div>
+                    <div class="col-md-2">
+                    <div class="inputBox">
+                    <strong>Service Status<b style="color: red;">*</b></strong>
+                        <select name="status" id="status" class="col-md-12">
+                            <option>Select Status type</option>
+                            <option value=0 >Unpaid</option>
+                            <option value=1 >Paid</option>
+                        </select>
+                    </div>
+                </div>
                 </div>
                 <div class="row" style="padding: 1px 14px;">
                     <button type="submit" style="float: right;" class="btn btn-primary">Payment In</button>
@@ -166,31 +177,37 @@
     </div>
 </div>
 <script>
-function get_instdata(project_id) {
+function get_instdata(service_id) {
 
     $.ajax({
         url: '<?php echo base_url('admin/project/get_service_data/');?>',
         type: 'POST',
         data: {
-            project_id: project_id
+            service_id: service_id
         },
         success: function(data) {
-            // return false;
             try {
-                var parsedData = JSON.parse(data); 
-                var item = parsedData.service_payment_data
-                // Parse the JSON response
+                var parsedData = JSON.parse(data); // Parse the JSON response
+                // console.log(parsedData.service_payment_data);
+                // return false;
+
                     var listdataElement = document.getElementById("listdata");
                     var ul = document.createElement("ul");
                     ul.className = "ulclasss";
+
+                    // Loop through the installment data and create list items
+                    for (var i = 0; i < parsedData.service_payment_data.length; i++) {
+                        var item = parsedData.service_payment_data[i];
                         var li = document.createElement("li");
                             li.className = "listdanger"; // Add the listdanger class
                             li.onclick = function() {
                                 getpaymentofinstallments(item);
                             }
-                        li.innerHTML = "<b>Date:</b> " + item.next_payment_date + "<br><b>Payment:</b> " + item
-                            .amount;
+                        
+                        li.innerHTML = "<b>Date:</b> " + item.payment_date + "<br><b>Payment:</b> " + item
+                            .amount + "<br><b>Status:</b> Unpaid";
                         ul.appendChild(li);
+                    }
                     // Clear previous content and append the new list
                     listdataElement.innerHTML = "";
                     listdataElement.appendChild(ul);
@@ -205,13 +222,16 @@ function get_instdata(project_id) {
 function getpaymentofinstallments(data) {
     console.log(data);
             $('#installment_section').slideDown();
-            let installment_date = new Date(data.next_payment_date);
+            let installment_date = new Date(data.payment_date);
             let formattedDate = installment_date.toISOString().substring(0, 10);
             $('#project_id').val(data.project_id);
+            $('#client_id').val(data.client_id);
+            $('#service_id').val(data.id);
             $('#client_name').val(data.client_name);
             $('#title').val(data.title);
             $('#installment_date').val(formattedDate);
             $('#total_payment').val(data.amount);
+            $('#status').val(data.status);
 }
 </script>
 <script>

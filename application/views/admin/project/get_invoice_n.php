@@ -63,7 +63,11 @@
     </tr>
     <tr>
         <td colspan="4">
-            <strong>Payment Type:</strong> <?php echo $invoice_data->payment_type; ?><br>
+            <?php
+            $invoice_data->payment_type = "Software payment";
+            $invoice_data->payment_type = "Service payment: ";
+            echo "<strong>Payment Type:</strong> " . $invoice_data->payment_type . "<br>";
+            ?>
             <strong>Payment Way:</strong> <?php echo $invoice_data->payment_way; ?><br>
             <strong>Due:</strong> <?php echo $invoice_data->due; ?><br>
             <strong>Created At:</strong> <?php echo $invoice_data->create_at; ?><br>
