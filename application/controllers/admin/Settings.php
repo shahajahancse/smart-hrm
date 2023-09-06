@@ -470,6 +470,66 @@ class Settings extends MY_Controller
         }
     }
 
+    public function account_setting_form($action = '', $id = null) {
+        // Check the HTTP request method to determine the action
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ($action === 'add') {
+                // Handle adding a new purpose (Create)
+                $title = $this->input->post('title');
+                $amount = $this->input->post('amount');
+                $Expense_Type = $this->input->post('Expense_Type');
+
+                if (!empty($title) && !empty($amount)) {
+                    $data = array(
+                        'title' => $title,
+                        'amount' => $amount,
+                        'expense_type' => $Expense_Type
+                    );
+                    $this->db->insert('xin_payment_out_purpose', $data);
+                    echo 'success';
+                } else {
+                    echo 'Validation failed. Please fill in all required fields.';
+                }
+            } elseif ($action === 'edit' && $id) {
+                // Handle editing an existing purpose (Update)
+                $title = $this->input->post('title');
+                $amount = $this->input->post('amount');
+                $Expense_Type = $this->input->post('Expense_Type');
+
+                if (!empty($title) && !empty($amount)) {
+                    $data = array(
+                        'title' => $title,
+                        'amount' => $amount,
+                        'expense_type' => $Expense_Type
+                    );
+                    $this->db->where('id', $id);
+                    $this->db->update('xin_payment_out_purpose', $data);
+                    echo 'success';
+                } else {
+                    echo 'Validation failed. Please fill in all required fields.';
+                }
+            } elseif ($action === 'delete' && $id) {
+                $this->db->where('id', $id);
+                $this->db->delete('xin_payment_out_purpose');
+                echo 'success';
+            }
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Handle displaying the form for editing an existing purpose
+            if ($action === 'edit' && $id) {
+                $query = $this->db->get_where('xin_payment_out_purpose', array('id' => $id));
+                $purpose = $query->row_array();
+                echo json_encode($purpose);
+            } else {
+                $data['purposes'] = $this->db->get('xin_payment_out_purpose')->result();
+                $data['title'] = 'Account Settings';
+                $data['breadcrumbs'] = 'Account Settings';
+                $data['subview'] = $this->load->view("admin/settings/account_setting_form", $data, true);
+                $this->load->view('admin/layout/layout_main', $data);
+            }
+        }else{
+            dd('not found');
+        }
+    }
     // backup list
     public function database_backup_list()
     {
