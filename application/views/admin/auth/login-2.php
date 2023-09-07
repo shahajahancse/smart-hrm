@@ -50,31 +50,22 @@ endif;
 <!-- animate -->
 <link media="all" type="text/css" rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/animate.css">
 <link media="all" type="text/css" rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_login_2.css">
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
 
-<!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body <?php echo $auth_bg;?>>
-<img id="hrload-img" src="<?php echo base_url()?>skin/img/loading.gif" style="">
+<body <?php echo $auth_bg;?> >
+<img id="hrload-img" src="<?php echo base_url()?>skin/img/loading.gif" style="" >
 <style type="text/css">
 #hrload-img {
-    display: none;
-    z-index: 87896969;
-    float: right;
-    margin-right: 25px;
-    margin-top: 0px;
+  display: none;
+  z-index: 87896969;
+  float: right;
+  margin-right: 15px;
+  margin-top: 0px;
 }
 </style>
     <!-- Start Preloader -->
-    
     <!-- Preloader End -->
-    
     <div class="container-fluid">
       <div class="row">
         <div class="authfy-container col-xs-12 col-sm-10 col-md-8 col-lg-6 col-sm-offset-1 col-md-offset-2 col-lg-offset-3">

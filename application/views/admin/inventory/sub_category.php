@@ -89,7 +89,7 @@
               <td><?= $key + 1; ?></td>
               <td><?= $row->sub_cate_name; ?></td>
               <td><?= $row->category_name; ?></td>
-              <td><?= $row->status; ?></td>
+              <td><?= $row->status=='Enable' ? "<span class='badge badge-successs' style='background-color:#46be8a'>Active</span>":"<span class='badge badge-danger'>Inactive</span>"; ?></td>
               <td>
                 <a class="btn- btn-sm btn-info" href="<?= base_url('admin/inventory/sub_category/'.$row->id);?>">Edit</a>
                 <a class="btn- btn-sm btn-danger" href="<?= base_url('admin/inventory/delete_sub_category/'.$row->id);?>">Delete</a>

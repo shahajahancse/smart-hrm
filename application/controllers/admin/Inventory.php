@@ -685,7 +685,6 @@ public function add_daily_package()
 
 	public function product_purchase_recived(){
 		// dd($_POST);
-		
         $results = $this->db->where('id',$_POST['row_id'])->get('products_purches_details')->result();
         foreach ($results as $key => $row) {
         	$product = $this->db->where('id', $row->product_id)->get('products')->row();
@@ -693,16 +692,12 @@ public function add_daily_package()
         	$this->db->where('id', $row->product_id)->update('products', array('quantity' => $quantity));
         	$this->db->where('id', $row->id)->update('products_purches_details', array('status' => 3,'supplyer_id'=>$_POST['spl_name']));
         }
-
 		$deliver = $this->db->where('id',$_POST['row_id'])->update('products_purches_details',['status'=>3,'supplyer_id'=>$_POST['spl_name']]);
 		if($deliver){
 			 $this->session->set_flashdata('success', 'Delivered Successfully.');
 			 redirect("admin/inventory/purchase","refresh");
 		}
-	 
 	}
-
-
 
 	//=============== suplier ========================
 	public function supplier($id = null){
@@ -712,12 +707,10 @@ public function add_daily_package()
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-
 		$this->form_validation->set_rules('name', 'Sapplier name', 'required|trim');
 		$this->form_validation->set_rules('company_name', 'company', 'required|trim');
 		$this->form_validation->set_rules('phone', 'Phone', 'required|trim');
 		$this->form_validation->set_rules('address', 'address', 'required|trim');
-
 		if ($this->form_validation->run() == true){
 			$supplier_data = array( 
 					'name'		 => $_POST['name'],
@@ -738,7 +731,6 @@ public function add_daily_package()
 			}
 		}
 						
-
 		//Dropdown
 		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']	= 'Store';
@@ -753,14 +745,12 @@ public function add_daily_package()
 
 	public function supplier_detail($id){
 		//search supplier details
-		
 		$data['result'] = $this->db->where('id', $id)->get('product_supplier')->row();
 		$data['title'] 			= 'Supplier Details | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']	= 'Supplier Details';
 		$data['results']         = $this->db->select('*')->get('product_supplier')->result();
 		$data['subview'] 		= $this->load->view("admin/inventory/supplier_details", $data, TRUE);
 								  $this->load->view('admin/layout/layout_main', $data);
-
 	}
 
 	public function get_supplier_ajax()
@@ -785,11 +775,7 @@ public function add_daily_package()
 	}
 	//==================== suplier part end ========================
 
-
-
-
 	//====================== Requisition Report=============================
-
 
 	public function report(){
 		$session = $this->session->userdata('username');
@@ -826,76 +812,63 @@ public function add_daily_package()
   }
 
    
-   public function perches_status_report($exc=null)
-	 {            
-		$first_date = $this->input->post('first_date');
-		$second_date = $this->input->post('second_date');
+public function perches_status_report($exc=null){            
+	$first_date = $this->input->post('first_date');
+	$second_date = $this->input->post('second_date');
+	$f1_date = date("Y-m-d", strtotime($first_date));
+	$f2_date = date("Y-m-d", strtotime($second_date));
+	$statusC = $this->input->post('statusC');
+	$data["values"] = $this->Inventory_model->perches_status_report($f1_date, $f2_date, $statusC);
+	$data['statusC']= $statusC;
+	$data['first_date'] = $first_date;
+	$data['second_date'] = $second_date;
+	if($exc == 1){
+		$this->load->view("admin/inventory/perches_status_report_excel", $data);
+	}else{
+		if(is_string($data["values"])){
+			echo $data["values"];
+		}
+		else{	
+			echo $this->load->view("admin/inventory/perches_status_report", $data, TRUE);
+		}
+	}
+}
 
-		$f1_date = date("Y-m-d", strtotime($first_date));
-		$f2_date = date("Y-m-d", strtotime($second_date));
-		$statusC = $this->input->post('statusC');
-		$data["values"] = $this->Inventory_model->perches_status_report($f1_date, $f2_date, $statusC);
+    //====================== Requisition EndReport=============================//
 
+    //====================== Low inventory and  Stack product report Report=============================
+
+public function low_inv_all_product_status_report($exc=null){
+	$statusC=$this->input->post('statusC');
+	if($statusC==7){
+		$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report();
 		$data['statusC']= $statusC;
-		$data['first_date'] = $first_date;
-		$data['second_date'] = $second_date;
-		if($exc == 1){
-			$this->load->view("admin/inventory/perches_status_report_excel", $data);
+	if($exc == 1){
+		$this->load->view("admin/inventory/low_in_status_report_excel", $data);
+	}else{
+		if(is_string($data["values"])){
+			echo $data["values"];
+		}
+		else{	
+			echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
+		}
+	}
+	}else{
+		$data['statusC']= $statusC;
+		$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report($statusC);
+		// dd($data['values']);
+		if($exc == 2){
+			$this->load->view("admin/inventory/low_in_status_report_excel", $data);
 		}else{
 			if(is_string($data["values"])){
 				echo $data["values"];
 			}
 			else{	
-				echo $this->load->view("admin/inventory/perches_status_report", $data, TRUE);
-			}
+				echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
+			}			
 		}
-   	 
- }
-
-    //====================== Requisition EndReport=============================
-
-
-
-      //====================== Low inventory and  Stack product report Report=============================
-
- public function low_inv_all_product_status_report($exc=null){
-             $statusC=$this->input->post('statusC');
-			 if($statusC==7){
-					$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report();
-					$data['statusC']= $statusC;
-					
-					if($exc == 1){
-						$this->load->view("admin/inventory/low_in_status_report_excel", $data);
-					}else{
-					
-							if(is_string($data["values"]))
-							{
-								echo $data["values"];
-							}
-							else
-							{	
-								echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
-							}
-						}
-			  }else{
-				    $data['statusC']= $statusC;
-					$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report($statusC);
-					// dd($data['values']);
-					if($exc == 2){
-						$this->load->view("admin/inventory/low_in_status_report_excel", $data);
-					 }else{
-							if(is_string($data["values"]))
-									{
-										echo $data["values"];
-									}
-									else
-									{	
-										echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
-									}			
-								}
-			  }
-		   
- }
+	}	   
+}
 
 
       //====================== End Low inventory and  Stack product report Report=============================

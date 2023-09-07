@@ -431,6 +431,7 @@
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_role_edit');?>",  add_info: "<?php echo $this->lang->line('xin_role_add');?>", value: "324",},
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_role_delete');?>",  add_info: "<?php echo $this->lang->line('xin_role_add');?>", value: "325",},
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_role_view');?>",  add_info: "<?php echo $this->lang->line('xin_role_add');?>", value: "326",},
+	// { id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_role_view');?>",  add_info: "<?php echo $this->lang->line('xin_role_add');?>", value: "327",},
 	]},
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_leads');?>",  add_info: "<?php echo $this->lang->line('xin_add_edit_delete_role_info');?>", value: "410",items: [
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_role_enable');?>",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "411",},

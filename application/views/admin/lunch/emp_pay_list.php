@@ -167,7 +167,7 @@ input[type="email"] {
                 id="next_dateu">
 
             <h2>Add Payment</h2>
-            <?php dd($emplist); ?>
+
             <select id="search-select">
                 <option value="none">Select Employee</option>
 

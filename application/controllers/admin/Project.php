@@ -43,7 +43,6 @@ class Project extends MY_Controller
         exit(json_encode($Return));
     }
 
-
     public function index()
     {
         $session = $this->session->userdata('username');
@@ -70,34 +69,7 @@ class Project extends MY_Controller
             redirect('admin/dashboard');
         }
     }
-    //  public function index()
-    //  {
-    // 	$session = $this->session->userdata('username');
-    // 	if(empty($session)){
-    // 		redirect('admin/');
-    // 	}
-    // 	$system = $this->Xin_model->read_setting_info(1);
-    // 	if($system[0]->module_projects_tasks!='true'){
-    // 		redirect('admin/dashboard');
-    // 	}
-    // 	$data['title'] = $this->lang->line('xin_projects').' | '.$this->Xin_model->site_title();
-    // 	$data['all_employees'] = $this->Xin_model->all_employees();
-    // 	$data['all_companies'] = $this->Xin_model->get_companies();
-    // 	$data['all_clients'] = $this->Clients_model->get_all_clients();
-    // 	$data['breadcrumbs'] = $this->lang->line('xin_projects');
-    // 	$data['path_url'] = 'project';
-    // 	$role_resources_ids = $this->Xin_model->user_role_resource();
-    // 	if(in_array('44',$role_resources_ids)) {
-    // 		if(!empty($session)){
-    // 			$data['subview'] = $this->load->view("admin/project/project_list", $data, TRUE);
-    // 			$this->load->view('admin/layout/layout_main', $data); //page load
-    // 		} else {
-    // 			redirect('admin/');
-    // 		}
-    // 	} else {
-    // 		redirect('admin/dashboard');
-    // 	}
-    //  }
+
     public function add_project_form()
     {
         $session = $this->session->userdata('username');
@@ -109,7 +81,6 @@ class Project extends MY_Controller
         $data['all_clients'] = $this->Clients_model->get_all_clients();
         $data['breadcrumbs'] = $this->lang->line('xin_projects');
         $role_resources_ids = $this->Xin_model->user_role_resource();
-
         $data['subview'] = $this->load->view("admin/project/project_form", $data, true);
         $this->load->view('admin/layout/layout_main', $data); //page load
     }
@@ -132,7 +103,6 @@ class Project extends MY_Controller
         $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Payment Details';
         $role_resources_ids = $this->Xin_model->user_role_resource();
-
 
         $data['subview'] = $this->load->view("admin/project/Payment_details", $data, true);
         $this->load->view('admin/layout/layout_main', $data); //page load
@@ -160,9 +130,10 @@ class Project extends MY_Controller
             // Handle query error
             $data['soft_payment_data'] = array();
         }
-        $this->db->select('xin_project_service.*');
-        $this->db->from('xin_project_service');
-        $this->db->where('xin_project_service.next_notify_date <=', date('Y-m-d'));
+        $this->db->select('xin_project_service_payment.*');
+        $this->db->from('xin_project_service_payment');
+        $this->db->where('xin_project_service_payment.nitify_date <=', date('Y-m-d'));
+        $this->db->where('xin_project_service_payment.status',0);
         $data['service_payment_data'] = $this->db->get()->result();
         $this->db->select('xin_project_invoice.*,xin_clients.name as client_name,xin_projects.title');
         $this->db->from('xin_project_invoice');
@@ -197,13 +168,32 @@ class Project extends MY_Controller
         $this->db->from('xin_project_account');
         $this->db->join('xin_clients', 'xin_project_account.clint_id = xin_clients.client_id');
         $this->db->join('xin_projects', 'xin_project_account.project_id = xin_projects.project_id');
-        // $this->db->order_by('next_installment_date DESC');
-        // $this->db->where('xin_project_account.if_notify',1);
+        $this->db->order_by('next_installment_date DESC');
+        $this->db->where('xin_project_account.if_notify', 1);
         $this->db->where('xin_project_account.notify_date_start <=', date('Y-m-d'));
         $data['soft_payment_data'] = $this->db->get()->result();
         $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Software Payment';
         $data['subview'] = $this->load->view("admin/project/get_software_payment", $data, true);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+    }
+    public function get_service_payment()
+    {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $this->db->select('xin_project_service_payment.project_id,xin_project_service_payment.service_id,xin_project_service_payment.status,xin_projects.title,xin_project_service_payment.nitify_date,xin_project_service_payment.payment_date, xin_clients.name as client_name');
+        $this->db->from('xin_project_service_payment');
+        $this->db->join('xin_clients', 'xin_project_service_payment.client_id = xin_clients.client_id');
+        $this->db->join('xin_projects', 'xin_project_service_payment.project_id = xin_projects.project_id');
+        $this->db->order_by('payment_date DESC');
+        $this->db->where('xin_project_service_payment.nitify_date <=', date('Y-m-d'));
+        $this->db->where('xin_project_service_payment.status',0);
+        $data['service_payment_data'] = $this->db->get()->result();
+        $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Service Payment';
+        $data['subview'] = $this->load->view("admin/project/get_service_payment", $data, true);
         $this->load->view('admin/layout/layout_main', $data); //page load
     }
     public function get_instalment_data()
@@ -250,6 +240,30 @@ class Project extends MY_Controller
         $data['instdata'] = $tableay;
         echo json_encode($data);
     }
+    public function get_service_data()
+    {
+        $service_id = $this->input->post('service_id');
+        
+        $service_payment_data = $this->db
+            ->select('p.project_id, p.id, p.amount, p.status, pr.title, p.nitify_date, p.payment_date, c.name as client_name,c.client_id')
+            ->from('xin_project_service_payment AS p')
+            ->where([
+                'p.service_id' => $service_id,
+                'p.status' => 0
+            ])
+            ->join('xin_clients AS c', 'p.client_id = c.client_id')
+            ->join('xin_projects AS pr', 'p.project_id = pr.project_id')
+            ->get()
+            ->result();
+            
+        $data = [
+            'service_id' => $service_id,
+            'service_payment_data' => $service_payment_data
+        ];
+        
+        echo json_encode($data);
+    }
+    
     public function getFromClient()
     {
         $type = $this->input->post("type");
@@ -290,7 +304,6 @@ class Project extends MY_Controller
             $soft_intmnt_dates_json = json_encode($soft_intmnt_dates);
             $soft_intmnt_prements_json = json_encode($soft_intmnt_prements);
             $soft_intmnt_status_json = json_encode($soft_intmnt_status);
-
 
             $soft_intmnt_takes = $number + 1;
 
@@ -334,7 +347,7 @@ class Project extends MY_Controller
                 'Payment_Received_percent' => $Payment_Received_percent,
                 'Remaining_Payment_percent' => $Remaining_Payment_percent,
                 'notify_date_start' => $notify_date_start,
-                'update_at' => $update_at
+                'update_at' => $update_at,
             );
             $this->db->where('project_id', $_POST['project_id']);
             $ra = $this->db->update('xin_project_account', $dat);
@@ -347,6 +360,35 @@ class Project extends MY_Controller
         } else {
             $result = 'Error';
             echo $result;
+        }
+    }
+    public function payment_in_form_service()
+    {
+        $session = $this->session->userdata('username');
+        if (empty($session) && $session['role_id'] == 3) {
+            return false;
+        }
+// [service_id] => 6
+//     [project_id] => 1
+//     [client_id] => 1
+//     [amount] => 3425234
+//     [payment_way] => Bkash
+//     [status] => 0
+        $data = array(
+            'status' =>$_POST['status'] ,
+        );
+        $this->db->where('id', $_POST['service_id']);
+        $ra = $this->db->update('xin_project_service_payment', $data);
+        if($ra && $_POST['status']==1){
+        $data = array(
+            'project_id' => $_POST['project_id'],
+            'clint_id' => $_POST['client_id'],
+            'payment_type' => 2,
+            'date' => date('Y-m-d'),
+            'payment_way' => $_POST['payment_way'],
+            'pyment_amount' => $_POST['amount'],
+        );
+        $this->db->insert('xin_project_invoice', $data);
         }
     }
     public function timelogs()
@@ -471,7 +513,7 @@ class Project extends MY_Controller
         $id = $this->uri->segment(4);
 
         $data = array(
-            'company_id' => $id
+            'company_id' => $id,
         );
         $session = $this->session->userdata('username');
         if (!empty($session)) {
@@ -497,7 +539,7 @@ class Project extends MY_Controller
         $data = array(
             'project_id' => $id,
             'assigned_to' => $result[0]->assigned_to,
-            'company_id' => $result[0]->company_id
+            'company_id' => $result[0]->company_id,
         );
         $session = $this->session->userdata('username');
         if (!empty($session)) {
@@ -598,7 +640,7 @@ class Project extends MY_Controller
         }
         /*$role_resources_ids = $this->Xin_model->user_role_resource();
         if(in_array('318',$role_resources_ids)) { //view
-            redirect('admin/project');
+        redirect('admin/project');
         }*/
         $data['title'] = $this->Xin_model->site_title();
         //$data['all_employees'] = $this->Xin_model->all_employees();
@@ -651,7 +693,7 @@ class Project extends MY_Controller
             'path_url' => 'project_detail',
             'all_clients' => $this->Clients_model->get_all_clients(),
             'all_employees' => $this->Xin_model->all_employees(),
-            'all_companies' => $this->Xin_model->get_companies()
+            'all_companies' => $this->Xin_model->get_companies(),
         );
 
         //$role_resources_ids = $this->Xin_model->user_role_resource();
@@ -720,7 +762,6 @@ class Project extends MY_Controller
             // progress
             $pbar = '<p class="m-b-0-5">' . $this->lang->line('xin_completed') . ' <span class="pull-xs-right">' . $r->project_progress . '%</span>
 	<div class="progress progress-xs"><div class="progress-bar ' . $progress_class . ' progress-bar-striped" role="progressbar" aria-valuenow="' . $r->project_progress . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $r->project_progress . '%"></div></div></p>';
-
 
             //status
             if ($r->status == 0) {
@@ -816,7 +857,7 @@ class Project extends MY_Controller
             "draw" => $draw,
             "recordsTotal" => $project->num_rows(),
             "recordsFiltered" => $project->num_rows(),
-            "data" => $data
+            "data" => $data,
         );
         echo json_encode($output);
         exit();
@@ -850,7 +891,7 @@ class Project extends MY_Controller
             'status' => $result[0]->status,
             'all_clients' => $this->Clients_model->get_all_clients(),
             'all_employees' => $this->Xin_model->all_employees(),
-            'all_companies' => $this->Xin_model->get_companies()
+            'all_companies' => $this->Xin_model->get_companies(),
         );
         $session = $this->session->userdata('username');
         if (!empty($session)) {
@@ -869,7 +910,7 @@ class Project extends MY_Controller
             'task_status' => $task_status,
             'all_projects' => $this->Project_model->get_all_projects(),
             'all_employees' => $this->Xin_model->all_employees(),
-            'all_companies' => $this->Xin_model->get_companies()
+            'all_companies' => $this->Xin_model->get_companies(),
         );
         $session = $this->session->userdata('username');
         if (!empty($session)) {
@@ -886,7 +927,7 @@ class Project extends MY_Controller
             'project_status' => $project_status,
             'all_employees' => $this->Xin_model->all_employees(),
             'all_companies' => $this->Xin_model->get_companies(),
-            'all_clients' => $this->Clients_model->get_all_clients()
+            'all_clients' => $this->Clients_model->get_all_clients(),
         );
         $session = $this->session->userdata('username');
         if (!empty($session)) {
@@ -952,7 +993,7 @@ class Project extends MY_Controller
                 'task_status' => $this->input->post('task_status'),
                 'is_notify' => '1',
                 'description' => $qt_description,
-                'created_at' => date('Y-m-d h:i:s')
+                'created_at' => date('Y-m-d h:i:s'),
             );
             $result = $this->Timesheet_model->add_task_record($data);
 
@@ -1131,9 +1172,10 @@ class Project extends MY_Controller
         if ($service_status) {
             $Service_type = $this->input->post('Service_type');
             $Service_amount = $this->input->post('Service_amount');
+            $Service_start_Date = $this->input->post('Service_start_Date');
             $Service_Increment_Date = $this->input->post('Service_Increment_Date');
-        }
 
+        }
         $data = array(
             'title' => $title,
             'client_id' => $client_id,
@@ -1159,18 +1201,17 @@ class Project extends MY_Controller
             'Service_type' => $Service_type,
             'Service_amount' => $Service_amount,
             'project_note' => '',
-            'Service_Increment_Date' => $Service_Increment_Date
+            'Service_Increment_Date' => $Service_Increment_Date,
         );
         $r = $this->db->insert('xin_projects', $data);
         if ($r) {
             $project_id = $this->db->insert_id();
-
             if ($service_status) {
                 $Service_type = $this->input->post('Service_type');
                 $Service_amount = $this->input->post('Service_amount');
                 $Service_start_Date = $this->input->post('Service_start_Date');
                 $Service_Increment_Date = $this->input->post('Service_Increment_Date');
-                // id	project_id	service_type	start_date	next_payment_date	amount	next_notify_date	next_inc_date	update_at	create_at
+                // id    project_id    service_type    start_date    next_payment_date    amount    next_notify_date    next_inc_date    update_at    create_at
                 $service_data = array(
                     'project_id' => $project_id,
                     'client_id' => $client_id,
@@ -1181,7 +1222,7 @@ class Project extends MY_Controller
                     'next_notify_date' => date('Y-m-d', strtotime('-2 day', strtotime($Service_start_Date))),
                     'next_inc_date' => $Service_Increment_Date,
                     'update_at' => date('Y-m-d H:i:s'),
-                    'create_at' => date('Y-m-d H:i:s')
+                    'create_at' => date('Y-m-d H:i:s'),
                 );
                 $addservice = $this->db->insert('xin_project_service', $service_data);
                 if (!$addservice) {
@@ -1221,7 +1262,7 @@ class Project extends MY_Controller
                 'Remaining_Payment' => $software_Budget + $hardware_Budget,
                 'Payment_Received_percent' => 0,
                 'Remaining_Payment_percent' => 100,
-                'update_at' => $update_at
+                'update_at' => $update_at,
             );
             $res = $this->db->insert('xin_project_account', $data);
             if ($res) {
@@ -1464,7 +1505,7 @@ class Project extends MY_Controller
             }
 
             $data = array(
-                'assigned_to' => $employee_ids
+                'assigned_to' => $employee_ids,
             );
             $id = $this->input->post('project_id');
             $result = $this->Project_model->update_record($data, $id);
@@ -1520,7 +1561,6 @@ class Project extends MY_Controller
         $draw = intval($this->input->get("draw"));
         $start = intval($this->input->get("start"));
         $length = intval($this->input->get("length"));
-
 
         $discussion = $this->Project_model->get_discussion($id);
 
@@ -1591,7 +1631,7 @@ class Project extends MY_Controller
 				</div>';
 
             $data[] = array(
-                $function
+                $function,
             );
         }
 
@@ -1599,7 +1639,7 @@ class Project extends MY_Controller
             "draw" => $draw,
             "recordsTotal" => $discussion->num_rows(),
             "recordsFiltered" => $discussion->num_rows(),
-            "data" => $data
+            "data" => $data,
         );
         echo json_encode($output);
         exit();
@@ -1655,7 +1695,7 @@ class Project extends MY_Controller
                 'attachment_file' => $fname,
                 'project_id' => $this->input->post('discussion_project_id'),
                 'user_id' => $this->input->post('user_id'),
-                'created_at' => date('d-m-Y h:i:s')
+                'created_at' => date('d-m-Y h:i:s'),
             );
             $result = $this->Project_model->add_discussion($data);
             if ($result == true) {
@@ -1685,7 +1725,6 @@ class Project extends MY_Controller
         $draw = intval($this->input->get("draw"));
         $start = intval($this->input->get("start"));
         $length = intval($this->input->get("length"));
-
 
         $bug = $this->Project_model->get_bug($id);
 
@@ -1780,7 +1819,7 @@ class Project extends MY_Controller
 				';
 
             $data[] = array(
-                $function
+                $function,
             );
         }
 
@@ -1788,7 +1827,7 @@ class Project extends MY_Controller
             "draw" => $draw,
             "recordsTotal" => $bug->num_rows(),
             "recordsFiltered" => $bug->num_rows(),
-            "data" => $data
+            "data" => $data,
         );
         echo json_encode($output);
         exit();
@@ -1844,7 +1883,7 @@ class Project extends MY_Controller
                 'attachment_file' => $fname,
                 'project_id' => $this->input->post('bug_project_id'),
                 'user_id' => $this->input->post('user_id'),
-                'created_at' => date('d-m-Y h:i:s')
+                'created_at' => date('d-m-Y h:i:s'),
             );
             $result = $this->Project_model->add_bug($data);
             if ($result == true) {
@@ -1911,7 +1950,7 @@ class Project extends MY_Controller
                 'file_title' => $this->input->post('file_name'),
                 'file_description' => $file_description,
                 'attachment_file' => $fname,
-                'created_at' => date('d-m-Y h:i:s')
+                'created_at' => date('d-m-Y h:i:s'),
             );
             $result = $this->Project_model->add_new_attachment($data);
             if ($result == true) {
@@ -1937,7 +1976,6 @@ class Project extends MY_Controller
         $start = intval($this->input->get("start"));
         $length = intval($this->input->get("length"));
 
-
         $attachments = $this->Project_model->get_attachments($id);
 
         $data = array();
@@ -1948,7 +1986,7 @@ class Project extends MY_Controller
                 '<span data-toggle="tooltip" data-placement="top" title="' . $this->lang->line('xin_download') . '"><a href="' . site_url() . 'admin/download?type=project/files&filename=' . $r->attachment_file . '"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-download"></span></button></a></span><span data-toggle="tooltip" data-placement="top" title="' . $this->lang->line('xin_delete') . '"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light fidelete" data-toggle="modal" data-target=".delete-modal-file" data-record-id="' . $r->project_attachment_id . '"><span class="fa fa-trash"></span></button></span>',
                 $r->file_title,
                 $r->file_description,
-                $r->created_at
+                $r->created_at,
             );
         }
 
@@ -1956,7 +1994,7 @@ class Project extends MY_Controller
             "draw" => $draw,
             "recordsTotal" => $attachments->num_rows(),
             "recordsFiltered" => $attachments->num_rows(),
-            "data" => $data
+            "data" => $data,
         );
 
         echo json_encode($output);
@@ -1991,7 +2029,7 @@ class Project extends MY_Controller
             $Return['csrf_hash'] = $this->security->get_csrf_hash();
 
             $data = array(
-                'project_note' => $this->input->post('project_note')
+                'project_note' => $this->input->post('project_note'),
             );
             $id = $this->input->post('note_project_id');
             $result = $this->Project_model->update_record($data, $id);
@@ -2044,7 +2082,6 @@ class Project extends MY_Controller
         $start = intval($this->input->get("start"));
         $length = intval($this->input->get("length"));
 
-
         $task_categories = $this->Project_model->get_task_categories();
         $role_resources_ids = $this->Xin_model->user_role_resource();
         $data = array();
@@ -2066,7 +2103,7 @@ class Project extends MY_Controller
 
             $data[] = array(
                 $combhr,
-                $r->category_name
+                $r->category_name,
             );
         }
 
@@ -2074,7 +2111,7 @@ class Project extends MY_Controller
             "draw" => $draw,
             "recordsTotal" => $task_categories->num_rows(),
             "recordsFiltered" => $task_categories->num_rows(),
-            "data" => $data
+            "data" => $data,
         );
         echo json_encode($output);
         exit();
@@ -2128,7 +2165,6 @@ class Project extends MY_Controller
                 $combhr = $edit;
             }
 
-
             $data[] = array(
                 $combhr,
                 $project_name,
@@ -2144,7 +2180,7 @@ class Project extends MY_Controller
             "draw" => $draw,
             "recordsTotal" => $timelogs->num_rows(),
             "recordsFiltered" => $timelogs->num_rows(),
-            "data" => $data
+            "data" => $data,
         );
         echo json_encode($output);
         exit();
@@ -2185,13 +2221,13 @@ class Project extends MY_Controller
             //if(in_array('346',$role_resources_ids)) { //edit
             $edit = '<span data-toggle="tooltip" data-placement="top" title="' . $this->lang->line('xin_edit') . '"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"  data-toggle="modal" data-target=".edit-modal-timelog-data"  data-timelogs_id="' . $r->timelogs_id . '"><span class="fa fa-pencil"></span></button></span>';
             //} else {
-            //	$edit = '';
+            //    $edit = '';
             //}
             //if(in_array('347',$role_resources_ids)) { // delete
             $delete = '<span data-toggle="tooltip" data-placement="top" title="' . $this->lang->line('xin_delete') . '"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete-timelog" data-toggle="modal" data-target=".delete-modal-timelogs" data-record-id="' . $r->timelogs_id . '"><span class="fa fa-trash"></span></button></span>';
-            //	} else {
-            //		$delete = '';
-            //	}
+            //    } else {
+            //        $delete = '';
+            //    }
             if ($user_info[0]->user_role_id == '1') {
                 $combhr = $edit . $delete;
             } else {
@@ -2212,7 +2248,7 @@ class Project extends MY_Controller
             "draw" => $draw,
             "recordsTotal" => $timelogs->num_rows(),
             "recordsFiltered" => $timelogs->num_rows(),
-            "data" => $data
+            "data" => $data,
         );
         echo json_encode($output);
         exit();
@@ -2237,7 +2273,7 @@ class Project extends MY_Controller
 
             $data = array(
                 'category_name' => $this->input->post('category_name'),
-                'created_at' => date('d-m-Y h:i:s')
+                'created_at' => date('d-m-Y h:i:s'),
             );
             $result = $this->Project_model->add_task_categories($data);
             if ($result == true) {
@@ -2271,7 +2307,7 @@ class Project extends MY_Controller
             }
 
             $data = array(
-                'category_name' => $this->input->post('category_name')
+                'category_name' => $this->input->post('category_name'),
             );
 
             $result = $this->Project_model->update_task_category_record($data, $id);
@@ -2338,7 +2374,7 @@ class Project extends MY_Controller
                 'end_date' => $this->input->post('end_date'),
                 'total_hours' => $this->input->post('total_hours'),
                 'timelogs_memo' => $this->input->post('timelogs_memo'),
-                'created_at' => date('Y-m-d h:i:s')
+                'created_at' => date('Y-m-d h:i:s'),
             );
             $result = $this->Project_model->add_project_timelog($data);
 
@@ -2392,7 +2428,7 @@ class Project extends MY_Controller
                 'start_date' => $this->input->post('start_date'),
                 'end_date' => $this->input->post('end_date'),
                 'total_hours' => $this->input->post('total_hours'),
-                'timelogs_memo' => $this->input->post('timelogs_memo')
+                'timelogs_memo' => $this->input->post('timelogs_memo'),
             );
 
             $result = $this->Project_model->update_project_timelog_record($data, $id);
@@ -2461,7 +2497,7 @@ class Project extends MY_Controller
         $result = $this->Project_model->read_task_category_information($id);
         $data = array(
             'task_category_id' => $result[0]->task_category_id,
-            'category_name' => $result[0]->category_name
+            'category_name' => $result[0]->category_name,
         );
         $session = $this->session->userdata('username');
         if (!empty($session)) {

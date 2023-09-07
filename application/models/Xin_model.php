@@ -616,11 +616,18 @@ class Xin_model extends CI_Model {
 			$arr['task_cat_active'] = 'active';
 			$arr['project_open'] = 'active';
 			return $arr;
-		}  else if($mClass=='project') {
+		}  else if($mMethod == 'get_payment_page' && $mClass=='project') {
+			$arr['payment_active'] 	= 'active';
+			$arr['project_open'] 	= 'active';
+			return $arr;
+		} 
+		else if($mClass=='project') {
 			$arr['project_active'] = 'active';
 			$arr['project_open'] = 'active';
 			return $arr;
-		} else if($mClass=='projects') {
+		} 
+
+		else if($mClass=='projects') {
 			$arr['projects_active'] = 'active';
 			$arr['projects_active'] = 'active';
 			return $arr;
@@ -628,13 +635,11 @@ class Xin_model extends CI_Model {
 			$arr['task_active'] = 'active';
 			$arr['project_open'] = 'active';
 			return $arr;
-		} else if($mMethod=='task_details') {
-			$arr['task_active'] = 'active';
-			$arr['project_open'] = 'active';
-			return $arr;
-		} else if($mClass=='clients') {
+		} 
+		// x// }
+		 else if($mClass=='clients') {
 			$arr['hr_clients_active'] = 'active';
-			$arr['hr_quote_manager_open'] = 'active';
+			$arr['project_open'] = 'active';
 			return $arr;
 		} else if($mClass=='leads') {
 			$arr['hr_leads_active'] = 'active';
@@ -656,7 +661,12 @@ class Xin_model extends CI_Model {
 			$arr['hr_client_invoices_pay_active'] = 'active';
 			$arr['hr_quote_manager_open'] = 'active';
 			return $arr;
-		} else if($mClass=='invoices') {
+		}else if($mMethod=='get_payment_page' && $mClass=='quotes') {
+			$arr['get_payment_page'] = 'active';
+			$arr['hr_quote_manager_open'] = 'active';
+			return $arr;
+		}
+		 else if($mClass=='invoices') {
 			$arr['hr_all_inv_active'] = 'active';
 			$arr['hr_quote_manager_open'] = 'active';
 			return $arr;

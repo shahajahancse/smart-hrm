@@ -468,4 +468,24 @@ class Clients extends MY_Controller
             exit;
         }
     }
+    public function delete() {
+		
+		if($this->input->post('is_ajax')==2) {
+			$session = $this->session->userdata('username');
+			if(empty($session)){ 
+				redirect('admin/');
+			}
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+			$id = $this->uri->segment(4);
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
+			$result = $this->Clients_model->delete_record($id);
+			if(isset($id)) {
+				$Return['result'] = $this->lang->line('xin_project_client_deleted');
+			} else {
+				$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
+			}
+			$this->output($Return);
+		}
+	}
 }

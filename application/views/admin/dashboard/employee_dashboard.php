@@ -28,13 +28,6 @@ foreach ($emp_data['emp_data'] as $r) {
 
 $paymeal = isset($data1->pay_amount) ? $data1->pay_amount / 45 : 0;
 $balanceMeal = $paymeal - $taken_meal;
-
-?>
-
-
-<?php
-
-
     // get month january to current month
     $currentMonth = date('n');
 $monthNames = array();
@@ -47,14 +40,14 @@ for ($i = 1; $i <= $currentMonth; $i++) {
 $schedule = $this->db->get('xin_office_shift')->row();
 
 // get employee salary from january to current month
-$salarys = $this->db->select('salary_month,grand_net_salary')
+$salarys = $this->db->select('salary_month,modify_salary,grand_net_salary')
                     ->where('employee_id', $userid)
                     ->get('xin_salary_payslips')
                     ->result();
 $salary = array();
 $salary_month = array();
 foreach ($salarys as $salaryObj) {
-    $salary[] = $salaryObj->grand_net_salary;
+    $salary[] = floor($salaryObj->grand_net_salary + $salaryObj->modify_salary);
     $salary_month[] = date('M', strtotime($salaryObj->salary_month));
 }
 // end
