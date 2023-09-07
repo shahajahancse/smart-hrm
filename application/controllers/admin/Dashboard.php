@@ -44,6 +44,10 @@ class Dashboard extends MY_Controller {
 		   $this->load->helper('date');
 		   $this->load->model("Lunch_model");
 		   $this->load->model('Attendance_model');
+			$d=$this->db->get('xin_system_setting')->row();
+			if($d->project_proccess_date<=date('Y-m-d')){
+				$this->save_service();
+			};
      }
 	
 	/*Function to set JSON output*/
@@ -54,6 +58,59 @@ class Dashboard extends MY_Controller {
 		/*Final JSON response*/
 		exit(json_encode($Return));
 	} 
+	// public function save_service(){
+	// 	$d=$this->db->get('xin_system_setting')->row();
+	// 	if($d->project_proccess_date>=date('Y-m-d')){
+	// 		$this->db->where('active_status',1);
+	// 		$this->db->where('active_status',1);
+	// 		$data=$this->db->get('xin_project_service')->result();
+
+	// 	};
+	// } 
+	public function save_service() {
+		$query = $this->db->query("
+			SELECT ps.*
+			FROM xin_system_setting ss
+			JOIN xin_project_service ps ON ps.start_date <= CURDATE()
+			WHERE ss.project_proccess_date <= CURDATE() AND ps.active_status = 1
+		");
+		
+		$data = $query->result();
+		if(count($data)>0) {
+			foreach($data as $d) {
+                if($d->service_type==2){
+					$project_id = $d->project_id;
+					$client_id = $d->client_id;
+					$amount = $d->amount;
+					$payment_date = $d->next_payment_date;
+					$notify_date = $d->next_notify_date;
+					$service_id=$d->id;
+					$add_data = array(
+						'service_id' => $service_id,
+						'project_id' => $project_id,
+						'client_id' => $client_id,
+						'amount' => $amount,
+						'payment_date' => $payment_date,
+						'nitify_date' => $notify_date
+					);
+					if ($this->db->insert('xin_project_service_payment', $add_data)) {
+						$update_data = array(
+							'next_payment_date' => date('Y-m-d', strtotime('+1 month', strtotime($payment_date))),
+							'next_notify_date' => date('Y-m-d', strtotime('+1 month', strtotime($notify_date)))
+						);
+						$this->db->where('id', $service_id);
+						if($this->db->update('xin_project_service', $update_data)){
+							$update_settings = array(
+								'project_proccess_date' => date('Y-m-d', strtotime('+1 month')),
+							);
+							$this->db->where('setting_id', 1);
+							$this->db->update('xin_system_setting', $update_settings);
+						};
+					}
+				};
+            }
+		}
+	}
 	
 	public function index()
 	{

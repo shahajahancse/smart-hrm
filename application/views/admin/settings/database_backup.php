@@ -16,7 +16,7 @@
     <?php $hidden = array('user_id' => $session['user_id']);?>
     <?php echo form_open('admin/settings/create_database_backup', $attributes, $hidden);?>
     <button type="submit" class="btn btn-primary save"><?php echo $this->lang->line('xin_create_backup');?></button>
-    <?php echo form_close(); ?> </div>
+    <?php echo form_close(); ?> </div> 
 </div>
 <div class="box  <?php echo $get_animate;?>">
   <div class="box-header with-border">
