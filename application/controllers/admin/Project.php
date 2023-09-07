@@ -166,7 +166,7 @@ class Project extends MY_Controller
         }
         $this->db->select('pa.project_id, p.title, pa.notify_date_start, pa.next_installment_date, c.name as client_name');
         $this->db->from('xin_project_account as pa');
-        $this->db->join('xin_clients as c', 'pa.client_id = c.client_id');
+        $this->db->join('xin_clients as c', 'pa.clint_id = c.client_id');
         $this->db->join('xin_projects as p', 'pa.project_id = p.project_id');
         $this->db->where('pa.if_notify', 1);
         $this->db->where('pa.notify_date_start <=', date('Y-m-d'));
@@ -185,11 +185,11 @@ class Project extends MY_Controller
         if (empty($session)) {
             redirect('admin/');
         }
-        $this->db->select('s.project_id, s.service_id, s.status, p.title, s.notify_date, s.payment_date, c.name as client_name');
+        $this->db->select('s.project_id, s.service_id, s.status, p.title, s.nitify_date, s.payment_date, c.name as client_name');
         $this->db->from('xin_project_service_payment as s');
         $this->db->join('xin_clients as c', 's.client_id = c.client_id');
         $this->db->join('xin_projects as p', 's.project_id = p.project_id');
-        $this->db->where('s.notify_date <=', date('Y-m-d'));
+        $this->db->where('s.nitify_date <=', date('Y-m-d'));
         $this->db->where('s.status', 0);
         $this->db->order_by('s.payment_date DESC');
         
