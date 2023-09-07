@@ -365,7 +365,7 @@ function closem() {
 <script>
 $('#movementform1').on('submit', function(event) {
     event.preventDefault(); // Prevent the default form submission
-
+    document.getElementById("movemodal").style.display = "none";
     // Get the form data
     var formData = $(this).serialize();
 

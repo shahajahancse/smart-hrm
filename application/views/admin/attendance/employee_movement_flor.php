@@ -363,7 +363,7 @@ document.getElementById("close").addEventListener("click", function() {
 <script>
 $('#movementform1').on('submit', function(event) {
     event.preventDefault(); // Prevent the default form submission
-
+    document.getElementById("customModal").style.display = "none";
     // Get the form data
     var formData = $(this).serialize();
 
