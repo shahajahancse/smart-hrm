@@ -229,7 +229,7 @@ textarea {
             </div>
             <div class="col-md-12 contentss" style="display: block;">
                 <div class="actions" style="float: right;display: flex;gap: 7px;">
-                    <input type="submit" class="btn" style="background: #39a3ff;" value="Move Outside">
+                    <input type="submit" onclick="closem()" class="btn" style="background: #39a3ff;" value="Move Outside">
                     <a class="btn" onclick="closem()">Cancel</a>
                 </div>
             </div>
