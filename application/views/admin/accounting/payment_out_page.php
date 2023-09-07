@@ -191,7 +191,7 @@ $query = $this->db->get();
 
 if ($query->num_rows() > 0) {
     $result = $query->row();
-    $totalAmount_monthly = $result->amount;
+    $totalAmount_monthly = 0+$result->amount;
 } else {
     $totalAmount_monthly = 0;
 }
@@ -208,7 +208,7 @@ $query = $this->db->get();
 
 if ($query->num_rows() > 0) {
     $result = $query->row();
-    $totalAmount_week = $result->amount;
+    $totalAmount_week =0+$result->amount;
 
 } else {
     $totalAmount_week = 0;
@@ -219,11 +219,11 @@ $this->db->from('xin_payment_out_invoice');
 $this->db->where('date', date('Y-m-d'));
 $query = $this->db->get();
 
+$totalAmount_today= 0;
 if ($query->num_rows() > 0) {
     $result = $query->row();
-    $totalAmount_today = $result->amount;
-
-} else {
+    $totalAmount_today =0+$result->amount;
+}else {
     $totalAmount_today= 0;
 }
 
@@ -239,7 +239,7 @@ $query = $this->db->get('xin_payment_out_invoice');
 $totalAmount_year = 0;
 if ($query->num_rows() > 0) {
     $result = $query->row();
-    $totalAmount_year = $result->amount;
+    $totalAmount_year =0+$result->amount;
 }
 ?>
 <div class="container">
