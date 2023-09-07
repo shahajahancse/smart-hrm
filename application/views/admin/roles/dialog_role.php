@@ -242,6 +242,11 @@ dataSource: [
 	]},
 	//core
 
+	{ id: "", class: "role-checkbox-modal", text: "Account",  add_info: "", check: "<?php if(isset($_GET['role_id'])) { if(in_array('2030',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>", value: "2030",  items: [
+		{ id: "", class: "role-checkbox-modal", text: "Payment In",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "2001", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1031',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+		{ id: "", class: "role-checkbox-modal", text: "Payment Out",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "2002", check: "<?php if(isset($_GET['role_id'])) { if(in_array('1031',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+	]},
+
 	// Organization
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('left_organization');?>", check: "<?php if(isset($_GET['role_id'])) { if(in_array('2',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>", add_info: "", value:"2", items: [
 		// sub 1

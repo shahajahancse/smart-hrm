@@ -121,7 +121,15 @@ class Xin_model extends CI_Model {
 			$arr['active'] = 'active';
 			$arr['open'] = '';
 			return $arr;
-		} else if($mClass=='department' && $mMethod=='sub_departments') {
+		}else if($mClass=='project' && $mMethod=='get_payment_page') {
+			$arr['get_payment_active'] = 'active';
+			$arr['account'] = 'active';
+			return $arr;
+		}else if($mClass=='accounting' && $mMethod=='payment_out_page') {
+			$arr['out_payment_active'] = 'active';
+			$arr['account'] = 'active';
+			return $arr;
+		}else if($mClass=='department' && $mMethod=='sub_departments') {
 			$arr['sub_departments_active'] = 'active';
 			$arr['adm_open'] = 'active';
 			return $arr;

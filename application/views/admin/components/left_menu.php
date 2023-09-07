@@ -88,6 +88,23 @@ if($theme[0]->sub_menu_icons != ''){
   <!-- sidebar menu: : style can be found in sidebar.less -->
   <ul class="sidebar-menu" data-widget="tree"> 
     <li class="<?php if(!empty($arr_mod['active']))echo $arr_mod['active'];?>"> <a href="<?php echo site_url('admin/dashboard');?>"> <i class="fa fa-dashboard"></i> <span><?php echo $this->lang->line('dashboard_title');?></span> </a> </li>
+
+    <?php if(in_array('2001',$role_resources_ids) || in_array('2002',$role_resources_ids) ){?>
+      <li class="<?php if(!empty($arr_mod['account']))echo $arr_mod['account'];?> treeview"> <a href="#"> <i class="fa fa-user"></i> <span><?php echo "Accounts";?></span> <span class="pull-right-container"> <?php if($exp_count > 0):?><span class="label label-danger pull-right"><?php echo $exp_count;?></span><?php endif;?> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+        <ul class="treeview-menu">
+          <?php if(in_array('2001',$role_resources_ids)) { ?>
+          <li class="<?php if(!empty($arr_mod['get_payment_active']))echo $arr_mod['get_payment_active'];?>"><a href="<?php echo site_url('admin/project/get_payment_page');?>"><i class="fa <?php echo $submenuicon;?>"></i> Payment In</a></li>
+          <?php } ?>
+          <?php if(in_array('2002',$role_resources_ids)) { ?>
+          <li class="<?php if(!empty($arr_mod['out_payment_active']))echo $arr_mod['out_payment_active'];?>"><a href="<?php echo site_url('admin/accounting/payment_out_page');?>"><i class="fa <?php echo $submenuicon;?>"></i> Payment Out</a></li>
+          <?php } ?>
+        </ul>
+      </li>
+    <?php } ?>
+
+
+
+
     <?php if(in_array('13',$role_resources_ids) || in_array('88',$role_resources_ids) || in_array('92',$role_resources_ids) || in_array('22',$role_resources_ids) || in_array('23',$role_resources_ids) || in_array('393',$role_resources_ids) || in_array('400',$role_resources_ids) || $user_info[0]->user_role_id==1){?>
       <li class="<?php if(!empty($arr_mod['stff_open']))echo $arr_mod['stff_open'];?> treeview"> <a href="#"> <i class="fa fa-user"></i> <span><?php echo $this->lang->line('let_staff');?></span> <span class="pull-right-container"> <?php if($exp_count > 0):?><span class="label label-danger pull-right"><?php echo $exp_count;?></span><?php endif;?> <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
