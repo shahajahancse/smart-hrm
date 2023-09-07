@@ -375,7 +375,7 @@ $('#movementform1').on('submit', function(event) {
         data: formData,
         success: function(response) {
             console.log(response);
-            // showSuccessAlert(response)
+            showSuccessAlert(response)
         },
 
 

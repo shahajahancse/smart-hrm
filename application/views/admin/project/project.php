@@ -132,9 +132,8 @@ td {
                             Action
                         </button>
                         <div class="dropdown-menu dropdown-menu-right list-group" aria-labelledby="actionButton">
-                            <a class="dropdown-item list-group-item" href="<?= base_url('admin/project/Payment_details/'.$project->project_id) ?>">Payment Details</a>
-                            <a class="dropdown-item list-group-item" href="<?= base_url('admin/project/Project_details/'.$project->project_id) ?>">Project Details</a>
-                            <!-- <a class="dropdown-item list-group-item" href="<?= base_url('admin/project/edit/') ?>">Edit</a> -->
+                            <a class="dropdown-item list-group-item"
+                                href="<?= base_url('admin/project/Payment_details/'.$project->project_id) ?>">Payment Details</a>
                         </div>
                     </div>
                     </td>

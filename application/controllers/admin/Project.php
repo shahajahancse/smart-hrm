@@ -164,14 +164,16 @@ class Project extends MY_Controller
         if (empty($session)) {
             redirect('admin/');
         }
-        $this->db->select('xin_project_account.project_id,xin_projects.title,xin_project_account.notify_date_start,xin_project_account.next_installment_date, xin_clients.name as client_name');
-        $this->db->from('xin_project_account');
-        $this->db->join('xin_clients', 'xin_project_account.clint_id = xin_clients.client_id');
-        $this->db->join('xin_projects', 'xin_project_account.project_id = xin_projects.project_id');
-        $this->db->order_by('next_installment_date DESC');
-        $this->db->where('xin_project_account.if_notify', 1);
-        $this->db->where('xin_project_account.notify_date_start <=', date('Y-m-d'));
+        $this->db->select('pa.project_id, p.title, pa.notify_date_start, pa.next_installment_date, c.name as client_name');
+        $this->db->from('xin_project_account as pa');
+        $this->db->join('xin_clients as c', 'pa.clint_id = c.client_id');
+        $this->db->join('xin_projects as p', 'pa.project_id = p.project_id');
+        $this->db->where('pa.if_notify', 1);
+        $this->db->where('pa.notify_date_start <=', date('Y-m-d'));
+        $this->db->order_by('pa.next_installment_date DESC');
+
         $data['soft_payment_data'] = $this->db->get()->result();
+
         $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Software Payment';
         $data['subview'] = $this->load->view("admin/project/get_software_payment", $data, true);
@@ -183,14 +185,16 @@ class Project extends MY_Controller
         if (empty($session)) {
             redirect('admin/');
         }
-        $this->db->select('xin_project_service_payment.project_id,xin_project_service_payment.service_id,xin_project_service_payment.status,xin_projects.title,xin_project_service_payment.nitify_date,xin_project_service_payment.payment_date, xin_clients.name as client_name');
-        $this->db->from('xin_project_service_payment');
-        $this->db->join('xin_clients', 'xin_project_service_payment.client_id = xin_clients.client_id');
-        $this->db->join('xin_projects', 'xin_project_service_payment.project_id = xin_projects.project_id');
-        $this->db->order_by('payment_date DESC');
-        $this->db->where('xin_project_service_payment.nitify_date <=', date('Y-m-d'));
-        $this->db->where('xin_project_service_payment.status',0);
+        $this->db->select('s.project_id, s.service_id, s.status, p.title, s.nitify_date, s.payment_date, c.name as client_name');
+        $this->db->from('xin_project_service_payment as s');
+        $this->db->join('xin_clients as c', 's.client_id = c.client_id');
+        $this->db->join('xin_projects as p', 's.project_id = p.project_id');
+        $this->db->where('s.nitify_date <=', date('Y-m-d'));
+        $this->db->where('s.status', 0);
+        $this->db->order_by('s.payment_date DESC');
+        
         $data['service_payment_data'] = $this->db->get()->result();
+        
         $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Service Payment';
         $data['subview'] = $this->load->view("admin/project/get_service_payment", $data, true);
