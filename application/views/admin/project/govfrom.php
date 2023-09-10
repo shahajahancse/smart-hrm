@@ -77,41 +77,36 @@ input:checked+.slider:after {
 <div style="display: flex;flex-direction: column;gap: 21px;">
     <div class="row">
         <h5>Software Section</h5>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="inputBox">
-                <input required type="number" name="software_Budget" id="software_Budget" value=0 onkeyup="setinstallmentdate()">
+                <input required type="number" name="software_Budget" id="software_Budget" value=0 >
                 <strong>Software Budget<span style="color: red;">*</span></strong>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="inputBox">
-                <input required type="number" name="instalment" id="instalment" value=1 onkeyup="setinstallmentdate()">
+                <input required type="number" name="instalment" id="instalment" value=1 >
                 <strong>Instalment<span style="color: red;">*</span></strong>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="inputBox">
                 <input required type="date" value="<?= date('Y-m-d') ?>" name="start_date" id="start_date">
                 <strong>Start Date<span style="color: red;">*</span></strong>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="inputBox">
                 <input required="required" type="date" value="<?= date('Y-m-d') ?>" name="end_date" id="end_date"
-                    onchange="getinstallmentfrom()">
+                    ">
                 <strong>End Date<span style="color: red;">*</span></strong>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <h5>Installment Section</h5>
-        <div id="installmentform" style="padding: 1px 22px;">
-            <!-- <div class="col-md-6">
-                <div class="inputBox">
-                    <input required type="number" name="software_Budget">
-                    <strong>Software Budget<span style="color: red;">*</span></strong>
-                </div>
-            </div> -->
+        <div class="col-md-2">
+            <div class="inputBox">
+                <input required="required" type="date" value="<?= date('Y-m-d') ?>" name="first_installment_date" id="first_installment_date">
+                <strong>First Installment Date<span style="color: red;">*</span></strong>
+            </div>
         </div>
     </div>
     <div class="row">

@@ -97,7 +97,7 @@
         <div class="col-md-6 column" style="padding:0px;height: 218px;overflow: auto;">
             <span
                 style="width: 100%;background: #adadad;display: block;text-align: center;font-size: 19px;position: sticky;top: 0;color: black;height: 34px;">Unpaid
-                Project</span>
+                Service</span>
             <ul style="list-style: none;background: #e7e7e7;padding: 11px">
                 <?php if (count($service_payment_data)>0){
              foreach ($service_payment_data as $key => $value) { ?>
@@ -113,7 +113,7 @@
         </div>
         <div class="col-md-6 column" style="padding:0px;height: 218px;overflow: auto;">
             <span
-                style="width: 100%;background: #adadad;display: block;text-align: center;font-size: 19px;position: sticky;top: 0;color: black;height: 34px;">Installment</span>
+                style="width: 100%;background: #adadad;display: block;text-align: center;font-size: 19px;position: sticky;top: 0;color: black;height: 34px;">Service</span>
 
             <div id="listdata"> <span> Please Select A Project</span>
             </div>

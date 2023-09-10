@@ -135,6 +135,7 @@ class Project extends MY_Controller
         $this->db->where('xin_project_service_payment.nitify_date <=', date('Y-m-d'));
         $this->db->where('xin_project_service_payment.status',0);
         $data['service_payment_data'] = $this->db->get()->result();
+        // dd($data['service_payment_data']);
         $this->db->select('xin_project_invoice.*,xin_clients.name as client_name,xin_projects.title');
         $this->db->from('xin_project_invoice');
         $this->db->join('xin_clients', 'xin_project_invoice.clint_id = xin_clients.client_id');
@@ -210,38 +211,9 @@ class Project extends MY_Controller
         $this->db->join('xin_projects', 'xin_project_account.project_id = xin_projects.project_id');
         $this->db->join('xin_clients', 'xin_project_account.clint_id = xin_clients.client_id');
         $soft_payment_data = $this->db->get()->row();
+        $data['number']=$soft_payment_data->soft_intmnt_takes;
         $data['project_id'] = $project_id;
         $data['soft_payment_data'] = $soft_payment_data;
-        $soft_intmnt_dates = json_decode($soft_payment_data->soft_intmnt_dates);
-        $soft_intmnt_payments = json_decode($soft_payment_data->soft_intmnt_prements);
-        $soft_intmnt_status = json_decode($soft_payment_data->soft_intmnt_status);
-        if ($number) {
-            $tableay = array();
-            $i = $number;
-            $intmnt_payments = $soft_intmnt_payments[$i];
-            $intmnt_status = $soft_intmnt_status[$i];
-            $intmnt_dates = $soft_intmnt_dates[$i];
-            $tableay[$i] = [
-                'intmnt_dates' => $intmnt_dates,
-                'intmnt_payments' => $intmnt_payments,
-                'intmnt_status' => $intmnt_status,
-            ];
-            $data['instdata'] = $tableay;
-            $data['number'] = $number;
-            echo json_encode($data);
-            exit();
-        }
-        $tableay = array();
-        foreach ($soft_intmnt_dates as $i => $intmnt_dates) {
-            $intmnt_payments = $soft_intmnt_payments[$i];
-            $intmnt_status = $soft_intmnt_status[$i];
-            $tableay[$i] = [
-                'intmnt_dates' => $intmnt_dates,
-                'intmnt_payments' => $intmnt_payments,
-                'intmnt_status' => $intmnt_status,
-            ];
-        }
-        $data['instdata'] = $tableay;
         echo json_encode($data);
     }
     public function get_service_data()
@@ -284,14 +256,28 @@ class Project extends MY_Controller
         if (empty($session) && $session['role_id'] == 3) {
             return false;
         }
+
+        // dd($_POST);
+    //[project_id] => 2
+    // [client_id] => 
+    // [number] => 0
+    // [installment_date] => 2023-09-10
+    // [total_budget] => 60000
+    // [payment_received] => 0
+    // [remaining_payment] => 60345
+    // [today_payment] => 7000
+    // [latest_remaining_payment] => 53345
+    // [payment_way] => Bkash
+    // [installment_no] => 1
+    // [next_installment_date] => 2023-09-10
+
         $data = array(
             'project_id' => $_POST['project_id'],
             'clint_id' => $_POST['client_id'],
             'payment_type' => 1,
-            'date' => date('Y-m-d'),
+            'date' => $_POST['installment_date'],
             'payment_way' => $_POST['payment_way'],
-            'pyment_amount' => $_POST['payment'],
-            'due' => $_POST['payment_deu'],
+            'pyment_amount' => $_POST['today_payment'],
         );
         $r = $this->db->insert('xin_project_invoice', $data);
         if ($r) {
@@ -301,8 +287,8 @@ class Project extends MY_Controller
             $soft_intmnt_prements = json_decode($project_acount->soft_intmnt_prements);
             $soft_intmnt_status = json_decode($project_acount->soft_intmnt_status);
             $number = $_POST['number'];
-            $soft_intmnt_dates[$number] = date('Y-m-d');
-            $soft_intmnt_prements[$number] = $_POST['payment'];
+            $soft_intmnt_dates[$number] = $_POST['installment_date'];
+            $soft_intmnt_prements[$number] = $_POST['today_payment'];
             $soft_intmnt_status[$number] = 1;
 
             $soft_intmnt_dates_json = json_encode($soft_intmnt_dates);
@@ -311,7 +297,7 @@ class Project extends MY_Controller
 
             $soft_intmnt_takes = $number + 1;
 
-            if ($soft_intmnt_takes == $project_acount->soft_total_installment) {
+            if ($_POST['latest_remaining_payment']<=0) {
                 $dtt = array(
                     'status' => 1,
                 );
@@ -323,16 +309,13 @@ class Project extends MY_Controller
                 $soft_prement_status = 0;
                 $if_notify = 1;
             }
-            $next_installment_date = $soft_intmnt_dates[$soft_intmnt_takes];
-            $next_payment_amount = $soft_intmnt_prements[$soft_intmnt_takes];
-            $installment_deu = $_POST['payment_deu'];
-            $Payment_Received = 0;
-            for ($i = 0; $i <= $number; $i++) {
-                $Payment_Received = $Payment_Received + $soft_intmnt_prements[$i];
-            }
-            $Remaining_Payment = $project_acount->total_budget - $Payment_Received;
-            $Payment_Received_percent = (($Payment_Received * 100) / $project_acount->total_budget);
-            $Remaining_Payment_percent = (($Remaining_Payment * 100) / $project_acount->total_budget);
+            $next_installment_date = $_POST['next_installment_date'];
+            $next_payment_amount = $_POST['latest_remaining_payment'];
+            $installment_deu = 0;
+            $Payment_Received = $_POST['payment_received']+$_POST['today_payment'];
+            $Remaining_Payment = $_POST['latest_remaining_payment'];
+            $Payment_Received_percent = (($Payment_Received * 100) / $project_acount->software_budget);
+            $Remaining_Payment_percent = (($Remaining_Payment * 100) / $project_acount->software_budget);
             $notify_date_start = date('Y-m-d', strtotime('-2 day', strtotime($next_installment_date)));
             $update_at = date('Y-m-d');
             $dat = array(
@@ -340,7 +323,7 @@ class Project extends MY_Controller
                 'soft_intmnt_prements' => $soft_intmnt_prements_json,
                 'soft_intmnt_status' => $soft_intmnt_status_json,
                 'invoice_ids' => json_encode($invoice_ids),
-                'soft_total_installment' => $soft_intmnt_takes,
+                'soft_intmnt_takes' => $soft_intmnt_takes,
                 'soft_prement_status' => $soft_prement_status,
                 'if_notify' => $if_notify,
                 'next_installment_date' => $next_installment_date,
@@ -1234,15 +1217,19 @@ class Project extends MY_Controller
                     exit();
                 }
             }
-            $soft_intmnt_dates = json_encode($this->input->post('soft_intmnt_dates'));
-            $soft_intmnt_prements = json_encode($this->input->post('soft_intmnt_prements'));
-            $soft_intmnt_status = json_encode($this->input->post('soft_intmnt_status'));
+            $soft_intmnt_datesarray=array();
+            $soft_intmnt_prementsarray=array();
+            $soft_intmnt_statusarray=array();
+
+            $soft_intmnt_dates = json_encode($soft_intmnt_datesarray);
+            $soft_intmnt_prements = json_encode($soft_intmnt_prementsarray);
+            $soft_intmnt_status = json_encode($soft_intmnt_statusarray);
             $soft_intmnt_takes = 0;
             $soft_prement_status = 0;
             $hardware_prement_status = 0;
             $if_notify = 1;
-            $intmnt_dates = $this->input->post('soft_intmnt_dates');
-            $notify_date_start = date('Y-m-d', strtotime('-3 day', strtotime($intmnt_dates[0])));
+            $intmnt_dates = $this->input->post('first_installment_date');
+            $notify_date_start = date('Y-m-d', strtotime('-3 day', strtotime($intmnt_dates)));
             $update_at = date('Y-m-d');
             $data = array(
                 'project_id' => $project_id,
@@ -1258,12 +1245,12 @@ class Project extends MY_Controller
                 'soft_prement_status' => $soft_prement_status,
                 'hardware_prement_status' => $hardware_prement_status,
                 'if_notify' => $if_notify,
-                'next_installment_date' => $intmnt_dates[0],
-                'next_payment_amount' => $this->input->post('soft_intmnt_prements')[0],
+                'next_installment_date' => $intmnt_dates,
+                'next_payment_amount' => 0,
                 'installment_deu' => 0,
                 'notify_date_start' => $notify_date_start,
                 'Payment_Received' => 0,
-                'Remaining_Payment' => $software_Budget + $hardware_Budget,
+                'Remaining_Payment' => $software_Budget,
                 'Payment_Received_percent' => 0,
                 'Remaining_Payment_percent' => 100,
                 'update_at' => $update_at,
