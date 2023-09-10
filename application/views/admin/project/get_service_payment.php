@@ -21,7 +21,7 @@
     border-radius: 4px;
     padding: 10px;
     margin-bottom: 10px;
-    color: red;
+    color: black;
     width: 100%;
     display: inline-block;
     cursor: pointer;

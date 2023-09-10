@@ -174,7 +174,6 @@ th {
                 <th>Payment Type</th>
                 <th>Payment Way</th>
                 <th>Payment Amount</th>
-                <th>Due</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -198,7 +197,6 @@ th {
                 </td>
                 <td><?= $row->payment_way ?></td>
                 <td><?= $row->pyment_amount ?></td>
-                <td><?= $row->due ?></td>
                 <td><a onclick="get_invoice_n(<?= $row->id ?>)" ><i class="fa fa-file-text" aria-hidden="true"></i></a>
                 </td>
             </tr>
