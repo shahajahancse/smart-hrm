@@ -1,3 +1,4 @@
+
 <?php 
 $session = $this->session->userdata('username');
 $get_animate = $this->Xin_model->get_content_animate();
@@ -34,6 +35,8 @@ $monthNames = array();
 for ($i = 1; $i <= $currentMonth; $i++) {
     $monthNames[] = date('F', mktime(0, 0, 0, $i, 1));
 }
+
+// dd($monthNames);
 // end
 
 // get employee shift schedule information
@@ -48,8 +51,9 @@ $salary = array();
 $salary_month = array();
 foreach ($salarys as $salaryObj) {
     $salary[] = floor($salaryObj->grand_net_salary + $salaryObj->modify_salary);
-    $salary_month[] = date('M', strtotime($salaryObj->salary_month));
+    $salary_month[] = date('F', strtotime($salaryObj->salary_month));
 }
+// dd($salary_month);
 // end
 // dd($salary_month);
 // punch time
@@ -569,16 +573,16 @@ hr {
             <div class="card">
                 <div class="card-body">
                     <div style="display:flex">
-                        <h5>Payroll Statistics</h5>
+                        <h5>Salary Statistics</h5>
                         <div class="col-md-3">
                             <select class="form-control  form-inline" id="year_id">
-                                <?php for($i=2012;$i<=date('Y');$i++) {?>
+                                <?php for($i=2023;$i<=date('Y');$i++) {?>
                                 <option value="<?php echo $i?>" <?php echo $i==date('Y') ? 'selected' : ''?>>
                                     <?php echo $i?></option>
                                 <?php }?>
                             </select>
                         </div>
-                        <h5 style="margin-right:0; margin-left: auto;">Yearly 1234M</h5>
+                        <!-- <h5 style="margin-right:0; margin-left: auto;">Yearly 1234M</h5> -->
                     </div>
                     <div id="my_div">
                         <canvas id="myChart"></canvas>
@@ -646,6 +650,11 @@ hr {
             </div>
         </div>
     </div>
+
+
+
+
+    <!-- lunch part -->
     <div class="row equal-height-row " style="margin-top:-10px">
         <div class="col-sm-4 col_style">
             <div class="card">
@@ -872,35 +881,7 @@ function myfunc(e) {
     $("#title").text(title);
     $("#description").text(description);
 }
-// Get the canvas element
-var ctx = document.getElementById('myChart').getContext('2d');
 
-var monthNames = <?php echo json_encode($monthNames); ?>;
-var dataValues = <?php echo json_encode($salary); ?>;
-
-// Create the chart
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: monthNames,
-        datasets: [{
-            label: 'Salary',
-            data: dataValues, // Add your data for each month here
-            backgroundColor: 'rgba(75, 192, 192, 0.8)'
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
-</script>
-
-<script>
 $('#year_id').on('change', function() {
     var year = $('#year_id').find(":selected").val();
     if (year) {
@@ -912,5 +893,55 @@ $('#year_id').on('change', function() {
 })
 $(document).ready(function() {
     $('#datatbale').DataTable();
+});
+</script>
+
+
+
+<script>
+const monthNames = <?php echo json_encode($monthNames); ?>;
+const dataValues = <?php echo json_encode($salary); ?>;
+
+const ctx = document.getElementById('myChart').getContext('2d');
+const zerosToPad = monthNames.length - dataValues.length;
+const zeroArray = new Array(zerosToPad).fill(0);
+const paddedDataValues = zeroArray.concat(dataValues);
+
+
+function customTooltip({ dataIndex }) {
+
+    if (dataIndex >= 1) { // Check if the dataIndex is greater than or equal to 1
+        const previousMonth = monthNames[dataIndex - 1];
+        const previousSalary = paddedDataValues[dataIndex ];
+        return `${previousMonth}\nSalary: ${previousSalary}`;
+    }
+    return ''; // Return an empty string for the first month (January)
+}
+
+// Create the chart
+const myChart = new Chart(ctx, {
+type: 'bar',
+data: {
+    labels: monthNames,
+    datasets: [{
+        label: 'Salary',
+        data: paddedDataValues,
+        backgroundColor: 'rgba(75, 192, 192, 0.8)'
+    }]
+},
+options: {
+    scales: {
+        y: {
+            beginAtZero: true
+        }
+    },
+    plugins: {
+        tooltip: {
+            callbacks: {
+                label: customTooltip // Use the custom tooltip function
+            }
+        }
+    }
+}
 });
 </script>
