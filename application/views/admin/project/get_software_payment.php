@@ -112,93 +112,109 @@
 
             </ul>
         </div>
-        <div class="col-md-6 column" style="padding:0px;height: 218px;overflow: auto;">
+        <!-- <div class="col-md-6 column" style="padding:0px;height: 218px;overflow: auto;">
             <span
                 style="width: 100%;background: #adadad;display: block;text-align: center;font-size: 19px;position: sticky;top: 0;color: black;height: 34px;">Installment</span>
 
             <div id="listdata"> <span> Please Select A Project</span>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <div class="box" style="padding: 29px 6px;display: none;" id="installment_section">
         <div class="col-md-12 bg-white">
             <h5>Installment Section </h5>
+            <div id="deusectionenable" style="display:none">
+                <h5 style="color:red">This Is Last Installment Please Get All Payment</h5>
+                <h5> Do you want to Payment with Deu
+                    <input type="checkbox" id="ifpaymentin" checked>
+                </h5><br>
+            </div>
+
             <form id="payment_in_form" style="display: flex;flex-direction: column;gap: 16px;">
                 <input type="hidden" name="project_id" id="project_id">
                 <input type="hidden" name="client_id" id="client_id">
                 <input type="hidden" name="number" id="number">
+
                 <div class="row">
                     <div class="col-md-3">
                         <div class="inputBox">
                             <strong>Client name <b style="color: red;">*</b></strong>
-                            <input type="text" id="client_name" disabled>
+                            <input type="text" id="client_name" readonly>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="inputBox">
                             <strong>Project name <b style="color: red;">*</b></strong>
-                            <input type="text" id="title" disabled>
+                            <input type="text" id="title" readonly>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="inputBox">
                             <strong>Installment Date<b style="color: red;">*</b></strong>
-                            <input type="date" id="installment_date" disabled>
+                            <input type="date" id="installment_date" value="<?= date('Y-m-d')?>"
+                                name="installment_date">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="inputBox">
-                            <strong>Last Installment Due <b style="color: red;">*</b></strong>
-                            <input type="number" id="last_deu" disabled>
+                            <strong>Total Budget<b style="color: red;">*</b></strong>
+                            <input type="number" id="total_budget" name="total_budget" readonly>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="inputBox">
-                            <strong>Installment Payment<b style="color: red;">*</b></strong>
-                            <input type="number" id="installment_payment" disabled>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="inputBox">
-                            <strong>Total Payment<b style="color: red;">*</b></strong>
-                            <input type="text" id="total_payment" disabled>
+                            <strong>Payment Received<b style="color: red;">*</b></strong>
+                            <input type="number" name="payment_received" id="payment_received" readonly>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="inputBox">
-                            <strong>Payment<b style="color: red;">*</b></strong>
-                            <input type="text" name="payment" id="pay_amount" onkeyup="showPaymentValue()" required>
+                            <strong>Remaining Payment<b style="color: red;">*</b></strong>
+                            <input type="number" name="remaining_payment" id="remaining_payment" readonly>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="inputBox">
-                            <strong>Due<b style="color: red;">*</b></strong>
-                            <input type="text" name="payment_deu" id="deu" onkeyup="showPaymentValue()" required>
+                            <strong>Today Payment<b style="color: red;">*</b></strong>
+                            <input type="number" name="today_payment" onkeyup=showPaymentValue() id="today_payment"
+                                required>
                         </div>
                     </div>
-
+                    <div class="col-md-3">
+                        <div class="inputBox">
+                            <strong>Latest Remaining Payment<b style="color: red;">*</b></strong>
+                            <input type="number" name="latest_remaining_payment" id="latest_remaining_payment" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-3">
                         <div class="inputBox">
                             <strong>Payment Way<b style="color: red;">*</b></strong>
                             <input type="text" name="payment_way" required>
                         </div>
                     </div>
-                    
-                    <!-- <div class="col-md-3">
+                    <div class="col-md-3">
                         <div class="inputBox">
-                            <strong>Deu<b style="color: red;">*</b></strong>
-                            <input type="text" name="present" id="deu" disabled>
+                            <strong>Installment No.<b style="color: red;">*</b></strong>
+                            <input type="number" name="installment_no" id="installment_no" readonly>
                         </div>
-                    </div> -->
+                    </div>
+                    <div class="col-md-3">
+                        <div class="inputBox">
+                            <strong>Next Installment Date<b style="color: red;">*</b></strong>
+                            <input type="date" name="next_installment_date" id="next_installment_date" required>
+                        </div>
+                    </div>
                 </div>
-                <div class="row" style="padding: 1px 14px;">
-                    <button type="submit" style="float: right;" class="btn btn-primary">Payment In</button>
-                </div>
-            </form>
         </div>
+        <div class="row" style="padding: 1px 14px;">
+            <button type="submit" style="float: right;" class="btn btn-primary">Payment In</button>
+        </div>
+        </form>
     </div>
 </div>
 <script>
@@ -211,94 +227,51 @@ function get_instdata(project_id) {
             project_id: project_id
         },
         success: function(data) {
-            try {
-                var parsedData = JSON.parse(data); // Parse the JSON response
-                console.log(parsedData.instdata);
-                // return false;
-
-                if (parsedData && parsedData.instdata && Array.isArray(parsedData.instdata)) {
-                    var listdataElement = document.getElementById("listdata");
-                    var ul = document.createElement("ul");
-                    ul.className = "ulclasss";
-
-                    // Loop through the installment data and create list items
-                    for (var i = 0; i < parsedData.instdata.length; i++) {
-                        var item = parsedData.instdata[i];
-                        var li = document.createElement("li");
-                        if (item.intmnt_status === 1) {
-                            li.className = "listprimari"; // Add the listprimari class
-                        } else {
-                            li.className = "listdanger"; // Add the listdanger class
-                            li.onclick = function() {
-                                getpaymentofinstallments(i, parsedData.project_id);
-                            }
-                        }
-                        li.innerHTML = "<b>Date:</b> " + item.intmnt_dates + "<br><b>Payment:</b> " + item
-                            .intmnt_payments + "<br><b>Status:</b> " + (item.intmnt_status == 1 ? "Paid" :
-                                "Unpaid");
-                        ul.appendChild(li);
-                        if (item.intmnt_status !== 1) {
-                            break;
-                        }
-                    }
-                    // Clear previous content and append the new list
-                    listdataElement.innerHTML = "";
-                    listdataElement.appendChild(ul);
-                } else {
-                    console.error("Invalid or missing instdata in the response.");
-                }
-            } catch (error) {
-                console.error("Error parsing JSON response:", error);
+            $('#installment_section').slideDown();
+            var parsedData = JSON.parse(data);
+            console.log(parsedData.soft_payment_data);
+            var pay_data = parsedData.soft_payment_data
+            // return false;
+            let installment_date = new Date(pay_data.next_installment_date);
+            let formattedDate = installment_date.toISOString().substring(0, 10);
+            $('#project_id').val(parsedData.project_id);
+            $('#number').val(parsedData.number);
+            $('#client_name').val(pay_data.client_name);
+            $('#title').val(pay_data.title);
+            $('#installment_date').val(formattedDate);
+            $('#client_id').val(pay_data.clint_id);
+            $('#total_budget').val(pay_data.software_budget);
+            $('#payment_received').val(pay_data.Payment_Received);
+            $('#remaining_payment').val(pay_data.Remaining_Payment);
+            $('#today_payment').val(0);
+            $('#today_payment').attr('max', pay_data.Remaining_Payment);
+            $('#latest_remaining_payment').val(pay_data.Remaining_Payment);
+            var intValue = parseInt(parsedData.number) + 1;
+            $('#installment_no').val(intValue);
+            console.log(pay_data.soft_total_installment);
+            if (pay_data.soft_total_installment == intValue) {
+                $('#ifpaymentin').prop('checked', false);
             }
         }
     });
 }
 </script>
 <script>
-function getpaymentofinstallments(number, project_id) {
-    $.ajax({
-        url: '<?php echo base_url('admin/project/get_instalment_data/');?>',
-        type: 'POST',
-        data: {
-            number: number,
-            project_id: project_id
-        },
-        success: function(data) {
-            $('#installment_section').slideDown();
-            var parsedData = JSON.parse(data);
-            console.log(parsedData);
-            let installment_date = new Date(parsedData.instdata[number].intmnt_dates);
-            let formattedDate = installment_date.toISOString().substring(0, 10);
-
-
-            $('#project_id').val(parsedData.project_id);
-            $('#number').val(number);
-            $('#client_name').val(parsedData.soft_payment_data.client_name);
-            $('#title').val(parsedData.soft_payment_data.title);
-            $('#installment_date').val(formattedDate);
-            $('#last_deu').val(parsedData.soft_payment_data.installment_deu);
-            $('#installment_payment').val(parsedData.instdata[number].intmnt_payments);
-            var totalPayment = parseInt(parsedData.soft_payment_data.installment_deu, 10) + parseInt(
-                parsedData.instdata[number].intmnt_payments, 10);
-            $('#total_payment').val(totalPayment);
-            $('#pay_amount').val(totalPayment);
-            $('#deu').val(0);
-            $('#client_id').val(parsedData.soft_payment_data.clint_id);
-        }
-    });
-}
-</script>
-<script>
 function showPaymentValue() {
-    var paymentAmount = document.getElementById("pay_amount").value;
-    let deu = parseInt(($('#total_payment').val()) - paymentAmount);
-    $('#deu').val(deu);
+    var paymentAmount = document.getElementById("today_payment").value;
+    let deu = parseInt(($('#remaining_payment').val()) - paymentAmount);
+    $('#latest_remaining_payment').val(deu);
 }
 
 $(document).ready(function() {
     $('#payment_in_form').submit(function(event) {
         event.preventDefault(); // Prevent the form from submitting normally
-
+        if (!$('#ifpaymentin').is(':checked')) {
+            if (!$('#latest_remaining_payment').val()>0) {
+                $('#deusectionenable').css('display', 'block');
+                return false;
+            };
+        }
         var formData = $(this).serialize();
         $.ajax({
             url: '<?php echo base_url('admin/project/payment_in_form/');?>',
@@ -306,8 +279,8 @@ $(document).ready(function() {
             data: formData, // Pass the serialized form data
             success: function(response) {
                 console.log(response);
-                var url='<?php echo base_url('admin/project/get_payment_page');?>';
-                showSuccessAlert(response,url);
+                var url = '<?php echo base_url('admin/project/get_payment_page');?>';
+                showSuccessAlert(response, url);
             },
             error: function(xhr, status, error) {
                 // Handle any errors that occur during the request
