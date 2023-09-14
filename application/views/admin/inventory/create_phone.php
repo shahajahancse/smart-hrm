@@ -1,5 +1,16 @@
 <?php 
 $get_animate = $this->Xin_model->get_content_animate();
+$get_user_number = '';
+if($session['role_id'] == 3){
+
+
+$get_user_number = $this->db->select('mobile_numbers.number')
+                        ->from('mobile_numbers')
+                        ->join('product_accessories','product_accessories.number = mobile_numbers.id')
+                        ->where('product_accessories.user_id',$session['user_id'])
+                        ->get()->row();
+}                        
+// dd($get_user_number);
 $data = $this->db->select('id,phone_number,amount,approved_amount,status,created_at')->get('mobile_bill_requisition')->result(); 
 // dd($data);
 ?>
@@ -11,7 +22,6 @@ $data = $this->db->select('id,phone_number,amount,approved_amount,status,created
     }
 </style>
 
-
 <div class="card  animated fadeInLeft">
     <div class="card-body form-inline">
         <h4>Mobile Bill Requisition Form</h4><hr>
@@ -20,7 +30,7 @@ $data = $this->db->select('id,phone_number,amount,approved_amount,status,created
         <?php echo form_open('admin/inventory/mobile_bill', $attributes, $hidden);?>
             <div class="form-group ">
                 <label for="exampleInputEmail1">Mobile Number</label><br>
-                <input type="tel" name="phone_number" class="form-control form-control-sm custom-sm-input" id="exampleInputEmail1" aria-describedby="emailHelp" pattern="[0-9]{11}" placeholder="e.g., 012345678911" required>
+                <input type="tel" name="phone_number" class="form-control form-control-sm custom-sm-input" id="exampleInputEmail1" aria-describedby="emailHelp" pattern="[0-9]{11}" placeholder="e.g., 012345678911" value="<?php echo $session['role_id'] == 3 ? '0'.$get_user_number->number : '' ?>"  >
             </div>
             <div class="form-group mx-2">
                 <label for="exampleInputPassword1">Amount</label><br>
@@ -30,7 +40,7 @@ $data = $this->db->select('id,phone_number,amount,approved_amount,status,created
                 <button type="submit" class="btn btn-primary" style="margin-top:23px">Submit</button>
             </div>
         <?php echo form_close(); ?> 
-    </div>
+    </div><br>
 </div>
 
 
@@ -62,7 +72,7 @@ $data = $this->db->select('id,phone_number,amount,approved_amount,status,created
 </div>
 
 
-
+<?php if($session['role_id'] == 3){?>
 <div class="card  <?php echo $get_animate;?>">
     <div class="card-body form-inline">
         <h4>Mobile Bill Requisition History</h4>    
@@ -86,8 +96,10 @@ $data = $this->db->select('id,phone_number,amount,approved_amount,status,created
                         <td><?= $row->approved_amount=='' ? 0 : $row->approved_amount ?></td>
                         <td><?= $row->status== 1 ? '<span class="badge" style="background-color:#bebc00">Pending</span>': '<span class="badge" style="background-color:#078d07d1">Approved</span>'?></td>
                         <td>
-                            <a class="btn btn-sm btn-info"  href="<?php echo base_url('admin/inventory/mobile_edit')?>">Edit</a>
-                            <a class="btn btn-sm btn-danger " href="<?php echo base_url('admin/inventory/mobile_delete/').$row->id?>">Delete</a>
+                            <?php if($row->status== 1){?>
+                            <a class="btn btn-sm btn-info"  href="<?php echo base_url('admin/inventory/mobile_edit')?>"><i class="fa fa-edit"></i></a>
+                            <?php }?>
+                            <a class="btn btn-sm btn-danger " href="<?php echo base_url('admin/inventory/mobile_delete/').$row->id?>"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                 <?php }?>
@@ -95,6 +107,7 @@ $data = $this->db->select('id,phone_number,amount,approved_amount,status,created
         </table>
     </div>
 </div>
+<?php }?>
 
 
 

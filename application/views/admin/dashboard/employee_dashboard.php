@@ -428,22 +428,18 @@ hr {
         width: 606px
     }
 }
-
 @media screen and (max-width: 992px) {
     .widght {
         width: 47% !important;
     }
 }
-
 @media screen and (max-width: 595px) {
     .widght {
         width: 100% !important;
     }
-
     .timeshet {}
 }
 </style>
-
 <div class=" <?php echo $get_animate;?>">
     <!-- breadcrumb section -->
     <div class="box-widget widget-user-2 container">
@@ -464,7 +460,6 @@ hr {
             </div>
         </div>
     </div>
-
     <!-- Today attendance info -->
     <div class="row equal-height-row " style="margin-top:10px">
         <div class="col-sm-4 col_style">
@@ -483,7 +478,6 @@ hr {
                         <span style="padding: 0px 0px 0px 12px"><?php echo date('D, jS M Y ').$in_time?><span>
                     </div>
                 </div>
-
                 <div class="containers">
                     <div class="circle">
                         <div class="text"><?= $total_working_hour." hrs"?></div>
@@ -492,7 +486,6 @@ hr {
                 <br>
             </div>
         </div>
-
         <!-- step bar -->
         <div class="col-sm-8 timeshet">
             <div class="col-sm-12 col_style">
@@ -543,7 +536,6 @@ hr {
                                 </li>
                             </ul>
                         </section>
-
                         <div class="row" style="margin-left: -8px;margin-top: 45px;">
                             <div class="col-sm-3">
                                 <p><span style="font-weight:600">Status : </span><span>On Time</span></p>
@@ -566,7 +558,6 @@ hr {
             </div>
         </div>
     </div>
-
     <!-- Monthly statistics -->
     <div class="row equal-height-row " style="margin-top:-10px">
         <div class="col-sm-8 col_style">
@@ -650,10 +641,6 @@ hr {
             </div>
         </div>
     </div>
-
-
-
-
     <!-- lunch part -->
     <div class="row equal-height-row " style="margin-top:-10px">
         <div class="col-sm-4 col_style">
@@ -693,8 +680,7 @@ hr {
                         </div>
                     </div>
                     <div class="text-center">
-                        <a href="<?= base_url('admin/lunch/lunch_emp_bill') ?>"
-                            style="margin-top:15px;color:#5442A8;">Details</a>
+                        <a href="<?= base_url('admin/lunch/lunch_emp_bill') ?>" style="margin-top:15px;color:#5442A8;">Details</a>
                     </div>
                     <h5 class="card-title" style="margin-top: 20px;margin-left: 13px;font-weight:600">Leave Balance</h5>
                     <div class="stats-box-row" style="border:2px solid #E1E1E1;padding:15px 5px;border-radius:5px;">
@@ -717,8 +703,7 @@ hr {
                         </div>
                     </div>
                     <div class="text-center">
-                        <a href="<?= base_url('admin/attendance/employee_attendance') ?>"
-                            style="margin-top:15px;color:#5442A8;">View All</a>
+                        <a href="<?= base_url('admin/attendance/employee_attendance') ?>" style="margin-top:15px;color:#5442A8;">View All</a>
                     </div>
                 </div>
             </div>
@@ -779,13 +764,9 @@ hr {
                             <span style="color:#8D8D8D; float:right"><?php echo $daysLeft?> days left</span>
                         </p>
                     </div>
-                    <!-- <div class="col-md-4" style="float: right;">
-                    </div> -->
                 </div>
                 <hr>
                 <?php }?>
-                <!-- Buttons with data-attributes -->
-                <!-- <button class="btn btn-sm">View All</button> -->
                 <a href="#" class="" data-toggle="modal" data-target=".bs-example-modal-lg"
                     style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
@@ -811,12 +792,8 @@ hr {
         </div>
     </div>
 </div>
-
 <!-- end notice modal -->
-
-
 <!-- upcomming holidays modal -->
-
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -867,10 +844,6 @@ foreach($holidays as $holiday) {
     </div>
 </div>
 <!-- end upcomming holidays modal -->
-
-
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
 
