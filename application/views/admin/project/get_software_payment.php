@@ -21,7 +21,7 @@
     border-radius: 4px;
     padding: 10px;
     margin-bottom: 10px;
-    color: red;
+    color: black;
     width: 100%;
     display: inline-block;
     cursor: pointer;
@@ -69,28 +69,6 @@
     position: absolute;
     top: -9px;
 }
-
-/* 
-.inputBox input:focus~strong,
-.inputBox input:valid~strong {
-    font-size: 0.8em;
-    transform: translateX(9px) translateY(-10.5px);
-    padding: 0 5px;
-    border-radius: 2px;
-    background: #fff;
-    letter-spacing: 0em;
-}
-
-.inputBox select:focus~strong,
-.inputBox select:valid~strong {
-    font-size: 0.8em;
-    transform: translateX(9px) translateY(-10.5px);
-    padding: 0 5px;
-    border-radius: 2px;
-    background: #fff;
-    letter-spacing: 0em;
-
-} */
 </style>
 <div style="display: flex;flex-direction: column;gap: 19px;">
     <div class="col-md-12" style="padding:4px;display: flex;gap: 24px;">
@@ -249,8 +227,9 @@ function get_instdata(project_id) {
             var intValue = parseInt(parsedData.number) + 1;
             $('#installment_no').val(intValue);
             console.log(pay_data.soft_total_installment);
-            if (pay_data.soft_total_installment == intValue) {
+            if (pay_data.soft_total_installment <= intValue) {
                 $('#ifpaymentin').prop('checked', false);
+                // console.log('hello');
             }
         }
     });
@@ -267,11 +246,13 @@ $(document).ready(function() {
     $('#payment_in_form').submit(function(event) {
         event.preventDefault(); // Prevent the form from submitting normally
         if (!$('#ifpaymentin').is(':checked')) {
-            if (!$('#latest_remaining_payment').val()>0) {
+            if (!$('#latest_remaining_payment').val()==0) {
                 $('#deusectionenable').css('display', 'block');
                 return false;
             };
         }
+        return false;
+
         var formData = $(this).serialize();
         $.ajax({
             url: '<?php echo base_url('admin/project/payment_in_form/');?>',

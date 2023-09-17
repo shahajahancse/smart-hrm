@@ -180,8 +180,8 @@ th {
 // Assuming you have already loaded the database library in CodeIgniter
 
 $currentMonth = date('m');
-$firstDate = date('Y-'.$currentMonth.'-01');
-$lastDate = date('Y-'.$currentMonth.'-t');
+$firstDate = date('Y-' . $currentMonth . '-01');
+$lastDate = date('Y-' . $currentMonth . '-t');
 
 $this->db->select_sum('amount'); // Calculates the total amount
 $this->db->from('xin_payment_out_invoice');
@@ -191,7 +191,7 @@ $query = $this->db->get();
 
 if ($query->num_rows() > 0) {
     $result = $query->row();
-    $totalAmount_monthly = 0+$result->amount;
+    $totalAmount_monthly = 0 + $result->amount;
 } else {
     $totalAmount_monthly = 0;
 }
@@ -208,7 +208,7 @@ $query = $this->db->get();
 
 if ($query->num_rows() > 0) {
     $result = $query->row();
-    $totalAmount_week =0+$result->amount;
+    $totalAmount_week = 0 + $result->amount;
 
 } else {
     $totalAmount_week = 0;
@@ -219,12 +219,12 @@ $this->db->from('xin_payment_out_invoice');
 $this->db->where('date', date('Y-m-d'));
 $query = $this->db->get();
 
-$totalAmount_today= 0;
+$totalAmount_today = 0;
 if ($query->num_rows() > 0) {
     $result = $query->row();
-    $totalAmount_today =0+$result->amount;
-}else {
-    $totalAmount_today= 0;
+    $totalAmount_today = 0 + $result->amount;
+} else {
+    $totalAmount_today = 0;
 }
 
 $currentYear = date('Y');
@@ -239,26 +239,26 @@ $query = $this->db->get('xin_payment_out_invoice');
 $totalAmount_year = 0;
 if ($query->num_rows() > 0) {
     $result = $query->row();
-    $totalAmount_year =0+$result->amount;
+    $totalAmount_year = 0 + $result->amount;
 }
 ?>
 <div class="container">
     <div class="row1">
         <div class="DivStatsInfo" style="background: #D1ECF1;">
             <div class="Heading">Today Expense</div>
-            <div class="Amount"><?= $totalAmount_today ?></div>
+            <div class="Amount"><?=$totalAmount_today?></div>
         </div>
         <div class="DivStatsInfo" style="background: #F1CFEE;">
             <div class="Heading">This Week Expense</div>
-            <div class="Amount"><?= $totalAmount_week ?></div>
+            <div class="Amount"><?=$totalAmount_week?></div>
         </div>
         <div class="DivStatsInfo" style="background: #FDDCDF;">
-            <div class="Heading"><?= date('M') ?>  Month Expense</div>
-            <div class="Amount"><?= $totalAmount_monthly ?></div>
+            <div class="Heading"><?=date('M')?> Month Expense</div>
+            <div class="Amount"><?=$totalAmount_monthly?></div>
         </div>
         <div class="DivStatsInfo" style="background: #D2F9EE;">
-            <div class="Heading"><?= date('Y') ?> Year Total Payment</div>
-            <div class="Amount"><?= $totalAmount_year ?></div>
+            <div class="Heading"><?=date('Y')?> Year Total Payment</div>
+            <div class="Amount"><?=$totalAmount_year?></div>
         </div>
     </div>
     <div class="Frame32">
@@ -286,8 +286,9 @@ if ($query->num_rows() > 0) {
                                     <select name="purposes" id="purposes" class="col-md-12">
                                         <option>Select Purpose</option>
                                         <?php foreach ($purposes as $key => $value) {
-                                           echo '<option value="'. $value->id. '">'. $value->title. '</option>';
-                                        };
+                                            echo '<option value="' . $value->id . '">' . $value->title . '</option>';
+                                        }
+                                        ;
                                         ?>
                                     </select>
                                 </div>
@@ -301,7 +302,7 @@ if ($query->num_rows() > 0) {
                             <div class="col-md-4">
                                 <div class="inputBox">
                                     <strong>Date<b style="color: red;">**</b></strong>
-                                    <input type="date" name="date" id="date" value="<?= date('Y-m-d') ?>" required>
+                                    <input type="date" name="date" id="date" value="<?=date('Y-m-d')?>" required>
                                 </div>
                             </div>
                         </div>
@@ -371,35 +372,35 @@ if ($query->num_rows() > 0) {
             </tr>
         </thead>
         <tbody>
-            <?php 
-           foreach ($table_data as $key => $row) {
-               ?>
+            <?php
+foreach ($table_data as $key => $row) {
+    ?>
             <tr>
-                <td><?php echo $key+1; ?></td>
+                <td><?php echo $key + 1; ?></td>
                 <td><?php echo $row->title; ?></td>
                 <td><?php echo $row->amount; ?></td>
                 <td><?php echo $row->date; ?></td>
                 <td>
                     <?php
-                        $expenseType = $row->Expense_Type;
-                        if ($expenseType == 1) {
-                            echo "daily";
-                        } elseif ($expenseType == 2) {
-                            echo "weekly";
-                        } elseif ($expenseType == 3) {
-                            echo "monthly";
-                        } elseif ($expenseType == 4) {
-                            echo "yearly";
-                        }
-                    ?>
+$expenseType = $row->Expense_Type;
+    if ($expenseType == 1) {
+        echo "daily";
+    } elseif ($expenseType == 2) {
+        echo "weekly";
+    } elseif ($expenseType == 3) {
+        echo "monthly";
+    } elseif ($expenseType == 4) {
+        echo "yearly";
+    }
+    ?>
                 </td>
                 <td><?php echo $row->Payment_Way; ?></td>
                 <td><?php echo $row->note; ?></td>
                 <td><a class="btn btn-primary btn-sm">Action</a></td>
             </tr>
             <?php
-           }
-           ?>
+}
+?>
         </tbody>
     </table>
 
@@ -407,7 +408,7 @@ if ($query->num_rows() > 0) {
 <script>
 function get_invoice_n(params) {
     $.ajax({
-        url: "<?= base_url('admin/project/get_invoice_n/')?>",
+        url: "<?=base_url('admin/project/get_invoice_n/')?>",
         type: "POST",
         data: {
             id: params
@@ -428,7 +429,7 @@ $(document).ready(function() {
         var id = $(this).val();
 
         $.ajax({
-            url: '<?= base_url('admin/accounting/get_purposes_amount') ?>',
+            url: '<?=base_url('admin/accounting/get_purposes_amount')?>',
             method: 'GET',
             data: {
                 id: id
@@ -455,7 +456,7 @@ $(document).ready(function() {
         // Get the form data
         var formData = $(this).serialize();
         $.ajax({
-            url: '<?= base_url('admin/accounting/payout_form_submit') ?>',
+            url: '<?=base_url('admin/accounting/payout_form_submit')?>',
             method: 'POST',
             data: formData,
             success: function(response) {
