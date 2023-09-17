@@ -158,7 +158,7 @@ class Lunch_model extends CI_Model {
         $date1 = new DateTime($first_date);
         $date2 = new DateTime($second_date);
         $interval = $date1->diff($date2);
-        $count = $interval->days + 1;
+        $count = $interval->days;
         $total_day = 0;
 
         $off_day = array('Friday','Saturday');

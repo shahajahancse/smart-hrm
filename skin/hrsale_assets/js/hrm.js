@@ -905,13 +905,31 @@ function Per1_Report(statusC)
     }
    
 }
+
+
+function mobile_bill(status) { 
+  console.table(status);
+  var ajaxRequest;  // The variable that makes Ajax possible!
+  ajaxRequest = new XMLHttpRequest();
+  first_date = "";
+  second_date = "";
+  sql = "";
   
+  var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql;
 
+  url = base_url + "/mobile_bill_report";
 
-
-
-
-
-
-
+  ajaxRequest.open("POST", url, true);
+  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+  ajaxRequest.send(data);
+  // alert(url); return;
   
+  ajaxRequest.onreadystatechange = function(){
+    if(ajaxRequest.readyState == 4){
+      var resp = ajaxRequest.responseText;
+      a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+      a.document.write(resp);
+      // a.close();
+    }
+  }
+}

@@ -43,6 +43,10 @@
       <li class="nav-item">
         <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Purchase</a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link" id="mobile-tab" data-toggle="tab" href="#mobile" role="tab" aria-controls="mobile" aria-selected="false">Mobile Bill</a>
+      </li>
     </ul>
     
     <div class="tab-content" id="myTabContent">
@@ -60,6 +64,13 @@
         <button class="btn btn-info btn-sm"  onclick="LP_AlP_Report(7)">Low inventory</button>
         <button class="btn btn-info btn-sm"  onclick="LP_AlP_Report(8)">All Products</button>
       </div>
+
+      <div class="tab-pane fade" id="mobile" role="tabpanel" aria-labelledby="mobile-tab" style="margin-top: 30px;">
+        <button class="btn btn-info btn-sm"  onclick="mobile_bill(1)"> Pending </button>
+        <button class="btn btn-info btn-sm"  onclick="mobile_bill(2)"> Approved </button>
+        <button class="btn btn-info btn-sm"  onclick="mobile_bill(3)"> Reject </button>
+        <button class="btn btn-info btn-sm"  onclick="mobile_bill(4)"> Payment </button>
+      </div>
     </div>
   </div>
 
@@ -71,56 +82,3 @@
 
 
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
-<script>
-  $(document).ready(function(){
-
-    // $('#manu_form').hide();
-    $("#manually_entry").click(function(){
-      $('#emp_report').hide();
-   
-      $('#report_title').hide();
-      $("#entry_form").load("<?php echo base_url()?>"+"admin/attendance/manually");
-    });
-
-    // select all item or deselect all item
-    $("#select_all").click(function(){
-      $('input:checkbox').not(this).prop('checked', this.checked);
-    });
-
-    // on load employee
-    $("#status").change(function(){
-      status = document.getElementById('status').value;
-      var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
-      $.ajax({
-        url: url,
-        type: 'GET',
-        data: {"status":status},
-        contentType: "application/json",
-        dataType: "json",
-
-
-        success: function(response){
-          arr = response.employees;
-          if (arr.length != 0) {
-            var items = '';
-            $.each(arr, function(index,value) {
-              items += '<tr id="removeTr">';
-              items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="'+value.emp_id+'" ></td>';
-              items += '<td class="success">'+value.emp_id+'</td>';
-              items += '<td class="warning ">'+value.first_name +' '+ value.last_name +'</td>';
-              items += '</tr>';
-            });
-            // console.log(items);
-            $('#fileDiv tr:last').after(items);
-          } else {
-            $('#fileDiv #removeTr').remove(); 
-          }
-        }
-      });
-    });
-  });
-</script>
-
-
-
-
