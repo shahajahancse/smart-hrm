@@ -98,9 +98,7 @@ class Lunch_model extends CI_Model {
         }else{
             $probable_meal=0;
             if ($prev_amount==0) {
-                $pay_amount=0;
-                $collection_amount=0;
-                $status = 1;
+                continue;
             }elseif($prev_amount>0){
                 $pay_amount=0;
                 $collection_amount=$prev_amount;
