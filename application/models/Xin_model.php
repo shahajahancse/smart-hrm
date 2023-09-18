@@ -129,6 +129,10 @@ class Xin_model extends CI_Model {
 			$arr['out_payment_active'] = 'active';
 			$arr['account'] = 'active';
 			return $arr;
+		}else if($mClass=='settings' && $mMethod=='account_setting_form') {
+			$arr['account_setting_active'] = 'active';
+			$arr['account'] = 'active';
+			return $arr;
 		}else if($mClass=='department' && $mMethod=='sub_departments') {
 			$arr['sub_departments_active'] = 'active';
 			$arr['adm_open'] = 'active';

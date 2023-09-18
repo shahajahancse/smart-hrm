@@ -1332,28 +1332,94 @@ public function mobile_bill(){
 		redirect('admin/inventory/create_phone','refresh');
 	}
 }
-public function mobile_delete($id){
-
-	$delete = $this->db->where('id',$id)->from('mobile_bill_requisition')->delete();
-	if($delete){
-		$this->session->set_flashdata('delete', 'Successfully Delete');
-		redirect('admin/inventory/create_phone','refresh');
-	}else{
-		$this->session->set_flashdata('error', 'Error!!! Try Again');
-		redirect('admin/inventory/create_phone','refresh');
-	}
-}
-
-public function requisition_equipment_list(){
+	public function mobile_delete($id){
 		$session = $this->session->userdata('username');
-	if(empty($session)){ 
-		redirect('admin/');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$delete = $this->db->where('id',$id)->from('mobile_bill_requisition')->delete();
+		if($delete){
+			if($session['user_id']==3){
+				$this->session->set_flashdata('delete', 'Successfully Delete');
+				redirect('admin/inventory/create_phone','refresh');
+			} else{
+				$this->session->set_flashdata('delete', 'Successfully Delete');
+				redirect('admin/inventory/index','refresh');
+			}
+		}else{
+			if($session['user_id']==3){
+				$this->session->set_flashdata('error', 'Error!!! Try Again');
+				redirect('admin/inventory/create_phone','refresh');
+			} else{
+				$this->session->set_flashdata('error', 'Error!!! Try Again');
+				redirect('admin/inventory/index','refresh');
+			}
+		}
 	}
-	$data['session']    = $session;
-	$data['equipments'] = $this->db->select('*')->get('products_requisition_details')->result();
-	$this->load->view("admin/inventory/requisition_equipment_list", $data);
-}
 
+	public function requisition_equipment_list(){
+			$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['session']    = $session;
+		$this->db->select('products_requisition_details.*, xin_employees.first_name, xin_employees.last_name,products_categories.category_name,products.product_name');
+		$this->db->from('products_requisition_details');
+		$this->db->join('products_categories', 'products_categories.id = products_requisition_details.cat_id');
+		$this->db->join('products', 'products.id = products_requisition_details.product_id');
+		$this->db->join('xin_employees', 'products_requisition_details.user_id = xin_employees.user_id');
+		$data['equipments'] = $this->db->get()->result();
+		// dd();
+		$this->load->view("admin/inventory/requisition_equipment_list", $data);
+	}
+
+	public function mobile_bill_requisition_list(){
+			$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['session'] = $session;
+		$this->db->select('mobile_bill_requisition.*, xin_employees.first_name, xin_employees.last_name');
+		$this->db->from('mobile_bill_requisition');
+		$this->db->join('xin_employees', 'mobile_bill_requisition.user_id = xin_employees.user_id');
+		$data['mobiles'] = $this->db->get()->result();
+						   $this->load->view("admin/inventory/mobile_bill_requisition_list", $data);
+	}
+
+	public function mobile_bill_edit_approved($id){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title']       = 'Mobile Bill Requisition| '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Mobile Bill Requisition ';
+		$data['ids']=$id;
+		$data['amount']	 = $this->db->select('id,amount')->where('id',$id)->get('mobile_bill_requisition')->row();
+		$data['subview'] = $this->load->view("admin/inventory/mobile_bill_edit_approve", $data, TRUE);
+							   $this->load->view('admin/layout/layout_main', $data);
+	}
+	public function mobile_bill_approved(){
+		// dd($_POST);
+		$update = $this->db->where('id',$_POST['h_id'])->update('mobile_bill_requisition',['approved_amount'=>$_POST['approved_amount'],'status'=>2]);
+		if($update){
+			$this->session->set_flashdata('success', 'Successfully Approved');
+			redirect('admin/inventory/index','refresh');
+		}
+	}
+	public function edit_mobile_bill_approved(){
+		// dd($_POST);
+		$update = $this->db->where('id',$_POST['h_id'])->update('mobile_bill_requisition',['amount'=>$_POST['amount']]);
+		if($update){
+			$this->session->set_flashdata('success', 'Successfully Approved');
+			redirect('admin/inventory/index','refresh');
+		}
+	}
+	public function mobile_edit($id){
+		// dd($_POST);
+		$data['amount']  = $this->db->where('id',$id)->get('mobile_bill_requisition');		
+		$data['subview'] = $this->load->view("admin/inventory/mobile_edit", $data, TRUE);
+						   $this->load->view('admin/layout/layout_main', $data);
+	}
 }
 
 ?>

@@ -180,7 +180,7 @@ if($bank_account->num_rows() > 0){
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="bank_branch">Bank Branch</label><br />
-                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text"  value="<?php echo $bank_account->bank_branch ?? ''; ?>"
+                  <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text"  value="<?php echo $bank_account->bank_branch?>"
                   >
                 </div>
               </div>
