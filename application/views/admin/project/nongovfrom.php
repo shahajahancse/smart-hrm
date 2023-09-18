@@ -79,13 +79,13 @@ input:checked+.slider:after {
         <h5>Software Section</h5>
         <div class="col-md-2">
             <div class="inputBox">
-                <input required type="number" name="software_Budget" id="software_Budget" value=0 onkeyup="setinstallmentdate()">
+                <input required type="number" name="software_Budget" id="software_Budget" value=0 >
                 <strong>Software Budget<span style="color: red;">*</span></strong>
             </div>
         </div>
         <div class="col-md-2">
             <div class="inputBox">
-                <input required type="number" name="instalment" id="instalment" value=1 onkeyup="setinstallmentdate()">
+                <input required type="number" name="instalment" id="instalment" value=0 >
                 <strong>Instalment<span style="color: red;">*</span></strong>
             </div>
         </div>
@@ -156,7 +156,7 @@ input:checked+.slider:after {
                 <div class="col-md-3">
                     <div class="inputBox">
                         <div class="inputBox">
-                            <input type="date" value="<?= date('Y-m-d') ?>" name="Service_start_Date"
+                            <input type="date" value="<?= date('Y-m-d') ?>" min="<?= date('Y-m-01') ?>" name="Service_start_Date"
                                 id="Service_Increment_Date">
                             <strong>Service Start Date<span style="color: red;">*</span></strong>
                         </div> 

@@ -1145,12 +1145,17 @@ class Project extends MY_Controller
         $assigned_to = $this->input->post('assigned_to');
         $description = $this->input->post('description');
         $project_progress = '0';
-        $status = 0;
-        $is_notify = 1;
         $added_by = 1;
         $created_at = date('d-m-Y');
         $software_Budget = $this->input->post('software_Budget');
         $instalment = $this->input->post('instalment');
+        $status = 0;
+        $is_notify = 1;
+        if ($software_Budget==0) {
+        $status = 1;
+        $is_notify = 0;
+        $instalment = 0;
+        }
         $hardware_Budget = $this->input->post('hardware_Budget');
         $hardware_Summary = $this->input->post('hardware_Summary');
         $serviceEnabled = $this->input->post('serviceEnabled');
@@ -1224,12 +1229,21 @@ class Project extends MY_Controller
             $soft_intmnt_dates = json_encode($soft_intmnt_datesarray);
             $soft_intmnt_prements = json_encode($soft_intmnt_prementsarray);
             $soft_intmnt_status = json_encode($soft_intmnt_statusarray);
-            $soft_intmnt_takes = 0;
             $soft_prement_status = 0;
-            $hardware_prement_status = 0;
             $if_notify = 1;
             $intmnt_dates = $this->input->post('first_installment_date');
             $notify_date_start = date('Y-m-d', strtotime('-3 day', strtotime($intmnt_dates)));
+            if ($software_Budget==0) {
+                $soft_prement_status = 1;
+                $if_notify = 0;
+                $intmnt_dates = null;
+                $notify_date_start = null;
+                }
+            $soft_intmnt_takes = 0;
+            $hardware_prement_status = 0;
+            if ($hardware_Budget==0) {
+                $hardware_prement_status = 1;
+            }
             $update_at = date('Y-m-d');
             $data = array(
                 'project_id' => $project_id,
