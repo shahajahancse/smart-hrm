@@ -93,10 +93,10 @@ if($theme[0]->sub_menu_icons != ''){
       <li class="<?php if(!empty($arr_mod['account']))echo $arr_mod['account'];?> treeview"> <a href="#"> <i class="fa fa-user"></i> <span><?php echo "Accounts";?></span> <span class="pull-right-container"> <?php if($exp_count > 0):?><span class="label label-danger pull-right"><?php echo $exp_count;?></span><?php endif;?> <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
           <?php if(in_array('2001',$role_resources_ids)) { ?>
-          <li class="<?php if(!empty($arr_mod['get_payment_active']))echo $arr_mod['get_payment_active'];?>"><a href="<?php echo site_url('admin/project/get_payment_page');?>"><i class="fa <?php echo $submenuicon;?>"></i> Payment In</a></li>
+          <li class="<?php if(!empty($arr_mod['get_payment_active']))echo $arr_mod['get_payment_active'];?>"><a href="<?php echo site_url('admin/project/get_payment_page');?>"><i class="fa <?php echo $submenuicon;?>"></i> Payment </a></li>
           <?php } ?>
           <?php if(in_array('2002',$role_resources_ids)) { ?>
-          <li class="<?php if(!empty($arr_mod['out_payment_active']))echo $arr_mod['out_payment_active'];?>"><a href="<?php echo site_url('admin/accounting/payment_out_page');?>"><i class="fa <?php echo $submenuicon;?>"></i> Payment Out</a></li>
+          <li class="<?php if(!empty($arr_mod['out_payment_active']))echo $arr_mod['out_payment_active'];?>"><a href="<?php echo site_url('admin/accounting/payment_out_page');?>"><i class="fa <?php echo $submenuicon;?>"></i> Expense </a></li>
           <?php } ?>
           <?php if(in_array('2003',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['account_setting_active']))echo $arr_mod['account_setting_active'];?>"><a href="<?php echo site_url('admin/settings/account_setting_form');?>"><i class="fa <?php echo $submenuicon;?>"></i>Settings</a></li>
