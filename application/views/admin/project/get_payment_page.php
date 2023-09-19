@@ -171,6 +171,7 @@ th {
                 <th>Title</th>
                 <th>Client Name</th>
                 <th>Date</th>
+                <th>Payment For</th>
                 <th>Payment Type</th>
                 <th>Payment Way</th>
                 <th>Payment Amount</th>
@@ -188,12 +189,27 @@ th {
                 <td><?= $row->date ?></td>
                 <td>
                     <?php
-                        if ($row->payment_type == 1) {
+                        if ($row->payment_for == 1) {
                             echo "Software Payment";
-                        } elseif ($row->payment_type == 2) {
+                        } elseif ($row->payment_for == 2) {
                             echo "Service Payment";
                         }
                         ?>
+                </td>
+                <td>
+                    <?php
+                    // 'installment=1; weekly=2; monthly=3; yearly=4;
+                    if ($row->payment_type == 1) {
+                        echo "Installment Payment";
+                    } elseif ($row->payment_type == 2) {
+                        echo "Weekly Payment";
+                    } elseif ($row->payment_type == 3) {
+                        echo "Monthly Payment";
+                    } elseif ($row->payment_type == 4) {
+                        echo "Yearly payment";
+                    }
+                    ?>
+                    
                 </td>
                 <td><?= $row->payment_way ?></td>
                 <td><?= $row->pyment_amount ?></td>

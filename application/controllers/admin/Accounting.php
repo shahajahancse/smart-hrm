@@ -2808,4 +2808,55 @@ class Accounting extends MY_Controller
         $start = intval($this->input->get("start"));
         $length = intval($this->input->get("length"));
     }
+    public function account_report(){
+        $session = $this->session->userdata('username');
+        if (empty($session) && $session['role_id']==3) {
+            redirect('admin/');
+        }
+        $data['title'] = "Report";
+        $data['breadcrumbs'] =  "Report";
+        $data['subview'] = $this->load->view("admin/accounting/account_report", $data, true);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+    }
+    public function payment_in_report (){
+        $session = $this->session->userdata('username');
+        if (empty($session) && $session['role_id']==3) {
+            redirect('admin/');
+        }
+        $this->db->select('xin_project_invoice.*,xin_clients.name as client_name,xin_projects.title as project_name');
+        $this->db->from('xin_project_invoice');
+        $this->db->join('xin_clients', 'xin_clients.client_id = xin_project_invoice.clint_id');
+        $this->db->join('xin_projects', 'xin_projects.project_id = xin_project_invoice.project_id');
+        if ($_POST['payment_for']!="") {
+            $this->db->where('xin_project_invoice.payment_for', $_POST['payment_for']);
+        }
+        if ($_POST['payment_type']!="") {
+            $this->db->where('xin_project_invoice.payment_type', $_POST['payment_type']);
+        }
+        $this->db->where('xin_project_invoice.date >=', $_POST['first_date']);
+        $this->db->where('xin_project_invoice.date <=', $_POST['second_date']);
+        $data['data']=$this->db->get()->result();
+        $data['first_date']=$_POST['first_date'];
+        $data['second_date']=$_POST['second_date'];
+        echo $this->load->view("admin/accounting/account_payment_in_report", $data, true);
+    }
+    public function payment_out_report (){
+        $session = $this->session->userdata('username');
+        if (empty($session) && $session['role_id']==3) {
+            redirect('admin/');
+        }
+        $this->db->select('xin_payment_out_invoice.*,xin_payment_out_purpose.*');
+        $this->db->from('xin_payment_out_invoice');
+        $this->db->join('xin_payment_out_purpose', 'xin_payment_out_purpose.id = xin_payment_out_invoice.purposes');
+        if ($_POST['payment_type']!="") {
+            $this->db->where('xin_payment_out_invoice.Expense_Type', $_POST['payment_type']);
+        }
+        $this->db->where('xin_payment_out_invoice.date >=', $_POST['first_date']);
+        $this->db->where('xin_payment_out_invoice.date <=', $_POST['second_date']);
+        $data['data']=$this->db->get()->result();
+        $data['first_date']=$_POST['first_date'];
+        $data['second_date']=$_POST['second_date'];
+        echo $this->load->view("admin/accounting/account_payment_out_report", $data, true);
+    }
+
 }
