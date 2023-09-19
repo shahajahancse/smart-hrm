@@ -101,6 +101,9 @@ if($theme[0]->sub_menu_icons != ''){
           <?php if(in_array('2003',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['account_setting_active']))echo $arr_mod['account_setting_active'];?>"><a href="<?php echo site_url('admin/settings/account_setting_form');?>"><i class="fa <?php echo $submenuicon;?>"></i>Settings</a></li>
           <?php } ?>
+          <?php if(in_array('2004',$role_resources_ids)) { ?>
+          <li class="<?php if(!empty($arr_mod['account_report_active']))echo $arr_mod['account_report_active'];?>"><a href="<?php echo site_url('admin/accounting/account_report');?>"><i class="fa <?php echo $submenuicon;?>"></i>Report</a></li>
+          <?php } ?>
         </ul>
       </li>
     <?php } ?>
