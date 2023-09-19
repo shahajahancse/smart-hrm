@@ -312,7 +312,7 @@ if ($query->num_rows() > 0) {
                                     <strong>Expense Type<b style="color: red;">**</b></strong>
                                     <select name="Expense_Type" id="Expense_Type" class="col-md-12">
                                         <option>Select type</option>
-                                        <option value="1">Daily</option>
+                                        <option value="5">Daily</option>
                                         <option value="2">Weekly</option>
                                         <option value="3">Monthly</option>
                                         <option value="4">Yearly</option>
@@ -383,7 +383,7 @@ foreach ($table_data as $key => $row) {
                 <td>
                     <?php
 $expenseType = $row->Expense_Type;
-    if ($expenseType == 1) {
+    if ($expenseType == 5) {
         echo "daily";
     } elseif ($expenseType == 2) {
         echo "weekly";

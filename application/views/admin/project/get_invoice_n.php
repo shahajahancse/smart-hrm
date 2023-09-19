@@ -64,7 +64,7 @@
     <tr>
         <td colspan="4">
             <?php
-            if($invoice_data->payment_type==1){ 
+            if($invoice_data->payment_for==1){ 
                 $n='Software payment';
             }else {
                 $n='Service payment';

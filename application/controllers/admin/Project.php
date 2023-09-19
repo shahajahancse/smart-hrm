@@ -77,7 +77,7 @@ class Project extends MY_Controller
             redirect('admin/');
         }
         $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
-        $data['all_employees'] = $this->Xin_model->all_employees();
+        $data['all_employees'] = $this->db->select('user_id,first_name,last_name')->where('user_role_id',3)->where('status',1)->get('xin_employees')->result();
         $data['all_clients'] = $this->Clients_model->get_all_clients();
         $data['breadcrumbs'] = $this->lang->line('xin_projects');
         $role_resources_ids = $this->Xin_model->user_role_resource();
@@ -145,7 +145,7 @@ class Project extends MY_Controller
         $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Payment In';
         $data['subview'] = $this->load->view("admin/project/get_payment_page", $data, true);
-        $this->load->view('admin/layout/layout_main', $data); //page load
+        $this->load->view('admin/layout/layout_main', $data);
     }
 
     public function get_invoice_n()
@@ -256,25 +256,11 @@ class Project extends MY_Controller
         if (empty($session) && $session['role_id'] == 3) {
             return false;
         }
-
-        // dd($_POST);
-    //[project_id] => 2
-    // [client_id] => 
-    // [number] => 0
-    // [installment_date] => 2023-09-10
-    // [total_budget] => 60000
-    // [payment_received] => 0
-    // [remaining_payment] => 60345
-    // [today_payment] => 7000
-    // [latest_remaining_payment] => 53345
-    // [payment_way] => Bkash
-    // [installment_no] => 1
-    // [next_installment_date] => 2023-09-10
-
         $data = array(
             'project_id' => $_POST['project_id'],
             'clint_id' => $_POST['client_id'],
-            'payment_type' => 1,
+            'payment_for' => 1, 
+            'payment_type' => 1, 
             'date' => $_POST['installment_date'],
             'payment_way' => $_POST['payment_way'],
             'pyment_amount' => $_POST['today_payment'],
@@ -355,12 +341,6 @@ class Project extends MY_Controller
         if (empty($session) && $session['role_id'] == 3) {
             return false;
         }
-// [service_id] => 6
-//     [project_id] => 1
-//     [client_id] => 1
-//     [amount] => 3425234
-//     [payment_way] => Bkash
-//     [status] => 0
         $data = array(
             'status' =>$_POST['status'] ,
         );
@@ -370,7 +350,8 @@ class Project extends MY_Controller
         $data = array(
             'project_id' => $_POST['project_id'],
             'clint_id' => $_POST['client_id'],
-            'payment_type' => 2,
+            'payment_for' => 2,
+            'payment_type' => 3,
             'date' => date('Y-m-d'),
             'payment_way' => $_POST['payment_way'],
             'pyment_amount' => $_POST['amount'],
