@@ -96,7 +96,7 @@ if($theme[0]->sub_menu_icons != ''){
           <li class="<?php if(!empty($arr_mod['get_payment_active']))echo $arr_mod['get_payment_active'];?>"><a href="<?php echo site_url('admin/project/get_payment_page');?>"><i class="fa <?php echo $submenuicon;?>"></i> Payment In</a></li>
           <?php } ?>
           <?php if(in_array('2002',$role_resources_ids)) { ?>
-          <li class="<?php if(!empty($arr_mod['out_payment_active']))echo $arr_mod['out_payment_active'];?>"><a href="<?php echo site_url('admin/accounting/payment_out_page');?>"><i class="fa <?php echo $submenuicon;?>"></i> Payment Out</a></li>
+          <li class="<?php if(!empty($arr_mod['out_payment_active']))echo $arr_mod['out_payment_active'];?>"><a href="<?php echo site_url('admin/accounting/payment_out_page');?>"><i class="fa <?php echo $submenuicon;?>"></i> Expense</a></li>
           <?php } ?>
           <?php if(in_array('2003',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['account_setting_active']))echo $arr_mod['account_setting_active'];?>"><a href="<?php echo site_url('admin/settings/account_setting_form');?>"><i class="fa <?php echo $submenuicon;?>"></i>Settings</a></li>
