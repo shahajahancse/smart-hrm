@@ -1,3 +1,4 @@
+
 <?php 
 $session = $this->session->userdata('username');
 $get_animate = $this->Xin_model->get_content_animate();
@@ -34,6 +35,8 @@ $monthNames = array();
 for ($i = 1; $i <= $currentMonth; $i++) {
     $monthNames[] = date('F', mktime(0, 0, 0, $i, 1));
 }
+
+// dd($monthNames);
 // end
 
 // get employee shift schedule information
@@ -48,8 +51,9 @@ $salary = array();
 $salary_month = array();
 foreach ($salarys as $salaryObj) {
     $salary[] = floor($salaryObj->grand_net_salary + $salaryObj->modify_salary);
-    $salary_month[] = date('M', strtotime($salaryObj->salary_month));
+    $salary_month[] = date('F', strtotime($salaryObj->salary_month));
 }
+// dd($salary_month);
 // end
 // dd($salary_month);
 // punch time
@@ -424,22 +428,18 @@ hr {
         width: 606px
     }
 }
-
 @media screen and (max-width: 992px) {
     .widght {
         width: 47% !important;
     }
 }
-
 @media screen and (max-width: 595px) {
     .widght {
         width: 100% !important;
     }
-
     .timeshet {}
 }
 </style>
-
 <div class=" <?php echo $get_animate;?>">
     <!-- breadcrumb section -->
     <div class="box-widget widget-user-2 container">
@@ -460,7 +460,6 @@ hr {
             </div>
         </div>
     </div>
-
     <!-- Today attendance info -->
     <div class="row equal-height-row " style="margin-top:10px">
         <div class="col-sm-4 col_style">
@@ -479,7 +478,6 @@ hr {
                         <span style="padding: 0px 0px 0px 12px"><?php echo date('D, jS M Y ').$in_time?><span>
                     </div>
                 </div>
-
                 <div class="containers">
                     <div class="circle">
                         <div class="text"><?= $total_working_hour." hrs"?></div>
@@ -488,7 +486,6 @@ hr {
                 <br>
             </div>
         </div>
-
         <!-- step bar -->
         <div class="col-sm-8 timeshet">
             <div class="col-sm-12 col_style">
@@ -539,7 +536,6 @@ hr {
                                 </li>
                             </ul>
                         </section>
-
                         <div class="row" style="margin-left: -8px;margin-top: 45px;">
                             <div class="col-sm-3">
                                 <p><span style="font-weight:600">Status : </span><span>On Time</span></p>
@@ -562,23 +558,22 @@ hr {
             </div>
         </div>
     </div>
-
     <!-- Monthly statistics -->
     <div class="row equal-height-row " style="margin-top:-10px">
         <div class="col-sm-8 col_style">
             <div class="card">
                 <div class="card-body">
                     <div style="display:flex">
-                        <h5>Payroll Statistics</h5>
+                        <h5>Salary Statistics</h5>
                         <div class="col-md-3">
                             <select class="form-control  form-inline" id="year_id">
-                                <?php for($i=2012;$i<=date('Y');$i++) {?>
+                                <?php for($i=2023;$i<=date('Y');$i++) {?>
                                 <option value="<?php echo $i?>" <?php echo $i==date('Y') ? 'selected' : ''?>>
                                     <?php echo $i?></option>
                                 <?php }?>
                             </select>
                         </div>
-                        <h5 style="margin-right:0; margin-left: auto;">Yearly 1234M</h5>
+                        <!-- <h5 style="margin-right:0; margin-left: auto;">Yearly 1234M</h5> -->
                     </div>
                     <div id="my_div">
                         <canvas id="myChart"></canvas>
@@ -646,6 +641,7 @@ hr {
             </div>
         </div>
     </div>
+    <!-- lunch part -->
     <div class="row equal-height-row " style="margin-top:-10px">
         <div class="col-sm-4 col_style">
             <div class="card">
@@ -684,8 +680,7 @@ hr {
                         </div>
                     </div>
                     <div class="text-center">
-                        <a href="<?= base_url('admin/lunch/lunch_emp_bill') ?>"
-                            style="margin-top:15px;color:#5442A8;">Details</a>
+                        <a href="<?= base_url('admin/lunch/lunch_emp_bill') ?>" style="margin-top:15px;color:#5442A8;">Details</a>
                     </div>
                     <h5 class="card-title" style="margin-top: 20px;margin-left: 13px;font-weight:600">Leave Balance</h5>
                     <div class="stats-box-row" style="border:2px solid #E1E1E1;padding:15px 5px;border-radius:5px;">
@@ -708,8 +703,7 @@ hr {
                         </div>
                     </div>
                     <div class="text-center">
-                        <a href="<?= base_url('admin/attendance/employee_attendance') ?>"
-                            style="margin-top:15px;color:#5442A8;">View All</a>
+                        <a href="<?= base_url('admin/attendance/employee_attendance') ?>" style="margin-top:15px;color:#5442A8;">View All</a>
                     </div>
                 </div>
             </div>
@@ -770,13 +764,9 @@ hr {
                             <span style="color:#8D8D8D; float:right"><?php echo $daysLeft?> days left</span>
                         </p>
                     </div>
-                    <!-- <div class="col-md-4" style="float: right;">
-                    </div> -->
                 </div>
                 <hr>
                 <?php }?>
-                <!-- Buttons with data-attributes -->
-                <!-- <button class="btn btn-sm">View All</button> -->
                 <a href="#" class="" data-toggle="modal" data-target=".bs-example-modal-lg"
                     style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
@@ -802,12 +792,8 @@ hr {
         </div>
     </div>
 </div>
-
 <!-- end notice modal -->
-
-
 <!-- upcomming holidays modal -->
-
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -859,10 +845,6 @@ foreach($holidays as $holiday) {
 </div>
 <!-- end upcomming holidays modal -->
 
-
-
-
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
 
 <script>
@@ -872,35 +854,7 @@ function myfunc(e) {
     $("#title").text(title);
     $("#description").text(description);
 }
-// Get the canvas element
-var ctx = document.getElementById('myChart').getContext('2d');
 
-var monthNames = <?php echo json_encode($monthNames); ?>;
-var dataValues = <?php echo json_encode($salary); ?>;
-
-// Create the chart
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: monthNames,
-        datasets: [{
-            label: 'Salary',
-            data: dataValues, // Add your data for each month here
-            backgroundColor: 'rgba(75, 192, 192, 0.8)'
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
-</script>
-
-<script>
 $('#year_id').on('change', function() {
     var year = $('#year_id').find(":selected").val();
     if (year) {
@@ -912,5 +866,55 @@ $('#year_id').on('change', function() {
 })
 $(document).ready(function() {
     $('#datatbale').DataTable();
+});
+</script>
+
+
+
+<script>
+const monthNames = <?php echo json_encode($monthNames); ?>;
+const dataValues = <?php echo json_encode($salary); ?>;
+
+const ctx = document.getElementById('myChart').getContext('2d');
+const zerosToPad = monthNames.length - dataValues.length;
+const zeroArray = new Array(zerosToPad).fill(0);
+const paddedDataValues = zeroArray.concat(dataValues);
+
+
+function customTooltip({ dataIndex }) {
+
+    if (dataIndex >= 1) { // Check if the dataIndex is greater than or equal to 1
+        const previousMonth = monthNames[dataIndex - 1];
+        const previousSalary = paddedDataValues[dataIndex ];
+        return `${previousMonth}\nSalary: ${previousSalary}`;
+    }
+    return ''; // Return an empty string for the first month (January)
+}
+
+// Create the chart
+const myChart = new Chart(ctx, {
+type: 'bar',
+data: {
+    labels: monthNames,
+    datasets: [{
+        label: 'Salary',
+        data: paddedDataValues,
+        backgroundColor: 'rgba(75, 192, 192, 0.8)'
+    }]
+},
+options: {
+    scales: {
+        y: {
+            beginAtZero: true
+        }
+    },
+    plugins: {
+        tooltip: {
+            callbacks: {
+                label: customTooltip // Use the custom tooltip function
+            }
+        }
+    }
+}
 });
 </script>

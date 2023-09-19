@@ -77,7 +77,7 @@ class Project extends MY_Controller
             redirect('admin/');
         }
         $data['title'] = $this->lang->line('xin_projects') . ' | ' . $this->Xin_model->site_title();
-        $data['all_employees'] = $this->Xin_model->all_employees();
+        $data['all_employees'] = $this->db->select('user_id,first_name,last_name')->where('user_role_id',3)->where('status',1)->get('xin_employees')->result();
         $data['all_clients'] = $this->Clients_model->get_all_clients();
         $data['breadcrumbs'] = $this->lang->line('xin_projects');
         $role_resources_ids = $this->Xin_model->user_role_resource();
