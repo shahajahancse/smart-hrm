@@ -278,6 +278,11 @@ class Lunch extends MY_Controller
         if (empty($session)) {
             redirect('admin/');
         }
+        $this->db->distinct();
+        $this->db->select('end_date,next_date');
+        $this->db->from('lunch_payment');
+        $this->db->order_by('id DESC'); // Replace with your actual table name
+        $data['prever_report'] = $this->db->get()->result();
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch Report';
         $data['path_url'] = 'lunch';
@@ -374,6 +379,16 @@ class Lunch extends MY_Controller
                 $this->load->view('admin/lunch/payment_report_page', $data);
             }
         }
+    }
+    public function prever_report()
+    {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $date = $this->input->post('date');
+        $data['lunch_data'] = $this->Lunch_model->prever_report($date);
+        $this->load->view('admin/lunch/payment_report_page', $data);
     }
     //manually lunch data entry
     public function manual_lunch_entry()

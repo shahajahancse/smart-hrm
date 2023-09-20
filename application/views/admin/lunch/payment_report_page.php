@@ -93,6 +93,7 @@
 
     <div class="container">
         <a onclick="window.print()" class="btn btn-primary" style="float: right;margin-top: 26px;">Print</a>
+       <?php if(isset($status)): ?>
         <div class="export-button">
             <form style="float: right;margin-top: 27px;margin-right: 5px;" action="<?php echo base_url();?>admin/Lunch/paymentreport" method="post">
                 <input type="hidden" name="status" value="<?php echo $status; ?>"></input>
@@ -100,6 +101,7 @@
                 <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS Export</button>
             </form>
         </div>
+        <?php endif; ?>
 
 
         <div style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px">

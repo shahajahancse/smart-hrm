@@ -94,7 +94,17 @@
                             </div>
                         </div>
 
-
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="upload_file">Previous Report</label>
+                                <select class="form-control" name="prever_report" id="prever_report">
+                                    <option value="">Select one</option>
+                                    <?php foreach($prever_report as $prever):?>
+                                    <option value="<?=$prever->end_date?>"><?=$prever->end_date?> >> <?=$prever->next_date?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -146,8 +156,7 @@
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(0)">Unpaid Employees</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2)">Employees Collection
                         Sheets</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2,1)">Previous Report</button>
-                    <!-- <button class="btn btn-sm mr-5 sbtn mt-2" onclick="vendor_Report()">Vendor Report</button> -->
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="prever_report()">Previous Report</button>
                 </div>
                 <div class="tab-pane fade" id="continue" role="tabpanel" aria-labelledby="continue-tab"
                     style="margin-top: 30px;">
