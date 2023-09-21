@@ -237,7 +237,7 @@
 <div class="box col-md-12 p-5 m-0">
     <h4>Project Add Form</h4>
     <div class="col-md-12" style="margin-top: 13px;">
-        <?php $attributes = array('name' => 'add_project', 'id' => 'add_project_form', 'autocomplete' => 'off');?>
+        <?php $attributes = array('name' => 'add_project', 'id' => 'add_project_form', 'autocomplete' => 'off','enctype' => 'multipart/form-data');?>
         <?php echo form_open('', $attributes);?>
         <div class="col-md-12 bg-white">
             <div class="col-md-3">
@@ -364,13 +364,17 @@ $('#add_project_form').submit(function(event) {
     event.preventDefault(); // Prevent the default form submission
     document.getElementById("loading").style.visibility = "visible";
 
-    var formData = $(this).serialize(); // Serialize the form data
+    var formData = new FormData(this);
 
     $.ajax({
         url: '<?= base_url('admin/project/add_project_n') ?>', // Replace with your actual API endpoint
         type: 'POST',
         data: formData,
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting the content type
         success: function(response) {
+            console.log(response);
+
             document.getElementById("loading").style.visibility = "hidden";
 
             console.log(response);
