@@ -86,7 +86,7 @@ if($bank_account->num_rows() > 0){
                   <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_employee_department');?>" name="last_name" type="text" value="<?php echo $department_name;?>">              
                 </div>
                 <div class="col-md-6">
-                  <label for="last_name" class="control-label labelmargin"><?php echo $this->lang->line('xin_employee_designation');?></label>
+                  <label for="last_name" class="control-label labelmargin">Designation</label>
                   <input class="form-control inputfield" disabled placeholder="<?php echo $this->lang->line('xin_employee_designation');?>" name="last_name" type="text" value="<?php echo $designation_name;?>">              
                 </div>
 <!-- hh -->
