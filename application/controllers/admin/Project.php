@@ -1113,6 +1113,14 @@ class Project extends MY_Controller
     }
     public function add_project_n()
     {
+            $is_free_service=0;
+            $free_service_start='';
+            $free_service_end='';
+        if($_POST['free_serviceEnabled']=='on'){
+            $is_free_service=1;
+            $free_service_start=$_POST['free_service_start_date'];
+            $free_service_end=$_POST['free_service_end_date'];
+        };
         $projecttype = $this->input->post('projecttype');
         $title = $this->input->post('title');
         $client_id = $this->input->post('client_id');
@@ -1149,6 +1157,20 @@ class Project extends MY_Controller
             $Service_Increment_Date = $this->input->post('Service_Increment_Date');
 
         }
+        $newFileName='';
+        if (isset($_FILES['agreement_file']) && !empty($_FILES['agreement_file']['name'])) {
+            $uploadDirectory = 'uploads/project_file/';
+            $allowedExtensions = array('pdf', 'jpg', 'jpeg', 'png');
+        
+            // Generate a unique filename using timestamp and a random string
+            $timestamp = time();
+            $fileExtension = pathinfo($_FILES['agreement_file']['name'], PATHINFO_EXTENSION);
+            $newFileName = $timestamp . '.'. $fileExtension;
+                // Upload the file to the specified directory
+                $uploadPath = $uploadDirectory . $newFileName;
+            move_uploaded_file($_FILES['agreement_file']['tmp_name'], $uploadPath);
+        }
+        
         $data = array(
             'title' => $title,
             'client_id' => $client_id,
@@ -1173,7 +1195,11 @@ class Project extends MY_Controller
             'service_status' => $service_status,
             'Service_type' => $Service_type,
             'Service_amount' => $Service_amount,
+            'is_free_service' => $is_free_service,
+            'free_service_start' => $free_service_start,
+            'free_service_end' => $free_service_end,
             'project_note' => '',
+            'agreement_file' => $newFileName,
             'Service_Increment_Date' => $Service_Increment_Date,
         );
         $r = $this->db->insert('xin_projects', $data);

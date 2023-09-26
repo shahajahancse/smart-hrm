@@ -143,7 +143,6 @@ function paymentreport(status, r = null) {
     ajaxRequest.open("POST", url, true);
     ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
     ajaxRequest.send(data);
-
     ajaxRequest.onreadystatechange = function () {
       if (ajaxRequest.readyState == 4) {
         document.getElementById("loading").style.visibility = "hidden";
