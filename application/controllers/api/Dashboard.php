@@ -73,8 +73,16 @@ class Dashboard extends API_Controller
                         ->row();
             if (!empty($punch_time)) {
                 $data['date']=date('d-M-Y');
-                $data['in_time'] = date('h.i A', strtotime($punch_time->clock_in));
-                $data['out_time'] = date('h.i A', strtotime($punch_time->clock_out));
+                if ($punch_time->clock_in) {
+                    $data['in_time'] = date('h.i A', strtotime($punch_time->clock_in));
+                }else {
+                    $data['in_time'] = null;
+                }
+                if ($punch_time->clock_out) {
+                    $data['out_time'] = date('h.i A', strtotime($punch_time->clock_out));
+                }else{
+                    $data['out_time'] = null;
+                }
             }else{
                 $data['date']=date('d-M-Y');
                 $data['in_time'] = null;
