@@ -73,8 +73,16 @@ class Dashboard extends API_Controller
                         ->row();
             if (!empty($punch_time)) {
                 $data['date']=date('d-M-Y');
-                $data['in_time'] = date('h.i A', strtotime($punch_time->clock_in));
-                $data['out_time'] = date('h.i A', strtotime($punch_time->clock_out));
+                if ($punch_time->clock_in) {
+                    $data['in_time'] = date('h.i A', strtotime($punch_time->clock_in));
+                }else {
+                    $data['in_time'] = null;
+                }
+                if ($punch_time->clock_out) {
+                    $data['out_time'] = date('h.i A', strtotime($punch_time->clock_out));
+                }else{
+                    $data['out_time'] = null;
+                }
             }else{
                 $data['date']=date('d-M-Y');
                 $data['in_time'] = null;
@@ -88,8 +96,8 @@ class Dashboard extends API_Controller
                 $second_date = date('Y-m-d');
                 $attendanceData = $this->db
                     ->select("COUNT(CASE WHEN status = 'present' THEN 1 END) AS count_p,
-                              COUNT(CASE WHEN status = 'absent' THEN 1 END) AS count_a,
-                              COUNT(CASE WHEN late_status = '1' THEN 1 END) AS count_late")
+                               COUNT(CASE WHEN status = 'absent' THEN 1 END) AS count_a,
+                               COUNT(CASE WHEN late_status = '1' THEN 1 END) AS count_late")
                     ->where('employee_id', $userid)
                     ->where("attendance_date BETWEEN '".$first_date."' AND '".$second_date."'")
                     ->get('xin_attendance_time')
