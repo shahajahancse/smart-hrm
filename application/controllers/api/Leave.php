@@ -62,10 +62,10 @@ class Leave extends API_Controller
            
         } else {
             $this->api_return([
-                'status'   =>   false,
-                'message'  =>   'Unsuccessful',
-                'data'     =>   [],
-            ], 404);
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
         }
     }
     public function add_leave()
@@ -225,10 +225,10 @@ class Leave extends API_Controller
             }
         } else {
             $this->api_return([
-                'status'  =>   false,
-                'message'  =>   'Unsuccessful',
-                'data'     =>   [],
-            ], 404);
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
         }
     }
 }

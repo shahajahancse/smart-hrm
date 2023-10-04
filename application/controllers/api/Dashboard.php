@@ -96,8 +96,8 @@ class Dashboard extends API_Controller
                 $second_date = date('Y-m-d');
                 $attendanceData = $this->db
                     ->select("COUNT(CASE WHEN status = 'present' THEN 1 END) AS count_p,
-                              COUNT(CASE WHEN status = 'absent' THEN 1 END) AS count_a,
-                              COUNT(CASE WHEN late_status = '1' THEN 1 END) AS count_late")
+                               COUNT(CASE WHEN status = 'absent' THEN 1 END) AS count_a,
+                               COUNT(CASE WHEN late_status = '1' THEN 1 END) AS count_late")
                     ->where('employee_id', $userid)
                     ->where("attendance_date BETWEEN '".$first_date."' AND '".$second_date."'")
                     ->get('xin_attendance_time')
