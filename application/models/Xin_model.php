@@ -1342,8 +1342,14 @@ class Xin_model extends CI_Model {
 	
 	// 1
 	public function get_notify_leave_applications() {
-	  $query = $this->db->query("SELECT * from xin_leave_applications where notify_leave = '1' order by leave_id desc");
-  	  return $query->result();
+	return  $query = $this->db->select('xin_leave_applications.*')
+					->from('xin_leave_applications')
+					->join('xin_employees','xin_employees.user_id = xin_leave_applications.employee_id','LEFT')
+					->where_in('xin_employees.status',[1,4,5])
+	  			    ->where_in('xin_leave_applications.status',[1,4])
+					->order_by('xin_leave_applications.leave_id', 'desc')
+					->get()->result();
+  	   
 	}
 	public function get_notify_leave_applications_by_userid($user_id) {
 	  $query = $this->db->query("SELECT * from xin_leave_applications where notify_leave = '3' and employee_id = $user_id  order by leave_id desc");

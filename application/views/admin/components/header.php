@@ -308,11 +308,11 @@ if($user[0]->user_role_id != 3) {
                             if($row->status==1) {
                                 $statuss="Pending. Please wait";
                             } elseif ($row->status==2) {
-                                $statuss="First Stage Approval. Please wait";
+                                $statuss="Approved";
                             } elseif ($row->status==3) {
                                 $statuss="Rejected";
                             } elseif ($row->status==4) {
-                                $statuss="Approved";
+                                $statuss="First Stage Approval";
                             } else {
                                 $statuss="--";
                             }
