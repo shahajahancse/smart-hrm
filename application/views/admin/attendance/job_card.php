@@ -197,7 +197,7 @@ foreach ($all_employees as $key => $value) {
 				}
 				else
 				{
-					echo date('H:i:s a',strtotime($row->clock_in));
+					echo date('h:i:s a',strtotime($row->clock_in));
 				}
 				echo "</td>";
 						
