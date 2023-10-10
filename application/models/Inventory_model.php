@@ -465,6 +465,7 @@ public function low_inv_allProduct_status_report($statusC = null) {
 
 
 public function equipment_list($session = null){
+	// dd($session);
 
 	$this->db->select('
 		pa.id AS a_id,

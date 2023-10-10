@@ -32,8 +32,6 @@ class Accessories extends MY_Controller {
          $data['results'] = $this->Accessories_model->get_product_reports_info($id=null,$status=null,$category=null);
          $datas['subview']= $this->load->view('admin/accessories/index',$data,TRUE);  
          $this->load->view('admin/layout/layout_main', $datas); 
-
-
     }
 
     public function category($id = null){
