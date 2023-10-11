@@ -95,7 +95,22 @@ class Requisition extends API_Controller
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
         if($user_info['status']==TRUE){
-            $data['results'] =  $this->Inventory_model->product_list();
+             $this->db->select('
+                p.cat_id, 
+                p.sub_cate_id, 
+		   		p.id as product_id, 
+		   		pc.category_name, 
+		   		psc.sub_cate_name,
+		   		p.product_name, 
+		   		p.quantity, 
+		   		pu.unit_name
+	   		');
+            $this->db->from('products as p');
+            $this->db->join('products_categories as pc', 'pc.id = p.cat_id');
+            $this->db->join('products_sub_categories as psc', 'psc.id = p.sub_cate_id');
+            $this->db->join('product_unit as pu', 'pu.id = p.unit_id');
+            $this->db->order_by('p.id','ASC');
+            $data = $this->db->get()->result();
             $this->api_return([
                 'status' => true,
                 'message' => 'successful',
@@ -114,13 +129,13 @@ class Requisition extends API_Controller
         $user_info = api_auth($authorization);
         if($user_info['status']==TRUE){
             $this->db->select('
-		   		p.id, 
+                p.cat_id, 
+                p.sub_cate_id, 
+		   		p.id as product_id, 
+		   		pc.category_name, 
+		   		psc.sub_cate_name,
 		   		p.product_name, 
 		   		p.quantity, 
-		   		p.cat_id, 
-		   		pc.category_name, 
-		   		p.sub_cate_id, 
-		   		psc.sub_cate_name,
 		   		pu.unit_name
 	   		');
             $this->db->from('products as p');
@@ -142,56 +157,54 @@ class Requisition extends API_Controller
         	   
     } 
 
-    public function create_requisition(){
-        $authorization = $this->input->get_request_header('Authorization');
-        $user_info = api_auth($authorization);
-        $user_info =(array) $user_info['user_info'];
-        if($user_info['status']==TRUE){
-        $this->load->library('form_validation');
+public function create_requisition() {
+    $authorization = $this->input->get_request_header('Authorization');
+    $user_info = api_auth($authorization);
+    $user_info = (array) $user_info['user_info'];
+    
+    if ($user_info['status'] == TRUE) {
+        $raw_data = $this->input->raw_input_stream;
+        $data = json_decode($raw_data);
 
-        $this->form_validation->set_rules('cat_id[]', 'select category', 'required|trim');
-        $this->form_validation->set_rules('sub_cate_id[]', 'sub category', 'required|trim');
-        $this->form_validation->set_rules('quantity[]', 'Quantity', 'required|trim');
-        $this->form_validation->set_rules('quantity[]', 'Quantity', 'required|trim');
-		//Validate and input data
-		if ($this->form_validation->run() == true){
-			for ($i=0; $i<sizeof($_POST['cat_id']); $i++) {
-				$form_data[] = array(
-					'user_id' 		   => $user_info['user_id'],
-					'cat_id'		   => $_POST['cat_id'][$i],
-					'sub_cate_id'	   => $_POST['sub_cate_id'][$i],
-					'product_id'	   => $_POST['product_id'][$i],
-					'quantity'		   => $_POST['quantity'][$i],
-					'requisition_date' => date("Y-m-d"),
-					'status'		   => 1,
-					'created_at'     => date("y-m-d"),
-				);
-			}  
-			if($this->db->insert_batch('products_requisition_details', $form_data)){
+        // Check if the JSON data could be successfully decoded
+        if ($data !== null) {
+            // Build and execute your SQL query
+            foreach ($data as $row) {
+                $insert_data = array(
+                    'cat_id' => $row->cat_id,
+                    'sub_cate_id' => $row->sub_cate_id,
+                    'product_id' => $row->product_id,
+                    'quantity' => $row->quantity,
+                    'user_id' => $user_info['user_id'],
+                    'requisition_date'=>date('Y-m-d'),
+                    'created_at'=>date('Y-m-d'),
+                );
+                $this->db->insert('products_requisition_details', $insert_data);
+            }
+            if ($insert_data > 0) {
                 $this->api_return([
                     'status' => true,
-                    'message' => 'successfull',
+                    'message' => 'Successfully inserted data',
                 ], 200);
-			} else {
+            } else {
                 $this->api_return([
                     'status' => false,
-                    'message' => 'error',
+                    'message' => 'Failed to insert data',
                 ], 200);
-			} 
-		} else {
-                $this->api_return([
-                    'status' => false,
-                    'message' => str_replace("\n", "",strip_tags(validation_errors())),
-                ], 200);
-			}            
-        }else {
+            }
+        } else {
             $this->api_return([
                 'status' => false,
-                'message' => 'Unauthorized User',
-            ], 401);
+                'message' => 'Invalid JSON data',
+            ], 400); // Return a 400 Bad Request status for invalid JSON
         }
-        
+    }else {
+        $this->api_return([
+            'status' => false,
+            'message' => 'Unauthorized User',
+        ], 401);
     }
+}
 
     // public function get_requisition_info_by_id($id){
     //     $authorization = $this->input->get_request_header('Authorization');
@@ -212,6 +225,31 @@ class Requisition extends API_Controller
 
     // }
 
+
+
+    public function delete_requsiton_item($id){
+
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if($user_info['status']==TRUE){
+
+            $this->api_return([
+                'status' => true,
+                'message' => 'successful',
+                'data' => $data,
+            ], 200);
+        }else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+            ], 401);
+        }
+
+		$delete = $this->db->where('id',$id)->delete('products_requisition_details');
+		$this->db->where('id',$id)->delete('products_requisitions');
+		$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
+		redirect("admin/inventory/index");
+	}
 
 
 
