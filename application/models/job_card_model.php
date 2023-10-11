@@ -74,6 +74,59 @@ class Job_card_model extends CI_Model{
 	}
 
 
+	function absent_report($grid_firstdate, $grid_seconddate, $emp_id){
+		$data = array();
+		$grid_firstdate = date("Y-m-d", strtotime($grid_firstdate)); 
+		$grid_seconddate = date("Y-m-d", strtotime($grid_seconddate));
+
+		$joining_check = $this->get_join_date($emp_id, $grid_firstdate, $grid_seconddate);
+		if( $joining_check != false)
+		{
+			$start_date = $joining_check;
+		}
+		else
+		{
+			$start_date = $grid_firstdate;
+		}
+			
+		$resign_check  = $this->get_resign_date($emp_id, $grid_firstdate, $grid_seconddate);
+		if($resign_check != false)
+		{
+			$end_date = $resign_check;
+		}
+		else
+		{
+			$end_date = $grid_seconddate;
+		}
+			
+		$left_check  = $this->get_left_date($emp_id, $grid_firstdate, $grid_seconddate);
+		if($left_check != false)
+		{
+			$end_date = $left_check;
+		}
+		else
+		{
+			$end_date = $grid_seconddate;
+		}
+			
+			
+		$this->db->select('
+				attendance_date, 
+				attendance_status,
+				status,
+			');
+		$this->db->from('xin_attendance_time');
+		$this->db->where('employee_id', $emp_id);
+		$this->db->where("attendance_date >=", $start_date);
+		$this->db->where("attendance_date <=", $end_date);
+		$this->db->where("status", "Absent");
+		$this->db->order_by("attendance_date");				
+		$query = $this->db->get()->result();
+		$data['emp_data'] = $query;
+		// dd($data);
+		return $data;
+	}
+
 	function get_join_date($emp_id, $sStartDate, $sEndDate)
 	{
 		$this->db->select('date_of_joining');
