@@ -111,19 +111,23 @@ class Job_card_model extends CI_Model{
 			
 			
 		$this->db->select('
-				attendance_date, 
-				attendance_status,
-				status,
-			');
+			clock_in , 
+			clock_out, 
+			lunch_in, 
+			lunch_out, 
+			attendance_date, 
+			attendance_status,
+			status,
+			late_status,
+		');
 		$this->db->from('xin_attendance_time');
 		$this->db->where('employee_id', $emp_id);
 		$this->db->where("attendance_date >=", $start_date);
 		$this->db->where("attendance_date <=", $end_date);
-		$this->db->where("status", "Absent");
+		$this->db->where_in("status", ["Absent","HalfDay"]);
 		$this->db->order_by("attendance_date");				
 		$query = $this->db->get()->result();
 		$data['emp_data'] = $query;
-		// dd($data);
 		return $data;
 	}
 

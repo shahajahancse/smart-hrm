@@ -193,6 +193,25 @@ class Requisition extends API_Controller
         
     }
 
+    // public function get_requisition_info_by_id($id){
+    //     $authorization = $this->input->get_request_header('Authorization');
+    //     $user_info = api_auth($authorization);
+    //     if($user_info['status']==TRUE){
+
+    //         $this->api_return([
+    //             'status' => true,
+    //             'message' => 'successful',
+    //             'data' => $data,
+    //         ], 200);
+    //     }else {
+    //         $this->api_return([
+    //             'status' => false,
+    //             'message' => 'Unauthorized User',
+    //         ], 401);
+    //     }
+
+    // }
+
 
 
 

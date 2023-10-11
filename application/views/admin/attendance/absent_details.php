@@ -88,8 +88,15 @@ foreach ($all_employees as $key => $value) {
 		  ";
 
 		foreach ($emp_data['emp_data'] as $key => $row) {
-				$att_status = "A";
+			if($row->attendance_status == 'HalfDay' && $row->status == 'HalfDay') {
+				$att_status = 'Half Day Absent';
+				$absent_count = $absent_count + 0.5;
+			}else{
+				$att_status = "Absent";
 				$absent_count++;
+			}
+				
+				
 			    echo "<tr>";
 				echo "<td>&nbsp;";
 				echo $row->attendance_date;
