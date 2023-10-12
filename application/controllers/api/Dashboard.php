@@ -136,7 +136,7 @@ class Dashboard extends API_Controller
             $data['earn_leave']=get_cal_leave($userid, 1);
             $data['sick_leave']=get_cal_leave($userid, 2);
             $data['Upcoming_holydays']= $this->db->select('*')->limit(5)->where("start_date > '".date('Y-m-d')."'")->get('xin_holidays')->result();
-            $data['notice'] = $this->db->select('*')->get('xin_events')->result();
+            $data['notice'] = $this->db->get('xin_events')->result();
                 $this->api_return([
                     'status' => true,
                     'message' => 'successful',

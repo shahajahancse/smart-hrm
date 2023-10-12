@@ -23,6 +23,17 @@ echo "<p style='text-align: center;font-weight: bold;color: red;font-size: xx-la
 exit();
 }
 ?>
+<?php
+if($exl==1){
+	$filename = "Salary_$first_date+to+$second_date.xls";
+	header('Content-Type: application/vnd.ms-excel'); //mime type
+	header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+	header('Cache-Control: max-age=0'); //no cache
+	}
+?>
+
+
+
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_hrsale_custom.css">
 
@@ -73,6 +84,14 @@ exit();
    <?php  $this->load->view('admin/head_bangla'); ?>
    <h4><?= $stype ?></h4>
   </div>
+  <form method="post" action="<?= base_url('admin/Attendance/leave_report') ?>">
+	<input type="hidden" name="first_date" value="<?= $first_date ?>" >
+	<input type="hidden" name="second_date" value="<?= $second_date ?>" >
+	<input type="hidden" name="sql" value="<?= $sql ?>" >
+	<input type="hidden" name="stutus" value="<?= $stutus ?>" >
+	<input type="hidden" name="exl" value="1" >
+	<input type="submit" style="top: 8px;right: 5px;position: absolute;" value="Export Excel">
+  </form>
 
   <div class="container">
   	<div class="box-body">
@@ -85,6 +104,7 @@ exit();
                 <td>to</td>
                 <td>Type</td>
                 <td>Qty</td>
+                <td>Reason</td>
                 <td>Status</td>
 	        </thead>
 			
@@ -104,9 +124,7 @@ exit();
 
                 $user_info = $this->Xin_model->read_employee_info($row->employee_id);
                 
-                ?>.
-
-            
+                ?>
                 <td><?php echo $key+1;?></td>
                 <td><?php echo $user_info[0]->first_name.' '.$user_info[0]->last_name?></td>
 				  
@@ -140,7 +158,11 @@ exit();
                 <td><?php
 
 				$total_day += $row->qty;
-				echo $row->qty?></td>
+				echo $row->qty?>
+				</td>
+                <td>
+				<?= $row->reason?>
+				</td>
                 <?php
                 if ($row->status==1) {
                     echo "<td class='text text-info' >Pending</td>";
