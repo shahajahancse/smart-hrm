@@ -1,4 +1,5 @@
 <?php 
+
 if ($type == 1){
 	$date = new DateTime($first_date);
     $formattedDate = $date->format('d M Y');
@@ -105,6 +106,7 @@ if($exl==1){
                 <td>Type</td>
                 <td>Qty</td>
                 <td>Reason</td>
+                <td>Total Leave Balance</td>
                 <td>Status</td>
 	        </thead>
 			
@@ -119,7 +121,6 @@ if($exl==1){
 			foreach($xin_employees as $key=>$row){
 				if(!in_array($row->employee_id,$totalemp)){
 					array_push($totalemp,$row->employee_id);
-
 				};
 
                 $user_info = $this->Xin_model->read_employee_info($row->employee_id);
@@ -155,13 +156,24 @@ if($exl==1){
 					echo "<td class='text' >Sick Leave</td>";
 				}
                 ?>
+
                 <td><?php
 
 				$total_day += $row->qty;
+
 				echo $row->qty?>
 				</td>
                 <td>
-				<?= $row->reason?>
+						<?= $row->reason?>
+
+			    </td>
+				
+				<td>
+					<?php 
+						$data = leave_cal($row->employee_id);
+						// dd($data);
+						echo "Earn Leave = ".$data['leaves'][0]['qty'] . ", Sick Leave = ".$data['leaves'][1]['qty'];
+					?>
 				</td>
                 <?php
                 if ($row->status==1) {

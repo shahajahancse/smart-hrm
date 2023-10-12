@@ -11,7 +11,7 @@ $get_user_number = $this->db->select('mobile_numbers.number')
                         ->get()->row();
 }                        
 // dd($get_user_number);
-$data = $this->db->select('id,phone_number,amount,approved_amount,status,created_at')->get('mobile_bill_requisition')->result(); 
+$data = $this->db->select('id,phone_number,amount,approved_amount,status,created_at')->where('user_id',$session['user_id'])->get('mobile_bill_requisition')->result(); 
 // dd($data);
 ?>
 

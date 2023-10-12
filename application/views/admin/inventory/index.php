@@ -1,7 +1,7 @@
 <?php
 // dd($session); 
 $session = $this->session->userdata('username');
-$using_list = $this->db->select('COUNT(user_id) as using_list')->where('user_id',$session['user_id'])->get('product_accessories')->row()->using_list;
+$using_list = $this->db->select('COUNT(user_id) as using_list')->where('user_id',$session['user_id'])->where('status',1)->get('product_accessories')->row()->using_list;
 $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(status) as status')->where('user_id',$session['user_id'])->get('products_requisition_details')->row();
 // dd($requisition_list);
 ?>

@@ -49,7 +49,7 @@ if($bank_account->num_rows() > 0){
      </ul>
     <div>
       
-  </div>
+  <!-- </div> -->
   <!-- End of Navbar Tab -->
   <div class="tab-content">
     <!-- Basic Information Tab -->
@@ -191,7 +191,4 @@ if($bank_account->num_rows() > 0){
     </div>
     <!-- End of Salary Tab -->   
   </div>
-  
 </div>     
-     
-
