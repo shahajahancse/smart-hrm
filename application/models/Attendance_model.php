@@ -478,6 +478,7 @@ class Attendance_model extends CI_Model
         $this->db->where_in('status', $stutuss);
         $this->db->where('from_date >=', $first_date);
         $this->db->where('to_date <=', $second_date);
+        $this->db->order_by('user_id', 'ASC');
         return $this->db->get('xin_leave_applications')->result();
     }
 

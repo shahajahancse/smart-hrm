@@ -322,7 +322,7 @@
                     <input type="hidden" name="subdepartment_id" value="YES" />
 
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label for="gender"
                                     class="control-label"><?php echo $this->lang->line('xin_employee_gender');?></label>
@@ -333,7 +333,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label for="office_shift_id"
                                     class="control-label"><?php echo $this->lang->line('xin_employee_office_shift');?></label>
@@ -347,7 +347,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label for="role"><?php echo $this->lang->line('xin_employee_role');?><i
                                         class="hrsale-asterisk"><span style="color:red">*</span></i></label>
@@ -366,7 +366,35 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="xin_hr_leave_cat">Employee or Lead</label>
+                                <select class="form-control" name="is_emp_lead">
+                                    <option value="">A</option>
+                                    <option value="">A</option>
+                                    <option value="">A</option>
+                                    <option value="">A</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="xin_hr_leave_cat"><?php echo $this->lang->line('xin_hr_leave_cat');?></label>
+                                <input type="hidden" name="leave_categories[]" value="0" />
+                                <select multiple="multiple" class="form-control" name="leave_categories[]"
+                                    data-plugin="select_hrm"
+                                    data-placeholder="<?php echo $this->lang->line('xin_hr_leave_cat');?>">
+                                    <?php foreach($all_leave_types as $leave_type) {?>
+                                    <option value="<?php echo $leave_type->leave_type_id?>">
+                                        <?php echo $leave_type->type_name?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label
                                     for="xin_hr_leave_cat"><?php echo $this->lang->line('xin_hr_leave_cat');?></label>
