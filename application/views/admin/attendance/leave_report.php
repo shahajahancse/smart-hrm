@@ -24,16 +24,6 @@ echo "<p style='text-align: center;font-weight: bold;color: red;font-size: xx-la
 exit();
 }
 ?>
-<?php
-if($exl==1){
-	$filename = "Salary_$first_date+to+$second_date.xls";
-	header('Content-Type: application/vnd.ms-excel'); //mime type
-	header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
-	header('Cache-Control: max-age=0'); //no cache
-	}
-?>
-
-
 
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_hrsale_custom.css">
@@ -111,12 +101,12 @@ if($exl==1){
 	        </thead>
 			
 
-            <?php 
+            	<?php 
 						
-						$total_el_leave=0;
-						$total_si_leave=0;
-						$total_day=0;
-						$totalemp=[];
+					$total_el_leave=0;
+					$total_si_leave=0;
+					$total_day=0;
+					$totalemp=[];
 
 			foreach($xin_employees as $key=>$row){
 				if(!in_array($row->employee_id,$totalemp)){
@@ -185,9 +175,7 @@ if($exl==1){
                 }
                 ?>
             </tbody>
-            <?php }
-			
-			?>
+            <?php } ?>
 
 	      </table>
 		  <table class="table">
