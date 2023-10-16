@@ -1,6 +1,6 @@
 <?php 
 $session = $this->session->userdata('username');
-// dd($results);
+// dd($amount);
 $get_animate = $this->Xin_model->get_content_animate();
 ?>
 <style>
@@ -11,7 +11,7 @@ $get_animate = $this->Xin_model->get_content_animate();
 </style>
 <div class="box <?php echo $get_animate;?>" style="margin-top:20px">
   <div class="box-header with-border">
-    <h3 class="box-title">MObile Bill Approval</h3>
+    <h3 class="box-title">Edit Mobile Bill </h3>
     <button class="btn btn-sm btn-info pull-right" style="margin-right: 10px;" onclick="history.back()"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
     <br/>
   </div>
@@ -22,11 +22,10 @@ $get_animate = $this->Xin_model->get_content_animate();
         <thead>
           <tr>
               <th class="text-center" >No.</th>
-              <th class="text-center" >Request Amount</th>
-              <th class="text-center" >Approved Amount</th>
+              <th class="text-center" >Enter Amount</th>
           </tr>
         </thead>
-        <?php echo form_open('admin/inventory/edit_mobile_bill_approved/'.$ids)?>
+        <?php echo form_open('admin/inventory/edit_mobile_bill_edit/'.$amount->id)?>
         <tbody>
             <?php  $i=1;?>
             <tr class="text-center">

@@ -479,6 +479,7 @@ public function equipment_list($session = null){
 		pa.number,
 		pa.image,
 		pa.user_id,
+		paw.provide_date,
 		MAX(e.first_name) AS first_name,
 		MAX(e.last_name) AS last_name,
 

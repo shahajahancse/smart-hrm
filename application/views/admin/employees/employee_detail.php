@@ -33,6 +33,7 @@
         <?php }?>
         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_leaves"><?php echo $this->lang->line('left_leaves');?></a> </li>
         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#NDA">NDA</a> </li>      
+        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#team_lead">Set Team Lead</a></li>      
      </ul>
       <div class="tab-content">
         <div class="tab-pane <?php echo $get_animate;?> active" id="xin_general">
@@ -2151,6 +2152,56 @@
             </div>
           </div>
         </div>
+
+      <!-- team lead -->
+        <div class="tab-pane <?php echo $get_animate;?>" id="team_lead">
+          <div class="box-body">
+            <div class="row no-gutters row-bordered row-border-light">
+              <div class="col-md-12">
+                <div class="tab-content">
+                      <div class="box-header with-border">
+                        <h3 class="box-title">Team Lead</h3>
+                      </div>
+                      <div class="box-body pb-2">
+                        <?php $attributes = array('name' => 'nda_info', 'id' => 'nda_info', 'autocomplete' => 'off');?>
+                        <?php echo form_open('admin/employees/team_lead', $attributes);?>
+                        <input type="hidden" name="user_id" value="<?= $user_id?>">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="email" class="control-label">Select Team Lead</label>
+                                  <select class="form-control" name="is_emp_lead">
+                                    <option value="">Select</option>
+                                      <?php
+                                          $team_leads = $this->db->select('user_id,first_name,last_name')->where('is_emp_lead',2)->get('xin_employees')->result(); 
+                                          foreach($team_leads as $row){
+                                      ?>
+                                      <option value="<?php echo $row->user_id?>"><?php echo $row->first_name." ".$row->last_name?></option>
+                                      <?php }?>
+                                  </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_save'))); ?> </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <?php echo form_close(); ?> 
+                          </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- team lead -->
         <div class="tab-pane <?php echo $get_animate;?>" id="xin_core_hr">
           <div class="box-body">
             <div class="row no-gutters row-bordered row-border-light">

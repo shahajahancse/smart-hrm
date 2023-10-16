@@ -1416,10 +1416,25 @@ public function mobile_bill(){
 	}
 	public function mobile_edit($id){
 		// dd($_POST);
-		$data['amount']  = $this->db->where('id',$id)->get('mobile_bill_requisition');		
+		$session = $this->session->userdata('username');
+		$data['title'] = 'Edit Amount | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Edit Amount';
+		$data['amount']  = $this->db->where('id',$id)->get('mobile_bill_requisition')->row();		
 		$data['subview'] = $this->load->view("admin/inventory/mobile_edit", $data, TRUE);
 						   $this->load->view('admin/layout/layout_main', $data);
 	}
+
+	
+	public function edit_mobile_bill_edit(){
+		$update  = $this->db->where('id',$_POST['h_id'])->update('mobile_bill_requisition',['amount'=>$_POST['amount']]);
+		if($update){
+			$this->session->set_flashdata('success', 'Successfully Update');
+			redirect('admin/inventory/create_phone','refresh');
+		}
+
+	}
+
+
 }
 
 ?>

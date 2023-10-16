@@ -143,6 +143,10 @@ $totalleavem=$leavemonth->el+$leavemonth->sl;
 
 
 <style>
+
+
+
+
 .layout {
     background: var(--bg-2, #F8FBFF);
     margin-left: -56px;
@@ -439,7 +443,55 @@ hr {
     }
     .timeshet {}
 }
+
+
+       .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border: 1px solid #000;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+
 </style>
+
+<div id="modal_imp" class="modal <?php echo $get_animate;?>">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Please Select Your Team Leader</h4>
+        </div>
+        <div class="modal-body">
+            <!-- <p>This is the content of the modal.</p> -->
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Submit</button>
+        </div>
+    </div>
+</div>
+
 <div class=" <?php echo $get_animate;?>">
     <!-- breadcrumb section -->
     <div class="box-widget widget-user-2 container">
@@ -917,4 +969,16 @@ options: {
     }
 }
 });
+</script>
+<script>
+    $(document).ready(function () {
+        var modal = $("#modal_imp");
+        var closeButton = $(".close");
+
+        modal.css("display", "block");
+
+        closeButton.on("click", function () {
+            modal.css("display", "none");
+        });
+    });
 </script>

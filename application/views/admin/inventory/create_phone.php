@@ -97,7 +97,7 @@ $data = $this->db->select('id,phone_number,amount,approved_amount,status,created
                         <td><?= $row->status== 1 ? '<span class="badge" style="background-color:#bebc00">Pending</span>': '<span class="badge" style="background-color:#078d07d1">Approved</span>'?></td>
                         <td>
                             <?php if($row->status== 1){?>
-                            <a class="btn btn-sm btn-info"  href="<?php echo base_url('admin/inventory/mobile_edit')?>"><i class="fa fa-edit"></i></a>
+                            <a class="btn btn-sm btn-info"  href="<?php echo base_url('admin/inventory/mobile_edit/').$row->id?>"><i class="fa fa-edit"></i></a>
                             <?php }?>
                             <a class="btn btn-sm btn-danger " href="<?php echo base_url('admin/inventory/mobile_delete/').$row->id?>"><i class="fa fa-trash"></i></a>
                         </td>

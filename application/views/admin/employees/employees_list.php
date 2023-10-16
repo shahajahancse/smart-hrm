@@ -370,25 +370,22 @@
                             <div class="form-group">
                                 <label for="xin_hr_leave_cat">Employee or Lead</label>
                                 <select class="form-control" name="is_emp_lead">
-                                    <option value="">A</option>
-                                    <option value="">A</option>
-                                    <option value="">A</option>
-                                    <option value="">A</option>
+                                    <option value="1">Employee</option>
+                                    <option value="2">Team Lead</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="xin_hr_leave_cat"><?php echo $this->lang->line('xin_hr_leave_cat');?></label>
-                                <input type="hidden" name="leave_categories[]" value="0" />
-                                <select multiple="multiple" class="form-control" name="leave_categories[]"
-                                    data-plugin="select_hrm"
-                                    data-placeholder="<?php echo $this->lang->line('xin_hr_leave_cat');?>">
-                                    <?php foreach($all_leave_types as $leave_type) {?>
-                                    <option value="<?php echo $leave_type->leave_type_id?>">
-                                        <?php echo $leave_type->type_name?></option>
-                                    <?php } ?>
+                                <label for="xin_hr_leave_cat">Team Leader</label>
+                                <select class="form-control" name="is_emp_lead">
+                                    <?php
+                                        $team_leads = $this->db->select('user_id,first_name,last_name')->where('is_emp_lead',2)->get('xin_employees')->result(); 
+                                        foreach($team_leads as $row){
+                                    ?>
+                                    <option value="<?php echo $row->user_id?>"><?php echo $row->first_name." ".$row->last_name?></option>
+                                    <?php }?>
                                 </select>
                             </div>
                         </div>
