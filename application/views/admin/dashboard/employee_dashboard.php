@@ -1,4 +1,5 @@
 
+
 <?php 
 $session = $this->session->userdata('username');
 $get_animate = $this->Xin_model->get_content_animate();
@@ -480,7 +481,7 @@ hr {
 
 </style>
 
-<div id="modal_imp" class="modal <?php echo $get_animate;?>">
+<div id="modal_imp" class="modal <?php echo $get_animate;?>" style="display: none">
     <!-- Modal content -->
     <div class="modal-content">
         <div class="modal-header">
@@ -986,10 +987,15 @@ options: {
 </script>
 <script>
     $(document).ready(function () {
+        // var modal = $("#modal_imp");
+        var closeButton = $(".close");
+        closeButton.on("click", function () {
+            modal.css("display", "none");
+        });
         // Make an AJAX request to check_user.php
         $.ajax({
             type: 'POST',
-            url: 'check_user.php',
+            url: "<?php echo  base_url('admin/employees/check') ?>",
             dataType: 'json',
             success: function (data) {
                 if (data.show_modal) {
@@ -999,8 +1005,8 @@ options: {
                     // Do nothing or handle other cases
                 }
             },
-            error: function () {
-                // Handle the error, if any
+            error: function (xhr, status, error) {
+                console.log("AJAX Error: " + status, error);
             }
         });
     });

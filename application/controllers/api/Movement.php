@@ -876,7 +876,6 @@ class Movement extends API_Controller
         }
     }
 
-
     public function getnamewithid($id) {
         $this->db->select('first_name, last_name');
         $this->db->where('user_id', $id);
@@ -884,7 +883,6 @@ class Movement extends API_Controller
         $fullname = $data->first_name . ' ' . $data->last_name;
         return $fullname;
     }
-
 
     public function getResonewithid($id) {
         $this->db->select('title');

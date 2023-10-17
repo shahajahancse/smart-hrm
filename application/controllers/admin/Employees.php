@@ -6642,8 +6642,22 @@ exit();
 		// dd($_POST);
 		$update  = $this->db->where('user_id',$_POST['user_id'])->update('xin_employees',['is_emp_lead'=>1,'lead_user_id'=>$_POST['team_lead_user_id']]);
 		if($update){
-			$this->session->set_flashdata('success', 'Successfully Update');
+			echo "<script>showSuccessAlert('bal')</script>";
+			$this->session->set_flashdata('addedd', 'Successfully Added');
 			redirect('admin/dashboard/','refresh');
 		}
+	}
+	public function check(){
+		$userID = $this->session->userdata('username');
+		$data = $this->db->select('is_emp_lead,lead_user_id')->where('user_id',$userID['user_id'])->get('xin_employees')->row();
+        // dd($data);
+		if ($data->is_emp_lead == null   && $data->lead_user_id == null) {
+            $response = array('show_modal' => true);
+        } else {
+            $response = array('show_modal' => false);
+        }
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
 	}
 }
