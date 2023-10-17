@@ -296,8 +296,28 @@ class Requisition extends API_Controller
 		
 	}
 
-
-
+    public function check_user(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if($user_info['status']==TRUE){
+            $user_info = $user_info['user_info'];
+            $check = $this->db->select('use_number,number')
+                              ->where('number !=','')
+                              ->where('user_id',$user_info->user_id)
+                              ->get('product_accessories')
+                              ->row();
+            $this->api_return([
+                'status' => true,
+                'message' => 'successful',
+                'user_number' => $check,
+            ], 200);
+        }else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+            ], 401);
+        }
+    }
 
     // mobile bill requisition 
        // view list 
@@ -433,7 +453,6 @@ class Requisition extends API_Controller
             ], 401);
         }
     }
-
 
     public function delete_number($id){
         $authorization = $this->input->get_request_header('Authorization');
