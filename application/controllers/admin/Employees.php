@@ -6623,22 +6623,27 @@ public function nda() {
 	   }
 exit();
 	}
-		public function device(){
-			$session = $this->session->userdata('username');
+	public function device(){
+		$session = $this->session->userdata('username');
 		
 		if(empty($session) && !is_array($session)){ 
 			redirect('admin/');
 		}
-
 		$data = array(
 				'title' => $this->lang->line('dashboard_title').' | '.$this->Xin_model->site_title(),
 				'path_url' => 'dashboard',
 				'breadcrumbs' => 'Device',
 				'result' =>$this->Employees_model->read_employee_information(($session['user_id']))
-
 			);
-			$data['subview'] = $this->load->view('admin/employees/device', $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-	
+		$data['subview'] = $this->load->view('admin/employees/device', $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+	public function add_lead(){
+		// dd($_POST);
+		$update  = $this->db->where('user_id',$_POST['user_id'])->update('xin_employees',['is_emp_lead'=>1,'lead_user_id'=>$_POST['team_lead_user_id']]);
+		if($update){
+			$this->session->set_flashdata('success', 'Successfully Update');
+			redirect('admin/dashboard/','refresh');
+		}
 	}
 }

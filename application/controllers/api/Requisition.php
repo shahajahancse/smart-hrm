@@ -363,6 +363,7 @@ class Requisition extends API_Controller
             ], 401);
         }
     }  
+
     public function add_mobile_bill(){
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
@@ -398,7 +399,6 @@ class Requisition extends API_Controller
             ], 401);
         }
     }  
-
 
     public function edit_bill($id){
         $authorization = $this->input->get_request_header('Authorization');
@@ -478,6 +478,4 @@ class Requisition extends API_Controller
             ], 401);
         }
     }
-
-
-    }
+}

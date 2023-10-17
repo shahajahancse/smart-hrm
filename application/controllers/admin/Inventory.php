@@ -1414,6 +1414,22 @@ public function mobile_bill(){
 			redirect('admin/inventory/index','refresh');
 		}
 	}
+	public function edit_mobile_bill_rejected($id){
+		// dd($_POST);
+		$update = $this->db->where('id',$id)->update('mobile_bill_requisition',['status'=>3]);
+		if($update){
+			$this->session->set_flashdata('success', 'Successfully Rejected');
+			redirect('admin/inventory/index','refresh');
+		}
+	}
+	public function mobile_bill_hand_over($id){
+		// dd($_POST);
+		$update = $this->db->where('id',$id)->update('mobile_bill_requisition',['status'=>4]);
+		if($update){
+			$this->session->set_flashdata('success', 'Successfully Amount Deliver');
+			redirect('admin/inventory/index','refresh');
+		}
+	}
 	public function mobile_edit($id){
 		// dd($_POST);
 		$session = $this->session->userdata('username');

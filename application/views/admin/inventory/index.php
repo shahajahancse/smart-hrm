@@ -5,7 +5,7 @@ $using_list = $this->db->select('COUNT(user_id) as using_list')->where('user_id'
 $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(status) as status')->where('user_id',$session['user_id'])->get('products_requisition_details')->row();
 // dd($requisition_list);
 $check = $this->db->select('use_number,number')->where('number !=','')->where('user_id',$session['user_id'])->get('product_accessories')->row();
-// dd($check ."<br>nai");
+// dd($check);
 ?>
 
 <style>
@@ -42,7 +42,7 @@ $check = $this->db->select('use_number,number')->where('number !=','')->where('u
 
 
 
-    .custom-divider {
+  .custom-divider {
     height: 2px;
     background-color: #ccc; /* You can adjust the color */
     margin: 5px 0; /* Adjust margin as needed */
@@ -130,8 +130,6 @@ $check = $this->db->select('use_number,number')->where('number !=','')->where('u
   <div id="list_data"></div>
 </div>
   
-
-
 <script>
   $(document).ready(function() {
     // Handle click event for the buttons

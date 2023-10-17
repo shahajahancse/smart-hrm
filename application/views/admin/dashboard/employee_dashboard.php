@@ -138,6 +138,10 @@ $all_notice = $this->db->select('*')->get('xin_events')->result();
 $leavemonth=$this->Salary_model->leave_count_status($userid,date('Y-m-01'),date('Y-m-t'), 2);
 $totalleavem=$leavemonth->el+$leavemonth->sl;
 
+
+
+$team_leads = $this->db->select('user_id,first_name,last_name,is_emp_lead,lead_user_id')->where_in('user_id',[18,35,37,38,39,40])->get('xin_employees')->result();
+// dd($team_leads);
 ?>
 
 
@@ -445,7 +449,7 @@ hr {
 }
 
 
-       .modal {
+.modal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -485,10 +489,20 @@ hr {
         </div>
         <div class="modal-body">
             <!-- <p>This is the content of the modal.</p> -->
+        <?php $attributes = array('id' => 'unit_insert', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
+        <?php $hidden = array('user_id' => $session['user_id']);?>
+        <?php echo form_open_multipart('admin/employees/add_lead', $attributes, $hidden);?>
+            <select name="team_lead_user_id" id="team_lead">
+                <option value="">Select Your Team Lead</option>
+                <?php foreach ($team_leads as $key => $value) { ?> 
+                    <option value="<?php echo $value->user_id?>"><?php echo $value->first_name.' '.$value->last_name?></option>
+                <?php }?>
+            </select>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Submit</button>
+            <button type="submit" class="btn btn-success btn-sm" data-dismiss="modal">Submit</button>
         </div>
+        <?php echo form_close(); ?> 
     </div>
 </div>
 
@@ -972,13 +986,22 @@ options: {
 </script>
 <script>
     $(document).ready(function () {
-        var modal = $("#modal_imp");
-        var closeButton = $(".close");
-
-        modal.css("display", "block");
-
-        closeButton.on("click", function () {
-            modal.css("display", "none");
+        // Make an AJAX request to check_user.php
+        $.ajax({
+            type: 'POST',
+            url: 'check_user.php',
+            dataType: 'json',
+            success: function (data) {
+                if (data.show_modal) {
+                    // Display the modal
+                    $('#modal_imp').show();
+                } else {
+                    // Do nothing or handle other cases
+                }
+            },
+            error: function () {
+                // Handle the error, if any
+            }
         });
     });
 </script>
