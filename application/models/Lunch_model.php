@@ -53,7 +53,7 @@ class Lunch_model extends CI_Model {
     }
     public function all_employees($date)
     {
-        $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1,4,5)");
+        $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1,4,5,6)");
         return $query->result();
     }
 
@@ -62,96 +62,97 @@ class Lunch_model extends CI_Model {
 
         $query = $this->all_employees($firstDate);
 
-    foreach($query as $row){
+        foreach($query as $row){
 
-        $emp_id = $row->user_id;
+            $emp_id = $row->user_id;
+            $doj = $row->date_of_joining;
 
-        $this->db->select('SUM(meal_amount) as prev_meal');
-        $this->db->where('date >=', $firstDate);
-        $this->db->where('date <=', $secondDate);
-        $this->db->where('emp_id', $emp_id);
-        $result = $this->db->get('lunch_details')->row();
-    
-        $prev_meal = isset($result->prev_meal)? $result->prev_meal:0;
-
-
-        $prev_cost=$prev_meal*45;
-        $prev_pay=0;
-
-        $this->db->where('emp_id', $row->user_id);
-        $this->db->where('end_date', date('Y-m-d', strtotime($firstDate . ' -1 day')));
+            $this->db->select('SUM(meal_amount) as prev_meal');
+            $this->db->where('date >=', $firstDate);
+            $this->db->where('date <=', $secondDate);
+            $this->db->where('emp_id', $emp_id);
+            $result = $this->db->get('lunch_details')->row();
         
-        $preepay= $this->db->get('lunch_payment')->result();
+            $prev_meal = isset($result->prev_meal)? $result->prev_meal:0;
 
-        //   dd( $preepay);
-        if (count($preepay)>0 && $preepay[0]->status==1){
-            $prev_pay+=$preepay[0]->pay_amount;
-        };
 
-        $prev_amount=$prev_pay-$prev_cost;
-        
-        if ($row->active_lunch==1) {
-            $probable_meal = $this->chackprobalemeal($secondDate,$probable_date, $emp_id);
-            $pay_amount=$probable_meal*45;
-            $collection_amount=$pay_amount-$prev_amount;
-            $status = 0;
-        }else{
-            $probable_meal=0;
-            if ($prev_amount==0) {
-                continue;
-            }elseif($prev_amount>0){
-                $pay_amount=0;
-                $collection_amount=$prev_amount;
+            $prev_cost=$prev_meal*45;
+            $prev_pay=0;
+
+            $this->db->where('emp_id', $row->user_id);
+            $this->db->where('end_date', date('Y-m-d', strtotime($firstDate . ' -1 day')));
+            
+            $preepay= $this->db->get('lunch_payment')->result();
+
+            //   dd( $preepay);
+            if (count($preepay)>0 && $preepay[0]->status==1){
+                $prev_pay+=$preepay[0]->pay_amount;
+            };
+
+            $prev_amount=$prev_pay-$prev_cost;
+            
+            if ($row->active_lunch==1) {
+                $probable_meal = $this->chackprobalemeal($secondDate, $probable_date, $emp_id, $doj);
+                $pay_amount=$probable_meal*45;
+                $collection_amount=$pay_amount-$prev_amount;
                 $status = 0;
             }else{
-                $pay_amount=$prev_amount;
-                $collection_amount=$prev_amount;
-                $status = 0;
+                $probable_meal=0;
+                if ($prev_amount==0) {
+                    continue;
+                }elseif($prev_amount>0){
+                    $pay_amount=0;
+                    $collection_amount=$prev_amount;
+                    $status = 0;
+                }else{
+                    $pay_amount=$prev_amount;
+                    $collection_amount=$prev_amount;
+                    $status = 0;
+                }
             }
+            $from_date=$firstDate;
+            $end_date=$secondDate;
+            $data = array(
+                'emp_id' => $emp_id,
+                'prev_meal' => $prev_meal,
+                'prev_cost' => $prev_cost,
+                'prev_pay' => $prev_pay,
+                'prev_amount' => $prev_amount,
+                'pay_amount' => $pay_amount,
+                'probable_meal' => $probable_meal,
+                'collection_amount' => $collection_amount,
+                'from_date' => $from_date,
+                'end_date' => $end_date,
+                'next_date' => $probable_date,
+                'status' => $status
+            );
+
+            $this->db->where('from_date', $firstDate);
+            $this->db->where('end_date', $secondDate);
+            $this->db->where('emp_id', $row->user_id);
+            $rc = $this->db->get('lunch_payment');
+
+            if ($rc->num_rows() > 0) {
+                $r = $rc->row();
+                $data['status'] = $r->status;
+                $data['pay_amount'] = $r->pay_amount;
+                $data['collection_amount'] = $r->collection_amount;
+
+                $this->db->where('id', $r->id);
+                $this->db->update('lunch_payment', $data);
+            } else {
+                $this->db->insert('lunch_payment', $data);
+            }
+
         }
-        $from_date=$firstDate;
-        $end_date=$secondDate;
-        $data = array(
-            'emp_id' => $emp_id,
-            'prev_meal' => $prev_meal,
-            'prev_cost' => $prev_cost,
-            'prev_pay' => $prev_pay,
-            'prev_amount' => $prev_amount,
-            'pay_amount' => $pay_amount,
-            'probable_meal' => $probable_meal,
-            'collection_amount' => $collection_amount,
-            'from_date' => $from_date,
-            'end_date' => $end_date,
-            'next_date' => $probable_date,
-            'status' => $status
-        );
-
-        $this->db->where('from_date', $firstDate);
-        $this->db->where('end_date', $secondDate);
-        $this->db->where('emp_id', $row->user_id);
-        $rc = $this->db->get('lunch_payment');
-
-        if ($rc->num_rows() > 0) {
-            $r = $rc->row();
-            $data['status'] = $r->status;
-            $data['pay_amount'] = $r->pay_amount;
-            $data['collection_amount'] = $r->collection_amount;
-
-            $this->db->where('id', $r->id);
-            $this->db->update('lunch_payment', $data);
-        } else {
-            $this->db->insert('lunch_payment', $data);
-        }
-
-      }
 
     }
 
-    public function chackprobalemeal($first_date, $second_date, $emp_id = null) {
-
-        /*if (in_array($emp_id, array(70, 71)) && $second_date < '2023-08-16') {
-            $first_date = '2023-07-23';
-        } */
+    public function chackprobalemeal($first_date, $second_date, $emp_id = null, $doj = null) {
+        // First 3 days not meal provide to New joining man power 
+        if ($first_date <= $doj) {
+           $first_date = date("Y-m-d", strtotime("+ 3 day", strtotime($doj)));
+        } 
 
         $date1 = new DateTime($first_date);
         $date2 = new DateTime($second_date);
@@ -161,6 +162,7 @@ class Lunch_model extends CI_Model {
 
         $off_day = array('Friday','Saturday');
         for ($i=0; $i < $count; $i++) { 
+
             $process_date = date("Y-m-d", strtotime("+{$i} day", strtotime($first_date)));
             $day = date("l", strtotime($process_date));
 

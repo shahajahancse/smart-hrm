@@ -474,6 +474,7 @@ class Lunch extends MY_Controller
             ->set_content_type('application/json')
             ->set_output(json_encode($lunch_payment));
     }
+    
     public function process()
     {
         $session = $this->session->userdata('username');
@@ -489,10 +490,10 @@ class Lunch extends MY_Controller
         $this->db->where('end_date', date('Y-m-d', strtotime($firstDate . ' -1 day')));
         $preepay = $this->db->get('lunch_payment')->result();
 
-        // if(count($preepay)>0){
-        //     echo json_encode(['error'=>'There are Unpaid Employee Found , Please Check the Collection Sheet']);
-        //     exit();
-        // };
+        if(count($preepay)>0){
+            echo json_encode(['error'=>'There are Unpaid Employee Found , Please Check the Collection Sheet']);
+            exit();
+        };
 
         $currentDate = strtotime($firstDate);
         while ($currentDate <= strtotime($secondDate)) {
