@@ -7,74 +7,68 @@
   <div class="col-md-6">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">Employees List Report </h3>
+        <h3 class="box-title">Employees Late Report </h3>
       </div>
       <div class="box-body">
+    
+         <div class="row">
+      <div class="col-md-12">
         <div class="row">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="upload_file">Status</label>
-                  <select class="form-control" name="status" id="status">
-                    <option value="">Select one</option>
-                    <option value="1">Regular</option>
-                    <option value="2">Left</option>
-                    <option value="3">Resign</option>
-                    <option value="4">All</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group"> &nbsp;
-                  <label for="first_name">&nbsp;</label><br />
-                  <button class="btn btn-success btn-sm" onclick="show_report(1)">Show Report</button>
-                </div>
-              </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="process_date">First Date</label>
+              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>" required>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="box">
-      <div class="box-header with-border">
-        <h3 class="box-title">Internship / Probation / Increment  Report </h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="process_date">Second Date</label>
+              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text" autocomplete="off">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="upload_file">Status</label>
+              <select class="form-control" name="status" id="status">
+                <option value="">Select one</option>
+                <option value="1">Regular</option>
+                <option value="2">Left</option>
+                <option value="3">Resign</option>
+                <option value="4">All</option>
+              </select>
+            </div>
+          </div>
 
-          <div class="col-md-10" style="margin-left:-15px;">
+          <div class="col-md-6" style="margin-left:-15px;">
             <div class="form-inline"> &nbsp;
               <label for="first_name">&nbsp;</label>
-              <button class="btn btn-success btn-sm" onclick="show_report(2)">Internship</button>&nbsp;&nbsp;
-              <button class="btn btn-success btn-sm" onclick="show_report(3)">Probation</button>&nbsp;&nbsp;
-              <button class="btn btn-success btn-sm" onclick="show_report(4)">Increment</button>
-            </div>
-          </div>
-
+              <button class="btn btn-success btn-sm" onclick="show_report(1)">Dailys</button>&nbsp;&nbsp;
+              <button class="btn btn-success btn-sm" onclick="show_report(2)">Weekly</button>&nbsp;&nbsp;
+              <button class="btn btn-success btn-sm" onclick="show_report(3)">Monthly</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-lg-4">
-    <div class="box" style="height: 74vh;overflow-y: scroll;">
-      <table class="table table-striped table-hover" id="fileDiv">
-        <tr style="position: sticky;top: 0;z-index:1">
-            <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox" name="select-all" /></th>
-            <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
-            <th class=" text-center" style="background:#0177bc;color:white">Name</th>
-        </tr>
-      </table>
+
+
+      </div>
     </div>
   </div>
+
+
+  <div class="col-lg-4">
+  <div class="box" style="height: 74vh;overflow-y: scroll;">
+  <table class="table table-striped table-hover" id="fileDiv">
+    <tr style="position: sticky;top: 0;z-index:1">
+        <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox" name="select-all" /></th>
+        <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
+        <th class=" text-center" style="background:#0177bc;color:white">Name</th>
+    </tr>
+  </table>
+  </div>
+  </div>
 </div>
-
-
-
 
 
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
@@ -123,6 +117,7 @@ function show_report(key){
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest = new XMLHttpRequest();
   status = document.getElementById('status').value;
+  attendance_date = document.getElementById('process_date').value;
   if(status ==''){
     alert('Please select status');
     return ;
@@ -133,8 +128,8 @@ function show_report(key){
     alert('Please select employee Id');
     return ;
   }
-  var data = "status="+status+'&sql='+sql+'&key='+key;
-  url = base_url + "/show_report";
+  var data = "attendance_date="+attendance_date+"&key="+key+"&status="+status+'&sql='+sql;
+  url = base_url + "/show_late_report";
   ajaxRequest.open("POST", url, true);
   ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
   ajaxRequest.send(data);

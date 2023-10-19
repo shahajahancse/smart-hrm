@@ -820,7 +820,7 @@ class Xin_model extends CI_Model {
 			$arr['reports_tasks_active'] = 'active';
 			$arr['reports_open'] = 'active';
 			return $arr;
-		} else if($mClass=='reports'  && $mMethod=='roles') {
+		} else if($mClass=='reports'  && $mMethod=='late_report') {
 			$arr['reports_roles_active'] = 'active';
 			$arr['reports_open'] = 'active';
 			return $arr;

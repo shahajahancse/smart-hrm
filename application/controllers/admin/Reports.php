@@ -45,6 +45,7 @@ class Reports extends MY_Controller
 		  $this->load->model("Roles_model");
 		  $this->load->model("Employees_model");
 		  $this->load->model("Designation_model");
+		  $this->load->model('Attendance_model');
      }
 	 
 	// payslip reports > employees and company
@@ -129,26 +130,7 @@ class Reports extends MY_Controller
 	}
 	
 	// employees report
-	public function employees() {
-	
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['title'] = $this->lang->line('xin_hr_report_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_hr_report_employees');
-		$data['path_url'] = 'reports_employees';
-		$data['all_companies'] = $this->Xin_model->get_companies();
-		$data['all_departments'] = $this->Department_model->all_departments();
-		$data['all_designations'] = $this->Designation_model->all_designations();
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('117',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/reports/employees", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
+
 	// get company > departments
 	 public function get_departments() {
 
@@ -1295,11 +1277,71 @@ class Reports extends MY_Controller
 			redirect('admin/');
 		}
 	}
+	public function employees() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_hr_report_employees').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_report_employees');
+
+		$data['subview'] = $this->load->view("admin/reports/employees", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+
+	}
+
+	public function late_report() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_hr_report_employees').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_report_employees');
+
+		$data['subview'] = $this->load->view("admin/reports/late_report", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+
+	}
 	 
 	 
-	 
-	 
-	 
-	 
+	public function show_report(){
+        $status = $this->input->post('status');
+        $sql = $this->input->post('sql');
+        $key = $this->input->post('key');
+        $emp_id = explode(',', trim($sql));
+        $data['emp_list'] =$this->Reports_model->show_report($emp_id,$key,$status);
+		$data['key']=$key;
+		if($key == 1){
+			$this->load->view('admin/reports/emp_list', $data);
+		}else if($key == 2){
+			$this->load->view('admin/reports/intern', $data);
+		}else if($key == 3){
+			$this->load->view('admin/reports/probation', $data);
+		}else{
+			$this->load->view('admin/reports/increment', $data);
+		}
+    }
+	public function show_late_report(){
+		// $report_date = ;
+        $attendance_date = date("Y-m-d", strtotime($this->input->post('attendance_date')));
+        $status = $this->input->post('status');
+        $sql = $this->input->post('sql');
+        $key = $this->input->post('key');
+        $emp_id = explode(',', trim($sql));
+        $data['attendance_date'] = $attendance_date;
+		$data['status'] = $key;
+		if($key == 1){
+			$second_date= null;
+		}else if($key == 2){
+			$second_date= date('Y-m-d',strtotime('+6 days'.$attendance_date));
+		}else{
+			$second_date= date('Y-m-d',strtotime('+30 days'.$attendance_date));        
+		}
+		// dd($second_date);
+		$data['values'] =$this->Reports_model->late_report($emp_id,$key,$attendance_date,$second_date);
+		// dd($data);
+		$this->load->view('admin/reports/show_late_report', $data);
+    }
+
 } 
 ?>

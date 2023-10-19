@@ -9,8 +9,7 @@ class Attendance_model extends CI_Model
         parent::__construct();
     }
 
-    public function attn_process($process_date, $emp_ids, $status = null)
-    {
+    public function attn_process($process_date, $emp_ids, $status = null){
 
         $check_day = date("Y-m-d", strtotime("-1 day", strtotime($process_date)));
         $att_check = $this->db->where('attendance_date', $check_day)->get('xin_attendance_time');
@@ -969,8 +968,12 @@ class Attendance_model extends CI_Model
         $this->db->select('user_id as emp_id, first_name, last_name');
         if ($status == 1) {
             $this->db->where_in('status', array(1,4,5));
-        } else {
+        } else if ($status == 2){
             $this->db->where('status', $status);
+        } else if($status == 3){
+            $this->db->where_in('status', $status);
+        } else{
+            $this->db->where_in('status', [1,2,3,4,5]);
         }
         $this->db->where('company_id', 1);
         $this->db->order_by('user_id', 'asc');

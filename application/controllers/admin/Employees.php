@@ -2758,12 +2758,13 @@ public function nda() {
 	public function team_lead() {
 		$session = $this->session->userdata('username');
 		$data = array(
-				'lead_user_id' =>  $this->input->post("is_emp_lead")
+			'lead_user_id' =>  $this->input->post("is_emp_lead")
 		);
 		$insert_data  = $this->db->where('user_id',$_POST['user_id'])->update('xin_employees',$data);
 		if($insert_data){
+			redirect('/admin/employees/detail/'.$session['user_id'],'refresh');
+			// dd($insert_data);
 
-			dd($insert_data);
 		}else{
 			dd("KO");
 		}

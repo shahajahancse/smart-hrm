@@ -181,6 +181,88 @@ class Reports_model extends CI_Model {
 			  return $query = $this->db->query("SELECT * FROM xin_employees");
 		  }
 	}
+
+	public function show_report($emp_ids,$key,$status){
+	
+		$data = $this->db->select('
+			xin_employees.first_name,
+			xin_employees.last_name,
+			xin_departments.department_name,
+			xin_designations.designation_name,
+			(SELECT lead_employees.first_name FROM xin_employees AS lead_employees WHERE lead_employees.user_id = xin_employees.lead_user_id) AS lead_first_name,
+			(SELECT lead_employees.last_name FROM xin_employees AS lead_employees WHERE lead_employees.user_id = xin_employees.lead_user_id) AS lead_last_name,
+			xin_employees.email,
+			xin_employees.contact_no,
+			xin_employees.address,
+			xin_employees.password,
+			xin_employees.basic_salary,
+			xin_employee_incre_prob.effective_date as last_incre_date,
+			xin_employees.notify_incre_prob as next_incre_date,
+			xin_employees.date_of_joining,
+			DATEDIFF(NOW(), xin_employees.date_of_joining) AS duration,
+		')
+		->from('xin_employees')		
+		->join('xin_departments','xin_employees.department_id = xin_departments.department_id','left')		
+		->join('xin_designations','xin_employees.designation_id = xin_designations.designation_id','left')		
+		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.id','left')	
+		->where_in('xin_employees.user_id',$emp_ids)	
+		->where('xin_employees.status',$status)	
+		->get()->result();
+	    return $data;
+	}
+
+	  public function late_report($emp_id,$key,$attendance_date,$second_date){
+
+		// dd($key);
+
+        $this->db->select('
+            xin_employees.user_id as emp_id,
+            xin_employees.employee_id,
+            xin_employees.first_name,
+            xin_employees.last_name,
+            xin_employees.department_id,
+            xin_employees.designation_id,
+            xin_employees.date_of_joining,
+            xin_departments.department_name,
+            xin_designations.designation_name,
+            xin_attendance_time.attendance_date as ad,
+            xin_attendance_time.clock_in,
+            xin_attendance_time.clock_out,
+            xin_attendance_time.attendance_status,
+            xin_attendance_time.status,
+            xin_attendance_time.late_status
+        ');
+
+        $this->db->from('xin_employees');
+        $this->db->from('xin_departments');
+        $this->db->from('xin_designations');
+        $this->db->from('xin_attendance_time');
+
+        $this->db->where("xin_attendance_time.late_status", 1);
+        $this->db->where("xin_employees.is_active", 1);
+		if($key==1){
+			$this->db->where("xin_attendance_time.attendance_date", $attendance_date);
+		}else if($key==2){
+			$this->db->where("xin_attendance_time.attendance_date between '$attendance_date' and '$second_date'");
+		}else{
+			$this->db->where("xin_attendance_time.attendance_date between '$attendance_date' and '$second_date'");
+		}
+
+        $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
+        $this->db->where('xin_employees.department_id = xin_departments.department_id');
+        $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
+        $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
+        $this->db->order_by('xin_attendance_time.clock_in', "ASC");
+        $data = $this->db->get()->result();
+
+		// dd($this->db->last_query());
+		// dd($data);
+        if($data=='') {
+			return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
+        } else {
+            return $data;
+        }
+    }
 	
 }
 ?>
