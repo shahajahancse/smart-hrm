@@ -131,6 +131,7 @@ class Reports extends MY_Controller
 	
 	// employees report
 
+
 	// get company > departments
 	 public function get_departments() {
 
@@ -193,6 +194,19 @@ class Reports extends MY_Controller
 			redirect('admin/dashboard');
 		}
 	}
+	public function employee_leave_report() {
+	
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = 'leave report | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'leave report';
+		$data['path_url'] = 'reports_employee_attendance';
+		$data['get_all_companies'] = $this->Xin_model->get_companies();
+			$data['subview'] = $this->load->view("admin/reports/employee_leave_report", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data);
+	}
 	// reports > employee leave
 	public function employee_leave() {
 	
@@ -212,6 +226,46 @@ class Reports extends MY_Controller
 			redirect('admin/dashboard');
 		}
 	}
+	public function absent_monthly() {
+	
+		$prossecc_date= $this->input->post('first_date');
+		$first_date = date('Y-m-01',strtotime($prossecc_date));
+		$second_date = date('Y-m-t',strtotime($prossecc_date));
+
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $data['company_info'] = $this->Xin_model->get_company_info(1);
+        $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+
+        echo $this->load->view("admin/attendance/absent_details", $data, true);
+	}
+	public function yerly_leave() {
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+        $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+
+        echo $this->load->view("admin/reports/yerly_leave", $data, true);
+	}
+	public function leave_report()
+    {
+      
+		$prossecc_date= $this->input->post('first_date');
+		$first_date = date('Y-m-01',strtotime($prossecc_date));
+		$second_date = date('Y-m-t',strtotime($prossecc_date));
+        $sql = $this->input->post('sql');
+        $data['sql']= $sql ;
+
+
+        $emp_id = explode(',', trim($sql));
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+
+        $data['xin_employees'] =  $this->Attendance_model->leavesm($emp_id, $first_date, $second_date);
+          echo $this->load->view("admin/reports/leave_report", $data, true);
+            
+    }
 	
 	// reports > employee training
 	public function employee_training() {

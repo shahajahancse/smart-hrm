@@ -480,6 +480,15 @@ class Attendance_model extends CI_Model
         $this->db->order_by('employee_id', 'ASC');
         return $this->db->get('xin_leave_applications')->result();
     }
+    public function leavesm($emp_ids, $first_date, $second_date)
+    {
+        $this->db->select('*');
+        $this->db->where_in('employee_id', $emp_ids);
+        $this->db->where('from_date >=', $first_date);
+        $this->db->where('to_date <=', $second_date);
+        $this->db->order_by('employee_id', 'ASC');
+        return $this->db->get('xin_leave_applications')->result();
+    }
 
 
     public function get_proxi($emp_id)
