@@ -190,8 +190,10 @@ class Reports_model extends CI_Model {
             $this->db->where('status', $status);
         } else if($status == 5){
             $this->db->where_in('status', $status);
-        } else {
+        } else if($status == 2 || $status == 3 || $status == 18){
             $this->db->where_in('status', [1,4,5]);
+        }else {
+            $this->db->where_in('status', $status);
         }
         $this->db->where('company_id', 1);
         $this->db->order_by('user_id', 'asc');
@@ -313,6 +315,46 @@ class Reports_model extends CI_Model {
 		// $a = $this->db->get();
 		//  dd($a->result());
 		return $this->db->get()->result();
+    }
+
+   public function get_product_reports_info($id=null, $status=null, $category=null){
+	// dd($id);
+        $this->db->select(' 
+                    ap.id as a_id,
+                    ap.cat_id,
+                    ap.device_model,
+                    ap.device_name_id,
+                    ap.description,
+                    ap.status,
+                    ap.remark,
+                    ap.number,
+                    ap.user_id,
+                    pac.cat_name,
+                    pac.cat_short_name,
+                    pam.model_name,
+                    pam.image,
+                    mobile_numbers.number,
+                    xin_employees.first_name,
+                    xin_employees.last_name,
+        ');
+        $this->db->from('product_accessories as ap');
+        $this->db->join('product_accessories_model as pam',  'ap.device_model = pam.id', 'left');
+        $this->db->join('product_accessory_categories as pac', 'ap.cat_id = pac.id', 'left');
+        $this->db->join('mobile_numbers', 'ap.number = mobile_numbers.id', 'left');    
+        $this->db->join('xin_employees', 'ap.user_id = xin_employees.user_id', 'left');
+        if($id !=null){
+            $this->db->where_in('ap.user_id',$id);
+        	$this->db->order_by('ap.user_id',"ASC");
+        } 
+        if($category != null){
+            $this->db->where('ap.cat_id',$category);
+        } 
+        if($status != null){
+            $this->db->where('ap.status',$status);
+        } 
+        $this->db->order_by('ap.status',"ASC");
+        $this->db->group_by('ap.id');
+        return $this->db->get()->result();  
     }
 	
 }

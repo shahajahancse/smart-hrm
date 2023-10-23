@@ -804,7 +804,7 @@ if($theme[0]->sub_menu_icons != ''){
 
         <?php if($system[0]->module_projects_tasks=='true'){?>
         <?php if(in_array('114',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['reports_projects_active']))echo $arr_mod['reports_projects_active'];?>"> <a href="<?php echo site_url('admin/reports/meeting');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Employee Meeting Report</a> </li>
+        <li class="sidenav-link <?php if(!empty($arr_mod['reports_projects_active']))echo $arr_mod['reports_projects_active'];?>"> <a href="<?php echo site_url('admin/reports/inventory');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Inventory</a> </li>
         <?php } ?>
 
         <?php if(in_array('115',$role_resources_ids)) { ?>

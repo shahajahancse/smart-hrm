@@ -4,6 +4,7 @@
 <?php  $this->load->view('admin/head_bangla'); ?>
 
 <h4 class="text-center">Employees Meeting Report</h4>
+<h6 class="text-center">Report on : <?php echo $status == 1 ? $first_date :($status==2 ? $first_date.' to '.$second_date : $first_date.' to '.$second_date )?></h6>
 <table class="table table-striped table-bordered">
     <thead style="font-size:12px;" >
         <tr>
