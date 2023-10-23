@@ -781,17 +781,17 @@ if($theme[0]->sub_menu_icons != ''){
     <?php  if(in_array('110',$role_resources_ids) || in_array('111',$role_resources_ids) || in_array('112',$role_resources_ids) || in_array('113',$role_resources_ids) || in_array('114',$role_resources_ids) || in_array('115',$role_resources_ids)) {?>
     <li class="<?php if(!empty($arr_mod['reports_open']))echo $arr_mod['reports_open'];?> treeview"> <a href="#"> <i class="fa fa-bar-chart"></i> <span><?php echo $this->lang->line('xin_hr_report_title');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
       <ul class="treeview-menu">
-        <?php if(in_array('111',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['reports_payslip_active']))echo $arr_mod['reports_payslip_active'];?>"> <a href="<?php echo site_url('admin/reports/payslip');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_report_employees');?> </a> </li>
-        <?php } ?>
-        <?php if(in_array('112',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['reports_employee_attendance_active']))echo $arr_mod['reports_employee_attendance_active'];?>"> <a href="<?php echo site_url('admin/reports/employee_attendance');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_reports_attendance_employee');?> </a> </li>
-        <?php } ?>
-        <?php if($system[0]->module_training=='true'){?>
-        <?php if(in_array('113',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['reports_employee_training_active']))echo $arr_mod['reports_employee_training_active'];?>"> <a href="<?php echo site_url('admin/reports/employee_training');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_reports_training');?> </a> </li>
-        <?php } ?>
-        <?php } ?>
+        <!-- < ?php if(in_array('111',$role_resources_ids)) { ?>
+        <li class="sidenav-link < ?php if(!empty($arr_mod['reports_payslip_active']))echo $arr_mod['reports_payslip_active'];?>"> <a href="< ?php echo site_url('admin/reports/payslip');?>"> <i class="fa < ?php echo $submenuicon;?>"></i> < ?php echo $this->lang->line('xin_hr_report_employees');?> </a> </li>
+        < ?php } ?>
+         ?php if(in_array('112',$role_resources_ids)) { ?>
+        <li class="sidenav-link < ?  php if(!empty($arr_mod['reports_employee_attendance_active']))echo $arr_mod['reports_employee_attendance_active'];?>"> <a href="< ?php echo site_url('admin/reports/employee_attendance');?>"> <i class="fa < ?php echo $submenuicon;?>"></i> < ?php echo $this->lang->line('xin_hr_reports_attendance_employee');?> </a> </li>
+        < ?php } ?>
+        < ?php if($system[0]->module_training=='true'){?>
+        < ?php if(in_array('113',$role_resources_ids)) { ?>
+        <li class="sidenav-link < ?php if(!empty($arr_mod['reports_employee_training_active']))echo $arr_mod['reports_employee_training_active'];?>"> <a href="< ?php echo site_url('admin/reports/employee_training');?>"> <i class="fa < ?php echo $submenuicon;?>"></i> < ?php echo $this->lang->line('xin_hr_reports_training');?> </a> </li>
+        < ?php } ?>
+        < ?php } ?> -->
 
         
         <?php if(in_array('117',$role_resources_ids)) { ?>
@@ -804,7 +804,7 @@ if($theme[0]->sub_menu_icons != ''){
 
         <?php if($system[0]->module_projects_tasks=='true'){?>
         <?php if(in_array('114',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['reports_projects_active']))echo $arr_mod['reports_projects_active'];?>"> <a href="<?php echo site_url('admin/reports/projects');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Internship</a> </li>
+        <li class="sidenav-link <?php if(!empty($arr_mod['reports_projects_active']))echo $arr_mod['reports_projects_active'];?>"> <a href="<?php echo site_url('admin/reports/meeting');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Employee Meeting Report</a> </li>
         <?php } ?>
 
         <?php if(in_array('115',$role_resources_ids)) { ?>

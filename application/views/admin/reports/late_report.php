@@ -10,64 +10,60 @@
         <h3 class="box-title">Employees Late Report </h3>
       </div>
       <div class="box-body">
-    
-         <div class="row">
-      <div class="col-md-12">
         <div class="row">
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="process_date">First Date</label>
-              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>" required>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="process_date">Second Date</label>
-              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text" autocomplete="off">
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="upload_file">Status</label>
-              <select class="form-control" name="status" id="status">
-                <option value="">Select one</option>
-                <option value="1">Regular</option>
-                <option value="2">Left</option>
-                <option value="3">Resign</option>
-                <option value="4">All</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="col-md-6" style="margin-left:-15px;">
-            <div class="form-inline"> &nbsp;
-              <label for="first_name">&nbsp;</label>
-              <button class="btn btn-success btn-sm" onclick="show_report(1)">Dailys</button>&nbsp;&nbsp;
-              <button class="btn btn-success btn-sm" onclick="show_report(2)">Weekly</button>&nbsp;&nbsp;
-              <button class="btn btn-success btn-sm" onclick="show_report(3)">Monthly</button>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="process_date">First Date</label>
+                  <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>" required>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="process_date">Second Date</label>
+                  <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text" autocomplete="off">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="upload_file">Status</label>
+                  <select class="form-control" name="status" id="status">
+                    <option value="">Select one</option>
+                    <option value="1">Regular</option>
+                    <option value="2">Left</option>
+                    <option value="3">Resign</option>
+                    <option value="4">All</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6" style="margin-left:-15px;">
+                <div class="form-inline"> &nbsp;
+                  <label for="first_name">&nbsp;</label>
+                  <button class="btn btn-success btn-sm" onclick="show_report(1)">Dailys</button>&nbsp;&nbsp;
+                  <button class="btn btn-success btn-sm" onclick="show_report(2)">Weekly</button>&nbsp;&nbsp;
+                  <button class="btn btn-success btn-sm" onclick="show_report(3)">Monthly</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
 
+    <div class="col-lg-4">
+      <div class="box" style="height: 74vh;overflow-y: scroll;">
+        <table class="table table-striped table-hover" id="fileDiv">
+          <tr style="position: sticky;top: 0;z-index:1">
+              <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox" name="select-all" /></th>
+              <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
+              <th class=" text-center" style="background:#0177bc;color:white">Name</th>
+          </tr>
+        </table>
       </div>
     </div>
-  </div>
-
-
-  <div class="col-lg-4">
-  <div class="box" style="height: 74vh;overflow-y: scroll;">
-  <table class="table table-striped table-hover" id="fileDiv">
-    <tr style="position: sticky;top: 0;z-index:1">
-        <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox" name="select-all" /></th>
-        <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
-        <th class=" text-center" style="background:#0177bc;color:white">Name</th>
-    </tr>
-  </table>
-  </div>
-  </div>
 </div>
 
 

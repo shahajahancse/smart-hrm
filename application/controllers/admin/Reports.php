@@ -69,24 +69,7 @@ class Reports extends MY_Controller
 	}
 	
 	// projects report
-	public function projects() {
-	
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['title'] = $this->lang->line('xin_hr_reports_projects').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_hr_reports_projects');
-		$data['path_url'] = 'reports_project';
-		$data['all_companies'] = $this->Xin_model->get_companies();
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('114',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/reports/projects", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
+
 	
 	// tasks report
 	public function tasks() {
@@ -1277,6 +1260,12 @@ class Reports extends MY_Controller
 			redirect('admin/');
 		}
 	}
+	
+	public function get_employeess(){
+        $status = $this->input->get('status');
+        $data["employees"] = $this->Reports_model->get_empolyees($status);
+        echo json_encode($data);
+    }
 	public function employees() {
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -1303,19 +1292,18 @@ class Reports extends MY_Controller
 
 	}
 	 
-	 
 	public function show_report(){
-        $status = $this->input->post('status');
+        // $status = $this->input->post('status');
         $sql = $this->input->post('sql');
-        $key = $this->input->post('key');
+        $status = $this->input->post('status');
         $emp_id = explode(',', trim($sql));
-        $data['emp_list'] =$this->Reports_model->show_report($emp_id,$key,$status);
-		$data['key']=$key;
-		if($key == 1){
+        $data['emp_list'] =$this->Reports_model->show_report($emp_id,$status);
+		$data['status']=$status;
+		if($status == 1 || $status == 3){
 			$this->load->view('admin/reports/emp_list', $data);
-		}else if($key == 2){
+		}else if($status == 4){
 			$this->load->view('admin/reports/intern', $data);
-		}else if($key == 3){
+		}else if($status == 5){
 			$this->load->view('admin/reports/probation', $data);
 		}else{
 			$this->load->view('admin/reports/increment', $data);
@@ -1337,10 +1325,43 @@ class Reports extends MY_Controller
 		}else{
 			$second_date= date('Y-m-d',strtotime('+30 days'.$attendance_date));        
 		}
-		// dd($second_date);
 		$data['values'] =$this->Reports_model->late_report($emp_id,$key,$attendance_date,$second_date);
+		// dd($second_date);
 		// dd($data);
 		$this->load->view('admin/reports/show_late_report', $data);
+    }
+
+
+	public function meeting() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = "Employees Meeting Report".' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] ="Meeting Report";
+		$data['subview'] = $this->load->view("admin/reports/meeting", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data);
+	}
+
+	public function show_meeting_report(){
+		// dd($_POST);
+        $attendance_date = date("Y-m-d", strtotime($this->input->post('a_date')));
+        $status = $this->input->post('status');
+        $sql = $this->input->post('sql');
+        $key = $this->input->post('key');
+        $emp_id = explode(',', trim($sql));
+        $data['attendance_date'] = $attendance_date;
+		$data['status'] = $key;
+		if($key == 1){
+			$second_date= null;
+		}else if($key == 2){
+			$second_date= date('Y-m-d',strtotime('+6 days'.$attendance_date));
+		}else{
+			$second_date= date('Y-m-d',strtotime('+30 days'.$attendance_date));        
+		}
+		$data['values'] =$this->Reports_model->show_meeting_report($emp_id,$key,$attendance_date,$second_date);
+		// dd($data);
+		$this->load->view('admin/reports/meeting_report', $data);
     }
 
 } 

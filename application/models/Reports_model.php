@@ -182,9 +182,25 @@ class Reports_model extends CI_Model {
 		  }
 	}
 
-	public function show_report($emp_ids,$key,$status){
-	
-		$data = $this->db->select('
+	public function get_empolyees($status){
+		$this->db->select('user_id as emp_id, first_name, last_name');
+        if ($status == 1) {
+            $this->db->where_in('status', $status);
+        } else if ($status == 4){
+            $this->db->where('status', $status);
+        } else if($status == 5){
+            $this->db->where_in('status', $status);
+        } else {
+            $this->db->where_in('status', [1,4,5]);
+        }
+        $this->db->where('company_id', 1);
+        $this->db->order_by('user_id', 'asc');
+        return $result = $this->db->get('xin_employees')->result();
+	}
+
+	public function show_report($emp_ids,$status){
+		// dd($status);
+		$this->db->select('
 			xin_employees.first_name,
 			xin_employees.last_name,
 			xin_departments.department_name,
@@ -205,13 +221,25 @@ class Reports_model extends CI_Model {
 		->join('xin_departments','xin_employees.department_id = xin_departments.department_id','left')		
 		->join('xin_designations','xin_employees.designation_id = xin_designations.designation_id','left')		
 		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.id','left')	
-		->where_in('xin_employees.user_id',$emp_ids)	
-		->where('xin_employees.status',$status)	
-		->get()->result();
+		->where_in('xin_employees.user_id',$emp_ids);
+		if($status == 1){
+			$this->db->where('xin_employees.status',$status);
+		}else if($status == 4){
+			$this->db->where('xin_employees.status',$status);
+		}else if($status == 5){
+			$this->db->where('xin_employees.status',$status);
+		}else if($status == 2){
+			$this->db->where('xin_employee_incre_prob.status',$status);
+		}else{
+			$this->db->where_in('xin_employees.status',[1,4,5]);	
+		}		
+		$data = $this->db->get()->result();
+		// dd($data);
 	    return $data;
 	}
 
-	  public function late_report($emp_id,$key,$attendance_date,$second_date){
+
+	public function late_report($emp_id,$key,$attendance_date,$second_date){
 
 		// dd($key);
 
@@ -255,13 +283,36 @@ class Reports_model extends CI_Model {
         $this->db->order_by('xin_attendance_time.clock_in', "ASC");
         $data = $this->db->get()->result();
 
-		// dd($this->db->last_query());
-		// dd($data);
         if($data=='') {
 			return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         } else {
-            return $data;
+            return $data; 
         }
+    }
+
+	public function show_meeting_report($emp_id,$key,$attendance_date,$second_date){
+		// dd( $key);
+		$this->db->select('empm.id, mr.title, 
+							em.first_name, 
+							em.last_name, 
+							empm.employee_id AS emp_id, 
+							empm.date, 
+							empm.out_time, 
+							empm.in_time, 
+							empm.status,
+							mp.address,
+							desig.designation_name
+						');
+		$this->db->from('xin_employee_move_register as empm');
+		$this->db->where_in('empm.employee_id', $emp_id);
+		$this->db->join('xin_employees as em', 'em.user_id = empm.employee_id');
+		$this->db->join('xin_designations as desig', 'em.designation_id = desig.designation_id');
+		$this->db->join('xin_employee_move_reason as mr', 'empm.reason = mr.id');
+		$this->db->join('xin_employee_move_place as mp', 'empm.place_adress = mp.place_id');
+		$this->db->order_by('empm.id', 'DESC');
+		// $a = $this->db->get();
+		//  dd($a->result());
+		return $this->db->get()->result();
     }
 	
 }

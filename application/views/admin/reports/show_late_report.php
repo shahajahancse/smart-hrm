@@ -68,8 +68,6 @@
                 <td><?php echo $row->designation_name?></td>
                 <td><?php echo $row->clock_in==""? "": date('H:i:s a',strtotime($row->clock_in))?></td>
                 <td><?php echo $row->clock_out==""? "": date('h:i:s a',strtotime($row->clock_out))?></td>
-                <!-- <td>< ?php echo $status;?></td>
-                <td>< ?php echo $row->comment;?></td> -->
             </tbody>
             <?php }?>
 	      </table>
