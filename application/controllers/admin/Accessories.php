@@ -242,6 +242,7 @@ class Accessories extends MY_Controller {
                 'status'         => $this->input->post('status'),
                 'use_number'     => $this->input->post('use_number'),
                 'number'         => $this->input->post('number'),
+                'move_status'    => 0,
             );    
 
             // dd($form_data);

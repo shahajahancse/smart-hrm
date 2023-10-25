@@ -165,6 +165,7 @@
         </table>
     </div>
 </div>
+
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 
 <script>

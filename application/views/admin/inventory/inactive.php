@@ -33,7 +33,7 @@
             <td class="text-center"><?= "MHL ".$row->cat_short_name.'-'.$row->device_name_id ?></td>
             <td class="text-center">
               <span class="using">
-                <?= $row->status == 5 && $row->move_status == 1 ? "<i class='fa fa-dot-circle-o' style='color:red'></i> Not Used": "<i class='fa fa-dot-circle-o' style='color:green'></i> Used"?>
+                <?= $row->status == 5 && $row->move_status == 0 ? "<i class='fa fa-dot-circle-o' style='color:red'></i> Not Used": "<i class='fa fa-dot-circle-o' style='color:green'></i> Used"?>
               </span>
             </td>
             <td class="text-center">

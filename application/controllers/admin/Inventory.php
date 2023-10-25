@@ -1234,12 +1234,12 @@ public function create_movement(){
 
 }
 public function move_create(){
-	dd($_POST);
+	// dd($_POST);
 	$data['device_id']  = $_POST['device_id'];
 	$data['user_id']    = $_POST['user_id'];
 	$data['purpose']    = $_POST['purpose'];
 	$data['floor']      = $_POST['floor'];
-	$data['acc_id']      = $_POST['test'];
+	$data['remark']     = $_POST['remark'];
 
 
     if($_POST['role_id'] != 3){
@@ -1271,6 +1271,7 @@ function requested_list(){
 	}
 	$data['session']    = $session;
 	$data['requests']   = $this->Inventory_model->request_list();
+	// dd($data);
 	$data['subview']    = $this->load->view("admin/inventory/request_list", $data);
 }
 

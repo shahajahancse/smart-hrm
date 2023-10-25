@@ -808,12 +808,12 @@ if($theme[0]->sub_menu_icons != ''){
         <?php } ?>
 
         <?php if(in_array('115',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['reports_tasks_active']))echo $arr_mod['reports_tasks_active'];?>"> <a href="<?php echo site_url('admin/reports/tasks');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Probation Period</a> </li>
+        <li class="sidenav-link <?php if(!empty($arr_mod['reports_leave_active']))echo $arr_mod['reports_leave_active'];?>"> <a href="<?php echo site_url('admin/reports/employee_leave');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Leave</a> </li>
         <?php } ?>
         <?php } ?>
 
         <?php if(in_array('409',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['reports_leave_active']))echo $arr_mod['reports_leave_active'];?>"> <a href="<?php echo site_url('admin/reports/employee_leave');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Increment</a> </li>
+        <li class="sidenav-link <?php if(!empty($arr_mod['reports_lunch_active']))echo $arr_mod['reports_lunch_active'];?>"> <a href="<?php echo site_url('admin/reports/lunch_report_all');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Lunch</a> </li>
         <?php } ?>
 
       </ul>

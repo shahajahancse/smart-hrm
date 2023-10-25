@@ -1443,5 +1443,26 @@ class Reports extends MY_Controller
 		$this->load->view('admin/reports/inventory_report',$data);
 	}
 
+	    public function lunch_report_all() {
+		$session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $this->db->distinct();
+        $this->db->select('end_date,next_date');
+        $this->db->from('lunch_payment');
+        $this->db->order_by('id DESC'); // Replace with your actual table name
+        $data['prever_report'] = $this->db->get()->result();
+        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Lunch Report';
+        $data['path_url'] = 'lunch';
+        if (!empty($session)) {
+            $data['subview'] = $this->load->view("admin/reports/lunch_report", $data, true);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+	}
+
 } 
 ?>
