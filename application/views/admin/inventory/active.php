@@ -40,7 +40,7 @@
             <td class="text-center"><?= $row->first_name.' '.$row->last_name?></td>
             <td class="text-center">
               <span class="using">
-                <?= $row->status== 2?"<i class='fa fa-dot-circle-o' style='color:green'></i> Used": ""?>
+                <?= $row->status== 2 ?"<i class='fa fa-dot-circle-o' style='color:green'></i> Used": ""?>
               </span>
             </td>
             <td class="text-center"><?= $row->floor == 3 ? "3rd Floor" : "5th Floor"?></td>

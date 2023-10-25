@@ -13,14 +13,14 @@
         <div class="row">
           <div class="col-md-12">
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-7">
                 <div class="form-group">
-                  <label for="upload_file">Status</label>
+                  <label for="upload_file">Select</label>
                   <select class="form-control" name="status" id="status">
                     <option value="">Select one</option>
                     <option value="11">All Report</option>
                     <option value="12">Category Wise Report</option>
-                    <option value="13">Sub Category Wise Report</option>
+                    <!-- <option value="13">Sub Category Wise Report</option> -->
                     <option value="14">Induvisual Item Report</option>
                     <optgroup label="Device Movement Report">
                         <option value="15">Daily</option>
@@ -35,34 +35,39 @@
                   </select>
                 </div>
               </div>
-            <div class="col-md-6">
+              <div class="col-md-5" id="div_category_id">
                 <div class="form-group">
-                  <label for="upload_file">Status</label>
-                  <select class="form-control" name="status" id="status">
+                  <label for="upload_file">Select Category</label>
+                  <select class="form-control" name="category" id="category_id">
                     <option value="">Select one</option>
-                    <option value="11">All Report</option>
-                    <option value="12">Category Wise Report</option>
-                    <option value="13">Sub Category Wise Report</option>
-                    <option value="14">Induvisual Item Report</option>
-                    <optgroup label="Device Movement Report">
-                        <option value="15">Daily</option>
-                        <option value="16">Weekly</option>
-                        <option value="17">Monthly</option>
-                    </optgroup>
-                    <option value="18">Employee Using Device</option>
-                    <option value="19">Stock/Stored Device Report</option>
-                    <option value="20">Stock/Stored Item Report</option>
-                    <option value="21">Damage Device Report</option>
-                    <option value="22">Damage Item Report</option>
+                    <?php
+                      $categories =$this->db->select('id,cat_name')->get('product_accessory_categories')->result(); 
+                      foreach($categories as $category){
+                    ?>
+                    <option value="<?php echo $category->id?>"><?php echo $category->cat_name?></option>
+                    <?php }?>
                   </select>
                 </div>
               </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <button style="margin-top: 25px" class="btn btn-success" onclick="show_report()">Show Report</button>
-                </div>
+              
+              <div class="col-md-5" id="div_sub_category_id">
+                  <div class="form-group">
+                    <label for="upload_file">Select Sub Category</label>
+                    <select class="form-control" name="sub_category" id="sub_category_id">
+                     <option value="">Select one</option>
+                    <?php
+                      $sub_categories =$this->db->select('id,sub_cate_name')->get('products_sub_categories')->result(); 
+                      foreach($sub_categories as $sub_category){
+                    ?>
+                    <option value="<?php echo $sub_category->id ?>"><?php echo $sub_category->sub_cate_name ?></option>
+                    <?php }?>
+                    </select>
+                  </div>
               </div>
             </div>
+              <!-- <div class="form-group"> -->
+                <button class="btn btn-success" onclick="show_report()">Show Report</button>
+              <!-- </div> -->
           </div>
         </div>
       </div>
@@ -118,13 +123,38 @@
                 }
             });
         });
-    });
+      });
+      $('#div_category_id').hide();
+      $('#div_sub_category_id').hide();
+
+      $("#status").change(function () {
+        status = $('#status').val();
+        if(status == 12){
+            $('#div_category_id').show(1000);
+            $('#div_sub_category_id').hide(1000);
+        } else if(status == 13){
+          $('#div_category_id').hide(1000);
+          $('#div_sub_category_id').show(1000);
+        }else{
+          $('#div_category_id').hide(1000);
+          $('#div_sub_category_id').hide(1000);
+        }
+      });
 
 
     function show_report(){
         var ajaxRequest;  // The variable that makes Ajax possible!
         ajaxRequest = new XMLHttpRequest();
-        status = document.getElementById('status').value;
+        var status = $('#status').val();
+        var category = $('#category_id').val();
+        var sub_category = $('#sub_category_id').val();
+
+        $('#status').on('change', function() {
+          if ($(this).val() != 12) {
+            $('#category_id').val('');
+          }
+        });
+
         if(status ==''){
             alert('Please select status');
             return ;
@@ -135,7 +165,7 @@
             alert('Please select employee Id');
             return ;
         }
-        var data = "status="+status+'&sql='+sql;
+        var data = "status="+status+"&category="+category+"&sub_category="+sub_category+'&sql='+sql;
         url = base_url + "/show_inventory_report";
         ajaxRequest.open("POST", url, true);
         ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");

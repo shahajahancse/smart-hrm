@@ -1363,16 +1363,27 @@ class Reports extends MY_Controller
 
 	}
 	public function show_inventory_report(){
+		// dd($_POST);
 		$sql = $this->input->post('sql');
         $status = $this->input->post('status');
+        $category = $this->input->post('category');
+        $sub_category = $this->input->post('sub_category');
         $emp_id = explode(',', trim($sql));
 		if($status == 11){
+			$data['reports']     = $this->Reports_model->get_product_reports_info(null,null,null);
+		}else if($status == 12){
+			$data['reports']     = $this->Reports_model->get_product_reports_info(null,null,$category);
+		}else if($status == 13){
 			$data['reports']     = $this->Reports_model->get_product_reports_info(null,null,null);
 		}else if($status == 18){
 			$data['reports']     = $this->Reports_model->get_product_reports_info($emp_id,null,null);
 		}else if($status == 19){
 			$data['reports']     = $this->Reports_model->get_product_reports_info(null,2,null);
+		}else if($status == 20){
+			$data['reports']     = $this->Reports_model->get_product_reports_info(null,4,null);
 		}else if($status == 21){
+			$data['reports']     = $this->Reports_model->get_product_reports_info(null,4,null);
+		}else if($status == 22){
 			$data['reports']     = $this->Reports_model->get_product_reports_info(null,4,null);
 		}
 		$this->load->view('admin/reports/inventory_report',$data);
