@@ -637,13 +637,15 @@
         }
       }
   }
-    function print_vendor_data()
+    function print_vendor_data(s)
     {
       var ajaxRequest;  // The variable that makes Ajax possible!
       ajaxRequest = new XMLHttpRequest();
-
       first_date = document.getElementById('process_date').value;
       second_date = document.getElementById('second_date').value;
+        if (s == 1) {
+          second_date = first_date;
+        }
       var checkboxes = document.getElementsByName('select_emp_id[]');
       var sql = get_checked_value(checkboxes);
       
