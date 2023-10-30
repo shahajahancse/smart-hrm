@@ -17,7 +17,9 @@
             <th class="text-center">Address</th>
             <th class="text-center">PC Password</th>
             <th class="text-center">Using Device</th>
+            <?php if($session['role_id'] ==1 || $session['role_id'] ==2){?>
             <th class="text-center">Gross Salary</th>
+            <?php }?>
             <th class="text-center">Joining Date</th>
             <th class="text-center">Job Duration</th>
             <th class="text-center">Last Increment Date</th>
@@ -38,7 +40,9 @@
             <td><?= $value->address?></td>
             <td><?= '-'?></td>
             <td><?= '-'?></td>
+            <?php if($session['role_id'] !=1 || $session['role_id'] !=2){?>
             <td><?= $value->basic_salary?></td>
+            <?php }?>
             <td><?= $value->date_of_joining?></td>
             <?php 
                 $years = floor($value->duration / 365); 

@@ -55,7 +55,7 @@
 </style>
 <div id="loading">
 
-    <img src="<?php echo base_url()?>skin/hrsale_assets/img/loding.gif">
+    <!-- <img src="<?php echo base_url()?>skin/hrsale_assets/img/loding.gif"> -->
 
 </div>
 
@@ -111,9 +111,9 @@
         </div>
     </div>
 
-    <div id="loader" align="center" style="margin:0 auto; width:600px; overflow:hidden; display:none; margin-top:10px;">
-        <img src="<?php echo base_url();?>/uploads/ajax-loader.gif" />
-    </div>
+    <!-- <div id="loader" align="center" style="margin:0 auto; width:600px; overflow:hidden; display:none; margin-top:10px;">
+        <img src="< ?php echo base_url();?>/uploads/ajax-loader.gif" />
+    </div> -->
 
     <div class="box <?php echo $get_animate;?>">
         <div class="box-header with-border" id="report_title">
@@ -123,32 +123,27 @@
 
         <div class="box-body" id="emp_report">
             <div class="tab-content" id="myTabContent">
-
                 <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab"
-                    style="margin-top: 30px;">
+                    style="margin-top: 0px;">
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(1)">Daily Ordering Report </button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(3)">Continue Ordering Report</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="perday(5)">Lunch Issues Report</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(1)">Paid Employees</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(0)">Unpaid Employees</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2)">Employees Collection
-                        Sheets</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2)">Employees Collection Sheets</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="prever_report()">Previous Report</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="lunch_jobcard()">Employee wise Lunch Report
-</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="lunch_jobcard()">Employee wise Lunch Report</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="conempmeal(1)">Employee Meal</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="conempmeal(2)">Gest Meal</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="print_vendor_data(1)">Vendor Lunch Daily</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="print_vendor_data(2)">Vendor Data Continue</button>
                 </div>
             </div>
-
-
         </div>
 
-        <div class="box-body" id="entry_form">
+        <!-- <div class="box-body" id="entry_form">
 
-        </div>
+        </div> -->
 
     </div>
 </div>
@@ -188,6 +183,7 @@ $(document).ready(function() {
     $("#status").change(function() {
         status = document.getElementById('status').value;
         var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
+        $('#fileDiv #removeTr').remove();
         $.ajax({
             url: url,
             type: 'GET',
@@ -201,22 +197,20 @@ $(document).ready(function() {
             success: function(response) {
                 arr = response.employees;
                 if (arr.length != 0) {
+                    var i = 1;
                     var items = '';
-                    $.each(arr, function(index, value) {
-                        items += '<tr id="removeTr">';
-                        items +=
-                            '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' +
-                            value.emp_id + '" ></td>';
-                        items += '<td class="success">' + value.emp_id + '</td>';
-                        items += '<td class="warning ">' + value.first_name + ' ' +
-                            value.last_name + '</td>';
-                        items += '</tr>';
+                    $.each(arr, function (index, value) {
+                    items += '<tr id="removeTr">';
+                    items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' + value.emp_id + '" ></td>';
+                    items += '<td class="success">' + (i++) + '</td>';
+                    items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + " (" +value.emp_id + ")" + '</td>';
+                    items += '</tr>';
                     });
                     // console.log(items);
                     $('#fileDiv tr:last').after(items);
-                } else {
-                    $('#fileDiv #removeTr').remove();
-                }
+                } 
+                    
+               
             }
         });
     });

@@ -1346,6 +1346,10 @@ class Reports extends MY_Controller
 
 	}
 	public function show_report(){
+			$data['session'] = $this->session->userdata('username');
+		if(empty($data['session'])){ 
+			redirect('admin/');
+		}
         // $status = $this->input->post('status');
         $sql = $this->input->post('sql');
         $status = $this->input->post('status');
@@ -1364,23 +1368,17 @@ class Reports extends MY_Controller
     }
 	public function show_late_report(){
 		// $report_date = ;
-        $attendance_date = date("Y-m-d", strtotime($this->input->post('attendance_date')));
+		// dd($_POST);
+        $attendance_date =$this->input->post('attendance_date');
+        $second_date = $this->input->post('second_date');
         $status = $this->input->post('status');
         $sql = $this->input->post('sql');
         $key = $this->input->post('key');
         $emp_id = explode(',', trim($sql));
         $data['attendance_date'] = $attendance_date;
+        $data['second_date'] = $second_date;
 		$data['status'] = $key;
-		if($key == 1){
-			$second_date= null;
-		}else if($key == 2){
-			$second_date= date('Y-m-d',strtotime('+6 days'.$attendance_date));
-		}else{
-			$second_date= date('Y-m-d',strtotime('+30 days'.$attendance_date));        
-		}
 		$data['values'] =$this->Reports_model->late_report($emp_id,$key,$attendance_date,$second_date);
-		// dd($second_date);
-		// dd($data);
 		$this->load->view('admin/reports/show_late_report', $data);
     }
 	public function show_meeting_report(){
@@ -1411,10 +1409,8 @@ class Reports extends MY_Controller
 		}
 		$data['title'] = "Inventory Report".' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = "Inventory Report";
-
 		$data['subview'] = $this->load->view("admin/reports/inventory", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
-
 	}
 	public function show_inventory_report(){
 		// dd($_POST);
