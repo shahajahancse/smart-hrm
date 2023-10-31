@@ -204,6 +204,8 @@ $(function() {
                                     <a style="padding-left:5px;"  href="<?= base_url('admin/inventory/product_details/'.$rows->id) ?>">Details</a>
                                     <hr class="divider">
                                     <a style="padding-left:5px;" href="<?= base_url('admin/inventory/products/'.$rows->id);?>">Edit</a>
+                                    <hr class="divider">
+                                    <a style="padding-left:5px;" href="<?= base_url('admin/inventory/products_delete/'.$rows->id);?>">Delete</a>
                                 </div>
                             </div>
                         </td>

@@ -1104,6 +1104,7 @@ public function low_inv_all_product_status_report($exc=null){
 		redirect("admin/inventory/index");
 	}
 
+
     public function delete_requsiton($id){
 		$this->db->where('id',$id)->delete('products_requisition_details');
 		$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
@@ -1448,7 +1449,13 @@ public function mobile_bill(){
 			$this->session->set_flashdata('success', 'Successfully Update');
 			redirect('admin/inventory/create_phone','refresh');
 		}
+	}
 
+	public function products_delete($id){
+		$delete = $this->db->where('id',$id)->delete('products');
+		$this->db->where('id',$id)->delete('products_requisitions');
+		$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
+		redirect("admin/inventory/products");
 	}
 
 

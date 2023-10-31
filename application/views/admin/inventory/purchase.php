@@ -99,7 +99,8 @@ $(function() {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php  foreach ($products as $key => $rows) { ?>
+                    <?php if (is_array($products)) {
+                        foreach ($products as $key => $rows) {?>
                     <tr>
                         <td class="text-center"><?php echo ($key+1)."."; ?></td>
                         <?php if($user_role_id==1){?>
@@ -138,7 +139,7 @@ $(function() {
                             </div>
                         </td>
                     </tr>
-                    <?php } ?>
+                    <?php } }?>
                 </tbody>
             </table>
         </div>

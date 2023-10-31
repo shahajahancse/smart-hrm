@@ -203,6 +203,7 @@ class Reports_model extends CI_Model {
 	public function show_report($emp_ids,$status){
 		// dd($status);
 		$this->db->select('
+			xin_employees.user_id,
 			xin_employees.first_name,
 			xin_employees.last_name,
 			xin_departments.department_name,
@@ -213,6 +214,7 @@ class Reports_model extends CI_Model {
 			xin_employees.contact_no,
 			xin_employees.address,
 			xin_employees.password,
+            xin_employees.user_password,
 			xin_employees.basic_salary,
 			xin_employee_incre_prob.effective_date as last_incre_date,
 			xin_employees.notify_incre_prob as next_incre_date,
@@ -225,7 +227,7 @@ class Reports_model extends CI_Model {
 		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.id','left')	
 		->where_in('xin_employees.user_id',$emp_ids);
 		if($status == 1){
-			$this->db->where('xin_employees.status',$status);
+			$this->db->where('xin_employees.status',$status);	
 		}else if($status == 4){
 			$this->db->where('xin_employees.status',$status);
 		}else if($status == 5){

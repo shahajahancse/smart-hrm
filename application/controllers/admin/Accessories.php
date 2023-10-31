@@ -426,6 +426,12 @@ class Accessories extends MY_Controller {
 
     }
 
+     public function delete_desk_list() {
+        $item_id = $this->input->post('id');
+        $this->db->where('id', $item_id);
+        return $this->db->delete('xin_employee_desk');
+    }
+
 }
 
 ?>

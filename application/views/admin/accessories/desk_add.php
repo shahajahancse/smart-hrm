@@ -202,7 +202,7 @@ function loadTableData() {
         tableHtml += '<td class="text-center">' + floor + '</td>';
         tableHtml += '<td class="text-center">' + row.description + '</td>';
         tableHtml += '<td class="text-center using">' + statusIconHtml + '</td>';
-        tableHtml += '<td class="text-center"><button class="btn btn-sm btn-info editButton" data-record-id="' + id + '">Edit</button></td>';
+        tableHtml += '<td class="text-center"><button class="btn btn-sm btn-info editButton" data-record-id="' + id + '">Edit</button><button class="btn btn-sm btn-danger deleteButton" data-record-id="' + id + '">Delete</button></td>';
         tableHtml += '</tr>';
         serialCounter++;
       });
@@ -242,6 +242,42 @@ $(document).on('click', '.editButton', function() {
   $('#recordId').val(recordId); // Set the recordId in the form
   fetchRowData(recordId);
 });
+
+
+$(document).on('click', '.deleteButton', function() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (!result.isConfirmed) {
+        return false;
+      }else{
+        var id = $(this).attr('data-record-id');
+        // alert(id);
+        $.ajax({
+          url: '<?php echo base_url('admin/accessories/delete_desk_list')?>',  
+          type: "POST",
+          data: { id: id },
+          success: function (response) {
+              $("#result").html(response);
+              // window.location.reload();
+              showSuccessAlert('Desk Delete Successfully');
+          }
+        });
+      }
+    })
+
+
+});
+
+
+
+
 
 function fetchRowData(recordId) {
   $.ajax({
