@@ -194,7 +194,7 @@ p {
     font-style: italic;
 }
 </style>
-<header class="main-header" style="z-index: 11111111111111111;">
+<header class="main-header" style="z-index: 1100;">
     <!-- Logo -->
     <a href="<?php echo site_url('admin/dashboard/');?>" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
