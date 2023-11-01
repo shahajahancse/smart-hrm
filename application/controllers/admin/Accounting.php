@@ -2858,5 +2858,138 @@ class Accounting extends MY_Controller
         $data['second_date']=$_POST['second_date'];
         echo $this->load->view("admin/accounting/account_payment_out_report", $data, true);
     }
+    public function petty_cash(){
+        $session = $this->session->userdata('username');
+        if (empty($session) && $session['role_id']==3) {
+            redirect('admin/');
+        }
+        $data['title'] = "Petty Cash Book";
+        $data['breadcrumbs'] =  "Petty Cash Book";
+        $data['subview'] = $this->load->view("admin/accounting/petty_cash", $data, true);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+
+    }
+    public function petty_cash_in(){
+        $session = $this->session->userdata('username');
+        if (empty($session) && $session['role_id']==3) {
+            redirect('admin/');
+        }
+        $date=date('Y-m-d');
+        $petty_cash_data=$this->db->where('date',$date)->get('petty_cash')->row();
+        if($petty_cash_data){
+            $petty_id=$petty_cash_data->id;
+            $today_cash_in=$petty_cash_data->today_cash_in+$this->input->post('received_amount');
+            $rest_amount=$petty_cash_data->rest_amount+$this->input->post('received_amount');
+          $this->db->set('today_cash_in', $today_cash_in);
+          $this->db->set('rest_amount', $rest_amount );
+          $this->db->where('id', $petty_id);
+          $this->db->update('petty_cash');
+        }else{
+            $petty_last_data = $this->db->get('petty_cash')->last_row();
+            $rest_amount = 0;
+
+            if (count($petty_last_data)>0) {
+                $rest_amount = $petty_last_data->rest_amount;
+            }
+           $this->db->insert('petty_cash', [
+               'previous_balance' => $rest_amount,
+               'today_cash_in' => $this->input->post('received_amount'),
+               'rest_amount' => $rest_amount + $this->input->post('received_amount'),
+               'date' => $date
+           ]);
+           
+           $petty_id= $this->db->insert_id();
+        }
+        if ($petty_id) {
+            $this->db->insert('petty_cash_in', [
+                'date' => $date,
+                'petty_id' => $petty_id,
+                'received_to' => $this->input->post('cash_received_from'),
+                'amount' => $this->input->post('received_amount'),
+            ]);
+            if ($this->db->affected_rows() > 0) {
+               echo 'success';
+            } else {
+                echo 'error';
+            }
+
+         }else{
+            echo 'error';
+         }
+    }
+    public function petty_cash_out(){
+        $session = $this->session->userdata('username');
+        if (empty($session) && $session['role_id']==3) {
+            redirect('admin/');
+        }
+        $date=date('Y-m-d');
+        $petty_cash_data=$this->db->where('date',$date)->get('petty_cash')->row();
+        if($petty_cash_data){
+            $petty_id=$petty_cash_data->id;
+
+            $today_expenses=$petty_cash_data->today_expenses+$this->input->post('cash_out_amount');
+            $rest_amount=$petty_cash_data->rest_amount-$this->input->post('cash_out_amount');
+
+          $this->db->set('today_expenses', $today_expenses);
+          $this->db->set('rest_amount', $rest_amount );
+          $this->db->where('id', $petty_id);
+          $this->db->update('petty_cash');
+        }else{
+            $petty_last_data = $this->db->get('petty_cash')->last_row();
+            $rest_amount = 0;
+
+            if (count($petty_last_data)>0) {
+                $rest_amount = $petty_last_data->rest_amount;
+            }
+
+
+
+           $this->db->insert('petty_cash', [
+               'previous_balance' => $rest_amount,
+               'today_expenses' => $this->input->post('cash_out_amount'),
+               'rest_amount' => $rest_amount - $this->input->post('cash_out_amount'),
+               'date' => $date
+           ]);
+           
+           $petty_id= $this->db->insert_id();
+        }
+        if ($petty_id) {
+            $this->db->insert('petty_cash_out', [
+                'purpose' => $this->input->post('cash_out_purpose'),
+                'details' => $this->input->post('cash_out_details'),
+                'amount' => $this->input->post('cash_out_amount'),
+                'remarks' => $this->input->post('cash_out_remarks'),
+                'petty_id' => $petty_id
+            ]);
+            if ($this->db->affected_rows() > 0) {
+               echo 'success';
+            } else {
+                echo 'error';
+            }
+         }else{
+            echo 'error';
+         }
+    }
+    public function get_data_petty_cash(){
+        $date=$_GET['date'];
+        $petty_cash_data=$this->db->where('date',$date)->get('petty_cash')->row();
+        if (count($petty_cash_data)>0) {
+            $petty_cash_in_data=$this->db->where('petty_id',$petty_cash_data->id)->get('petty_cash_in')->result();
+            $petty_cash_out_data=$this->db->where('petty_id',$petty_cash_data->id)->get('petty_cash_out')->result();
+            $data['petty_cash_data'] = $petty_cash_data;
+            $data['petty_cash_in_data'] = $petty_cash_in_data;
+            $data['petty_cash_out_data'] = $petty_cash_out_data;
+            $data['status'] = 'success';
+        }else{
+            $petty_last_data = $this->db->get('petty_cash')->last_row();
+            $previous_balance = 0;
+            if (count($petty_last_data)>0) {
+                $previous_balance = $petty_last_data->rest_amount;
+            }
+            $data['previous_balance'] = $previous_balance;
+            $data['status'] = 'error';
+        }
+        echo json_encode($data);
+    }
 
 }
