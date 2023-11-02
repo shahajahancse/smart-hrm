@@ -240,9 +240,10 @@ function get_data() {
                 $('#today_expenses_data').html(card_data.today_expenses);
                 $('#rest_amount_data').html(card_data.rest_amount);
                 if (petty_cash_in_data.length != 0) {
+                    var table_data_in = '';
                     for (let index = 0; index < petty_cash_in_data.length; index++) {
                         const cash_in = petty_cash_in_data[index];
-                        var table_data_in = `<tr>
+                        table_data_in += `<tr>
                                                 <td>${index+1}</td>
                                                 <td>${cash_in.received_to}</td>
                                                 <td>${cash_in.amount}</td>
@@ -256,9 +257,10 @@ function get_data() {
 
                 if (petty_cash_out_data.length != 0) {
 
+                    var table_data_out = '';
                     for (let index = 0; index < petty_cash_out_data.length; index++) {
                         const cash_out = petty_cash_out_data[index];
-                        var table_data_out = `<tr>
+                         table_data_out += `<tr>
                                                 <td>${index+1}</td>
                                                 <td>${cash_out.purpose}</td>
                                                 <td>${cash_out.details}</td>
@@ -274,10 +276,9 @@ function get_data() {
 
                 $('#cash_out_data').html(table_data_out);
             }
-        }
-    })
+        }
+    })
 }
-
 $(document).ready(function() {
     get_data();
 })

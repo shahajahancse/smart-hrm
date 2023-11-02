@@ -6081,21 +6081,17 @@ public function nda() {
 		$length = intval($this->input->get("length"));
 	 }
 	 
-	  public function expired_documents() {
+	  public function set_team_leads() {
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_e_details_exp_documents').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_e_details_exp_documents');
-		$data['path_url'] = 'employees_expired_documents';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('400',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/employees/expired_documents_list", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
+		$data['breadcrumbs'] = "Set Team Lead";
+		$data['leads'] = $this->db->select('user_id,first_name,last_name')->where('status',1)->where('lead_user_id =',null)->where('is_emp_lead =',null)->order_by('user_id')->get('xin_employees')->result();
+		$data['subview'] = $this->load->view("admin/employees/set_team_leads", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+		
      }
 	 
 	 // employee documents - listing
@@ -6643,7 +6639,7 @@ exit();
 		// dd($_POST);
 		$update  = $this->db->where('user_id',$_POST['user_id'])->update('xin_employees',['is_emp_lead'=>1,'lead_user_id'=>$_POST['team_lead_user_id']]);
 		if($update){
-			echo "<script>showSuccessAlert('bal')</script>";
+			echo "<script>showSuccessAlert('test')</script>";
 			$this->session->set_flashdata('addedd', 'Successfully Added');
 			redirect('admin/dashboard/','refresh');
 		}
@@ -6660,5 +6656,31 @@ exit();
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($response));
+	}
+
+	public function set_leads(){
+		// dd($_POST);
+		$user_id=$this->input->post('lead_user_ids');
+		$is_emp_lead=$this->input->post('is_emp_lead');
+		$lead_user_id=$this->input->post('lead_user_id');
+		$data = array(
+					'is_emp_lead' => $is_emp_lead,
+					'lead_user_id'=> $lead_user_id
+			  );
+		$sql = $this->db->where('user_id',$user_id)->update('xin_employees',$data);
+		if($sql){
+			$this->session->set_flashdata('success', 'Successfully Added');
+			echo "<script>window.location.replace('set_team_leads')</script>";
+		}
+		
+	}
+	public function delete_leader($id){
+
+		$sql = $this->db->where('user_id',$id)->update('xin_employees',['is_emp_lead'=>null, 'lead_user_id'=>null]);
+		if($sql){
+			$this->session->set_flashdata('success', 'Delete Successfully');
+			echo "<script>window.location.replace('set_team_leads')</script>";
+		}
+		
 	}
 }

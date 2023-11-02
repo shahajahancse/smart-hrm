@@ -113,7 +113,7 @@ public function purchase_products_requisition($id,$role_id){
 		$this->db->where('p.user_id',$id);
 		return	$this->db->get()->result();
 	}
-	if($role_id == 1) {
+	if($role_id == 1 || $role_id == 2) {
 		return	$this->db->get()->result();
 	}
 } 

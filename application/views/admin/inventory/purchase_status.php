@@ -49,7 +49,7 @@ $(function() {
                     <?php foreach ($products as $key => $rows) { ?>
                     <tr>
                         <td class="text-center"><?php echo($key+1)."."; ?></td>
-                        <?php if($user_role_id==1) {?>
+                        <?php if($user_role_id==1 || $user_role_id == 2) {?>
                         <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                         <td class="text-center"><?php echo $rows->status==1 ? "
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" :
@@ -64,6 +64,8 @@ $(function() {
                                     Action
                                 </button>
                                 <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
+                                
+                                    <a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Approved</a> <br>
                                     <a style="padding-left:5px;" class="text-primary"  href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>"><b>Details</b></a><br>
                                     <?php if($rows->status==4 || $rows->status==1) {?>
                                     <a style="padding-left:5px;"  href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>"><b>Edit</b></a>

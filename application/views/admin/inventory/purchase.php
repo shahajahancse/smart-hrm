@@ -99,11 +99,11 @@ $(function() {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (is_array($products)) {
+                    <?php  if (is_array($products)) {
                         foreach ($products as $key => $rows) {?>
                     <tr>
                         <td class="text-center"><?php echo ($key+1)."."; ?></td>
-                        <?php if($user_role_id==1){?>
+                        <?php if($user_role_id==1 || $user_role_id==2){?>
                         <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                         <?php } ?>
                         <td class="text-center"><?php echo isset($rows->name) ?></td>
@@ -130,6 +130,7 @@ $(function() {
                                     <?php if($session['role_id'] == 1 ||  $session['role_id'] == 2){?>
                                         <?php if($rows->status==1){?>
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Approved</a> <br>
+                                            <a style="padding-left:5px; font-weight:bold" class="text-primary" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br>
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-danger" href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Reject</a><br>
                                         <?php }else{?>
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-success" href="#"  data-toggle="modal" data-target="#exampleModalCenter" data-row_id="<?= $rows->id ?>" onclick="openmod(this)">Order Receive</a><br>

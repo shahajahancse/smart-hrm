@@ -102,6 +102,10 @@ if($theme[0]->sub_menu_icons != ''){
           <li class="<?php if(!empty($arr_mod['account_setting_active']))echo $arr_mod['account_setting_active'];?>"><a href="<?php echo site_url('admin/settings/account_setting_form');?>"><i class="fa <?php echo $submenuicon;?>"></i>Settings</a></li>
           <?php } ?>
           <?php if(in_array('2004',$role_resources_ids)) { ?>
+          <li class="<?php if(!empty($arr_mod['petty_cash_active']))echo $arr_mod['petty_cash_active'];?>"><a href="<?php echo site_url('admin/accounting/petty_cash');?>"><i class="fa <?php echo $submenuicon;?>"></i>Petty Cash</a></li>
+          <?php } ?>
+
+          <?php if(in_array('2004',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['account_report_active']))echo $arr_mod['account_report_active'];?>"><a href="<?php echo site_url('admin/accounting/account_report');?>"><i class="fa <?php echo $submenuicon;?>"></i>Report</a></li>
           <?php } ?>
         </ul>
@@ -130,7 +134,7 @@ if($theme[0]->sub_menu_icons != ''){
           <li class="<?php if(!empty($arr_mod['emp_ex_active']))echo $arr_mod['emp_ex_active'];?>"><a href="<?php echo site_url('admin/employee_exit');?>"><i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('left_employees_exit');?></a></li>
           <?php } ?>
           <?php if(in_array('400',$role_resources_ids)) { ?>
-          <li class="<?php if(!empty($arr_mod['exp_doc_active']))echo $arr_mod['exp_doc_active'];?>"><a href="<?php echo site_url('admin/employees/expired_documents');?>"><i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_e_details_exp_documents');?> <?php if($exp_count > 0):?><span class="label label-danger pull-right"><?php echo $exp_count;?></span><?php endif;?></a></li>
+          <li class="<?php if(!empty($arr_mod['team_leads_active']))echo $arr_mod['team_leads_active'];?>"><a href="<?php echo site_url('admin/employees/set_team_leads');?>"><i class="fa <?php echo $submenuicon;?>"></i> Set Team Lead<span class="label label-danger pull-right"></span></a></li>
           <?php } ?>
           <?php if(in_array('22',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['emp_ll_active']))echo $arr_mod['emp_ll_active'];?>"><a href="<?php echo site_url('admin/employees_last_login');?>"><i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('left_employees_last_login');?></a></li>

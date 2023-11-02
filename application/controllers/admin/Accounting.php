@@ -2973,7 +2973,8 @@ class Accounting extends MY_Controller
     public function get_data_petty_cash(){
         $date=$_GET['date'];
         $petty_cash_data=$this->db->where('date',$date)->get('petty_cash')->row();
-        if (count($petty_cash_data)>0) {
+        // dd($petty_cash_data);
+        if (!empty($petty_cash_data)) {
             $petty_cash_in_data=$this->db->where('petty_id',$petty_cash_data->id)->get('petty_cash_in')->result();
             $petty_cash_out_data=$this->db->where('petty_id',$petty_cash_data->id)->get('petty_cash_out')->result();
             $data['petty_cash_data'] = $petty_cash_data;
@@ -2983,7 +2984,7 @@ class Accounting extends MY_Controller
         }else{
             $petty_last_data = $this->db->get('petty_cash')->last_row();
             $previous_balance = 0;
-            if (count($petty_last_data)>0) {
+            if (!empty($petty_last_data)) {
                 $previous_balance = $petty_last_data->rest_amount;
             }
             $data['previous_balance'] = $previous_balance;
