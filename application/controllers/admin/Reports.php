@@ -1439,7 +1439,7 @@ class Reports extends MY_Controller
 		$this->load->view('admin/reports/inventory_report',$data);
 	}
 	
-	    public function lunch_report_all() {
+	public function lunch_report_all() {
 		$session = $this->session->userdata('username');
         if (empty($session)) {
             redirect('admin/');
@@ -1473,6 +1473,5 @@ class Reports extends MY_Controller
 		$data['client_list'] = $this->db->get('xin_clients')->result();
 		$this->load->view('admin/reports/client_list', $data);
     }
-
 } 
 ?>
