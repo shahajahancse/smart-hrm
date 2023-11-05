@@ -1438,7 +1438,7 @@ class Reports extends MY_Controller
 		}
 		$this->load->view('admin/reports/inventory_report',$data);
 	}
-
+	
 	    public function lunch_report_all() {
 		$session = $this->session->userdata('username');
         if (empty($session)) {
@@ -1453,12 +1453,21 @@ class Reports extends MY_Controller
         $data['breadcrumbs'] = 'Lunch Report';
         $data['path_url'] = 'lunch';
         if (!empty($session)) {
-            $data['subview'] = $this->load->view("admin/reports/lunch_report", $data, true);
+			$data['subview'] = $this->load->view("admin/reports/lunch_report", $data, true);
             $this->load->view('admin/layout/layout_main', $data); //page load
         } else {
             redirect('admin/');
         }
 	}
-
+	public function accounts_report() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = "Accounts Report".' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = "Accounts Report";
+		$data['subview'] = $this->load->view("admin/reports/accounts_report", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
 } 
 ?>

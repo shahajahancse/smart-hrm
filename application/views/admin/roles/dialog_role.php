@@ -759,6 +759,7 @@ dataSource: [
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('xin_hr_report_user_roles');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "116", check: "<?php if(isset($_GET['role_id'])) { if(in_array('116',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('xin_hr_report_employees');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "117", check: "<?php if(isset($_GET['role_id'])) { if(in_array('117',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 	{ id: "", class: "role-checkbox-modal", text: "<?php echo $this->lang->line('xin_hr_report_leave_report');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "409", check: "<?php if(isset($_GET['role_id'])) { if(in_array('409',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+	{ id: "", class: "role-checkbox-modal", text: "Accounts",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "419", check: "<?php if(isset($_GET['role_id'])) { if(in_array('419',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 	
 	]},
 ]

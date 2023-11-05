@@ -208,6 +208,17 @@ class Attendance_model extends CI_Model
             }
             // dd($leave);
 
+            // get extra present of off day
+            $extra_p_day = date('Y-m-d H:i:s', strtotime($early_out_time. ' -1 hours'));
+            if (($off_day == true) && ($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>=strtotime($extra_p_day))) {
+                $astatus = 'Present';
+                $status = 'Off Day';
+                // hard code this line
+                if (in_array($emp_id, array(46, 82))) {
+                    $astatus = 'Off Day';
+                }
+            }
+
             //// check present statu for meeting
             $this->db->where('employee_id', $emp_id)->where('date', $process_date)->where('astatus', 1);
             $num_row = $this->db->get("xin_employee_move_register");

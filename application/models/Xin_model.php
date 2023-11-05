@@ -820,6 +820,10 @@ class Xin_model extends CI_Model {
 			$arr['reports_projects_active'] = 'active';
 			$arr['reports_open'] = 'active';
 			return $arr;
+		}else if($mClass=='reports'  && $mMethod=='accounts_report') {
+			$arr['reports_accounts_active'] = 'active';
+			$arr['reports_open'] = 'active';
+			return $arr;
 		} else if($mClass=='reports'  && $mMethod=='tasks') {
 			$arr['reports_tasks_active'] = 'active';
 			$arr['reports_open'] = 'active';

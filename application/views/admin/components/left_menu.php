@@ -820,6 +820,10 @@ if($theme[0]->sub_menu_icons != ''){
         <li class="sidenav-link <?php if(!empty($arr_mod['reports_lunch_active']))echo $arr_mod['reports_lunch_active'];?>"> <a href="<?php echo site_url('admin/reports/lunch_report_all');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Lunch</a> </li>
         <?php } ?>
 
+        <?php if(in_array('409',$role_resources_ids)) { ?>
+        <li class="sidenav-link <?php if(!empty($arr_mod['reports_accounts_active']))echo $arr_mod['reports_accounts_active'];?>"> <a href="<?php echo site_url('admin/reports/accounts_report');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Accounts</a> </li>
+        <?php } ?>
+
       </ul>
     </li>
     <?php } ?>
