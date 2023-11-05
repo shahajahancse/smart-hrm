@@ -6661,4 +6661,54 @@ exit();
             ->set_content_type('application/json')
             ->set_output(json_encode($response));
 	}
+	public function employee_issue($action = '', $id = null) {
+		$data['employees'] = $this->Xin_model->all_employees();
+        // Check the HTTP request method to determine the action
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ($action === 'add') {
+                // Handle adding a new purpose (Create)
+                $emp_id = $this->input->post('emp_id');
+                $comment = $this->input->post('comment');
+                    $data = array(
+                        'emp_id' => $emp_id,
+                        'comment' => $comment
+                      
+                    );
+                    $this->db->insert('employee_issue', $data);
+                    echo 'success';
+                
+            } elseif ($action === 'edit' && $id) {
+                // Handle editing an existing purpose (Update)
+				$emp_id = $this->input->post('emp_id');
+                $comment = $this->input->post('comment');
+                    $data = array(
+						'emp_id' => $emp_id,
+                        'comment' => $comment
+                    );
+                    $this->db->where('id', $id);
+                    $this->db->update('employee_issue', $data);
+                    echo 'success';
+            } elseif ($action === 'delete' && $id) {
+                $this->db->where('id', $id);
+                $this->db->delete('employee_issue');
+                echo 'success';
+            }
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Handle displaying the form for editing an existing purpose
+            if ($action === 'edit' && $id) {
+                $query = $this->db->get_where('employee_issue', array('id' => $id));
+                $purpose = $query->row_array();
+                echo json_encode($purpose);
+            } else {
+                $data['purposes'] = $this->db->get('employee_issue')->result();
+                $data['title'] = 'Employee Isuue';
+                $data['breadcrumbs'] = 'Employee Isuue';
+                $data['subview'] = $this->load->view("admin/employees/employee_issue", $data, true);
+                $this->load->view('admin/layout/layout_main', $data);
+            }
+        }else{
+			$data['subview'] = $this->load->view("admin/employees/employee_issue", $data, true);
+			$this->load->view('admin/layout/layout_main', $data);
+        }
+    }
 }
