@@ -127,6 +127,7 @@ class Clients extends MY_Controller
             $this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
             $name = $this->input->post('name');
             $company_name = $this->input->post('company_name');
+            $client_type = $this->input->post('client_type');
             $email = $this->input->post('email');
             $contact_number = $this->input->post('contact_number');
             $website = $this->input->post('website');
@@ -174,6 +175,7 @@ class Clients extends MY_Controller
 
                 $data = array(
                 'name' => $this->input->post('name'),
+                'type' => $this->input->post('client_type'),
                 'company_name' => $this->input->post('company_name'),
                 'email' => $this->input->post('email'),
                 'client_password' => $password_hash,
@@ -248,6 +250,7 @@ class Clients extends MY_Controller
 
                 $data = array(
                 'name' => $this->input->post('name'),
+                'type' => $this->input->post('client_type'),
                 'company_name' => $this->input->post('company_name'),
                 'email' => $this->input->post('email'),
                 'client_password' => $password_hash,
@@ -325,6 +328,7 @@ class Clients extends MY_Controller
         $data = array(
             'client_id' => $result[0]->client_id,
             'name' => $result[0]->name,
+            'type' => $result[0]->type,
             'company_name' => $result[0]->company_name,
             'client_profile' => $result[0]->client_profile,
             'email' => $result[0]->email,

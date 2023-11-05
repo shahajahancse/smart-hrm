@@ -1396,6 +1396,10 @@ class Reports extends MY_Controller
 		// dd($data);
 		$this->load->view('admin/reports/show_late_report', $data);
     }
+	public function client_list(){
+		$data['client_list'] = $this->db->get('xin_clients')->result();
+		$this->load->view('admin/reports/client_list', $data);
+    }
 
 } 
 ?>
