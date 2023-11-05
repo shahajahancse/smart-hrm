@@ -33,6 +33,14 @@
                                     type="text">
                             </div>
                             <div class="form-group">
+                                <label for="client_name">Client Type</label>
+                                <select class="form-control" name="client_type" data-plugin="select_hrm"
+                                    data-placeholder="Client Type">
+                                    <option value="1">Government</option>
+                                    <option value="2">Private</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label
@@ -128,47 +136,35 @@
                     </div>
                 </div>
                 <h4>Contact Details</h4>
-               
+
                 <h5>Person 1</h5>
                 <div class="col-md-12 p-0 m-0">
                     <div class="col-md-3">
                         <label for="website">Name</label>
-                        <input class="form-control"
-                            placeholder="Name" name="person_name_a"
-                            type="text" required>
+                        <input class="form-control" placeholder="Name" name="person_name_a" type="text" required>
                     </div>
                     <div class="col-md-3">
                         <label for="website">Number</label>
-                        <input class="form-control"
-                            placeholder="Number" name="person_phn_a"
-                            type="number" required>
+                        <input class="form-control" placeholder="Number" name="person_phn_a" type="number" required>
                     </div>
                     <div class="col-md-3">
                         <label for="website">Email</label>
-                        <input class="form-control"
-                            placeholder="Email" name="person_email_a"
-                            type="email" required>
+                        <input class="form-control" placeholder="Email" name="person_email_a" type="email" required>
                     </div>
                 </div>
                 <h5>Person 2</h5>
                 <div class="col-md-12 p-0 m-0">
                     <div class="col-md-3">
                         <label for="website">Name</label>
-                        <input class="form-control"
-                            placeholder="Name" name="person_name_b"
-                            type="text">
+                        <input class="form-control" placeholder="Name" name="person_name_b" type="text">
                     </div>
                     <div class="col-md-3">
                         <label for="website">Number</label>
-                        <input class="form-control"
-                            placeholder="Number" name="person_phn_b"
-                            type="number">
+                        <input class="form-control" placeholder="Number" name="person_phn_b" type="number">
                     </div>
                     <div class="col-md-3">
                         <label for="website">Email</label>
-                        <input class="form-control"
-                            placeholder="Email" name="person_email_b"
-                            type="email">
+                        <input class="form-control" placeholder="Email" name="person_email_b" type="email">
                     </div>
                 </div>
                 <div class="form-actions box-footer">

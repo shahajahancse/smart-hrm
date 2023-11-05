@@ -148,6 +148,7 @@ tbody{
                          <th  class='bnb' style="width: 42px;">D.A Salary</th>
                          <th  class='bnb ' style="width: 60px;">Grand Net Salary</th>
                            <th  class='bnb' style="width: 37px;">Account Number</th>
+                           <th  class='bnb' style="width: 37px;">Remark</th>
                         </tr>
                         <tr>
                             <th  class='bnt'></th>
@@ -288,6 +289,7 @@ tbody{
                         $grand_total_modify_salary+=$values[$i]->modify_salary;
                         ?>
                         <td><?=$values[$i]->account_number?></td>
+                        <td></td>
 
                         </tr>
                                 <?php
@@ -373,6 +375,7 @@ tbody{
                             <th  class='bnb' style="width: 42px;">D.A Salary</th>
                             <th  class='bnb ' style="width: 60px;">Grand Net Salary</th>
                             <th  class='bnb' style="width: 37px;">Account Number</th>
+                            <th  class='bnb' style="width: 37px;">Remark</th>
                         </tr>
                             <tr>
                                 <th  class='bnt'></th>

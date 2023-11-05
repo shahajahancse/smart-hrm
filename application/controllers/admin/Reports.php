@@ -1469,5 +1469,10 @@ class Reports extends MY_Controller
 		$data['subview'] = $this->load->view("admin/reports/accounts_report", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+	public function client_list(){
+		$data['client_list'] = $this->db->get('xin_clients')->result();
+		$this->load->view('admin/reports/client_list', $data);
+    }
+
 } 
 ?>
