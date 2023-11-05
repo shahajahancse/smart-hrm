@@ -133,15 +133,22 @@ if (isset($success)) {
              
                 <div class="row">
                   <div class="col-md-12">
-                    <?php  if($user[0]->user_role_id == 1 || $user[0]->user_role_id == 2 || $user[0]->user_role_id == 4) {?>
+                    <?php  if($user[0]->user_role_id == 1 || $user[0]->user_role_id == 2 || $user[0]->user_role_id == 4 || $user[0]->is_emp_lead == 2) {?>
                     <div class="form-group">
                       <label for="status"><?php echo $this->lang->line('dashboard_xin_status');?></label>
                       <select class="form-control" name="status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
+                       <?php if($user[0]->is_emp_lead == 2){?>
+                        <option value="1" <?php if($status=='1'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_pending');?></option>
+                        <option value="4" <?php if($status=='4'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_role_first_level_approval');?></option>
+                      <?php } else{?>
                         <option value="1" <?php if($status=='1'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_pending');?></option>
                         <option value="4" <?php if($status=='4'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_role_first_level_approval');?></option>
                         <option value="2" <?php if($status=='2'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_approved');?></option>
                         <option value="3" <?php if($status=='3'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_rejected');?></option>
-                      </select>
+              
+                          <?php }?>
+
+                        </select>
                     </div>
                     <?php } else {?>
                     <div class="form-group">
@@ -164,7 +171,7 @@ if (isset($success)) {
                     </div>
                   </div>
                 </div>
-                <?php if($user[0]->user_role_id != 3) {?>
+                <?php if($user[0]->user_role_id != 3 || $user[0]->is_emp_lead == 2) {?>
                 <div class="form-actions box-footer">
                   <button type="submit" class="btn btn-primary"> <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
                 </div>

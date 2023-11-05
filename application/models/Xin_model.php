@@ -1350,6 +1350,7 @@ class Xin_model extends CI_Model {
 	
 	// 1
 	public function get_notify_leave_applications() {
+
 	return  $query = $this->db->select('xin_leave_applications.*')
 					->from('xin_leave_applications')
 					->join('xin_employees','xin_employees.user_id = xin_leave_applications.employee_id','LEFT')
@@ -1357,11 +1358,30 @@ class Xin_model extends CI_Model {
 	  			    ->where_in('xin_leave_applications.status',[1,4])
 					->order_by('xin_leave_applications.leave_id', 'desc')
 					->get()->result();
-  	   
+
 	}
 	public function get_notify_leave_applications_by_userid($user_id) {
-	  $query = $this->db->query("SELECT * from xin_leave_applications where notify_leave = '3' and employee_id = $user_id  order by leave_id desc");
-  	  return $query->result();
+		$query = $this->db->query("SELECT * from xin_leave_applications where notify_leave = '3' and employee_id = $user_id  order by leave_id desc")->result();
+		$emp_data = $this->read_employee_info_att($user_id)->row();
+		$extra = array();
+		$data = array(); // Initialize $data as an empty array
+		if ($emp_data->is_emp_lead == 2) {
+			$extra_result = $this->db->query("SELECT user_id from xin_employees where lead_user_id = $user_id")->result();
+			foreach ($extra_result as $row) {
+				$extra[] = $row->user_id; // Store user_id values in $extra array
+			}
+			if (!empty($extra)) {
+				$data=$this->db->select('xin_leave_applications.*')
+					->from('xin_leave_applications')
+					->join('xin_employees','xin_employees.user_id = xin_leave_applications.employee_id','LEFT')
+					->where_in('xin_employees.status',[1,4,5])
+	  			    ->where_in('xin_leave_applications.status',[1])
+	  			    ->where_in('xin_leave_applications.employee_id',$extra)
+					->order_by('xin_leave_applications.leave_id', 'desc')
+					->get()->result();
+			}
+		}
+		return array_merge($query, $data);
 	}
  	public function get_last_user_leave_applications($user_id) {
 	  $query = $this->db->query("SELECT * from xin_leave_applications where employee_id = '".$user_id."' and is_notify = '1' order by leave_id desc");
