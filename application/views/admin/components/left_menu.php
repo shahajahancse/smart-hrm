@@ -820,10 +820,13 @@ if($theme[0]->sub_menu_icons != ''){
         <li class="sidenav-link <?php if(!empty($arr_mod['reports_lunch_active']))echo $arr_mod['reports_lunch_active'];?>"> <a href="<?php echo site_url('admin/reports/lunch_report_all');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Lunch</a> </li>
         <?php } ?>
 
-        <?php if(in_array('409',$role_resources_ids)) { ?>
+        <?php if(in_array('419',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['reports_accounts_active']))echo $arr_mod['reports_accounts_active'];?>"> <a href="<?php echo site_url('admin/reports/accounts_report');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Accounts</a> </li>
         <?php } ?>
 
+         <?php if(in_array('420',$role_resources_ids)) { ?>
+        <li class="sidenav-link <?php if(!empty($arr_mod['reports_emp_issue_active']))echo $arr_mod['reports_emp_issue_active'];?>"> <a href="<?php echo site_url('admin/employees/employee_issue');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Employee Issue</a> </li>
+        <?php } ?>
       </ul>
     </li>
     <?php } ?>

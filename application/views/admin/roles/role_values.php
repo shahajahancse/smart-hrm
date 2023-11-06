@@ -474,6 +474,7 @@
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_hr_report_employees');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "117"},
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_hr_report_leave_report');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "409"},
 	{ id: "", class: "role-checkbox", text: "Accounts",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "419"},
+	{ id: "", class: "role-checkbox", text: "Employee Issue",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "420"},
 	]},
 	//
 	]
