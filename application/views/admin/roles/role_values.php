@@ -39,7 +39,7 @@
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_role_delete');?>",  add_info: "<?php echo $this->lang->line('xin_role_delete');?>", value: "206",},
 	{ id: "", class: "role-checkbox", text: "<?php echo '<small>'.$this->lang->line('xin_role_view').' '.$this->lang->line('left_employees_exit').'</small>';?>",  add_info: "<?php echo $this->lang->line('xin_role_view');?>", value: "231",}
 	]},
-	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_e_details_exp_documents');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "400"},
+	{ id: "", class: "role-checkbox", text: "Set Team Lead",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "400"},
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('left_employees_last_login');?>",  add_info: "<?php echo $this->lang->line('xin_add_edit_delete_role_info');?>", value: "22"}
 	]},
 	//
@@ -473,6 +473,8 @@
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_hr_report_user_roles');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "116"},
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_hr_report_employees');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "117"},
 	{ id: "", class: "role-checkbox", text: "<?php echo $this->lang->line('xin_hr_report_leave_report');?>",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "409"},
+	{ id: "", class: "role-checkbox", text: "Accounts",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "419"},
+	{ id: "", class: "role-checkbox", text: "Employee Issue",  add_info: "<?php echo $this->lang->line('xin_view');?>", value: "420"},
 	]},
 	//
 	]

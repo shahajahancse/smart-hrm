@@ -242,6 +242,7 @@ class Accessories extends MY_Controller {
                 'status'         => $this->input->post('status'),
                 'use_number'     => $this->input->post('use_number'),
                 'number'         => $this->input->post('number'),
+                'move_status'    => 0,
             );    
 
             // dd($form_data);
@@ -423,6 +424,12 @@ class Accessories extends MY_Controller {
             echo json_encode(['status'=>'true']);
        }
 
+    }
+
+     public function delete_desk_list() {
+        $item_id = $this->input->post('id');
+        $this->db->where('id', $item_id);
+        return $this->db->delete('xin_employee_desk');
     }
 
 }

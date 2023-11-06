@@ -41,7 +41,7 @@
   <div style="text-align: center;">
 <?php  $this->load->view('admin/head_bangla'); ?>
   <h4 class="box-title"><b><?php echo $status == 1 ? 'Daily' : ($status == 2 ? 'Weekly' : 'Monthly')?> Late Report</b></h4>
-	  <p>Report date: <?php echo $status == 1 ? date(' d M Y',strtotime($attendance_date)) : ($status == 2 ? date(' d M Y',strtotime($attendance_date)).' to '.date(' d M Y',strtotime('+6 days'.$attendance_date)) : date(' d M Y',strtotime($attendance_date)).' to '.date(' d M Y',strtotime('+30 days'.$attendance_date))); ?> </p>
+	  <p>Report date: <?php echo $status == 1 ? date(' d M Y',strtotime($attendance_date)) : ($status == 2 ? date(' d M Y',strtotime($attendance_date)).' to '.date(' d M Y',strtotime('+6 days'.$attendance_date)) : date(' d M Y',strtotime($attendance_date)).' to '.date(' d M Y',strtotime($second_date))); ?> </p>
   </div>
 
   <div class="container">
@@ -68,8 +68,6 @@
                 <td><?php echo $row->designation_name?></td>
                 <td><?php echo $row->clock_in==""? "": date('H:i:s a',strtotime($row->clock_in))?></td>
                 <td><?php echo $row->clock_out==""? "": date('h:i:s a',strtotime($row->clock_out))?></td>
-                <!-- <td>< ?php echo $status;?></td>
-                <td>< ?php echo $row->comment;?></td> -->
             </tbody>
             <?php }?>
 	      </table>

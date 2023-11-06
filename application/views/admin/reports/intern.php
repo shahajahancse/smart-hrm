@@ -3,7 +3,7 @@
 <body style="background:white">
 <?php  $this->load->view('admin/head_bangla'); ?>
 
-<h4 class="text-center">Report of Employee List</h4>
+<h4 class="text-center">Report of Employee Internship List</h4>
 <table class="table table-striped table-bordered">
     <thead style="font-size:12px;" >
         <tr>

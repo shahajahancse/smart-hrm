@@ -10,64 +10,63 @@
         <h3 class="box-title">Employees Late Report </h3>
       </div>
       <div class="box-body">
-    
-         <div class="row">
-      <div class="col-md-12">
         <div class="row">
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="process_date">First Date</label>
-              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>" required>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="process_date">Second Date</label>
-              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text" autocomplete="off">
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="upload_file">Status</label>
-              <select class="form-control" name="status" id="status">
-                <option value="">Select one</option>
-                <option value="1">Regular</option>
-                <option value="2">Left</option>
-                <option value="3">Resign</option>
-                <option value="4">All</option>
-              </select>
-            </div>
-          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="process_date">First Date</label>
+                  <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>" required>
+                </div>
+              </div>
 
-          <div class="col-md-6" style="margin-left:-15px;">
-            <div class="form-inline"> &nbsp;
-              <label for="first_name">&nbsp;</label>
-              <button class="btn btn-success btn-sm" onclick="show_report(1)">Dailys</button>&nbsp;&nbsp;
-              <button class="btn btn-success btn-sm" onclick="show_report(2)">Weekly</button>&nbsp;&nbsp;
-              <button class="btn btn-success btn-sm" onclick="show_report(3)">Monthly</button>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="process_date">Second Date</label>
+                  <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date" name="second_date" type="text" required>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="upload_file">Status</label>
+                  <select class="form-control" name="status" id="status">
+                    <option value="">Select one</option>
+                    <option value="1">Regular</option>
+                    <option value="2">Left</option>
+                    <option value="3">Resign</option>
+                    <option value="4">All</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-8" style="margin-left:-15px;">
+                <div class="form-inline"> &nbsp;
+                  <label for="first_name">&nbsp;</label>
+                  <button class="btn btn-success btn-sm" onclick="show_report(1)">Dailys</button>&nbsp;&nbsp;
+                  <button class="btn btn-success btn-sm" onclick="show_report(2)">Weekly</button>&nbsp;&nbsp;
+                  <button class="btn btn-success btn-sm" onclick="show_report(3)">Continuously</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
 
+    <div class="col-lg-5">
+      <div class="box" style="height: 74vh;overflow-y: scroll;">
+        <table class="table table-striped table-hover" id="fileDiv">
+          <tr style="position: sticky;top: 0;z-index:1">
+              <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox" name="select-all" /></th>
+              <th class="" style="width:10%;background:#0177bcc2;color:white">Sl.</th>
+              <th class=" text-center" style="background:#0177bc;color:white">Name</th>
+              <!-- <th class=" text-center" style="background:#0177bc;color:white">Id</th> -->
+          </tr>
+        </table>
       </div>
     </div>
-  </div>
-
-
-  <div class="col-lg-4">
-  <div class="box" style="height: 74vh;overflow-y: scroll;">
-  <table class="table table-striped table-hover" id="fileDiv">
-    <tr style="position: sticky;top: 0;z-index:1">
-        <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox" name="select-all" /></th>
-        <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
-        <th class=" text-center" style="background:#0177bc;color:white">Name</th>
-    </tr>
-  </table>
-  </div>
-  </div>
 </div>
 
 
@@ -95,12 +94,15 @@
     success: function (response) {
       arr = response.employees;
       if (arr.length != 0) {
-        var items = '';
-        $.each(arr, function (index, value) {
+        let i = 1;
+        let items = "";
+
+        arr.forEach(function (value, index) {
           items += '<tr id="removeTr">';
           items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' + value.emp_id + '" ></td>';
-          items += '<td class="success">' + value.emp_id + '</td>';
-          items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + '</td>';
+          items += '<td class="success">' + (i++) + '</td>';
+          items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + " (" +value.emp_id + ")" + '</td>';
+          // items += '<td class="success">' + + '</td>';
           items += '</tr>';
         });
         // Append the new rows
@@ -118,8 +120,13 @@ function show_report(key){
   ajaxRequest = new XMLHttpRequest();
   status = document.getElementById('status').value;
   attendance_date = document.getElementById('process_date').value;
+  second_date = document.getElementById('second_date').value;
   if(status ==''){
     alert('Please select status');
+    return ;
+  }
+  if(second_date == ''){
+    alert('Please select second date');
     return ;
   }
   var checkboxes = document.getElementsByName('select_emp_id[]');
@@ -128,14 +135,13 @@ function show_report(key){
     alert('Please select employee Id');
     return ;
   }
-  var data = "attendance_date="+attendance_date+"&key="+key+"&status="+status+'&sql='+sql;
+  var data = "attendance_date="+attendance_date+"&second_date="+second_date+"&key="+key+"&status="+status+'&sql='+sql;
   url = base_url + "/show_late_report";
   ajaxRequest.open("POST", url, true);
   ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
   ajaxRequest.send(data);
   ajaxRequest.onreadystatechange = function(){
     if(ajaxRequest.readyState == 4){
-      // console.log(ajaxRequest);
       var resp = ajaxRequest.responseText;
       a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
       a.document.write(resp);

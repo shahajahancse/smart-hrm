@@ -133,7 +133,11 @@ class Xin_model extends CI_Model {
 			$arr['account_setting_active'] = 'active';
 			$arr['account'] = 'active';
 			return $arr;
-		} else if($mClass=='accounting' && $mMethod=='account_report') {
+		} else if($mClass=='accounting' && $mMethod=='petty_cash') {
+			$arr['petty_cash_active'] = 'active';
+			$arr['account'] = 'active';
+			return $arr;
+		}else if($mClass=='accounting' && $mMethod=='account_report') {
 			$arr['account_report_active'] = 'active';
 			$arr['account'] = 'active';
 			return $arr;
@@ -177,8 +181,8 @@ class Xin_model extends CI_Model {
 			$arr['hremp_active'] = 'active';
 			$arr['stff_open'] = 'active';
 			return $arr;
-		} else if($mClass=='employees' && $mMethod=='expired_documents') {
-			$arr['exp_doc_active'] = 'active';
+		} else if($mClass=='employees' && $mMethod=='set_team_leads') {
+			$arr['team_leads_active'] = 'active';
 			$arr['stff_open'] = 'active';
 			return $arr;
 		} else if($mClass=='employees' && $mMethod=='import') {
@@ -812,8 +816,17 @@ class Xin_model extends CI_Model {
 			$arr['reports_employee_training_active'] = 'active';
 			$arr['reports_open'] = 'active';
 			return $arr;
-		} else if($mClass=='reports'  && $mMethod=='projects') {
+		} else if($mClass=='reports'  && $mMethod=='inventory') {
 			$arr['reports_projects_active'] = 'active';
+			$arr['reports_open'] = 'active';
+			return $arr;
+		}else if($mClass=='reports'  && $mMethod=='accounts_report') {
+			$arr['reports_accounts_active'] = 'active';
+			$arr['reports_open'] = 'active';
+			return $arr;
+		}
+		else if($mClass=='employees'  && $mMethod=='employee_issue') {
+			$arr['reports_emp_issue_active'] = 'active';
 			$arr['reports_open'] = 'active';
 			return $arr;
 		} else if($mClass=='reports'  && $mMethod=='tasks') {

@@ -1104,6 +1104,7 @@ public function low_inv_all_product_status_report($exc=null){
 		redirect("admin/inventory/index");
 	}
 
+
     public function delete_requsiton($id){
 		$this->db->where('id',$id)->delete('products_requisition_details');
 		$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
@@ -1234,12 +1235,12 @@ public function create_movement(){
 
 }
 public function move_create(){
-	dd($_POST);
+	// dd($_POST);
 	$data['device_id']  = $_POST['device_id'];
 	$data['user_id']    = $_POST['user_id'];
 	$data['purpose']    = $_POST['purpose'];
 	$data['floor']      = $_POST['floor'];
-	$data['acc_id']      = $_POST['test'];
+	$data['remark']     = $_POST['remark'];
 
 
     if($_POST['role_id'] != 3){
@@ -1271,6 +1272,7 @@ function requested_list(){
 	}
 	$data['session']    = $session;
 	$data['requests']   = $this->Inventory_model->request_list();
+	// dd($data);
 	$data['subview']    = $this->load->view("admin/inventory/request_list", $data);
 }
 
@@ -1447,7 +1449,13 @@ public function mobile_bill(){
 			$this->session->set_flashdata('success', 'Successfully Update');
 			redirect('admin/inventory/create_phone','refresh');
 		}
+	}
 
+	public function products_delete($id){
+		$delete = $this->db->where('id',$id)->delete('products');
+		$this->db->where('id',$id)->delete('products_requisitions');
+		$this->session->set_flashdata('warning', 'Requsiton deleted successfully.');
+		redirect("admin/inventory/products");
 	}
 
 

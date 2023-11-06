@@ -1,4 +1,17 @@
-
+var url=base_url;
+var parts = url.split('/');
+var lastUri = parts[parts.length - 1];
+var firstUri = parts[2];
+// alert(firstUri);
+if (lastUri == 'reports') {
+  if (firstUri == 'localhost') { 
+    base_url = 'http://localhost/smart-hrm/admin/lunch/';
+  } else {
+    base_url = 'http://173.212.223.213/smarthr/admin/lunch/';
+  }
+  
+  // alert(base_url);
+}
 function perday(status) {
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest = new XMLHttpRequest();

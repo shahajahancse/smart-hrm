@@ -273,10 +273,9 @@ function get_data() {
 
                 $('#cash_out_data').html(table_data_out);
             }
-        }
-    })
+        }
+    })
 }
-
 $(document).ready(function() {
     get_data();
 })

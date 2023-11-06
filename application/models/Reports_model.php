@@ -182,9 +182,28 @@ class Reports_model extends CI_Model {
 		  }
 	}
 
-	public function show_report($emp_ids,$key,$status){
-	
-		$data = $this->db->select('
+	public function get_empolyees($status){
+		$this->db->select('user_id as emp_id, first_name, last_name');
+        if ($status == 1) {
+            $this->db->where_in('status', $status);
+        } else if ($status == 4){
+            $this->db->where('status', $status);
+        } else if($status == 5){
+            $this->db->where_in('status', $status);
+        } else if($status == 2 || $status == 3 || $status == 18){
+            $this->db->where_in('status', [1,4,5]);
+        }else {
+            $this->db->where_in('status', $status);
+        }
+        $this->db->where('company_id', 1);
+        $this->db->order_by('user_id', 'asc');
+        return $result = $this->db->get('xin_employees')->result();
+	}
+
+	public function show_report($emp_ids,$status){
+		// dd($status);
+		$this->db->select('
+			xin_employees.user_id,
 			xin_employees.first_name,
 			xin_employees.last_name,
 			xin_departments.department_name,
@@ -195,6 +214,7 @@ class Reports_model extends CI_Model {
 			xin_employees.contact_no,
 			xin_employees.address,
 			xin_employees.password,
+            xin_employees.user_password,
 			xin_employees.basic_salary,
 			xin_employee_incre_prob.effective_date as last_incre_date,
 			xin_employees.notify_incre_prob as next_incre_date,
@@ -205,16 +225,25 @@ class Reports_model extends CI_Model {
 		->join('xin_departments','xin_employees.department_id = xin_departments.department_id','left')		
 		->join('xin_designations','xin_employees.designation_id = xin_designations.designation_id','left')		
 		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.id','left')	
-		->where_in('xin_employees.user_id',$emp_ids)	
-		->where('xin_employees.status',$status)	
-		->get()->result();
+		->where_in('xin_employees.user_id',$emp_ids);
+		if($status == 1){
+			$this->db->where('xin_employees.status',$status);	
+		}else if($status == 4){
+			$this->db->where('xin_employees.status',$status);
+		}else if($status == 5){
+			$this->db->where('xin_employees.status',$status);
+		}else if($status == 2){
+			$this->db->where('xin_employee_incre_prob.status',$status);
+		}else{
+			$this->db->where_in('xin_employees.status',[1,4,5]);	
+		}		
+		$data = $this->db->get()->result();
+		// dd($data);
 	    return $data;
 	}
 
-	  public function late_report($emp_id,$key,$attendance_date,$second_date){
 
-		// dd($key);
-
+	public function late_report($emp_id,$key,$attendance_date,$second_date){
         $this->db->select('
             xin_employees.user_id as emp_id,
             xin_employees.employee_id,
@@ -237,31 +266,92 @@ class Reports_model extends CI_Model {
         $this->db->from('xin_departments');
         $this->db->from('xin_designations');
         $this->db->from('xin_attendance_time');
-
         $this->db->where("xin_attendance_time.late_status", 1);
         $this->db->where("xin_employees.is_active", 1);
 		if($key==1){
 			$this->db->where("xin_attendance_time.attendance_date", $attendance_date);
 		}else if($key==2){
+			$second_date = date('Y-m-d', strtotime("+6 days", strtotime($attendance_date)));
 			$this->db->where("xin_attendance_time.attendance_date between '$attendance_date' and '$second_date'");
 		}else{
 			$this->db->where("xin_attendance_time.attendance_date between '$attendance_date' and '$second_date'");
 		}
-
         $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
         $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
         $this->db->order_by('xin_attendance_time.clock_in', "ASC");
         $data = $this->db->get()->result();
-
-		// dd($this->db->last_query());
-		// dd($data);
         if($data=='') {
 			return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         } else {
-            return $data;
+            return $data; 
         }
+    }
+
+	public function show_meeting_report($emp_id,$key,$attendance_date,$second_date){
+		// dd( $key);
+		$this->db->select('empm.id, mr.title, 
+							em.first_name, 
+							em.last_name, 
+							empm.employee_id AS emp_id, 
+							empm.date, 
+							empm.out_time, 
+							empm.in_time, 
+							empm.status,
+							mp.address,
+							desig.designation_name
+						');
+		$this->db->from('xin_employee_move_register as empm');
+		$this->db->where_in('empm.employee_id', $emp_id);
+		$this->db->join('xin_employees as em', 'em.user_id = empm.employee_id');
+		$this->db->join('xin_designations as desig', 'em.designation_id = desig.designation_id');
+		$this->db->join('xin_employee_move_reason as mr', 'empm.reason = mr.id');
+		$this->db->join('xin_employee_move_place as mp', 'empm.place_adress = mp.place_id');
+		$this->db->order_by('empm.id', 'DESC');
+		// $a = $this->db->get();
+		//  dd($a->result());
+		return $this->db->get()->result();
+    }
+
+   public function get_product_reports_info($id=null, $status=null, $category=null){
+	// dd($id);
+        $this->db->select(' 
+                    ap.id as a_id,
+                    ap.cat_id,
+                    ap.device_model,
+                    ap.device_name_id,
+                    ap.description,
+                    ap.status,
+                    ap.remark,
+                    ap.number,
+                    ap.user_id,
+                    pac.cat_name,
+                    pac.cat_short_name,
+                    pam.model_name,
+                    pam.image,
+                    mobile_numbers.number,
+                    xin_employees.first_name,
+                    xin_employees.last_name,
+        ');
+        $this->db->from('product_accessories as ap');
+        $this->db->join('product_accessories_model as pam',  'ap.device_model = pam.id', 'left');
+        $this->db->join('product_accessory_categories as pac', 'ap.cat_id = pac.id', 'left');
+        $this->db->join('mobile_numbers', 'ap.number = mobile_numbers.id', 'left');    
+        $this->db->join('xin_employees', 'ap.user_id = xin_employees.user_id', 'left');
+        if($id !=null){
+            $this->db->where_in('ap.user_id',$id);
+        	$this->db->order_by('ap.user_id',"ASC");
+        } 
+        if($category != null){
+            $this->db->where('ap.cat_id',$category);
+        } 
+        if($status != null){
+            $this->db->where('ap.status',$status);
+        } 
+        $this->db->order_by('ap.status',"ASC");
+        $this->db->group_by('ap.id');
+        return $this->db->get()->result();  
     }
 	
 }

@@ -113,7 +113,7 @@ public function purchase_products_requisition($id,$role_id){
 		$this->db->where('p.user_id',$id);
 		return	$this->db->get()->result();
 	}
-	if($role_id == 1) {
+	if($role_id == 1 || $role_id == 2) {
 		return	$this->db->get()->result();
 	}
 } 
@@ -526,7 +526,7 @@ public function movement_list(){
 	$this->db->join('product_accessories_model as pam', 'pa.device_model = pam.id', 'left');
 	$this->db->join('product_accessory_categories as pac', 'pa.cat_id = pac.id', 'left');
 	$this->db->where('pa.status',5);
-	$this->db->where('pa.move_status',1);
+	$this->db->where('pa.move_status',0);
 	$this->db->group_by('pa.id');
 	$data = $this->db->get()->result();
 
@@ -547,11 +547,11 @@ public function request_list(){
 	");
 
 	$this->db->from("move_list");
-	$this->db->join("product_accessories_model", "move_list.device_id = product_accessories_model.id");
-	$this->db->join("xin_employees", "move_list.user_id = xin_employees.user_id");
-	$this->db->join("product_accessories", "move_list.device_id = product_accessories.id"); // Join the product_accessories table
+	$this->db->join("product_accessories_model", "move_list.device_id = product_accessories_model.id",'left');
+	$this->db->join("xin_employees", "move_list.user_id = xin_employees.user_id",'left');
+	$this->db->join("product_accessories", "move_list.device_id = product_accessories.id",'left'); // Join the product_accessories table
 	$this->db->join("product_accessory_categories", "product_accessory_categories.id = product_accessories.cat_id"); // Join the product_accessories table
-	$this->db->where("move_list.status", 1);
+	$this->db->where("move_list.status", 2);
 
 	return $this->db->get()->result();
 
@@ -595,7 +595,6 @@ public function inactive_list(){
 	$this->db->join("product_accessories_model", "product_accessories.device_model = product_accessories_model.id");	
 	$this->db->join("product_accessory_categories", "product_accessory_categories.id = product_accessories.cat_id"); // Join the product_accessories table
 	$this->db->where("product_accessories.status",5);
-
 	return $this->db->get()->result();
 } 
 
