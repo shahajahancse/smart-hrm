@@ -38,7 +38,7 @@ $success = $this->session->flashdata('success');
 <script>
 
 $(document).ready(function() {
-	console.log('hello');
+	// console.log('hello');
    var xin_table = $('#emplist').dataTable({
         "bDestroy": true,
 		"ajax": {
@@ -51,14 +51,4 @@ $(document).ready(function() {
     });
 });
 </script>
-
-
-
-
-
-
-
-
-
-
 

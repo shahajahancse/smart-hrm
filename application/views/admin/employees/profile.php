@@ -76,10 +76,10 @@
                       <a class="list-group-item-profile list-group-item list-group-item-action nav-tabs-link" href="#bank_account" data-profile="9" data-profile-block="bank_account" data-toggle="tab" aria-expanded="true" id="user_profile_9"> <i class="fa fa-laptop"></i> <?php echo $this->lang->line('xin_e_details_baccount');?> </a>
                       <?php } ?>
                       <a class="list-group-item-profile list-group-item list-group-item-action nav-tabs-link" href="#shift" data-profile="12" data-profile-block="shift" data-toggle="tab" aria-expanded="true" id="user_profile_12"> <i class="fa fa-clock-o"></i> <?php echo $this->lang->line('xin_e_details_shift');?> </a> <a class="list-group-item-profile list-group-item list-group-item-action nav-tabs-link" href="#change_password" data-profile="14" data-profile-block="change_password" data-toggle="tab" aria-expanded="true" id="user_profile_14"> <i class="fa fa-key"></i> <?php echo $this->lang->line('xin_e_details_cpassword');?> </a></div>
-                    </div>
-                  </div> <!-- /.box-body --> 
+                  </div>
+                  <!-- /.box-body --> 
                 </div>
-
+              </div>
               <div class="col-md-9 current-tab <?php echo $get_animate;?>" id="user_basic_info"  aria-expanded="false">
                 <?php $attributes = array('name' => 'basic_info', 'id' => 'basic_info', 'autocomplete' => 'off');?>
                 <?php $hidden = array('u_basic_info' => 'UPDATE');?>
@@ -173,14 +173,14 @@
                 <?php $hidden = array('u_profile_picture' => 'UPDATE');?>
                 <?php echo form_open_multipart('admin/employees/profile_picture/', $attributes, $hidden);?>
                 <?php
-                  $data_usr2 = array(
-                    'type'  => 'hidden',
-                    'name'  => 'user_id',
-                    'id'  => 'user_id',
-                    'value' => $session['user_id'],
-                  );
-                  echo form_input($data_usr2);
-                ?>
+                      $data_usr2 = array(
+                            'type'  => 'hidden',
+                            'name'  => 'user_id',
+                            'id'  => 'user_id',
+                            'value' => $session['user_id'],
+                     );
+                    echo form_input($data_usr2);
+                    ?>
                 <?php
                     $data_usr3 = array(
                             'type'  => 'hidden',

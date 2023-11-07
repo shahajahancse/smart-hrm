@@ -16,7 +16,7 @@
             <th class="text-center">Phone</th>
             <th class="text-center">Address</th>
 
-            <?php if($session['role_id'] ==1 || $session['role_id'] ==2){?>
+            <?php if($session['role_id'] ==1){?>
             <th class="text-center">Gross Salary</th>
             <?php }?>
             <th class="text-center">Joining Date</th>
@@ -48,7 +48,7 @@
                 // dd($query);
             ?>
 
-            <?php if($session['role_id'] !=1 || $session['role_id'] !=2){?>
+            <?php if($session['role_id'] ==1){?>
             <td><?= $value->basic_salary?></td>
             <?php }?>
             <td><?= $value->date_of_joining?></td>

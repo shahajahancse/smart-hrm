@@ -126,6 +126,7 @@
                     style="margin-top: 30px;">
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="payment_in(1)">Daily</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="payment_in(2)">continuously</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="client_list()">Client List</button>
                 </div>
                 <div class="tab-pane fade" id="continue" role="tabpanel" aria-labelledby="continue-tab"
                     style="margin-top: 30px;">
@@ -213,6 +214,26 @@ function payment_out(s) {
     ajaxRequest.open("POST", url, true);
     ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
     ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function() {
+        if (ajaxRequest.readyState == 4) {
+            // console.log(ajaxRequest.responseText); return;
+            var resp = ajaxRequest.responseText;
+            a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+            a.document.write(resp);
+            // a.close();
+        }
+    }
+    }
+
+    function client_list(){
+    var ajaxRequest; // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+   
+  
+    url = base_url + '/client_list';
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send();
     ajaxRequest.onreadystatechange = function() {
         if (ajaxRequest.readyState == 4) {
             // console.log(ajaxRequest.responseText); return;

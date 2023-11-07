@@ -30,7 +30,7 @@ $data = $this->db->select('id,phone_number,amount,approved_amount,status,created
         <?php echo form_open('admin/inventory/mobile_bill', $attributes, $hidden);?>
             <div class="form-group ">
                 <label for="exampleInputEmail1">Mobile Number</label><br>
-                <input type="tel" name="phone_number" class="form-control form-control-sm custom-sm-input" id="exampleInputEmail1" aria-describedby="emailHelp" pattern="[0-9]{11}" placeholder="e.g., 012345678911" value="<?php echo $session['role_id'] == 3 ? $get_user_number->number : '' ?>"  >
+                <input type="tel" name="phone_number" class="form-control form-control-sm custom-sm-input" id="exampleInputEmail1" aria-describedby="emailHelp" pattern="[0-9]{11}" placeholder="e.g., 012345678911" value="<?php echo $session['role_id'] == 3 ? '0'.$get_user_number->number : '' ?>"  >
             </div>
             <div class="form-group mx-2">
                 <label for="exampleInputPassword1">Amount</label><br>

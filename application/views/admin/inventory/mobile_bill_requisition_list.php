@@ -22,7 +22,7 @@
             <td  class="text-center"><?php echo $rows->amount; ?></td>
             <td  class="text-center"><?php echo $rows->approved_amount=='' || $rows->approved_amount==null ? '0': $rows->approved_amount; ?></td>
             <td  class="text-center">
-              <?php echo $rows->status == 1 ? "<span class='using' style='color:#c3b901'> <i class='fa fa-dot-circle-o'></i> Pending</span>" : ($rows->status == 2 ? "<span class='using' style='color:green'> <i class='fa fa-dot-circle-o'></i> Approved</span>" :($rows->status ==3 ? "<span class='using' style='color:red'> <i class='fa fa-dot-circle-o'></i> Rejected</span>" : "<span class='using' style='color:seagreen'> <i class='fa fa-dot-circle-o'></i> Rechared</span>")) ; ?>
+              <?php echo $rows->status == 1 ? "<span class='using' style='color:#c3b901'> <i class='fa fa-dot-circle-o'></i> Pending</span>" : "<span class='using' style='color:green'> <i class='fa fa-dot-circle-o'></i> Approved</span>" ; ?>
             </td>
             <td  class="text-center">
               <div class="btn-group <?php echo $rows->status == 3?'d-hidden':''?>" >
@@ -37,7 +37,7 @@
                   </li>
                   <li class="divider <?php echo ($rows->status == 2  || $rows->status == 4) ?'d-hidden':''?>"></li>
                   <li class="<?php echo ($rows->status == 2  || $rows->status == 4) ?'d-hidden':''?>">
-                    <a href="<?= base_url('admin/inventory/edit_mobile_bill_rejected/'.$rows->id);?>">
+                    <a href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">
                       <b class="text-danger">Rejected</b>
                     </a>
                   </li>
@@ -49,7 +49,7 @@
                   </li>
                   <li class="divider <?php echo $rows->status == 2 || $rows->status == 4 || $rows->status == 1  ?'d-hidden':''?>"></li>
                   <li class="<?php echo ($rows->status == 4) || ($rows->status == 1) ?'d-hidden':''?>">
-                      <a style="padding-left:5px;" href="<?= base_url('admin/inventory/mobile_bill_hand_over/'.$rows->id);?>">
+                      <a style="padding-left:5px;" href="<?= base_url('admin/inventory/hand_over/'.$rows->id);?>">
                       <b class="text-info">Delivered</b>
                     </a>
                   </li>

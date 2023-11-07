@@ -303,11 +303,18 @@ class Reports_model extends CI_Model {
 							desig.designation_name
 						');
 		$this->db->from('xin_employee_move_register as empm');
-		$this->db->where_in('empm.employee_id', $emp_id);
 		$this->db->join('xin_employees as em', 'em.user_id = empm.employee_id');
 		$this->db->join('xin_designations as desig', 'em.designation_id = desig.designation_id');
 		$this->db->join('xin_employee_move_reason as mr', 'empm.reason = mr.id');
 		$this->db->join('xin_employee_move_place as mp', 'empm.place_adress = mp.place_id');
+		$this->db->where_in('empm.employee_id', $emp_id);
+		if($status == 1){
+			$this->db->where('empm.date',$attendance_date);
+		}else if($status == 2){
+			$this->db->where("empm.date >= '$attendance_date' AND empm.date    <= '$second_date'");
+		}else{
+
+		}
 		$this->db->order_by('empm.id', 'DESC');
 		// $a = $this->db->get();
 		//  dd($a->result());

@@ -219,8 +219,7 @@ function get_data() {
         success: function(json) {
             var data = JSON.parse(json);
             if (data.status == 'error') {
-                // 123
-                $('#previous_balance_data').html(data.p revious_balance);
+                $('#previous_balance_data').html(data.previous_balance);
                 $('#today_balance_data').html(0);
                 $('#today_expenses_data').html(0);
                 $('#rest_amount_data').html(data.previous_balance);

@@ -127,35 +127,6 @@ input:checked+.slider:after {
         </div>
     </div>
     <div class="row">
-        <h5 style="float: left;margin-right: 10px;">Free Service</h5>
-        <label class="switch">
-            <input type="checkbox" onchange="free_serviceEn(this)" name="free_serviceEnabled">
-            <span class="slider"></span>
-        </label>
-        <div class="col-md-12" >
-            <div class="row" id="free_service_section" style="padding: 6px;display: none;">
-                <div class="col-md-4">
-                    <div class="inputBox">
-                        <div class="inputBox">
-                            <input type="date" value="<?= date('Y-m-d') ?>" min="<?= date('Y-m-01') ?>" name="free_service_start_date"
-                                id="free_service_start_date">
-                            <strong>Free Service Start Date<span style="color: red;">*</span></strong>
-                        </div> 
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="inputBox">
-                        <div class="inputBox">
-                            <input type="date" value="<?= date('Y-m-d') ?>" name="free_service_end_date"
-                                id="free_service_end_date">
-                            <strong>Free Service End Date<span style="color: red;">*</span></strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <h5 style="float: left;margin-right: 10px;">Service</h5>
         <label class="switch">
             <input type="checkbox" onchange="serviceEn(this)" name="serviceEnabled">
@@ -204,14 +175,6 @@ input:checked+.slider:after {
         </div>
     </div>
     <div class="row">
-        <h5>Agreement File </h5>
-        <div class="col-md-12">
-            <div class="inputBox">
-                <input type="file" style="height: 37px;" name="agreement_file">
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <h5>Description</h5>
         <div class="col-md-12">
             <div class="inputBox">
@@ -227,27 +190,6 @@ input:checked+.slider:after {
 </div>
 <script>
     setinstallmentdate()
-</script>
-<script>
-function free_serviceEn(element) {
-    if (element.checked) {
-        console.log("Checkbox is checked");
-        $('#free_service_section').animate({
-            opacity: "show",
-            height: "show",
-            display: "inline-block"
-        });
-        $('#free_service_start_date').attr('required', true);
-        $('#free_service_end_date').attr('required', true);
-    } else {
-        $('#free_service_section').animate({
-            opacity: "hide",
-            height: "hide"
-        });
-        $('#free_service_start_date').removeAttr('required');
-        $('#free_service_end_date').removeAttr('required');
-    }
-}
 </script>
 <script>
 function serviceEn(element) {

@@ -119,6 +119,7 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
             <th scope="row">1</th>
             <td>Guest</td>
             <td>-</td>
+
             <td>
                 <input type="number" name="guest" min="0" id="guest-input" onchange="summeal()" class="activmeal"
                     value="<?= isset($guest->guest_m) ? $guest->guest_m : '0'; ?>" style="width: 83px;">
@@ -132,7 +133,7 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
 
 <div class="form-group">
     <label>Comment</label><br>
-    <span id="is_requard" style="color: red;display: none;">Comment is required</span>
+    <span id="is_requard" style="color: red;display: none;"> Comment is required</span>
     <textarea name="bigcomment" class="form-control" id="bigcomment"
         rows="3"><?= isset($guest->bigcomment) ? $guest->bigcomment : ''; ?></textarea>
 </div>

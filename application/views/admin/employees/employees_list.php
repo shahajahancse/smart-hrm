@@ -380,7 +380,6 @@
                             <div class="form-group">
                                 <label for="xin_hr_leave_cat">Team Leader</label>
                                 <select class="form-control" name="is_emp_lead">
-                                    <option value="">Select Team Lead</option>
                                     <?php
                                         $team_leads = $this->db->select('user_id,first_name,last_name')->where('is_emp_lead',2)->get('xin_employees')->result(); 
                                         foreach($team_leads as $row){

@@ -72,7 +72,7 @@ $(function() {
                                     <br>
                                     <a style="padding-left:5px; " class="text-danger" href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>"><b>Rejected</b></a>
                                     <?php }?> <?php if($rows->status==2) {?>
-                                    <a style="padding-left:5px;"   href="<?= base_url('admin/inventory/product_purchase_delivered/'.$rows->id);?>"><b>Order Received</b></a> <br>
+                                    <a style="padding-left:5px;"   href="<?= base_url('admin/inventory/product_purchase_recived/'.$rows->id);?>"><b>Order Received</b></a> <br>
                                 </div>
                             </div>
                         </td>

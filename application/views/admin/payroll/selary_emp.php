@@ -31,7 +31,7 @@ if(count($lastmonthsalarys)>0) {
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
         <div class="heading">Deduction</div>
         <div class="heading2">
-            <?=  (isset($lastmonthsalaryy)) ? $lastmonthsalaryy->late_deduct+$lastmonthsalaryy->absent_deduct : '0'?>
+            <?=  (isset($lastmonthsalaryy)) ? $lastmonthsalaryy->modify_salary+$lastmonthsalaryy->late_deduct+$lastmonthsalaryy->absent_deduct : '0'?>
         </div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">

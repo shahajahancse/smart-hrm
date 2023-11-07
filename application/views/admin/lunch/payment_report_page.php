@@ -109,11 +109,17 @@
         <div style="font-size:12px; font-weight:bold; text-align:center;height:0px;"></div>
         <div style="font-size:12px; line-height:15px; font-weight:bold; text-align:center;">
             <?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
+
         <div style="font-size:13px; line-height:15px; text-align:center;">Monthly Lunch Payment Report
             of <?php $convertedDate1 = date('d-m-Y', strtotime($lunch_data[0]->end_date));
-               $convertedDate2 = date('d-m-Y', strtotime($newDate)); ?>
+
+               $convertedDate2 = date('d-m-Y', strtotime($lunch_data[0]->next_date)); ?>
+
             <?= isset($lunch_data[0]->end_date) ? $convertedDate1 : ''; ?> to
-            <?= isset($newDate) ? $convertedDate2: ''; ?> </div>
+
+            <?= isset($convertedDate2) ? $convertedDate2: ''; ?> 
+
+        </div>
     </div>
     
     <div class="table-responsive" style="margin-top: 0px; padding:10px;">

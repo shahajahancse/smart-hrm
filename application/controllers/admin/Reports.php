@@ -1438,6 +1438,69 @@ class Reports extends MY_Controller
 		}
 		$this->load->view('admin/reports/inventory_report',$data);
 	}
+
+	public function issue_report(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title']       = "Issue Report".' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = "Issue Report";
+		// $data['issues'] = $this->db->select('xin_employees.user_id,xin_employees.first_name,xin_employees.last_name,employee_issue.comment')->from('employee_issue')->join('xin_employees','xin_employees.user_id = employee_issue.emp_id')->get()->result();
+		// dd($data);
+		$data['subview']     = $this->load->view('admin/reports/issue_report',$data,true);
+		$this->load->view('admin/layout/layout_main', $data);
+	}
+
+	public function employee_issue($action = '', $id = null) {
+		$data['employees'] = $this->Xin_model->all_employees();
+        // Check the HTTP request method to determine the action
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ($action === 'add') {
+                // Handle adding a new purpose (Create)
+                $emp_id = $this->input->post('emp_id');
+                $comment = $this->input->post('comment');
+                    $data = array(
+                        'emp_id' => $emp_id,
+                        'comment' => $comment
+                    );
+                    $this->db->insert('employee_issue', $data);
+                    echo 'success';
+                
+            } elseif ($action === 'edit' && $id) {
+                // Handle editing an existing purpose (Update)
+				$emp_id = $this->input->post('emp_id');
+                $comment = $this->input->post('comment');
+                    $data = array(
+						'emp_id' => $emp_id,
+                        'comment' => $comment
+                    );
+                    $this->db->where('id', $id);
+                    $this->db->update('employee_issue', $data);
+                    echo 'success';
+            } elseif ($action === 'delete' && $id) {
+                $this->db->where('id', $id);
+                $this->db->delete('employee_issue');
+                echo 'success';
+            }
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            // Handle displaying the form for editing an existing purpose
+            if ($action === 'edit' && $id) {
+                $query = $this->db->get_where('employee_issue', array('id' => $id));
+                $purpose = $query->row_array();
+                echo json_encode($purpose);
+            } else {
+                $data['purposes'] = $this->db->get('employee_issue')->result();
+                $data['title'] = 'Employee Isuue';
+                $data['breadcrumbs'] = 'Employee Isuue';
+                $data['subview'] = $this->load->view("admin/employees/employee_issue", $data, true);
+                $this->load->view('admin/layout/layout_main', $data);
+            }
+        }else{
+			$data['subview'] = $this->load->view("admin/employees/employee_issue", $data, true);
+			$this->load->view('admin/layout/layout_main', $data);
+        }
+    }
 	
 	public function lunch_report_all() {
 		$session = $this->session->userdata('username');
@@ -1472,6 +1535,10 @@ class Reports extends MY_Controller
 	public function client_list(){
 		$data['client_list'] = $this->db->get('xin_clients')->result();
 		$this->load->view('admin/reports/client_list', $data);
+    }
+	public function store_in_out(){
+		echo "<script>alert('processing')</script>";
+		// redirect('dashboard','refrash');
     }
 } 
 ?>

@@ -28,7 +28,8 @@
             <td><?= $value->designation_name?></td>
             <td><?= $value->date_of_joining?></td>
             <td><?= '-'?></td>
-            <td><?= '-'?></td>
+            <?php  $inc_ammount = $this->db->select('old_salary,new_salary')->where('emp_id',$value->user_id)->get('xin_employee_incre_prob')->row();?>
+            <td><?= !empty($inc_ammount) ? ($inc_ammount->new_salary - $inc_ammount->old_salary) : '-'?></td>
             <td><?= '-'?></td>
             <td><?= $value->next_incre_date?></td>
             <?php 

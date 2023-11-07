@@ -1,18 +1,24 @@
-
-<?php 
-  $session              = $this->session->userdata('username');
-  $system               = $this->Xin_model->read_setting_info(1);
-  $eid                  = $this->uri->segment(4);
-  $eresult              = $this->Employees_model->read_employee_information($eid);
-  $ar_sc                = explode('- ',$system[0]->default_currency_symbol);
-  $sc_show              = $ar_sc[1];
-  $leave_user           = $this->Xin_model->read_user_info($eid);
-  $get_animate          = $this->Xin_model->get_content_animate();
-  $leave_categories_ids = explode(',',$leave_categories);
-  $view_companies_ids   = explode(',',$view_companies_id);
-  $user_info            = $this->Xin_model->read_user_info($session['user_id']);
-  $role_resources_ids   = $this->Xin_model->user_role_resource(); 
+<?php
+// /<span style="color:red">*</span> Employee Details view
+// <span style="color:red">*</span>/
 ?>
+<?php $session = $this->session->userdata('username');?>
+<?php $system = $this->Xin_model->read_setting_info(1);?>
+<?php //$default_currency = $this->Xin_model->read_currency_con_info($system[0]->default_currency_id);?>
+<?php
+$eid = $this->uri->segment(4);
+$eresult = $this->Employees_model->read_employee_information($eid);
+?>
+<?php
+$ar_sc = explode('- ',$system[0]->default_currency_symbol);
+$sc_show = $ar_sc[1];
+$leave_user = $this->Xin_model->read_user_info($eid);
+?>
+<?php $get_animate = $this->Xin_model->get_content_animate();?>
+<?php $leave_categories_ids = explode(',',$leave_categories);?>
+<?php $view_companies_ids = explode(',',$view_companies_id);?>
+<?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
+<?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
 <style>
   #nda_start{
@@ -23,6 +29,7 @@
   }
 </style>
 <div class="row">
+
   <div class="col-md-12">
     <div class="nav-tabs-custom mb-4">
       <ul class="nav nav-tabs">
@@ -32,8 +39,10 @@
         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_employee_set_salary"><?php echo $this->lang->line('xin_employee_set_salary');?></a> </li>
         <?php }?>
         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_leaves"><?php echo $this->lang->line('left_leaves');?></a> </li>
+        <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_core_hr"><?php echo $this->lang->line('xin_hr');?></a> </li> -->
+        <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_projects"><?php echo $this->lang->line('xin_hr_m_project_task');?></a> </li> -->
+        <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_payslips"><?php echo $this->lang->line('left_payslips');?></a> </li>       -->
         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#NDA">NDA</a> </li>      
-        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#team_lead">Set Team Lead</a></li>      
      </ul>
       <div class="tab-content">
         <div class="tab-pane <?php echo $get_animate;?> active" id="xin_general">
@@ -2152,56 +2161,6 @@
             </div>
           </div>
         </div>
-
-      <!-- team lead -->
-        <div class="tab-pane <?php echo $get_animate;?>" id="team_lead">
-          <div class="box-body">
-            <div class="row no-gutters row-bordered row-border-light">
-              <div class="col-md-12">
-                <div class="tab-content">
-                      <div class="box-header with-border">
-                        <h3 class="box-title">Team Lead</h3>
-                      </div>
-                      <div class="box-body pb-2">
-                        <?php $attributes = array('name' => 'nda_info', 'id' => 'nda_info', 'autocomplete' => 'off');?>
-                        <?php echo form_open('admin/employees/team_lead', $attributes);?>
-                        <input type="hidden" name="user_id" value="<?= $user_id?>">
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="email" class="control-label">Select Team Lead</label>
-                                  <select class="form-control" name="is_emp_lead">
-                                    <option value="">Select</option>
-                                      <?php
-                                          $team_leads = $this->db->select('user_id,first_name,last_name')->where('is_emp_lead',2)->get('xin_employees')->result(); 
-                                          foreach($team_leads as $row){
-                                      ?>
-                                      <option value="<?php echo $row->user_id?>"><?php echo $row->first_name." ".$row->last_name?></option>
-                                      <?php }?>
-                                  </select>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                              <div class="col-md-12">
-                                <div class="form-group">
-                                  <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_save'))); ?> </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <?php echo form_close(); ?> 
-                          </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- team lead -->
         <div class="tab-pane <?php echo $get_animate;?>" id="xin_core_hr">
           <div class="box-body">
             <div class="row no-gutters row-bordered row-border-light">
@@ -3181,6 +3140,9 @@
                         confirmButtonText: 'OK'
                     });
                 },
+                // error: function(xhr, status, error) {
+                //     console.log(xhr.responseText);
+                // }
             });
         });
     });

@@ -1,6 +1,6 @@
 <?php /* Leave Application view */ ?> 
 <?php $session = $this->session->userdata('username');
-// dd($session['user_id']);
+
 $error = $this->session->flashdata('error');
 $success = $this->session->flashdata('success');
 ?> 

@@ -27,9 +27,8 @@
 .btn {
     padding: 3px !important;
 }
-
-.swal2-container {
-    z-index: 1111 !important;
+.swal2-container{
+    z-index: 1111!important;
 }
 </style>
 <?php $session = $this->session->userdata('username');?>
@@ -98,22 +97,12 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class=" col-md-6 form-field">
-                                    <label for="reason">Select Reason of move**</label>
-                                    <select id="reason" onchange="changetother(this)" name="reason" class="col-md-12"
-                                        required>
-                                        <?php $resonedata = $this->db->order_by('id', 'desc')->get('xin_employee_move_reason')->result();?>
-                                        <option value=""> Select Reason of move</option>
-                                        <?php $resonedata = $this->db->get('xin_employee_move_reason')->result();
-                            foreach ($resonedata  as $k => $v) {
-                                ?>
-                                        <option value="<?=$v->id ?>"><?= $v->title ?></option>
-                                        <?php } ?>
-                                        <option value="other">Other</option>
-                                    </select>
-                                    <input type="text" id="otherInput" name="otherInput"
-                                        style="display: none;margin: 7px 3px;width: 39%;height: 36px;"
-                                        class="col-md-12">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="summary">Reason</label>
+                                        <textarea class="form-control" placeholder="reason" name="reason" cols="30"
+                                            rows="3" id="m_reasoness"></textarea>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-actions box-footer">
@@ -225,10 +214,11 @@
                             <td><?php echo $row->date; ?></td>
                             <td><?php echo $row->out_time == "" ? "" : date('h:i A',strtotime($row->out_time)); ?></td>
                             <td><?php echo $row->in_time  == "" ? "" : date('h:i A',strtotime($row->in_time));?></td>
-                            <td><?php echo $row->title ; ?></td>
+                            <td><?php echo $row->title; ?></td>
                             <?php
                                 $status = $row->status;
                                 $statusMessage = '';
+
                                 switch ($status) {
                                     case 0:
                                         $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:black"></i> Not Applied</span>';
@@ -309,38 +299,38 @@
 </div>
 
 <script>
-function changetada() {
+function changetada(){
     $('#viewModal').modal().hide();
 
-    var payamValue = document.getElementById("payam").value;
-    var staValue = document.getElementById("sta").value;
-    var moveid = document.getElementById("moveid").value;
+var payamValue = document.getElementById("payam").value;
+var staValue = document.getElementById("sta").value;
+var moveid = document.getElementById("moveid").value;
 
     var url = "<?php echo base_url('admin/attendance/changetada'); ?>";
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: {
-            payable_amount: payamValue,
-            status: staValue,
-            moveid: moveid
-        },
-        success: function(response) {
-            Swal.fire({
-                title: 'Success!',
-                text: response,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.reload();
-                }
-            });
-        },
-        error: function(response) {
-            alert(response.message)
-        }
-    });
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                payable_amount: payamValue,
+                status: staValue,
+                moveid: moveid
+                },
+            success: function(response) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: response,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
+            },
+            error: function(response) {
+                alert(response.message)
+            }
+        });
 }
 </script>
 <script>
@@ -353,44 +343,39 @@ $(document).ready(function() {
         'default': 'now'
     });
 
-    $("#move_register").submit(function(e) {
-        e.preventDefault();
-        var okyes = confirm('Are you sure you want to leave?');
-
-        if (okyes === false) {
-            return;
-        }
-
+    $("#move_register").on('submit', function(e) {
         var url = "<?php echo base_url('admin/attendance/create_move_register'); ?>";
-
-        var formData = new FormData(this); // 'this' refers to the form element
-
+        e.preventDefault();
+        var okyes;
+        okyes = confirm('Are you sure you want to leave?');
+        if (okyes == false) return;
         $.ajax({
             url: url,
             type: 'POST',
-            data: formData,
-            processData: false, // Prevent jQuery from processing the data
-            contentType: false, // Prevent jQuery from setting the content type
+            dataType: "json",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            cache: false,
             success: function(response) {
-                console.log(response);
-                if (response.status === 'success') {
-                   showSuccessAlert(response.message)
+                if (response.status == 'success') {
+                    alert(response.message)
+                    window.location.replace(
+                        '<?php echo base_url('admin/attendance/move_register/')?>')
                 } else {
-                    showSuccessAlert(response.message)
+                    alert(response.message)
                 }
             },
             error: function(response) {
-                alert('An error occurred: ' + response.statusText);
+                alert(response.message)
             }
         });
-
         return false;
     });
-
     $('#example').DataTable();
 });
 
-function moveview(id, st) {
+function moveview(id,st) {
     $('#viewModal').modal().show();
     // alert(id);
     var url = "<?php echo base_url('admin/attendance/view_ta_da/')?>" + id + "/" + st;
@@ -570,17 +555,4 @@ function copyText() {
         }
     });
 }
-</script>
-<script>
-function changetother(raw) {
-    var selectedOption = raw.value;
-    if (selectedOption === "other") {
-        document.getElementById("otherInput").style.display = "block";
-        document.getElementById("otherInput").focus();
-        document.getElementById("otherInput").required = true;
-    } else {
-        document.getElementById("otherInput").style.display = "none";
-        document.getElementById("otherInput").required = false;
-    }
-};
 </script>

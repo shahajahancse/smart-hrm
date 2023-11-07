@@ -194,7 +194,7 @@ p {
     font-style: italic;
 }
 </style>
-<header class="main-header" style="z-index: 1100;">
+<header class="main-header" style="z-index: 11111111111111111;">
     <!-- Logo -->
     <a href="<?php echo site_url('admin/dashboard/');?>" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -312,7 +312,7 @@ if($user[0]->user_role_id != 3) {
                             } elseif ($row->status==3) {
                                 $statuss="Rejected";
                             } elseif ($row->status==4) {
-                                $statuss="First Stage Approval";
+                                $statuss="First Stage Approval.";
                             } else {
                                 $statuss="--";
                             }

@@ -167,7 +167,6 @@ input[type="email"] {
                 id="next_dateu">
 
             <h2>Add Payment</h2>
-
             <select id="search-select">
                 <option value="none">Select Employee</option>
 

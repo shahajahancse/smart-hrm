@@ -1,5 +1,4 @@
 
-
 <?php 
 $session = $this->session->userdata('username');
 $get_animate = $this->Xin_model->get_content_animate();
@@ -139,19 +138,11 @@ $all_notice = $this->db->select('*')->get('xin_events')->result();
 $leavemonth=$this->Salary_model->leave_count_status($userid,date('Y-m-01'),date('Y-m-t'), 2);
 $totalleavem=$leavemonth->el+$leavemonth->sl;
 
-
-
-$team_leads = $this->db->select('user_id,first_name,last_name,is_emp_lead,lead_user_id')->where_in('user_id',[18,35,37,38,39,40])->get('xin_employees')->result();
-// dd($team_leads);
 ?>
 
 
 
 <style>
-
-
-
-
 .layout {
     background: var(--bg-2, #F8FBFF);
     margin-left: -56px;
@@ -437,75 +428,21 @@ hr {
         width: 606px
     }
 }
+
 @media screen and (max-width: 992px) {
     .widght {
         width: 47% !important;
     }
 }
+
 @media screen and (max-width: 595px) {
     .widght {
         width: 100% !important;
     }
+
     .timeshet {}
 }
-
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-.modal-content {
-    background-color: #fff;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    border: 1px solid #000;
-}
-
-.close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-}
-
-
 </style>
-
-<div id="modal_imp" class="modal <?php echo $get_animate;?>" style="display: none">
-    <!-- Modal content -->
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Please Select Your Team Leader</h4>
-        </div>
-        <div class="modal-body">
-            <!-- <p>This is the content of the modal.</p> -->
-        <?php $attributes = array('id' => 'unit_insert', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
-        <?php $hidden = array('user_id' => $session['user_id']);?>
-        <?php echo form_open_multipart('admin/employees/add_lead', $attributes, $hidden);?>
-            <select name="team_lead_user_id" id="team_lead">
-                <option value="">Select Your Team Lead</option>
-                <?php foreach ($team_leads as $key => $value) { ?> 
-                    <option value="<?php echo $value->user_id?>"><?php echo $value->first_name.' '.$value->last_name?></option>
-                <?php }?>
-            </select>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-success btn-sm" data-dismiss="modal">Submit</button>
-        </div>
-        <?php echo form_close(); ?> 
-    </div>
-</div>
 
 <div class=" <?php echo $get_animate;?>">
     <!-- breadcrumb section -->
@@ -527,24 +464,26 @@ hr {
             </div>
         </div>
     </div>
+
     <!-- Today attendance info -->
     <div class="row equal-height-row " style="margin-top:10px">
         <div class="col-sm-4 col_style">
             <div class="card timeac" style="width: 250px;">
                 <div class="card-body flex-container" style="margin-top: -8px;margin-bottom: -20px;">
                     <h5 class="card-title flex-item " style="font-weight: 600;">Timesheet</h5>
-                    <h6 class="card-title flex-item " style="margin-left: 86px;"><?php echo date('d M Y')?></h6>
+                    <h6 class="card-title flex-item " style="margin-left: 83px;"><?php echo date('d M Y')?></h6>
                 </div>
                 <div class="card-body">
-                    <div style="border-radius: 4px;border: 1px solid #E3E3E3;background: #F9F9F9; padding: 5px 0px;">
-                        <span style="padding: 11px 0px 16px 12px">Punch In At</span><br>
+                    <div style="border-radius: 4px;border: 1px solid #E3E3E3;background: #0177bccf;color:white; padding: 5px 0px;">
+                        <span style="padding: 0px 0px 0px 30px"><b>Punch In At</b></span>
                         <?php if ($in_time == '00:00') {
                             $in_time = "<span class='text-danger' >00:00</span>";
                             $total_working_hour = '0.0';
                         } ?>
-                        <span style="padding: 0px 0px 0px 12px"><?php echo date('D, jS M Y ').$in_time?><span>
+                        <span style="padding: 0px 0px 0px 0px"><b><?php echo $in_time?></b><span>
                     </div>
                 </div>
+
                 <div class="containers">
                     <div class="circle">
                         <div class="text"><?= $total_working_hour." hrs"?></div>
@@ -553,6 +492,7 @@ hr {
                 <br>
             </div>
         </div>
+
         <!-- step bar -->
         <div class="col-sm-8 timeshet">
             <div class="col-sm-12 col_style">
@@ -603,19 +543,20 @@ hr {
                                 </li>
                             </ul>
                         </section>
+
                         <div class="row" style="margin-left: -8px;margin-top: 45px;">
                             <div class="col-sm-3">
-                                <p><span style="font-weight:600">Status : </span><span>On Time</span></p>
+                                <p><span style="font-weight:600;font-size: 14px;">Status : </span><span style="font-size: 14px;"><?php echo $in_time >='09:35:00' ? '<span class="text-danger"><b>Late</b></span>' : '<span class="success"><b>On Time</b></span>'?></span></p>
                             </div>
                             <div class="col-sm-4">
-                                <p><span style="font-weight:600">Lunch Time : </span><span>1 Hour</span></p>
+                                <p><span style="font-weight:600;font-size: 14px;">Lunch Time : </span><span style="font-size: 14px;">1 Hour</span></p>
                             </div>
                             <div class="col-sm-5">
                                 <?php $in = date("h:i A", strtotime($schedule->in_time));
                                 $out = date("h:i A", strtotime($schedule->ot_start_time)); ?>
                                 <p>
-                                    <span style="font-weight:600">Working Time: </span>
-                                    <span><?= $in .'  -  '. $out; ?></span>
+                                    <span style="font-weight:600;font-size: 14px;">Working Time: </span>
+                                    <span style="font-size: 14px;"><?= $in .'  -  '. $out; ?></span>
                                 </p>
                             </div>
                         </div>
@@ -625,6 +566,7 @@ hr {
             </div>
         </div>
     </div>
+
     <!-- Monthly statistics -->
     <div class="row equal-height-row " style="margin-top:-10px">
         <div class="col-sm-8 col_style">
@@ -708,6 +650,10 @@ hr {
             </div>
         </div>
     </div>
+
+
+
+
     <!-- lunch part -->
     <div class="row equal-height-row " style="margin-top:-10px">
         <div class="col-sm-4 col_style">
@@ -747,7 +693,8 @@ hr {
                         </div>
                     </div>
                     <div class="text-center">
-                        <a href="<?= base_url('admin/lunch/lunch_emp_bill') ?>" style="margin-top:15px;color:#5442A8;">Details</a>
+                        <a href="<?= base_url('admin/lunch/lunch_emp_bill') ?>"
+                            style="margin-top:15px;color:#5442A8;">Details</a>
                     </div>
                     <h5 class="card-title" style="margin-top: 20px;margin-left: 13px;font-weight:600">Leave Balance</h5>
                     <div class="stats-box-row" style="border:2px solid #E1E1E1;padding:15px 5px;border-radius:5px;">
@@ -770,7 +717,8 @@ hr {
                         </div>
                     </div>
                     <div class="text-center">
-                        <a href="<?= base_url('admin/attendance/employee_attendance') ?>" style="margin-top:15px;color:#5442A8;">View All</a>
+                        <a href="<?= base_url('admin/attendance/employee_attendance') ?>"
+                            style="margin-top:15px;color:#5442A8;">View All</a>
                     </div>
                 </div>
             </div>
@@ -831,9 +779,13 @@ hr {
                             <span style="color:#8D8D8D; float:right"><?php echo $daysLeft?> days left</span>
                         </p>
                     </div>
+                    <!-- <div class="col-md-4" style="float: right;">
+                    </div> -->
                 </div>
                 <hr>
                 <?php }?>
+                <!-- Buttons with data-attributes -->
+                <!-- <button class="btn btn-sm">View All</button> -->
                 <a href="#" class="" data-toggle="modal" data-target=".bs-example-modal-lg"
                     style="margin-top:15px;color:#5442A8;text-align: center;">View All</a>
             </div>
@@ -859,8 +811,12 @@ hr {
         </div>
     </div>
 </div>
+
 <!-- end notice modal -->
+
+
 <!-- upcomming holidays modal -->
+
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -911,6 +867,10 @@ foreach($holidays as $holiday) {
     </div>
 </div>
 <!-- end upcomming holidays modal -->
+
+
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
 
@@ -984,30 +944,4 @@ options: {
     }
 }
 });
-</script>
-<script>
-    $(document).ready(function () {
-        // var modal = $("#modal_imp");
-        var closeButton = $(".close");
-        closeButton.on("click", function () {
-            modal.css("display", "none");
-        });
-        // Make an AJAX request to check_user.php
-        $.ajax({
-            type: 'POST',
-            url: "<?php echo  base_url('admin/employees/check') ?>",
-            dataType: 'json',
-            success: function (data) {
-                if (data.show_modal) {
-                    // Display the modal
-                    $('#modal_imp').show();
-                } else {
-                    // Do nothing or handle other cases
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log("AJAX Error: " + status, error);
-            }
-        });
-    });
 </script>
