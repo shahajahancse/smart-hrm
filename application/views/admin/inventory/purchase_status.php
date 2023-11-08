@@ -40,16 +40,22 @@ $(function() {
                     <tr>
                         <th class="text-center" style="width:20px;">No.</th>
                         <th class="text-center" style="width:100px;">Requisition By</th>
+                        <th class="text-center" style="width:20px;">Product Name</th>
+                        <th class="text-center" style="width:20px;">Quantity</th>
+                        <th class="text-center" style="width:20px;">Apprd Quantity</th>
                         <th class="text-center" style="width:20px;">Status</th>
                         <th class="text-center" style="width:20px;">Request Date</th>
                         <th class="text-center" style="width:50px;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($products as $key => $rows) { ?>
+                    <?php  foreach ($products as $key => $rows) { ?>
                     <tr>
                         <td class="text-center"><?php echo($key+1)."."; ?></td>
                         <?php if($user_role_id==1 || $user_role_id == 2) {?>
+                        <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
+                        <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
+                        <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                         <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                         <td class="text-center"><?php echo $rows->status==1 ? "
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" :

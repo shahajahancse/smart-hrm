@@ -6684,7 +6684,9 @@ exit();
 		
 	}
 	public function employee_issue($action = '', $id = null) {
+
 		$data['employees'] = $this->Xin_model->all_employees();
+		$data['session']  = $this->session->userdata('username');
         // Check the HTTP request method to determine the action
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($action === 'add') {

@@ -290,7 +290,7 @@ class Reports_model extends CI_Model {
     }
 
 	public function show_meeting_report($emp_id,$key,$attendance_date,$second_date){
-		// dd( $key);
+		// dd( $second_date);
 		$this->db->select('empm.id, mr.title, 
 							em.first_name, 
 							em.last_name, 
@@ -308,21 +308,21 @@ class Reports_model extends CI_Model {
 		$this->db->join('xin_employee_move_reason as mr', 'empm.reason = mr.id');
 		$this->db->join('xin_employee_move_place as mp', 'empm.place_adress = mp.place_id');
 		$this->db->where_in('empm.employee_id', $emp_id);
-		if($status == 1){
-			$this->db->where('empm.date',$attendance_date);
-		}else if($status == 2){
-			$this->db->where("empm.date >= '$attendance_date' AND empm.date    <= '$second_date'");
+		if($key == 1){
+			$this->db->where("empm.date between'$attendance_date' AND'$second_date'");
+		}else if($key == 2){
+			$this->db->where("empm.date between'$attendance_date' AND'$second_date'");
 		}else{
-
+			$this->db->where("empm.date between'$attendance_date' AND'$second_date'");
 		}
 		$this->db->order_by('empm.id', 'DESC');
-		// $a = $this->db->get();
-		//  dd($a->result());
+
 		return $this->db->get()->result();
+		// $d = $this->db->get()->result();
+		// dd($this->db->last_query());
     }
 
    public function get_product_reports_info($id=null, $status=null, $category=null){
-	// dd($id);
         $this->db->select(' 
                     ap.id as a_id,
                     ap.cat_id,
@@ -361,5 +361,33 @@ class Reports_model extends CI_Model {
         return $this->db->get()->result();  
     }
 	
+	public function get_movement_reports_info($date){
+        $this->db->select(' 
+                    ap.id as a_id,
+                    ap.cat_id,
+                    ap.device_model,
+                    ap.device_name_id,
+                    ap.description,
+                    ap.status,
+                    ap.remark,
+                    ap.number,
+                    ap.user_id,
+                    pac.cat_name,
+                    pac.cat_short_name,
+                    pam.model_name,
+                    pam.image,
+                    mobile_numbers.number,
+                    xin_employees.first_name,
+                    xin_employees.last_name,
+        ');
+        $this->db->from('product_accessories as ap');
+        $this->db->join('product_accessories_model as pam',  'ap.device_model = pam.id', 'left');
+        $this->db->join('product_accessory_categories as pac', 'ap.cat_id = pac.id', 'left');
+        $this->db->join('mobile_numbers', 'ap.number = mobile_numbers.id', 'left');    
+        $this->db->join('xin_employees', 'ap.user_id = xin_employees.user_id', 'left');
+        $this->db->order_by('ap.status',"ASC");
+        $this->db->group_by('ap.id');
+        return $this->db->get()->result();  
+    }
 }
 ?>

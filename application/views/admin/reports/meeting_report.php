@@ -11,6 +11,7 @@
             <th class="text-center">S.N</th>
             <th class="text-center">Name</th>
             <th class="text-center">Designation</th>
+            <th class="text-center">Date</th>
             <th class="text-center">Meeting Place</th>
             <th class="text-center">Purpose</th>
             <th class="text-center">Meeting Time Duration(Out time & In Time)</th>
@@ -22,6 +23,7 @@
             <td><?= $i++?></td>
             <td><?= $value->first_name.' '.$value->last_name?></td>
             <td><?= $value->designation_name?></td>
+            <td><?= date(' d M Y',strtotime($value->date))?></td>
             <td><?= $value->address?></td>
             <td><?= $value->title?></td>
             <?php $time1 = new DateTime($value->out_time);

@@ -286,6 +286,9 @@ if($theme[0]->sub_menu_icons != ''){
           <?php if(in_array('377',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['eemp_active']))echo $arr_mod['eemp_active'];?>"><a href="<?php echo site_url('admin/employees/emp_list');?>"><i class="fa <?php echo $submenuicon;?>"></i> Employee List </a></li>
           <?php } ?>
+          <?php if(in_array('3770',$role_resources_ids)) { ?>
+          <li class="<?php if(!empty($arr_mod['issue_active']))echo $arr_mod['issue_active'];?>"><a href="<?php echo site_url('admin/employees/employee_issue');?>"><i class="fa <?php echo $submenuicon;?>"></i> Add Issues </a></li>
+          <?php } ?>
         </ul>
       </li>
     <?php } ?>
@@ -808,6 +811,10 @@ if($theme[0]->sub_menu_icons != ''){
 
         <?php if($system[0]->module_projects_tasks=='true'){?>
         <?php if(in_array('114',$role_resources_ids)) { ?>
+        <li class="sidenav-link <?php if(!empty($arr_mod['reports_store_active']))echo $arr_mod['reports_store_active'];?>"> <a href="<?php echo site_url('admin/reports/store_report');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Store In Out Report</a> </li>
+        <?php } ?>
+
+        <?php if(in_array('1141',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['reports_projects_active']))echo $arr_mod['reports_projects_active'];?>"> <a href="<?php echo site_url('admin/reports/inventory');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Inventory</a> </li>
         <?php } ?>
 
@@ -825,7 +832,7 @@ if($theme[0]->sub_menu_icons != ''){
         <?php } ?>
 
          <?php if(in_array('420',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['reports_emp_issue_active']))echo $arr_mod['reports_emp_issue_active'];?>"> <a href="<?php echo site_url('admin/employees/employee_issue');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Employee Issue</a> </li>
+        <li class="sidenav-link <?php if(!empty($arr_mod['reports_emp_issue_active']))echo $arr_mod['reports_emp_issue_active'];?>"> <a href="<?php echo site_url('admin/reports/issue_report');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Employee Issue</a> </li>
         <?php } ?>
       </ul>
     </li>

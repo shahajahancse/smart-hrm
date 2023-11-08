@@ -1,44 +1,53 @@
-<div class="container">
+<!-- <div class="container"> -->
     <!-- Button to trigger add modal -->
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addPurposeModal">
-        <i class="fas fa-plus-circle"></i> Add Issue
-    </button>
 
     <!-- Table to display payment purposes -->
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Sl</th>
-                    <th>Employee name</th>
-                    <th>Comment</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($purposes as $key=>$purpose): ?>
-                <tr>
-                    <td><?= $key+1 ?></td>
-                    <td>
-                      <?php
-                       $data=$this->Employees_model->fetch_user_info($purpose->emp_id);
-                    //    dd($data);
-                       echo $data[0]->first_name.' '.$data[0]->last_name
-                      ?>
-                    </td>
-                    <td><?= $purpose->comment ?></td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-info edit-purpose" data-id="<?= $purpose->id ?>"
-                            data-toggle="modal" data-target="#editPurposeModal">
-                            <i class="fas fa-pencil-alt"></i> Edit
-                        </a>
-                        <a href="#" class="btn btn-sm btn-danger delete-purpose" data-id="<?= $purpose->id ?>">
-                            <i class="fas fa-trash"></i> Delete
-                        </a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+    <div class="box">
+        <div class="box-body">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addPurposeModal">
+                <i class="fa fa-plus-circle"></i> Add Issue
+            </button>
+            <div class="table-responsive" style="margin-top:10px">
+                <table class="table table-bordered table-hover " id="issues">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Sl</th>
+                            <th>Employee name</th>
+                            <th>Comment</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $i=1;  foreach ($purposes as $key=>$purpose) {
+                            if( $session['user_id'] == $purpose->emp_id || $session['role_id'] == 1 ){
+
+                            
+                        ?>
+                        <tr>
+                            <td><?=   $session['user_id'] == $purpose->emp_id ? $i++ : $key+1 ?></td>
+                            <td>
+                            <?php
+                            $data=$this->Employees_model->fetch_user_info($purpose->emp_id);
+                            //    dd($data);
+                            echo $data[0]->first_name.' '.$data[0]->last_name
+                            ?>
+                            </td>
+                            <td><?= $purpose->comment ?></td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-info edit-purpose" data-id="<?= $purpose->id ?>"
+                                    data-toggle="modal" data-target="#editPurposeModal">
+                                    <i class="fa fa-pencil"></i> Edit
+                                </a>
+                                <a href="#" class="btn btn-sm btn-danger delete-purpose" data-id="<?= $purpose->id ?>">
+                                    <i class="fa fa-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                        <?php } }?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!-- Add Purpose Modal -->
@@ -113,9 +122,12 @@
             </div>
         </div>
     </div>
-</div>
-
+<!-- </div> -->
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script>
+$(document).ready(function() {
+    $('#issues').dataTable();
+});
 // AJAX to add a new purpose
 $('#add-purpose-form').submit(function(e) {
     e.preventDefault();

@@ -193,7 +193,12 @@ class Xin_model extends CI_Model {
 			$arr['eemp_active'] = 'active';
 			$arr['attnd_open'] = 'active';
 			return $arr;
-		} else if($mClass=='employees') {
+		} else if($mClass=='employees' && $mMethod=='employee_issue') {
+			$arr['issue_active'] = 'active';
+			$arr['attnd_open'] = 'active';
+			return $arr;
+		} 
+		 else if($mClass=='employees') {
 			$arr['emp_active'] = 'active';
 			$arr['stff_open'] = 'active';
 			return $arr;
@@ -820,6 +825,10 @@ class Xin_model extends CI_Model {
 			$arr['reports_projects_active'] = 'active';
 			$arr['reports_open'] = 'active';
 			return $arr;
+		} else if($mClass=='reports'  && $mMethod=='store_report') {
+			$arr['reports_store_active'] = 'active';
+			$arr['reports_open'] = 'active';
+			return $arr;
 		}else if($mClass=='reports'  && $mMethod=='accounts_report') {
 			$arr['reports_accounts_active'] = 'active';
 			$arr['reports_open'] = 'active';
@@ -832,7 +841,7 @@ class Xin_model extends CI_Model {
 			$arr['reports_leave_active'] = 'active';
 			$arr['reports_open'] = 'active';
 			return $arr;
-		}else if($mClass=='reports'  && $mMethod=='employee_issue') {
+		}else if($mClass=='reports'  && $mMethod=='issue_report') {
 			$arr['reports_emp_issue_active'] = 'active';
 			$arr['reports_open'] = 'active';
 			return $arr;

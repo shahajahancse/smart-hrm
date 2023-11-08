@@ -47,6 +47,7 @@ class Reports extends MY_Controller
 		  $this->load->model("Designation_model");
 		  $this->load->model('Attendance_model');
 		  $this->load->model('Accessories_model');
+		  $this->load->model('Inventory_model');
      }
 	 
 	// payslip reports > employees and company
@@ -1391,7 +1392,7 @@ class Reports extends MY_Controller
         $data['first_date'] = $attendance_date;
 		$data['status'] = $key;
 		if($key == 1){
-			$second_date= null;
+			$second_date= date('Y-m-d',strtotime($attendance_date));
 		}else if($key == 2){
 			$second_date= date('Y-m-d',strtotime('+6 days'.$attendance_date));
 		}else{
@@ -1423,17 +1424,18 @@ class Reports extends MY_Controller
 			$data['reports']     = $this->Reports_model->get_product_reports_info(null,null,null);
 		}else if($status == 12){
 			$data['reports']     = $this->Reports_model->get_product_reports_info(null,null,$category);
-		}else if($status == 13){
+		}else if($status == 15){
+			$date  = date('Y-m-d');
+			$data['reports']     = $this->Reports_model->get_movement_reports_info($date);
+		}else if($status == 16){
+			$data['reports']     = $this->Reports_model->get_product_reports_info(null,null,null);
+		}else if($status == 17){
 			$data['reports']     = $this->Reports_model->get_product_reports_info(null,null,null);
 		}else if($status == 18){
 			$data['reports']     = $this->Reports_model->get_product_reports_info($emp_id,null,null);
 		}else if($status == 19){
 			$data['reports']     = $this->Reports_model->get_product_reports_info(null,2,null);
 		}else if($status == 20){
-			$data['reports']     = $this->Reports_model->get_product_reports_info(null,4,null);
-		}else if($status == 21){
-			$data['reports']     = $this->Reports_model->get_product_reports_info(null,4,null);
-		}else if($status == 22){
 			$data['reports']     = $this->Reports_model->get_product_reports_info(null,4,null);
 		}
 		$this->load->view('admin/reports/inventory_report',$data);
@@ -1446,62 +1448,27 @@ class Reports extends MY_Controller
 		}
 		$data['title']       = "Issue Report".' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = "Issue Report";
-		// $data['issues'] = $this->db->select('xin_employees.user_id,xin_employees.first_name,xin_employees.last_name,employee_issue.comment')->from('employee_issue')->join('xin_employees','xin_employees.user_id = employee_issue.emp_id')->get()->result();
-		// dd($data);
 		$data['subview']     = $this->load->view('admin/reports/issue_report',$data,true);
 		$this->load->view('admin/layout/layout_main', $data);
 	}
 
-	public function employee_issue($action = '', $id = null) {
-		$data['employees'] = $this->Xin_model->all_employees();
-        // Check the HTTP request method to determine the action
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if ($action === 'add') {
-                // Handle adding a new purpose (Create)
-                $emp_id = $this->input->post('emp_id');
-                $comment = $this->input->post('comment');
-                    $data = array(
-                        'emp_id' => $emp_id,
-                        'comment' => $comment
-                    );
-                    $this->db->insert('employee_issue', $data);
-                    echo 'success';
-                
-            } elseif ($action === 'edit' && $id) {
-                // Handle editing an existing purpose (Update)
-				$emp_id = $this->input->post('emp_id');
-                $comment = $this->input->post('comment');
-                    $data = array(
-						'emp_id' => $emp_id,
-                        'comment' => $comment
-                    );
-                    $this->db->where('id', $id);
-                    $this->db->update('employee_issue', $data);
-                    echo 'success';
-            } elseif ($action === 'delete' && $id) {
-                $this->db->where('id', $id);
-                $this->db->delete('employee_issue');
-                echo 'success';
-            }
-        } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            // Handle displaying the form for editing an existing purpose
-            if ($action === 'edit' && $id) {
-                $query = $this->db->get_where('employee_issue', array('id' => $id));
-                $purpose = $query->row_array();
-                echo json_encode($purpose);
-            } else {
-                $data['purposes'] = $this->db->get('employee_issue')->result();
-                $data['title'] = 'Employee Isuue';
-                $data['breadcrumbs'] = 'Employee Isuue';
-                $data['subview'] = $this->load->view("admin/employees/employee_issue", $data, true);
-                $this->load->view('admin/layout/layout_main', $data);
-            }
-        }else{
-			$data['subview'] = $this->load->view("admin/employees/employee_issue", $data, true);
-			$this->load->view('admin/layout/layout_main', $data);
-        }
-    }
-	
+	public function issuee_report(){
+		$sql = $this->input->post('sql');
+        $status = $this->input->post('status');
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $emp_id = explode(',', trim($sql));
+		$data['status'] = $status;
+		if($status == 2){
+			$second_date =  date('Y-m-d',strtotime('+6 days'.$second_date));
+		}
+		$data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+		$data['values'] = $this->db->select('xin_employees.user_id,xin_employees.first_name,xin_employees.last_name,employee_issue.comment,employee_issue.emp_id')->where_in('emp_id',$emp_id)->from('employee_issue')->join('xin_employees','xin_employees.user_id = employee_issue.emp_id')->get()->result();
+		// dd($data);
+		$this->load->view('admin/reports/issuees_report',$data);
+	}
+
 	public function lunch_report_all() {
 		$session = $this->session->userdata('username');
         if (empty($session)) {
@@ -1536,9 +1503,57 @@ class Reports extends MY_Controller
 		$data['client_list'] = $this->db->get('xin_clients')->result();
 		$this->load->view('admin/reports/client_list', $data);
     }
-	public function store_in_out(){
-		echo "<script>alert('processing')</script>";
-		// redirect('dashboard','refrash');
+	public function store_report(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = "Store In Out Report".' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = "Store In Out Report";
+		$data['subview'] = $this->load->view("admin/reports/store_report", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); 
     }
+public function inventory_status_report($exc=null){
+	$first_date = $this->input->post('first_date');
+	$second_date = $this->input->post('second_date');
+	$statusC = $this->input->post('statusC');
+	$data["values"] = $this->Inventory_model->requsition_status_report($first_date, $second_date, $statusC);
+	//  dd($data["values"]);
+	$data['statusC']= $statusC;
+	$data['first_date'] = $first_date;
+	$data['second_date'] = $second_date;
+	if($exc == 1){
+		$this->load->view("admin/inventory/inventory_req_status_report_excil", $data);
+	}else{
+		if(is_string($data["values"])){
+			echo $data["values"];
+		}
+		else{	
+			echo $this->load->view("admin/inventory/inventory_req_status_report", $data, TRUE);
+		}
+	}
+}
+
+public function perches_status_report($exc=null){            
+	$first_date = $this->input->post('first_date');
+	$second_date = $this->input->post('second_date');
+	$f1_date = date("Y-m-d", strtotime($first_date));
+	$f2_date = date("Y-m-d", strtotime($second_date));
+	$statusC = $this->input->post('statusC');
+	$data["values"] = $this->Inventory_model->perches_status_report($f1_date, $f2_date, $statusC);
+	$data['statusC']= $statusC;
+	$data['first_date'] = $first_date;
+	$data['second_date'] = $second_date;
+	if($exc == 1){
+		$this->load->view("admin/inventory/perches_status_report_excel", $data);
+	}else{
+		if(is_string($data["values"])){
+			echo $data["values"];
+		}
+		else{	
+			echo $this->load->view("admin/inventory/perches_status_report", $data, TRUE);
+		}
+	}
+}
 } 
 ?>

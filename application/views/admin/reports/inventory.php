@@ -21,7 +21,7 @@
                     <option value="11">All Report</option>
                     <option value="12">Category Wise Report</option>
                     <!-- <option value="13">Sub Category Wise Report</option> -->
-                    <option value="14">Induvisual Item Report</option>
+                    <!-- <option value="14">Induvisual Item Report</option> -->
                     <optgroup label="Device Movement Report">
                         <option value="15">Daily</option>
                         <option value="16">Weekly</option>
@@ -29,9 +29,7 @@
                     </optgroup>
                     <option value="18">Employee Using Device</option>
                     <option value="19">Stock/Stored Device Report</option>
-                    <option value="20">Stock/Stored Item Report</option>
-                    <option value="21">Damage Device Report</option>
-                    <option value="22">Damage Item Report</option>
+                    <option value="20">Damage Item Report</option>
                   </select>
                 </div>
               </div>

@@ -609,24 +609,19 @@ public function add_daily_package()
 		
 		$data['title'] 		 = 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store';
-		// $data['path_url'] 	 = 'inventory';
 		if($session['role_id']!=3){
 			$data['results']	 = $this->Inventory_model->product_purches_details($id);
-			// dd($data['results']);
 			if(!empty($data['results'])){
 				$data['id'] 	 = $data['results'][0]->id;
 			}
 		    $data['status'] = $this->db->select('status')
-			                     ->where('id',$id)->get('products_purches_details')
-								 ->result()[0]
-								 ->status;			
+				->where('id',$id)->get('products_purches_details')
+				->result()[0]
+				->status;			
 		}
-		else
-		{
+		else{
 			$data['results']	 = $this->Inventory_model->req_details_cat_wise($id);
 		}
-		
-	    // $data['user_id'] 	 = $id;
 		$data['subview'] 	 = $this->load->view("admin/inventory/product_purches_details", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
@@ -664,23 +659,25 @@ public function add_daily_package()
 	}
 	//approved by prisal product purches edit
 	public function product_persial_approved($id){
-		// dd($id);
 	    $session = $this->session->userdata('username');
 		$all_detail=$this->db->where('id',$id)->get('products_purches_details')->result();
-		// dd($all_detail);
 		foreach($all_detail as $key=>$value){
 			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
 		}
 		$quantity=$this->input->post('qunatity[]');
 		$r_did=$this->input->post('r_id[]');
 		foreach($d1 as $k=>$v){
-				 foreach($quantity as $key=>$value){
-					$log_user=$_SESSION['username']['user_id'];
-					if($session['role_id']!=3 &&  $this->input->post('update_a')==0){
-					$this->db->where('id',$id)->update('products_purches_details',['updated_by'=>$log_user]);
-                    $this->db->where('id',$r_did[$key])->update('products_purches_details',['ap_quantity'=>$value]);}else{
-						$this->db->where('id',$r_did[$key])->update('products_purches_details',['quantity'=>$value]);
-					} }
+				if(!empty($quantity)){
+					foreach($quantity as $key=>$value){
+						$log_user=$_SESSION['username']['user_id'];
+						if($session['role_id']!=3 &&  $this->input->post('update_a')==0){
+							$this->db->where('id',$id)->update('products_purches_details',['updated_by'=>$log_user]);
+							$this->db->where('id',$r_did[$key])->update('products_purches_details',['ap_quantity'=>$value]);}else{
+							$this->db->where('id',$r_did[$key])->update('products_purches_details',['quantity'=>$value]);
+						} 
+					}
+				}
+			
 			 }
 
 			 if($session['role_id']!=3 && $this->input->post('update_a')==0){ 
@@ -697,16 +694,16 @@ public function add_daily_package()
 	
 	}
 
-	public function product_purchase_recived(){
-		// dd($_POST);
-        $results = $this->db->where('id',$_POST['row_id'])->get('products_purches_details')->result();
+	public function product_purchase_recived($id){
+	
+        $results = $this->db->where('id',$id)->get('products_purches_details')->result();
         foreach ($results as $key => $row) {
         	$product = $this->db->where('id', $row->product_id)->get('products')->row();
         	$quantity = $product->quantity + $row->ap_quantity;	
         	$this->db->where('id', $row->product_id)->update('products', array('quantity' => $quantity));
-        	$this->db->where('id', $row->id)->update('products_purches_details', array('status' => 3,'supplyer_id'=>$_POST['spl_name']));
+        	$this->db->where('id', $row->id)->update('products_purches_details', array('status' => 3));
         }
-		$deliver = $this->db->where('id',$_POST['row_id'])->update('products_purches_details',['status'=>3,'supplyer_id'=>$_POST['spl_name']]);
+		$deliver = $this->db->where('id',$id)->update('products_purches_details',['status'=>3]);
 		if($deliver){
 			 $this->session->set_flashdata('success', 'Delivered Successfully.');
 			 redirect("admin/inventory/purchase","refresh");
