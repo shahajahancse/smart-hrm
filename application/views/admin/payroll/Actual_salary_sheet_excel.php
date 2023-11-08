@@ -7,6 +7,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="<?php echo base_url() ?>skin/hrsale_assets/css/ac_s.css">
+    <script src= 
+"https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"> 
+        </script> 
+
+        <script src="https://cdn.jsdelivr.net/npm/table2excel@1.0.4/dist/table2excel.min.js"></script> 
     <style>
         .colors1 {
      background-color: #0177bc3b;
@@ -53,7 +58,7 @@ tbody{
 </style>
 
   </head>
-    <body>
+    <body id="record">
                 <div  style="float: right;">
                         <div style="position:absolute;display: flex;right:0;">
                                 <form action="<?php echo base_url();?>admin/payroll/salary_sheet_excel" method="post">
@@ -63,6 +68,7 @@ tbody{
                                     <input type="hidden" name="status" value="<?php echo $status; ?>"></input>
                                     <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS</button>
                                 </form>
+                                <a id="export" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">iuhsf</a>
                                 <button class="btn" onclick="printPage()">Print</button></div>
                         </div>
                 </div>
@@ -129,7 +135,7 @@ tbody{
                 
 
                 <div class='fullt'>
-                    <table>
+                    <table id="myTable">
 
                         <thead>
                         <tr>
@@ -508,6 +514,36 @@ tbody{
 
                   
                 }
+                $(document).ready(function(){
+    $("#export").click(function(){
+        var workbook = XLSX.utils.book_new();
+        
+        //var worksheet_data  =  [['hello','world']];
+        //var worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
+      
+        var worksheet_data  = document.getElementById("myTable");
+        var worksheet = XLSX.utils.table_to_sheet(worksheet_data);
+        
+        workbook.SheetNames.push("Test");
+        workbook.Sheets["Test"] = worksheet;
+      
+         exportExcelFile(workbook);
+      
+     
+    });
+})
+
+function exportExcelFile(workbook) {
+    return XLSX.writeFile(workbook, "bookName.xlsx");
+}
+
+
+
+
+
+
+
+
 
 
                 </script>
