@@ -24,21 +24,23 @@ $get_animate = $this->Xin_model->get_content_animate();
               <th class="text-center" >No.</th>
                 <th class="text-center" >Product Name</th>
                 <th class="text-center" >Quantity</th>
+                <th class="text-center" >Approved Quantity</th>
                 <th class="text-center" >Approximate Amount</th>
                 <th class="text-center" >Total Approximate Amount</th>
           </tr>
         </thead>
-        <?php echo form_open('admin/inventory/product_persial_approved/'.$id)?>
         <tbody>
-            <?php $i=1;foreach($results as $row){?>
+          <?php $i=1;foreach($results as $row){?>
+            <?php echo form_open('admin/inventory/product_persial_approved/'.$row->id)?>
             <tr class="text-center">
                 <td><?php echo $i++?></td>
                 <td><?php echo $row->product_name?></td>
-                <td><input type="number" id="quantity" name="quantity" min="1" style="width:30%" value="<?php echo $row->quantity?>"></td>
+                <td><?php echo $row->quantity?></td>
+                <td><input type="number" id="quantity" name="ap_quantity" min="1" style="width:30%"></td>
                 <td><span id="aprox_amount"><?php echo $row->approx_amount?></span></td>
                 <td><span id="aprox_t_amount"><?php echo $row->approx_t_amount?><span></td>
-                <td><a href="<?php echo base_url('admin/inventory/delete_purches_item/'.$row->id.'/'.$id)?>">Delete</a></td>
-                <input type="hidden" name="r_id[]" value="<?php echo $row->id?>" >
+                <td><a href="<?php echo base_url('admin/inventory/delete_purches_item/'.$row->id)?>">Delete</a></td>
+                <input type="hidden" name="id" value="<?php echo $row->id?>" >
             </tr>
             <?php }?>
         </tbody>

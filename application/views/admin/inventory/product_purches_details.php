@@ -18,16 +18,13 @@ $get_animate = $this->Xin_model->get_content_animate();
       <?php if(!empty($results)){?>
          <?php echo form_open('admin/inventory/product_persial_approved/'.$id)?>
          <?php $i=1;foreach($results as $row){?>
-            <input type="hidden" name="r_id[]" value="<?php echo $row->id?>" >
-            <input type="hidden" id="quantity" name="qunatity[]" min="1" style="width:20%" value="<?php echo $row->quantity?>">
-
+            <input type="hidden" name="r_id" value="<?php echo $row->id?>" >
+            <input type="hidden" id="quantity" name="qunatity" min="1" style="width:20%" value="<?php echo $row->quantity?>">
           <?php }?>
           <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
           <?php echo form_close()?>
-    
-    
-       <a class="btn btn-sm btn-danger pull-right" href="<?php echo base_url('admin/inventory/product_purchase_rejected/'.$results [0]->id);?>" style="margin-right: 10px;">Rejected</a>
-       <a class="btn btn-sm btn-warning pull-right" style="margin-right: 10px;" href="<?php echo base_url('admin/inventory/product_purchase_edit_approved/'.$results [0]->id);?>">Edit & Approved</a>
+       <a class="btn btn-sm btn-danger pull-right" href="<?php echo base_url('admin/inventory/product_purchase_rejected/'.$row->id);?>" style="margin-right: 10px;">Rejected</a>
+       <a class="btn btn-sm btn-warning pull-right" style="margin-right: 10px;" href="<?php echo base_url('admin/inventory/product_purchase_edit_approved/'.$row->id);?>">Edit & Approved</a>
     <?php }}}?>
 
     <button class="btn btn-sm btn-info pull-right" style="margin-right: 10px;" onclick="history.back()"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
@@ -52,8 +49,6 @@ $get_animate = $this->Xin_model->get_content_animate();
             <?php $i=1;foreach($results as $row){?>
             <tr class="text-center">
                 <td><?php echo $i++?></td>
-                <!-- <td><?php echo $row->name?></td>
-                <td><?php echo $row->company?></td> -->
                 <td><?php echo $row->product_name?></td>
                 <td><?php echo $row->quantity?></td>
                 <td><?php echo $row->ap_quantity?></td>
@@ -64,11 +59,3 @@ $get_animate = $this->Xin_model->get_content_animate();
     </div>
   </div>
 </div>
-
-<script>
-// $(document).ready(function () {
-//     $('#table_data').DataTable();
-// });
-
-</script>
-

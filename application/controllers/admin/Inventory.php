@@ -481,7 +481,6 @@ public function add_daily_package()
 		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']	= 'Store';
 		$data['products'] 		= $this->Inventory_model->purchase_products_requisition($session['user_id'],$session['role_id']);
-		// dd($data);
 		$data['company'] = $this->db->distinct()->select('company')->get("product_supplier")->result();
 		$data['user_role_id'] 	= $session['role_id'];
 		if ($id != null) {
@@ -641,7 +640,6 @@ public function add_daily_package()
 
 	//product purches edit form load here
 	public function product_purchase_edit_approved($id){
-		
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -659,39 +657,13 @@ public function add_daily_package()
 	}
 	//approved by prisal product purches edit
 	public function product_persial_approved($id){
-	    $session = $this->session->userdata('username');
-		$all_detail=$this->db->where('id',$id)->get('products_purches_details')->result();
-		foreach($all_detail as $key=>$value){
-			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
+		$quantity=$this->input->post('ap_quantity');
+		// dd($quantity);	
+		$update = $this->db->where('id',$id)->update('products_purches_details',['status'=>2,'ap_quantity'=>$quantity]);
+		if($update){
+			$this->session->set_flashdata('success', 'Updated Successfully.');
+			redirect("admin/inventory/purchase","refresh");
 		}
-		$quantity=$this->input->post('qunatity[]');
-		$r_did=$this->input->post('r_id[]');
-		foreach($d1 as $k=>$v){
-				if(!empty($quantity)){
-					foreach($quantity as $key=>$value){
-						$log_user=$_SESSION['username']['user_id'];
-						if($session['role_id']!=3 &&  $this->input->post('update_a')==0){
-							$this->db->where('id',$id)->update('products_purches_details',['updated_by'=>$log_user]);
-							$this->db->where('id',$r_did[$key])->update('products_purches_details',['ap_quantity'=>$value]);}else{
-							$this->db->where('id',$r_did[$key])->update('products_purches_details',['quantity'=>$value]);
-						} 
-					}
-				}
-			
-			 }
-
-			 if($session['role_id']!=3 && $this->input->post('update_a')==0){ 
-				$approved = $this->db->where('id',$id)->update('products_purches_details',['status'=>2]);
-				if($approved){
-					$this->session->set_flashdata('success', 'Updated Successfully.');
-					redirect("admin/inventory/purchase","refresh");
-		        }
-			}
-		  else{
-					$this->session->set_flashdata('success', ' product Updated Successfully.');
-				    redirect("admin/inventory/purchase","refresh");
-				 }
-	
 	}
 
 	public function product_purchase_recived($id){

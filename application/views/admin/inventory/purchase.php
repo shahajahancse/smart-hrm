@@ -101,16 +101,20 @@ $(function() {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php  if (is_array($products)) {
+                    <?php if (is_array($products)) {
                         foreach ($products as $key => $rows) {?>
                     <tr>
                         <td class="text-center"><?php echo ($key+1)."."; ?></td>
                         <?php if($user_role_id==1 || $user_role_id==2){?>
                         <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
-                        <?php } ?>
-                        <td class="text-center"><?php echo isset($rows->name) ?></td> 
-                        <td class="text-center"><?php echo isset($rows->name) ?></td>
-                        <td class="text-center"><?php echo isset($rows->name) ?></td>
+                        <?php } 
+                        $this->load->model('Inventory_model');
+                        $data = $this->Inventory_model->req_purchase_details($rows->id);
+                        // dd($data);
+                        ?>
+                        <td class="text-center"><?php echo $data->product_name ?></td> 
+                        <td class="text-center"><?php echo $data->quantity ?></td>
+                        <td class="text-center"><?php echo  $data->ap_quantity ?></td>
                         <td class="text-center">
                             <?php echo $rows->status == 1 ?"<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>": ($rows->status == 2 ?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Deliver</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>")); ?>
                         </td>
@@ -134,9 +138,9 @@ $(function() {
                                     <?php if($session['role_id'] == 1 ||  $session['role_id'] == 2){?>
                                         <?php if($rows->status==1){?>
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Approved</a> <br>
-                                            <!-- <a style="padding-left:5px; font-weight:bold" class="text-primary" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br> -->
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-danger" href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Reject</a><br>
-                                        <?php }else{?>
+                                            <?php }else{?>
+                                                <!-- <a style="padding-left:5px; font-weight:bold" class="text-primary" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br> -->
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_recived/'.$rows->id);?>">Order Receive</a><br>
                                        <?php  }?>
                                     <?php }?>

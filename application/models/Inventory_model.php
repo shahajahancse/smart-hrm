@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class inventory_model extends CI_Model{
+class inventory_model extends CI_Model
+{
  
     public function __construct()
     {
@@ -250,11 +251,13 @@ class inventory_model extends CI_Model{
 	}
 
 	public  function req_details_cat_wise($id){
+		// dd($id);
 		$this->db->select(" 
 			products_categories.category_name,
 			products_sub_categories.sub_cate_name,
 			products.product_name,
 			products_requisition_details.quantity,
+			products_requisition_details.approved_qty,
 			products_requisitions.user_id,
 		")
 		->from("products_categories")
@@ -267,7 +270,21 @@ class inventory_model extends CI_Model{
 		->where("products.id 				= products_requisition_details.product_id")	
 		->where("products_requisition_details.cat_id = $id")
 		->group_by('products_requisition_details.id');
+		// dd($id);
 		return $this->db->get()->result();
+	}
+	
+	public  function req_purchase_details($id){
+		// dd($id);
+		$this->db->select(" 
+			products.product_name,
+			products_purches_details.quantity,
+			products_purches_details.ap_quantity,
+		")
+		->from("products")	
+		->join("products_purches_details","products.id = products_purches_details.product_id")	
+		->where("products_purches_details.id = $id");
+		return $this->db->get()->row();
 	}
 				
 	public function requsition_status_report($f1_date=null, $f2_date=null,$statusC){
