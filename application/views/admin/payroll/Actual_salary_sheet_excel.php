@@ -68,7 +68,6 @@ tbody{
                                     <input type="hidden" name="status" value="<?php echo $status; ?>"></input>
                                     <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS</button>
                                 </form>
-                                <a id="export" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">iuhsf</a>
                                 <button class="btn" onclick="printPage()">Print</button></div>
                         </div>
                 </div>
