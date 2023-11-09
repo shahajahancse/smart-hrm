@@ -89,7 +89,7 @@
   <?php
     $grand_total = $basic_salary = 0;
     foreach ($values as $key => $row) {
-      $grand_total = $grand_total + $row->grand_net_salary + ($row->modify_salary);
+      $grand_total = $grand_total + $row->grand_net_salary + ($row->modify_salary) - $row->aba_deduct;
       $basic_salary = $basic_salary + $row->basic_salary;
   ?>
   <tr>
@@ -99,7 +99,7 @@
     <td class="text-center"><?= $row->date_of_joining ?></td>
   
     <td class="text-center"><?= $row->basic_salary ?></td>
-    <td class="text-center"><?= $row->grand_net_salary + ($row->modify_salary) ?></td>
+    <td class="text-center"><?= $row->grand_net_salary + ($row->modify_salary) - $row->aba_deduct ?></td>
       <td class="text-center"><?= $row->account_number ?></td>
   </tr>
   <?php } ?>

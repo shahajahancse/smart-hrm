@@ -49,8 +49,8 @@
 							<th  class='bnb' style="width: 28px;">D.A Day</th>
 							<th  class='bnb' style="width: 42px;">D.A Salary</th>
 							<th  class='bnb ' style="width: 60px;">Grand Net Salary</th>
-							<!-- <th  class='bnb' style="width: 37px;">Account Number</th>
-							<th  class='bnb' style="width: 37px;">Remark</th> -->
+							<th  class='bnb' style="width: 37px;">Account Number</th>
+							<th  class='bnb' style="width: 37px;">Remark</th>
                         </tr>
                         <tr>
                             <th  class='bnt' colspan="5"></th>
@@ -98,7 +98,7 @@
                                     </tr>
                                 </table>
                             </th>
-                            <th  class='bnt' colspan="5"></th>
+                            <th  class='bnt' colspan="7"></th>
                             <!-- <th  class='bnt'></th>
                             <th  class='bnt'></th>
                             <th  class='bnt'></th>
@@ -167,8 +167,9 @@
 								<td><?=$values[$i]->extra_pay?></td>
 								<td><?=$values[$i]->m_pay_day?></td>
 								<td><?=$values[$i]->modify_salary?></td>
-
 								<td class='colors4'><?=$values[$i]->grand_net_salary + $values[$i]->modify_salary - $values[$i]->aba_deduct?></td>
+								<td><?=$values[$i]->account_number?></td>
+								<td></td>
 						</tr>
 
 						<?php } ?>
