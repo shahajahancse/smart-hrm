@@ -6,11 +6,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<?php
-$filename = "Salary_$salary_month.xls";
-header('Content-Type: application/vnd.ms-excel'); // Mime type
-header('Content-Disposition: attachment;filename="' . $filename . '"'); // Tell the browser the file name
-header('Cache-Control: max-age=0'); // No cache
-?>
+			$filename = "Salary_$salary_month.xls";
+			header('Content-Type: application/vnd.ms-excel'); // Mime type
+			header('Content-Disposition: attachment;filename="' . $filename . '"'); // Tell the browser the file name
+			header('Cache-Control: max-age=0'); // No cache
+		?>
 
 
   </head>
@@ -108,7 +108,7 @@ header('Cache-Control: max-age=0'); // No cache
 							<?php
 						// print the rows for all pages
 						for ($i = 0; $i < count($values); $i++) {
-								$total_grand_net_salary+=$values[$i]->grand_net_salary+$values[$i]->modify_salary;
+								$total_grand_net_salary+=$values[$i]->grand_net_salary+$values[$i]->modify_salary-$values[$i]->aba_deduct;
 								$total_basic_salary+=$values[$i]->basic_salary;
 								$total_net_salary+=$values[$i]->net_salary;
 								$total_late_deduct+=$values[$i]->late_deduct;
@@ -195,5 +195,11 @@ header('Cache-Control: max-age=0'); // No cache
 							</tr>
 						</tfoot> 
                     </table>
+
+					<div class="ndive">
+						<section style='width: 33%;'>Prepared By</section>
+						<section style='width: 33%;'>Confirmed By</section>
+						<section style='width: 33%;'>Aproved By(Managing Director)</section>
+					</div>
     </body>
 </html>

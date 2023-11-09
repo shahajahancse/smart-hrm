@@ -272,7 +272,7 @@ tbody{
                         
                         <td class='colors4'><?=$values[$i]->grand_net_salary+$values[$i]->modify_salary-$values[$i]->aba_deduct?></td>
                         <?php
-                        $total_grand_net_salary+=$values[$i]->grand_net_salary+$values[$i]->modify_salary;
+                        $total_grand_net_salary+=$values[$i]->grand_net_salary+$values[$i]->modify_salary-$values[$i]->aba_deduct;
                         $total_basic_salary+=$values[$i]->basic_salary;
                         $total_net_salary+=$values[$i]->net_salary;
                         $total_late_deduct+=$values[$i]->late_deduct;
@@ -282,7 +282,7 @@ tbody{
                         $total_extra_pay+=$values[$i]->extra_pay;
                         $total_modify_salary+=$values[$i]->modify_salary;
                         // granttotal
-                        $grand_total_grand_net_salary+=$values[$i]->grand_net_salary+$values[$i]->modify_salary;
+                        $grand_total_grand_net_salary+=$values[$i]->grand_net_salary+$values[$i]->modify_salary-$values[$i]->aba_deduct;
                         $grand_total_basic_salary+=$values[$i]->basic_salary;
                         $grand_total_net_salary+=$values[$i]->net_salary;
                         $grand_total_late_deduct+=$values[$i]->late_deduct;
