@@ -331,14 +331,11 @@ class inventory_model extends CI_Model
 	}
 	
 	public function perches_status_report($f1_date, $f2_date,$statusC) {
-		$f2_date = date('Y-m-d 23:59:59', strtotime($f2_date));
+		$f2_date = date('Y-m-d', strtotime($f2_date));
 		$this->db->select(" 
-			products_purches_details.id,
-			products_purches.created_at,
 			products_purches_details.quantity,
 			products_purches_details.ap_quantity,
-			products_purches.status,
-			products_purches.user_id,
+			products_purches_details.created_at,
 			products_categories.category_name,
 			products_sub_categories.sub_cate_name,
 			products.product_name,
@@ -350,7 +347,6 @@ class inventory_model extends CI_Model
 		->from("products_categories")
 		->from("products_sub_categories")
 		->from("products")
-		->from("products_purches")
 		->from("products_purches_details")
 		->from("xin_employees")
 		->from("xin_departments")
@@ -360,9 +356,9 @@ class inventory_model extends CI_Model
 		->where("products_categories.id     = products.cat_id")	
 		->where("products_sub_categories.id = products.sub_cate_id")	
 		->where("products.id 				= products_purches_details.product_id")	
-		->where("xin_employees.user_id 		= products_purches.user_id")
-		->where("products_purches.created_at BETWEEN '$f1_date' AND '$f2_date'")
-		->where("products_purches.status 		= $statusC")
+		->where("xin_employees.user_id 		= products_purches_details.user_id")
+		->where("products_purches_details.created_at BETWEEN '$f1_date' AND '$f2_date'")
+		->where("products_purches_details.status 		= $statusC")
 		
 		->group_by('products_purches_details.id');
 		$query= $this->db->get();

@@ -501,24 +501,14 @@ class Dashboard extends MY_Controller {
         $data["emp_id"] = $emp_id;
 		if(is_string($data["values"]))
         {
-					// dd($data["values"]);
-
             echo $data["values"];
         }
-        else
-        {	
+        else  {	
         	if ($excel == 1) {
 	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
         	} else {
 	            $this->load->view('admin/dashboard/payslip',$data);
         	}
         }
-
-		
 	}
-
-	
-
-
-
 }

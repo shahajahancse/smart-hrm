@@ -520,7 +520,7 @@ public function add_daily_package()
 			}
 			//Dropdown
 			$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
-			$data['breadcrumbs']	= 'purchase Pending';
+			$data['breadcrumbs']	= 'Purchase Pending';
 			$data['categorys']		= $this->db->get("products_categories")->result();
 			$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],1);
 			$data['results'] 		= $this->Inventory_model->product_list();
@@ -529,7 +529,7 @@ public function add_daily_package()
 			$data['units'] 			= $this->db->get("product_unit")->result();
 			$data['user_role_id'] 	= $session['role_id'];
 			$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
-									$this->load->view('admin/layout/layout_main', $data); //page load
+									  $this->load->view('admin/layout/layout_main', $data); //page load
     }
 
 	public function purchase_aproved_list()
@@ -801,6 +801,7 @@ public function perches_status_report($exc=null){
 	$f1_date = date("Y-m-d", strtotime($first_date));
 	$f2_date = date("Y-m-d", strtotime($second_date));
 	$statusC = $this->input->post('statusC');
+	// dd($statusC);
 	$data["values"] = $this->Inventory_model->perches_status_report($f1_date, $f2_date, $statusC);
 	$data['statusC']= $statusC;
 	$data['first_date'] = $first_date;

@@ -54,9 +54,13 @@ $(function() {
                         <td class="text-center"><?php echo($key+1)."."; ?></td>
                         <?php if($user_role_id==1 || $user_role_id == 2) {?>
                         <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
-                        <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
-                        <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
-                        <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
+                        <?php } 
+                        $this->load->model('Inventory_model');
+                        $data = $this->Inventory_model->req_purchase_details($rows->id);
+                        ?>
+                        <td class="text-center"><?php echo $data->product_name ?></td> 
+                        <td class="text-center"><?php echo $data->quantity ?></td>
+                        <td class="text-center"><?php echo  $data->ap_quantity ?></td>
                         <td class="text-center"><?php echo $rows->status==1 ? "
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" :
                      ($rows->status==2 ? "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>" : ($rows->status ==3 ? "<span class='badge' style='background-color:#28a745'><b>Received</b></span>" : "<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>"));

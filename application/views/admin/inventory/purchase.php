@@ -124,24 +124,21 @@ $(function() {
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Action
                                 </button>
-                                <div class="dropdown-menu" style="min-width: 100px !important;border-radius:0;line-height: 2;  " aria-labelledby="dropdownMenuButton">
+                                <div class="dropdown-menu" style="min-width: 110px !important;margin-left:-49px;border-radius:0;line-height: 2;  " aria-labelledby="dropdownMenuButton">
                                     <?php if($session['role_id']==4){?>
                                         <?php if($rows->status == 1){?>
-                                            <!-- <a style="padding-left:5px; font-weight:bold" class="text-primary" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br> -->
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a> <br>
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_delete/'.$rows->id);?>">Delete</a> <br>
                                         <?php }else{?>
-                                            <!-- <a style="padding-left:5px; font-weight:bold" class="text-primary" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br> -->
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_delete/'.$rows->id);?>">Delete</a> <br>
                                         <?php }?>
                                     <?php }?>
                                     <?php if($session['role_id'] == 1 ||  $session['role_id'] == 2){?>
                                         <?php if($rows->status==1){?>
-                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Approved</a> <br>
+                                                <a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Approved</a> <br>
                                             <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-danger" href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Reject</a><br>
                                             <?php }else{?>
-                                                <!-- <a style="padding-left:5px; font-weight:bold" class="text-primary" href="<?= base_url('admin/inventory/product_purchase_details/'.$rows->id);?>">Details</a><br> -->
-                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_recived/'.$rows->id);?>">Order Receive</a><br>
+                                           <a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_recived/'.$rows->id);?>">Order Receive</a><br>
                                        <?php  }?>
                                     <?php }?>
                                 </div>
@@ -154,40 +151,9 @@ $(function() {
         </div>
     </div>
 </div>
-<!-- <script>
-//Company Supplier
-$(document).ready(function() {
-    $('#purchase_table').DataTable();
-    // Handle change event of the company name select field
-    $('#cmp_name').change(function() {
-        var companyName = $(this).val();
-        var url = '<?php echo base_url('admin/inventory/get_supplier_ajax/');?>'
-        // Make an AJAX request to fetch the suppliers
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: {
-                companyName: companyName
-            },
-            dataType: 'json',
-            success: function(func_data) {
-                var options = '';
-                $.each(func_data, function(id, name) {
-                    options += '<option value="' + id + '">' + name + '</option>';
-                });
-                $('#spl_name').html(options);
-            },
-            error: function(xhr, status, error) {
-                console.log(xhr.responseText);
-            }
-        });
-    });
 
+<script>
+$(document).ready(function(){
+  $("#purchase_table").DataTable();
 });
 </script>
-<script>
-function openmod(id) {
-    var rowId = $(id).attr("data-row_id");
-    $("#id").val(rowId); 
-}
-</script> -->
