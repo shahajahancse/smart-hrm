@@ -1428,6 +1428,25 @@ public function mobile_bill(){
 		redirect("admin/inventory/products");
 	}
 
+	public function mobile_bill_report($staus){
+		$data['first_date']  = $this->input->post('first_date'); 
+		$data['second_date'] = $this->input->post('second_date');
+		$first_date = $this->input->post('first_date'); 
+		$second_date = $this->input->post('second_date');
+		$this->db->select('*')->where("created_at between '$first_date' and '$second_date'");
+		if($status == ){
+			$this->db->where('status',$status);
+		}
+		if($status == ){
+			$this->db->where('status',$status);
+		}
+		if($status == ){
+			$this->db->where('status',$status);
+		}
+		$this->db->get('mobile_bill_requisition')->result();
+
+	}
+
 
 }
 

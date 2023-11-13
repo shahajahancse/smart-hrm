@@ -951,11 +951,12 @@ function mobile_bill(status) {
   console.table(status);
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest = new XMLHttpRequest();
-  first_date = "";
-  second_date = "";
-  sql = "";
+  first_date = document.getElementById('process_date').value
+  second_date = document.getElementById('second_date').value;
+  // second_date = "";
+  // sql = "";
   
-  var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql;
+  var data = "first_date="+first_date+'&second_date='+second_date;
 
   url = base_url + "/mobile_bill_report";
 
