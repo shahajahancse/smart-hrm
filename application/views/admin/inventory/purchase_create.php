@@ -122,6 +122,7 @@
         type: "POST",
         url: "<?php echo base_url('admin/inventory/get_sub_category_ajax/');?>" + id,
         success: function(func_data){
+        // console.log();
           $.each(func_data,function(id,name){
             var opt = $('<option />');
             opt.val(id);

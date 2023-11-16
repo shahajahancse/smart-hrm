@@ -15,21 +15,35 @@
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
+                    <label for="process_date">First Date</label>
+                    <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>">
+                </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="process_date">Second Date</label>
+                    <input class="form-control attendance_date" placeholder="Second Date" id="second_date" name="second_date" type="text">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
                   <label for="upload_file">Status</label>
                   <select class="form-control" name="status" id="status">
                     <option value="">Select one</option>
+                    <option value="0">All Employees</option>
                     <option value="1">Regular</option>
-                    <option value="4">Internship</option>
-                    <option value="5">Probation</option>
-                    <option value="2">Increment</option>
-                    <option value="3">All Employees</option>
+                    <option value="2">Left</option>
+                    <option value="3">Resign</option>
                   </select>
                 </div>
               </div>
-              <div class="col-md-3">
-                <div class="form-group"> &nbsp;
-                  <label for="first_name">&nbsp;</label><br />
-                  <button class="btn btn-success btn-sm" onclick="show_report()">Show Report</button>
+
+              <div class="col-md-12">
+                <div class="form-group">
+                  <button class="btn btn-success btn-sm " style="margin-right:10px" onclick="show_report(1)">Employee List</button>
+                  <button class="btn btn-success btn-sm"  style="margin-right:10px" onclick="show_report(2)">Increment</button>
+                  <button class="btn btn-success btn-sm" style="margin-right:10px" onclick="show_report(3)">Internship</button>
+                  <button class="btn btn-success btn-sm" onclick="show_report(4)">Probation</button>
                 </div>
               </div>
             </div>
@@ -96,7 +110,6 @@
       status = document.getElementById('status').value;
       var url = "<?php echo base_url('admin/reports/get_employeess'); ?>";
       $("#select_all").prop("checked", false);
-      // Remove existing rows with id="removeTr"
       $('#fileDiv #removeTr').remove();
 
       $.ajax({
@@ -126,13 +139,26 @@
   });
 
 
-function show_report(){
+function show_report(r){
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest = new XMLHttpRequest();
   status = document.getElementById('status').value;
+  first_date = document.getElementById('process_date').value;
+  second_date = document.getElementById('second_date').value;
   if(status ==''){
     alert('Please select status');
     return ;
+  }
+  if(r == 2 ){
+    if(first_date ==''){
+      alert('Please select first date');
+      return ;
+    }
+    if(second_date ==''){
+      alert('Please select second date');
+      return ;
+    }
+   
   }
   var checkboxes = document.getElementsByName('select_emp_id[]');
   var sql = get_checked_value(checkboxes);
@@ -140,7 +166,7 @@ function show_report(){
     alert('Please select employee Id');
     return ;
   }
-  var data = "status="+status+'&sql='+sql;
+  var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql;
   url = base_url + "/show_report";
   ajaxRequest.open("POST", url, true);
   ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");

@@ -200,7 +200,7 @@ class Reports_model extends CI_Model {
         return $result = $this->db->get('xin_employees')->result();
 	}
 
-	public function show_report($emp_ids,$status){
+	public function show_report($emp_ids,$status,$first_date=null,$second_date=null){
 		// dd($status);
 		$this->db->select('
 			xin_employees.user_id,
@@ -226,18 +226,32 @@ class Reports_model extends CI_Model {
 		->join('xin_designations','xin_employees.designation_id = xin_designations.designation_id','left')		
 		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.id','left')	
 		->where_in('xin_employees.user_id',$emp_ids);
+
 		if($status == 1){
-			$this->db->where('xin_employees.status',$status);	
-		}else if($status == 4){
-			$this->db->where('xin_employees.status',$status);
-		}else if($status == 5){
-			$this->db->where('xin_employees.status',$status);
-		}else if($status == 2){
-			$this->db->where('xin_employee_incre_prob.status',$status);
-		}else{
 			$this->db->where_in('xin_employees.status',[1,4,5]);	
-		}		
-		$data = $this->db->get()->result();
+			if($first_date != null && $second_date !=null){
+				$this->db->where('xin_employees.date_of_joining between "' . $first_date . '" AND "' . $second_date . '"');
+			}
+			$this->db->order_by('xin_employees.date_of_joining','ASC');
+		}
+
+		if(($first_date != null && $second_date !=null) && $status == 2){
+			$this->db->where('xin_employees.notify_incre_prob between "' . $first_date . '" AND "' . $second_date . '"');
+			$this->db->order_by('xin_employees.notify_incre_prob','ASC');
+		}
+
+
+		// if($status == 1){
+		// 	$this->db->where_in('xin_employees.status',[1,4,5]);	
+		// }
+	
+		if($status == 3){
+			$this->db->where('xin_employees.status',4);
+		}
+		if($status == 4){
+			$this->db->where('xin_employees.status',5);
+		}
+		$data = $this->db->order_by('xin_employees.date_of_joining','ASC')->get()->result();
 		// dd($data);
 	    return $data;
 	}

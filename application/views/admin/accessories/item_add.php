@@ -216,5 +216,11 @@ if(isset($row->status)==1){
     $("#user_id").val(null);
   }
 <?php }?>
-
+  var status = $('#use_number').find(":selected").val();  
+      if(status==1){
+       $("#number").prop('disabled', false);
+      }else{
+       $("#number").prop('disabled', true);
+       $("#number").val(null);
+      }
 </script>

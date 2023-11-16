@@ -217,20 +217,16 @@ class Accessories extends MY_Controller {
             $data['title']         = 'Add Item'.' | '.$this->Xin_model->site_title();
             $data['breadcrumbs']   = "Add Item";
         }
-
         $this->form_validation->set_rules('cat_id', 'Category Name', 'required|trim');
-        
         if($id != null) {
             $data['row'] = $this->db->select('*')->where('id',$id)->get("product_accessories")->row();
         }  
         if ($this->form_validation->run() == true){
-
             if($this->input->post('status')==1){
                 $user_id = $this->input->post('user_id');
             }else{
                 $user_id=null;
             }
-
             $form_data = array(
                 'cat_id'         => $this->input->post('cat_id'),
                 'device_name_id' => $this->input->post('device_name_id'),
@@ -244,7 +240,6 @@ class Accessories extends MY_Controller {
                 'number'         => $this->input->post('number'),
                 'move_status'    => 0,
             );    
-
             // dd($form_data);
             if ($hid = $this->input->post('hidden_id')) {
                 $this->db->where('id', $hid)->update('product_accessories', $form_data);
@@ -285,8 +280,6 @@ class Accessories extends MY_Controller {
                 }   
             }               
         }
- 
-
         $data['categories']=$this->db->select('*')->get('product_accessory_categories')->result();
         $data['users']=$this->db->select('*')->get('xin_employees')->result();
         $datas['subview']= $this->load->view('admin/accessories/item_add',$data,TRUE);  

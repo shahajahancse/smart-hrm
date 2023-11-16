@@ -1318,8 +1318,24 @@ class Reports extends MY_Controller
 	}
 	
 	public function get_employeess(){
+
         $status = $this->input->get('status');
-        $data["employees"] = $this->Reports_model->get_empolyees($status);
+		$this->db->select('user_id as emp_id, first_name, last_name');
+        if ($status == 0) {
+			$this->db->where_in('status', [1,4,5]);
+        } 
+		if ($status == 1){
+            $this->db->where('status', $status);
+        } 
+		if($status == 2){
+            $this->db->where('status', $status);
+        } 
+		if($status == 3){
+            $this->db->where('status',$status);
+        }
+        $this->db->where('company_id', 1);
+        $this->db->order_by('user_id', 'asc');
+        $data["employees"] = $this->db->get('xin_employees')->result();
         echo json_encode($data);
     }
 	public function employees() {
@@ -1346,27 +1362,42 @@ class Reports extends MY_Controller
 		$this->load->view('admin/layout/layout_main', $data); //page load
 
 	}
-	public function show_report(){
-			$data['session'] = $this->session->userdata('username');
+	public function show_report($elc=null){
+		// dd($_POST);
+		$data['session'] = $this->session->userdata('username');
 		if(empty($data['session'])){ 
 			redirect('admin/');
 		}
-        // $status = $this->input->post('status');
+        $elc = $this->input->post('elc');
         $sql = $this->input->post('sql');
         $status = $this->input->post('status');
+		$data['status']= $status;
+		$data['sql']= $sql;
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+		$data['first_date']= $first_date;
+		$data['second_date']= $second_date;
         $emp_id = explode(',', trim($sql));
-        $data['emp_list'] =$this->Reports_model->show_report($emp_id,$status);
+        $data['emp_list'] =$this->Reports_model->show_report($emp_id,$status,$first_date,$second_date);
 		$data['status']=$status;
-		if($status == 1 || $status == 3){
-			$this->load->view('admin/reports/emp_list', $data);
-		}else if($status == 4){
-			$this->load->view('admin/reports/intern', $data);
-		}else if($status == 5){
-			$this->load->view('admin/reports/probation', $data);
+		if($elc==1){
+			$this->load->view('admin/reports/incre_excel', $data);
 		}else{
-			$this->load->view('admin/reports/increment', $data);
+			if($status == 1){
+				$this->load->view('admin/reports/emp_list', $data);
+			} 
+			if($status == 3){
+				$this->load->view('admin/reports/intern', $data);
+			} 
+			if($status == 4){
+				$this->load->view('admin/reports/probation', $data);
+			}
+			if($status == 2){
+				$this->load->view('admin/reports/increment', $data);
+			}
 		}
     }
+
 	public function show_late_report(){
 		// $report_date = ;
 		// dd($_POST);

@@ -46,7 +46,7 @@ class Dashboard extends MY_Controller {
 		   $this->load->model('Attendance_model');
 			$d=$this->db->get('xin_system_setting')->row();
 			if($d->project_proccess_date<=date('Y-m-d')){
-				dd('hello');
+				
 				$this->save_service();
 				
 			};
@@ -484,9 +484,6 @@ class Dashboard extends MY_Controller {
         redirect($_SERVER['HTTP_REFERER']);
         
     }
-
-
-
 
 
 	public function payslip(){
