@@ -1128,9 +1128,6 @@ class Reports extends MY_Controller
 				$status = $this->lang->line('xin_absent');
 			}
 		}
-		
-		
-		
 		// check if clock-out for date
 		$check_out = $this->Timesheet_model->attendance_first_out_check($employee[0]->user_id,$attendance_date);		
 		if($check_out->num_rows() == 1){
@@ -1197,16 +1194,6 @@ class Reports extends MY_Controller
 			}	
 			// attendance date
 			$tdate = $this->Xin_model->set_date_format($attendance_date);
-			/*if($user_info[0]->user_role_id==1){
-				$fclckIn = $clkInIp;
-				$fclckOut = $clkOutIp;
-			} else {
-				$fclckIn = $clock_in2;
-				$fclckOut = $clock_out2;
-			}*/	
-			// attendance date
-			//$tdate = $this->Xin_model->set_date_format($attendance_date);
-			
 			$data[] = array(
 				$full_name,
 				$comp_name,
@@ -1448,26 +1435,25 @@ class Reports extends MY_Controller
 		// dd($_POST);
 		$sql = $this->input->post('sql');
         $status = $this->input->post('status');
-        $category = $this->input->post('category');
-        $sub_category = $this->input->post('sub_category');
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
         $emp_id = explode(',', trim($sql));
-		if($status == 11){
-			$data['reports']     = $this->Reports_model->get_product_reports_info(null,null,null);
-		}else if($status == 12){
-			$data['reports']     = $this->Reports_model->get_product_reports_info(null,null,$category);
-		}else if($status == 15){
-			$date  = date('Y-m-d');
-			$data['reports']     = $this->Reports_model->get_movement_reports_info($date);
-		}else if($status == 16){
-			$data['reports']     = $this->Reports_model->get_product_reports_info(null,null,null);
-		}else if($status == 17){
-			$data['reports']     = $this->Reports_model->get_product_reports_info(null,null,null);
-		}else if($status == 18){
-			$data['reports']     = $this->Reports_model->get_product_reports_info($emp_id,null,null);
-		}else if($status == 19){
-			$data['reports']     = $this->Reports_model->get_product_reports_info(null,2,null);
-		}else if($status == 20){
-			$data['reports']     = $this->Reports_model->get_product_reports_info(null,4,null);
+		if($status == 'all'){
+			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
+		}else if($status == 'using'){
+			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
+		}else if($status == 'store'){
+			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
+		}else if($status == 'damage'){
+			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
+		}else if($status == 'daily'){
+			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
+		}else if($status == 'weekly'){
+			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
+		}else if($status == 'monthly'){
+			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
+		}else{
+			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
 		}
 		$this->load->view('admin/reports/inventory_report',$data);
 	}
@@ -1544,69 +1530,55 @@ class Reports extends MY_Controller
 		$data['subview'] = $this->load->view("admin/reports/store_report", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); 
     }
-public function inventory_status_report($exc=null){
-	$first_date = $this->input->post('first_date');
-	$second_date = $this->input->post('second_date');
-	$statusC = $this->input->post('statusC');
-	$data["values"] = $this->Inventory_model->requsition_status_report($first_date, $second_date, $statusC);
-	//  dd($data["values"]);
-	$data['statusC']= $statusC;
-	$data['first_date'] = $first_date;
-	$data['second_date'] = $second_date;
-	if($exc == 1){
-		$this->load->view("admin/inventory/inventory_req_status_report_excil", $data);
-	}else{
-		if(is_string($data["values"])){
-			echo $data["values"];
-		}
-		else{	
-			echo $this->load->view("admin/inventory/inventory_req_status_report", $data, TRUE);
-		}
-	}
-}
-
-public function perches_status_report($exc=null){            
-	$first_date = $this->input->post('first_date');
-	$second_date = $this->input->post('second_date');
-	$f1_date = date("Y-m-d", strtotime($first_date));
-	$f2_date = date("Y-m-d", strtotime($second_date));
-	$statusC = $this->input->post('statusC');
-	$data["values"] = $this->Inventory_model->perches_status_report($f1_date, $f2_date, $statusC);
-	$data['statusC']= $statusC;
-	$data['first_date'] = $first_date;
-	$data['second_date'] = $second_date;
-	if($exc == 1){
-		$this->load->view("admin/inventory/perches_status_report_excel", $data);
-	}else{
-		if(is_string($data["values"])){
-			echo $data["values"];
-		}
-		else{	
-			echo $this->load->view("admin/inventory/perches_status_report", $data, TRUE);
-		}
-	}
-}
-
-public function low_inv_all_product_status_report($exc=null){
-	$statusC=$this->input->post('statusC');
-	if($statusC==7){
-		$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report();
+	public function inventory_status_report($exc=null){
+		$first_date = $this->input->post('first_date');
+		$second_date = $this->input->post('second_date');
+		$statusC = $this->input->post('statusC');
+		$data["values"] = $this->Inventory_model->requsition_status_report($first_date, $second_date, $statusC);
+		//  dd($data["values"]);
 		$data['statusC']= $statusC;
-	if($exc == 1){
-		$this->load->view("admin/inventory/low_in_status_report_excel", $data);
-	}else{
-		if(is_string($data["values"])){
-			echo $data["values"];
-		}
-		else{	
-			echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
+		$data['first_date'] = $first_date;
+		$data['second_date'] = $second_date;
+		if($exc == 1){
+			$this->load->view("admin/inventory/inventory_req_status_report_excil", $data);
+		}else{
+			if(is_string($data["values"])){
+				echo $data["values"];
+			}
+			else{	
+				echo $this->load->view("admin/inventory/inventory_req_status_report", $data, TRUE);
+			}
 		}
 	}
-	}else{
+
+	public function perches_status_report($exc=null){            
+		$first_date = $this->input->post('first_date');
+		$second_date = $this->input->post('second_date');
+		$f1_date = date("Y-m-d", strtotime($first_date));
+		$f2_date = date("Y-m-d", strtotime($second_date));
+		$statusC = $this->input->post('statusC');
+		$data["values"] = $this->Inventory_model->perches_status_report($f1_date, $f2_date, $statusC);
 		$data['statusC']= $statusC;
-		$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report($statusC);
-		// dd($data['values']);
-		if($exc == 2){
+		$data['first_date'] = $first_date;
+		$data['second_date'] = $second_date;
+		if($exc == 1){
+			$this->load->view("admin/inventory/perches_status_report_excel", $data);
+		}else{
+			if(is_string($data["values"])){
+				echo $data["values"];
+			}
+			else{	
+				echo $this->load->view("admin/inventory/perches_status_report", $data, TRUE);
+			}
+		}
+	}
+
+	public function low_inv_all_product_status_report($exc=null){
+		$statusC=$this->input->post('statusC');
+		if($statusC==7){
+			$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report();
+			$data['statusC']= $statusC;
+		if($exc == 1){
 			$this->load->view("admin/inventory/low_in_status_report_excel", $data);
 		}else{
 			if(is_string($data["values"])){
@@ -1614,9 +1586,37 @@ public function low_inv_all_product_status_report($exc=null){
 			}
 			else{	
 				echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
-			}			
+			}
 		}
-	}	   
-}
+		}else{
+			$data['statusC']= $statusC;
+			$data['values'] = $this->Inventory_model->low_inv_allProduct_status_report($statusC);
+			// dd($data['values']);
+			if($exc == 2){
+				$this->load->view("admin/inventory/low_in_status_report_excel", $data);
+			}else{
+				if(is_string($data["values"])){
+					echo $data["values"];
+				}
+				else{	
+					echo $this->load->view("admin/inventory/low_in_status_report", $data, TRUE);
+				}			
+			}
+		}	   
+	}
+
+	public function leave_application(){
+		// dd($_POST);
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+        $sql = $this->input->post('sql');
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $emp_id = explode(',', trim($sql));
+        $data['app_list'] =$this->Reports_model->leave_application($first_date,$second_date,$emp_id);
+		$this->load->view("admin/reports/leave_application", $data);
+	}
 } 
 ?>

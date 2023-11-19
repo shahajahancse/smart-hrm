@@ -241,16 +241,22 @@ class Reports_model extends CI_Model {
 		}
 
 
-		// if($status == 1){
-		// 	$this->db->where_in('xin_employees.status',[1,4,5]);	
-		// }
-	
-		if($status == 3){
+		if( $status == 3){
 			$this->db->where('xin_employees.status',4);
+			if($first_date != null && $second_date !=null){
+				$this->db->where('xin_employees.date_of_joining between "' . $first_date . '" AND "' . $second_date . '"');
+			}
+			$this->db->order_by('xin_employees.date_of_joining','ASC');
 		}
+
 		if($status == 4){
 			$this->db->where('xin_employees.status',5);
+			if($first_date != null && $second_date !=null){
+				$this->db->where('xin_employees.date_of_joining between "' . $first_date . '" AND "' . $second_date . '"');
+			}
+			$this->db->order_by('xin_employees.date_of_joining','ASC');
 		}
+
 		$data = $this->db->order_by('xin_employees.date_of_joining','ASC')->get()->result();
 		// dd($data);
 	    return $data;
@@ -336,7 +342,7 @@ class Reports_model extends CI_Model {
 		// dd($this->db->last_query());
     }
 
-   public function get_product_reports_info($id=null, $status=null, $category=null){
+   	public function get_product_reports_info($first_date=null,$second_date=null,$status,$emp_id){
         $this->db->select(' 
                     ap.id as a_id,
                     ap.cat_id,
@@ -360,16 +366,22 @@ class Reports_model extends CI_Model {
         $this->db->join('product_accessory_categories as pac', 'ap.cat_id = pac.id', 'left');
         $this->db->join('mobile_numbers', 'ap.number = mobile_numbers.id', 'left');    
         $this->db->join('xin_employees', 'ap.user_id = xin_employees.user_id', 'left');
-        if($id !=null){
-            $this->db->where_in('ap.user_id',$id);
+		if($status == 'all'){
+			$this->db->where_in('ap.status',[1,2,3,4,5]);
+		}else if($status == 'using'){
+            $this->db->where_in('ap.user_id',$emp_id);
         	$this->db->order_by('ap.user_id',"ASC");
-        } 
-        if($category != null){
-            $this->db->where('ap.cat_id',$category);
-        } 
-        if($status != null){
-            $this->db->where('ap.status',$status);
-        } 
+        }else if($status == 'store'){
+            $this->db->where('ap.status',2);
+        	$this->db->order_by('ap.id',"ASC");
+        }else if($status == 'damage'){
+            $this->db->where('ap.status',4);
+        	$this->db->order_by('ap.id',"ASC");
+        }else{
+			$this->db->where('ap.cat_id',$status  );
+        	$this->db->order_by('ap.id',"ASC");
+		}
+		 
         $this->db->order_by('ap.status',"ASC");
         $this->db->group_by('ap.id');
         return $this->db->get()->result();  
@@ -403,5 +415,22 @@ class Reports_model extends CI_Model {
         $this->db->group_by('ap.id');
         return $this->db->get()->result();  
     }
+
+	public function leave_application($first_date=null,$second_date=null,$emp_id=null){
+		$this->db->select('xin_employees.first_name,xin_departments.department_name,xin_designations.designation_name,xin_employees.last_name,xin_leave_applications.*');
+		$this->db->from('xin_leave_applications');
+		$this->db->join('xin_employees','xin_employees.user_id = xin_leave_applications.employee_id','left');
+		$this->db->join('xin_departments','xin_departments.department_id = xin_leave_applications.department_id','left');
+		$this->db->join('xin_designations','xin_designations.designation_id = xin_employees.designation_id','left');
+		if($emp_id !=null){
+			$this->db->where_in('xin_leave_applications.employee_id',$emp_id);
+		}
+		if($first_date !='' && $second_date !=''){
+			$this->db->where('xin_leave_applications.applied_on between "' . $first_date . '" AND "' . $second_date . '"');
+		}
+		$query = $this->db->order_by('xin_leave_applications.applied_on','ASC')->get()->result();
+		// dd($query);
+		return $query;
+	}
 }
 ?>

@@ -3,75 +3,77 @@
 <?php $_tasks = $this->Timesheet_model->get_tasks();?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
+<style>
+   option {
+            background-color: white;
+            color: black; /* Replace with your desired color */
+            text-align :left;
+        }
+</style>
 <div class="row m-b-1 <?php echo $get_animate;?>">
   <div class="col-md-6">
-    <div class="box">
-      <div class="box-header with-border">
-        <h3 class="box-title">Inventory Report</h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-7">
-                <div class="form-group">
-                  <label for="upload_file">Select</label>
-                  <select class="form-control" name="status" id="status">
-                    <option value="">Select one</option>
-                    <option value="11">All Report</option>
-                    <option value="12">Category Wise Report</option>
-                    <!-- <option value="13">Sub Category Wise Report</option> -->
-                    <!-- <option value="14">Induvisual Item Report</option> -->
-                    <optgroup label="Device Movement Report">
-                        <option value="15">Daily</option>
-                        <option value="16">Weekly</option>
-                        <option value="17">Monthly</option>
-                    </optgroup>
-                    <option value="18">Employee Using Device</option>
-                    <option value="19">Stock/Stored Device Report</option>
-                    <option value="20">Damage Item Report</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-5" id="div_category_id">
-                <div class="form-group">
-                  <label for="upload_file">Select Category</label>
-                  <select class="form-control" name="category" id="category_id">
-                    <option value="">Select one</option>
-                    <?php
-                      $categories =$this->db->select('id,cat_name')->get('product_accessory_categories')->result(); 
-                      foreach($categories as $category){
-                    ?>
-                    <option value="<?php echo $category->id?>"><?php echo $category->cat_name?></option>
-                    <?php }?>
-                  </select>
-                </div>
-              </div>
-              
-              <div class="col-md-5" id="div_sub_category_id">
-                  <div class="form-group">
-                    <label for="upload_file">Select Sub Category</label>
-                    <select class="form-control" name="sub_category" id="sub_category_id">
-                     <option value="">Select one</option>
-                    <?php
-                      $sub_categories =$this->db->select('id,sub_cate_name')->get('products_sub_categories')->result(); 
-                      foreach($sub_categories as $sub_category){
-                    ?>
-                    <option value="<?php echo $sub_category->id ?>"><?php echo $sub_category->sub_cate_name ?></option>
-                    <?php }?>
-                    </select>
-                  </div>
-              </div>
-            </div>
-              <!-- <div class="form-group"> -->
-                <button class="btn btn-success" onclick="show_report()">Show Report</button>
-              <!-- </div> -->
+
+  <div class="box">
+    <div class="box-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+              <label for="process_date">First Date</label>
+              <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="process_date">Second Date</label>
+            <input class="form-control attendance_date" placeholder="Second Date" id="second_date" name="second_date" type="text" autocomplete="off">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="upload_file">Status</label>
+            <select class="form-control" name="status" id="status">
+              <option value="">Select one</option>
+              <option value="0">Regular</option>
+              <option value="2">Left</option>
+              <option value="3">Resign</option>
+            </select>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
+  <div class="box">
+    <div class="box-body">
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#tab1">Inventory Report</a></li>
+        <li><a data-toggle="tab" href="#tab2">Movement Report</a></li>
+      </ul>
 
+      <div class="tab-content">
+        <div id="tab1" class="tab-pane fade in active" style="margin-top:20px">
+          <button class="btn btn-sm btn-success" onclick="show_report('all')">All Report</button>
+          <select class="btn btn-sm btn-success" style="margin-left:10px" id="mySelect">
+            <option value="">Category Wise report </option>
+              <?php
+                $categories =$this->db->select('id,cat_name')->get('product_accessory_categories')->result(); 
+                foreach($categories as $category){
+              ?>
+              <option value="<?php echo $category->id?>" onclick="show_report(2)"><?php echo $category->cat_name?></option>
+              <?php }?>
+          </select>
+          <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('using')">Employee using device</button><br><br>
+          <button class="btn btn-sm btn-success" onclick="show_report('store')">Stored Report</button>
+          <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('damage')">Damaged Report</button>
+        </div>
+        <div id="tab2" class="tab-pane fade"  style="margin-top:20px">
+        <button class="btn btn-sm btn-success" onclick="show_report('daily')">Daily Report</button>
+        <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('weekly')">Weekly Report</button>
+        <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('monthly')">Monthly Report</button>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
   <div class="col-lg-5">
     <div class="box" style="height: 74vh;overflow-y: scroll;">
@@ -84,101 +86,87 @@
       </table>
     </div>
   </div>
+
 </div>
 
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 <script>
-    $(document).ready(function(){
-        $("#select_all").click(function(){
-        $('input:checkbox').not(this).prop('checked', this.checked);
-        });
-        // on load employee
-        $("#status").change(function () {
-            status = document.getElementById('status').value;
-            var url = "<?php echo base_url('admin/reports/get_employeess'); ?>";
-            $("#select_all").prop("checked", false);
-            $('#fileDiv #removeTr').remove();
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: { "status": status },
-                contentType: "application/json",
-                dataType: "json",
-                success: function (response) {
-                    arr = response.employees;
-                    if (arr.length != 0) {
-                    var i = 1;
-                    var items = '';
-                    $.each(arr, function (index, value) {
-                        items += '<tr id="removeTr">';
-                        items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' + value.emp_id + '" ></td>';
-                        items += '<td class="success">' + (i++) + '</td>';
-                        items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + " (" +value.emp_id + ")" + '</td>';
-                        items += '</tr>';
-                    });
-                    $('#fileDiv tr:last').after(items);
-                    }
-                }
-            });
-        });
-      });
-      $('#div_category_id').hide();
-      $('#div_sub_category_id').hide();
-
-      $("#status").change(function () {
-        status = $('#status').val();
-        if(status == 12){
-            $('#div_category_id').show(1000);
-            $('#div_sub_category_id').hide(1000);
-        } else if(status == 13){
-          $('#div_category_id').hide(1000);
-          $('#div_sub_category_id').show(1000);
-        }else{
-          $('#div_category_id').hide(1000);
-          $('#div_sub_category_id').hide(1000);
-        }
-      });
-
-
-    function show_report(){
-        var ajaxRequest;  // The variable that makes Ajax possible!
-        ajaxRequest = new XMLHttpRequest();
-        var status = $('#status').val();
-        var category = $('#category_id').val();
-        var sub_category = $('#sub_category_id').val();
-
-        $('#status').on('change', function() {
-          if ($(this).val() != 12) {
-            $('#category_id').val('');
+$(document).ready(function(){
+    $("#select_all").click(function(){
+    $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+    // on load employee
+    $("#status").change(function () {
+      status = document.getElementById('status').value;
+      var url = "<?php echo base_url('admin/reports/get_employeess'); ?>";
+      $("#select_all").prop("checked", false);
+      $('#fileDiv #removeTr').remove();
+      $.ajax({
+        url: url,
+        type: 'GET',
+        data: { "status": status },
+        contentType: "application/json",
+        dataType: "json",
+        success: function (response) {
+          arr = response.employees;
+          if (arr.length != 0) {
+          var i = 1;
+          var items = '';
+          $.each(arr, function (index, value) {
+            items += '<tr id="removeTr">';
+            items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' + value.emp_id + '" ></td>';
+            items += '<td class="success">' + (i++) + '</td>';
+            items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + " (" +value.emp_id + ")" + '</td>';
+            items += '</tr>';
+          });
+          $('#fileDiv tr:last').after(items);
           }
-        });
+        }
+      });
+    });
+  });
+  $("#mySelect").on("change", function () {
+    var selectedValue = $(this).val();
+    show_report(selectedValue);
+  });
+  function show_report(r){
+    var ajaxRequest;  // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+    var status = $('#status').val();
+    var first_date = $('#process_date').val();
+    var second_date = $('#second_date').val();
+    var checkboxes = document.getElementsByName('select_emp_id[]');
+    var sql = get_checked_value(checkboxes);
 
-        if(status ==''){
-            alert('Please select status');
-            return ;
-        }
-        var checkboxes = document.getElementsByName('select_emp_id[]');
-        var sql = get_checked_value(checkboxes);
-        if(sql =='' && status == 18){
-            alert('Please select employee Id');
-            return ;
-        }
-        var data = "status="+status+"&category="+category+"&sub_category="+sub_category+'&sql='+sql;
-        url = base_url + "/show_inventory_report";
-        ajaxRequest.open("POST", url, true);
-        ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-        ajaxRequest.send(data);
-        ajaxRequest.onreadystatechange = function(){
-            if(ajaxRequest.readyState == 4){
-            // console.log(ajaxRequest);
-            var resp = ajaxRequest.responseText;
-            a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
-            a.document.write(resp);
-            }
-        }
+    if(status =='' && r =='using'){
+      alert('Please select status');
+      return ;
+    }
+    if(status !='' && r =='using' && sql ==''){
+      alert('Please select employee id');
+      return ;
     }
 
-
+    var data = "first_date="+first_date+"&second_date="+first_date+"&status="+r+'&sql='+sql;
+    url = base_url + "/show_inventory_report";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+      var resp = ajaxRequest.responseText;
+      a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+      a.document.write(resp);
+      }
+    }
+  }
 </script>
 
-    
+
+<script>
+  $(document).ready(function () {
+      $("#mySelect").on("change", function () {
+        $(this).prop("selectedIndex", "");
+      });
+  });
+</script>

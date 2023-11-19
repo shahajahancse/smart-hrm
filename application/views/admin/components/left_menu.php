@@ -819,7 +819,7 @@ if($theme[0]->sub_menu_icons != ''){
         <?php } ?>
 
         <?php if(in_array('115',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['reports_leave_active']))echo $arr_mod['reports_leave_active'];?>"> <a href="<?php echo site_url('admin/reports/employee_leave');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Leave</a> </li>
+        <li class="sidenav-link <?php if(!empty($arr_mod['reports_leave_active']))echo $arr_mod['reports_leave_active'];?>"> <a href="<?php echo site_url('admin/reports/employee_leave_report');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Leave</a> </li>
         <?php } ?>
         <?php } ?>
 

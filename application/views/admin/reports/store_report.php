@@ -38,10 +38,10 @@
   <div class="box-body" id="emp_report">
     <ul class="nav nav-tabs " id="myTab" role="tablist">
       <li class="nav-item active">
-        <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily" aria-selected="true">Requsition</a>
+        <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Store In</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Purchase</a>
+      <li class="nav-item ">
+        <a class="nav-link " id="daily-tab" data-toggle="tab" href="#daily" role="tab" aria-controls="daily" aria-selected="true">Store Out</a>
       </li>
 
       <!-- <li class="nav-item">

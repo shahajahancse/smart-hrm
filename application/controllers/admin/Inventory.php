@@ -511,29 +511,26 @@ public function add_daily_package()
     }
 
 
-	public function purchase_panding_list()
-	{
-			$session = $this->session->userdata('username');
-			//   dd($session);
-			if(empty($session)){ 
-				redirect('admin/');
-			}
-			//Dropdown
-			$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
-			$data['breadcrumbs']	= 'Purchase Pending';
-			$data['categorys']		= $this->db->get("products_categories")->result();
-			$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],1);
-			$data['results'] 		= $this->Inventory_model->product_list();
-			$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
-			$data['company'] 		= $this->db->distinct()->select('company')->get("product_supplier")->result();
-			$data['units'] 			= $this->db->get("product_unit")->result();
-			$data['user_role_id'] 	= $session['role_id'];
-			$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
-									  $this->load->view('admin/layout/layout_main', $data); //page load
+	public function purchase_panding_list(){
+		$session = $this->session->userdata('username');
+
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] 			= 'Store | '.$this->Xin_model->site_title();
+		$data['breadcrumbs']	= 'Purchase Pending';
+		$data['categorys']		= $this->db->get("products_categories")->result();
+		$data['products'] 		= $this->Inventory_model->purchase_products_status($session['user_id'],$session['role_id'],1);
+		$data['results'] 		= $this->Inventory_model->product_list();
+		$data['sub_categorys']  = $this->db->get("products_sub_categories")->result();
+		$data['company'] 		= $this->db->distinct()->select('company')->get("product_supplier")->result();
+		$data['units'] 			= $this->db->get("product_unit")->result();
+		$data['user_role_id'] 	= $session['role_id'];
+		$data['subview'] 		= $this->load->view("admin/inventory/purchase_status", $data, TRUE);
+								  $this->load->view('admin/layout/layout_main', $data); //page load
     }
 
-	public function purchase_aproved_list()
-	{
+	public function purchase_aproved_list(){
 		$session = $this->session->userdata('username');
 		//   dd($session);
 		if(empty($session)){ 
@@ -1434,13 +1431,13 @@ public function mobile_bill(){
 		$first_date = $this->input->post('first_date'); 
 		$second_date = $this->input->post('second_date');
 		$this->db->select('*')->where("created_at between '$first_date' and '$second_date'");
-		if($status == ){
+		if($status == 3	){
 			$this->db->where('status',$status);
 		}
-		if($status == ){
+		if($status == 1){
 			$this->db->where('status',$status);
 		}
-		if($status == ){
+		if($status == 2){
 			$this->db->where('status',$status);
 		}
 		$this->db->get('mobile_bill_requisition')->result();

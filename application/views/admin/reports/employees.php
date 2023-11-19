@@ -5,6 +5,7 @@
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <div class="row m-b-1 <?php echo $get_animate;?>">
   <div class="col-md-6">
+    
     <div class="box">
       <div class="box-header with-border">
         <h3 class="box-title">Employees Report </h3>
@@ -20,9 +21,9 @@
                 </div>
               </div>
               <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="process_date">Second Date</label>
-                    <input class="form-control attendance_date" placeholder="Second Date" id="second_date" name="second_date" type="text">
+                <div class="form-group">
+                  <label for="process_date">Second Date</label>
+                  <input class="form-control attendance_date" placeholder="Second Date" id="second_date" name="second_date" type="text" autocomplete="off">
                 </div>
               </div>
               <div class="col-md-4">
@@ -37,48 +38,39 @@
                   </select>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="box-body">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#tab1">Employees Report</a></li>
+          <li><a data-toggle="tab" href="#tab2">Movement</a></li>
+        </ul>
 
-              <div class="col-md-12">
-                <div class="form-group">
+        <div class="tab-content">
+          <div id="tab1" class="tab-pane fade in active">
+                <div class="form-group" style="margin-top:20px">
                   <button class="btn btn-success btn-sm " style="margin-right:10px" onclick="show_report(1)">Employee List</button>
                   <button class="btn btn-success btn-sm"  style="margin-right:10px" onclick="show_report(2)">Increment</button>
                   <button class="btn btn-success btn-sm" style="margin-right:10px" onclick="show_report(3)">Internship</button>
                   <button class="btn btn-success btn-sm" onclick="show_report(4)">Probation</button>
                 </div>
-              </div>
-            </div>
           </div>
+          <div id="tab2" class="tab-pane fade">
+                <div class="form-group" style="margin-top:20px">
+                  <button class="btn btn-success btn-sm"  style="margin-right:10px" onclick="show_meeting_report(1)">Dailys</button>
+                  <button class="btn btn-success btn-sm"  style="margin-right:10px" onclick="show_meeting_report(2)">Weekly</button>
+                  <button class="btn btn-success btn-sm"  style="margin-right:10px" onclick="show_meeting_report(3)">Monthly</button>
+                </div>
+          </div>
+          
         </div>
       </div>
-      
     </div>
-    <div class="box">
-            <div class="box-header with-border">
-        <h3 class="box-title">Employees Meeting Report(OutDoor) </h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="process_date">First Date</label>
-                  <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>" required>
-                </div>
-              </div>
 
-              <div class="col-md-6">
-                <div class="form-group" style="margin-top:10px"><br>
-                  <button class="btn btn-success btn-sm" onclick="show_meeting_report(1)">Dailys</button>&nbsp;&nbsp;
-                  <button class="btn btn-success btn-sm" onclick="show_meeting_report(2)">Weekly</button>&nbsp;&nbsp;
-                  <button class="btn btn-success btn-sm" onclick="show_meeting_report(3)">Monthly</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
   <div class="col-lg-5">
     <div class="box" style="height: 74vh;overflow-y: scroll;">
@@ -138,83 +130,79 @@
     });
   });
 
-
-function show_report(r){
-  var ajaxRequest;  // The variable that makes Ajax possible!
-  ajaxRequest = new XMLHttpRequest();
-  status = document.getElementById('status').value;
-  first_date = document.getElementById('process_date').value;
-  second_date = document.getElementById('second_date').value;
-  if(status ==''){
-    alert('Please select status');
-    return ;
-  }
-  if(r == 2 ){
-    if(first_date ==''){
-      alert('Please select first date');
+  function show_report(r){
+    var ajaxRequest;  // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+    status = document.getElementById('status').value;
+    first_date = document.getElementById('process_date').value;
+    second_date = document.getElementById('second_date').value;
+    if(status ==''){
+      alert('Please select status');
       return ;
     }
-    if(second_date ==''){
-      alert('Please select second date');
-      return ;
-    }
-   
-  }
-  var checkboxes = document.getElementsByName('select_emp_id[]');
-  var sql = get_checked_value(checkboxes);
-  if(sql ==''){
-    alert('Please select employee Id');
-    return ;
-  }
-  var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql;
-  url = base_url + "/show_report";
-  ajaxRequest.open("POST", url, true);
-  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-  ajaxRequest.send(data);
-  ajaxRequest.onreadystatechange = function(){
-    if(ajaxRequest.readyState == 4){
-      // console.log(ajaxRequest);
-      var resp = ajaxRequest.responseText;
-      a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
-      a.document.write(resp);
-    }
-  }
-}
-
-
-function show_meeting_report(key){
-  var ajaxRequest;  // The variable that makes Ajax possible!
-  ajaxRequest = new XMLHttpRequest();
-  status = document.getElementById('status').value;
-  attendance_date = document.getElementById('process_date').value;
-  if(status ==''){
-    alert('Please select status');
-    return ;
-  }
-  var checkboxes = document.getElementsByName('select_emp_id[]');
-  var sql = get_checked_value(checkboxes);
-  if(sql ==''){
-    alert('Please select employee Id');
-    return ;
-  }
-  if(attendance_date ==''){
-    alert('Please select date');
-    return ;
-  }
-  var data = "a_date="+attendance_date+"&status="+status+'&sql='+sql+"&key="+key;
-  url = base_url + "/show_meeting_report";
-  ajaxRequest.open("POST", url, true);
-  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-  ajaxRequest.send(data);
-  ajaxRequest.onreadystatechange = function(){
-    if(ajaxRequest.readyState == 4){
-      // console.log(ajaxRequest);
-      var resp = ajaxRequest.responseText;
-      a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
-      a.document.write(resp);
-    }
-  }
-}
-</script>
-
+    if(r == 2 ){
+      if(first_date ==''){
+        alert('Please select first date');
+        return ;
+      }
+      if(second_date ==''){
+        alert('Please select second date');
+        return ;
+      }
     
+    }
+    var checkboxes = document.getElementsByName('select_emp_id[]');
+    var sql = get_checked_value(checkboxes);
+    if(sql ==''){
+      alert('Please select employee Id');
+      return ;
+    }
+    var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql;
+    url = base_url + "/show_report";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+        // console.log(ajaxRequest);
+        var resp = ajaxRequest.responseText;
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+        a.document.write(resp);
+      }
+    }
+  }
+
+  function show_meeting_report(key){
+    var ajaxRequest;  // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+    status = document.getElementById('status').value;
+    attendance_date = document.getElementById('process_date').value;
+    if(status ==''){
+      alert('Please select status');
+      return ;
+    }
+    var checkboxes = document.getElementsByName('select_emp_id[]');
+    var sql = get_checked_value(checkboxes);
+    if(sql ==''){
+      alert('Please select employee Id');
+      return ;
+    }
+    if(attendance_date ==''){
+      alert('Please select date');
+      return ;
+    }
+    var data = "a_date="+attendance_date+"&status="+status+'&sql='+sql+"&key="+key;
+    url = base_url + "/show_meeting_report";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+        // console.log(ajaxRequest);
+        var resp = ajaxRequest.responseText;
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+        a.document.write(resp);
+      }
+    }
+  }
+</script>
