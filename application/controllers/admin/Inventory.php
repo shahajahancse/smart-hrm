@@ -1208,6 +1208,7 @@ public function move_create(){
 	$data['purpose']    = $_POST['purpose'];
 	$data['floor']      = $_POST['floor'];
 	$data['remark']     = $_POST['remark'];
+	
 
 
     if($_POST['role_id'] != 3){
@@ -1217,11 +1218,11 @@ public function move_create(){
 		$data['floor']      = $_POST['floor'];
 		$data['start_time'] = date("Y-m-d H:i:s");
 	}
-	$data['status']      = $_POST['role_id'] != 3 ? 2 : 1;
+	// $data['status']      = $_POST['role_id'] != 3 ? 2 : 1;
 	$insert = $this->db->insert('move_list',$data);
 	if($insert){
 		if($_POST['role_id']!=3){
-			$this->db->where('device_model',$_POST['device_id'])->update('product_accessories',['move_status'=>2]);
+			$this->db->where('device_model',$_POST['device_id'])->update('product_accessories',['move_status'=>2,'user_id'=>$_POST['emp_id']]);
 		}
 		$this->session->set_flashdata('success', 'Successfully Insert Done');
 	}else{
@@ -1250,6 +1251,7 @@ function active_list(){
 	}
 	$data['session']    = $session;
 	$data['requests']   = $this->Inventory_model->active_list();
+	// dd($data);
 	$data['subview']    = $this->load->view("admin/inventory/active", $data);
 }
 function inactive_list(){
@@ -1274,16 +1276,22 @@ function request_edit(){
 	}
 }
 
-function delete_request($id){
-	// dd($_POST);
 
-    $delete = $this->db->where('id',$id)->update('move_list',$data);
-	if($delete){
-		$this->session->set_flashdata('success', 'Successfully Update Done');
+function free_device($id){
+
+	$free_device = $this->db->select('user_id,device_id')->where('id',$id)->get('move_list')->row();
+
+	$this->db->where('user_id',$free_device->user_id)->where('device_model',$free_device->device_id)->update('product_accessories', ['move_status' => 1]);
+	$this->db->where('user_id',$free_device->user_id)->where('device_id',$free_device->device_id)->update('move_list', ['status' => 1]);
+					 
+	if($free_device){
+			// dd($this->db->last_query());
+			$this->session->set_flashdata('success', 'Device Successfully Free');
+			redirect('admin/inventory/moves','refresh');
 	}else{
-		$this->session->set_flashdata('error', 'Error to Update');
+		$this->session->set_flashdata('error', 'Error');
 	}
-	return true;
+	
 }
 
 public function mobile_bill(){

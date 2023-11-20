@@ -33,16 +33,18 @@
             <td class="text-center"><?= "MHL ".$row->cat_short_name.'-'.$row->device_name_id ?></td>
             <td class="text-center">
               <span class="using">
-                <?= $row->status == 5 && $row->move_status == 0 ? "<i class='fa fa-dot-circle-o' style='color:red'></i> Not Used": "<i class='fa fa-dot-circle-o' style='color:green'></i> Used"?>
+                <?= $row->status == 5 && $row->move_status == 1 ? "<i class='fa fa-dot-circle-o' style='color:red'></i> Not Used": "<i class='fa fa-dot-circle-o' style='color:green'></i> Used"?>
               </span>
             </td>
             <td class="text-center">
                 <div class="dropdown" >
+                  <?php if($row->status == 5 && $row->move_status == 1){?>
                   <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important;color:black" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                   <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                     <a class='req_id text-info'  data-toggle="modal" data-target="#requested_listt" style="padding-left:5px; cursor: pointer"  data-id="<?php echo $row->id?>" data-status="<?php echo $row->status?>"  ><b>Edit</b></a><br>
                     <a class="text-danger"style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_request/'.$row->id);?>"><b>Delete</b></a>
                   </div>
+                  <?php }?>
                 </div>
             </td>
           </tr>

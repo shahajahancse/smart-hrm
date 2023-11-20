@@ -88,7 +88,7 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
         <a href="#" class="btn btnn" style="margin-left:10px;" id="active_deivce">Active Device</a>
         <a href="#" class="btn btnn" style="margin-left:10px;" id="move_history">Movement history</a>
       <?php }else{?>
-      <a href="#" class="btn btnn" id="listButton">Request List</a>
+      <!-- <a href="#" class="btn btnn" id="listButton">Request List</a> -->
       <a href="#" class="btn btnn" style="margin-left:10px;" id="infoButtonn">Used Device</a>
       <a href="#" class="btn btnn" style="margin-left:10px;" id="infoButtonnn">All Device</a>
       <?php }?>
@@ -128,11 +128,11 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
 
   $(document).ready(function(){
     $('#listButton').addClass('active');
-    $("#list_data").load("<?php echo base_url("admin/inventory/requested_list")?>");
+    $("#list_data").load("<?php echo base_url("admin/inventory/active_list")?>");
   });
-  $('#listButton').click(function () {
-    $("#list_data").load("<?php echo base_url("admin/inventory/requested_list")?>");
-  });
+  // $('#listButton').click(function () {
+  //   $("#list_data").load("< ?php echo base_url("admin/inventory/requested_list")?>");
+  // });
 
   $('#infoButtonn').click(function () {
     $("#list_data").load("<?php echo base_url("admin/inventory/active_list")?>");

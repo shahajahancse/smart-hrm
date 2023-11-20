@@ -1530,6 +1530,22 @@ class Reports extends MY_Controller
 		$data['subview'] = $this->load->view("admin/reports/store_report", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); 
     }
+
+	public function item_wise_report(){
+		// dd($_POST);
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$id = $this->input->post('item_id');
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+		$data['first_date']=$first_date;
+		$data['second_date']=$second_date;
+		$data['results'] = $this->Inventory_model->product_details($id,$first_date,$second_date);
+		$this->load->view("admin/reports/item_wise_report", $data);
+    }
+
 	public function inventory_status_report($exc=null){
 		$first_date = $this->input->post('first_date');
 		$second_date = $this->input->post('second_date');
@@ -1605,18 +1621,28 @@ class Reports extends MY_Controller
 		}	   
 	}
 
-	public function leave_application(){
+	public function leave_application($exl=null){
 		// dd($_POST);
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+        $exl = $this->input->post('exl');
         $sql = $this->input->post('sql');
+        $status = $this->input->post('status');
+		$data['status']= $status;
+		$data['sql']= $sql;
         $first_date = $this->input->post('first_date');
         $second_date = $this->input->post('second_date');
+		$data['first_date']= $first_date;
+		$data['second_date']= $second_date;
         $emp_id = explode(',', trim($sql));
         $data['app_list'] =$this->Reports_model->leave_application($first_date,$second_date,$emp_id);
-		$this->load->view("admin/reports/leave_application", $data);
+		if($exl==1){
+			$this->load->view("admin/reports/leave_application_excel", $data);
+		}else{
+			$this->load->view("admin/reports/leave_application", $data);
+		}
 	}
 } 
 ?>

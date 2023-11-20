@@ -420,7 +420,7 @@ class Reports_model extends CI_Model {
 		$this->db->select('xin_employees.first_name,xin_departments.department_name,xin_designations.designation_name,xin_employees.last_name,xin_leave_applications.*');
 		$this->db->from('xin_leave_applications');
 		$this->db->join('xin_employees','xin_employees.user_id = xin_leave_applications.employee_id','left');
-		$this->db->join('xin_departments','xin_departments.department_id = xin_leave_applications.department_id','left');
+		$this->db->join('xin_departments','xin_departments.department_id = xin_employees.department_id','left');
 		$this->db->join('xin_designations','xin_designations.designation_id = xin_employees.designation_id','left');
 		if($emp_id !=null){
 			$this->db->where_in('xin_leave_applications.employee_id',$emp_id);

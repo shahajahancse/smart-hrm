@@ -31,7 +31,7 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($requests as $key => $row) { ?>
+        <?php foreach ($requests as $key => $row) {?>
           <tr>
             <td class="text-center"><?= $key + 1 ?></td>
             <td class="text-center"><?= $row->cat_name ?></td>
@@ -50,8 +50,9 @@
                 <div class="dropdown" >
                   <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important;color:black;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                   <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
-                    <a class='req_id text-info'  data-toggle="modal" data-target="#requested_listt" style="padding-left:5px; cursor: pointer"  data-id="<?php echo $row->id?>" data-status="<?php echo $row->status?>"  ><b>Approved</b></a><br>
-                    <a class="text-danger"style="padding-left:5px;" href="<?= base_url('admin/inventory/delete_request/'.$row->id);?>"><b>Delete</b></a>
+                    <a class='req_id text-info' style="padding-left:5px; cursor: pointer" href="<?= base_url('admin/inventory/free_device/'.$row->id);?>" ><b>Free Device</b></a><br>
+                    <!-- <a class='req_id text-info'  data-toggle="modal" data-target="#requested_listt" style="padding-left:5px; cursor: pointer"  data-id="<?php echo $row->id?>" data-status="<?php echo $row->status?>"  ><b>Free Device</b></a><br> -->
+                    <!-- <a class="text-danger"style="padding-left:5px;" href="< ?= base_url('admin/inventory/delete_request/'.$row->id);?>"><b>Delete</b></a> -->
                   </div>
                 </div>
             </td>
@@ -62,7 +63,7 @@
   </div>
 </div>
 
-
+<!-- 
 <div class="modal fade" id="requested_listt" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -107,7 +108,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
  <script type="text/javascript">
     $(document).ready(function () {

@@ -33,6 +33,9 @@ class inventory_model extends CI_Model
 		$this->db->from('products as p');
 		$this->db->join('products_purches_details as pp', 'pp.product_id = p.id');
 		$this->db->where('p.id',  $id);
+		if($from_date != '' && $to_date !=''){
+			$this->db->where('pp.created_at between "' . $from_date . '" AND "' . $to_date . '"');
+		}
 		$this->db->group_by('pp.id');
 		$purchase_query = $this->db->order_by('pp.id','DESC')->get()->result();
 
@@ -48,6 +51,9 @@ class inventory_model extends CI_Model
 		$this->db->from('products as p');
 		$this->db->join('products_requisition_details as pr', 'pr.product_id = p.id');
 		$this->db->where('p.id',  $id);
+		if($from_date != '' && $to_date !=''){
+			$this->db->where('pr.created_at between "' . $from_date . '" AND "' . $to_date . '"');
+		}
 		$this->db->group_by('pr.id');
 		$requisition_query = $this->db->order_by('pr.id','DESC')->get()->result();
 		$query = array_merge($requisition_query,$purchase_query);
@@ -451,7 +457,7 @@ class inventory_model extends CI_Model
 		$this->db->join('product_accessories_model as pam', 'pa.device_model = pam.id', 'left');
 		$this->db->join('product_accessory_categories as pac', 'pa.cat_id = pac.id', 'left');
 		$this->db->where('pa.status',5);
-		$this->db->where('pa.move_status',0);
+		$this->db->where('pa.move_status',1);
 		$this->db->group_by('pa.id');
 		$data = $this->db->get()->result();
 		return $data;          
@@ -477,21 +483,22 @@ class inventory_model extends CI_Model
 	} 
 
 	public function active_list(){
-		$this->db->select("
-			product_accessories_model.model_name, 
-			product_accessory_categories.cat_name, 
-			product_accessory_categories.cat_short_name, 
-			product_accessories.device_name_id, 
-			xin_employees.first_name, 
-			xin_employees.last_name,
-			move_list.*, 
-		");
-		$this->db->from("move_list");
-		$this->db->join("product_accessories_model", "move_list.device_id = product_accessories_model.id");
-		$this->db->join("xin_employees", "move_list.user_id = xin_employees.user_id");
-		$this->db->join("product_accessories", "move_list.device_id = product_accessories.id"); // Join the product_accessories table
-		$this->db->join("product_accessory_categories", "product_accessory_categories.id = product_accessories.cat_id"); // Join the product_accessories table
-		$this->db->where("move_list.status", 2);
+		$this->db->select('product_accessories_model.model_name,
+					product_accessories.device_name_id,
+					product_accessory_categories.cat_name,
+					product_accessory_categories.cat_short_name,
+					xin_employees.first_name,
+					xin_employees.last_name,
+					move_list.*
+		')
+		->from('product_accessories')
+		->join("move_list", "move_list.user_id = product_accessories.user_id")
+		->join("xin_employees", "xin_employees.user_id = product_accessories.user_id")
+		->join("product_accessories_model", "product_accessories.device_model = product_accessories_model.id")
+		->join("product_accessory_categories", "product_accessory_categories.id = product_accessories.cat_id")
+		->where('product_accessories.status',5)
+		->where('product_accessories.move_status',2)
+		->where('move_list.status',2);
 		return $this->db->get()->result();
 	} 
 
