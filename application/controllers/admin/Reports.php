@@ -1438,24 +1438,18 @@ class Reports extends MY_Controller
         $first_date = $this->input->post('first_date');
         $second_date = $this->input->post('second_date');
         $emp_id = explode(',', trim($sql));
-		if($status == 'all'){
-			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
-		}else if($status == 'using'){
-			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
-		}else if($status == 'store'){
-			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
-		}else if($status == 'damage'){
-			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
-		}else if($status == 'daily'){
-			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
-		}else if($status == 'weekly'){
-			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
-		}else if($status == 'monthly'){
-			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
-		}else{
-			$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
-		}
+		$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
 		$this->load->view('admin/reports/inventory_report',$data);
+	}
+	public function show_move_report(){
+		$sql = $this->input->post('sql');
+        $status = $this->input->post('status');
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $emp_id = explode(',', trim($sql));
+		$data['reports']     = $this->Reports_model->show_move_report($first_date,$second_date,$status,$emp_id);
+		// dd($data);
+		$this->load->view('admin/reports/show_move_report',$data);
 	}
 
 	public function issue_report(){

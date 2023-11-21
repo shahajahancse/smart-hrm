@@ -67,9 +67,9 @@
           <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('damage')">Damaged Report</button>
         </div>
         <div id="tab2" class="tab-pane fade"  style="margin-top:20px">
-        <button class="btn btn-sm btn-success" onclick="show_report('daily')">Daily Report</button>
-        <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('weekly')">Weekly Report</button>
-        <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('monthly')">Monthly Report</button>
+        <button class="btn btn-sm btn-success" onclick="move_report('daily')">Daily Report</button>
+        <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="move_report('weekly')">Weekly Report</button>
+        <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="move_report('monthly')">Monthly Report</button>
         </div>
       </div>
     </div>
@@ -92,74 +92,116 @@
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 <script>
 $(document).ready(function(){
-    $("#select_all").click(function(){
-    $('input:checkbox').not(this).prop('checked', this.checked);
-    });
-    // on load employee
-    $("#status").change(function () {
-      status = document.getElementById('status').value;
-      var url = "<?php echo base_url('admin/reports/get_employeess'); ?>";
-      $("#select_all").prop("checked", false);
-      $('#fileDiv #removeTr').remove();
-      $.ajax({
-        url: url,
-        type: 'GET',
-        data: { "status": status },
-        contentType: "application/json",
-        dataType: "json",
-        success: function (response) {
-          arr = response.employees;
-          if (arr.length != 0) {
-          var i = 1;
-          var items = '';
-          $.each(arr, function (index, value) {
-            items += '<tr id="removeTr">';
-            items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' + value.emp_id + '" ></td>';
-            items += '<td class="success">' + (i++) + '</td>';
-            items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + " (" +value.emp_id + ")" + '</td>';
-            items += '</tr>';
-          });
-          $('#fileDiv tr:last').after(items);
-          }
+  $("#select_all").click(function(){
+  $('input:checkbox').not(this).prop('checked', this.checked);
+  });
+  // on load employee
+  $("#status").change(function () {
+    status = document.getElementById('status').value;
+    var url = "<?php echo base_url('admin/reports/get_employeess'); ?>";
+    $("#select_all").prop("checked", false);
+    $('#fileDiv #removeTr').remove();
+    $.ajax({
+      url: url,
+      type: 'GET',
+      data: { "status": status },
+      contentType: "application/json",
+      dataType: "json",
+      success: function (response) {
+        arr = response.employees;
+        if (arr.length != 0) {
+        var i = 1;
+        var items = '';
+        $.each(arr, function (index, value) {
+          items += '<tr id="removeTr">';
+          items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' + value.emp_id + '" ></td>';
+          items += '<td class="success">' + (i++) + '</td>';
+          items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + " (" +value.emp_id + ")" + '</td>';
+          items += '</tr>';
+        });
+        $('#fileDiv tr:last').after(items);
         }
-      });
+      }
     });
   });
-  $("#mySelect").on("change", function () {
-    var selectedValue = $(this).val();
-    show_report(selectedValue);
-  });
-  function show_report(r){
-    var ajaxRequest;  // The variable that makes Ajax possible!
-    ajaxRequest = new XMLHttpRequest();
-    var status = $('#status').val();
-    var first_date = $('#process_date').val();
-    var second_date = $('#second_date').val();
-    var checkboxes = document.getElementsByName('select_emp_id[]');
-    var sql = get_checked_value(checkboxes);
+});
+$("#mySelect").on("change", function () {
+  var selectedValue = $(this).val();
+  show_report(selectedValue);
+});
+function show_report(r){
+  var ajaxRequest;  // The variable that makes Ajax possible!
+  ajaxRequest = new XMLHttpRequest();
+  var status = $('#status').val();
+  var first_date = $('#process_date').val();
+  var second_date = $('#second_date').val();
+  var checkboxes = document.getElementsByName('select_emp_id[]');
+  var sql = get_checked_value(checkboxes);
 
-    if(status =='' && r =='using'){
-      alert('Please select status');
-      return ;
-    }
-    if(status !='' && r =='using' && sql ==''){
-      alert('Please select employee id');
-      return ;
-    }
+  if(status =='' && r =='using'){
+    alert('Please select status');
+    return ;
+  }
+  if(status !='' && r =='using' && sql ==''){
+    alert('Please select employee id');
+    return ;
+  }
 
-    var data = "first_date="+first_date+"&second_date="+first_date+"&status="+r+'&sql='+sql;
-    url = base_url + "/show_inventory_report";
-    ajaxRequest.open("POST", url, true);
-    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-    ajaxRequest.send(data);
-    ajaxRequest.onreadystatechange = function(){
-      if(ajaxRequest.readyState == 4){
-      var resp = ajaxRequest.responseText;
-      a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
-      a.document.write(resp);
-      }
+  var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql;
+  url = base_url + "/show_inventory_report";
+  ajaxRequest.open("POST", url, true);
+  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+  ajaxRequest.send(data);
+  ajaxRequest.onreadystatechange = function(){
+    if(ajaxRequest.readyState == 4){
+    var resp = ajaxRequest.responseText;
+    a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+    a.document.write(resp);
     }
   }
+}
+
+function move_report(r){
+  var ajaxRequest;  // The variable that makes Ajax possible!
+  ajaxRequest = new XMLHttpRequest();
+  var status = $('#status').val();
+  var first_date = $('#process_date').val();
+  var second_date = $('#second_date').val();
+  var checkboxes = document.getElementsByName('select_emp_id[]');
+  var sql = get_checked_value(checkboxes);
+
+  if(status =='' && r =='using'){
+    alert('Please select status');
+    return ;
+  }
+  if(status !='' && r =='using' && sql ==''){
+    alert('Please select employee id');
+    return ;
+  }
+
+  var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql;
+  url = base_url + "/show_move_report";
+  ajaxRequest.open("POST", url, true);
+  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+  ajaxRequest.send(data);
+  ajaxRequest.onreadystatechange = function(){
+    if(ajaxRequest.readyState == 4){
+    var resp = ajaxRequest.responseText;
+    a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+    a.document.write(resp);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
 </script>
 
 

@@ -1194,7 +1194,10 @@ public function create_movement(){
 
 	$data['title'] = 'Create Movement | '.$this->Xin_model->site_title();
 	$data['breadcrumbs'] = 'Create Movement';
-	$data['users'] = $this->db->select('first_name,last_name,user_id')->where_in('status',[1,4,5])->get('xin_employees')->result();
+	$data['users'] = $this->db->select('xin_employees.first_name,xin_employees.last_name,xin_employees.user_id')
+						  ->from('xin_employees')
+						  ->where_in('.xin_employees.status',[1,4,5])
+						  ->get()->result();
 	$data['get'] = $this->Inventory_model->movement_list();
 	// dd($data['get']);
 	$data['subview'] = $this->load->view("admin/inventory/create_movement", $data, TRUE);

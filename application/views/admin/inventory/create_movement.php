@@ -1,3 +1,11 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    $(document).ready(function(){
+        // alert('sa');
+        $('#emp_ids').select2();
+    });
+</script>
+
 <?php $attributes = array('id' => 'product-form', 'autocomplete' => 'off', 'class' => 'm-b-1 add');?>
 <?php $hidden = $session?>
 <?php echo form_open('admin/inventory/move_create', $attributes,$hidden);?>
@@ -23,9 +31,14 @@
         <div class="col-md-5">
             <div class="form-group">
                 <label>Employee<i class="hrsale-asterisk" style="color:red !important">*</i></label>
-                <select class="form-control" name="emp_id" id="emp_id" required>
+                <select class="select2 form-control " name="emp_id" id="emp_id" required>
                     <option value="">Select Employee</option>
-                    <?php foreach ($users as $rows) { ?>
+                    <?php foreach ($users as $rows) { 
+                          $data = $this->db->select('user_id')->where('status',2)->get('move_list')->row();
+                          if($rows->user_id == $data->user_id){
+                                continue;
+                          }
+                    ?>
                         <option  value="<?= $rows->user_id?>"><?= $rows->first_name.' '.$rows->last_name?></option>
                     <?php } ?>
                 </select>

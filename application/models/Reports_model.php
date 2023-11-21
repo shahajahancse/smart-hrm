@@ -343,6 +343,7 @@ class Reports_model extends CI_Model {
     }
 
    	public function get_product_reports_info($first_date=null,$second_date=null,$status,$emp_id){
+		// dd($status);
         $this->db->select(' 
                     ap.id as a_id,
                     ap.cat_id,
@@ -378,12 +379,58 @@ class Reports_model extends CI_Model {
             $this->db->where('ap.status',4);
         	$this->db->order_by('ap.id',"ASC");
         }else{
-			$this->db->where('ap.cat_id',$status  );
+			$this->db->where('ap.cat_id',$status);
         	$this->db->order_by('ap.id',"ASC");
 		}
 		 
         $this->db->order_by('ap.status',"ASC");
         $this->db->group_by('ap.id');
+        return $this->db->get()->result();  
+    }
+   	public function show_move_report($first_date=null,$second_date=null,$status,$emp_id){
+		// dd($status);
+
+		$this->db->select('move_list.*');
+		$this->db->select(' 
+			xin_employees.first_name,
+			xin_employees.last_name,
+			move_list.*,
+			product_accessories_model.model_name,
+			product_accessory_categories.cat_name,
+			product_accessory_categories.cat_short_name,
+			product_accessories.device_name_id,
+			xin_departments.department_name,
+			xin_designations.designation_name,
+        ');
+        $this->db->from('move_list');
+        $this->db->join('xin_employees', 'xin_employees.user_id = move_list.user_id', 'left');
+        $this->db->join('product_accessories_model',  'product_accessories_model.id = move_list.device_id', 'left');
+        $this->db->join('product_accessory_categories', 'product_accessories_model.cat_id = product_accessory_categories.id', 'left');
+        $this->db->join('product_accessories', 'product_accessories.device_model = move_list.device_id', 'left');
+        $this->db->join('xin_departments', 'xin_departments.department_name = xin_employees.department_id', 'left');
+        $this->db->join('xin_designations', 'xin_designations.designation_name = xin_employees.designation_id', 'left');
+		$this->db->where_in('product_accessories.status',5);
+
+        // $this->db->join('move_list', 'move_list.user_id = ap.user_id', 'left');
+		if($status == 'daily'){
+			$this->db->where('move_list.created_at',$first_date);
+		}	
+		if($status == 'weekly'){
+			$second_date = date('Y-m-d',strtotime('+6 days'.$first_date));
+        	$this->db->where('move_list.created_at between  "' . $first_date . '" AND "' . $second_date . '"');
+        }
+		if($status == 'weekly'){
+        	$this->db->where('move_list.created_at between  "' . $first_date . '" AND "' . $second_date . '"');
+        }
+		// else if($status == 'monthly'){
+        //     $this->db->where('ap.status',2);
+        // 	$this->db->order_by('ap.id',"ASC");
+        // }
+		 
+        $this->db->order_by('move_list.created_at',"ASC");
+        // $this->db->group_by('ap.id');
+        // $data = $this->db->get()->result();
+	    // dd($data);
         return $this->db->get()->result();  
     }
 	
