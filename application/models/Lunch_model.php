@@ -187,9 +187,8 @@ class Lunch_model extends CI_Model {
         return $query->result();
     }
 
-    public function paymentreport($status)
+    public function paymentreport($status = null)
     {
-
         $last_prement= $this->db->query("SELECT * FROM `lunch_payment` ORDER BY id DESC LIMIT 1")->row();
         
         $this->db->select('xin_employees.first_name, xin_employees.last_name, lunch_payment.*');
