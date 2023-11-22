@@ -51,13 +51,17 @@
                 </tr>
             </thead>
             <tbody style="text-align: center;">
-                <?php  $totalamount=0; $previouspay=0; $total_cl_ml=0;
+            <?php  $totalamount=$previouspay=$total_cl_ml=$total_probable_meal=$total_stock=$totalbalacemeal=0;
                 foreach ($lunch_data as $key=>$employee):  
                     $pbm = ($employee->prev_amount/45);
 
                     $total_cl_ml += ($employee->collection_amount/45);
                     $totalamount += $employee->collection_amount;
                     $previouspay+=$employee->prev_pay;
+
+                    $total_probable_meal += $employee->probable_meal;
+                    $total_stock += $employee->stock_meal;
+                    $totalbalacemeal += $employee->probable_meal-$pbm;
                     ?>
 
                 <tr>
@@ -76,7 +80,10 @@
             </tbody>
             <tfoot style="text-align: center;font-weight: bold;">
                 <tr>
-                    <td style="text-align: center; margin-right: 5px;" colspan="5">Total</td>
+                    <td style="text-align: center; margin-right: 5px;" colspan="2">Total</td>
+                    <td colspan="1"><?= $total_probable_meal ?></td>
+                    <td colspan="1"><?= $total_stock ?></td>
+                    <td colspan="1"><?= $totalbalacemeal ?></td>
                     <td colspan="1"><?= $total_cl_ml ?></td>
                     <td colspan="1"><?= $totalamount ?></td>
                 </tr>
