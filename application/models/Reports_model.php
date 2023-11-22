@@ -388,9 +388,6 @@ class Reports_model extends CI_Model {
         return $this->db->get()->result();  
     }
    	public function show_move_report($first_date=null,$second_date=null,$status,$emp_id){
-		// dd($status);
-
-		$this->db->select('move_list.*');
 		$this->db->select(' 
 			xin_employees.first_name,
 			xin_employees.last_name,
@@ -407,30 +404,48 @@ class Reports_model extends CI_Model {
         $this->db->join('product_accessories_model',  'product_accessories_model.id = move_list.device_id', 'left');
         $this->db->join('product_accessory_categories', 'product_accessories_model.cat_id = product_accessory_categories.id', 'left');
         $this->db->join('product_accessories', 'product_accessories.device_model = move_list.device_id', 'left');
-        $this->db->join('xin_departments', 'xin_departments.department_name = xin_employees.department_id', 'left');
-        $this->db->join('xin_designations', 'xin_designations.designation_name = xin_employees.designation_id', 'left');
+        $this->db->join('xin_departments','xin_departments.department_id = xin_employees.department_id');
+        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
 		$this->db->where_in('product_accessories.status',5);
-
-        // $this->db->join('move_list', 'move_list.user_id = ap.user_id', 'left');
-		if($status == 'daily'){
+        if($status == 'daily'){
 			$this->db->where('move_list.created_at',$first_date);
 		}	
 		if($status == 'weekly'){
 			$second_date = date('Y-m-d',strtotime('+6 days'.$first_date));
         	$this->db->where('move_list.created_at between  "' . $first_date . '" AND "' . $second_date . '"');
         }
-		if($status == 'weekly'){
-        	$this->db->where('move_list.created_at between  "' . $first_date . '" AND "' . $second_date . '"');
+		if($status == 'monthly'){
+			$this->db->where('move_list.created_at between  "' . $first_date . '" AND "' . $second_date . '"');
         }
-		// else if($status == 'monthly'){
-        //     $this->db->where('ap.status',2);
-        // 	$this->db->order_by('ap.id',"ASC");
-        // }
-		 
         $this->db->order_by('move_list.created_at',"ASC");
-        // $this->db->group_by('ap.id');
-        // $data = $this->db->get()->result();
-	    // dd($data);
+        return $this->db->get()->result();  
+    }
+
+	   	public function show_mobile_bill_report($first_date=null,$second_date=null,$status,$emp_id){
+		$this->db->select(' 
+			xin_employees.first_name,
+			xin_employees.last_name,
+			xin_departments.department_name,
+			xin_designations.designation_name,
+			mobile_bill_requisition.*
+        ');
+        $this->db->from('xin_employees');
+        $this->db->join('xin_departments','xin_departments.department_id = xin_employees.department_id');
+        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+        $this->db->join('mobile_bill_requisition', 'mobile_bill_requisition.user_id = xin_employees.user_id');
+		$this->db->where_in('xin_employees.status',[1,4,5]);
+		if($status == 1){
+			$this->db->where('mobile_bill_requisition.created_at between  "' . $first_date . '" AND "' . $second_date . '"');
+			$this->db->where('mobile_bill_requisition.status',1);
+		}	
+		if($status == 2){
+			$this->db->where('mobile_bill_requisition.created_at between  "' . $first_date . '" AND "' . $second_date . '"');
+			$this->db->where('mobile_bill_requisition.status',2);
+		}
+		if($status == 3){
+			$this->db->where('mobile_bill_requisition.created_at between  "' . $first_date . '" AND "' . $second_date . '"');
+			$this->db->where('mobile_bill_requisition.status',3);
+		}
         return $this->db->get()->result();  
     }
 	

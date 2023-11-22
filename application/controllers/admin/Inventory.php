@@ -1285,10 +1285,9 @@ function free_device($id){
 	$free_device = $this->db->select('user_id,device_id')->where('id',$id)->get('move_list')->row();
 
 	$this->db->where('user_id',$free_device->user_id)->where('device_model',$free_device->device_id)->update('product_accessories', ['move_status' => 1]);
-	$this->db->where('user_id',$free_device->user_id)->where('device_id',$free_device->device_id)->update('move_list', ['status' => 1]);
+	$this->db->where('user_id',$free_device->user_id)->where('device_id',$free_device->device_id)->update('move_list', ['status' => 1,'close_time'=>date('Y-m-d H:i:s')]);
 					 
 	if($free_device){
-			// dd($this->db->last_query());
 			$this->session->set_flashdata('success', 'Device Successfully Free');
 			redirect('admin/inventory/moves','refresh');
 	}else{

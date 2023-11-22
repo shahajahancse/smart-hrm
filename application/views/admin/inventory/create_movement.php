@@ -31,7 +31,7 @@
         <div class="col-md-5">
             <div class="form-group">
                 <label>Employee<i class="hrsale-asterisk" style="color:red !important">*</i></label>
-                <select class="select2 form-control " name="emp_id" id="emp_id" required>
+                <select class="select2 form-control " name="emp_id" id="emp_ids" required>
                     <option value="">Select Employee</option>
                     <?php foreach ($users as $rows) { 
                           $data = $this->db->select('user_id')->where('status',2)->get('move_list')->row();

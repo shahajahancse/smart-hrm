@@ -48,6 +48,7 @@
       <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#tab1">Inventory Report</a></li>
         <li><a data-toggle="tab" href="#tab2">Movement Report</a></li>
+        <li><a data-toggle="tab" href="#tab3">Mobile Bill Report</a></li>
       </ul>
 
       <div class="tab-content">
@@ -62,14 +63,19 @@
               <option value="<?php echo $category->id?>" onclick="show_report(2)"><?php echo $category->cat_name?></option>
               <?php }?>
           </select>
-          <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('using')">Employee using device</button><br><br>
-          <button class="btn btn-sm btn-success" onclick="show_report('store')">Stored Report</button>
-          <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('damage')">Damaged Report</button>
+            <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('using')">Employee using device</button><br><br>
+            <button class="btn btn-sm btn-success" onclick="show_report('store')">Stored Report</button>
+            <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('damage')">Damaged Report</button>
         </div>
         <div id="tab2" class="tab-pane fade"  style="margin-top:20px">
-        <button class="btn btn-sm btn-success" onclick="move_report('daily')">Daily Report</button>
-        <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="move_report('weekly')">Weekly Report</button>
-        <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="move_report('monthly')">Monthly Report</button>
+          <button class="btn btn-sm btn-success" onclick="move_report('daily')">Daily Report</button>
+          <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="move_report('weekly')">Weekly Report</button>
+          <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="move_report('monthly')">Continuous  Report</button>
+        </div>
+        <div id="tab3" class="tab-pane fade"  style="margin-top:20px">
+          <button class="btn btn-sm btn-success" onclick="mobile_bill_report(1)">Pending Report</button>
+          <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="mobile_bill_report(2)">Approved Report</button>
+          <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="mobile_bill_report(3)">Reject  Report</button>
         </div>
       </div>
     </div>
@@ -86,7 +92,6 @@
       </table>
     </div>
   </div>
-
 </div>
 
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
@@ -170,14 +175,19 @@ function move_report(r){
   var checkboxes = document.getElementsByName('select_emp_id[]');
   var sql = get_checked_value(checkboxes);
 
-  if(status =='' && r =='using'){
+  if(status =='' && (r =='daily' || r =='monthly' || r =='weekly')){
     alert('Please select status');
     return ;
   }
-  if(status !='' && r =='using' && sql ==''){
+  if(status !='' &&(r =='daily' || r =='monthly' || r =='weekly') && sql ==''){
     alert('Please select employee id');
     return ;
   }
+  if(r =='monthly' && second_date ==''){
+    alert('Please select second date');
+    return ;
+  }
+
 
   var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql;
   url = base_url + "/show_move_report";
@@ -195,6 +205,42 @@ function move_report(r){
 
 
 
+function mobile_bill_report(r){
+  var ajaxRequest;  // The variable that makes Ajax possible!
+  ajaxRequest = new XMLHttpRequest();
+  var status = $('#status').val();
+  var first_date = $('#process_date').val();
+  var second_date = $('#second_date').val();
+  var checkboxes = document.getElementsByName('select_emp_id[]');
+  var sql = get_checked_value(checkboxes);
+
+  if(status =='' && (r ==1 || r ==2 || r ==3)){
+    alert('Please select status');
+    return ;
+  }
+  if(status !='' &&(r ==1 || r ==2 || r ==3) && sql ==''){
+    alert('Please select employee id');
+    return ;
+  }
+  if(second_date =='' && (r ==1 || r ==2 || r ==3)){
+    alert('Please select second date');
+    return ;
+  }
+
+
+  var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql;
+  url = base_url + "/show_mobile_bill_report";
+  ajaxRequest.open("POST", url, true);
+  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+  ajaxRequest.send(data);
+  ajaxRequest.onreadystatechange = function(){
+    if(ajaxRequest.readyState == 4){
+    var resp = ajaxRequest.responseText;
+    a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+    a.document.write(resp);
+    }
+  }
+}
 
 
 
