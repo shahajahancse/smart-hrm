@@ -89,7 +89,7 @@ $(function() {
                 <thead>
                     <tr>
                         <th class="text-center" style="width:20px;">No.</th>
-                        <?php if($user_role_id==1){?>
+                        <?php if($user_role_id==1 || $user_role_id==2){?>
                         <th class="text-center">Requisition By</th>
                         <?php }?>
                         <th class="text-center">Product Name</th>

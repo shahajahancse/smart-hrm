@@ -1402,7 +1402,7 @@ public function mobile_bill(){
 		}
 	}
 	public function mobile_bill_hand_over($id){
-		// dd($_POST);
+		// dd($id);
 		$update = $this->db->where('id',$id)->update('mobile_bill_requisition',['status'=>4]);
 		if($update){
 			$this->session->set_flashdata('success', 'Successfully Amount Deliver');

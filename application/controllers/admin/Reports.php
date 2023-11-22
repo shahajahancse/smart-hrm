@@ -1214,7 +1214,6 @@ class Reports extends MY_Controller
 	  echo json_encode($output);
 	  exit();
      }
-	 
 	 public function employee_leave_list() {
 
 		$data['title'] = $this->Xin_model->site_title();
@@ -1303,7 +1302,6 @@ class Reports extends MY_Controller
 			redirect('admin/');
 		}
 	}
-	
 	public function get_employeess(){
 
         $status = $this->input->get('status');
@@ -1384,7 +1382,6 @@ class Reports extends MY_Controller
 			}
 		}
     }
-
 	public function show_late_report(){
 		// $report_date = ;
 		// dd($_POST);
@@ -1464,7 +1461,6 @@ class Reports extends MY_Controller
 		$data['reports']     = $this->Reports_model->show_mobile_bill_report($first_date,$second_date,$status,$emp_id);
 		$this->load->view('admin/reports/show_mobile_bill_report',$data);
 	}
-
 	public function issue_report(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -1475,7 +1471,6 @@ class Reports extends MY_Controller
 		$data['subview']     = $this->load->view('admin/reports/issue_report',$data,true);
 		$this->load->view('admin/layout/layout_main', $data);
 	}
-
 	public function issuee_report(){
 		$sql = $this->input->post('sql');
         $status = $this->input->post('status');
@@ -1492,7 +1487,6 @@ class Reports extends MY_Controller
 		// dd($data);
 		$this->load->view('admin/reports/issuees_report',$data);
 	}
-
 	public function lunch_report_all() {
 		$session = $this->session->userdata('username');
         if (empty($session)) {
@@ -1537,7 +1531,6 @@ class Reports extends MY_Controller
 		$data['subview'] = $this->load->view("admin/reports/store_report", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); 
     }
-
 	public function item_wise_report(){
 		// dd($_POST);
 		$session = $this->session->userdata('username');
@@ -1552,7 +1545,6 @@ class Reports extends MY_Controller
 		$data['results'] = $this->Inventory_model->product_details($id,$first_date,$second_date);
 		$this->load->view("admin/reports/item_wise_report", $data);
     }
-
 	public function inventory_status_report($exc=null){
 		$first_date = $this->input->post('first_date');
 		$second_date = $this->input->post('second_date');
@@ -1573,7 +1565,6 @@ class Reports extends MY_Controller
 			}
 		}
 	}
-
 	public function perches_status_report($exc=null){            
 		$first_date = $this->input->post('first_date');
 		$second_date = $this->input->post('second_date');
@@ -1595,7 +1586,6 @@ class Reports extends MY_Controller
 			}
 		}
 	}
-
 	public function low_inv_all_product_status_report($exc=null){
 		$statusC=$this->input->post('statusC');
 		if($statusC==7){
@@ -1627,7 +1617,6 @@ class Reports extends MY_Controller
 			}
 		}	   
 	}
-
 	public function leave_application($exl=null){
 		// dd($_POST);
 		$session = $this->session->userdata('username');
