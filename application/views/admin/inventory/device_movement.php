@@ -1,10 +1,41 @@
+
 <?php
-// dd($session); 
+$this_month_first_date = date('Y-m-01');
+$today_date = date('Y-m-d');
+$last_seven_days = date('Y-m-d', strtotime('-1 week'));
+$last_month = date('Y-m-d', strtotime('-2 month'));
+$this_month = date('Y-m-1');
 $session = $this->session->userdata('username');
-$using_list = $this->db->select('COUNT(user_id) as using_list')->where('user_id',$session['user_id'])->get('product_accessories')->row()->using_list;
-$requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(status) as status')->where('user_id',$session['user_id'])->get('products_requisition_details')->row();
-// dd($requisition_list);
+$requisition_list = $this->db->get('move_list')->result();
+
+$today_data = array_filter($requisition_list, function ($item) use ($today_date) {
+    $created_at = date('Y-m-d', strtotime($item->created_at));
+    return $created_at == $today_date;
+});
+
+
+$last_seven_data = array_filter($requisition_list, function ($item) use ($last_seven_days, $today_date) {
+    $created_at = date('Y-m-d', strtotime($item->created_at));
+    return ($created_at >= $last_seven_days) && ($created_at <= $today_date);
+});
+
+
+$last_month_data = array_filter($requisition_list, function ($item) use ($last_month, $this_month_first_date) {
+    $created_at = date('Y-m-d', strtotime($item->created_at));
+    return ($created_at >= $last_month) && ($created_at <$this_month_first_date);
+});
+
+
+$this_month_data = array_filter($requisition_list, function ($item) use ($this_month,$today_date) {
+    $created_at = date('Y-m-d', strtotime($item->created_at));
+    return ($created_at >= $this_month) && ($created_at <= $today_date);
+});
+
 ?>
+
+
+
+
 
 <style>
 .btn.active {
@@ -57,21 +88,21 @@ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(statu
         
     <div class="divrow " style="margin-bottom: 27px;">
         <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
-            <div class="h5">Total Request</div>
-            <div class="h5"><?= $using_list ?></div>
+            <div class="h5">Today's</div>
+            <div class="h5"><?= count($today_data) ?></div>
         </div>
 
         <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
-            <div class="h5">Using Device</div>
-            <div class="h5"><?= $requisition_list->using_list  ?></div>
+            <div class="h5">Last 7days</div>
+            <div class="h5"><?= count($last_seven_data)  ?></div>
         </div>
         <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">
-            <div class="h5">Unusing Device</div>
-            <div class="h5"><?=  0 ?></div>
+            <div class="h5">This Month</div>
+            <div class="h5"><?= count($this_month_data) ?></div>
         </div>
         <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
-            <div class="h5">Pending Items</div>
-            <div class="h5"><?= $requisition_list->status ?></div>
+            <div class="h5">Last Month</div>
+            <div class="h5"><?=  count($last_month_data) ?></div>
         </div>
     </div>
 
