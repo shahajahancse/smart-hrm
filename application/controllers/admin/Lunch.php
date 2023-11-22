@@ -825,7 +825,7 @@ class Lunch extends MY_Controller
         $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
         $data['first_date']=$result->end_date;
         $data['second_date']=$result->next_date;
-        $data['empdata'] = $this->Lunch_model->paymentreport();
+        $data['empdata'] = $this->Lunch_model->paymentreport(2);
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Lunch';
         $data['path_url'] = 'lunch';
