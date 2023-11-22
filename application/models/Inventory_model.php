@@ -283,12 +283,14 @@ class inventory_model extends CI_Model
 	public  function req_purchase_details($id){
 		// dd($id);
 		$this->db->select(" 
+			product_unit.unit_name,
 			products.product_name,
 			products_purches_details.quantity,
 			products_purches_details.ap_quantity,
 		")
 		->from("products")	
 		->join("products_purches_details","products.id = products_purches_details.product_id")	
+		->join("product_unit","product_unit.id = products.unit_id")	
 		->where("products_purches_details.id = $id");
 		return $this->db->get()->row();
 	}

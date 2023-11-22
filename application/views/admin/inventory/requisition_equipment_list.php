@@ -22,8 +22,8 @@
             <td><?php echo $rows->first_name." ".$rows->last_name; ?></td>
             <td><?php echo $rows->category_name?></td>
             <td><?php echo $rows->product_name; ?></td>
-            <td><?php echo $rows->quantity; ?></td>
-            <td><?php echo $rows->approved_qty; ?></td>
+            <td><?php echo intval( $rows->quantity).' '.$rows->unit_name; ?></td>
+            <td><?php echo intval($rows->approved_qty).' '.$rows->unit_name; ?></td>
             <td>
               <?php echo $rows->status == 5 ? "<span class='using' style='color:#28a745'>First Step Approved</span>" : ($rows->status == 1 ? "<span class='using' style='color:#ffc107'> <i class='fa fa-dot-circle-o'></i> Pending</span>" : ($rows->status == 2 ? "<span class='using' style='color:#28a745'> <i class='fa fa-dot-circle-o'></i> Approved</span>" : ($rows->status == 3 ? "<span class='using' style='color:#087a58'> <i class='fa fa-dot-circle-o'></i> Handover</span>" : "<span class='using' style='color:#d56666'> <i class='fa fa-dot-circle-o'></i> Rejected</span>"))); ?>
             </td>

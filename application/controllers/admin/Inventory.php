@@ -1342,13 +1342,14 @@ public function mobile_bill(){
 			redirect('admin/');
 		}
 		$data['session']    = $session;
-		$this->db->select('products_requisition_details.*, xin_employees.first_name, xin_employees.last_name,products_categories.category_name,products.product_name');
+		$this->db->select('product_unit.unit_name,products_requisition_details.*, xin_employees.first_name, xin_employees.last_name,products_categories.category_name,products.product_name');
 		$this->db->from('products_requisition_details');
 		$this->db->join('products_categories', 'products_categories.id = products_requisition_details.cat_id');
 		$this->db->join('products', 'products.id = products_requisition_details.product_id');
+		$this->db->join('product_unit', 'product_unit.id = products.unit_id');
 		$this->db->join('xin_employees', 'products_requisition_details.user_id = xin_employees.user_id');
 		$data['equipments'] = $this->db->get()->result();
-		// dd();
+		// dd($data);
 		$this->load->view("admin/inventory/requisition_equipment_list", $data);
 	}
 

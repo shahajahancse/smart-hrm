@@ -113,8 +113,8 @@ $(function() {
                         // dd($data);
                         ?>
                         <td class="text-center"><?php echo $data->product_name ?></td> 
-                        <td class="text-center"><?php echo $data->quantity ?></td>
-                        <td class="text-center"><?php echo  $data->ap_quantity ?></td>
+                        <td class="text-center"><?php echo intval($data->quantity).' '.$data->unit_name ?></td>
+                        <td class="text-center"><?php echo  intval($data->ap_quantity).' '.$data->unit_name ?></td>
                         <td class="text-center">
                             <?php echo $rows->status == 1 ?"<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>": ($rows->status == 2 ?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Deliver</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>")); ?>
                         </td>
