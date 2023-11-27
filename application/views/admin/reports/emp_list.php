@@ -4,7 +4,7 @@
 <?php  $this->load->view('admin/head_bangla'); ?>
 
 <h4 class="text-center">Report of Employee List</h4>
-<table class="table table-striped table-bordered table-responsive">
+<table class="table  table-bordered table-responsive">
     <thead style="font-size:12px;" >
         <tr>
             <th class="text-center">S.N</th>
@@ -53,19 +53,26 @@
             <?php }?>
             <td><?= $value->date_of_joining?></td>
             <?php 
-                $years = floor($value->duration / 365); 
-                $remainingDays = $value->duration % 365;
-                $months = floor($remainingDays / 30); 
-                $remainingDays = $remainingDays % 30;
+              
+
+                $date1 = new DateTime($value->date_of_joining); // replace with your start date
+                $date2 = new DateTime(); // replace with your end date, or use new DateTime('2023-11-26') for the current date
+
+                $interval = date_diff($date1, $date2);
             ?>
-            <td><?= ($years == 0 ? '': $years.' years ').$months.' months '. $remainingDays.' days'?></td>
+            <td><?= ($interval->y == 0 ? '':$interval->y.' years ').$interval->m.' months '.$interval->d.' days'?></td>
             <td><?= date('Y-m-d',strtotime('-1 year'.$value->next_incre_date))?></td>
             <td><?= $value->next_incre_date?></td>
             <td><?= $value->user_password?></td>
             <td>
-                <?php $i=1; foreach ($query as $key => $value) {?>
-                    <?= $i++.'. '.$value->model_name.' '.$value->cat_name.' '.$value->cat_short_name.'-'.$value->device_name_id.'<br>'?>
-               <?php }?>
+                <table>
+                    <?php $i=1; foreach ($query as $key => $value) {?>
+                        <tr>                
+                            <td style="white-space:nowrap;font-size:12px;"><?= $i++.'. '.$value->model_name.' '.$value->cat_name.' '.$value->cat_short_name.'-'.$value->device_name_id.'<br>'?></td>
+                        </tr>
+                    <?php }?>
+                </table>
+
             </td>
         </tr>
         <?php }?>
