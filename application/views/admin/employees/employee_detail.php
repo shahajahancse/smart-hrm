@@ -310,7 +310,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                 <input class="form-control date" readonly placeholder="<?php echo $this->lang->line('xin_employee_dob');?>" name="date_of_birth" type="text" value="<?php echo $date_of_birth;?>">
                               </div>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-4">
                               <div class="form-group">
                                 <label for="xin_hr_leave_cat"><?php echo $this->lang->line('xin_hr_leave_cat');?></label>
                                 <input type="hidden" name="leave_categories[]" value="0" />
@@ -321,8 +321,18 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                 </select>
                               </div>
                             </div>
+
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label for="email" class="control-label">Give Letter</label>
+                                <select class="form-control" name="letter_status" data-plugin="select_hrm">
+                                    <option value="0" <?php echo ($letter_status == 0) ? 'selected' : ''; ?> >No</option>
+                                    <option value="1" <?php echo ($letter_status == 1) ? 'selected' : ''; ?> >Yes</option>
+                                </select>
+                              </div>
+                            </div>
                           </div>
-                          <div class="row">  
+                          <!-- <div class="row">  
                             <div class="col-md-12">
                               <div class="form-group">
                                <input type="hidden" value="0" name="view_companies_id[]" />
@@ -335,8 +345,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                 </select>
                               </div>
                             </div>
-                          </div>  
-                            <div class="row">
+                          </div>   -->
+                            <!-- <div class="row">
                             <div class="col-md-4">
                               <div class="form-group">
                                 <label for="estate"><?php echo $this->lang->line('xin_state');?></label>
@@ -355,10 +365,10 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                 <input class="form-control" placeholder="<?php echo $this->lang->line('xin_zipcode');?>" name="ezipcode" type="text" value="<?php echo $zipcode;?>">
                               </div>
                             </div>
-                          </div>
+                          </div> -->
                           <div class="row">
                             <?php $ethnicity_type = $this->Xin_model->get_ethnicity_type();?>
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                               <div class="form-group">
                                 <label for="email" class="control-label"><?php echo $this->lang->line('xin_ethnicity_type_title');?></label>
                                 <select class="form-control" name="ethnicity_type" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_ethnicity_type_title');?>">
@@ -368,34 +378,20 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                   <?php } ?>
                                 </select>
                               </div>
-                            </div>
-                            <div class="col-md-8">
+                            </div> -->
+                            <div class="col-md-6">
                               <div class="form-group">
                                 <label for="address">Present Address</label>
                                 <input type="text" class="form-control" placeholder="Present Address" name="address" value="<?php echo $address;?>" />
                               </div>
                             </div>
-                          </div>  
-                          <div class="row">
 
-                            <div class="col-md-4">
-                              <div class="form-group">
-                                <label for="email" class="control-label">Give Letter</label>
-                                <select class="form-control" name="letter_status" data-plugin="select_hrm">
-                                    <option value="0" <?php echo ($letter_status == 0) ? 'selected' : ''; ?> >No</option>
-                                    <option value="1" <?php echo ($letter_status == 1) ? 'selected' : ''; ?> >Yes</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                               <div class="form-group">
                                 <label for="address">Permanent Address</label>
                                 <input type="text" class="form-control" placeholder="Permanent Address" name="per_address" value="<?php echo $per_address;?>" />
                               </div>
                             </div> 
-
-
-
                           </div>  
                           </div>
                           <?php $module_attributes = $this->Custom_fields_model->all_hrsale_module_attributes();?>

@@ -2149,13 +2149,11 @@ class Employees extends MY_Controller {
 					$tmp_name = $_FILES["p_file"]["tmp_name"];
 					$profile = "uploads/profile/";
 					$set_img = base_url()."uploads/profile/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
 					$name = basename($_FILES["p_file"]["name"]);
 					$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
 					move_uploaded_file($tmp_name, $profile.$newfilename);
 					$fname = $newfilename;
-			}
+				}
 		}else{
 			$fname = '';
 		}

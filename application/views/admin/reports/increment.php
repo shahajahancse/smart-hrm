@@ -36,11 +36,10 @@
             <th class="text-center">Designation</th>
             <th class="text-center">Department</th>
             <th class="text-center">Joining Date</th>
-            <th class="text-center">Probation Preiod</th>
+            <!-- <th class="text-center">Probation Preiod</th> -->
             <th class="text-center">Last Increment Date</th>
-
             <th class="text-center">Increment</th>
-            <th class="text-center">Position Change</th>
+            <!-- <th class="text-center">Position Change</th> -->
             <th class="text-center">Next Increment</th>
             <th class="text-center">Job Duration</th>
         </tr>
@@ -55,19 +54,15 @@
             <td><?= $value->department_name?></td>
             <td><?= $value->designation_name?></td>
             <td><?= $value->date_of_joining?></td>
-            <td><?= '-'?></td>
             <td><?= $value->last_incre_date?></td>
-            <?php  $inc_ammount = $this->db->select('old_salary,new_salary')->where('emp_id',$value->user_id)->get('xin_employee_incre_prob')->row();?>
-            <td><?= !empty($inc_ammount) ? ($inc_ammount->new_salary - $inc_ammount->old_salary) : '-'?></td>
-            <td><?= '-'?></td>
-            <td><?= $value->next_incre_date?></td>
+            <td><?= $value->new_salary - $value->old_salary?></td>
+            <td><?= date('Y-m-d',strtotime('+1 days'.$value->next_incre_date))?></td>
             <?php 
-                $years = floor($value->duration / 365); 
-                $remainingDays = $value->duration % 365;
-                $months = floor($remainingDays / 30); 
-                $remainingDays = $remainingDays % 30;
+                $date1 = new DateTime($value->date_of_joining);
+                $date2 = new DateTime();
+                $interval = date_diff($date1, $date2);
             ?>
-            <td><?= ($years == 0 ? '': $years.' years ').$months.' months '. $remainingDays.' days'?></td>
+            <td><?= ($interval->y == 0 ? '':$interval->y.' years ').$interval->m.' months '.$interval->d.' days'?></td>
         </tr>
         <?php }?>
     </tbody>

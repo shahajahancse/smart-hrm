@@ -216,6 +216,8 @@ class Reports_model extends CI_Model {
 			xin_employees.password,
             xin_employees.user_password,
 			xin_employees.basic_salary,
+			xin_employee_incre_prob.old_salary,
+			xin_employee_incre_prob.new_salary,
 			xin_employee_incre_prob.effective_date as last_incre_date,
 			xin_employees.notify_incre_prob as next_incre_date,
 			xin_employees.date_of_joining,
@@ -224,9 +226,9 @@ class Reports_model extends CI_Model {
 		->from('xin_employees')		
 		->join('xin_departments','xin_employees.department_id = xin_departments.department_id','left')		
 		->join('xin_designations','xin_employees.designation_id = xin_designations.designation_id','left')		
-		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.id','left')	
-		->where_in('xin_employees.user_id',$emp_ids);
-
+		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.emp_id','left');
+		$this->db->where_in('xin_employees.user_id',$emp_ids);
+		
 		if($status == 1){
 			$this->db->where_in('xin_employees.status',[1,4,5]);	
 			if($first_date != null && $second_date !=null){
@@ -234,10 +236,10 @@ class Reports_model extends CI_Model {
 			}
 			$this->db->order_by('xin_employees.date_of_joining','ASC');
 		}
-
+		
 		if(($first_date != null && $second_date !=null) && $status == 2){
+		
 			$this->db->where('xin_employees.notify_incre_prob between "' . $first_date . '" AND "' . $second_date . '"');
-			$this->db->order_by('xin_employees.notify_incre_prob','ASC');
 		}
 
 
@@ -254,8 +256,9 @@ class Reports_model extends CI_Model {
 			if($first_date != null && $second_date !=null){
 				$this->db->where('xin_employees.date_of_joining between "' . $first_date . '" AND "' . $second_date . '"');
 			}
-			$this->db->order_by('xin_employees.date_of_joining','ASC');
 		}
+		$this->db->group_by('xin_employees.user_id');
+		$this->db->order_by('xin_employee_incre_prob.effective_date','DESC');
 
 		$data = $this->db->order_by('xin_employees.date_of_joining','ASC')->get()->result();
 		// dd($data);

@@ -21,12 +21,12 @@
             <th class="text-center">Name</th>
             <th class="text-center">Designation</th>
             <th class="text-center">Department</th>
-            <th class="text-center">Internship Preiod</th>
+            <th class="text-center">Joining Date</th>
+            <th class="text-center">End Internship Date</th>
             <?php if($session['role_id']==1){?>
             <th class="text-center">Gross Salary</th>
             <?php }?>
-            <th class="text-center">Increment Amount</th>
-            <th class="text-center">Comments</th>
+            <th class="text-center">Duration</th>
         </tr>
     </thead>
     <tbody style="font-size:12px;" >
@@ -37,21 +37,19 @@
             <td><?= $value->department_name?></td>
             <td><?= $value->designation_name?></td>
             <td><?= $value->date_of_joining?></td>
+            <td><?= $value->next_incre_date?></td>
             <?php if($session['role_id']==1){?>
             <td><?= $value->basic_salary?></td>
             <?php }
                 $inc_ammount = $this->db->select('old_salary,new_salary')->where('emp_id',$value->user_id)->get('xin_employee_incre_prob')->row();
-                // dd($inc_ammount);
-            
             ?>
-            <td><?= !empty($inc_ammount) ? ($inc_ammount->new_salary - $inc_ammount->old_salary) : '-'?></td>
+            <!-- <td><?= !empty($inc_ammount) ? ($inc_ammount->new_salary - $inc_ammount->old_salary) : '-'?></td> -->
             <?php 
-                $years = floor($value->duration / 365); 
-                $remainingDays = $value->duration % 365;
-                $months = floor($remainingDays / 30); 
-                $remainingDays = $remainingDays % 30;
+                $date1 = new DateTime($value->date_of_joining);
+                $date2 = new DateTime();
+                $interval = date_diff($date1, $date2);
             ?>
-            <td><?= ($years == 0 ? '': $years.' years ').$months.' months '. $remainingDays.' days'?></td>
+            <td><?= ($interval->y == 0 ? '':$interval->y.' years ').$interval->m.' months '.$interval->d.' days'?></td>
         </tr>
         <?php }?>
     </tbody>
