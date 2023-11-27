@@ -67,9 +67,9 @@
 <?php
   $category_data = '';
   $category_data .= '<option value="">--Select One--</option>';
-  $i=1;
+
   foreach ($categorys as $key => $value) {
-    $category_data .= '<option value="'.$i++.'">'.$value->category_name.'</option>';
+    $category_data .= '<option value="'.$value->id.'">'.$value->category_name.'</option>';
   }
 ?>
 <script type="text/javascript">
