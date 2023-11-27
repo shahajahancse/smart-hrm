@@ -1366,7 +1366,21 @@ class Reports extends MY_Controller
         $data['emp_list'] =$this->Reports_model->show_report($emp_id,$status,$first_date,$second_date);
 		$data['status']=$status;
 		if($elc==1){
-			$this->load->view('admin/reports/incre_excel', $data);
+			if($status == 1){
+				$this->load->view('admin/reports/emp_list_excel', $data);
+			} 
+			if($status == 3){
+				$this->load->view('admin/reports/intern_excel', $data);
+			} 
+			if($status == 4){
+				$this->load->view('admin/reports/probation_excel', $data);
+			}
+			if($status == 2){
+				$this->load->view('admin/reports/incre_excel', $data);
+			}
+			if($status == 5){
+				$this->load->view('admin/reports/using_device_excel', $data);
+			}
 		}else{
 			if($status == 1){
 				$this->load->view('admin/reports/emp_list', $data);
@@ -1379,6 +1393,9 @@ class Reports extends MY_Controller
 			}
 			if($status == 2){
 				$this->load->view('admin/reports/increment', $data);
+			}
+			if($status == 5){
+				$this->load->view('admin/reports/using_device', $data);
 			}
 		}
     }

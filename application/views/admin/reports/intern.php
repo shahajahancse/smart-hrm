@@ -2,7 +2,17 @@
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_hrsale_custom.css">
 <body style="background:white">
 <?php  $this->load->view('admin/head_bangla'); ?>
-
+<div style="float: right;margin-top:30px">
+    <!-- <button class="btn btn-sm btn-primary" id="btn_print" onclick="window.print()">Print</button>    -->
+    <form style="float: right;"  action="<?php echo base_url('admin/reports/show_report/'); ?>" method="post">
+    <input type="hidden" name="first_date" value="<?php echo $first_date; ?>">
+    <input type="hidden" name="second_date" value="<?php echo $second_date; ?>">
+    <input type="hidden" name="status" value="<?php echo $status; ?>">
+    <input type="hidden" name="sql" value="<?php echo $sql; ?>">
+    <input type="hidden" name="elc" value="<?php echo $elc=1; ?>">
+    <button class="btn btn-sm btn-info" style="margin-right:15px" type="submit" id="excel">Excel</button>
+    </form>
+</div>
 <h4 class="text-center">Report of Employee Internship List</h4>
 <table class="table table-striped table-bordered">
     <thead style="font-size:12px;" >

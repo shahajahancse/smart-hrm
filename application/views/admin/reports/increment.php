@@ -37,6 +37,8 @@
             <th class="text-center">Department</th>
             <th class="text-center">Joining Date</th>
             <th class="text-center">Probation Preiod</th>
+            <th class="text-center">Last Increment Date</th>
+
             <th class="text-center">Increment</th>
             <th class="text-center">Position Change</th>
             <th class="text-center">Next Increment</th>
@@ -44,7 +46,9 @@
         </tr>
     </thead>
     <tbody style="font-size:12px;" >
-        <?php $i=1; foreach ($emp_list as $key => $value) {?>
+        <?php $i=1; foreach ($emp_list as $key => $value) {
+         
+            ?>
         <tr>
             <td><?= $i++?></td>
             <td><?= $value->first_name.' '.$value->last_name?></td>
@@ -52,6 +56,7 @@
             <td><?= $value->designation_name?></td>
             <td><?= $value->date_of_joining?></td>
             <td><?= '-'?></td>
+            <td><?= $value->last_incre_date?></td>
             <?php  $inc_ammount = $this->db->select('old_salary,new_salary')->where('emp_id',$value->user_id)->get('xin_employee_incre_prob')->row();?>
             <td><?= !empty($inc_ammount) ? ($inc_ammount->new_salary - $inc_ammount->old_salary) : '-'?></td>
             <td><?= '-'?></td>

@@ -57,6 +57,7 @@
                   <button class="btn btn-success btn-sm"  style="margin-right:10px" onclick="show_report(2)">Increment</button>
                   <button class="btn btn-success btn-sm" style="margin-right:10px" onclick="show_report(3)">Internship</button>
                   <button class="btn btn-success btn-sm" onclick="show_report(4)">Probation</button>
+                  <button class="btn btn-success btn-sm" onclick="show_report(5)">Using Device</button>
                 </div>
           </div>
           <div id="tab2" class="tab-pane fade">

@@ -50,6 +50,7 @@
               <th class="text-left">Product Name</th>
               <th class="text-left">Unit</th>
               <th class="text-left">Quantity</th>
+              <th class="text-left">Note</th>
               <th class="text-left">Action</th>
             </tr>
             <tr></tr>
@@ -98,6 +99,7 @@
           items+= '<td>'+unit_name+'</td>';
 
           items+= '<td><input name="quantity[]" style="width: 73px;" class="form-control input-sm" required /></td>';
+          items+= '<td><input name="note[]" style="width: 73px;" class="form-control input-sm" required /></td>';
 
           items+= '<td> <a class="label label-important text-danger" onclick="removeRow(this)"><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
           items+= '</tr>';

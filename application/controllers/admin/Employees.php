@@ -398,6 +398,7 @@ class Employees extends MY_Controller {
 				'new_salary' => $this->input->post('new_salary'),
 				'effective_date' => $this->input->post('effective_date'),
 				'status' => $this->input->post('status'),
+				'remark' => $this->input->post('remarks'),
 				'letter_status' => 0,
 			);
 		} else {
@@ -411,6 +412,7 @@ class Employees extends MY_Controller {
 				'new_salary' => $this->input->post('new_salary'),
 				'effective_date' => $this->input->post('effective_date'),
 				'status' => $this->input->post('status'),
+				'remark' => $this->input->post('remarks'),
 				'letter_status' => 0,
 			);
 		}
@@ -2157,6 +2159,28 @@ class Employees extends MY_Controller {
 		}else{
 			$fname = '';
 		}
+
+		if($_FILES['n_file']['size']!=0){
+			//checking image type
+			$allowed =  array('png','jpg','jpeg','pdf','gif');
+			$filename = $_FILES['n_file']['name'];
+			$ext = pathinfo($filename, PATHINFO_EXTENSION);
+			
+				if(in_array($ext,$allowed)){
+					
+					$tmp_name = $_FILES["n_file"]["tmp_name"];
+					$profile = "uploads/profile/";
+					$set_img = base_url()."uploads/profile/";
+					// basename() may prevent filesystem traversal attacks;
+					// further validation/sanitation of the filename may be appropriate
+					$name = basename($_FILES["n_file"]["name"]);
+					$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
+					move_uploaded_file($tmp_name, $profile.$newfilename);
+					$nname = $newfilename;
+			}
+		}else{
+			$nname = '';
+		}
 		$data = array(
 			'employee_id' => $employee_id,
 			'office_shift_id' => $this->input->post('office_shift_id'),
@@ -2184,6 +2208,7 @@ class Employees extends MY_Controller {
 			'is_active' => 1,
 			'leave_categories' => $cat_ids,
 			'profile_picture' => $fname,
+			'note_file' => $nname,
 			'created_at' => date('Y-m-d h:i:s')
 		);
 		// dd($data);

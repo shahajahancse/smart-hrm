@@ -514,12 +514,20 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="col-md-12">
+                                <div class="col-md-12" style="display:flex;flex-direction:row">
                                     <div class='form-group'>
                                         <fieldset class="form-group">
                                             <label for="logo">Profile Picture<i class="hrsale-asterisk"><span
                                                         style="color:red">*</span></i></label>
                                             <input type="file" class="form-control-file" id="p_file" name="p_file"
+                                                accept=".gif, .png, .jpg, .jpeg">
+                                            <small><?php echo $this->lang->line('xin_e_details_picture_type');?></small>
+                                        </fieldset>
+                                    </div>
+                                    <div class='form-group'>
+                                        <fieldset class="form-group">
+                                            <label for="logo">Note</label>
+                                            <input type="file" class="form-control-file" id="n_file" name="n_file"
                                                 accept=".gif, .png, .jpg, .jpeg">
                                             <small><?php echo $this->lang->line('xin_e_details_picture_type');?></small>
                                         </fieldset>

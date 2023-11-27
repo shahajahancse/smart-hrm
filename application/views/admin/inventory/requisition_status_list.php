@@ -69,6 +69,7 @@
               <th class="text-center" style="width:20px;">App_Qty</th>
               <th class="text-center" style="width:20px;">Status</th>
               <th class="text-center" style="width:20px;">Req_Date</th>
+              <th class="text-center" style="width:20px;">Note</th>
               <th class="text-center" style="width:50px;">Action</th>
           </tr>
         </thead>
@@ -84,6 +85,7 @@
                 <?php echo $rows->status == 5 ? "<span class='using' style='color:#28a745'>First Step Approved</span>" : ($rows->status == 1 ? "<span class='using' style='color:#ffc107'> <i class='fa fa-dot-circle-o'></i> Pending</span>" : ($rows->status == 2 ? "<span class='using' style='color:#28a745'> <i class='fa fa-dot-circle-o'></i> Approved</span>" : ($rows->status == 3 ? "<span class='using' style='color:#087a58'> <i class='fa fa-dot-circle-o'></i> Handover</span>" : "<span class='using' style='color:#d56666'> <i class='fa fa-dot-circle-o'></i> Rejected</span>"))); ?>    
               </td>
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
+              <td class="text-center"><?php echo $rows->note ?></td>
               <td class="text-center">
                 <div class="btn-group <?php echo $rows->status == 3?'d-hidden':''?>" >
                   <button type="button" class="btn btn-sm dropdown-toggle" style="background: transparent;box-shadow:none !important" data-toggle="dropdown">
