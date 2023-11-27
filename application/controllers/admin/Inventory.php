@@ -70,6 +70,7 @@ class Inventory extends MY_Controller {
 					'sub_cate_id'	   => $_POST['sub_cate_id'][$i],
 					'product_id'	   => $_POST['product_id'][$i],
 					'quantity'		   => $_POST['quantity'][$i],
+					'note'		   => $_POST['note'][$i],
 					'requisition_date' => $_POST['requisition_date'],
 					'status'		   => 1,
 					'created_at'     => date("y-m-d"),
