@@ -398,6 +398,7 @@ class Employees extends MY_Controller {
 				'new_salary' => $this->input->post('new_salary'),
 				'effective_date' => $this->input->post('effective_date'),
 				'status' => $this->input->post('status'),
+				'remark' => $this->input->post('remarks'),
 				'letter_status' => 0,
 			);
 		} else {
@@ -411,6 +412,7 @@ class Employees extends MY_Controller {
 				'new_salary' => $this->input->post('new_salary'),
 				'effective_date' => $this->input->post('effective_date'),
 				'status' => $this->input->post('status'),
+				'remark' => $this->input->post('remarks'),
 				'letter_status' => 0,
 			);
 		}

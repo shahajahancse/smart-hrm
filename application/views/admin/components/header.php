@@ -818,6 +818,12 @@ if($user[0]->user_role_id != 3) {
                             value="" />
                     </div>
                 </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <textarea name="remarks" style="width: 853px; height: 75px;"></textarea>
+                    </div>
+                </div>
 
                 <button id="button" class="btn btn-sm btn-primary pull-right "
                     style="margin-right:16px;margin-bottom:20px">Submit</button>
