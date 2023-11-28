@@ -13,7 +13,7 @@
     <button class="btn btn-sm btn-info" style="margin-right:15px" type="submit" id="excel">Excel</button>
     </form>
 </div>
-<h4 class="text-center">Report of Employee Probation Period List</h4>
+<h4 class="text-center">Report of Employee Probation Period List From <?php echo $first_date; ?> To <?php echo $second_date; ?></h4>
 <table class="table table-striped table-bordered">
     <thead style="font-size:12px;" >
         <tr>
@@ -22,7 +22,9 @@
             <th class="text-center">Designation</th>
             <th class="text-center">Department</th>
             <th class="text-center">Joining Date</th>
-            <th class="text-center">End Probation Date</th>
+            <th class="text-center">Probation Start</th>
+            <th class="text-center">Probation End </th>
+            <th class="text-center">Probation Period</th>
             <?php if($session['role_id']==1){?>
             <th class="text-center">Gross Salary</th>
             <?php }?>
@@ -38,12 +40,33 @@
             <td><?= $value->department_name?></td>
             <td><?= $value->designation_name?></td>
             <td><?= $value->date_of_joining?></td>
-            <?php 
-                $date4 = new DateTime($value->date_of_joining);
-                $date5 = new DateTime($value->next_incre_date);
-                $interval2 = date_diff($date5, $date4);
-            ?>
+            <td>
+                <?php 
+                $probationStart = $value->date_of_joining;
+                $this->db->where('emp_id', $value->user_id);
+                $this->db->where('status', 4);
+                $this->db->order_by('id', 'desc');
+                $this->db->limit(1);
+                $query = $this->db->get('xin_employee_incre_prob');
+                if ($query->num_rows() > 0) {
+                    $probationStart = $query->row()->effective_date;
+                }
+                ?>
+                <?= $probationStart?>
+            </td>
             <td><?= $value->next_incre_date?></td>
+            <td>
+                <?php
+                $joiningDate = new DateTime($probationStart);
+                $nextIncreDate = new DateTime($value->next_incre_date);
+                
+                $diff = $joiningDate->diff($nextIncreDate);
+                
+                $years = $diff->y;
+                $months = $diff->m;
+                $days = $diff->d;?>
+               <?=($years)?$years.' Years ':''?><?=($months)?$months.' Months ':''?><?=($days)?$days.' Days ':''?>      
+            </td>
             <?php if($session['role_id']==1){?>
             <td><?= $value->basic_salary?></td>
             <?php }?>

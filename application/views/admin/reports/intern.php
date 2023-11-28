@@ -13,7 +13,7 @@
     <button class="btn btn-sm btn-info" style="margin-right:15px" type="submit" id="excel">Excel</button>
     </form>
 </div>
-<h4 class="text-center">Report of Employee Internship List</h4>
+<h4 class="text-center">Report of Employee Internship List From <?php echo $first_date; ?> To <?php echo $second_date; ?></h4>
 <table class="table table-striped table-bordered">
     <thead style="font-size:12px;" >
         <tr>
@@ -23,6 +23,7 @@
             <th class="text-center">Department</th>
             <th class="text-center">Joining Date</th>
             <th class="text-center">End Internship Date</th>
+            <th class="text-center">Internship Period</th>
             <?php if($session['role_id']==1){?>
             <th class="text-center">Gross Salary</th>
             <?php }?>
@@ -38,6 +39,22 @@
             <td><?= $value->designation_name?></td>
             <td><?= $value->date_of_joining?></td>
             <td><?= $value->next_incre_date?></td>
+            <td>
+            <?php
+            $joiningDate = new DateTime($value->date_of_joining);
+            $nextIncreDate = new DateTime($value->next_incre_date);
+            
+            $diff = $joiningDate->diff($nextIncreDate);
+            
+            $years = $diff->y;
+            $months = $diff->m;
+            $days = $diff->d;
+            ?>
+            
+           <?=($years)?$years.' Years ':''?><?=($months)?$months.' Months ':''?><?=($days)?$days.' Days ':''?>
+         
+            </td>
+
             <?php if($session['role_id']==1){?>
             <td><?= $value->basic_salary?></td>
             <?php }

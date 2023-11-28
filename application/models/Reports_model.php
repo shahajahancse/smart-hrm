@@ -201,7 +201,7 @@ class Reports_model extends CI_Model {
 	}
 
 	public function show_report($emp_ids,$status,$first_date=null,$second_date=null){
-		// dd($status);
+		
 		$this->db->select('
 			xin_employees.user_id,
 			xin_employees.first_name,
@@ -248,20 +248,17 @@ class Reports_model extends CI_Model {
 			if($first_date != null && $second_date !=null){
 				$this->db->where('xin_employees.notify_incre_prob between "' . $first_date . '" AND "' . $second_date . '"');
 			}
-			$this->db->order_by('xin_employees.date_of_joining','ASC');
 		}
-
+		
 		if($status == 4){
 			$this->db->where('xin_employees.status',5);
 			if($first_date != null && $second_date !=null){
-				$this->db->where('xin_employees.date_of_joining between "' . $first_date . '" AND "' . $second_date . '"');
+				$this->db->where('xin_employees.notify_incre_prob between "' . $first_date . '" AND "' . $second_date . '"');
 			}
 		}
 		$this->db->group_by('xin_employees.user_id');
 		$this->db->order_by('xin_employee_incre_prob.effective_date','DESC');
-
-		$data = $this->db->order_by('xin_employees.date_of_joining','ASC')->get()->result();
-		// dd($data);
+		$data = $this->db->get()->result();
 	    return $data;
 	}
 
