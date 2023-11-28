@@ -45,9 +45,7 @@
         </tr>
     </thead>
     <tbody style="font-size:12px;" >
-        <?php $i=1; foreach ($emp_list as $key => $value) {
-         
-            ?>
+        <?php $i=1; foreach ($emp_list as $key => $value) {?>
         <tr>
             <td><?= $i++?></td>
             <td><?= $value->first_name.' '.$value->last_name?></td>

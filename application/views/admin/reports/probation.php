@@ -46,10 +46,8 @@
             <td><?= $value->next_incre_date?></td>
             <?php if($session['role_id']==1){?>
             <td><?= $value->basic_salary?></td>
-            <?php }
-             $inc_ammount = $this->db->select('old_salary,new_salary')->where('emp_id',$value->user_id)->get('xin_employee_incre_prob')->row();
-            ?>
-            <td><?= !empty($inc_ammount) ? ($inc_ammount->new_salary - $inc_ammount->old_salary) : '-'?></td>
+            <?php }?>
+            <td><?= $value->new_salary - $value->old_salary?></td>
             <?php 
                 $date1 = new DateTime($value->date_of_joining);
                 $date2 = new DateTime();
@@ -60,5 +58,4 @@
         <?php }?>
     </tbody>
 </table>
-
 </body>

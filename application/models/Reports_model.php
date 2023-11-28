@@ -246,7 +246,7 @@ class Reports_model extends CI_Model {
 		if( $status == 3){
 			$this->db->where('xin_employees.status',4);
 			if($first_date != null && $second_date !=null){
-				$this->db->where('xin_employees.date_of_joining between "' . $first_date . '" AND "' . $second_date . '"');
+				$this->db->where('xin_employees.notify_incre_prob between "' . $first_date . '" AND "' . $second_date . '"');
 			}
 			$this->db->order_by('xin_employees.date_of_joining','ASC');
 		}
