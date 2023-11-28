@@ -51,7 +51,7 @@
                 if ($query->num_rows() > 0) {
                     $probationStart = $query->row()->effective_date;
                 }
-                ?>
+                ?>  
                 <?= $probationStart?>
             </td>
             <td><?= $value->next_incre_date?></td>
