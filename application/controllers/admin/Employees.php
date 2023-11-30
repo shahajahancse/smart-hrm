@@ -488,6 +488,8 @@ class Employees extends MY_Controller {
 			'note_file' => $nname,
 			'remark' => $this->input->post('remarks'),
 		));
+		$this->session->set_flashdata('addedd', 'Successfully Added');
+		redirect('admin/employees/detail/'.$this->input->post('user_id'));
 	}
 
     // increment/probation/promotion list here
