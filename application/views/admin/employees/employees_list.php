@@ -532,6 +532,12 @@
                                             <small><?php echo $this->lang->line('xin_e_details_picture_type');?></small>
                                         </fieldset>
                                     </div>
+                                    <div class='form-group'>
+                                        <fieldset class="form-group">
+                                            <label for="logo">Remark</label>
+                                            <textarea class="form-control" id="remark" name="remark" rows="3"></textarea>
+                                        </fieldset>
+                                    </div>
                                 </div>
                             </div>
                         </div>
