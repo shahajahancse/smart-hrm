@@ -461,6 +461,35 @@ class Employees extends MY_Controller {
 		exit;
     }
 
+	public function remarks(){
+		if($_FILES['n_file']['size']!=0){
+			//checking image type
+			$allowed =  array('png','jpg','jpeg','pdf','gif');
+			$filename = $_FILES['n_file']['name'];
+			$ext = pathinfo($filename, PATHINFO_EXTENSION);
+			
+				if(in_array($ext,$allowed)){
+					
+					$tmp_name = $_FILES["n_file"]["tmp_name"];
+					$profile = "uploads/profile/";
+					$set_img = base_url()."uploads/profile/";
+					// basename() may prevent filesystem traversal attacks;
+					// further validation/sanitation of the filename may be appropriate
+					$name = basename($_FILES["n_file"]["name"]);
+					$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
+					move_uploaded_file($tmp_name, $profile.$newfilename);
+					$nname = $newfilename;
+			}
+		}else{
+			$nname = '';
+		}
+		$this->db->where('user_id', $this->input->post('user_id'));
+		$this->db->update('xin_employees', array(
+			'note_file' => $nname,
+			'remark' => $this->input->post('remarks'),
+		));
+	}
+
     // increment/probation/promotion list here
     public function increment_pro_list()
     {
@@ -1269,6 +1298,8 @@ class Employees extends MY_Controller {
 			'path_url' => 'employees_detail',
 			'first_name' => $result[0]->first_name,
 			'last_name' => $result[0]->last_name,
+			'note_file' => $result[0]->note_file,
+			'remark' => $result[0]->remark,
 			'user_id' => $result[0]->user_id,
 			'employee_id' => $result[0]->employee_id,
 			'proxi_id' => $result[0]->proxi_id,
@@ -2207,10 +2238,9 @@ class Employees extends MY_Controller {
 			'leave_categories' => $cat_ids,
 			'profile_picture' => $fname,
 			'note_file' => $nname,
+			'remark' => $this->input->post('remark'),
 			'created_at' => date('Y-m-d h:i:s')
 		);
-		// dd($data);
-
 		$iresult = $this->Employees_model->add($data);
 	
 			$emdata = array(
