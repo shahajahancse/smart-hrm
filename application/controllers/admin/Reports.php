@@ -1305,6 +1305,7 @@ class Reports extends MY_Controller
 	public function get_employeess(){
 
         $status = $this->input->get('status');
+		// dd($status);
 		$this->db->select('user_id as emp_id, first_name, last_name');
         if ($status == 0) {
 			$this->db->where_in('status', [1,4,5]);
@@ -1318,6 +1319,9 @@ class Reports extends MY_Controller
 		if($status == 3){
             $this->db->where('status',$status);
         }
+		if($status == 4){
+			$this->db->where_in('status',[1,2,3,4,5]);
+		}
         $this->db->where('company_id', 1);
         $this->db->order_by('user_id', 'asc');
         $data["employees"] = $this->db->get('xin_employees')->result();

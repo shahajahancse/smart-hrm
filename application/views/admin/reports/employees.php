@@ -31,8 +31,8 @@
                   <label for="upload_file">Status</label>
                   <select class="form-control" name="status" id="status">
                     <option value="">Select one</option>
-                    <option value="0">All Employees</option>
-                    <option value="1">Regular</option>
+                    <option value="0">Regular</option>
+                    <!-- <option value="1">Regular</option> -->
                     <option value="2">Left</option>
                     <option value="3">Resign</option>
                   </select>
@@ -167,7 +167,7 @@
       if(ajaxRequest.readyState == 4){
         // console.log(ajaxRequest);
         var resp = ajaxRequest.responseText;
-        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1800,height=800');
         a.document.write(resp);
       }
     }
