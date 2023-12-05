@@ -495,9 +495,11 @@ class Timesheet extends MY_Controller {
 			redirect('admin/leave/emp_leave');
 		}
 
+
 		$data['title'] = $this->lang->line('left_leave').' | '.$this->Xin_model->site_title();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		$data['all_leave_types'] = $this->Timesheet_model->all_leave_types();
+		$data['leaves_info'] = $this->Timesheet_model->get_leaves_with_info();
 		$data['breadcrumbs'] = $this->lang->line('left_leave');
 		$data['path_url'] = 'leave';
 		// dd($user_info);
@@ -665,6 +667,47 @@ class Timesheet extends MY_Controller {
 		
 	}
 
+	public function leave_approve($id ,$qty,$from_date) {
+		$data = array(
+			'status' => 2,
+			'qty' => $qty,
+			'from_date' => $from_date
+		);
+		$result = $this->Timesheet_model->update_leave_record($data,$id);
+		if($result == TRUE) {
+			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave_added'));
+			if($data['qty'] > 0){
+				for ($i=0; $i < $data['qty']; $i++) { 
+					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
+					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+				}
+			} else {
+				$process_date = $data['from_date'];
+				$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+			}
+			redirect('admin/timesheet/leave');
+
+
+		} else {
+			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
+			redirect('admin/timesheet/leave');
+		}
+	
+	}
+	public function leave_reject($id) {
+		$data = array(
+			'status' => 3,
+		);
+		$result = $this->Timesheet_model->update_leave_record($data,$id);
+		if($result == TRUE) {
+			$this->session->set_flashdata('success', 'Leave Rejected');
+			redirect('admin/timesheet/leave');
+		} else {
+			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
+			redirect('admin/timesheet/leave');
+		}
+	
+	}
 	// Validate and add info in database
 	public function update_leave_status() {
 		
