@@ -70,7 +70,7 @@
               <th class="text-center" style="width:20px;">Status</th>
               <th class="text-center" style="width:20px;">Req_Date</th>
               <th class="text-center" style="width:20px;">Note</th>
-              <!-- <th class="text-center" style="width:50px;">Action</th> -->
+              <th class="text-center" style="width:50px;">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -99,6 +99,25 @@
               <td class="text-center"><?= $status  ?> </td>
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
               <td style="cursor: pointer; color: #310bff" title="<?= $rows->note ?>" ><?= substr($rows->note, 0,10) ?></td>
+              <td class="text-center">
+                <div class="btn-group <?php echo $rows->status == 3?'d-hidden':''?>" >
+                  <button type="button" class="btn btn-sm dropdown-toggle" style="background: transparent;box-shadow:none !important" data-toggle="dropdown">
+                    <span><i class="fa fa-ellipsis-v" ></i></span> 
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right">
+                    <li class="<?php echo ($session['role_id'] != 1) ?'d-hidden':''?>">
+                      <a href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">
+                        <b class="text-danger">Rejected</b>
+                      </a>
+                    </li>
+                    <li >
+                        <a style="padding-left:5px;" href="<?= base_url('admin/inventory/hand_over/'.$rows->id);?>">
+                        <b class="text-info">Delivered</b>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </td>
           <?php } ?>
         </tbody>
       </table>
