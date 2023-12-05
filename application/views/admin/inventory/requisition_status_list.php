@@ -74,18 +74,31 @@
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($products as $key => $rows) { ?>
+          <?php foreach ($products as $key => $rows) { 
+            if ($rows->status == 5 ) {
+              $status = "<span class='using' style='color:#28a745'>First Step Approved</span>";
+            } else if ($rows->status == 1 ) {
+              $status = "<span class='using' style='color:#ffc107'> <i class='fa fa-dot-circle-o'></i> Pending</span>";
+            } else if ($rows->status == 2 ) {
+              $status = "<span class='using' style='color:#28a745'> <i class='fa fa-dot-circle-o'></i> Approved</span>";
+            } else if ($rows->status == 3 ) {
+              $status = "<span class='using' style='color:#087a58'> <i class='fa fa-dot-circle-o'></i> Handover</span>";
+            } else if ($rows->status == 4 ) {
+              $status = "<span class='using' style='color:#d56666'> <i class='fa fa-dot-circle-o'></i> Rejected</span>";
+            } else if ($rows->status == 6 ) {
+              $status = "<span class='using' style='color:#0b70ed'> <i class='fa fa-dot-circle-o'></i> Admin Approved</span>";
+            }
+          ?>
+
             <tr>
               <td class="text-center"><?php echo ($key+1)."."; ?></td>
               <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
               <td class="text-center"><?= $rows->product_name?></td>
               <td class="text-center"><?= $rows->quantity?></td>
               <td class="text-center"><?= $rows->approved_qty?></td>
-              <td class="text-center">
-                <?php echo $rows->status == 5 ? "<span class='using' style='color:#28a745'>First Step Approved</span>" : ($rows->status == 1 ? "<span class='using' style='color:#ffc107'> <i class='fa fa-dot-circle-o'></i> Pending</span>" : ($rows->status == 2 ? "<span class='using' style='color:#28a745'> <i class='fa fa-dot-circle-o'></i> Approved</span>" : ($rows->status == 3 ? "<span class='using' style='color:#087a58'> <i class='fa fa-dot-circle-o'></i> Handover</span>" : "<span class='using' style='color:#d56666'> <i class='fa fa-dot-circle-o'></i> Rejected</span>"))); ?>    
-              </td>
+              <td class="text-center"><?= $status  ?> </td>
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
-              <td class="text-center"><?php echo $rows->note ?></td>
+              <td style="cursor: pointer; color: #310bff" title="<?= $rows->note ?>" ><?= substr($rows->note, 0,10) ?></td>
               <td class="text-center">
                 <div class="btn-group <?php echo $rows->status == 3?'d-hidden':''?>" >
                   <button type="button" class="btn btn-sm dropdown-toggle" style="background: transparent;box-shadow:none !important" data-toggle="dropdown">
@@ -97,8 +110,8 @@
                         <b class="text-success">Approved</b>
                       </a>
                     </li>
-                    <li class="divider <?php echo ($rows->status == 2  || $rows->status == 4) ?'d-hidden':''?>"></li>
-                    <li class="<?php echo ($rows->status == 2  || $rows->status == 4) ?'d-hidden':''?>">
+                    <li class="divider <?php echo ($rows->status == 2 && $session['role_id'] != 1 ) ?'d-hidden':''?>"></li>
+                    <li class="<?php echo ($rows->status == 2 && $session['role_id'] != 1) ?'d-hidden':''?>">
                       <a href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">
                         <b class="text-danger">Rejected</b>
                       </a>
@@ -110,7 +123,7 @@
                       </a>
                     </li>
                     <li class="divider <?php echo $rows->status == 2 || $rows->status == 4 || $rows->status == 1  ?'d-hidden':''?>"></li>
-                    <li class="<?php echo ($rows->status == 4) || ($rows->status == 1) ?'d-hidden':''?>">
+                    <li class="<?php echo ($rows->status != 2) ?'d-hidden':''?>">
                         <a style="padding-left:5px;" href="<?= base_url('admin/inventory/hand_over/'.$rows->id);?>">
                         <b class="text-info">Delivered</b>
                       </a>
