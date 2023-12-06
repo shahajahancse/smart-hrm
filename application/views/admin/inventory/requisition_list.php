@@ -40,7 +40,7 @@
             <td class="text-center"><?= $row->approved_qty ?></td>
             <td class="text-center">
               <span class="using">
-                <?= $row->status==1 ?"<i class='fa fa-dot-circle-o' style='color:#ffda00'></i> Pending":($row->status==2?"<i class='fa fa-dot-circle-o' style='color:#6ebe09'></i> Approved":($row->status==3?"<i class='fa fa-dot-circle-o' style='color:#09bea9'></i>  Handover":($row->status==4?"<i class='fa fa-dot-circle-o' style='color:#de0000'></i> Rejected":"First Step Approved")))?>
+                <?= $row->status==1 ?"<i class='fa fa-dot-circle-o' style='color:#ffda00'>Approved</i> ":($row->status==2?"<i class='fa fa-dot-circle-o' style='color:#6ebe09'></i>Pending ":($row->status==3?"<i class='fa fa-dot-circle-o' style='color:#09bea9'></i>  Handover":($row->status==4?"<i class='fa fa-dot-circle-o' style='color:#de0000'></i> Rejected":"First Step Approved")))?>
               </span>
             </td>
             <td class="text-center">

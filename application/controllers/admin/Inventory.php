@@ -127,7 +127,7 @@ class Inventory extends MY_Controller {
 		$data['breadcrumbs'] = 'Store Pending List';
 		$data['user_role_id'] 	= $session['role_id'];
 
-		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
+		$data['subview'] 	 = $this->load->view("admin/inventory/pending_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
@@ -163,7 +163,7 @@ class Inventory extends MY_Controller {
 		$approved = $this->db->where('id',$r_id)->update('products_requisition_details',$data);
 		if ($approved) {
 			$this->session->set_flashdata('success', 'Product Updated Successfully.');
-		    redirect("admin/inventory");
+		    redirect("admin/inventory/pending_list");
 		}
 		
 	}
@@ -178,12 +178,40 @@ class Inventory extends MY_Controller {
 		$data['title'] 		 = 'Store Aproved List | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Store Aproved List';
 		$data['user_role_id'] 	= $session['role_id'];
-		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
+		$data['subview'] 	 = $this->load->view("admin/inventory/approved_list", $data, TRUE);
 
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
+	public function delivery_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],3);
+		$data['title'] 		 = 'Store Handover List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store Handover List';
+		$data['user_role_id'] 	= $session['role_id'];
 
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+	public function reject_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],4);
+
+		$data['title'] 		 = 'Store Reject List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store Reject List';
+		$data['user_role_id'] 	= $session['role_id'];
+
+		$data['subview'] 	 = $this->load->view("admin/inventory/reject_list", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
 
 
 
@@ -294,37 +322,6 @@ public function add_daily_package()
 		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
-
-
-	public function delivery_list(){
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],3);
-		$data['title'] 		 = 'Store Handover List | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Handover List';
-		$data['user_role_id'] 	= $session['role_id'];
-		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
-	}
-
-	public function reject_list(){
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-
-		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],4);
-
-		$data['title'] 		 = 'Store Reject List | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Reject List';
-		$data['user_role_id'] 	= $session['role_id'];
-
-		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
-	}
-
 
 
 	public function requsition_details($id)	{
