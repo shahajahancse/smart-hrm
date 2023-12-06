@@ -51,8 +51,16 @@ if ( ! function_exists('api_auth'))
                 }else {
                     $imageUrl = base_url('uploads/profile/default_female.jpg');
                 }
-            }           
-            // dd($imageUrl);
+            }   
+             
+            if($imageUrl){
+                if ($query->gender == 'Male') {
+                    $imageUrl = base_url('uploads/profile/default_male.jpg');
+                }else {
+                    $imageUrl = base_url('uploads/profile/default_female.jpg');
+                }
+            };       
+
             $imageData = file_get_contents($imageUrl);
             $extension = pathinfo($file_extention, PATHINFO_EXTENSION);
             $base64Image = 'data:image/' . $extension . ';base64,' . base64_encode($imageData);
