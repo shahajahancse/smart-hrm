@@ -12,8 +12,8 @@
 
             <div class="col-md-3">
               <label for="Status">Select Team Laad</label>
-              <select name="lead_user_ids" class="form-control select2" data-plugin="select_hrm" id="test" required  >  
-                    <option>Select Team Laad</option>
+              <select name="lead_user_ids" class="form-control select2" data-plugin="select_hrm" id="mySelect" required  >  
+                    <option>Select Team Lead</option>
                     <?php foreach($leads as $row){?>
                     <option value="<?php echo $row->user_id?>"><?php echo $row->first_name.' '. $row->last_name?></option>
                     <?php }?>
@@ -98,7 +98,7 @@
 <script>
 
   $(document).ready(function() {
+    $('#mySelect').select2();
     $('#example').DataTable();
   });
-
-</script>
+</script>  

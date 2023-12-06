@@ -1286,7 +1286,7 @@ class Employees extends MY_Controller {
 		$id = $this->uri->segment(4);
 		
 		$result = $this->Employees_model->read_employee_information($id);
-		// dd($result[0]->proxi_id);
+		// dd($result);
 		if(is_null($result)){
 			redirect('admin/employees');
 		}
@@ -1358,6 +1358,8 @@ class Employees extends MY_Controller {
 			'get_all_companies' => $this->Xin_model->get_companies(),
 			'all_office_locations' => $this->Location_model->all_office_locations(),
 			'all_leave_types' => $this->Timesheet_model->all_leave_types(),
+			// 'is_emp_lead' => $result[0]->is_emp_lead,
+			'lead_user_id' => $result[0]->lead_user_id,
 			);
 		// dd($data);
 			if($result[0]->nda_status!=0) {
@@ -1367,6 +1369,8 @@ class Employees extends MY_Controller {
 				$data['nda_end_date'] = $r->to_date;
 				$data['nda_id'] = $r->id;
 			}
+
+		// dd($data);	
 
 		$data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
@@ -2480,7 +2484,7 @@ class Employees extends MY_Controller {
 		$per_address = $this->Xin_model->clean_posts($this->input->post('per_address'));
 		$leave_categories = array($this->input->post('leave_categories'));
 		$cat_ids = implode(',',$this->input->post('leave_categories'));
-		$view_companies_id = implode(',',$this->input->post('view_companies_id'));
+		// $view_companies_id = implode(',',$this->input->post('view_companies_id'));
 		
 		$module_attributes = $this->Custom_fields_model->all_hrsale_module_attributes();
 		$count_module_attributes = $this->Custom_fields_model->count_module_attributes();	
@@ -2523,7 +2527,7 @@ class Employees extends MY_Controller {
 			'zipcode' => $this->input->post('ezipcode'),
 			'ethnicity_type' => $this->input->post('ethnicity_type'),
 			'leave_categories' => $cat_ids,
-			'view_companies_id' => $view_companies_id,
+			// 'view_companies_id' => $view_companies_id,
 			'date_of_leaving' => $this->input->post('date_of_leaving'),
 			'marital_status' => $this->input->post('marital_status'),
 			'is_active' => $this->input->post('is_active'),
@@ -2813,13 +2817,11 @@ public function nda() {
 	public function team_lead() {
 		$session = $this->session->userdata('username');
 		$data = array(
-			'lead_user_id' =>  $this->input->post("is_emp_lead")
+			'lead_user_id' =>  $this->input->post("set_team_lead")
 		);
 		$insert_data  = $this->db->where('user_id',$_POST['user_id'])->update('xin_employees',$data);
 		if($insert_data){
 			redirect('/admin/employees/detail/'.$session['user_id'],'refresh');
-			// dd($insert_data);
-
 		}else{
 			dd("KO");
 		}
@@ -6142,8 +6144,15 @@ public function nda() {
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_e_details_exp_documents').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = "Set Team Lead";
-		$data['leads'] = $this->db->select('user_id,first_name,last_name')->where('status',1)->where('lead_user_id =',null)->where('is_emp_lead =',null)->order_by('user_id')->get('xin_employees')->result();
+		$data['breadcrumbs'] = "Set Team Leadsss";
+		$data['leads'] = $this->db->select('user_id, first_name, last_name')
+									->where('status', 1)
+									->where('lead_user_id =', 0)
+									->where('is_emp_lead !=', 2) 
+									->order_by('user_id')
+									->get('xin_employees')
+									->result();
+		// dd($data);
 		$data['subview'] = $this->load->view("admin/employees/set_team_leads", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 		
@@ -6690,6 +6699,7 @@ exit();
 		$data['subview'] = $this->load->view('admin/employees/device', $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
+
 	public function add_lead(){
 		// dd($_POST);
 		$update  = $this->db->where('user_id',$_POST['user_id'])->update('xin_employees',['is_emp_lead'=>1,'lead_user_id'=>$_POST['team_lead_user_id']]);
@@ -6699,19 +6709,30 @@ exit();
 			redirect('admin/dashboard/','refresh');
 		}
 	}
-	public function check(){
-		$userID = $this->session->userdata('username');
-		$data = $this->db->select('is_emp_lead,lead_user_id')->where('user_id',$userID['user_id'])->get('xin_employees')->row();
-        // dd($data);
-		if ($data->is_emp_lead == null   && $data->lead_user_id == null) {
-            $response = array('show_modal' => true);
-        } else {
-            $response = array('show_modal' => false);
-        }
-        $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode($response));
+
+	public function add_leads(){
+		// dd($_POST);
+		$update  = $this->db->where('user_id',$_POST['user_id'])->update('xin_employees',['is_emp_lead'=>1,'lead_user_id'=>$_POST['set_team_lead']]);
+		if($update){
+			// echo "<script>showSuccessAlert('test')</script>";
+			$this->session->set_flashdata('addedd', 'Successfully Added');
+			redirect('admin/dashboard/','refresh');
+		}
 	}
+
+	// public function check(){
+	// 	$userID = $this->session->userdata('username');
+	// 	$data = $this->db->select('is_emp_lead,lead_user_id')->where('user_id',$userID['user_id'])->get('xin_employees')->row();
+    //     // dd($data);
+	// 	if ($data->is_emp_lead == null   && $data->lead_user_id == null) {
+    //         $response = array('show_modal' => true);
+    //     } else {
+    //         $response = array('show_modal' => false);
+    //     }
+    //     $this->output
+    //         ->set_content_type('application/json')
+    //         ->set_output(json_encode($response));
+	// }
 
 	public function set_leads(){
 		// dd($_POST);
@@ -6730,13 +6751,11 @@ exit();
 		
 	}
 	public function delete_leader($id){
-
-		$sql = $this->db->where('user_id',$id)->update('xin_employees',['is_emp_lead'=>null, 'lead_user_id'=>null]);
+		$sql = $this->db->where('user_id',$id)->update('xin_employees',['is_emp_lead'=>0, 'lead_user_id'=>0]);
 		if($sql){
 			$this->session->set_flashdata('success', 'Delete Successfully');
-			echo "<script>window.location.replace('set_team_leads')</script>";
+			redirect('admin/employees/set_team_leads','refresh');	
 		}
-		
 	}
 	public function employee_issue($action = '', $id = null) {
 

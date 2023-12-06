@@ -51,6 +51,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                 <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_payslips"><?php echo $this->lang->line('left_payslips');?></a> </li>       -->
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#NDA">NDA</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#remarks">Remarks</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#set_team_lead">Team Lead</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane <?php echo $get_animate;?> active" id="xin_general">
@@ -3144,6 +3145,45 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                 <?php echo form_close(); ?>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane <?php echo $get_animate;?>" id="set_team_lead">
+                    <div class="box-body">
+                        <div class="row no-gutters row-bordered row-border-light">
+                            <div class="col-md-12">
+                                <div class="tab-content">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">Team Lead</h3>
+                                    </div>
+                                    <div class="box-body pb-2">
+                                        <?php $attributes = array('name' => 'team_lead', 'id' => 'team_leads', 'autocomplete' => 'off');?>
+                                        <?php echo form_open('admin/employees/add_leads', $attributes);?>
+                                          <input type="hidden" name="user_id" value="<?= $user_id?>">
+                                            <!-- <div class="row"> -->
+                                                <div class="col-md-4">
+                                                    <select name="set_team_lead" id="team_lead" class="form-control">
+                                                        <option value="">Selecet</option>
+                                                        <?php $data = $this->db->select('user_id, first_name, last_name')
+                                                                            ->where('status', 1)
+                                                                            ->where('lead_user_id =', 0)
+                                                                            ->where('is_emp_lead =', 2) 
+                                                                            ->order_by('user_id')
+                                                                            ->get('xin_employees')
+                                                                            ->result();
+                                                              
+                                                            foreach($data as $row){  
+                                                        ?>
+                                                        <option value="<?php echo $row->user_id?>" <?php echo $row->user_id == $lead_user_id ? 'selected':''?>><?php echo $row->first_name.''.$row->last_name?></option>
+                                                        <?php }?>
+                                                    </select><br>
+                                                    <input type="submit" class="btn btn-sm btn-success" value="Save" name='btn'>
+                                                </div>
+                                            <!-- </div> -->
+                                        <?php echo form_close(); ?>
                                     </div>
                                 </div>
                             </div>
