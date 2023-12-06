@@ -793,5 +793,18 @@
 		$data = $this->db->order_by("la.leave_id", "DESC")->get();
 		return $data->result(); 
 	}
+	public function get_leaves_leave_id_with_info($id = null) {
+		$this->db->select("la.*, e.first_name, e.last_name,e.basic_salary, lt.type_name, d.department_name, des.designation_name");
+		$this->db->from("xin_leave_applications as la");
+		$this->db->join("xin_employees as e", "e.user_id = la.employee_id", 'left');
+		$this->db->join("xin_leave_type as lt", "lt.leave_type_id = la.leave_type_id", 'left');
+		$this->db->join("xin_departments as d", "d.department_id = e.department_id", 'left');
+		$this->db->join("xin_designations as des", "des.designation_id = e.designation_id", 'left');
+		if ($id != null) {
+			$this->db->where("la.leave_id", $id);
+		}
+		$data = $this->db->order_by("la.leave_id", "DESC")->get();
+		return $data->row(); 
+	}
 }
 ?>

@@ -59,132 +59,136 @@ td, th {
 <div id="edit-leave-modal-data" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Leave Application</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row" style="padding: 7px 0px;display: flex;gap: 16px;">
-                    <div class="col-md-6 myboxx">
-                        <div class="myboxx_header">
-                            Employee Information
+        <form action="<?= base_url('admin/timesheet/modal_leave_update') ?>" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Leave Application</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style="padding: 7px 0px;display: flex;gap: 16px;">
+                        <div class="col-md-6 myboxx">
+                            <div class="myboxx_header">
+                                Employee Information
+                            </div>
+                            <div class="myboxx_body">
+                                <table class="table table-bordered col-md-12" style="margin: 0;">
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Employee Name</th>
+                                        <td style="padding: 3px 8px!important;" id="employee_name_m"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Department</th>
+                                        <td style="padding: 3px 8px!important;" id="department_name_m"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Designation</th>
+                                        <td style="padding: 3px 8px!important;" id="designation_name_m"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Basic Salary</th>
+                                        <td style="padding: 3px 8px!important;" id="basic_salary_m"></td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                        <div class="myboxx_body">
-                            <table class="table table-bordered col-md-12" style="margin: 0;">
-                                <tr>
-                                    <th style="padding: 3px 8px!important;">Employee Name</th>
-                                    <td style="padding: 3px 8px!important;">Md Ahaduzzaman</td>
-                                </tr>
-                                <tr>
-                                    <th style="padding: 3px 8px!important;">Department</th>
-                                    <td style="padding: 3px 8px!important;">department</td>
-                                </tr>
-                                <tr>
-                                    <th style="padding: 3px 8px!important;">Designation</th>
-                                    <td style="padding: 3px 8px!important;">tech</td>
-                                </tr>
-                                <tr>
-                                    <th style="padding: 3px 8px!important;">Basic Salary</th>
-                                    <td style="padding: 3px 8px!important;">10000</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-md-6 myboxx">
-                        <div class="myboxx_header">
-                            Leave Status
-                        </div>
-                        <div class="myboxx_body">
-                            <div class="box-block card-dashboard">
-                                <div id="leave-statistics">
-                                    <p><strong>Earn leave (9.5/12)</strong></p>
-                                    <div class="progress" style="margin: 7px;height: 19px;background: aqua;">
-                                        <div class="progress-bar" style="background: #ff8484;width: 75%;"> Teken 9.5 </div>
-                                    </div>
+                        <div class="col-md-6 myboxx">
+                            <div class="myboxx_header">
+                                Leave Status
+                            </div>
+                            <div class="myboxx_body">
+                                <div class="box-block card-dashboard">
                                     <div id="leave-statistics">
-                                        <p><strong>Sick leave (3/4)</strong></p>
+                                        <p><strong>Earn leave (<span id="leave_count_el_p"></span>/12)</strong></p>
                                         <div class="progress" style="margin: 7px;height: 19px;background: aqua;">
-                                            <div class="progress-bar" style="background: #ff8484;width: 75%;"> Teken 3</div>
+                                            <div class="progress-bar" id="leave_count_el_prog" style="background: #ff8484;width: 75%;"> Teken 9.5 </div>
+                                        </div>
+                                        <div id="leave-statistics">
+                                            <p><strong>Sick leave (<span id="leave_count_sl_p"></span>/4)</strong></p>
+                                            <div class="progress" style="margin: 7px;height: 19px;background: aqua;">
+                                                <div class="progress-bar" id="leave_count_sl_prog" style="background: #ff8484;width: 75%;"> Teken 3</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            
                             </div>
-                           
                         </div>
                     </div>
-                </div>
-                <div class="row" style="padding: 7px 0px;display: flex;gap: 16px;">
-                    <div class="col-md-12 myboxx">
-                        <div class="myboxx_header">
-                            Leave Information
-                        </div>
-                        <div class="myboxx_body">
-                          <div class="col-md-6" style="padding: 5px;border: 1px solid #cfcfcf;border-radius: 4px;">
-                            <table class="table table-bordered col-md-12" style="margin: 0;">
-                                <tr>
-                                    <th style="padding: 3px 8px!important;">Leave Type</th>
-                                    <td style="padding: 3px 8px!important;">Sick Leave</td>
-                                </tr>
-                                <tr>
-                                    <th style="padding: 3px 8px!important;">Application Date</th>
-                                    <td style="padding: 3px 8px!important;">01-Nov-2022</td>
-                                </tr>
-                                <tr>
-                                    <th style="padding: 3px 8px!important;">Attachment</th>
-                                    <td style="padding: 3px 8px!important;"><a href="" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Download</a></td>
-                                </tr>
-                               
-                            </table>
-                            <label for=""> Reason</label>
-                            <textarea name="" id="" style="width: 412px; height: 64px;"></textarea>
-                          </div>
-                          <div class="col-md-6" style="padding: 5px;border: 1px solid #cfcfcf;border-radius: 4px;">
-                            <table class="table table-bordered col-md-12" style="margin: 0;">
-                                  <tr>
-                                      <th style="padding: 3px 8px!important;">From Date</th>
-                                      <td style="padding: 3px 8px!important;"  colspan="2"><input type="date" name="" id="" value="1/1/2022"></td>
-                                  </tr>
-                                  <tr>
-                                      <th style="padding: 3px 8px!important;">To Date</th>
-                                    <td style="padding: 3px 8px!important;" colspan="2"><input type="date" name="" id="" value="1/1/2023"></td>
-                                  </tr>
-                                  <tr>
-                                      <th style="padding: 3px 8px!important;">Total Days</th>
-                                      <td style="padding: 3px 8px!important;"><input type="number" name="" id="" value="1"></td> 
-                                      <td> <input type="checkbox" name="" id="Half Day"> Halfday </td>
-                                  </tr>
-                                  <tr>
-                                      <th style="padding: 3px 8px!important;">Status</th>
-                                      <td style="padding: 3px 8px!important;">
-                                        <select class="form-control select2-hidden-accessible" name="status" data-plugin="select_hrm" data-placeholder="Status" tabindex="-1" aria-hidden="true">
-                                          <option value="1">Pending</option>
-                                          <option value="4">First Level Approval</option>
-                                          <option value="2" selected="">Approved</option>
-                                          <option value="3">Rejected</option>
-                                        </select>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <th style="padding: 3px 8px!important;">Remark</th>
-                                      <td style="padding: 3px 8px!important;">
-                                      <input type="text" name="" id="">
-                                      </td>
-                                  </tr>
+                    <div class="row" style="padding: 7px 0px;display: flex;gap: 16px;">
+                        <div class="col-md-12 myboxx">
+                            <div class="myboxx_header">
+                                Leave Information
+                            </div>
+                            <div class="myboxx_body">
+                            <div class="col-md-6" style="padding: 5px;border: 1px solid #cfcfcf;border-radius: 4px;">
+                                <table class="table table-bordered col-md-12" style="margin: 0;">
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Leave Type</th>
+                                        <td style="padding: 3px 8px!important;" id="leave_type_m"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Application Date</th>
+                                        <td style="padding: 3px 8px!important;" id="application_date_m"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Attachment</th>
+                                        <td style="padding: 3px 8px!important;"><a href="" id="attachment_m" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Download</a></td>
+                                    </tr>
                                 
-                              </table>
-                          </div>
-                           
+                                </table>
+                                <label for=""> Reason</label>
+                                <textarea  style="width: 412px; height: 64px;" id="reason_m" readonly></textarea>
+                            </div>
+                            <div class="col-md-6" style="padding: 5px;border: 1px solid #cfcfcf;border-radius: 4px;">
+                                <table class="table table-bordered col-md-12" style="margin: 0;">
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">From Date</th>
+                                        <td style="padding: 3px 8px!important;" colspan="2"><input type="date" id="from_date_m" name="from_date" value="<?=date('Y-m-d')?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">To Date</th>
+                                        <td style="padding: 3px 8px!important;" colspan="2"><input type="date" id="to_date_m" name="to_date" value="<?=date('Y-m-d')?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Total Days</th>
+                                        <td style="padding: 3px 8px!important;"><input onchange=checkhulf() type="text" name="total_days" id="total_days_m" value="1" ></td> 
+                                        <td> <input type="checkbox" onchange=checkhulf() id="Half_Day_m" name="Half_Day"> Halfday </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Status</th>
+                                        <td style="padding: 3px 8px!important;">
+                                            <select class="form-control" id="status_m" name="status">
+                                            <option value="1">Pending</option>
+                                            <option value="4">First Level Approval</option>
+                                            <option value="2">Approved</option>
+                                            <option value="3">Rejected</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Remark</th>
+                                        <td style="padding: 3px 8px!important;">
+                                        <input type="text" name="remark" id="remark_m">
+                                        </td>
+                                    </tr>
+                                    
+                                </table>
+                            </div>
+                            
+                            </div>
                         </div>
+                    
                     </div>
-                   
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="leave_id" id="leave_id_m" />
+                    <input type="hidden" name="emp_id" id="emp_id_m" />
+                    <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+        </form>
 
     </div>
 </div>
@@ -421,7 +425,7 @@ td, th {
                                 </button>
                                 <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" role="menu">
                                     <li>
-                                        <a style="border-radius: 6px;" href="javascript:void(0);" data-toggle="modal"
+                                        <a onclick="modal_leave_data_ajax('<?= $leave->leave_id ?>')" style="border-radius: 6px;" data-toggle="modal"
                                             data-target="#edit-leave-modal-data">
                                             <i class="fa fa-eye"></i> View
                                         </a>
@@ -465,7 +469,76 @@ td, th {
         </div>
     </div>
 </div>
+<script>
+    function modal_leave_data_ajax(id) {
+        $.ajax({
+            type: 'get',
+            url: '<?= base_url("admin/timesheet/modal_leave_data_ajax/") ?>' + id,
+            success: function(response) {
+                if (response) {
+                    var result=JSON.parse(response).result;
+                    var leave_calel=JSON.parse(response).leave_calel;
+                    var leave_calel_percent=JSON.parse(response).leave_calel_percent;
+                    var leave_calsl=JSON.parse(response).leave_calsl;
+                    var leave_calsl_percent=JSON.parse(response).leave_calsl_percent;
+                    $('#employee_name_m').html(result.first_name+' '+ result.last_name);
+                    $('#leave_id_m').val(result.leave_id);
+                    $('#department_name_m').html(result.department_name);
+                    $('#designation_name_m').html(result.designation_name);
+                    $('#basic_salary_m').html(result.basic_salary);
 
+                    $('#leave_count_el_p').html(leave_calel);
+                    $('#leave_count_sl_p').html(leave_calsl);
+                    
+                    $('#leave_count_el_prog').css('width', `${leave_calel_percent}%`);
+                    $('#leave_count_sl_prog').css('width', `${leave_calsl_percent}%`);
+                    if (result.leave_type_id===1) {
+                        $('#leave_type_m').html('Earn Leave');
+                    } else {
+                        $('#leave_type_m').html('Sick Leave');
+                    }
+                    $('#application_date_m').html(result.created_at);
+                    $('#attachment_m').attr('href','<?= base_url('uploads/leave') ?>'+result.leave_attachment);
+                    $('#from_date_m').val(result.from_date);
+                    $('#to_date_m').val(result.to_date);
+                    $('#total_days_m').val(result.qty);
+                    $('#reason_m').val(result.reason);
+                    if(result.is_half_day==1){
+                        $('#Half_Day_m').attr('checked','checked');
+                    }else{
+                        $('#Half_Day_m').removeAttr('checked');
+                    }
+                    $('#status_m').val(result.status);
+                    $('#remark_m').val(result.remarks);
+                    $('#emp_id_m').val(result.employee_id);
+                }
+            },
+            error: function(response) {
+                
+            }
+        })
+    }
+</script>
+<script>
+    function checkhulf() {
+        $total_day=$('#total_days_m');
+        $Half_Day=$('#Half_Day_m');
+        $from_date= $('#from_date_m');
+        $to_date= $('#to_date_m');
+        if($Half_Day.is(':checked')){
+            $total_day.val(0.5);
+            $to_date.val($from_date.val());
+        }else{
+            $total_day.val(1);
+        }
+
+        if ($total_day.val()==0.5) {
+            $Half_Day.attr('checked','checked');
+        }else(
+            $Half_Day.removeAttr('checked')
+        ) 
+    }
+</script>
 <script>
 $(document).ready(function() {
     var table = $('#myTable').DataTable({

@@ -706,7 +706,74 @@ class Timesheet extends MY_Controller {
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
 			redirect('admin/timesheet/leave');
 		}
-	
+	}
+	public function modal_leave_update() {
+		// dd($_POST);
+		// Array
+		// (
+		// 	[from_date] => 2023-11-21
+		// 	[to_date] => 2023-11-21
+		// 	[total_days] => 0.5
+		// 	[Half_Day] => on
+		// 	[status] => 2
+		// 	[remark] => fdgfg
+		// 	[leave_id] => 349
+		// 	[submit] => Submit
+		// )
+		$from_date = $this->input->post('from_date');
+		$to_date = $this->input->post('to_date');
+		$total_days = $this->input->post('total_days');
+		$status = $this->input->post('status');
+		$remark = $this->input->post('remark');
+		$leave_id = $this->input->post('leave_id');
+		$hulfday=0;
+		if($this->input->post('Half_Day')){
+			$hulfday=1;
+			$total_days=0.5;
+		}
+		$qt_remarks = htmlspecialchars(addslashes($remark), ENT_QUOTES);
+		$stutuss=$this->input->post('status');
+		if ($stutuss==4 ||$stutuss==3 ||$stutuss==2){
+			$notyfi_data=3;
+		}else{
+			$notyfi_data=1;
+		};
+		$qnty= $total_days;
+		
+
+
+		$data = array(
+			'status' => $status,
+			'remarks' => $qt_remarks,
+			'notify_leave' => $notyfi_data,
+			'from_date' =>$from_date,
+			'to_date' => $to_date,
+			'qty' => $qnty,
+			'is_half_day' => $hulfday
+		);
+		$id=$this->input->post('leave_id');
+		$result = $this->Timesheet_model->update_leave_record($data,$id);
+		if($result == TRUE) {
+			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
+			// automatically leave process start
+			if($data['qty'] > 0){
+				for ($i=0; $i < $data['qty']; $i++) { 
+					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
+					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+				}
+			}
+		}else{
+			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
+		}
+		redirect('admin/timesheet/leave');
+	}
+	public function modal_leave_data_ajax($id) {
+		$data['result'] = $this->Timesheet_model->get_leaves_leave_id_with_info($id);
+		$data['leave_calel']=12-get_cal_leave($data['result']->employee_id, 1);
+		$data['leave_calel_percent']=$data['leave_calel']*100/12;
+		$data['leave_calsl']=4-get_cal_leave($data['result']->employee_id, 2);
+		$data['leave_calsl_percent']=$data['leave_calsl']*100/4;
+		echo json_encode($data);
 	}
 	// Validate and add info in database
 	public function update_leave_status() {
