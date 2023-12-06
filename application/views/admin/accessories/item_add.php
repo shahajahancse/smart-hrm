@@ -134,6 +134,9 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 
 <script>
+  $(document).ready(function(){
+    $('#user_id').select2();
+  });
 
 <?php if(isset($row)){?>
 var val = $('#cat_id').find(":selected").val();  
