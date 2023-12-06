@@ -122,6 +122,21 @@ class inventory_model extends CI_Model
 			return	$this->db->get()->result();
 		}
 	} 
+	public function purchase_products_requisition_api($offset, $limit){
+		$this->db->select('
+			p.id,
+			p.user_id,
+			p.status,
+			p.created_at,
+			p.updated_by,
+			emp.first_name,
+			emp.last_name
+		')->from('products_purches_details as p')
+		->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left');
+		$this->db->order_by('p.id', 'desc');
+		$this->db->limit($limit, $offset);
+			return	$this->db->get()->result();
+	} 
 
 
 	// ************* purchase part end ********************
