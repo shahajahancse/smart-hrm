@@ -182,7 +182,7 @@ class inventory_model extends CI_Model
 
 		return	$this->db->get()->result();
 	} 
-	public function product_requisition($id,$role_id,$status){
+	public function product_requisition($id,$role_id,$status = array()){
 		$this->db->select("
 			xin_employees.first_name,
 			xin_employees.last_name,
@@ -192,7 +192,7 @@ class inventory_model extends CI_Model
 		->from("products_requisition_details")
 		->join('xin_employees','products_requisition_details.user_id = xin_employees.user_id','left')
 		->join('products','products_requisition_details.product_id = products.id','left')
-		->where('products_requisition_details.status',$status)
+		->where_in('products_requisition_details.status',$status)
 		->group_by('products_requisition_details.id')
 		->order_by('products_requisition_details.id', 'desc');
 		return	$this->db->get()->result();
@@ -269,10 +269,12 @@ class inventory_model extends CI_Model
 			products_requisition_details.user_id,
 			products_requisition_details.quantity,
 			products_requisition_details.approved_qty,
+			products_requisition_details.note,
 			products_categories.category_name,
 			products_sub_categories.sub_cate_name,
 			products.product_name,
 			products.quantity as p_qty,
+			products.permission as p_permission,
 		")
 		->from("products_categories")
 		->from("products_sub_categories")
@@ -284,7 +286,7 @@ class inventory_model extends CI_Model
 		->where("products.id 				= products_requisition_details.product_id")	
 		->where("xin_employees.user_id 		= products_requisition_details.user_id")
 		->where("products_requisition_details.id",$id)
-		->group_by('products_requisition_details.id')->get()->result();
+		->group_by('products_requisition_details.id')->get()->row();
 	}
 
 	public  function req_details_cat_wise($id){

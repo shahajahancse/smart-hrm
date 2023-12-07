@@ -31,6 +31,8 @@
             <th class="text-center">Last Increment Date</th>
             <th class="text-center">Next Increment Date</th>
             <th class="text-center">PC Password</th>
+            <th class="text-center">Note File</th>
+            <th class="text-center">Remark</th>
         </tr>
     </thead>
     <tbody style="font-size:12px;">
@@ -64,6 +66,14 @@
             <td><?= date('Y-m-d',strtotime('-1 year'.$value->next_incre_date))?></td>
             <td><?= $value->next_incre_date?></td>
             <td><?= $value->user_password?></td>
+            <td><?php if($value->note_file ==null){
+                echo 'No File';
+            }else{?>
+                <a href="<?=  base_url('uploads/profile/').$value->note_file?>" target="_blank">View</a>
+                <a href="<?=  base_url('uploads/profile/').$value->note_file?>" download="<?=  base_url('uploads/profile/').$value->note_file?>">Download</a>
+            <?php }?>
+            </td>
+            <td><?= $value->remark?></td>
         </tr>
         <?php }?>
     </tbody>

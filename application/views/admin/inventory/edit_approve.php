@@ -25,37 +25,52 @@ $get_animate = $this->Xin_model->get_content_animate();
                 <th class="text-center" >Category</th>
                 <th class="text-center" >Sub Category</th>
                 <th class="text-center" >Product Name</th>
-                <th class="text-center" >Request Quantity</th>
-                <th class="text-center" >Approved Quantity</th>
-                <th class="text-center" >Stock Quantity</th>
+                <th class="text-center" >Request Qty</th>
+                <th class="text-center" >App. Qty</th>
+                <th class="text-center" >Stock Qty</th>
+                <th class="text-center" >Comment</th>
+                <th class="text-center" >Action</th>
           </tr>
         </thead>
-        <?php echo form_open('admin/inventory/persial_approved/'.$requisition_id)?>
+        <?php echo form_open('admin/inventory/persial_approved/'.$row->id)?>
 
         <tbody>
-          
-            <?php  $i=1;foreach($results as $row){?>
             <tr class="text-center">
-                <td><?php echo $i++?></td>
+                <td><?php echo 1; ?></td>
                 <td><?php echo $row->category_name?></td>
                 <td><?php echo $row->sub_cate_name?></td>
                 <td><?php echo $row->product_name?></td>
                 <td><?php echo $row->quantity?></td>
-                <td><input type="number" id="quantity" name="qunatity[]" min="1" style="width:40%" value="<?php echo $row->quantity?>"></td>
+                <td><input type="number" id="quantity" onkeyup="check_qty()" name="approved_qty" min="1" style="width:100px" value="<?php echo $row->quantity?>"></td>
                 <td><?php echo $row->p_qty?></td>
-                <td><a href="<?php echo base_url('admin/inventory/delete_requsiton_item/'.$row->id.'/'.$requisition_id)?>">Delete</a></td>
-                <input type="hidden" name="r_id[]" value="<?php echo $row->id?>">
+                <td style="cursor: pointer; color: #310bff" title="<?= $row->note ?>" ><?= substr($row->note, 0,10) ?></td>
+
+                <td><a class="btn btn-sm btn-danger" href="<?php echo base_url('admin/inventory/delete_requsiton_item/'.$row->id.'/'.$row->id)?>">Delete</a></td>
+                <input type="hidden" name="r_id" value="<?php echo $row->id?>">
+                <input type="hidden" name="stock_quantity" value="<?php echo $row->p_qty?>">
+                <input type="hidden" name="p_permission" value="<?php echo $row->p_permission?>">
             </tr>
-            <?php }?>
-           
         </tbody>
       </table>
-      <?php if(!empty($results)){?>
-      <?php if($session['role_id']!=3) {?>
-      <input type="submit" class="btn btn-sm btn-success pull-right" style="margin-right: 10px;" value="Approved">
-      <?php } }?>
+      <?php if(!empty($row) && $session['role_id']!=3 ){?>
+      <input type="submit" class="btn btn-mini btn-success pull-right" id="submit" style="margin-right: 10px;" value="Approved">
+      <?php } ?>
 
         <?php echo form_close()?>
     </div>
   </div>
 </div>
+
+<script>
+  function check_qty() {
+    p_qty = parseFloat("<?= $row->p_qty ?>");
+    req_qty = parseFloat(document.getElementById('quantity').value);
+    sub_id = document.getElementById('submit');
+    if (p_qty >= req_qty) {
+      sub_id.removeAttribute("disabled");
+    } else {
+      sub_id.setAttribute("disabled", true);
+    }
+  }
+  check_qty();
+</script>

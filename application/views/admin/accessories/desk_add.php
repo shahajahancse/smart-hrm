@@ -134,6 +134,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
 <script>
 $(document).ready(function() {
+  $('user_id').select2();
   loadTableData();
   $('#ex_desk_noo').hide();
    $('#modal_title').text('Add Desk');

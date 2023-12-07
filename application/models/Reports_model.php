@@ -214,6 +214,8 @@ class Reports_model extends CI_Model {
 			xin_employees.contact_no,
 			xin_employees.address,
 			xin_employees.password,
+			xin_employees.note_file,
+			xin_employees.remark,
             xin_employees.user_password,
 			xin_employees.basic_salary,
 			xin_employee_incre_prob.old_salary,

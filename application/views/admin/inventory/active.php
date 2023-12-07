@@ -51,9 +51,7 @@
                   <i class="fa fa-ellipsis-v dropdown-toggle btn" style="border:none; background: transparent;box-shadow:none !important;color:black;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                   <div class="dropdown-menu" style=" min-width: 100px !important;border-radius:0;line-height: 1.7;  "  aria-labelledby="dropdownMenuButton">
                     <a class='req_id text-info' style="padding-left:5px; cursor: pointer" href="<?= base_url('admin/inventory/free_device/'.$row->id);?>" ><b>Free Device</b></a><br>
-                    <!-- <a class='req_id text-info'  data-toggle="modal" data-target="#requested_listt" style="padding-left:5px; cursor: pointer"  data-id="<?php echo $row->id?>" data-status="<?php echo $row->status?>"  ><b>Free Device</b></a><br> -->
-                    <!-- <a class="text-danger"style="padding-left:5px;" href="< ?= base_url('admin/inventory/delete_request/'.$row->id);?>"><b>Delete</b></a> -->
-                  </div>
+                    </div>
                 </div>
             </td>
           </tr>
@@ -62,53 +60,6 @@
     </table>
   </div>
 </div>
-
-<!-- 
-<div class="modal fade" id="requested_listt" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Edit Requested List</h4>
-      </div>
-      <div class="modal-body">      
-        <table class="table table-bordered" style="width:100%">
-          <thead>
-            <tr>
-              <th class="text-left" style="">Status</th>
-              <th class="text-left" >Floor</th>
-              <th class="text-left" >Remark</th>
-            </tr>
-          </thead>
-          <tbody>
-              <tr>
-                <input type="hidden" id="item_hid" value="">
-                <td>
-                    <select class="form-control status_id" id="statuss">
-                        <option value="2"  >Active</option>
-                        <option value="1" >Pending</option>
-                    </select>
-                </td>
-                <td>
-                    <select class="form-control"  id="floor_id">
-                        <option value="3">3rd Floor</option>
-                        <option value="5">5th Floor</option>
-                    </select>
-                </td>
-                <td>
-                    <textarea name="remark" id="remark" class="form-control"></textarea>
-                </td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
-        <button id="submit" type="submit" class="btn btn-sm btn-success">Update</button>
-      </div>
-    </div>
-  </div>
-</div> -->
 
  <script type="text/javascript">
     $(document).ready(function () {

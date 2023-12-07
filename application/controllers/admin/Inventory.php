@@ -105,6 +105,123 @@ class Inventory extends MY_Controller {
 		}
 		return true;
 	}
+
+	public function pending_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		if ($session['role_id'] == 4) {
+			$status = array(1,5,6);
+		} elseif($session['role_id'] == 2){
+			$status = array(1,5,6);
+		} elseif($session['role_id'] == 1){
+			$status = array(1,5,6);
+		} else{
+			$status = array(1);
+		}
+		$data['products'] = $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'], $status);
+
+		$data['title'] 		 = 'Store Pending List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store Pending List';
+		$data['user_role_id'] 	= $session['role_id'];
+
+		$data['subview'] 	 = $this->load->view("admin/inventory/pending_list", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+	public function persial_approved($id){
+
+		$session = $this->session->userdata('username');
+		$status = 1;
+		$approved_qty = $this->input->post('approved_qty');
+		$permission = $this->input->post('p_permission');
+		$r_id = $this->input->post('r_id');
+		//  manage permission to user wise
+		if ($session['role_id'] == 2) {
+			if ($permission == '0') {
+				$status = 2;
+			} else {
+				$status = 6;
+			}
+		} elseif ($session['role_id'] == 1) {
+			$status = 2;
+		} elseif ($session['role_id'] == 4) {
+			$status = 5;
+		} else {
+			redirect('admin/');
+		}
+
+
+		$data = array(
+			'approved_qty' => $approved_qty,
+			'status' 	   => $status,
+			'updated_by'   => $session['user_id'],
+		);
+
+		$approved = $this->db->where('id',$r_id)->update('products_requisition_details',$data);
+		if ($approved) {
+			$this->session->set_flashdata('success', 'Product Updated Successfully.');
+		    redirect("admin/inventory/pending_list");
+		}
+		
+	}
+
+	public function aproved_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$data['products'] = $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],array(2));
+		$data['title'] 		 = 'Store Aproved List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store Aproved List';
+		$data['user_role_id'] 	= $session['role_id'];
+		$data['subview'] 	 = $this->load->view("admin/inventory/approved_list", $data, TRUE);
+
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+	public function delivery_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],3);
+		$data['title'] 		 = 'Store Handover List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store Handover List';
+		$data['user_role_id'] 	= $session['role_id'];
+
+		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+	public function reject_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],4);
+
+		$data['title'] 		 = 'Store Reject List | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Store Reject List';
+		$data['user_role_id'] 	= $session['role_id'];
+
+		$data['subview'] 	 = $this->load->view("admin/inventory/reject_list", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+
+
+
+
+
+
+
+
+
 	public function create_phone($id = null) {
 		$data['session'] = $this->session->userdata('username');
 		if(empty($data['session'])){ 
@@ -118,22 +235,27 @@ class Inventory extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
-
-
-
-
-	public function pending_list(){
+	// reqisition change status requsition_edit_approved
+	public function requsition_edit_approved($id){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] 		 = 'Store Pending List | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Pending List';
-		$data['user_role_id'] 	= $session['role_id'];
-		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],1);
-		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
+		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Requsition ';
+	    $data['row'] 	 = $this->Inventory_model->requisition_details($id);
+		// dd($data);
+		if(!empty($data['results'])){
+			$data['requisition_id'] = $data['results'][0]->id;
+		}else{
+			$data['requisition_id'] = '';
+		}
+		// dd($data);
+		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data);
 	}
+	
+
 	public function daily_pkg(){
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -201,50 +323,6 @@ public function add_daily_package()
 		$this->load->view('admin/layout/layout_main', $data); //page load
 	}
 
-	public function aproved_list(){
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],2);
-		$data['title'] 		 = 'Store Aproved List | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Aproved List';
-		$data['user_role_id'] 	= $session['role_id'];
-		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
-
-		$this->load->view('admin/layout/layout_main', $data); //page load
-	}
-
-	public function delivery_list(){
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],3);
-		$data['title'] 		 = 'Store Handover List | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Handover List';
-		$data['user_role_id'] 	= $session['role_id'];
-		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
-	}
-
-	public function reject_list(){
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-
-		$data['products'] 		= $this->Inventory_model->product_requisition($session['user_id'],$session['role_id'],4);
-
-		$data['title'] 		 = 'Store Reject List | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Store Reject List';
-		$data['user_role_id'] 	= $session['role_id'];
-
-		$data['subview'] 	 = $this->load->view("admin/inventory/requisition_status_list", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data); //page load
-	}
-
-
 
 	public function requsition_details($id)	{
 		$session = $this->session->userdata('username');
@@ -303,95 +381,10 @@ public function add_daily_package()
 		}
 	}
 
-	// reqisition change status requsition_edit_approved
-	public function requsition_edit_approved($id){
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['title']       = 'Requsition| '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Requsition ';
-	    $data['results'] 	 = $this->Inventory_model->requisition_details($id);
-		// dd($data);
-		if(!empty($data['results'])){
-			$data['requisition_id'] = $data['results'][0]->id;
-		}else{
-			$data['requisition_id'] = '';
-		}
-		// dd($data);
-		$data['subview'] 	 = $this->load->view("admin/inventory/edit_approve", $data, TRUE);
-		$this->load->view('admin/layout/layout_main', $data);
-	}
+
 	
-	
-	public function persial_approved($id){
-		
-		$session = $this->session->userdata('username');
-		$all_detail=$this->db->where('id',$id)->get('products_requisition_details')->result();
-		foreach($all_detail as $key=>$value){
-			$d1[]= $this->db->where('id',$all_detail[$key]->product_id)->get('products')->row();
-		}
-
-		$quantity=$this->input->post('qunatity[]');
-		$r_did=$this->input->post('r_id[]');
-		foreach($d1 as $k=>$v){
-			if(isset($_POST['first_step'])){
-				$log_user=$_SESSION['username']['user_id'];
-				$this->db->where('id',$id)->update('products_requisition_details',['updated_by'=>$log_user,'status'=>5]);
-				foreach($quantity as $key=>$value){
-					$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value,'status'=>5]); 
-				}
-				   $this->session->set_flashdata('success', 'Product Updated Successfully.');
-				   redirect("admin/inventory/index","refresh");
 
 
-			}elseif(isset($_POST['update'])){
-				$log_user=$_SESSION['username']['user_id'];
-				foreach($quantity as $key=>$value){
-					$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); 
-				}
-				   $this->session->set_flashdata('success', 'Product Updated Successfully.');
-				   redirect("admin/inventory/index","refresh");
-
-
-			}else{
-			if($session['role_id']==1){
-					if($d1[$k]->quantity >= $quantity[$k]) {
-						foreach($quantity as $key=>$value){
-							$log_user=$_SESSION['username']['user_id'];
-							$this->db->where('id',$id)->update('products_requisition_details',['updated_by'=>$log_user]);
-							$this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]);
-						}
-					} else{
-						// dd($d1[$k]->product_name);
-						$variable = $d1[$k]->product_name;
-						$variable1= $d1[$k]->quantity;
-						$this->session->set_flashdata('flash_data', $variable);
-						$this->session->set_flashdata('flash_data1', $variable1);
-						$this->session->set_flashdata('warning', 'Approved  Quantity is Biger ');
-						redirect("admin/inventory/requsition_details/$id","refresh");
-					}
-			}else{
-				foreach($quantity as $key=>$value){
-				     $this->db->where('id',$r_did[$key])->update('products_requisition_details',['approved_qty'=>$value]); 
-				 }
-					$this->session->set_flashdata('success', 'Product Updated Successfully.');
-				    redirect("admin/inventory/index","refresh");
-			}
-		}
-
-		}
-			if($session['role_id'] == 1){
-			$approved = $this->db->where('id',$id)->update('products_requisition_details',['status'=>2]);
-				if($approved){
-					$this->db->where('id',$id)->update('products_requisition_details',['status'=>2]);
-
-							$this->session->set_flashdata('success', 'Updated Successfully.');
-							redirect("admin/inventory/index","refresh");
-						}
-				}
-			
-	}
 
 	public function hand_over($id=null){
 		

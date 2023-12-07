@@ -70,7 +70,7 @@
               <th class="text-center" style="width:20px;">Status</th>
               <th class="text-center" style="width:20px;">Req_Date</th>
               <th class="text-center" style="width:20px;">Note</th>
-              <!-- <th class="text-center" style="width:50px;">Action</th> -->
+              <th class="text-center" style="width:50px;">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -99,6 +99,32 @@
               <td class="text-center"><?= $status  ?> </td>
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
               <td style="cursor: pointer; color: #310bff" title="<?= $rows->note ?>" ><?= substr($rows->note, 0,10) ?></td>
+              <td class="text-center">
+                <div class="btn-group <?php echo $rows->status == 3?'d-hidden':''?>" >
+                  <button type="button" class="btn btn-sm dropdown-toggle" style="background: transparent;box-shadow:none !important" data-toggle="dropdown">
+                    <span><i class="fa fa-ellipsis-v" ></i></span> 
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                      <a href="<?= base_url('admin/inventory/requsition_edit_approved/'.$rows->id);?>">
+                        <b class="text-success">Approved</b>
+                      </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                      <a href="<?= base_url('admin/inventory/requsition_rejected/'.$rows->id);?>">
+                        <b class="text-danger">Rejected</b>
+                      </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                      <a href="<?= base_url('admin/inventory/delete_requsiton/'.$rows->id);?>">
+                        <b class="text-danger">Delete</b>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </td>
           <?php } ?>
         </tbody>
       </table>
