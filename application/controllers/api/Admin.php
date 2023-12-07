@@ -25,7 +25,9 @@ class Admin extends API_Controller
             if ($user_info['user_info']->user_role_id != 3) {
                 $offset = $this->input->post('offset');
                 $limit = $this->input->post('limit');
-                $result = $this->Timesheet_model->get_leaves_with_info_with_pagi($offset, $limit);
+                $status = $this->input->post('status');
+
+                $result = $this->Timesheet_model->get_leaves_with_info_with_pagi($offset, $limit,$status);
                 if ($result) {
                     $this->api_return([
                         'status' => true,
@@ -35,9 +37,9 @@ class Admin extends API_Controller
                 } else {
                     $this->api_return([
                         'status' => false,
-                        'message' => 'Unauthorized User',
+                        'message' => 'Data not found',
                         'data' => [],
-                    ], 401);
+                    ], 200);
                 }
             } else {
                 $this->api_return([
@@ -62,6 +64,13 @@ class Admin extends API_Controller
             if ($user_info['user_info']->user_role_id != 3) {
                 $id = $this->input->post('leave_id');
                 $data['result'] = $this->Timesheet_model->get_leaves_leave_id_with_info($id);
+                if(empty($data['result'])){
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
                 $data['leave_calel'] = 12 - get_cal_leave($data['result']->employee_id, 1);
                 $data['leave_calel_percent'] = $data['leave_calel'] * 100 / 12;
                 $data['leave_calsl'] = 4 - get_cal_leave($data['result']->employee_id, 2);
@@ -168,8 +177,8 @@ class Admin extends API_Controller
     }
     // levae end
 
-    // stock start
-    public function stock_list()
+    // stock in start
+    public function stock_in_list()
     {
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
@@ -177,7 +186,8 @@ class Admin extends API_Controller
             if ($user_info['user_info']->user_role_id != 3) {
                 $offset = $this->input->post('offset');
                 $limit = $this->input->post('limit');
-                $data['products']= $this->Inventory_model->purchase_products_requisition_api($offset, $limit);
+                $status = $this->input->post('status');
+                $data['products']= $this->Inventory_model->purchase_products_requisition_api($offset, $limit, $status);
                 if ($data) {
                     $this->api_return([
                         'status' => true,
@@ -206,15 +216,126 @@ class Admin extends API_Controller
             ], 401);
         }
     }
-    public function single_stock_details()
+    public function single_stock_in_details()
     {
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
         if ($user_info['status'] == true) {
             if ($user_info['user_info']->user_role_id != 3) {
-                $id = $this->input->post('item_id');
-                
+                $id = $this->input->post('id');
                 $data['results'] = $this->Inventory_model->product_requisition_details($id);
+                if (!empty($data['results'])) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data Not Found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function single_stock_in_status_change()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $id = $this->input->post('id');
+                $quantity = $this->input->post('approved_quantity');
+                $status = $this->input->post('status');
+                if ($status == 1 || $status == 2 ||$status == 4) {
+                    $update = $this->db->where('id',$id)->update('products_purches_details',['status'=>$status,'ap_quantity'=>$quantity]);
+                    if($update){
+                        $this->api_return([
+                            'status' => true,
+                            'message' => 'Update Successful',
+                            'data' => [],
+                        ], 200);
+                    }else{
+                        $this->api_return([
+                            'status' => false,
+                            'message' => 'Update Failed',
+                            'data' => [],
+                        ], 200);
+                       }
+                }elseif($status == 3){
+
+                    $results = $this->db->where('id',$id)->get('products_purches_details')->result();
+                    foreach ($results as $key => $row) {
+                        $product = $this->db->where('id', $row->product_id)->get('products')->row();
+                        $quantity = $product->quantity + $row->ap_quantity;	
+                        $this->db->where('id', $row->product_id)->update('products', array('quantity' => $quantity));
+                        $this->db->where('id', $row->id)->update('products_purches_details', array('status' => 3));
+                    }
+                    $deliver = $this->db->where('id',$id)->update('products_purches_details',['status'=>3]);
+                    if($deliver){
+                        $this->api_return([
+                            'status' => true,
+                            'message' => 'Received Successful',
+                            'data' => [],
+                        ], 200);
+                   }else{
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Update Failed',
+                        'data' => [],
+                    ], 200);
+                   }
+                }else{
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please provide valid status',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    // stock in end
+
+
+    // stock out start
+
+    public function stock_out_list()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $offset = $this->input->post('offset');
+                $limit = $this->input->post('limit');
+                $status = $this->input->post('status');
+                $data['products']= $this->Inventory_model->product_requisition_api($offset, $limit, $status);
                 if ($data) {
                     $this->api_return([
                         'status' => true,
@@ -243,6 +364,111 @@ class Admin extends API_Controller
             ], 401);
         }
     }
-    // stock end
+    public function single_stock_out_details()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $id = $this->input->post('id');
+                $data['results'] = $this->Inventory_model->requisition_details($id);
+                if (!empty($data['results'])) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data Not Found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function single_stock_out_status_change()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $id = $this->input->post('id');
+                $quantity = $this->input->post('approved_quantity');
+                $status = $this->input->post('status');
+                if ($status == 1 || $status == 2 ||$status == 4) {
+                    $update = $this->db->where('id',$id)->update('products_purches_details',['status'=>$status,'ap_quantity'=>$quantity]);
+                    if($update){
+                        $this->api_return([
+                            'status' => true,
+                            'message' => 'Update Successful',
+                            'data' => [],
+                        ], 200);
+                    }else{
+                        $this->api_return([
+                            'status' => false,
+                            'message' => 'Update Failed',
+                            'data' => [],
+                        ], 200);
+                       }
+                }elseif($status == 3){
+
+                    $results = $this->db->where('id',$id)->get('products_purches_details')->result();
+                    foreach ($results as $key => $row) {
+                        $product = $this->db->where('id', $row->product_id)->get('products')->row();
+                        $quantity = $product->quantity + $row->ap_quantity;	
+                        $this->db->where('id', $row->product_id)->update('products', array('quantity' => $quantity));
+                        $this->db->where('id', $row->id)->update('products_purches_details', array('status' => 3));
+                    }
+                    $deliver = $this->db->where('id',$id)->update('products_purches_details',['status'=>3]);
+                    if($deliver){
+                        $this->api_return([
+                            'status' => true,
+                            'message' => 'Received Successful',
+                            'data' => [],
+                        ], 200);
+                   }else{
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Update Failed',
+                        'data' => [],
+                    ], 200);
+                   }
+                }else{
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please provide valid status',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+// stock out End
 
 }

@@ -122,7 +122,7 @@ class inventory_model extends CI_Model
 			return	$this->db->get()->result();
 		}
 	} 
-	public function purchase_products_requisition_api($offset, $limit){
+	public function purchase_products_requisition_api($offset, $limit ,$status){
 		$this->db->select('
 			p.id,
 			p.user_id,
@@ -135,6 +135,7 @@ class inventory_model extends CI_Model
 		->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left');
 		$this->db->order_by('p.id', 'desc');
 		$this->db->limit($limit, $offset);
+			$this->db->where('p.status',$status);
 			return	$this->db->get()->result();
 	} 
 
@@ -196,10 +197,25 @@ class inventory_model extends CI_Model
 		->order_by('products_requisition_details.id', 'desc');
 		return	$this->db->get()->result();
 	} 
+	public function product_requisition_api($offset, $limit, $status){
+		$this->db->select("
+			xin_employees.first_name,
+			xin_employees.last_name,
+			products.product_name,
+			products_requisition_details.*
+		")
+		->from("products_requisition_details")
+		->join('xin_employees','products_requisition_details.user_id = xin_employees.user_id','left')
+		->join('products','products_requisition_details.product_id = products.id','left')
+		->where('products_requisition_details.status',$status)
+		->group_by('products_requisition_details.id')
+		->order_by('products_requisition_details.id', 'desc');
+		$this->db->limit($limit, $offset);
+		return	$this->db->get()->result();
+	} 
 
 	
 	public  function product_purches_details($id){
-	
 		$this->db->select('
 			xin_employees.first_name,
 			xin_employees.last_name,
