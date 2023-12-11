@@ -390,11 +390,11 @@
       second_date = document.getElementById('second_date').value;
       var checkboxes = document.getElementsByName('select_emp_id[]');
       var sql = get_checked_value(checkboxes);
-      // if(sql =='')
-      // {
-      //   alert('Please select employee Id');
-      //   return ;
-      // }
+      if(sql =='')
+      {
+        alert('Please select employee Id');
+        return ;
+      }
       
       if(first_date =='')
       {
@@ -424,7 +424,8 @@
           // a.close();
         }
       }
-  }
+    }
+
     function extra_present()
     {
       var ajaxRequest;  // The variable that makes Ajax possible!
@@ -434,11 +435,11 @@
       second_date = document.getElementById('second_date').value;
       var checkboxes = document.getElementsByName('select_emp_id[]');
       var sql = get_checked_value(checkboxes);
-      if(sql =='')
+      /*if(sql =='')
       {
         alert('Please select employee Id');
         return ;
-      }
+      }*/
       
       if(first_date =='')
       {
@@ -468,7 +469,9 @@
           // a.close();
         }
       }
-  }
+    }
+
+    
     function latecount(type)
     {
       var ajaxRequest;  // The variable that makes Ajax possible!

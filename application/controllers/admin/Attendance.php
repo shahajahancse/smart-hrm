@@ -542,10 +542,14 @@ class Attendance extends MY_Controller
     {
         $first_date = $this->input->post('first_date');
         $second_date = $this->input->post('second_date');
+
         $sql = $this->input->post('sql');
-        $emp_id = explode(',', trim($sql));
-        $data['first_date'] = $first_date;
-        $data['second_date'] = $second_date;
+        if (empty($sql)) {
+            $emp_id = array();
+        } else {
+            $emp_id = explode(',', trim($sql));
+        }
+
         $this->db->select('
         xin_employees.user_id as emp_id,
         xin_employees.employee_id,
@@ -588,9 +592,10 @@ class Attendance extends MY_Controller
     $this->db->group_by('xin_attendance_time.employee_id');
     
 
-     $data["values"] = $this->db->get()->result();
-
-     $this->load->view('admin/attendance/extra_present', $data);
+    $data["values"] = $this->db->get()->result();
+    $data['first_date'] = $first_date;
+    $data['second_date'] = $second_date;
+    $this->load->view('admin/attendance/extra_present', $data);
         
     }
     public function late_details()
