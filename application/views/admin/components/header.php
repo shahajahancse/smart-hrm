@@ -231,30 +231,29 @@ p {
                     </a>
                 </li>
 
-
                 <?php
-            $fcount = 0;
-if($user[0]->user_role_id != 3) {
-    $leaveapp = $this->Xin_model->get_notify_leave_applications();
-    $start_date = date('Y-m-d', strtotime('-1 month', strtotime(date("Y-m-01"))));
-    $end_date = date('Y-m-d', strtotime('+2 month', strtotime(date("Y-m-00"))));
-    $incrementapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 1);
-    $probationapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 5);
-    $internapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 4);
-    $fcount = count($leaveapp) + count($incrementapp) + count($probationapp) + count($internapp);
+                $fcount = 0;
+                if(in_array($user[0]->user_role_id, array(1,2,4))) {
+                    $leaveapp = $this->Xin_model->get_notify_leave_applications();
+                    $start_date = date('Y-m-d', strtotime('-1 month', strtotime(date("Y-m-01"))));
+                    $end_date = date('Y-m-d', strtotime('+2 month', strtotime(date("Y-m-00"))));
+                    $incrementapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 1);
+                    $probationapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 5);
+                    $internapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 4);
+                    $fcount = count($leaveapp) + count($incrementapp) + count($probationapp) + count($internapp);
 
-    // $nproject = $this->Xin_model->get_notify_projects();
-    // $ntask = $this->Xin_model->get_notify_tasks();
-    // $nannouncements = $this->Xin_model->get_notify_announcements();
-    // $ntickets = $this->Xin_model->get_notify_tickets();
-    // count
-    // $leave_count = $this->Xin_model->count_notify_leave_applications();
-    // $proj_count = $this->Xin_model->count_notify_projects();
-    // $tsk_count = $this->Xin_model->count_notify_tasks();
-    // $nst_count = $this->Xin_model->count_notify_announcements();
+                // $nproject = $this->Xin_model->get_notify_projects();
+                // $ntask = $this->Xin_model->get_notify_tasks();
+                // $nannouncements = $this->Xin_model->get_notify_announcements();
+                // $ntickets = $this->Xin_model->get_notify_tickets();
+                // count
+                // $leave_count = $this->Xin_model->count_notify_leave_applications();
+                // $proj_count = $this->Xin_model->count_notify_projects();
+                // $tsk_count = $this->Xin_model->count_notify_tasks();
+                // $nst_count = $this->Xin_model->count_notify_announcements();
 
-    //$this->Xin_model->count_notify_tickets();
-    //$tsk_count = $this->Xin_model->count_notify_tasks();?>
+                //$this->Xin_model->count_notify_tickets();
+                //$tsk_count = $this->Xin_model->count_notify_tasks();?>
 
                 <!-- <p style="float: left; margin-top: 15px; width: 65%;">
                   <marquee>Leave : <?= count($leaveapp); ?>, Increment : <?= count($incrementapp); ?>,  Probation : <?= count($probationapp); ?> </marquee>
@@ -278,6 +277,7 @@ if($user[0]->user_role_id != 3) {
                     color: #037c29 !important;
                 }
                 </style>
+                <?php if (in_array($user[0]->user_role_id, array(1,2,3,4))) { ?>
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"
                         title="<?php echo $this->lang->line('header_notifications');?>">
@@ -495,7 +495,7 @@ if($user[0]->user_role_id != 3) {
                 </li>
                 <!-- Tasks: style can be found in dropdown.less -->
                 <!-- User Account: style can be found in dropdown.less -->
-                <?php  if($user[0]->user_role_id == 1) { ?>
+                <?php }  if($user[0]->user_role_id == 1) { ?>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true"
                         title="<?php echo $this->lang->line('header_configuration');?>">
@@ -658,11 +658,11 @@ if($user[0]->user_role_id != 3) {
                 <!-- Control Sidebar Toggle Button -->
                 <?php if ($user[0]->user_role_id == 1) {?>
 
-                <li>
+                <!-- <li>
                     <a href="#" data-toggle="control-sidebar"
                         title="<?php echo $this->lang->line('xin_role_layout_settings');?>"><i
                             class="fa fa-cog fa-spin"></i></a>
-                </li>
+                </li> -->
 
                 <?php }
                 ?>

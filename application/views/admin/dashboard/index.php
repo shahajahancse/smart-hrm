@@ -4,7 +4,7 @@
 	$theme = $this->Xin_model->read_theme_info(1);
 ?>
 <?php
-	if(in_array($user_info[0]->user_role_id, array(1,2,4))):
+	if(in_array($user_info[0]->user_role_id, array(1,2,4,5,6))):
 		if($theme[0]->dashboard_option == 'dashboard_1') {
 			$this->load->view('admin/dashboard/administrator_dashboard_1');
 		} else if($theme[0]->dashboard_option == 'dashboard_2') {
