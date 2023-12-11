@@ -586,6 +586,7 @@ class Attendance extends MY_Controller
 
     $this->db->order_by('xin_attendance_time.clock_in', "ASC");
     $this->db->group_by('xin_attendance_time.employee_id');
+    
 
      $data["values"] = $this->db->get()->result();
 
