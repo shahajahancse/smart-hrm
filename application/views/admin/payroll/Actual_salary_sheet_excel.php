@@ -270,7 +270,7 @@ tbody{
                         <td><?=$values[$i]->m_pay_day?></td>
                         <td><?=$values[$i]->modify_salary?></td>
                         
-                        <td class='colors4'><?=$values[$i]->grand_net_salary+$values[$i]->modify_salary-$values[$i]->aba_deduct?></td>
+                        <td class='colors4'><?=round($values[$i]->grand_net_salary+$values[$i]->modify_salary-$values[$i]->aba_deduct)?></td>
                         <?php
                         $total_grand_net_salary+=$values[$i]->grand_net_salary+$values[$i]->modify_salary-$values[$i]->aba_deduct;
                         $total_basic_salary+=$values[$i]->basic_salary;
@@ -321,7 +321,7 @@ tbody{
                                 <td  colspan='1'></td>
                                 <td colspan='1'><?=$total_modify_salary?></td>
                                 
-                                <td class='colors4' colspan='1'><?=$total_grand_net_salary?></td>
+                                <td class='colors4' colspan='1'><?=round($total_grand_net_salary)?></td>
                                 <td colspan='1'></td> 
                                 </tr>
                             </tfoot>
@@ -466,7 +466,7 @@ tbody{
                     <!-- grand total -->
                     <tr>
                         <td colspan='4'>Grand Total:</td>
-                        <td  colspan='1'><?=$grand_total_basic_salary?></td>
+                        <td  colspan='1'><?=round($grand_total_basic_salary)?></td>
                         <td colspan='3'></td>
                         <td colspan='1'>
                             <table>
@@ -484,7 +484,7 @@ tbody{
                     
                         <td colspan='1'><?=$grand_total_modify_salary?></td>
                         
-                        <td colspan='1'><?=$grand_total_grand_net_salary?></td>
+                        <td colspan='1'><?=round($grand_total_grand_net_salary)?></td>
                         <td colspan='1'></td>
                     </tr>
                 </tfoot>
