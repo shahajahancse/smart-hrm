@@ -165,6 +165,7 @@
 
       <div class="tab-pane fade" id="continuously" role="tabpanel" aria-labelledby="continuously-tab" style="margin-top: 30px;">
         <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="jobCard()">Job Card</button>
+        <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="extra_present()">Extra Present</button>
         <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="movReport(2)">Unpaid Movement</button>
         <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="movReport(1)">Process Movement</button>
         <button class="btn btn-sm mr-5 sbtn mt-2"  onclick="movReport(3)">Reject Movement</button>

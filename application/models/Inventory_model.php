@@ -328,9 +328,10 @@ class inventory_model extends CI_Model
 		return $this->db->get()->row();
 	}
 				
-	public function requsition_status_report($f1_date=null, $f2_date=null,$statusC){
+	public function requsition_status_report($f1_date=null, $f2_date=null,$statusC= null){
 		$this->db->select(" 
 			products_requisition_details.id,
+			products_requisition_details.status,
 			products_requisition_details.quantity,
 			products_requisition_details.approved_qty,
 			products_requisition_details.user_id,
@@ -356,8 +357,11 @@ class inventory_model extends CI_Model
 		->where("products_categories.id          = products_requisition_details.cat_id")	
 		->where("products_sub_categories.id 	 = products_requisition_details.sub_cate_id")	
 		->where("products.id 					 = products_requisition_details.product_id")	
-		->where("products.id 					 = products_requisition_details.product_id")	
-		->where("products_requisition_details.status",$statusC);
+		->where("products.id 					 = products_requisition_details.product_id");
+
+		if ($statusC != null) {
+			$this->db->where("products_requisition_details.status",$statusC);
+		}	
 		if($f1_date !=null && $f2_date != null){
 			$this->db->where("products_requisition_details.created_at BETWEEN '$f1_date' AND '$f2_date'");
 		}

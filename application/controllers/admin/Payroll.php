@@ -81,18 +81,9 @@ class Payroll extends MY_Controller {
     }
 
 	public function modify_salary(){
-		
-		
-
-	
 			$salary_month= $_POST['salary_month'];
-			
 			$data = $this->Xin_model->modify_salary($salary_month);
-			
-			
 			echo json_encode($data);
-	
-
 	}
 
 	public function save_modify_salary(){
@@ -115,7 +106,6 @@ class Payroll extends MY_Controller {
 	        $user_id = $modifydataid[$i]; // Get the ID of the employee
 	        $salary = $modifydata[$i]; // Get the new salary for the employee
 	        $m_day = $m_day_data[$i]; 
-
 	        // Call the model function to update the salary data for the employee
 	        $result = $this->Xin_model->update_salaryall($user_id, $salary, $date, $m_day);
 	    }

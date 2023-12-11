@@ -200,7 +200,7 @@ class Reports_model extends CI_Model {
         return $result = $this->db->get('xin_employees')->result();
 	}
 
-	public function show_report($emp_ids,$status,$first_date=null,$second_date=null){
+	public function show_report($emp_ids=null,$status=null,$first_date=null,$second_date=null){
 		
 		$this->db->select('
 			xin_employees.user_id,
@@ -229,7 +229,9 @@ class Reports_model extends CI_Model {
 		->join('xin_departments','xin_employees.department_id = xin_departments.department_id','left')		
 		->join('xin_designations','xin_employees.designation_id = xin_designations.designation_id','left')		
 		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.emp_id','left');
-		$this->db->where_in('xin_employees.user_id',$emp_ids);
+		if ($emp_ids != null) {
+			$this->db->where_in('xin_employees.user_id',$emp_ids);
+		}
 		
 		if($status == 1){
 			$this->db->where_in('xin_employees.status',[1,4,5]);	
@@ -344,7 +346,7 @@ class Reports_model extends CI_Model {
 		// dd($this->db->last_query());
     }
 
-   	public function get_product_reports_info($first_date=null,$second_date=null,$status,$emp_id){
+   	public function get_product_reports_info($first_date=null,$second_date=null,$status='all',$emp_id =null){
 		// dd($status);
         $this->db->select(' 
                     ap.id as a_id,
@@ -389,7 +391,7 @@ class Reports_model extends CI_Model {
         $this->db->group_by('ap.id');
         return $this->db->get()->result();  
     }
-   	public function show_move_report($first_date=null,$second_date=null,$status,$emp_id){
+   	public function show_move_report($first_date=null,$second_date=null,$status=null,$emp_id=null){
 		$this->db->select(' 
 			xin_employees.first_name,
 			xin_employees.last_name,
@@ -409,6 +411,7 @@ class Reports_model extends CI_Model {
         $this->db->join('xin_departments','xin_departments.department_id = xin_employees.department_id');
         $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
 		$this->db->where_in('product_accessories.status',5);
+
         if($status == 'daily'){
 			$this->db->where('move_list.created_at',$first_date);
 		}	
@@ -419,6 +422,7 @@ class Reports_model extends CI_Model {
 		if($status == 'monthly'){
 			$this->db->where('move_list.created_at between  "' . $first_date . '" AND "' . $second_date . '"');
         }
+		
         $this->db->order_by('move_list.created_at',"ASC");
         return $this->db->get()->result();  
     }

@@ -187,7 +187,7 @@ class Lunch_model extends CI_Model {
         return $query->result();
     }
 
-    public function paymentreport($status)
+    public function paymentreport($status =null)
     {
         $last_prement= $this->db->query("SELECT * FROM `lunch_payment` ORDER BY id DESC LIMIT 1")->row();
         $this->db->select('xin_employees.first_name, xin_employees.last_name, lunch_payment.*');
@@ -198,6 +198,7 @@ class Lunch_model extends CI_Model {
             $this->db->where('lunch_payment.status', $status);
         }
         $result = $this->db->get('lunch_payment')->result();
+        dd($last_prement->end_date);
         return $result;
     }
     public function prever_report($date)
