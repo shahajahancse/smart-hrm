@@ -226,8 +226,8 @@ class Admin extends API_Controller
         if ($user_info['status'] == true) {
             if ($user_info['user_info']->user_role_id != 3) {
                 $id = $this->input->post('id');
-                $data['results'] = $this->Inventory_model->product_requisition_details($id);
-                if (!empty($data['results'])) {
+                $data = $this->Inventory_model->product_requisition_details($id);
+                if (!empty($data)) {
                     $this->api_return([
                         'status' => true,
                         'message' => 'successful',
@@ -460,7 +460,7 @@ class Admin extends API_Controller
                     $approved = $this->db->where('id', $r_id)->update('products_requisition_details', $data);
                     if ($approved) {
                         $this->api_return([
-                            'status' => false,
+                            'status' => true,
                             'message' => 'Success',
                             'data' => [],
                         ], 200);
@@ -802,6 +802,82 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => true,
                         'message' => 'successful',
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data Not Found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        };
+    }
+    public function admin_dashboard()
+    {
+
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                // present
+                if(!empty($this->input->post('date'))){
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Date Not Found',
+                        'data' => [],
+                    ], 200);
+                    exit();
+                }
+                $date=date('Y-m-d',strtotime($this->input->post('date')));
+                $Present_status=[];
+                $present=$this->Timesheet_model->get_today_present(0,'Present',$date);
+                $Present_status['total_present']= count($present);
+                $Present_status['present']=($present==null)?[]:$present;
+                // Present end
+                
+                // absent
+                $Absent_status=[];
+                $absent=$this->Timesheet_model->get_today_present(0,'Absent',$date);
+                $Absent_status['total_absent']= count($absent);
+                $Absent_status['absent']=($absent==null)?[]:$absent;
+                // absent end
+
+                // late
+                $Late_status=[];
+                $late=$this->Timesheet_model->get_today_present(1,'',$date);
+                $Late_status['total_late']= count($late);
+                $Late_status['late']=($late==null)?[]:$late;
+                // late end
+
+                // Leave
+                $leave_status=[];
+                $leave=$this->Timesheet_model->get_today_leave($date);
+                $leave_status['total_leave']= count($leave);
+                $leave_status['leave']=($leave==null)?[]:$leave;
+                // leave end
+                $data['Present_status']=$Present_status;
+                $data['Absent_status']=$Absent_status;
+                $data['Late_status']=$Late_status;
+                $data['leave_status']=$leave_status;
+                if (!empty($data)) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'date' => $date,
                         'data' => $data,
                     ], 200);
                 } else {

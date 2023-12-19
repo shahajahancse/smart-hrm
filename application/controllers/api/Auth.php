@@ -68,7 +68,6 @@ class Auth extends API_Controller
                 $this->db->where('user_id', $auth['user_id'])->update('api_keys', array('api_key' => $token));
             }
             $user_info = api_auth($token);
-
             if ($user_info) {
                 $user_info['user_info']->token = $token;
                 $this->api_return([

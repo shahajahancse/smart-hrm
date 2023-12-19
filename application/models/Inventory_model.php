@@ -123,16 +123,22 @@ class inventory_model extends CI_Model
 		}
 	} 
 	public function purchase_products_requisition_api($offset, $limit ,$status){
+		
 		$this->db->select('
 			p.id,
+			p.product_id,
+			p.quantity,
+			p.ap_quantity,
 			p.user_id,
 			p.status,
 			p.created_at,
 			p.updated_by,
 			emp.first_name,
-			emp.last_name
+			emp.last_name,
+			products.product_name
 		')->from('products_purches_details as p')
-		->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left');
+		->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left')
+		->join('products', 'p.product_id = products.id', 'left');
 		$this->db->order_by('p.id', 'desc');
 		$this->db->limit($limit, $offset);
 			$this->db->where('p.status',$status);
@@ -258,7 +264,7 @@ class inventory_model extends CI_Model
 		->where("products_purches_details.product_id = products.id")
 		->where("products_purches_details.id",$id)
 		->order_by('products_purches_details.id', 'desc');
-		return $this->db->get()->result();
+		return $this->db->get()->row();
 	}
 
 	public  function requisition_details($id=null){
