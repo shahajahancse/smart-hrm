@@ -1154,16 +1154,18 @@ class Admin extends API_Controller
                 $this->db->where('lunch.date', $this->input->post('date'));
                 $this->db->order_by('lunch.date', 'desc');
                 $lunch_data['lunch']= $this->db->get()->row();
-
-                $this->db->select('lunch_details.*,xin_employees.first_name,xin_employees.last_name,xin_departments.department_name,xin_designations.designation_name');
-                $this->db->from('lunch_details');
-                $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
-                $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
-                $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
-                $this->db->where('xin_employees.status', 1);
-                $this->db->where('lunch_details.lunch_id', $lunch_data['lunch']->id);
-                $lunch_data['lunch_details'] = $this->db->get()->result();
-
+                if (!empty($lunch_data['lunch'])) {
+                    $this->db->select('lunch_details.*,xin_employees.first_name,xin_employees.last_name,xin_departments.department_name,xin_designations.designation_name');
+                    $this->db->from('lunch_details');
+                    $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
+                    $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+                    $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+                    $this->db->where('xin_employees.status', 1);
+                    $this->db->where('lunch_details.lunch_id', $lunch_data['lunch']->id);
+                    $lunch_data['lunch_details'] = $this->db->get()->result();
+                }else{
+                    $lunch_data['lunch_details'] =[];
+                }
                 $data = $lunch_data;
 
                 if (!empty($data)) {
