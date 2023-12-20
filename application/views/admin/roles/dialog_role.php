@@ -247,7 +247,8 @@ dataSource: [
 		{ id: "", class: "role-checkbox-modal", text: "Payment In",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "2001", check: "<?php if(isset($_GET['role_id'])) { if(in_array('2001',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 		{ id: "", class: "role-checkbox-modal", text: "Payment Out",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "2002", check: "<?php if(isset($_GET['role_id'])) { if(in_array('2002',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 		{ id: "", class: "role-checkbox-modal", text: "Settings",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "2003", check: "<?php if(isset($_GET['role_id'])) { if(in_array('2003',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
-		{ id: "", class: "role-checkbox-modal", text: "Report",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "2004", check: "<?php if(isset($_GET['role_id'])) { if(in_array('2004',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+		{ id: "", class: "role-checkbox-modal", text: "Petty cash",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "2004", check: "<?php if(isset($_GET['role_id'])) { if(in_array('2004',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+		{ id: "", class: "role-checkbox-modal", text: "Report",  add_info: "<?php echo $this->lang->line('xin_role_enable');?>", value: "2005", check: "<?php if(isset($_GET['role_id'])) { if(in_array('2005',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 	]},
 
 	// Organization

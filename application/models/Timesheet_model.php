@@ -839,16 +839,10 @@
         $this->db->from('xin_departments');
         $this->db->from('xin_designations');
         $this->db->from('xin_attendance_time');
-
-        if ($late_status != null && $late_status != 0 && $late_status != '') {
-            $this->db->where("xin_attendance_time.late_status", 1);
-        }
-
+        $this->db->where("xin_attendance_time.late_status", $late_status);
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $date);
-        if($status != null && $status != 0 && $status != '') {
-            $this->db->where_in("xin_attendance_time.status", $status);
-        }
+        $this->db->where_in("xin_attendance_time.status", $status);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
         $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
@@ -893,5 +887,17 @@
            $data=[];
         }
     }
+	public function upcomming_intrn_prob_promo($first_date, $second_date,$status){
+
+		$this->db->select('xin_employees.first_name,xin_employees.last_name,xin_employees.notify_incre_prob,xin_departments.department_name,xin_designations.designation_name,xin_employees.status');
+		$this->db->from('xin_employees');
+		$this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+		$this->db->where('xin_employees.status', $status);
+		$this->db->where('xin_employees.notify_incre_prob BETWEEN "'.$first_date.'" AND "'.$second_date.'"');
+		$this->db->order_by('xin_employees.basic_salary', 'asc');
+		return $this->db->get()->result();
+		
+	}
 }
 ?>

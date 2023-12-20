@@ -834,7 +834,7 @@ class Admin extends API_Controller
         if ($user_info['status'] == true) {
             if ($user_info['user_info']->user_role_id != 3) {
                 // present
-                if(!empty($this->input->post('date'))){
+                if(!$this->input->post('date')){
                     $this->api_return([
                         'status' => false,
                         'message' => 'Date Not Found',
@@ -842,6 +842,38 @@ class Admin extends API_Controller
                     ], 200);
                     exit();
                 }
+
+                $first_date=date('Y-m-01',strtotime($this->input->post('date')));
+                $second_date=date('Y-m-t',strtotime($this->input->post('date')));
+
+                $upcoming_upgrade=[];
+                $upcoming_increment=$this->Timesheet_model->upcomming_intrn_prob_promo($first_date,$second_date,1);
+                $upcoming_intern=$this->Timesheet_model->upcomming_intrn_prob_promo($first_date,$second_date,4);
+                $upcoming_probation=$this->Timesheet_model->upcomming_intrn_prob_promo($first_date,$second_date,5);
+
+                $upcoming_upgrade['upcoming_increment']=($upcoming_increment==null)?0:count($upcoming_increment);
+                $upcoming_upgrade['upcoming_intern']=($upcoming_intern==null)?0:count($upcoming_intern);
+                $upcoming_upgrade['upcoming_probation']=($upcoming_probation==null)?0:count($upcoming_probation);
+
+
+                $this->db->select('lunch_details.*');
+                $this->db->from('lunch_details');
+                $this->db->where('lunch_details.date', $this->input->post('date'));
+                $this->db->where('lunch_details.meal_amount',1);
+                $active_lunch= $this->db->get()->result();
+
+                $this->db->select('lunch_details.*');
+                $this->db->from('lunch_details');
+                $this->db->where('lunch_details.date', $this->input->post('date'));
+                $this->db->where('lunch_details.meal_amount',0);
+                $Inactive_lunch= $this->db->get()->result();
+                
+                $lunch=[];
+                $lunch['active_lunch']=($active_lunch==null)?0:count($active_lunch);
+                $lunch['Inactive_lunch']=($Inactive_lunch==null)?0:count($Inactive_lunch);
+
+
+
                 $date=date('Y-m-d',strtotime($this->input->post('date')));
                 $Present_status=[];
                 $present=$this->Timesheet_model->get_today_present(0,'Present',$date);
@@ -858,7 +890,7 @@ class Admin extends API_Controller
 
                 // late
                 $Late_status=[];
-                $late=$this->Timesheet_model->get_today_present(1,'',$date);
+                $late=$this->Timesheet_model->get_today_present(1,'Present',$date);
                 $Late_status['total_late']= count($late);
                 $Late_status['late']=($late==null)?[]:$late;
                 // late end
@@ -873,11 +905,271 @@ class Admin extends API_Controller
                 $data['Absent_status']=$Absent_status;
                 $data['Late_status']=$Late_status;
                 $data['leave_status']=$leave_status;
+                $data['upcoming_upgrade']=$upcoming_upgrade;
+                $data['lunch']=$lunch;
                 if (!empty($data)) {
                     $this->api_return([
                         'status' => true,
                         'message' => 'successful',
                         'date' => $date,
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data Not Found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        };
+    }
+    public function attendence()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                // present
+                if(!$this->input->post('date')){
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Date Not Found',
+                        'data' => [],
+                    ], 200);
+                    exit();
+                }
+                $date=date('Y-m-d',strtotime($this->input->post('date')));
+                
+               
+
+
+                $Present_status=[];
+                $present=$this->Timesheet_model->get_today_present(0,'Present',$date);
+                $Present_status['total_present']= count($present);
+                $Present_status['present']=($present==null)?[]:$present;
+                // Present end
+
+                // absent
+                $Absent_status=[];
+                $absent=$this->Timesheet_model->get_today_present(0,'Absent',$date);
+                $Absent_status['total_absent']= count($absent);
+                $Absent_status['absent']=($absent==null)?[]:$absent;
+                // absent end
+
+               
+                $Late_status=[];
+                $late=$this->Timesheet_model->get_today_present(1,'Present',$date);
+                $Late_status['total_late']= count($late);
+                $Late_status['late']=($late==null)?[]:$late;
+                // late end
+
+                // Leave
+                $leave_status=[];
+                $leave=$this->Timesheet_model->get_today_leave($date);
+                $leave_status['total_leave']= count($leave);
+                $leave_status['leave']=($leave==null)?[]:$leave;
+                // leave end
+             
+
+
+                $data['Present_status']=$Present_status;
+                $data['Absent_status']=$Absent_status;
+                $data['Late_status']=$Late_status;
+                $data['leave_status']=$leave_status;
+       
+                if (!empty($data)) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'date' => $date,
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data Not Found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        };
+    }
+    public function upcomming_intrn_prob_promo()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                // present
+                if(!$this->input->post('date')){
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Date Not Found',
+                        'data' => [],
+                    ], 200);
+                    exit();
+                }
+                if(!$this->input->post('status')){
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Status Not Found',
+                        'data' => [],
+                    ], 200);
+                    exit();
+                }
+
+                $first_date=date('Y-m-01',strtotime($this->input->post('date')));
+                $second_date=date('Y-m-t',strtotime($this->input->post('date')));
+                $status=$this->input->post('status');
+
+                $data=$this->Timesheet_model->upcomming_intrn_prob_promo($first_date,$second_date,$status);
+                if (!empty($data)) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'date' => $this->input->post('date'),
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data Not Found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        };
+    }
+    public function done_intrn_prob_promo()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                // present
+                if(!$this->input->post('date')){
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Date Not Found',
+                        'data' => [],
+                    ], 200);
+                    exit();
+                }
+                $first_date=date('Y-m-01',strtotime($this->input->post('date')));
+                $second_date=date('Y-m-t',strtotime($this->input->post('date')));
+                $this->db->select('xin_employee_incre_prob.*,xin_employees.first_name,xin_employees.last_name,xin_employees.notify_incre_prob,xin_departments.department_name,xin_designations.designation_name');
+                $this->db->from('xin_employee_incre_prob');
+                $this->db->join('xin_employees', 'xin_employees.user_id = xin_employee_incre_prob.emp_id');
+                $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+                $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+                $this->db->where('xin_employees.status', 1);
+                $this->db->where('xin_employee_incre_prob.effective_date BETWEEN "'.$first_date.'" AND "'.$second_date.'"');
+                $this->db->where('xin_employee_incre_prob.status',$this->input->post('status'));
+                $this->db->order_by('xin_employees.basic_salary', 'asc');
+                $data["employees"] = $this->db->get()->result();
+                if (!empty($data)) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'date' => $this->input->post('date'),
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data Not Found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        };
+    }
+    public function lunch_order()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                // present
+                if(!$this->input->post('date')){
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Date Not Found',
+                        'data' => [],
+                    ], 200);
+                    exit();
+                }
+                $lunch_data=[];
+                $this->db->select('lunch.*');
+                $this->db->from('lunch');
+                $this->db->where('lunch.date', $this->input->post('date'));
+                $this->db->order_by('lunch.date', 'desc');
+                $lunch_data['lunch']= $this->db->get()->row();
+
+                $this->db->select('lunch_details.*,xin_employees.first_name,xin_employees.last_name,xin_departments.department_name,xin_designations.designation_name');
+                $this->db->from('lunch_details');
+                $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
+                $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+                $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+                $this->db->where('xin_employees.status', 1);
+                $this->db->where('lunch_details.lunch_id', $lunch_data['lunch']->id);
+                $lunch_data['lunch_details'] = $this->db->get()->result();
+
+                $data = $lunch_data;
+
+                if (!empty($data)) {
+                    $this->api_return([      
+                        'message' => 'successful',
+                        'date' => $this->input->post('date'),
                         'data' => $data,
                     ], 200);
                 } else {

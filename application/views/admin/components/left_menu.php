@@ -105,7 +105,7 @@ if($theme[0]->sub_menu_icons != ''){
           <li class="<?php if(!empty($arr_mod['petty_cash_active']))echo $arr_mod['petty_cash_active'];?>"><a href="<?php echo site_url('admin/accounting/petty_cash');?>"><i class="fa <?php echo $submenuicon;?>"></i>Petty Cash</a></li>
           <?php } ?>
 
-          <?php if(in_array('2004',$role_resources_ids)) { ?>
+          <?php if(in_array('2005',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['account_report_active']))echo $arr_mod['account_report_active'];?>"><a href="<?php echo site_url('admin/accounting/account_report');?>"><i class="fa <?php echo $submenuicon;?>"></i>Report</a></li>
           <?php } ?>
         </ul>

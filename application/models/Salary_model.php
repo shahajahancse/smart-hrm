@@ -231,7 +231,6 @@ class Salary_model extends CI_Model {
                 SUM(CASE WHEN attendance_status = 'Present' THEN 1 ELSE 0 END ) AS extra_p, 
                 SUM(CASE WHEN late_status = '1' THEN 1 ELSE 0 END ) AS late_status, 
             ");
-
         $this->db->where('employee_id',$emp_id);
         $this->db->where("attendance_date BETWEEN '$FS_on_date' AND '$FS_off_date'");
         $query = $this->db->get('xin_attendance_time');

@@ -127,6 +127,7 @@ class Attendance extends MY_Controller
                 $proxi_id = $this->db->where('emp_id', $row)->get('xin_proxi')->row()->proxi_id;
                 if ($proxi_id == null) {
                     $name = $this->db->where('user_id', $row)->get('xin_employees')->row();
+
                     echo "Required to Punch Id of $name->first_name $name->last_name";
                     exit;
                 } elseif ($proxi_id == ' ') {
@@ -134,7 +135,14 @@ class Attendance extends MY_Controller
                     echo "Required to Punch Id of $name->first_name $name->last_name";
                     exit;
                 }
-
+                $session = $this->session->userdata('username');
+                if ($session['role_id'] != 1) {
+                    $employee_managment = $this->db->where('user_id', $row)->get('xin_employees')->row();
+                    if ($employee_managment->is_management = 1) {
+                        echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name";
+                        exit;
+                    }
+                }
                 // insert in time
                 if ($in_time != '') {
                     $this->db->where("proxi_id", $proxi_id);
