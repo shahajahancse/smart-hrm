@@ -480,7 +480,6 @@ class Attendance extends MY_Controller
         $sql = $this->input->post('sql');
         $emp_id = explode(',', trim($sql));
         $data['status']= $status;
-        // dd($late_status." ".$status);
         $data["values"] = $this->Attendance_model->lunch_report($attendance_date, $emp_id, $status, $late_status);
         $data["attendance_date"] = $attendance_date;
 

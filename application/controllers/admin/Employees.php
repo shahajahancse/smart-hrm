@@ -6147,12 +6147,11 @@ public function nda() {
 		$data['breadcrumbs'] = "Set Team Leadsss";
 		$data['leads'] = $this->db->select('user_id, first_name, last_name')
 									->where('status', 1)
-									->where('lead_user_id =', 0)
+									->where('lead_user_id', 0)
 									->where('is_emp_lead !=', 2) 
 									->order_by('user_id')
 									->get('xin_employees')
 									->result();
-		// dd($data);
 		$data['subview'] = $this->load->view("admin/employees/set_team_leads", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
 		

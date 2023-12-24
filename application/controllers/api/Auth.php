@@ -129,11 +129,9 @@ class Auth extends API_Controller
     // Read data using username and password
     private function login_auth($data)
     {
-        $sql = 'SELECT * FROM xin_employees WHERE username = ? AND is_active = ?';
-        $binds = array($data['username'],1);
-        $query = $this->db->query($sql, $binds);
-
-
+      $sql = 'SELECT * FROM xin_employees WHERE username = ? AND is_active = ? AND status IN (?, ?, ?,?)';
+      $binds = array($data['username'], 1, 1, 4, 5,0);
+      $query = $this->db->query($sql, $binds);
         $options = array('cost' => 12);
         $password_hash = password_hash($data['password'], PASSWORD_BCRYPT, $options);
         if ($query->num_rows() > 0) {
