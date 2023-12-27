@@ -136,6 +136,7 @@ class Attendance extends MY_Controller
                     exit;
                 }
                 $session = $this->session->userdata('username');
+
                 if ($session['role_id'] != 1) {
                     $employee_managment = $this->db->where('user_id', $row)->get('xin_employees')->row();
                     if ($employee_managment->is_management = 1) {
@@ -143,6 +144,7 @@ class Attendance extends MY_Controller
                         exit;
                     }
                 }
+
                 // insert in time
                 if ($in_time != '') {
                     $this->db->where("proxi_id", $proxi_id);
@@ -1217,5 +1219,21 @@ class Attendance extends MY_Controller
             $data['subview'] 	 =  $this->load->view('admin/attendance/move_place', $data);
             $this->load->view('admin/layout/layout_main', $data);
         }
+    }
+    public function extra_present_approval(){
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', $sql);
+      $this->db->select("xin_attendance_time.*, xin_employees.first_name, xin_employees.last_name,");
+      $this->db->from("xin_attendance_time");
+      $this->db->join("xin_employees", "xin_employees.user_id = xin_attendance_time.employee_id");
+      $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
+      $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
+      $this->db->where("xin_attendance_time.status","Off Day");
+      $this->db->where("xin_attendance_time.attendance_status", "Present");
+      $this->db->group_by("xin_attendance_time.employee_id");
+      $query = $this->db->get()->result();
+      echo  json_encode($query);
     }
 }

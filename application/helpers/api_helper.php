@@ -10,7 +10,7 @@ if ( ! function_exists('api_auth'))
         $q = $CI->db->get()->row();
         if (!empty($q)) {
             $CI->db->select('
-                e.user_id, 
+                e.username as user_id, 
                 e.employee_id, 
                 e.first_name, 
                 e.last_name, 
