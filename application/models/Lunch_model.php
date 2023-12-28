@@ -198,7 +198,7 @@ class Lunch_model extends CI_Model {
             $this->db->where('lunch_payment.status', $status);
         }
         $result = $this->db->get('lunch_payment')->result();
-        dd($last_prement->end_date);
+        // dd($last_prement->end_date);
         return $result;
     }
     public function prever_report($date)
