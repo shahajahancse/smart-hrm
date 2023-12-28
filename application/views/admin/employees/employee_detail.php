@@ -3168,13 +3168,12 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                     <select name="set_team_lead" id="team_lead" class="form-control">
                                                         <option value="">Selecet</option>
                                                         <?php $data = $this->db->select('user_id, first_name, last_name')
-                                                                            ->where('status', 1)
-                                                                            ->where('lead_user_id =', 0)
-                                                                            ->where('is_emp_lead =', 2) 
-                                                                            ->order_by('user_id')
-                                                                            ->get('xin_employees')
-                                                                            ->result();
-                                                              
+                                                                ->where_in('status', [0,1])
+                                                                ->where('lead_user_id =', 0)
+                                                                ->where('is_emp_lead =', 2) 
+                                                                ->order_by('user_id')
+                                                                ->get('xin_employees')
+                                                                ->result();
                                                             foreach($data as $row){  
                                                         ?>
                                                         <option value="<?php echo $row->user_id?>" <?php echo $row->user_id == $lead_user_id ? 'selected':''?>><?php echo $row->first_name.''.$row->last_name?></option>
