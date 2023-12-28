@@ -145,12 +145,12 @@ class Admin extends API_Controller
                 $id = $this->input->post('leave_id');
                 $result = $this->Timesheet_model->update_leave_record($data, $id);
                 if ($result == true) {
-                    if ($data['qty'] > 0) {
-                        for ($i = 0; $i < $data['qty']; $i++) {
-                            $process_date = date("Y-m-d", strtotime("+$i day", strtotime($data['from_date'])));
-                            $this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
-                        }
-                    }
+                    // if ($data['qty'] > 0) {
+                    //     for ($i = 0; $i < $data['qty']; $i++) {
+                    //         $process_date = date("Y-m-d", strtotime("+$i day", strtotime($data['from_date'])));
+                    //         $this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+                    //     }
+                    // }
                     $this->api_return([
                         'status' => true,
                         'message' => 'successful',
