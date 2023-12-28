@@ -75,23 +75,20 @@
             </div>
             <form id="extra_present_approval_form">
                 <div class="col-md-12" style="display: flex;flex-direction: column;gap: 9px;">
-                    <div class="col-md-12"
-                        style="padding: 6px;border: 1px solid #c1c1c1;border-radius: 5px;display: flex;flex-direction: row;font-weight: bold;">
-                        <div class="col-md-3"> <span> Employee Name</span> </div>
-                        <div class="col-md-3"> <span>Date</span> </div>
-                        <div class="col-md-2"> <span>Clock In</span> </div>
-                        <div class="col-md-2"> <span>Clock Out</span> </div>
-                        <div class="col-md-2"> <span>Status</span> </div>
-                    </div>
-                    <div class="col-md-12"
-                        style="padding: 6px;border: 1px solid #c1c1c1;border-radius: 5px;display: flex;flex-direction: row;">
-                        <input type="hidden" name="extra_present_approval_id" id="extra_present_approval_id">
-                        <div class="col-md-3"><span>Employee Name</span></div>
-                        <div class="col-md-3"><span>Date</span></div>
-                        <div class="col-md-2"><span>Clock In</span></div>
-                        <div class="col-md-2"><span>Clock Out</span></div>
-                        <div class="col-md-2"><span>Status</span></div>
-                    </div>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Employee Name</th>
+                                <th>Date</th>
+                                <th>Day</th>
+                                <th>In</th>
+                                <th>Out</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="extra_present_approval_data">
+                        </tbody>
+                    </table>
                     <div class="col-md-12" style="margin-top: 10px;text-align-last: right;">
                         <input class="btn btn-primary" type="submit" value="Save">
                     </div>
@@ -394,9 +391,8 @@ function extra_present_approval() {
             if (arr.length != 0) {
                 $.each(arr, function(index, value) {
                     item += '<tr>';
-                    item += '<td class="success">' + (index + 1) + '  </td>';
-                    item += '<td class="warning ">' + value.first_name + ' ' + value.last_name +
-                        '</td>';
+                    item += '<td class="warning ">' + value.first_name + ' ' + value.last_name +'</td>';
+                    item += '<td class="warning ">' + value.att+'</td>';
                     item += '</tr>';
                 });
             }

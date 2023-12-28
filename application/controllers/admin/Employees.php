@@ -308,7 +308,8 @@ class Employees extends MY_Controller {
 				$lrip = '';
 			}
 
-			$function = '
+			if($r->user_role_id == 1) {
+				$function = '
 				<div class="dropdown" >
                     <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Action
@@ -323,11 +324,21 @@ class Employees extends MY_Controller {
 						
 						</div>
                 </div>';
+			} else {
+				$function = '
+				<div class="dropdown" >
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Action
+                    </button>
+                    <div class="dropdown-menu  pull-left" style="min-width: 123px !important;border-radius: 5px;left: -64px;box-shadow: 0px 0px 5px 1px #8e8e8e;top: 27px;" aria-labelledby="dropdownMenuButton">
+						
+                        <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a>
 
+                        '. $lrip .'
+						</div>
+                </div>';
 
-
-
-
+			}
 			if($r->wages_type == 1){
 				$bsalary = $this->Xin_model->currency_sign($r->basic_salary);
 			} else {
