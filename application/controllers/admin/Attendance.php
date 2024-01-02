@@ -139,7 +139,7 @@ class Attendance extends MY_Controller
 
                 if ($session['role_id'] != 1) {
                     $employee_managment = $this->db->where('user_id', $row)->get('xin_employees')->row();
-                    if ($employee_managment->is_management = 1) {
+                    if ($employee_managment->is_management == 1) {
                         echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name";
                         exit;
                     }
