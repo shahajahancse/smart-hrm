@@ -8,6 +8,11 @@
     gap: 17px;
     margin-top: 40px;
 }
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
 </style>
 <div class="monthname">
     Petty Cash Summery of <input id="get_date" type="date" value="<?= date('Y-m-d') ?>"
@@ -126,23 +131,8 @@
     </div>
 </div>
 <div class="col-md-12" style="display: flex; gap: 10px">
-    <div class="col-md-6" style="box-shadow: 0px 0px 6px 2px #c9c9c9;padding: 6px;">
-    <h4>Cash In</h4>
-        <table class="table table-striped table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>SL</th>
-                    <th>Cash Received From</th>
-                    <th>Amount</th>
-                    <th>Remarks</th>
-                </tr>
-            </thead>
-            <tbody id="cash_in_data">
-            </tbody>
-        </table>
-    </div>
     <div class="col-md-6 " style="box-shadow: 0px 0px 6px 2px #c9c9c9;padding: 6px;">
-    <h4>Cash Out</h4>
+     <h4>Cash Out</h4>
         <table class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
@@ -157,6 +147,23 @@
             </tbody>
         </table>
     </div>
+
+    <div class="col-md-6" style="box-shadow: 0px 0px 6px 2px #c9c9c9;padding: 6px;">
+     <h4>Cash In</h4>
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>SL</th>
+                    <th>Cash Received From</th>
+                    <th>Amount</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody id="cash_in_data">
+            </tbody>
+        </table>
+    </div>
+    
 </div>
 
 
@@ -239,7 +246,7 @@ function get_data() {
                     var table_data_in = '';
                     for (let index = 0; index < petty_cash_in_data.length; index++) {
                         const cash_in = petty_cash_in_data[index];
-                        table_data_in += `<tr>
+                        table_data_in += `<tr >
                                                 <td>${index+1}</td>
                                                 <td>${cash_in.received_to}</td>
                                                 <td>${cash_in.amount}</td>
@@ -268,9 +275,13 @@ function get_data() {
                     table_data_out = '<tr><td colspan="5">There is no data</td></tr>';
 
                 }
-                $('#cash_in_data').html(table_data_in);
+                $('#cash_in_data').empty();
 
-                $('#cash_out_data').html(table_data_out);
+                $('#cash_out_data').empty();
+
+                $('#cash_in_data').append(table_data_in);
+
+                $('#cash_out_data').append(table_data_out);
             }
         }
     })
