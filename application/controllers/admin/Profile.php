@@ -94,6 +94,7 @@ class Profile extends MY_Controller {
 			'twitter_link' => $result[0]->twitter_link,
 			'blogger_link' => $result[0]->blogger_link,
 			'linkdedin_link' => $result[0]->linkdedin_link,
+			'youtube_link' => $result[0]->youtube_link,
 			'google_plus_link' => $result[0]->google_plus_link,
 			'instagram_link' => $result[0]->instagram_link,
 			'last_login_date' => $result[0]->last_login_date,
