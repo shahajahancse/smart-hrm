@@ -609,6 +609,7 @@ class Attendance extends MY_Controller
     }
     public function overall_performance()
     {
+        
         $first_date = $this->input->post('first_date');
         $second_date = $this->input->post('second_date');
 
