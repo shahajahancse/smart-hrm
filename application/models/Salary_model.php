@@ -228,7 +228,7 @@ class Salary_model extends CI_Model {
                 SUM(CASE WHEN status = 'Off Day'  THEN 1 ELSE 0 END ) AS weekend,
                 SUM(CASE WHEN status = 'Holiday'  THEN 1 ELSE 0 END ) AS holiday,  
                 SUM(CASE WHEN attendance_status = 'HalfDay'  THEN 0.5 ELSE 0 END ) AS HalfDay, 
-                SUM(CASE WHEN attendance_status = 'Present' THEN 1 ELSE 0 END ) AS extra_p, 
+                SUM(CASE WHEN extra_ap = 1 THEN 1 ELSE 0 END) AS extra_p, 
                 SUM(CASE WHEN late_status = '1' THEN 1 ELSE 0 END ) AS late_status, 
             ");
         $this->db->where('employee_id',$emp_id);
