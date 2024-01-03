@@ -428,19 +428,13 @@
 
     function extra_present()
     {
+      
       var ajaxRequest;  // The variable that makes Ajax possible!
       ajaxRequest = new XMLHttpRequest();
-
       first_date = document.getElementById('process_date').value;
       second_date = document.getElementById('second_date').value;
       var checkboxes = document.getElementsByName('select_emp_id[]');
       var sql = get_checked_value(checkboxes);
-      /*if(sql =='')
-      {
-        alert('Please select employee Id');
-        return ;
-      }*/
-      
       if(first_date =='')
       {
         alert('Please select first date');
@@ -451,27 +445,57 @@
         alert('Please select second date');
         return ;
       }
-      
       var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql;
-
       url = base_url + "/extra_present";
       ajaxRequest.open("POST", url, true);
       ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
        ajaxRequest.send(data);
-        // alert(url); return;
-
       ajaxRequest.onreadystatechange = function(){
         if(ajaxRequest.readyState == 4){
-          // console.log(ajaxRequest.responseText); return;
           var resp = ajaxRequest.responseText;
           a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
           a.document.write(resp);
-          // a.close();
+        }
+      }
+    }
+    function overall_performance()
+    {
+      $('#loading').css({
+        visibility: 'visible'
+    });
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+      first_date = document.getElementById('process_date').value;
+      second_date = document.getElementById('second_date').value;
+      var checkboxes = document.getElementsByName('select_emp_id[]');
+      var sql = get_checked_value(checkboxes);
+      if(first_date =='')
+      {
+        alert('Please select first date');
+        return ;
+      }
+      if(second_date =='')
+      {
+        alert('Please select second date');
+        return ;
+      }
+      var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql;
+      url = base_url + "/overall_performance";
+      ajaxRequest.open("POST", url, true);
+      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+       ajaxRequest.send(data);
+      ajaxRequest.onreadystatechange = function(){
+        $('#loading').css({
+          visibility: 'hidden'
+      });
+        if(ajaxRequest.readyState == 4){
+          var resp = ajaxRequest.responseText;
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+          a.document.write(resp);
         }
       }
     }
 
-    
     function latecount(type)
     {
       var ajaxRequest;  // The variable that makes Ajax possible!

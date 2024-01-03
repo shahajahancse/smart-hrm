@@ -576,35 +576,87 @@ class Attendance extends MY_Controller
         xin_attendance_time.status,
         xin_attendance_time.late_status,
         xin_attendance_time.comment,
-    ');
+      ');
 
-    $this->db->from('xin_employees');
-    $this->db->from('xin_departments');
-    $this->db->from('xin_designations');
-    $this->db->from('xin_attendance_time');
+        $this->db->from('xin_employees');
+        $this->db->from('xin_departments');
+        $this->db->from('xin_designations');
+        $this->db->from('xin_attendance_time');
 
 
-    $this->db->where("xin_employees.is_active", 1);
-    $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'" );
-    if (!empty($emp_id)) {
-        $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
+        $this->db->where("xin_employees.is_active", 1);
+        $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'" );
+        if (!empty($emp_id)) {
+            $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
+        }
+        $this->db->where('xin_employees.department_id = xin_departments.department_id');
+        $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
+        $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
+
+        $this->db->where_in("xin_attendance_time.attendance_status", 'Present');
+        $this->db->where_in("xin_attendance_time.status", 'Off Day');
+
+
+        $this->db->order_by('xin_attendance_time.clock_in', "ASC");
+        $this->db->group_by('xin_attendance_time.employee_id');
+        
+
+        $data["values"] = $this->db->get()->result();
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $this->load->view('admin/attendance/extra_present', $data);
+        
     }
-    $this->db->where('xin_employees.department_id = xin_departments.department_id');
-    $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
-    $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
+    public function overall_performance()
+    {
+        
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
 
-    $this->db->where_in("xin_attendance_time.attendance_status", 'Present');
-    $this->db->where_in("xin_attendance_time.status", 'Off Day');
+        $sql = $this->input->post('sql');
+        if (empty($sql)) {
+            $emp_id = array();
+        } else {
+            $emp_id = explode(',', trim($sql));
+        }
+        $data=[];
+        foreach($emp_id as $key => $value){
+          $get_total_present = $this->Attendance_model->get_total_present($value, $first_date, $second_date);
+          $get_total_absent = $this->Attendance_model->get_total_absent($value, $first_date, $second_date);
+          $get_total_late = $this->Attendance_model->get_total_late($value, $first_date, $second_date);
+          $get_total_overtime = $this->Attendance_model->get_total_overtime($value, $first_date, $second_date);
+          $get_total_leave = $this->Attendance_model->get_total_leave($value, $first_date, $second_date);
+        
 
+          $total_day = $get_total_present + $get_total_absent+$get_total_leave;
+          $get_percent_present = ($get_total_present / $total_day) * 100;
+          $get_percent_absent = ($get_total_absent / $total_day) * 100;
+          $get_percent_overtime = ($get_total_overtime / $total_day) * 100;
+          $get_percent_late = ($get_total_late / $total_day) * 100;
+          $get_percent_leave = ($get_total_leave / $total_day) * 100;
 
-    $this->db->order_by('xin_attendance_time.clock_in', "ASC");
-    $this->db->group_by('xin_attendance_time.employee_id');
-    
+          $get_employee_info= $this->Xin_model->read_user_info($value);
+          $data[$key] = [
+            'first_name' => $get_employee_info[0]->first_name,
+            'last_name' => $get_employee_info[0]->last_name,
+            'total_present' => $get_total_present,
+            'total_percent_present' => number_format($get_percent_present, 2),
+            'total_absent' => $get_total_absent,
+            'total_percent_absent' => number_format($get_percent_absent, 2),
+            'total_late' => $get_total_late,
+            'total_percent_late' => number_format($get_percent_late, 2),
+            'total_overtime' => $get_total_overtime,
+            'total_percent_overtime' => number_format($get_percent_overtime, 2),
+            'total_leave' => $get_total_leave,
+            'total_percent_leave' => number_format($get_percent_leave, 2),
+            'total_day' => $total_day,
+          ];
+        }
+        $d['data']=$data;
+        $d['first_date'] = $first_date;
+        $d['second_date'] = $second_date;
+        echo $this->load->view("admin/attendance/overall_performance", $d, true);
 
-    $data["values"] = $this->db->get()->result();
-    $data['first_date'] = $first_date;
-    $data['second_date'] = $second_date;
-    $this->load->view('admin/attendance/extra_present', $data);
         
     }
     public function late_details()
@@ -1235,5 +1287,14 @@ class Attendance extends MY_Controller
       $this->db->group_by("xin_attendance_time.employee_id");
       $query = $this->db->get()->result();
       echo  json_encode($query);
+    }
+    public function extra_present_approval_press(){
+        $data = array(
+            'extra_ap' => $this->input->post('data')
+        );
+        $time_attendance_id = $this->input->post('time_attendance_id');
+        $this->db->where('time_attendance_id', $time_attendance_id);
+        $this->db->update('xin_attendance_time', $data);
+        echo 'success';
     }
 }

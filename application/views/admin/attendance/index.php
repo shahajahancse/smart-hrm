@@ -35,6 +35,89 @@
     padding: 6px 10px !important;
     margin-top: 13px;
 }
+/* Customize the label (the checkbox-btn) */
+.checkbox-btn {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-btn input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-btn label {
+  cursor: pointer;
+  font-size: 14px;
+}
+/* Create a custom checkbox */
+.checkmark {
+content: 'zfdsdf';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  border: 2.5px solid #000000;
+  transition: .2s linear;
+}
+.checkbox-btn input:checked ~ .checkmark {
+  background-color: transparent;
+  color: #0ea021;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  left: 50%;
+  top: 40%;
+  width: 10px;
+  height: 14px;
+  border: 2px solid #0ea021;
+  filter: drop-shadow(0px 0px 10px #0ea021);
+  border-width: 0 2.5px 2.5px 0;
+  transition: .2s linear;
+  transform: translate(-50%, -50%) rotate(-90deg) scale(0.2);
+}
+
+/* Show the checkmark when checked */
+.checkbox-btn input:checked ~ .checkmark:after {
+  visibility: visible;
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  animation: pulse 1s ease-in;
+}
+
+.checkbox-btn input:checked ~ .checkmark {
+  transform: rotate(45deg);
+  border: none;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1.6);
+  }
+}
+
+
 </style>
 <div id="loading">
 
@@ -80,17 +163,18 @@
                             <tr>
                                 <th>Employee Name</th>
                                 <th>Date</th>
-                                <th>Day</th>
                                 <th>In</th>
                                 <th>Out</th>
                                 <th>Status</th>
+                                <th>Approve status</th>
                             </tr>
                         </thead>
                         <tbody id="extra_present_approval_data">
+
                         </tbody>
                     </table>
                     <div class="col-md-12" style="margin-top: 10px;text-align-last: right;">
-                        <input class="btn btn-primary" type="submit" value="Save">
+                        <a class="btn btn-primary"  href="#" data-dismiss="modal">Close</a>
                     </div>
                 </div>
 
@@ -157,14 +241,14 @@
     <div class="box <?php echo $get_animate;?>">
         <div class="box-header with-border" id="report_title">
             <h3 class="box-title" id="report"> Employee Report
-                <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
             </h3>
-            <button id="manually_entry" class="btn btn-sm btn-primary pull-right"
-                style="padding: 6px 10px !important;">Manually Entry</button>
-            <button onclick="extra_present_approval()" class="btn btn-sm btn-primary pull-right"
-                style="padding: 6px 10px !important;">Extra Present Approval</button>
+            <div class="box-tools pull-right">
+                <button id="manually_entry" class="btn btn-sm btn-primary"
+                    style="padding: 6px 10px !important;">Manually Entry</button>
+                <button onclick="extra_present_approval()" class="btn btn-sm btn-primary"
+                    style="padding: 6px 10px !important;">Extra Present Approval</button>
+            </div>
         </div>
-
         <div class="box-body" id="emp_report">
             <ul class="nav nav-tabs " id="myTab" role="tablist">
                 <li class="nav-item active">
@@ -178,6 +262,10 @@
                 <li class="nav-item">
                     <a class="nav-link" id="continuously-tab" data-toggle="tab" href="#continuously" role="tab"
                         aria-controls="continuously" aria-selected="false">Continuously</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="performance-tab" data-toggle="tab" href="#performance" role="tab"
+                        aria-controls="continuously" aria-selected="false"> Attendance Performance </a>
                 </li>
             </ul>
 
@@ -217,7 +305,6 @@
 
 
                 </div>
-
                 <div class="tab-pane fade" id="continuously" role="tabpanel" aria-labelledby="continuously-tab"
                     style="margin-top: 30px;">
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="jobCard()">Job Card</button>
@@ -229,11 +316,19 @@
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="leavecal(3,[1,4])">Leave Panding</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="leavecal(3,[2])">Leave Approved</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="leavecal(3,[3])">Leave Rejected</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="latecount(1)">Late</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="absent()">Absent</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="latecount(0)">No Late</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="overtime()">Overtime</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="nda_report()">NDA Report</button>
+                </div>
+                <div class="tab-pane fade" id="performance" role="tabpanel" aria-labelledby="performance-tab"
+                    style="margin-top: 30px;">
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="latecount(1)">Late</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="latecount(0)">No Late</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="overtime()">Overtime</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="absent()">Absent</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="extra_present()">Extra Present</button>
+                    <button class="btn  btn-sm mr-5 sbtn mt-2" onclick="overall_performance()">Over All Performance</button>
                 </div>
 
             </div>
@@ -391,8 +486,18 @@ function extra_present_approval() {
             if (arr.length != 0) {
                 $.each(arr, function(index, value) {
                     item += '<tr>';
-                    item += '<td class="warning ">' + value.first_name + ' ' + value.last_name +'</td>';
-                    item += '<td class="warning ">' + value.att+'</td>';
+                    item += '<td class="">' + value.first_name + ' ' + value.last_name +'</td>';
+                    item += '<td class="">' + value.attendance_date+'</td>';
+                    item += '<td class="">' + value.clock_in+'</td>';
+                    item += '<td class="">' + value.clock_out+'</td>';
+                    item += '<td class="">Extra Present</td>';
+                    item += `<td class="">
+                        <label class="checkbox-btn">
+                                <label for="checkbox"></label>
+                                <input id="checkbox"  onchange="extra_present_approval_press(this,${value.time_attendance_id})" type="checkbox" ${value.extra_ap == 1 ? 'checked' : ''}>
+                                <span class="checkmark"></span>
+                        </label>
+                        </td>`;
                     item += '</tr>';
                 });
             }
@@ -402,6 +507,31 @@ function extra_present_approval() {
             console.log(xhr.responseText);
         }
     })
-
 }
 </script>
+<script>
+function extra_present_approval_press(data, time_attendance_id) {
+    if (data.checked) {
+        data=1
+    } else {
+        data=0
+    } 
+    var url = "<?php echo base_url('admin/attendance/extra_present_approval_press'); ?>";
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            "data": data,
+            "time_attendance_id": time_attendance_id
+        },
+        success: function(response) {
+            console.log(response);
+        },
+        error: function(xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+    })
+}
+</script>
+
+    

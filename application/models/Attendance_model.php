@@ -722,6 +722,59 @@ class Attendance_model extends CI_Model
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
     }
+    public function get_total_present($value, $first_date, $second_date)
+    {
+        $this->db->select('xin_attendance_time.attendance_date');
+        $this->db->from('xin_attendance_time');
+        $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
+        $this->db->where("xin_attendance_time.status", 'Present');
+        $this->db->where("xin_attendance_time.employee_id", $value);
+        return count($this->db->get()->result());
+    }
+    public function get_total_absent($value, $first_date, $second_date)
+    {
+        $this->db->select('xin_attendance_time.attendance_date');
+        $this->db->from('xin_attendance_time');
+        $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
+        $this->db->where("xin_attendance_time.status", 'Absent');
+        $this->db->where("xin_attendance_time.employee_id", $value);
+        return count($this->db->get()->result());
+    }
+
+    public function get_total_late($value, $first_date, $second_date)
+    {
+        $this->db->select('xin_attendance_time.attendance_date');
+        $this->db->from('xin_attendance_time');
+        $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
+        $this->db->where("xin_attendance_time.late_status", 1);
+        $this->db->where("xin_attendance_time.employee_id", $value);
+        return count($this->db->get()->result());
+    }
+
+    public function get_total_overtime($value, $first_date, $second_date)
+    {
+        $this->db->select('xin_attendance_time.attendance_date');
+        $this->db->from('xin_attendance_time');
+        $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
+        $this->db->where("xin_attendance_time.status", 'Present');
+        $this->db->where("xin_attendance_time.ot >= 30");
+        $this->db->where("xin_attendance_time.employee_id", $value);
+        return count($this->db->get()->result());
+    }
+    public function get_total_leave($value, $first_date, $second_date)
+    {
+        $this->db->select('xin_leave_applications.*');
+        $this->db->from('xin_leave_applications');
+        $this->db->where("xin_leave_applications.from_date BETWEEN '$first_date' AND '$second_date'");
+        $this->db->where("xin_leave_applications.status", 2);
+        $this->db->where("xin_leave_applications.employee_id", $value);
+        $data=$this->db->get()->result();
+        $total = 0;
+        foreach($data as $dat) {
+            $total += $dat->qty;
+        }
+        return $total;
+    }
 
 
 
