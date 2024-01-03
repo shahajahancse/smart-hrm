@@ -101,12 +101,12 @@ td, th {
                                     <div id="leave-statistics">
                                         <p><strong>Earn leave (<span id="leave_count_el_p"></span>/12)</strong></p>
                                         <div class="progress" style="margin: 7px;height: 19px;background: aqua;">
-                                            <div class="progress-bar" id="leave_count_el_prog" style="background: #ff8484;width: 75%;"> Teken 9.5 </div>
+                                            <div class="progress-bar" id="leave_count_el_prog" style="background: #ff8484;width: 75%;"></div>
                                         </div>
                                         <div id="leave-statistics">
                                             <p><strong>Sick leave (<span id="leave_count_sl_p"></span>/4)</strong></p>
                                             <div class="progress" style="margin: 7px;height: 19px;background: aqua;">
-                                                <div class="progress-bar" id="leave_count_sl_prog" style="background: #ff8484;width: 75%;"> Teken 3</div>
+                                                <div class="progress-bar" id="leave_count_sl_prog" style="background: #ff8484;width: 75%;"></div>
                                             </div>
                                         </div>
                                     </div>

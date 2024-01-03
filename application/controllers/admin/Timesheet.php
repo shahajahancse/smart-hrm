@@ -769,9 +769,34 @@ class Timesheet extends MY_Controller {
 	}
 	public function modal_leave_data_ajax($id) {
 		$data['result'] = $this->Timesheet_model->get_leaves_leave_id_with_info($id);
-		$data['leave_calel']=12-get_cal_leave($data['result']->employee_id, 1);
+		$employee_id=$data['result']->employee_id;
+
+		$this->db->where('leave_id', $id);
+		$leave_data=$this->db->get('xin_leave_applications')->row();
+		$year = date('Y', strtotime($leave_data->from_date));
+		// $from_date = date("$year-01-01");
+		// $to_date = date("$year-12-31");
+
+		$this->db->select('
+		SUM(CASE WHEN leave_type_id = 1 THEN qty ELSE 0 END) AS earn_leave,
+		SUM(CASE WHEN leave_type_id = 2 THEN qty ELSE 0 END) AS sick_leave,
+		');
+		$this->db->where('employee_id', $employee_id);
+		$this->db->where('current_year', $year);
+		$this->db->where('status', 2);
+
+		$this->db->from('xin_leave_applications');
+		$total_leave = $this->db->get()->row();
+
+
+
+
+
+
+
+		$data['leave_calel']=$total_leave->earn_leave;
 		$data['leave_calel_percent']=$data['leave_calel']*100/12;
-		$data['leave_calsl']=4-get_cal_leave($data['result']->employee_id, 2);
+		$data['leave_calsl']=$total_leave->sick_leave;
 		$data['leave_calsl_percent']=$data['leave_calsl']*100/4;
 		echo json_encode($data);
 	}
