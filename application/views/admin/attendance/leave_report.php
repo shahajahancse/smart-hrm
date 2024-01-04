@@ -175,9 +175,8 @@ exit();
 				
 				<td>
 					<?php 
-						$data = leave_cal($row->employee_id);
-						// dd($data);
-						echo "Earn Leave = ".$data['leaves'][0]['qty'] . ", Sick Leave = ".$data['leaves'][1]['qty'];
+						
+						echo "Earn Leave = ".(12-$total_leave->earn_leave) . ", Sick Leave = ".(4-$total_leave->sick_leave);
 					?>
 				</td>
                 <?php

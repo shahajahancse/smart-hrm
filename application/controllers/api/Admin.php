@@ -855,16 +855,17 @@ class Admin extends API_Controller
                 $upcoming_upgrade['upcoming_intern']=($upcoming_intern==null)?0:count($upcoming_intern);
                 $upcoming_upgrade['upcoming_probation']=($upcoming_probation==null)?0:count($upcoming_probation);
 
+                $ldate =  date('Y-m-d',strtotime($this->input->post('date')));
 
                 $this->db->select('lunch_details.*');
                 $this->db->from('lunch_details');
-                $this->db->where('lunch_details.date', $this->input->post('date'));
+                $this->db->where('lunch_details.date', $ldate);
                 $this->db->where('lunch_details.meal_amount',1);
                 $active_lunch= $this->db->get()->result();
 
                 $this->db->select('lunch_details.*');
                 $this->db->from('lunch_details');
-                $this->db->where('lunch_details.date', $this->input->post('date'));
+                $this->db->where('lunch_details.date', $ldate);
                 $this->db->where('lunch_details.meal_amount',0);
                 $Inactive_lunch= $this->db->get()->result();
                 
@@ -1148,26 +1149,42 @@ class Admin extends API_Controller
                     ], 200);
                     exit();
                 }
-                $lunch_data=[];
-                $this->db->select('lunch.*');
-                $this->db->from('lunch');
-                $this->db->where('lunch.date', $this->input->post('date'));
-                $this->db->order_by('lunch.date', 'desc');
-                $lunch_data['lunch']= $this->db->get()->row();
-                if (!empty($lunch_data['lunch'])) {
-                    $this->db->select('lunch_details.*,xin_employees.first_name,xin_employees.last_name,xin_departments.department_name,xin_designations.designation_name');
-                    $this->db->from('lunch_details');
-                    $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
-                    $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
-                    $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
-                    $this->db->where('xin_employees.status', 1);
-                    $this->db->where('lunch_details.lunch_id', $lunch_data['lunch']->id);
-                    $lunch_data['lunch_details'] = $this->db->get()->result();
-                }else{
-                    $lunch_data['lunch_details'] =[];
+                $status=$this->input->post('status');
+                if ($status == 1) {
+                    $lunch_data=[];
+                    $this->db->select('lunch.*');
+                    $this->db->from('lunch');
+                    $this->db->where('lunch.date', $this->input->post('date'));
+                    $this->db->order_by('lunch.date', 'desc');
+                    $lunch_data['lunch']= $this->db->get()->row();
+                    if (!empty($lunch_data['lunch'])) {
+                        $this->db->select('lunch_details.*,xin_employees.first_name,xin_employees.last_name,xin_departments.department_name,xin_designations.designation_name');
+                        $this->db->from('lunch_details');
+                        $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
+                        $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+                        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+                        $this->db->where('lunch_details.lunch_id', $lunch_data['lunch']->id);
+                        $this->db->where('lunch_details.meal_amount',1);
+                        $lunch_data['lunch_details'] = $this->db->get()->result();
+                    }else{
+                        $lunch_data['lunch_details'] =[];
+                    }
+                    $data = $lunch_data;
+    
+                }elseif($status == 2){
+                        $ldate =  date('Y-m-d',strtotime($this->input->post('date')));
+                        $this->db->select('lunch_details.*,xin_employees.first_name,xin_employees.last_name,xin_departments.department_name,xin_designations.designation_name');
+                        $this->db->from('lunch_details');
+                        $this->db->join('xin_employees', 'xin_employees.user_id = lunch_details.emp_id');
+                        $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+                        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+                        $this->db->where('lunch_details.date', $ldate);
+                        $this->db->where('lunch_details.meal_amount',0);
+                        $lunch_data['lunch_details'] = $this->db->get()->result();
+                      $lunch_data['lunch']['emp_m'] = strval(count($lunch_data['lunch_details']));
+                      $lunch_data['lunch']['guest_m'] = strval(0);
+                        $data = $lunch_data;
                 }
-                $data = $lunch_data;
-
                 if (!empty($data)) {
                     $this->api_return([      
                         'message' => 'successful',
@@ -1196,4 +1213,87 @@ class Admin extends API_Controller
             ], 401);
         };
     }
+    public function job_card(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $emp_id=$this->input->post('emp_id');
+                if (empty($emp_id)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select Employee',
+                        'data' => $result,
+                    ], 200);
+                    exit;
+                }
+                $first_date = $this->input->post('first_date');
+                if (empty($first_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select First Date',
+                        'data' => $result,
+                    ], 200);
+                    exit;
+                }
+                $second_date = $this->input->post('second_date');
+                if (empty($second_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select Second Date',
+                        'data' => $result,
+                    ], 200);
+                    exit;
+                }
+                $result = $this->Reports_model->get_job_card($emp_id, $first_date, $second_date);
+                if ($result) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $result,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

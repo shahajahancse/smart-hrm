@@ -154,8 +154,7 @@ exit();
 				
 				<td>
 					<?php 
-						
-						echo "Earn Leave = ".$total_leave->earn_leave . ", Sick Leave = ".$total_leave->sick_leave;
+						echo "Earn Leave = ".(12-$total_leave->earn_leave) . ", Sick Leave = ".(4-$total_leave->sick_leave);
 					?>
 				</td>
                 <?php
