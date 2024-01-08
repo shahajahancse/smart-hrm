@@ -640,4 +640,16 @@ class Reports_model extends CI_Model
 		$all_data['extrap_count'] = $extrap_count;
 		return $all_data;
     }
+    public function get_extra_present($first_date, $second_date){
+        $this->db->select('xin_attendance_time.* , xin_employees.first_name, xin_employees.last_name');
+        $this->db->from('xin_attendance_time');
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_attendance_time.employee_id');
+        $this->db->where('xin_attendance_time.attendance_date >=', $first_date);
+        $this->db->where('xin_attendance_time.attendance_date <=', $second_date);
+        $this->db->where('xin_attendance_time.attendance_status', 'Present');
+        $this->db->where('xin_attendance_time.status', 'Off Day');
+        $this->db->group_by('xin_attendance_time.employee_id');
+        $query = $this->db->get();
+        return $query->result();
+    }
 }

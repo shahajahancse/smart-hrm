@@ -38,7 +38,7 @@ class Employee_list extends API_Controller
         }
     }
     public function index(){
-            $this->db->select('xin_employees.first_name,xin_employees.last_name,xin_employees.email,xin_employees.contact_no,xin_departments.department_name,xin_designations.designation_name');
+            $this->db->select('xin_employees.*,xin_departments.department_name,xin_designations.designation_name');
             $this->db->from('xin_employees');
             $this->db->from('xin_departments');
             $this->db->from('xin_designations');

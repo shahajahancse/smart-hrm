@@ -1274,6 +1274,59 @@ class Admin extends API_Controller
             ], 401);
         }
     }
+    public function extra_present(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                
+                $first_date = $this->input->post('first_date');
+                if (empty($first_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select First Date',
+                        'data' => $result,
+                    ], 200);
+                    exit;
+                }
+                $second_date = $this->input->post('second_date');
+                if (empty($second_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select Second Date',
+                        'data' => $result,
+                    ], 200);
+                    exit;
+                }
+                $result = $this->Reports_model->get_extra_present($first_date, $second_date);
+                if ($result) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $result,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
     
 }
 

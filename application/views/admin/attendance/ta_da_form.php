@@ -195,6 +195,7 @@ if (isset($movedata)) {
             </div>
         </div>
     </div>
+
     <div class="col-md-12" style="padding: 4px 22px;display: flex;gap: 25px;">
         <div class="col-md-12 boxx">
             <span class="heading">Additional Cost </span>
@@ -208,12 +209,21 @@ if (isset($movedata)) {
             </div>
         </div>
     </div>
+    <?php if($move->status==6):?>
+    <span style="padding: 0px 29px;font-size: 17px;font-weight: bold;">Return Comment : </span><br>
+    <div class="col-md-12" style="padding: 4px 22px;display: flex;gap: 25px;">
+        <textarea name="return_comment"  id="" style="width: 100%;height: 116px;border-radius: 5px;"
+     
+             readonly><?= isset($move->return_comment) ? $move->return_comment : '' ?></textarea>
+    </div>
+    <?php endif?>
     <span style="padding: 0px 29px;font-size: 17px;font-weight: bold;">Remark : </span><br>
     <div class="col-md-12" style="padding: 4px 22px;display: flex;gap: 25px;">
         <textarea name="remark" id="" style="width: 100%;height: 116px;border-radius: 5px;"
      
             ><?= isset($movedata->remark) ? $movedata->remark : '' ?></textarea>
     </div>
+   
     <div class="col-md-12" style="padding: 2px 26px; display: flex; justify-content: flex-end; gap: 25px;">
         <input type="submit" value="Submit" class="btn"
             style="width: 151px;margin: 5px;background: #27eaff;color: black;font-weight: bold;">

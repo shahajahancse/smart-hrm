@@ -866,9 +866,11 @@ class Attendance extends MY_Controller
         $status = $this->input->post('status');
         $payable_amount = $this->input->post('payable_amount');
         $moveid = $this->input->post('moveid');
+        $return_comment=$this->input->post('return_comment');
         $data = array(
             'payable_amount' => $payable_amount,
             'status' => $status,
+            'return_comment' => $return_comment,
             'updated_at' => date('Y-m-d H:i:s'),
         );
         $this->db->where('id', $moveid);
@@ -1124,6 +1126,11 @@ class Attendance extends MY_Controller
         if (count($movedata) != 0) {
             $data['movedata'] = $movedata[0];
         }
+        $this->db->select("*");
+        $this->db->where("id", $id);
+        $move  = $this->db->get('xin_employee_move_register')->row();
+        $data['move'] = $move;
+        
         $data['title'] 		 = 'Outside Office Movements Form';
         $data['breadcrumbs'] = 'Outside Office Movements Form';
         $data['subview'] 	 = $this->load->view("admin/attendance/ta_da_form", $data, true);
