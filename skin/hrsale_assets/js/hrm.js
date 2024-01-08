@@ -460,9 +460,7 @@
     }
     function overall_performance()
     {
-      $('#loading').css({
-        visibility: 'visible'
-    });
+     
       var ajaxRequest;  // The variable that makes Ajax possible!
       ajaxRequest = new XMLHttpRequest();
       first_date = document.getElementById('process_date').value;

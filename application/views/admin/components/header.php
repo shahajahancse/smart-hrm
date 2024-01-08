@@ -241,23 +241,8 @@ p {
                     $probationapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 5);
                     $internapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 4);
                     $fcount = count($leaveapp) + count($incrementapp) + count($probationapp) + count($internapp);
+                    ?>
 
-                // $nproject = $this->Xin_model->get_notify_projects();
-                // $ntask = $this->Xin_model->get_notify_tasks();
-                // $nannouncements = $this->Xin_model->get_notify_announcements();
-                // $ntickets = $this->Xin_model->get_notify_tickets();
-                // count
-                // $leave_count = $this->Xin_model->count_notify_leave_applications();
-                // $proj_count = $this->Xin_model->count_notify_projects();
-                // $tsk_count = $this->Xin_model->count_notify_tasks();
-                // $nst_count = $this->Xin_model->count_notify_announcements();
-
-                //$this->Xin_model->count_notify_tickets();
-                //$tsk_count = $this->Xin_model->count_notify_tasks();?>
-
-                <!-- <p style="float: left; margin-top: 15px; width: 65%;">
-                  <marquee>Leave : <?= count($leaveapp); ?>, Increment : <?= count($incrementapp); ?>,  Probation : <?= count($probationapp); ?> </marquee>
-                </p> -->
 
                 <?php } elseif ($user[0]->user_role_id == 3) {
                     $leaveapp = $this->Xin_model->get_notify_leave_applications_by_userid($user[0]->user_id);
@@ -323,7 +308,7 @@ p {
                                     $roolid=$session['role_id'];
                                     if($roolid==3) {
                                         ?>
-                                    <a data-toggle="modal" data-target="#myModal"
+                                    <a  onclick='modal_leave_data_ajax(<?php echo $row->leave_id ?>)' data-target="#edit-leave-modal-data"  data-toggle="modal" style="cursor: pointer;"
                                         data-leave_id="<?php echo $row->leave_id ?>"
                                         data-emname="<?php echo $emp_name ?>"
                                         data-company_id="<?php echo $row->company_id ?>"
@@ -671,7 +656,185 @@ p {
         </div>
     </nav>
 </header>
+<style>
+.myboxx {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    border-radius: 5px;
+    box-shadow: 0px 0px 2px 2px #e5e5e5;
+    flex-direction: column;
+}
 
+.myboxx_header {
+    background: #dddddd;
+    color: black;
+    font-size: 17px;
+    width: -webkit-fill-available;
+    border-bottom: 1px solid #979797;
+    text-align: center;
+}
+
+.myboxx_body {
+    color: black;
+    font-size: 15px;
+    padding: 5px;
+    width: -webkit-fill-available;
+}
+td, th {
+    padding: 0 !important;
+}
+</style>
+<div id="edit-leave-modal-data" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <form action="<?= base_url('admin/timesheet/modal_leave_update') ?>" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Leave Application</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style="padding: 7px 0px;display: flex;gap: 16px;">
+                        <div class="col-md-6 myboxx">
+                            <div class="myboxx_header">
+                                Employee Information
+                            </div>
+                            <div class="myboxx_body">
+                                <table class="table table-bordered col-md-12" style="margin: 0;">
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Employee Name</th>
+                                        <td style="padding: 3px 8px!important;" id="employee_name_m"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Department</th>
+                                        <td style="padding: 3px 8px!important;" id="department_name_m"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Designation</th>
+                                        <td style="padding: 3px 8px!important;" id="designation_name_m"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Basic Salary</th>
+                                        <td style="padding: 3px 8px!important;" id="basic_salary_m"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6 myboxx">
+                            <div class="myboxx_header">
+                                Leave Status
+                            </div>
+                            <div class="myboxx_body">
+                                <div class="box-block card-dashboard">
+                                    <div id="leave-statistics">
+                                        <p><strong>Earn leave (<span id="leave_count_el_p"></span>/12)</strong></p>
+                                        <div class="progress" style="margin: 7px;height: 19px;background: aqua;">
+                                            <div class="progress-bar" id="leave_count_el_prog" style="background: #ff8484;width: 75%;"></div>
+                                        </div>
+                                        <div id="leave-statistics">
+                                            <p><strong>Sick leave (<span id="leave_count_sl_p"></span>/4)</strong></p>
+                                            <div class="progress" style="margin: 7px;height: 19px;background: aqua;">
+                                                <div class="progress-bar" id="leave_count_sl_prog" style="background: #ff8484;width: 75%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 7px 0px;display: flex;gap: 16px;">
+                        <div class="col-md-12 myboxx">
+                            <div class="myboxx_header">
+                                Leave Information
+                            </div>
+                            <div class="myboxx_body">
+                            <div class="col-md-6" style="padding: 5px;border: 1px solid #cfcfcf;border-radius: 4px;">
+                                <table class="table table-bordered col-md-12" style="margin: 0;">
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Leave Type</th>
+                                        <td style="padding: 3px 8px!important;" id="leave_type_m"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Application Date</th>
+                                        <td style="padding: 3px 8px!important;" id="application_date_m"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Attachment</th>
+                                        <td style="padding: 3px 8px!important;"><a href="" id="attachment_m" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Download</a></td>
+                                    </tr>
+                                
+                                </table>
+                                <label for=""> Reason</label>
+                                <textarea  style="width: 412px; height: 64px;" id="reason_m" readonly></textarea>
+                            </div>
+                            <div class="col-md-6" style="padding: 5px;border: 1px solid #cfcfcf;border-radius: 4px;">
+                                <table class="table table-bordered col-md-12" style="margin: 0;">
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">From Date</th>
+                                        <td style="padding: 3px 8px!important;" colspan="2"><input type="date" id="from_date_m" name="from_date" value="<?=date('Y-m-d')?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">To Date</th>
+                                        <td style="padding: 3px 8px!important;" colspan="2"><input type="date" id="to_date_m" name="to_date" value="<?=date('Y-m-d')?>"></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Total Days</th>
+                                        <td style="padding: 3px 8px!important;"><input onchange=checkhulf() type="text" name="total_days" id="total_days_m" value="1" ></td> 
+                                        <td> <input type="checkbox" onchange=checkhulf() id="Half_Day_m" name="Half_Day"> Halfday </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Status</th>
+                                        <td style="padding: 3px 8px!important;">
+                                            <select class="form-control" id="status_m" name="status" <?=$user[0]->user_role_id==3 ? 'disabled' : ''?>>
+                                            <option value="1">Pending</option>
+                                            <option value="4">First Level Approval</option>
+                                            <option value="2">Approved</option>
+                                            <option value="3">Rejected</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Team Lead Comment</th>
+                                        <td style="padding: 3px 8px!important;" colspan="2">
+                                        <textarea type="text" name="team_lead_comment" id="team_lead_comment" <?= $user[0]->is_emp_lead != 2 ? 'disabled' : ''?>> </textarea>
+                                        <input type="hidden" name="team_lead_approved" id="team_lead_approved"  value='<?= $user[0]->is_emp_lead != 2 ? 0 : 1?>' >
+                                        
+                                        </td>
+                                    </tr>
+                                    <?php  if($user[0]->user_role_id !=3 ): ?>
+                                    <tr>
+                                        <th style="padding: 3px 8px!important;">Remark</th>
+                                        <td style="padding: 3px 8px!important;" colspan="2">
+                                        <input type="text" name="remark" id="remark_m">
+                                        </td>
+                                    </tr>
+                                    <?php endif; ?>
+                                  
+                                    
+                                </table>
+                            </div>
+                            
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="leave_id" id="leave_id_m" />
+                    <input type="hidden" name="emp_id" id="emp_id_m" />
+                    <?php if ($user[0]->is_emp_lead == 2 || $user[0]->user_role_id !=3)  { ?>
+                        <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+                   <?php } ?>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
 
 <!-- policy modal -->
 
@@ -1097,4 +1260,64 @@ function movetype() {
     $("#sub").toggle();
 
 }
+</script>
+<script>
+    function modal_leave_data_ajax(id) {
+        $.ajax({
+            type: 'get',
+            url: '<?= base_url("admin/timesheet/modal_leave_data_ajax/") ?>' + id,
+            success: function(response) {
+                console.log(response);
+                if (response) {
+                    var result=JSON.parse(response).result;
+                    
+                    var leave_calel=JSON.parse(response).leave_calel;
+                    var leave_calel_percent=JSON.parse(response).leave_calel_percent;
+                    var leave_calsl=JSON.parse(response).leave_calsl;
+                    var leave_calsl_percent=JSON.parse(response).leave_calsl_percent;
+                    $('#employee_name_m').html(result.first_name+' '+ result.last_name);
+                    $('#leave_id_m').val(result.leave_id);
+                    $('#department_name_m').html(result.department_name);
+                    $('#designation_name_m').html(result.designation_name);
+                    $('#basic_salary_m').html(result.basic_salary);
+                    $('#team_lead_comment').html(result.team_lead_comment);
+                    if (result.team_lead_approved==1) {
+                        $('#team_lead_approved').val(1);
+                    }
+
+                    $('#leave_count_el_p').html(leave_calel);
+                    $('#leave_count_sl_p').html(leave_calsl);
+                    
+                    $('#leave_count_el_prog').css('width', `${leave_calel_percent}%`);
+                    $('#leave_count_sl_prog').css('width', `${leave_calsl_percent}%`);
+                    if (result.leave_type_id===1) {
+                        $('#leave_type_m').html('Earn Leave');
+                    } else {
+                        $('#leave_type_m').html('Sick Leave');
+                    }
+                    $('#application_date_m').html(result.applied_on);
+                    if (result.leave_attachment == '') {
+                        $('#attachment_m').css("display", "none");
+                        
+                    }
+                    $('#attachment_m').attr('href','<?= base_url('uploads/leave') ?>'+result.leave_attachment);
+                    $('#from_date_m').val(result.from_date);
+                    $('#to_date_m').val(result.to_date);
+                    $('#total_days_m').val(result.qty);
+                    $('#reason_m').val(result.reason);
+                    if(result.is_half_day==1){
+                        $('#Half_Day_m').attr('checked','checked');
+                    }else{
+                        $('#Half_Day_m').removeAttr('checked');
+                    }
+                    $('#status_m').val(result.status);
+                    $('#remark_m').val(result.remarks);
+                    $('#emp_id_m').val(result.employee_id);
+                }
+            },
+            error: function(response) {
+                
+            }
+        })
+    }
 </script>

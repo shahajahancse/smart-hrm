@@ -6154,7 +6154,7 @@ public function nda() {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_e_details_exp_documents').' | '.$this->Xin_model->site_title();
+		$data['title'] = 'Set Team Lead | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = "Set Team Leadsss";
 		$data['leads'] = $this->db->select('user_id, first_name, last_name')
 									->where('status', 1)
@@ -6819,4 +6819,14 @@ exit();
 			$this->load->view('admin/layout/layout_main', $data);
         }
     }
+	public function  set_team_lead_ajax(){
+		$user_id=$this->input->post('user_id');
+		$data=$this->input->post('d');
+		$this->db->where('user_id',$user_id)->update('xin_employees',['is_emp_lead'=>$data]);
+	}
+	public function  changeTeamLead(){
+		$user_id=$this->input->post('user_id');
+		$data=$this->input->post('team_lead');
+		$this->db->where('user_id',$user_id)->update('xin_employees',['lead_user_id'=>$data]);
+	}
 }

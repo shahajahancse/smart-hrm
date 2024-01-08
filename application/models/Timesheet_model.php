@@ -805,7 +805,7 @@
 		return $data->result(); 
 	}
 	public function get_leaves_leave_id_with_info($id = null) {
-		$this->db->select("la.*, e.first_name, e.last_name,e.basic_salary, lt.type_name, d.department_name, des.designation_name");
+		$this->db->select("la.*, e.*, lt.type_name, d.department_name, des.designation_name");
 		$this->db->from("xin_leave_applications as la");
 		$this->db->join("xin_employees as e", "e.user_id = la.employee_id", 'left');
 		$this->db->join("xin_leave_type as lt", "lt.leave_type_id = la.leave_type_id", 'left');
