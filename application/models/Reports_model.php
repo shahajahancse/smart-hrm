@@ -546,14 +546,17 @@ class Reports_model extends CI_Model
 		$extrap_count = 0;
 		$att_status = '';
 		$day_off_count=0;
+        $late_count=0;
+        $absent_count=0;
+        $perror_count=0;
 		foreach ($emp_data['emp_data'] as $key => $row) {
            
 			if ($row->status == 'Leave') {
-                $leave_type = $this->Job_card_model->get_leave_type($row->attendance_date, $value->user_id);
+                $leave_type = $this->Job_card_model->get_leave_type($row->attendance_date,  $emp_id);
                 $att_status = $leave_type;
                 $leave_count++;
             } elseif ($row->status == 'Hleave') {
-                $leave_type = $this->Job_card_model->get_leave_type($row->attendance_date, $value->user_id);
+                $leave_type = $this->Job_card_model->get_leave_type($row->attendance_date,  $emp_id);
                 $att_status = $leave_type;
                 $leave_count = $leave_count + 0.5;
 
@@ -651,5 +654,139 @@ class Reports_model extends CI_Model
         $this->db->group_by('xin_attendance_time.employee_id');
         $query = $this->db->get();
         return $query->result();
+    }
+    public function get_leave_report($emp_id, $first_date, $second_date, $status){
+
+        $this->db->select('xin_leave_applications.*, xin_employees.first_name, xin_employees.last_name');
+        $this->db->from('xin_leave_applications');
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_leave_applications.employee_id');
+        $this->db->where('xin_leave_applications.from_date >=', $first_date);
+        $this->db->where('xin_leave_applications.to_date <=', $second_date);
+        $this->db->where('xin_leave_applications.status', $status);
+        $this->db->where_in('xin_leave_applications.employee_id', $emp_id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function get_attendence_report($emp_id, $first_date, $second_date, $status){
+
+        $this->db->select('xin_attendance_time.*, xin_employees.first_name, xin_employees.last_name');
+        $this->db->from('xin_attendance_time');
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_attendance_time.employee_id');
+        $this->db->where("xin_attendance_time.attendance_date between '$first_date' and '$second_date'");
+        
+        if ($status == 'Present') {
+            $this->db->where('xin_attendance_time.status', 'Present');
+        }elseif ($status == 'Absent') {
+            $this->db->where('xin_attendance_time.status', 'Absent');
+        }elseif ($status == 'Late') {
+            $this->db->where('xin_attendance_time.status', 'Present');
+            $this->db->where('xin_attendance_time.late_status', 1);
+        }elseif ($status == 'Early Out') {
+            $this->db->where('xin_attendance_time.status', 'Present');
+            $this->db->where('xin_attendance_time.early_out_status', 1);
+        }
+
+
+        $this->db->where_in('xin_attendance_time.employee_id', $emp_id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    //wrong
+    public function get_requisition_report($first_date, $second_date, $status){
+        $this->db->select("
+        xin_employees.first_name,
+        xin_employees.last_name,
+        products.product_name,
+        products_requisition_details.*
+    ")
+    ->from("products_requisition_details")
+    ->join('xin_employees','products_requisition_details.user_id = xin_employees.user_id','left')
+    ->join('products','products_requisition_details.product_id = products.id','left')
+    ->where_in('products_requisition_details.status',$status)
+    ->where("products_requisition_details.created_at between '$first_date' and '$second_date'")
+    ->group_by('products_requisition_details.id')
+    ->order_by('products_requisition_details.id', 'desc');
+    return	$this->db->get()->result();
+        
+    }
+    public function get_store_in_report($first_date, $second_date){
+        $this->db->select('
+            p.id,
+            p.product_id,
+            p.quantity,
+            p.ap_quantity,
+            p.user_id,
+            p.status,
+            p.created_at,
+            p.updated_by,
+            emp.first_name,
+            emp.last_name,
+            products.product_name
+            ')->from('products_purches_details as p')
+            ->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left')
+            ->join('products', 'p.product_id = products.id', 'left');
+            $this->db->order_by('p.id', 'desc');
+            $this->db->where("p.created_at between '$first_date' and '$second_date'");
+        $this->db->where('p.status',3);
+        return	$this->db->get()->result();
+    }
+    public function get_store_out_report($first_date, $second_date){
+        $this->db->select("
+        xin_employees.first_name,
+        xin_employees.last_name,
+        products.product_name,
+        products_requisition_details.*
+    ")
+    ->from("products_requisition_details")
+    ->join('xin_employees','products_requisition_details.user_id = xin_employees.user_id','left')
+    ->join('products','products_requisition_details.product_id = products.id','left')
+    ->where_in('products_requisition_details.status',3)
+    ->where("products_requisition_details.created_at between '$first_date' and '$second_date'")
+    ->group_by('products_requisition_details.id')
+    ->order_by('products_requisition_details.id', 'desc');
+    return	$this->db->get()->result();
+        
+    }
+    public function get_product_reports_info_2($status = 'all')
+    {
+        $this->db->select('
+                    ap.id as a_id,
+                    ap.cat_id,
+                    ap.device_model,
+                    ap.device_name_id,
+                    ap.description,
+                    ap.status,
+                    ap.remark,
+                    ap.number,
+                    ap.user_id,
+                    pac.cat_name,
+                    pac.cat_short_name,
+                    pam.model_name,
+                    pam.image,
+                    mobile_numbers.number,
+                    xin_employees.first_name,
+                    xin_employees.last_name,
+        ');
+        $this->db->from('product_accessories as ap');
+        $this->db->join('product_accessories_model as pam', 'ap.device_model = pam.id', 'left');
+        $this->db->join('product_accessory_categories as pac', 'ap.cat_id = pac.id', 'left');
+        $this->db->join('mobile_numbers', 'ap.number = mobile_numbers.id', 'left');
+        $this->db->join('xin_employees', 'ap.user_id = xin_employees.user_id', 'left');
+        if ($status == 'all') {
+            $this->db->where_in('ap.status', [1, 2, 3, 4, 5]);
+        } else if ($status == 'store') {
+            $this->db->where('ap.status', 2);
+            $this->db->order_by('ap.id', "ASC");
+        } else if ($status == 'damage') {
+            $this->db->where('ap.status', 4);
+            $this->db->order_by('ap.id', "ASC");
+        } else {
+            $this->db->where('ap.cat_id', $status);
+            $this->db->order_by('ap.id', "ASC");
+        }
+
+        $this->db->order_by('ap.status', "ASC");
+        $this->db->group_by('ap.id');
+        return $this->db->get()->result();
     }
 }
