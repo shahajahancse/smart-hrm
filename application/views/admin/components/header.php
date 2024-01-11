@@ -1290,11 +1290,13 @@ function movetype() {
                     
                     $('#leave_count_el_prog').css('width', `${leave_calel_percent}%`);
                     $('#leave_count_sl_prog').css('width', `${leave_calsl_percent}%`);
-                    if (result.leave_type_id===1) {
+                    console.log(result.leave_type_id);
+                    if (result.leave_type==='el') {
                         $('#leave_type_m').html('Earn Leave');
                     } else {
                         $('#leave_type_m').html('Sick Leave');
                     }
+
                     $('#application_date_m').html(result.applied_on);
                     if (result.leave_attachment == '') {
                         $('#attachment_m').css("display", "none");
@@ -1310,7 +1312,7 @@ function movetype() {
                     }else{
                         $('#Half_Day_m').removeAttr('checked');
                     }
-                    $('#status_m').val(result.status);
+                    $('#status_m').val(result.leave_status);
                     $('#remark_m').val(result.remarks);
                     $('#emp_id_m').val(result.employee_id);
                 }

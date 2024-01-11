@@ -708,7 +708,7 @@ class Timesheet extends MY_Controller {
 		}
 	}
 	public function modal_leave_update() {
-		
+		$notyfi_data=1;
 		$from_date = $this->input->post('from_date');
 		$to_date = $this->input->post('to_date');
 		$total_days = $this->input->post('total_days');
@@ -769,9 +769,11 @@ class Timesheet extends MY_Controller {
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
 			// automatically leave process start
 			if($data['qty'] > 0){
-				for ($i=0; $i < $data['qty']; $i++) { 
-					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
-					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+				if ($from_date < date('Y-m-d')) {
+					for ($i=0; $i < $data['qty']; $i++) { 
+						$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
+						$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+					}
 				}
 			}
 		}else{

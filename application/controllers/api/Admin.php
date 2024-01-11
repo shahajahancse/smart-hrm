@@ -1337,7 +1337,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select Employee',
-                        'data' => '',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1348,7 +1348,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select First Date',
-                        'data' => '',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1358,7 +1358,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select Second Date',
-                        'data' =>'',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1367,8 +1367,8 @@ class Admin extends API_Controller
                 if (empty($status)) {
                     $this->api_return([
                         'status' => false,
-                        'message' => 'Please select Second Date',
-                        'data' => '',
+                        'message' => 'Please select Status',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1413,7 +1413,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select Employee',
-                        'data' => '',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1424,7 +1424,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select First Date',
-                        'data' => '',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1434,7 +1434,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select Second Date',
-                        'data' =>'',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1443,8 +1443,8 @@ class Admin extends API_Controller
                 if (empty($status)) {
                     $this->api_return([
                         'status' => false,
-                        'message' => 'Please select Second Date',
-                        'data' => '',
+                        'message' => 'Please select  Status',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1490,7 +1490,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select First Date',
-                        'data' => '',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1500,7 +1500,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select Second Date',
-                        'data' =>'',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1509,8 +1509,8 @@ class Admin extends API_Controller
                 if (empty($status)) {
                     $this->api_return([
                         'status' => false,
-                        'message' => 'Please select Second Date',
-                        'data' => '',
+                        'message' => 'Please select  Status',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1556,7 +1556,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select First Date',
-                        'data' => '',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1566,7 +1566,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select Second Date',
-                        'data' =>'',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1575,8 +1575,8 @@ class Admin extends API_Controller
                 if (empty($status)) {
                     $this->api_return([
                         'status' => false,
-                        'message' => 'Please select Second Date',
-                        'data' => '',
+                        'message' => 'Please select  Status',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1590,7 +1590,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select valid status',
-                        'data' => '',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1667,7 +1667,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => false,
                         'message' => 'Please select Second Date',
-                        'data' => '',
+                        'data' => [],
                     ], 200);
                     exit;
                 }
@@ -1679,6 +1679,122 @@ class Admin extends API_Controller
                         'status' => true,
                         'message' => 'successful',
                         'data' => $categories,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function vendor_daily_lunch(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $date = $this->input->post('date');
+                if (empty($date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select  Date',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+                $result=$this->db->where('date',$date)->get('lunch_vendor_meal')->row();
+                if (empty($result)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+              $result->file =  base_url($result->file);
+                if ($result) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $categories,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function vendor_month_lunch(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                
+                $first_date = $this->input->post('first_date');
+                if (empty($first_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select First Date',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+
+                $second_date = $this->input->post('second_date');
+                if (empty($second_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select Second Date',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+                $result=$this->db->where('date BETWEEN "'.$first_date.'" AND "'.$second_date.'"')->get('lunch_vendor_meal')->result();
+                if (empty($result)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                    exit;}
+                foreach ($result as $key => $value) {
+                    $result[$key]->file =  base_url($value->file);
+                }
+                if ($result) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $result,
                     ], 200);
                 } else {
                     $this->api_return([
