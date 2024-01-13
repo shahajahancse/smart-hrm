@@ -59,7 +59,76 @@ class Employees extends MY_Controller {
 	}
 
 
+	public function bl($id)
+	{
+		exit();
+			$this->db->select('
+				SUM(CASE WHEN leave_type_id = 1 THEN qty ELSE 0 END) AS earn_leave,
+				SUM(CASE WHEN leave_type_id = 2 THEN qty ELSE 0 END) AS sick_leave,
+			');
+			$this->db->where('employee_id', $id);
+			$this->db->where('current_year', '2023');
+			$this->db->where('status', 2);
+			$this->db->from('xin_leave_applications');
+			$total_leave = $this->db->get()->row();
 
+			$this->db->where('emp_id', $id);
+			$this->db->where('year', '2023');
+			$this->db->from('leave_balanace');
+			$l = $this->db->get()->row();
+
+			$el = $l->el_total - $total_leave->earn_leave;
+			$sl = $l->sl_total - $total_leave->sick_leave;
+
+			dd($el .'=='. $sl);
+	}
+
+	public function lb()
+	{
+		exit();
+		$user_info = $this->db->where('status', 1)->get('xin_employees')->result();
+		foreach ($user_info as $key => $row) {
+			if ($row->is_leave_on == 1 && strtotime($row->leave_effective) < strtotime('2024-01-05')) {
+				$data = array(
+					'emp_id' => $row->user_id,
+					'el_total' => 12,
+					'sl_total' => 4,
+					'year' => '2024',
+				);
+			} else {
+				$d1 = new DateTime('2024-12-31'); 
+            	$d2 = new DateTime($row->leave_effective);   
+            	$Months = $d2->diff($d1); 
+            	$month = $Months->m;
+            	$qty = round(($month / 3), 2);
+
+            	
+            	$numberString = (string) $qty;
+				$parts = explode('.', $numberString);
+				$integerPart = $parts[0];
+				if (isset($parts[1])) {
+					$decimalPart = $parts[1];
+				} else {
+					$decimalPart = 0;
+				}
+
+				if ($decimalPart > 50) {
+            		$integerPart += 0.5;
+            	}
+
+				$data = array(
+					'emp_id' => $row->user_id,
+					'el_total' => $month,
+					'sl_total' => $integerPart,
+					'year' => '2024',
+				);
+			}
+				// echo "<pre>". $row->user_id;
+				// dd($data);
+			$this->db->insert('leave_balanace', $data);
+		}
+		dd('done');
+	}
 	
 	 public function index()
      {
