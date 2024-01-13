@@ -4584,4 +4584,57 @@ class Timesheet extends MY_Controller {
 			//}
 		//}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// cpmmand dont use this 
+
+  
+
+public function leave_efectinve_caculate(){
+	$all_employee=$this->db->where('user_role_id',3)
+	->where('status',1)
+	->get('xin_employees')->result();
+	foreach($all_employee as $employee){
+		$is_on=0;
+		$effective_date=null;
+		if ($employee->status == 1) {
+			$year_start=strtotime(date('01-07-2022'));
+			$employee_joining_date= strtotime($employee->date_of_joining);
+			if ($employee_joining_date < $year_start) {
+				$is_on=1;
+		        $effective_date=date('Y-m-d',$employee_joining_date);
+			}else{
+				$is_on=0;
+		        $effective_date=null;
+			}
+		}else{
+			$is_on=0;
+		    $effective_date=null;
+		}
+		$data = array(
+			'is_leave_on' => $is_on,
+			'leave_effective' => $effective_date
+		);
+		$this->db->where('user_id',$employee->user_id);
+		$this->db->update('xin_employees',$data);
+	}
+}
 }
