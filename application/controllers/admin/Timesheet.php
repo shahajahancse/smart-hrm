@@ -663,8 +663,6 @@ class Timesheet extends MY_Controller {
 				redirect('admin/timesheet/leave');
 				
 			}
-		
-		
 	}
 
 	public function leave_approve($id ,$qty,$from_date) {
@@ -675,6 +673,24 @@ class Timesheet extends MY_Controller {
 		);
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
 		if($result == TRUE) {
+			$this->db->where('leave_id', $id);
+			$leve_data = $this->db->get('xin_leave_applications', $data)->row();
+			$emp_id =$leve_data->employee_id;
+			$from_date =$leve_data->from_date;
+			$leave_type_id =$leve_data->leave_type_id;
+			$y = date('Y', strtotime($from_date));
+			$leave_data = cals_leave($emp_id, $y);
+				if ($leave_type_id==1) {
+					$rdata = array(
+						'el_balanace' => $leave_data->el_balanace - $qty
+					);
+				}else{
+					$rdata = array(
+						'sl_balanace' =>$leave_data->sl_balanace - $qty
+					);
+				}
+				$this->db->where('id', $leave_data->id);
+				$this->db->update('leave_balanace', $rdata);
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave_added'));
 			if($data['qty'] > 0){
 				for ($i=0; $i < $data['qty']; $i++) { 
@@ -766,6 +782,34 @@ class Timesheet extends MY_Controller {
 		$id=$this->input->post('leave_id');
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
 		if($result == TRUE) {
+
+			if ($status && $status==2) {
+				$this->db->where('leave_id', $id);
+				$leve_data = $this->db->get('xin_leave_applications', $data)->row();
+				$emp_id =$leve_data->employee_id;
+				$from_date =$leve_data->from_date;
+				$leave_type_id =$leve_data->leave_type_id;
+				$y = date('Y', strtotime($from_date));
+				$leave_data = cals_leave($emp_id, $y);
+					if ($leave_type_id==1) {
+						$rdata = array(
+							'el_balanace' => $leave_data->el_balanace - $qnty
+						);
+					}else{
+						$rdata = array(
+							'sl_balanace' =>$leave_data->sl_balanace - $qnty
+						);
+					}
+					$this->db->where('id', $leave_data->id);
+					$this->db->update('leave_balanace', $rdata);
+	
+
+			
+			}
+			
+
+
+
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
 			// automatically leave process start
 			if($data['qty'] > 0){
@@ -788,39 +832,36 @@ class Timesheet extends MY_Controller {
 	public function modal_leave_data_ajax($id) {
 		$data['result'] = $this->Timesheet_model->get_leaves_leave_id_with_info($id);
 		$employee_id=$data['result']->user_id;
-
 		$this->db->where('leave_id', $id);
 		$leave_data=$this->db->get('xin_leave_applications')->row();
 		$year = date('Y', strtotime($leave_data->from_date));
-		// $from_date = date("$year-01-01");
-		// $to_date = date("$year-12-31");
 
-		$this->db->select('
-		SUM(CASE WHEN leave_type_id = 1 THEN qty ELSE 0 END) AS earn_leave,
-		SUM(CASE WHEN leave_type_id = 2 THEN qty ELSE 0 END) AS sick_leave,
-		');
-		$this->db->where('employee_id', $employee_id);
-		$this->db->where('current_year', $year);
-		$this->db->where('status', 2);
+		$leave_data_balance = cals_leave($employee_id, $year);	
+		// dd($leave_data_balance);
+		// dd($leave_data_balance);
+		// // dd($leave_data_balance);
+		// // stdClass Object
+		// // (
+		// // 	[id] => 23
+		// // 	[emp_id] => 58
+		// // 	[el_total] => 2.00
+		// // 	[sl_total] => 0.50
+		// // 	[el_balanace] => 1.00
+		// // 	[sl_balanace] => 0.00
+		// // 	[year] => 2023
+		// // )
+		$data['leave_totalel']=$leave_data_balance->el_total;
+		$data['leave_totalsl']=$leave_data_balance->sl_total;
 
-		$this->db->from('xin_leave_applications');
-		$total_leave = $this->db->get()->row();
-
-
-
-
-
-
-		$data['leave_calel']=($total_leave->earn_leave !='')?$total_leave->earn_leave:0;
-		$data['leave_calel_percent']=$data['leave_calel']*100/12;
-		$data['leave_calsl']=($total_leave->sick_leave !='')?$total_leave->sick_leave:0;
-		$data['leave_calsl_percent']=$data['leave_calsl']*100/4;
+		$data['leave_calel']=$leave_data_balance->el_balanace;
+		$data['leave_calel_percent']=($leave_data_balance->el_total-$leave_data_balance->el_balanace)*100/$leave_data_balance->el_total;
+		$data['leave_calsl']=$leave_data_balance->sl_balanace;
+		$data['leave_calsl_percent']=($leave_data_balance->sl_total-$leave_data_balance->sl_balanace)*100/$leave_data_balance->sl_total;
 		echo json_encode($data);
 	}
 	// Validate and add info in database
 	public function update_leave_status() {
 		
-		// dd( $this->input->post());
 		$id = $this->uri->segment(4);
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -856,10 +897,33 @@ class Timesheet extends MY_Controller {
 
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
 		if ($result == TRUE) {
+			if ($stutuss==2) {
+				$emp_id = $_POST['emp_id'];
+				$y = date('Y', strtotime($this->input->post('start_date')));
+				$leave_data = cals_leave($emp_id, $y);	
+				$leave_type_id=$this->input->post('leave_type');
+					if ($leave_type_id==1) {
+						$rdata = array(
+							'el_balanace' => $leave_data->el_balanace - $qnty
+						);
+					}else{
+						$rdata = array(
+							'sl_balanace' =>$leave_data->sl_balanace - $qnty
+						);
+					}
+					$this->db->where('id', $leave_data->id);
+					$this->db->update('leave_balanace', $rdata);
+				}
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
 
 			// automatically leave process start
 			if($data['qty'] > 0){
+
+
+
+
+
+
 				for ($i=0; $i < $data['qty']; $i++) { 
 					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
 					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
@@ -4636,5 +4700,37 @@ public function leave_efectinve_caculate(){
 		$this->db->where('user_id',$employee->user_id);
 		$this->db->update('xin_employees',$data);
 	}
+}
+public function leave_efectinve_table(){
+	exit();
+	$year_start ='01-07-2022';
+	
+	
+	$all_employee = $this->db->query("SELECT * FROM `xin_employees` WHERE `status` = 1 AND `date_of_joining` >= '2022-07-01' ")->result();
+	$data['title'] = $this->lang->line('dashboard_attendance').' | '.$this->Xin_model->site_title();
+	$data['breadcrumbs'] = $this->lang->line('dashboard_attendance');
+	$data['path_url'] = 'attendance';
+
+	$data['all_employee'] = $all_employee;
+	
+	$data['subview'] = $this->load->view("admin/timesheet/give_efectivefore_leave", $data, TRUE);
+	$this->load->view('admin/layout/layout_main', $data);
+
+}
+public function give_efectivefore_leave_add(){
+	exit();
+	$employee_id = $this->input->post('employee_id');
+	$is_leave_on = $this->input->post('is_leave_on');
+	$leave_effective = $this->input->post('leave_effective');
+
+	foreach($employee_id as $key => $value){
+		$data = array(
+			'is_leave_on' => $is_leave_on[$key],
+			'leave_effective' => $leave_effective[$key]
+		);
+		$this->db->where('user_id',$value);
+		$this->db->update('xin_employees',$data);
+	}
+	echo"done";
 }
 }

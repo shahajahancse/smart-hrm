@@ -77,49 +77,41 @@ foreach ($all_employees as $key => $value) {
 		echo "</tr>";
 	echo "<table>";
 
-	$leave_calel=get_cal_leave($value->user_id, 1);
-    $leave_calsl=get_cal_leave($value->user_id, 2);
-    $totaluseleave=$leave_calel+$leave_calsl;
-	// dd($emp_data);
+	$year = date('Y', strtotime($date));
 
-	
-	echo "<table class='table table-bordered table-sm   table-striped sal mt-2' style='text-align:center; font-size:13px; '> 
-		  <th>Date</th>
-		  <th>Attendance Status</th>
-		  ";
+	$total_leave=cals_leave($value->user_id,$year);
+	 ?>
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>Type</th>
+				<th>Earn Leave</th>
+				<th>Sick Leave</th>
+			</tr>
+		</thead>
 
-	echo "<tr align='center'>";
-                echo "<td>";
-                echo "Total Earn Leave";
-                echo "</td>";	
+		<tbody>
+			<tr>
+				<td>Total Leave</td>
+				<td><?=empty($total_leave)? 0: $total_leave->el_total ?></td>
+				<td><?=empty($total_leave)? 0: $total_leave->sl_total ?></td>
+			</tr>
+			<tr>
+				<td>Total Used Leave</td>
+				<td><?=empty($total_leave)? 0: $total_leave->el_total-$total_leave->el_balanace ?></td>
+				<td><?=empty($total_leave)? 0: $total_leave->sl_total -$total_leave->sl_balanace ?></td>
+			</tr>
+			<tr>
+				<td>Total Balance Leave</td>
+				<td><?=empty($total_leave)? 0:$total_leave->el_balanace ?></td>
+				<td><?=empty($total_leave)? 0:$total_leave->sl_balanace ?></td>
+			</tr>
+		</tbody>
 
-                echo "<td>";
-                echo 12-$leave_calel;
-                echo "</td>";
+	</table>
 
-    echo "</tr>";
-	echo "<tr align='center'>";
-                echo "<td>";
-                echo "Total Sick Leave";
-                echo "</td>";	
 
-                echo "<td>";
-                echo 4-$leave_calsl;
-                echo "</td>";
-
-    echo "</tr>";
-	echo "<tr align='center'>";
-                echo "<td>";
-                echo "Total  Leave";
-                echo "</td>";	
-
-                echo "<td>";
-                echo 16-$totaluseleave;
-                echo "</td>";
-
-    echo "</tr>";
-
-	echo "</table>";
+<?php	
 }
 ?>
 </div>

@@ -114,18 +114,18 @@ exit();
 					$employee_id=$row->employee_id;
 					$year = date('Y', strtotime($row->from_date));
 
-					$this->db->select('
-					SUM(CASE WHEN leave_type_id = 1 THEN qty ELSE 0 END) AS earn_leave,
-					SUM(CASE WHEN leave_type_id = 2 THEN qty ELSE 0 END) AS sick_leave,
-					');
+					$total_leave=cals_leave($employee_id,$year);
+					// stdClass Object
+					// (
+					// 	[id] => 1
+					// 	[emp_id] => 10
+					// 	[el_total] => 6.00
+					// 	[sl_total] => 2.00
+					// 	[el_balanace] => 2.00
+					// 	[sl_balanace] => 1.00
+					// 	[year] => 2023
+					// )
 
-					$this->db->where('employee_id', $employee_id);
-					$this->db->where('current_year', $year);
-					$this->db->where('status', 2);
-
-					$this->db->from('xin_leave_applications');
-					$total_leave = $this->db->get()->row();
-				 
 			     ?>
 				
                 <td><?php echo $row->to_date . ' ('.$dayName.')'?></td>
@@ -153,9 +153,24 @@ exit();
 			    </td>
 				
 				<td>
-					<?php 
-						echo "Earn Leave = ".(12-$total_leave->earn_leave) . ", Sick Leave = ".(4-$total_leave->sick_leave);
-					?>
+					<table >
+						<tr>
+							<th>Type</th>
+							<th>Earn Leave</th>
+							<th>Sick Leave</th>
+						</tr>
+						<tr>
+							<td>Total</td>
+							<td><?=(empty($total_leave))? 0:$total_leave->el_total?></td>
+							<td><?= (empty($total_leave))? 0:$total_leave->sl_total?></td>
+					    </tr>
+						<tr>
+							<td>Balance</td>
+							<td><?= (empty($total_leave))? 0: $total_leave->el_balanace?></td>
+							<td><?= (empty($total_leave))? 0:$total_leave->sl_balanace?></td>
+					    </tr>
+							
+					</table>
 				</td>
                 <?php
                 if ($row->status==1) {

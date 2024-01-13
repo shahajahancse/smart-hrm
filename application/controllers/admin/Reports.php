@@ -230,7 +230,7 @@ class Reports extends MY_Controller
         $sql = $this->input->post('sql');
         $emp_id = explode(',', trim($sql));
         $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
-
+		$data['date']=$this->input->post('first_date');
         echo $this->load->view("admin/reports/yerly_leave", $data, true);
 	}
 	public function leave_report()

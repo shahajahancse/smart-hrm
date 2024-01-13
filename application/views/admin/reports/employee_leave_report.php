@@ -307,17 +307,20 @@
     var ajaxRequest;  // The variable that makes Ajax possible!
     ajaxRequest = new XMLHttpRequest();
 
+   
+    first_date = document.getElementById('process_date').value;
+    second_date = document.getElementById('second_date').value;
     var checkboxes = document.getElementsByName('select_emp_id[]');
     var sql = get_checked_value(checkboxes);
-    if(sql =='')
-    {
+    if(sql =='') {
       alert('Please select employee Id');
       return ;
     }
-    
-    
-
-    var data ='sql='+sql;
+    if(first_date ==''){
+      alert('Please select first date');
+      return ;
+    }
+    var data = "first_date="+first_date+'&second_date='+second_date+'&sql='+sql;
 
     url = base_url + "/yerly_leave";
     // alert(url); return ;
