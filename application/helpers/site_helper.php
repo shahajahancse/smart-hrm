@@ -88,6 +88,17 @@ if ( ! function_exists('GetDayDate'))
 if ( ! function_exists('leave_cal'))
 {
     // leave cal
+    function cals_leave($id, $year)
+    {
+        $CI =& get_instance();
+        return $CI->db->where('emp_id', $id)->where('year', $year)->get('leave_balanace')->row();
+    }
+}
+
+
+if ( ! function_exists('leave_cal'))
+{
+    // leave cal
     function leave_cal($id)
     {
         $CI =& get_instance();
