@@ -1360,6 +1360,7 @@ class Reports extends MY_Controller
         $elc = $this->input->post('elc');
         $sql = $this->input->post('sql');
         $status = $this->input->post('status');
+        $done = $this->input->post('done');
 		$data['status']= $status;
 		$data['sql']= $sql;
         $first_date = $this->input->post('first_date');
@@ -1367,8 +1368,9 @@ class Reports extends MY_Controller
 		$data['first_date']= $first_date;
 		$data['second_date']= $second_date;
         $emp_id = explode(',', trim($sql));
-        $data['emp_list'] =$this->Reports_model->show_report($emp_id,$status,$first_date,$second_date);
+        $data['emp_list'] =$this->Reports_model->show_report($emp_id,$status,$first_date,$second_date, $done);
 		$data['status']=$status;
+
 		if($elc==1){
 			if($status == 1){
 				$this->load->view('admin/reports/emp_list_excel', $data);
@@ -1385,7 +1387,26 @@ class Reports extends MY_Controller
 			if($status == 5){
 				$this->load->view('admin/reports/using_device_excel', $data);
 			}
-		}else{
+		} elseif (!empty($done)) {
+
+
+			if($status == 1){
+				$this->load->view('admin/reports/probation', $data);
+			} 
+			if($status == 2){
+				$this->load->view('admin/reports/probation', $data);
+			}
+			if($status == 3){
+				$this->load->view('admin/reports/probation', $data);
+			}
+			if($status == 4){
+				$this->load->view('admin/reports/probation', $data);
+			}
+			if($status == 5){
+				$this->load->view('admin/reports/probation', $data);
+			}
+
+		} else {
 			if($status == 1){
 				$this->load->view('admin/reports/emp_list', $data);
 			} 

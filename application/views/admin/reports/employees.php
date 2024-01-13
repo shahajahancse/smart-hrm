@@ -52,12 +52,20 @@
 
         <div class="tab-content">
           <div id="tab1" class="tab-pane fade in active">
-                <div class="form-group" style="margin-top:20px">
+                <div class="form-group" style="margin-top:20px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 5px;">
                   <button class="btn btn-success btn-sm " style="margin-right:10px" onclick="show_report(1)">Employee List</button>
                   <button class="btn btn-success btn-sm"  style="margin-right:10px" onclick="show_report(2)">Increment</button>
                   <button class="btn btn-success btn-sm" style="margin-right:10px" onclick="show_report(3)">Internship</button>
                   <button class="btn btn-success btn-sm" onclick="show_report(4)">Probation</button>
                   <button class="btn btn-success btn-sm" onclick="show_report(5)">Using Device</button>
+
+
+                  <button class="btn btn-sm " style="background: #0177bc; color: #fff" onclick="show_report(1,1)">Probation to Regular</button>
+                  <button class="btn btn-sm"  style="background: #0177bc; color: #fff" onclick="show_report(2,1)">Increment</button>
+                  <button class="btn btn-sm" style="background: #0177bc; color: #fff" onclick="show_report(3,1)">Promotion</button>
+
+                  <button class="btn btn-sm" style="background: #0177bc; color: #fff" onclick="show_report(4, 1)">Intern to Probation</button>
+                  <button class="btn btn-sm" style="background: #0177bc; color: #fff" onclick="show_report(5, 1)">Intern to Regular</button>
                 </div>
           </div>
           <div id="tab2" class="tab-pane fade">
@@ -131,7 +139,7 @@
     });
   });
 
-  function show_report(r){
+  function show_report(r, done){
     var ajaxRequest;  // The variable that makes Ajax possible!
     ajaxRequest = new XMLHttpRequest();
     status = document.getElementById('status').value;
@@ -158,7 +166,7 @@
       alert('Please select employee Id');
       return ;
     }
-    var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql;
+    var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql+'&done='+done;
     url = base_url + "/show_report";
     ajaxRequest.open("POST", url, true);
     ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");

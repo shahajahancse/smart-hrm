@@ -200,7 +200,7 @@ class Reports_model extends CI_Model {
         return $result = $this->db->get('xin_employees')->result();
 	}
 
-	public function show_report($emp_ids=null,$status=null,$first_date=null,$second_date=null){
+	public function show_report($emp_ids=null,$status=null,$first_date=null,$second_date=null, $done = null){
 		
 		$this->db->select('
 			xin_employees.user_id,
@@ -229,37 +229,45 @@ class Reports_model extends CI_Model {
 		->join('xin_departments','xin_employees.department_id = xin_departments.department_id','left')		
 		->join('xin_designations','xin_employees.designation_id = xin_designations.designation_id','left')		
 		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.emp_id','left');
-		if ($emp_ids != null) {
+
+		if (!empty($done)) {
+			$this->db->where('xin_employee_incre_prob.status',$status);
 			$this->db->where_in('xin_employees.user_id',$emp_ids);
-		}
-		
-		if($status == 1){
-			$this->db->where_in('xin_employees.status',[1,4,5]);	
-			if($first_date != null && $second_date !=null){
-				$this->db->where('xin_employees.date_of_joining between "' . $first_date . '" AND "' . $second_date . '"');
+			$this->db->where('xin_employee_incre_prob.effective_date between "' . $first_date . '" AND "' . $second_date . '"');
+		} else {
+			if ($emp_ids != null) {
+				$this->db->where_in('xin_employees.user_id',$emp_ids);
 			}
-			$this->db->order_by('xin_employees.date_of_joining','ASC');
-		}
-		
-		if(($first_date != null && $second_date !=null) && $status == 2){
-		
-			$this->db->where('xin_employees.notify_incre_prob between "' . $first_date . '" AND "' . $second_date . '"');
-		}
-
-
-		if( $status == 3){
-			$this->db->where('xin_employees.status',4);
-			if($first_date != null && $second_date !=null){
+			
+			if($status == 1){
+				$this->db->where_in('xin_employees.status',[1,4,5]);	
+				if($first_date != null && $second_date !=null){
+					$this->db->where('xin_employees.date_of_joining between "' . $first_date . '" AND "' . $second_date . '"');
+				}
+				$this->db->order_by('xin_employees.date_of_joining','ASC');
+			}
+			
+			if(($first_date != null && $second_date !=null) && $status == 2){
+			
 				$this->db->where('xin_employees.notify_incre_prob between "' . $first_date . '" AND "' . $second_date . '"');
 			}
-		}
-		
-		if($status == 4){
-			$this->db->where('xin_employees.status',5);
-			if($first_date != null && $second_date !=null){
-				$this->db->where('xin_employees.notify_incre_prob between "' . $first_date . '" AND "' . $second_date . '"');
+
+
+			if( $status == 3){
+				$this->db->where('xin_employees.status',4);
+				if($first_date != null && $second_date !=null){
+					$this->db->where('xin_employees.notify_incre_prob between "' . $first_date . '" AND "' . $second_date . '"');
+				}
+			}
+			
+			if($status == 4){
+				$this->db->where('xin_employees.status',5);
+				if($first_date != null && $second_date !=null){
+					$this->db->where('xin_employees.notify_incre_prob between "' . $first_date . '" AND "' . $second_date . '"');
+				}
 			}
 		}
+
 		$this->db->group_by('xin_employees.user_id');
 		$this->db->order_by('xin_employee_incre_prob.effective_date','DESC');
 		$data = $this->db->get()->result();
