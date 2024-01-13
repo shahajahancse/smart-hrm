@@ -122,6 +122,21 @@ exit();
 				<?php
 				  $toDateString = $row->from_date;
 				  $dayName = date('l', strtotime($toDateString));
+
+				  $employee_id=$row->employee_id;
+					$year = date('Y', strtotime($row->from_date));
+
+					$this->db->select('
+					SUM(CASE WHEN leave_type_id = 1 THEN qty ELSE 0 END) AS earn_leave,
+					SUM(CASE WHEN leave_type_id = 2 THEN qty ELSE 0 END) AS sick_leave,
+					');
+
+					$this->db->where('employee_id', $employee_id);
+					$this->db->where('current_year', $year);
+					$this->db->where('status', 2);
+
+					$this->db->from('xin_leave_applications');
+					$total_leave = $this->db->get()->row();
 				  
 				 
 			     ?>
@@ -160,9 +175,8 @@ exit();
 				
 				<td>
 					<?php 
-						$data = leave_cal($row->employee_id);
-						// dd($data);
-						echo "Earn Leave = ".$data['leaves'][0]['qty'] . ", Sick Leave = ".$data['leaves'][1]['qty'];
+						
+						echo "Earn Leave = ".(12-$total_leave->earn_leave) . ", Sick Leave = ".(4-$total_leave->sick_leave);
 					?>
 				</td>
                 <?php

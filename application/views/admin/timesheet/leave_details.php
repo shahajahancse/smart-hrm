@@ -240,59 +240,59 @@ if (isset($success)) {
     <section id="decimal">
       <div class="row">
         <div class="col-md-12">
-          <div class="box">
+          <!-- <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"> <?php echo $this->lang->line('xin_leave_statistics');?> </h3>
               </div>
             <div class="box-body">
               <div class="box-block card-dashboard">
-                <?php $leave_categories_ids = explode(',',$leave_user[0]->leave_categories); ?>
-                <?php foreach($all_leave_types as $type) {
-					if(in_array($type->leave_type_id,$leave_categories_ids)){?>
-                <?php
-                	$hlfcount =0;
-					//$count_l =0;
-					$leave_halfday_cal = employee_leave_halfday_cal($type->leave_type_id,$employee_id);
-					foreach($leave_halfday_cal as $lhalfday):
-						$hlfcount += 0.5;
-					endforeach;
-					$count_l = count_leaves_info($type->leave_type_id,$employee_id);
-					$count_l = $count_l - $hlfcount;
-				?>
-                <?php
-					$edays_per_year = $type->days_per_year;
-					
-					if($count_l == 0){
-						$progress_class = '';
-						$count_data = 0;
-					} else {
-						if($edays_per_year > 0){
-							$count_data = $count_l / $edays_per_year * 100;
-						} else {
-							$count_data = 0;
-						}
-						// progress
-						if($count_data <= 20) {
-							$progress_class = 'progress-success';
-						} else if($count_data > 20 && $count_data <= 50){
-							$progress_class = 'progress-info';
-						} else if($count_data > 50 && $count_data <= 75){
-							$progress_class = 'progress-warning';
-						} else {
-							$progress_class = 'progress-danger';
-						}
-					}
-				?>
-                <div id="leave-statistics">
-                  <p><strong><?php echo $type->type_name;?> (<?php echo $count_l;?>/<?php echo $edays_per_year;?>)</strong></p>
-                  <div class="progress" style="height: 6px;">
-                  <div class="progress-bar" style="width: <?php echo $count_data;?>%;"></div>
-                </div>
-                  <?php } }?>
+                                <?php $leave_categories_ids = explode(',',$leave_user[0]->leave_categories); ?>
+                                <?php foreach($all_leave_types as $type) {
+                          if(in_array($type->leave_type_id,$leave_categories_ids)){?>
+                                <?php
+                                  $hlfcount =0;
+                          //$count_l =0;
+                          $leave_halfday_cal = employee_leave_halfday_cal($type->leave_type_id,$employee_id);
+                          foreach($leave_halfday_cal as $lhalfday):
+                            $hlfcount += 0.5;
+                          endforeach;
+                          $count_l = count_leaves_info($type->leave_type_id,$employee_id);
+                          $count_l = $count_l - $hlfcount;
+                        ?>
+                                <?php
+                          $edays_per_year = $type->days_per_year;
+                          
+                          if($count_l == 0){
+                            $progress_class = '';
+                            $count_data = 0;
+                          } else {
+                            if($edays_per_year > 0){
+                              $count_data = $count_l / $edays_per_year * 100;
+                            } else {
+                              $count_data = 0;
+                            }
+                            // progress
+                            if($count_data <= 20) {
+                              $progress_class = 'progress-success';
+                            } else if($count_data > 20 && $count_data <= 50){
+                              $progress_class = 'progress-info';
+                            } else if($count_data > 50 && $count_data <= 75){
+                              $progress_class = 'progress-warning';
+                            } else {
+                              $progress_class = 'progress-danger';
+                            }
+                          }
+                        ?>
+                  <div id="leave-statistics">
+                    <p><strong><?php echo $type->type_name;?> (<?php echo $count_l;?>/<?php echo $edays_per_year;?>)</strong></p>
+                    <div class="progress" style="height: 6px;">
+                    <div class="progress-bar" style="width: <?php echo $count_data;?>%;"></div>
+                  </div>
+                    <?php } }?>
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </section>

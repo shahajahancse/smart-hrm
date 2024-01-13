@@ -248,6 +248,7 @@ class Reports extends MY_Controller
         $data['second_date'] = $second_date;
 
         $data['xin_employees'] =  $this->Attendance_model->leavesm($emp_id, $first_date, $second_date);
+		
           echo $this->load->view("admin/reports/leave_report", $data, true);
             
     }

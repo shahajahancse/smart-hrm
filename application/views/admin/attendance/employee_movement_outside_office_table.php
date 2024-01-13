@@ -82,12 +82,15 @@
                 case 5:
                     $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:green"></i>First Step Approved </span>';
                     break;
+                case 6:
+                    $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:green"></i>Return of Correction </span>';
+                    break;
             }
             ?>
 
             <td><?= $statusMessage ?></td>
             <td>
-                <?php if ($data->in_out == 0 && $status <= 1): ?>
+                <?php if ($data->in_out == 0): ?>
                 <a href="<?= base_url('admin/attendance/ta_da_form/') . $data->id ?>">Details</a>
                 <?php else: ?>
                 Not Available
@@ -100,7 +103,7 @@
 </table>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/alfrcr/paginathing/dist/paginathing.min.js"></script>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 jQuery(document).ready(function($) {
     const listElement = $('.list-group');
     $('.table tbody').paginathing({
@@ -111,4 +114,4 @@ jQuery(document).ready(function($) {
         ulClass: 'pagination flex-wrap justify-content-center'
     });
 });
-</script>
+</script> -->

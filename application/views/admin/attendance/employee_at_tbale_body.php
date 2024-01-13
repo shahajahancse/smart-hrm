@@ -27,7 +27,7 @@
 </table>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/alfrcr/paginathing/dist/paginathing.min.js"></script>
 <!--  <script type="text/javascript" src="../src/test.js"></script>-->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 jQuery(document).ready(function($) {
     const listElement = $('.list-group');
     $('.table tbody').paginathing({
@@ -38,4 +38,4 @@ jQuery(document).ready(function($) {
         ulClass: 'pagination flex-wrap justify-content-center'
     });
 });
-</script>
+</script> -->

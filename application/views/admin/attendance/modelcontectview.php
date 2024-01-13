@@ -230,14 +230,26 @@ td{
                                 <input type="number" id="payam" value="<?= $dataall->payable_amount ?>" style="border-radius: 4px;text-align: center;width: 118px;" <?= ($st=='e')? '':'readonly' ?> >
                             </td>
                             <td>
-                                <select  id="sta" style="border-radius: 4px;text-align: center;width: 118px;">
+                                <select  id="sta" style="border-radius: 4px;text-align: center;width: 118px;" onchange="return_change()">
                                     <option  value="1"  <?= ($dataall->status==1)? 'selected':''?> >Pending</option>
                                     <option value="3"  <?= ($dataall->status==3)? 'selected':'' ?> >Rejected</option>
                                     <option  value="5"  <?= ($dataall->status==5)? 'selected':'' ?> >First Step Approved</option>
                                     <option  value="2"  <?= ($dataall->status==2)? 'selected':'' ?> >Approved</option>
                                     <option value="4"   <?= ($dataall->status==4)? 'selected':'' ?> >Pay</option>
+                                    <option value="6"   <?= ($dataall->status==6)? 'selected':'' ?> >Return for Correction</option>
                                 </select>
+                                <textarea type="text" id="return_comment" style="display: none" >  <?= $dataall->return_comment ?> </textarea>
                             </td>
+                            <script>
+                                function return_change(){
+                                    var staValue = document.getElementById("sta").value;
+                                    if (staValue==6){
+                                        document.getElementById("return_comment").style.display = "block";
+                                    }else{
+                                        document.getElementById("return_comment").style.display = "none";
+                                    }
+                                }
+                            </script>
                         </tr>
                     </tbody>
                 </table>

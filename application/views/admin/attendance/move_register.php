@@ -122,7 +122,6 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="apply_for_ta_da">Apply for TA/DA</h4>
                     <h4 class="modal-title" id="modify_ta_da">Modify TA/DA</h4>
                 </div>
                 <form>
@@ -238,6 +237,9 @@
                                     case 5:
                                         $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:green"></i>First Step Approved </span>';
                                         break;
+                                    case 6:
+                                        $statusMessage = '<span class="pending"><i class="fa fa-dot-circle-o" style="color:green"></i>Return of Correction </span>';
+                                        break;
                                 }
                                 ?>
 
@@ -305,6 +307,7 @@ function changetada(){
 var payamValue = document.getElementById("payam").value;
 var staValue = document.getElementById("sta").value;
 var moveid = document.getElementById("moveid").value;
+var return_comment = document.getElementById("return_comment").value;
 
     var url = "<?php echo base_url('admin/attendance/changetada'); ?>";
         $.ajax({
@@ -313,7 +316,8 @@ var moveid = document.getElementById("moveid").value;
             data: {
                 payable_amount: payamValue,
                 status: staValue,
-                moveid: moveid
+                moveid: moveid,
+                return_comment: return_comment
                 },
             success: function(response) {
                 Swal.fire({

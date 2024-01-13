@@ -708,70 +708,112 @@ class Timesheet extends MY_Controller {
 		}
 	}
 	public function modal_leave_update() {
-		// dd($_POST);
-		// Array
-		// (
-		// 	[from_date] => 2023-11-21
-		// 	[to_date] => 2023-11-21
-		// 	[total_days] => 0.5
-		// 	[Half_Day] => on
-		// 	[status] => 2
-		// 	[remark] => fdgfg
-		// 	[leave_id] => 349
-		// 	[submit] => Submit
-		// )
+		$notyfi_data=1;
 		$from_date = $this->input->post('from_date');
 		$to_date = $this->input->post('to_date');
 		$total_days = $this->input->post('total_days');
 		$status = $this->input->post('status');
 		$remark = $this->input->post('remark');
 		$leave_id = $this->input->post('leave_id');
+		$team_lead_approved =0;
+		if ($this->input->post('team_lead_approved')) {
+			$team_lead_approved = $this->input->post('team_lead_approved');
+		}
+		$team_lead_comment = '';
+		if ($this->input->post('team_lead_comment')) {
+			$team_lead_comment = $this->input->post('team_lead_comment');
+		}
+	
 		$hulfday=0;
 		if($this->input->post('Half_Day')){
 			$hulfday=1;
 			$total_days=0.5;
 		}
 		$qt_remarks = htmlspecialchars(addslashes($remark), ENT_QUOTES);
-		$stutuss=$this->input->post('status');
-		if ($stutuss==4 ||$stutuss==3 ||$stutuss==2){
-			$notyfi_data=3;
+		if ($status) {
+			$stutuss= $status;
+			if ($stutuss==4 ||$stutuss==3 ||$stutuss==2){
+				$notyfi_data=3;
+			}else{
+				$notyfi_data=1;
+			};
+	
+			$qnty= $total_days;
+			$data = array(
+				'status' => $status,
+				'remarks' => $qt_remarks,
+				'notify_leave' => $notyfi_data,
+				'from_date' =>$from_date,
+				'to_date' => $to_date,
+				'qty' => $qnty,
+				'is_half_day' => $hulfday,
+				'team_lead_approved' => $team_lead_approved,
+				'team_lead_comment' => $team_lead_comment,
+			);
 		}else{
-			$notyfi_data=1;
-		};
-		$qnty= $total_days;
-		
-
-
-		$data = array(
-			'status' => $status,
-			'remarks' => $qt_remarks,
-			'notify_leave' => $notyfi_data,
-			'from_date' =>$from_date,
-			'to_date' => $to_date,
-			'qty' => $qnty,
-			'is_half_day' => $hulfday
-		);
+			$qnty= $total_days;
+			$data = array(
+				'remarks' => $qt_remarks,
+				'notify_leave' => $notyfi_data,
+				'from_date' =>$from_date,
+				'to_date' => $to_date,
+				'qty' => $qnty,
+				'is_half_day' => $hulfday,
+				'team_lead_approved' => $team_lead_approved,
+				'team_lead_comment' => $team_lead_comment,
+			);
+		}
 		$id=$this->input->post('leave_id');
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
 		if($result == TRUE) {
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
 			// automatically leave process start
 			if($data['qty'] > 0){
-				for ($i=0; $i < $data['qty']; $i++) { 
-					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
-					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+				if ($from_date < date('Y-m-d')) {
+					for ($i=0; $i < $data['qty']; $i++) { 
+						$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
+						$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+					}
 				}
 			}
 		}else{
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
 		}
-		redirect('admin/timesheet/leave');
+		// Load the URL Helper
+		$this->load->helper('url');
+		// Load the Agent Library
+		$this->load->library('user_agent');
+        redirect($this->agent->referrer());
 	}
 	public function modal_leave_data_ajax($id) {
 		$data['result'] = $this->Timesheet_model->get_leaves_leave_id_with_info($id);
-		$data['leave_calel']=12-get_cal_leave($data['result']->employee_id, 1);
+		$employee_id=$data['result']->user_id;
+
+		$this->db->where('leave_id', $id);
+		$leave_data=$this->db->get('xin_leave_applications')->row();
+		$year = date('Y', strtotime($leave_data->from_date));
+		// $from_date = date("$year-01-01");
+		// $to_date = date("$year-12-31");
+
+		$this->db->select('
+		SUM(CASE WHEN leave_type_id = 1 THEN qty ELSE 0 END) AS earn_leave,
+		SUM(CASE WHEN leave_type_id = 2 THEN qty ELSE 0 END) AS sick_leave,
+		');
+		$this->db->where('employee_id', $employee_id);
+		$this->db->where('current_year', $year);
+		$this->db->where('status', 2);
+
+		$this->db->from('xin_leave_applications');
+		$total_leave = $this->db->get()->row();
+
+
+
+
+
+
+		$data['leave_calel']=($total_leave->earn_leave !='')?$total_leave->earn_leave:0;
 		$data['leave_calel_percent']=$data['leave_calel']*100/12;
-		$data['leave_calsl']=4-get_cal_leave($data['result']->employee_id, 2);
+		$data['leave_calsl']=($total_leave->sick_leave !='')?$total_leave->sick_leave:0;
 		$data['leave_calsl_percent']=$data['leave_calsl']*100/4;
 		echo json_encode($data);
 	}
@@ -4266,6 +4308,42 @@ class Timesheet extends MY_Controller {
 			$this->output($Return);
 		}
 	}
+	public function print_leave() {
+		$id = $this->input->post('id');
+
+		$data['result'] = $this->Timesheet_model->get_leaves_leave_id_with_info($id);
+
+		$employee_id=$data['result']->user_id;
+		$this->db->where('leave_id', $id);
+		$leave_data=$this->db->get('xin_leave_applications')->row();
+		$year = date('Y', strtotime($leave_data->from_date));
+		// $from_date = date("$year-01-01");
+		// $to_date = date("$year-12-31");
+
+		$this->db->select('
+		SUM(CASE WHEN leave_type_id = 1 THEN qty ELSE 0 END) AS earn_leave,
+		SUM(CASE WHEN leave_type_id = 2 THEN qty ELSE 0 END) AS sick_leave,
+		');
+		$this->db->where('employee_id', $employee_id);
+		$this->db->where('current_year', $year);
+		$this->db->where('status', 2);
+
+		$this->db->from('xin_leave_applications');
+		$total_leave = $this->db->get()->row();
+
+
+
+
+
+
+
+		$data['leave_calel']=($total_leave->earn_leave !='')?$total_leave->earn_leave:0;
+		$data['leave_calel_percent']=$data['leave_calel']*100/12;
+		$data['leave_calsl']=($total_leave->sick_leave !='')?$total_leave->sick_leave:0;
+		$data['leave_calsl_percent']=$data['leave_calsl']*100/4;
+		echo $this->load->view('admin/timesheet/leaveform', $data, true);
+		
+	}
 	public function delete_variation() {
 		if($this->input->post('type')=='delete') {
 			// Define return | here result is used to return user data and error for error message 
@@ -4506,4 +4584,57 @@ class Timesheet extends MY_Controller {
 			//}
 		//}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// cpmmand dont use this 
+
+  
+
+public function leave_efectinve_caculate(){
+	$all_employee=$this->db->where('user_role_id',3)
+	->where('status',1)
+	->get('xin_employees')->result();
+	foreach($all_employee as $employee){
+		$is_on=0;
+		$effective_date=null;
+		if ($employee->status == 1) {
+			$year_start=strtotime(date('01-07-2022'));
+			$employee_joining_date= strtotime($employee->date_of_joining);
+			if ($employee_joining_date < $year_start) {
+				$is_on=1;
+		        $effective_date=date('Y-m-d',$employee_joining_date);
+			}else{
+				$is_on=0;
+		        $effective_date=null;
+			}
+		}else{
+			$is_on=0;
+		    $effective_date=null;
+		}
+		$data = array(
+			'is_leave_on' => $is_on,
+			'leave_effective' => $effective_date
+		);
+		$this->db->where('user_id',$employee->user_id);
+		$this->db->update('xin_employees',$data);
+	}
+}
 }
