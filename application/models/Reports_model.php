@@ -240,7 +240,7 @@ class Reports_model extends CI_Model {
 	    return $data;
 	}
 
-	public function show_report($emp_ids=null,$status=null,$first_date=null,$second_date=null, $done = null){
+	public function show_report($emp_ids=null,$status=null,$first_date=null,$second_date=null){
 		
 		$this->db->select('
 			xin_employees.user_id,
@@ -258,6 +258,7 @@ class Reports_model extends CI_Model {
 			xin_employees.remark,
             xin_employees.user_password,
 			xin_employees.basic_salary,
+			xin_employees.status,
 			xin_employee_incre_prob.old_salary,
 			xin_employee_incre_prob.new_salary,
 			xin_employee_incre_prob.effective_date as last_incre_date,

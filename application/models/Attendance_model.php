@@ -21,6 +21,12 @@ class Attendance_model extends CI_Model
             exit;
         }
 
+        if (strtotime('2023-06-31') >= strtotime($process_date)) {
+            echo 'Sorry! Before 2023-06-31 process not allowed';
+            exit;
+        }
+
+
         $off_day = $this->dayoff_check($process_date);
         $holiday_day = $this->holiday_check($process_date);
 
@@ -59,21 +65,22 @@ class Attendance_model extends CI_Model
                 $lunch_id = $this->lunch_auto_off_details($lunch_id, $emp_id, $lst, $process_date);
             }
             // lumch auto off
+            $shift_schedule  = $this->get_shift_schedule($emp_id, $process_date, $shift_id);
 
             $proxi_id   = $this->get_proxi($emp_id);
-            if (strtotime('2023-04-29') >= strtotime($process_date)) {
+            if (strtotime('2024-01-14') <= strtotime($process_date)) {
                 $shift_schedule = (object) array(
                     'office_shift_id' => 1,
                     'company_id' => 1,
                     'shift_name' => 'Morning Shift',
                     'default_shift' => 1,
                     'in_start_time' => '06:30:00',
-                    'in_time' => '09:00:00',
-                    'late_start' => '09:00:01',
-                    'lunch_time' => '13:00:00',
-                    'lunch_minute' => 30,
-                    'out_start_time' => '12:00:00',
-                    'ot_start_time' => '16:30:00',
+                    'in_time' => '10:00:00',
+                    'late_start' => '10:05:01',
+                    'lunch_time' => '13:10:00',
+                    'lunch_minute' => 60,
+                    'out_start_time' => '13:00:00',
+                    'ot_start_time' => '19:00:00',
                     'out_end_time' => '23:59:59',
                 );
             } else {
