@@ -2,13 +2,6 @@
 
 $stype="Monthly Leave report";
 ?>
-<?php
-if(count($xin_employees)<1){
-echo "<p style='text-align: center;font-weight: bold;color: red;font-size: xx-large;'>There is no data</p>";
-exit();
-}
-?>
-
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_hrsale_custom.css">
 
@@ -57,157 +50,122 @@ exit();
 <div class="box" id="print_area">
   <div style="text-align: center;">
    <?php  $this->load->view('admin/head_bangla'); ?>
-   <h4><?= $stype ?></h4>
+   <h4>Leave Report</h4>
   </div>
   <div class="container">
   	<div class="box-body">
 	    <div class="box-datatable table-responsive">
-	      <table class="table table-striped table-bordered">
-	        <thead>
-                <td>Sl. No.</td>
-                <td>Employee Name</td>
-                <td>From</td>
-                <td>to</td>
-                <td>Type</td>
-                <td>Qty</td>
-                <td>Reason</td>
-                <td>Total Leave Balance</td>
-                <td>Status</td>
-	        </thead>
-			
-
-            	<?php 
-						
-					$total_el_leave=0;
-					$total_si_leave=0;
-					$total_day=0;
-					$totalemp=[];
-
-			foreach($xin_employees as $key=>$row){
-
-				if(!in_array($row->employee_id,$totalemp)){
-					array_push($totalemp,$row->employee_id);
-				};
-
-
-
-
-
-
-                $user_info = $this->Xin_model->read_employee_info($row->employee_id);
-                
-                ?>
-                <td><?php echo $key+1;?></td>
-                <td><?php echo $user_info[0]->first_name.' '.$user_info[0]->last_name?></td>
-				  
-				<?php
-				  $toDateString = $row->from_date;
-				  $dayName = date('l', strtotime($toDateString));
-				  
-				 
-			     ?>
-                <td><?php echo $row->from_date. ' ('.$dayName. ')'?></td>
-				
-				  <?php
-				  $toDateString = $row->to_date;
-				  $dayName = date('l', strtotime($toDateString));
-					$employee_id=$row->employee_id;
-					$year = date('Y', strtotime($row->from_date));
-
-					$total_leave=cals_leave($employee_id,$year);
-					// stdClass Object
-					// (
-					// 	[id] => 1
-					// 	[emp_id] => 10
-					// 	[el_total] => 6.00
-					// 	[sl_total] => 2.00
-					// 	[el_balanace] => 2.00
-					// 	[sl_balanace] => 1.00
-					// 	[year] => 2023
-					// )
-
-			     ?>
-				
-                <td><?php echo $row->to_date . ' ('.$dayName.')'?></td>
-				<?php
-                if ($row->leave_type=='el') {
-					$total_el_leave +=$row->qty;
-
-                    echo "<td class='text' >Earn Leave</td>";
-                }else{
-					$total_si_leave +=$row->qty;
-
-					echo "<td class='text' >Sick Leave</td>";
-				}
-                ?>
-
-                <td><?php
-
-				$total_day += $row->qty;
-
-				echo $row->qty?>
-				</td>
-                <td>
-						<?= $row->reason?>
-
-			    </td>
-				
-				<td>
-					<table >
+			<?php foreach($employee_id as $key => $employee){
+				$this->load->model('Xin_model');
+				$employee_info=$this->Xin_model->read_user_info($employee);
+				?>
+				<table class="table table-bordered">
 						<tr>
-							<th>Type</th>
-							<th>EL</th>
-							<th>SL</th>
+							<th colspan="8" style="background: #b0ffb2;"> <?php echo $employee_info[0]->first_name.' '.$employee_info[0]->last_name; ?></th>
+							<?php 
+								$this->load->model('Attendance_model');
+								$leave_report=$this->Attendance_model->leavesm_singale($employee, $first_date, $second_date);
+								?>
+							<td rowspan="<?=count($leave_report)+2?>">
+							<?php
+									$employee_id=$employee;
+									$year = date('Y', strtotime($first_date));
+									$total_leave=cals_leave($employee_id,$year);
+								?>
+								<table class="table table-bordered" style="background: #4ef7f799;">
+									<tr><th colspan="3">Leave Details</th></tr>
+									<tr>
+										<th>Type</th>
+										<th>EL</th>
+										<th>SL</th>
+									</tr>
+									<tr>
+										<td>Total</td>
+										<td><?=(empty($total_leave))? 0:$total_leave->el_total?></td>
+										<td><?= (empty($total_leave))? 0:$total_leave->sl_total?></td>
+									</tr>
+									<tr>
+										<td>Balance</td>
+										<td style="color: #0b24e7; font-weight: bold;" ><?= (empty($total_leave))? 0: $total_leave->el_balanace?></td>
+										<td style="color: #0b24e7; font-weight: bold;" ><?= (empty($total_leave))? 0:$total_leave->sl_balanace?></td>
+									</tr>
+								</table>
+								
+
+							</td>
+					
 						</tr>
+					
 						<tr>
-							<td>Total</td>
-							<td><?=(empty($total_leave))? 0:$total_leave->el_total?></td>
-							<td><?= (empty($total_leave))? 0:$total_leave->sl_total?></td>
-					    </tr>
+							<th>Sl</th>
+							<th>Applied On</th>
+							<th>Start Date</th>
+							<th>End Date</th>
+							<th>Days</th>
+							<th>Leave Type</th>
+							<th>Reason</th>
+							<th>Status</th>
+						</tr>
+						<?php $tqty=0; foreach($leave_report as $key => $value){ 							
+							// 		[leave_id] => 364
+							// 		[company_id] => 1
+							// 		[employee_id] => 11
+							// 		[department_id] => 0
+							// 		[leave_type_id] => 1
+							// 		[leave_type] => el
+							// 		[qty] => 2.0
+							// 		[from_date] => 2023-12-17
+							// 		[to_date] => 2023-12-18
+							// 		[applied_on] => 2023-12-10 11:59:11
+							// 		[reason] => Family Program
+							// 		[remarks] => 
+							// 		[status] => 2
+							// 		[is_half_day] => 0
+							// 		[notify_leave] => 0
+							// 		[leave_attachment] => 
+							// 		[team_lead_approved] => 0
+							// 		[team_lead_comment] => 
+							// 		[created_at] => 2023-12-10 11:59:11
+							// 		[current_year] => 2023	
+							?>
 						<tr>
-							<td>Balance</td>
-							<td style="color: #0b24e7; font-weight: bold;" ><?= (empty($total_leave))? 0: $total_leave->el_balanace?></td>
-							<td style="color: #0b24e7; font-weight: bold;" ><?= (empty($total_leave))? 0:$total_leave->sl_balanace?></td>
-					    </tr>
+							<td><?php echo $key+1; ?></td>
+							<td><?php echo date('d-F-Y H:i A', strtotime($value->applied_on)); ?> - (<?=date('l', strtotime($value->applied_on)) ?>)</td>
+							<td><?php echo date('d-F-Y', strtotime($value->from_date)); ?> -  (<?=date('l', strtotime($value->from_date)) ?>)</td>
+							<td><?php echo date('d-F-Y', strtotime($value->to_date)); ?> -  (<?=date('l', strtotime($value->to_date)) ?>)</td>
+							<td><?php $tqty= $tqty+$value->qty;  echo $value->qty; ?></td>
+							<td><?php echo ($value->leave_type_id==1)? '<span>Earn Leave</span>' : '<span>Sick Leave</span>';?></td>
+							<td><?php echo $value->reason; ?></td>
+							<!-- 1=pending, 2=Approved, 3=Rejected, 4=First Level Approval, 5=team lead approved -->
+							<td>
+								<?php 
+								if($value->status==1){
+									echo '<span class="text-danger">Pending</span>';
+								}elseif($value->status==2){
+									echo '<span class="text-success">Approved</span>';
+								}elseif($value->status==3){
+									echo '<span class="text-danger">Rejected</span>';
+								}elseif($value->status==4){
+									echo '<span class="text-info">First Level Approval</span>';
+								}elseif($value->status==5){
+									echo '<span class="text-info">Team Lead Approval</span>';
+								}
+								?>
+							</td>
+						</tr>
+						
+						<?php } ?>
+						<tr> 
+							<td colspan="4" >
+								Total 
+							</td>
+							<td colspan="1" >
+								  <?= $tqty ?>
+							</td>
 							
-					</table>
-				</td>
-                <?php
-                if ($row->status==1) {
-                    echo "<td class='text text-info' >Pending</td>";
-                }elseif ($row->status==2) {
-                    echo "<td class='text text-success' >Approved</td>";
-                }elseif ($row->status==3) {
-                    echo "<td class='text text-danger' >Rejected</td>";
-                }elseif ($row->status==4) {
-                    echo "<td class='text text-danger' >First Level Approval</td>";
-                }
-                ?>
-            </tbody>
-            <?php } ?>
-
-	      </table>
-		  <table class="table">
-			<thead>
-				<tr>
-					<th>Total Employee</th>
-					<th>Total leave</th>
-					<th>Total Earn Leave</th>
-					<th>Total Sick Leave</th>
-					
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-				   <td><?=count($totalemp)?></td>
-				   <td><?=$total_day?></td>
-				   <td><?=$total_el_leave?></td>
-				   <td><?=$total_si_leave?></td>
-				  
-					
-				</tr>
-			</tbody>
-		  </table>
+					    </tr>
+				</table>
+			<?php } ?>
 	    </div>
 	  </div>
   </div>

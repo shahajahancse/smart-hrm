@@ -221,7 +221,34 @@ p {
                 id="msgs_count"><?php echo $unread_msgs;?></span><?php } ?>
         </a>
         <?php } ?>
+<style>
+    .notli {
+    padding: 1px;
+    margin: 10px;
+    border-radius: 11px;
+    box-shadow: 0px 0px 1px 3px #c3c3c3;
+}
 
+.menu::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+.menu::-webkit-scrollbar
+{
+	width: 7px;
+	background-color: #F5F5F5;
+}
+
+.menu::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+</style>
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <li>
@@ -260,6 +287,16 @@ p {
                 }
                 .menu>li>a>.ngcolor {
                     color: #037c29 !important;
+                }
+                .navbar-nav>.messages-menu>.dropdown-menu>li .menu>li>a {
+                    margin: 0;
+                    padding: 3px 1px;
+                }
+                .navbar-custom-menu>.navbar-nav>li>.dropdown-menu {
+                    position: absolute;
+                    right: 0;
+                    left: auto;
+                    box-shadow: 0px 0px 11px 4px #686868;
                 }
                 </style>
                 <?php if (in_array($user[0]->user_role_id, array(1,2,3,4))) { ?>
@@ -302,7 +339,7 @@ p {
                                 $statuss="--";
                             }
                                     ?>
-                                <li>
+                                <li class ="notli">
                                     <!-- start message -->
                                     <?php
                                     $roolid=$session['role_id'];
@@ -370,7 +407,7 @@ p {
                                         $ipdate = $row->notify_incre_prob;
                                     $red_zone = date('Y-m-d', strtotime('-20 days', strtotime(date($ipdate))));
                                     ?>
-                                <li class="lir">
+                                <li class="lir notli">
                                     <!-- start message -->
                                     <a onclick="incrementFun(<?php echo $row->user_id; ?>)">
                                         <div class="pull-left">
@@ -409,7 +446,7 @@ p {
                                         $ipdate = $row->notify_incre_prob;
                                     $red_zone = date('Y-m-d', strtotime('-20 days', strtotime(date($ipdate))));
                                     ?>
-                                <li class="lir">
+                                <li class="lir notli">
                                     <!-- start message -->
                                     <a onclick="incrementFun(<?php echo $row->user_id; ?>)">
                                         <div class="pull-left">
@@ -448,7 +485,7 @@ p {
                                       $ipdate = $row->notify_incre_prob;
                                     $red_zone = date('Y-m-d', strtotime('-20 days', strtotime(date($ipdate))));
                                     ?>
-                                <li class="lir">
+                                <li class="lir notli">
                                     <!-- start message -->
                                     <a onclick="incrementFun(<?php echo $row->user_id; ?>)">
                                         <div class="pull-left">
