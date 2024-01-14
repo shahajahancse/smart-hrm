@@ -53,10 +53,10 @@
         <div class="tab-content">
           <div id="tab1" class="tab-pane fade in active">
                 <div class="form-group" style="margin-top:20px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 5px;">
-                  <button class="btn btn-success btn-sm " style="margin-right:10px" onclick="show_report(1)">Employee List</button>
-                  <button class="btn btn-success btn-sm"  style="margin-right:10px" onclick="show_report(2)">Increment</button>
-                  <button class="btn btn-success btn-sm" style="margin-right:10px" onclick="show_report(3)">Internship</button>
-                  <button class="btn btn-success btn-sm" onclick="show_report(4)">Probation</button>
+                  <button class="btn btn-success btn-sm " style="margin-right:10px" onclick="show_report(1)">Employee Joining List</button>
+                  <button class="btn btn-success btn-sm"  style="margin-right:10px" onclick="show_report(2)">Increment Upcoming</button>
+                  <button class="btn btn-success btn-sm" style="margin-right:10px" onclick="show_report(3)">Internship Upcoming</button>
+                  <button class="btn btn-success btn-sm" onclick="show_report(4)">Probation Upcoming</button>
                   <button class="btn btn-success btn-sm" onclick="show_report(5)">Using Device</button>
 
 

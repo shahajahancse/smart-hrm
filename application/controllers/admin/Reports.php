@@ -1358,19 +1358,26 @@ class Reports extends MY_Controller
 		if(empty($data['session'])){ 
 			redirect('admin/');
 		}
-        $elc = $this->input->post('elc');
-        $sql = $this->input->post('sql');
-        $status = $this->input->post('status');
-        $done = $this->input->post('done');
+
+      $elc = $this->input->post('elc');
+      $sql = $this->input->post('sql');
+      $status = $this->input->post('status');
+      $done = $this->input->post('done');
 		$data['status']= $status;
 		$data['sql']= $sql;
-        $first_date = $this->input->post('first_date');
-        $second_date = $this->input->post('second_date');
+      $first_date = $this->input->post('first_date');
+      $second_date = $this->input->post('second_date');
 		$data['first_date']= $first_date;
 		$data['second_date']= $second_date;
-        $emp_id = explode(',', trim($sql));
-        $data['emp_list'] =$this->Reports_model->show_report($emp_id,$status,$first_date,$second_date, $done);
+
+      $emp_id = explode(',', trim($sql));
+      if ($done == 1 && $done  != 'undefined') {
+	      $data['emp_list'] =$this->Reports_model->done_inc_pro_prb_report($emp_id,$status,$first_date,$second_date);
+      } else {
+	      $data['emp_list'] =$this->Reports_model->show_report($emp_id,$status,$first_date,$second_date);
+      }
 		$data['status']=$status;
+
 
 		if($elc==1){
 			if($status == 1){
@@ -1388,26 +1395,29 @@ class Reports extends MY_Controller
 			if($status == 5){
 				$this->load->view('admin/reports/using_device_excel', $data);
 			}
-		} elseif (!empty($done)) {
 
-
+		} else if($done == 1 && $done  != 'undefined') {
 			if($status == 1){
-				$this->load->view('admin/reports/probation', $data);
+				$data['data_type'] = 'Probation to Regular';
+				$this->load->view('admin/reports/int_pro', $data);
 			} 
 			if($status == 2){
-				$this->load->view('admin/reports/probation', $data);
-			}
+				$data['data_type'] = 'Increment';
+				$this->load->view('admin/reports/inc_pro', $data);
+			} 
 			if($status == 3){
-				$this->load->view('admin/reports/probation', $data);
+				$data['data_type'] = 'Promotion';
+				$this->load->view('admin/reports/inc_pro', $data);
 			}
 			if($status == 4){
+				$data['data_type'] = 'Intern to Probation';
 				$this->load->view('admin/reports/probation', $data);
 			}
 			if($status == 5){
-				$this->load->view('admin/reports/probation', $data);
+				$data['data_type'] = 'Intern to Regular';
+				$this->load->view('admin/reports/intern', $data);
 			}
-
-		} else {
+		} else  {
 			if($status == 1){
 				$this->load->view('admin/reports/emp_list', $data);
 			} 
@@ -1424,7 +1434,8 @@ class Reports extends MY_Controller
 				$this->load->view('admin/reports/using_device', $data);
 			}
 		}
-    }
+   }
+
 	public function show_late_report(){
 		// $report_date = ;
 		// dd($_POST);
