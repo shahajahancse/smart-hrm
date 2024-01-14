@@ -251,7 +251,7 @@ class Reports extends MY_Controller
 		
           echo $this->load->view("admin/reports/leave_report", $data, true);
             
-    }
+   }
 	
 	// reports > employee training
 	public function employee_training() {
@@ -1340,6 +1340,7 @@ class Reports extends MY_Controller
 		$this->load->view('admin/layout/layout_main', $data); //page load
 
 	}
+
 	public function late_report() {
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -1352,6 +1353,7 @@ class Reports extends MY_Controller
 		$this->load->view('admin/layout/layout_main', $data); //page load
 
 	}
+
 	public function show_report($elc=null){
 		// dd($_POST);
 		$data['session'] = $this->session->userdata('username');
@@ -1363,40 +1365,61 @@ class Reports extends MY_Controller
       $sql = $this->input->post('sql');
       $status = $this->input->post('status');
       $done = $this->input->post('done');
-		$data['status']= $status;
-		$data['sql']= $sql;
       $first_date = $this->input->post('first_date');
       $second_date = $this->input->post('second_date');
-		$data['first_date']= $first_date;
-		$data['second_date']= $second_date;
 
       $emp_id = explode(',', trim($sql));
-      if ($done == 1 && $done  != 'undefined') {
-	      $data['emp_list'] =$this->Reports_model->done_inc_pro_prb_report($emp_id,$status,$first_date,$second_date);
+      if ($done == 1 && $done  != 'undefined' && $status != 7) {
+      	if ($status == 1) {
+      		$pstatus = 5;
+      	} else if ($status == 2 || $status == 3) {
+      		$pstatus = 1;
+      	} else {
+      		$pstatus = 4;
+      	}
+
+	      $data['emp_list'] =$this->Reports_model->pending_inc_pro_prb_report($emp_id, $pstatus, $first_date, $second_date);
+	      $data['done_list'] =$this->Reports_model->done_inc_pro_prb_report($emp_id, $status, $first_date, $second_date);
+      } else if ($done == 1 && $done  != 'undefined' && $status == 7) {
+		   $data['emp_list'] =$this->Reports_model->all_pending_report($emp_id, $first_date, $second_date);
       } else {
 	      $data['emp_list'] =$this->Reports_model->show_report($emp_id,$status,$first_date,$second_date);
       }
-		$data['status']=$status;
 
+		$data['sql'] = $sql;
+		$data['status'] = $status;
+		$data['first_date'] = $first_date;
+		$data['second_date'] = $second_date;
 
-		if($elc==1){
+		if ($elc==1 && $done == 1 && $done  != 'undefined') {
 			if($status == 1){
-				$this->load->view('admin/reports/emp_list_excel', $data);
+				$data['data_type'] = 'Probation to Regular';
+				$data['data_type_n'] = 'Probation';
+				$this->load->view('admin/reports/int_Pro_reg_excel', $data);
+			} 
+			if($status == 2){
+				$data['data_type'] = 'Increment';
+				$this->load->view('admin/reports/inc_pro_excel', $data);
 			} 
 			if($status == 3){
-				$this->load->view('admin/reports/intern_excel', $data);
-			} 
-			if($status == 4){
-				$this->load->view('admin/reports/probation_excel', $data);
+				$data['data_type'] = 'Promotion';
+				$this->load->view('admin/reports/inc_pro_excel', $data);
 			}
-			if($status == 2){
-				$this->load->view('admin/reports/incre_excel', $data);
+			if($status == 4){
+				$data['data_type'] = 'Intern to Probation';
+				$data['data_type_n'] = 'Intern';
+				$this->load->view('admin/reports/int_Pro_reg_excel', $data);
 			}
 			if($status == 5){
-				$this->load->view('admin/reports/using_device_excel', $data);
+				$data['data_type'] = 'Intern to Regular';
+				$data['data_type_n'] = 'Intern';
+				$this->load->view('admin/reports/int_Pro_reg_excel', $data);
 			}
-
-		} else if($done == 1 && $done  != 'undefined') {
+			if($status == 7){
+				$data['data_type'] = 'Intern, Probation & Increment Pending List';
+				$this->load->view('admin/reports/intern_excelipn', $data);
+			}
+		} else if ($done == 1 && $done  != 'undefined') {
 			if($status == 1){
 				$data['data_type'] = 'Probation to Regular';
 				$data['data_type_n'] = 'Probation';
@@ -1420,6 +1443,28 @@ class Reports extends MY_Controller
 				$data['data_type_n'] = 'Intern';
 				$this->load->view('admin/reports/int_Pro_reg', $data);
 			}
+			if($status == 7){
+				$data['data_type'] = 'Intern, Probation & Increment Pending List';
+				$this->load->view('admin/reports/intern', $data);
+			}
+			
+		} else if($elc==1) {
+			if($status == 1){
+				$this->load->view('admin/reports/emp_list_excel', $data);
+			} 
+			if($status == 3){
+				$this->load->view('admin/reports/intern_excel', $data);
+			} 
+			if($status == 4){
+				$this->load->view('admin/reports/probation_excel', $data);
+			}
+			if($status == 2){
+				$this->load->view('admin/reports/incre_excel', $data);
+			}
+			if($status == 5){
+				$this->load->view('admin/reports/using_device_excel', $data);
+			}
+
 		} else  {
 			if($status == 1){
 				$this->load->view('admin/reports/emp_list', $data);

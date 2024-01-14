@@ -1,19 +1,18 @@
-<link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_hrsale_custom.css">
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"
+    xmlns="http://www.w3.org/TR/REC-html40">
+
+<?php
+$filename = "excel_list.xls";
+header('Content-Type: application/vnd.ms-excel'); //mime type
+header('Content-Disposition: attachment;filename="' . $filename . '"'); //tell browser what's the file name
+header('Cache-Control: max-age=0'); //no cache
+?>
+<link rel="stylesheet"
+    href="<?php echo base_url(); ?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrsale_assets/css/hrsale/xin_hrsale_custom.css">
+
 <body style="background:white">
-    <?php  $this->load->view('admin/head_bangla'); ?>
-    <div style="float: right;margin-top:30px">
-        <!-- <button class="btn btn-sm btn-primary" id="btn_print" onclick="window.print()">Print</button>    -->
-        <form style="float: right;"  action="<?php echo base_url('admin/reports/show_report/'); ?>" method="post">
-        <input type="hidden" name="first_date" value="<?php echo $first_date; ?>">
-        <input type="hidden" name="second_date" value="<?php echo $second_date; ?>">
-        <input type="hidden" name="status" value="<?php echo $status; ?>">
-        <input type="hidden" name="sql" value="<?php echo $sql; ?>">
-        <input type="hidden" name="elc" value="<?php echo $elc=1; ?>">
-        <input type="hidden" name="done" value="1">
-        <button class="btn btn-sm btn-info" style="margin-right:15px" type="submit" id="excel">Excel</button>
-        </form>
-    </div>
+    <?php $this->load->view('admin/head_bangla');?>
     <h4 class="text-center">Report of <?= $data_type ?> From <?php echo $first_date; ?> To <?php echo $second_date; ?></h4>
     <table class="table table-striped table-bordered">
         <thead style="font-size:12px;" >
@@ -97,5 +96,6 @@
             <?php } ?>
         </tbody>
     </table>
-
 </body>
+
+</html>

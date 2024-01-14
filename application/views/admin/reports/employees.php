@@ -3,9 +3,17 @@
 <?php $_tasks = $this->Timesheet_model->get_tasks();?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
+<style>
+  .breadcrumb {
+       margin-bottom: 0px !important; 
+  }
+  .dbtn {
+    background: #0177bc !important;
+    color: #fff !important;
+  }
+</style>
 <div class="row m-b-1 <?php echo $get_animate;?>">
-  <div class="col-md-6">
-    
+  <div class="col-md-7">
     <div class="box">
       <div class="box-header with-border">
         <h3 class="box-title">Employees Report </h3>
@@ -14,19 +22,30 @@
         <div class="row">
           <div class="col-md-12">
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                     <label for="process_date">First Date</label>
                     <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>">
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label for="process_date">Second Date</label>
                   <input class="form-control attendance_date" placeholder="Second Date" id="second_date" name="second_date" type="text" autocomplete="off">
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="upload_file">Type</label>
+                  <select class="form-control" name="type" id="type">
+                    <option value="">Select one</option>
+                    <option value="1">Regular</option>
+                    <option value="4">Intern</option>
+                    <option value="5">Probation</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
                 <div class="form-group">
                   <label for="upload_file">Status</label>
                   <select class="form-control" name="status" id="status">
@@ -52,21 +71,18 @@
 
         <div class="tab-content">
           <div id="tab1" class="tab-pane fade in active">
-                <div class="form-group" style="margin-top:20px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 5px;">
-                  <button class="btn btn-success btn-sm " style="margin-right:10px" onclick="show_report(1)">Employee Joining List</button>
-                  <button class="btn btn-success btn-sm"  style="margin-right:10px" onclick="show_report(2)">Increment Upcoming</button>
-                  <button class="btn btn-success btn-sm" style="margin-right:10px" onclick="show_report(3)">Internship Upcoming</button>
-                  <button class="btn btn-success btn-sm" onclick="show_report(4)">Probation Upcoming</button>
-                  <button class="btn btn-success btn-sm" onclick="show_report(5)">Using Device</button>
+            <div class="form-group" style="margin-top:20px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 5px;">
 
+              <button class="btn dbtn btn-sm " onclick="show_report(1)">Employee Joining List</button>
+              <button class="btn dbtn btn-sm" onclick="show_report(7,1)">Pending List All</button>
+              <button class="btn dbtn btn-sm" onclick="show_report(2,1)">Increment</button>
+              <button class="btn dbtn btn-sm" onclick="show_report(3,1)">Promotion</button>
+              <button class="btn dbtn btn-sm" onclick="show_report(1,1)">Probation to Regular</button>
+              <button class="btn dbtn btn-sm" onclick="show_report(4,1)">Intern to Probation</button>
+              <button class="btn dbtn btn-sm" onclick="show_report(5,1)">Intern to Regular</button>
 
-                  <button class="btn btn-sm " style="background: #0177bc; color: #fff" onclick="show_report(1,1)">Probation to Regular</button>
-                  <button class="btn btn-sm"  style="background: #0177bc; color: #fff" onclick="show_report(2,1)">Increment</button>
-                  <button class="btn btn-sm" style="background: #0177bc; color: #fff" onclick="show_report(3,1)">Promotion</button>
-
-                  <button class="btn btn-sm" style="background: #0177bc; color: #fff" onclick="show_report(4, 1)">Intern to Probation</button>
-                  <button class="btn btn-sm" style="background: #0177bc; color: #fff" onclick="show_report(5, 1)">Intern to Regular</button>
-                </div>
+              <button class="btn btn-success btn-sm" onclick="show_report(5)">Using Device</button>
+            </div>
           </div>
           <div id="tab2" class="tab-pane fade">
                 <div class="form-group" style="margin-top:20px">
@@ -79,8 +95,9 @@
         </div>
       </div>
     </div>
-
   </div>
+
+
   <div class="col-lg-5">
     <div class="box" style="height: 74vh;overflow-y: scroll;">
       <table class="table table-striped table-hover" id="fileDiv">
@@ -149,6 +166,7 @@
       alert('Please select status');
       return ;
     }
+
     if(r == 2 ){
       if(first_date ==''){
         alert('Please select first date');
@@ -158,8 +176,8 @@
         alert('Please select second date');
         return ;
       }
-    
     }
+
     var checkboxes = document.getElementsByName('select_emp_id[]');
     var sql = get_checked_value(checkboxes);
     if(sql ==''){
@@ -175,7 +193,7 @@
       if(ajaxRequest.readyState == 4){
         // console.log(ajaxRequest);
         var resp = ajaxRequest.responseText;
-        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1800,height=800');
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1400,height=800');
         a.document.write(resp);
       }
     }
