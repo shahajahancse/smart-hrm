@@ -1628,7 +1628,7 @@ class Admin extends API_Controller
         if ($user_info['status'] == true) {
             if ($user_info['user_info']->user_role_id != 3) {
                 $categories =$this->db->select('id,cat_name')->get('product_accessory_categories')->result(); 
-                if ($result) {
+                if ($categories) {
                     $this->api_return([
                         'status' => true,
                         'message' => 'successful',
@@ -1678,7 +1678,7 @@ class Admin extends API_Controller
                     $this->api_return([
                         'status' => true,
                         'message' => 'successful',
-                        'data' => $categories,
+                        'data' => $result,
                     ], 200);
                 } else {
                     $this->api_return([
