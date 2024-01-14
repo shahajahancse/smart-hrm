@@ -234,7 +234,7 @@ class Reports extends MY_Controller
         echo $this->load->view("admin/reports/yerly_leave", $data, true);
 	}
 	public function leave_report()
-    {
+   {
       
 		$prossecc_date= $this->input->post('first_date');
 		$first_date = date('Y-m-01',strtotime($prossecc_date));
@@ -1399,7 +1399,8 @@ class Reports extends MY_Controller
 		} else if($done == 1 && $done  != 'undefined') {
 			if($status == 1){
 				$data['data_type'] = 'Probation to Regular';
-				$this->load->view('admin/reports/int_pro', $data);
+				$data['data_type_n'] = 'Probation';
+				$this->load->view('admin/reports/int_Pro_reg', $data);
 			} 
 			if($status == 2){
 				$data['data_type'] = 'Increment';
@@ -1411,11 +1412,13 @@ class Reports extends MY_Controller
 			}
 			if($status == 4){
 				$data['data_type'] = 'Intern to Probation';
-				$this->load->view('admin/reports/probation', $data);
+				$data['data_type_n'] = 'Intern';
+				$this->load->view('admin/reports/int_Pro_reg', $data);
 			}
 			if($status == 5){
 				$data['data_type'] = 'Intern to Regular';
-				$this->load->view('admin/reports/intern', $data);
+				$data['data_type_n'] = 'Intern';
+				$this->load->view('admin/reports/int_Pro_reg', $data);
 			}
 		} else  {
 			if($status == 1){

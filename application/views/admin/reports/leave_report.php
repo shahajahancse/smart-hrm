@@ -156,8 +156,8 @@ exit();
 					<table >
 						<tr>
 							<th>Type</th>
-							<th>Earn Leave</th>
-							<th>Sick Leave</th>
+							<th>EL</th>
+							<th>SL</th>
 						</tr>
 						<tr>
 							<td>Total</td>
@@ -166,8 +166,8 @@ exit();
 					    </tr>
 						<tr>
 							<td>Balance</td>
-							<td><?= (empty($total_leave))? 0: $total_leave->el_balanace?></td>
-							<td><?= (empty($total_leave))? 0:$total_leave->sl_balanace?></td>
+							<td style="color: #0b24e7; font-weight: bold;" ><?= (empty($total_leave))? 0: $total_leave->el_balanace?></td>
+							<td style="color: #0b24e7; font-weight: bold;" ><?= (empty($total_leave))? 0:$total_leave->sl_balanace?></td>
 					    </tr>
 							
 					</table>

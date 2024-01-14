@@ -32,6 +32,7 @@
             <th class="text-center">Next Increment Date</th>
             <th class="text-center">PC Password</th>
             <th class="text-center">Note File</th>
+            <th class="text-center">Status</th>
             <th class="text-center">Remark</th>
         </tr>
     </thead>
@@ -73,6 +74,20 @@
                 <a href="<?=  base_url('uploads/profile/').$value->note_file?>" download="<?=  base_url('uploads/profile/').$value->note_file?>">Download</a>
             <?php }?>
             </td>
+            <?php if ($value->status == 1) {
+                $status = 'Regular';
+            } else if ($value->status == 2) {
+                $status = 'Left';
+            } else if ($value->status == 3) {
+                $status = 'Resign';
+            } else if ($value->status == 4) {
+                $status = 'Intern';
+            } else {
+                $status = 'Probation';
+            }
+            
+            ?>
+            <td><?= $status ?></td>
             <td><?= $value->remark?></td>
         </tr>
         <?php }?>
