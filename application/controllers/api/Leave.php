@@ -210,7 +210,11 @@ class Leave extends API_Controller
                 }
                 
             } else {
-                $type_name = " Earn leave";
+                if ($emp_leave->el_balanace < $no_of_days) {
+                    $ss=0;
+                }else{
+                    $ss=1;
+                }
             }
 
 
@@ -227,8 +231,6 @@ class Leave extends API_Controller
                 ], 404);
                 exit();
             }
-            
-			
 			$data = array(
 			'employee_id' => $userid,
 			'company_id' => 1,
