@@ -3,6 +3,18 @@ $userid  = $session[ 'user_id' ];
 
 ?>
 <?php
+    $this->db->where('user_id',$userid);
+    $emp=$this->db->get('xin_employees')->row(); 
+
+    $this->db->where('emp_id',$userid);
+    $this->db->where('year',date('Y'));
+    $emp_leave=$this->db->get('leave_balanace')->row(); 
+   $earn=(empty($emp_leave))?0:$emp_leave->el_balanace;
+   
+   $sick=(empty($emp_leave))?0:$emp_leave->sl_balanace;
+    $is_leave_on=$emp->is_leave_on;
+?>
+<?php
 $leavecal=leave_cal($userid);
 $leave_calel=get_cal_leave($userid, 1);
 $leave_calsl=get_cal_leave($userid, 2);
@@ -139,8 +151,8 @@ body {
                         <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;"
                             required>
                             <option value="">Select Leave Type**</option>
-                            <option value="1">Earn Leave</option>
-                            <option value="2">Sick Leave</option>
+                            <option value="1" <?=($earn == 0.00)?'disabled':'' ?>>Earn Leave (<?=$earn?>)</option>
+                            <option value="2" <?=($sick == 0.00)?'disabled':'' ?>>Sick Leave (<?=$sick?>)</option>
                         </select>
                     </div>
                 </div>
@@ -212,30 +224,33 @@ body {
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
         <div class="heading">Total Earn Leave</div>
-        <div class="heading2">12</div>
+        <div class="heading2"><?=(empty($emp_leave))?0:$emp_leave->el_total?></div>
     </div>
 
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
         <div class="heading">Total Sick Leave</div>
-        <div class="heading2">4</div>
+        <div class="heading2"><?= (empty($emp_leave))?0:$emp_leave->sl_total?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">
         <div class="heading">Remaining Earn Leave</div>
-        <div class="heading2"><?=  $leave_calel?></div>
+        <div class="heading2"><?=  (empty($emp_leave))?0:$emp_leave->el_balanace ?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
         <div class="heading">Remaining Sick Leave</div>
-        <div class="heading2"><?=$leave_calsl?></div>
+        <div class="heading2"><?= (empty($emp_leave))?0:$emp_leave->sl_balanace ?></div>
     </div>
 </div>
 <div class="col-md-12 medelbar">
     <div class="col-md-10"
         style="color: #000;font-family: Roboto;font-size: 15px;font-style: normal;line-height: 43.5px;text-transform: capitalize;font-weight: bold;">
         Are you want to take a leave? Please make sure to leave the request form to HR/ Admin. </div>
-    <a class="col-md-2" id="openModal"
+   <?php if($is_leave_on == 1){?>
+        <a class="col-md-2" id="openModal"
         style="text-align-last: right;color: white;display: flex;height: 41px;padding: 4px 17px;cursor: pointer;justify-content: center;align-items: center;gap: 10px;border-radius: 4px;border: 1px solid var(--b, #599AE7);background: var(--b, #599AE7);">
         Leave Request
     </a>
+    <?php }?>
+
 </div>
 <div class="col-md-12 medelbar">
     <div class="col-md-3 divform-group">
@@ -342,8 +357,10 @@ function getdata(status) {
     });
 }
 </script>
+
 <script>
 function openModal() {
+
     document.getElementById("customModal").style.display = "block";
 }
 
@@ -373,9 +390,7 @@ function calculateDays() {
     } else {
         checkpoint.removeAttribute('disabled');
     }
-
 }
-
 // Event listeners for date input changes
 document.getElementById('start_date').addEventListener('change', calculateDays);
 document.getElementById('end_date').addEventListener('change', calculateDays);

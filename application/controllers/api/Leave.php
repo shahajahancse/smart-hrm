@@ -86,6 +86,13 @@ class Leave extends API_Controller
                 ], 404);
                 exit();
             }
+
+
+            $this->db->where('emp_id',$userid);
+            $this->db->where('year',date('Y'));
+            $emp_leave=$this->db->get('leave_balanace')->row();
+
+           
             $leave_date = $this->db->select('from_date,to_date')->where('employee_id',$userid)->get('xin_leave_applications')->result();
 			
 			//check duplicate leave date 
@@ -93,7 +100,7 @@ class Leave extends API_Controller
 				if($date->from_date == $start_date && $date->to_date == $end_date) {
                     $this->api_return([
                         'status'  =>   false,
-                        'message'  =>   " Can't applied For This Date, Leave Already Have For This Date",
+                        'message'  =>   "Can't applied For This Date, Leave Already Have For This Date",
                         'data'     =>   [],
                     ], 404);
                     exit();
@@ -189,6 +196,36 @@ class Leave extends API_Controller
                 $fileLocation = 'uploads/leave/' . $filename;
             } else {
                 $fileLocation = '';
+            }
+
+
+
+            $ss=1;
+            if ($this->input->post('leave_type') == 2) {
+
+                if ($emp_leave->sl_balanace < $no_of_days) {
+                    $ss=0;
+                }else{
+                    $ss=1;
+                }
+                
+            } else {
+                $type_name = " Earn leave";
+            }
+
+
+
+
+
+
+
+            if ($ss==0) {
+                $this->api_return([
+                    'status'  =>   false,
+                    'message'  =>   'You dont have This Type Leave',
+                    'data'     =>   [],
+                ], 404);
+                exit();
             }
             
 			
