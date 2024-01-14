@@ -508,12 +508,15 @@ class Attendance_model extends CI_Model
         $this->db->group_by('employee_id');
         return $this->db->get('xin_leave_applications')->result();
     }
-    public function leavesm_singale($emp_ids, $first_date, $second_date)
+    public function leavesm_singale($emp_ids, $first_date, $second_date, $status=null)
     {
         $this->db->select('*');
         $this->db->where('employee_id', $emp_ids);
         $this->db->where('from_date >=', $first_date);
         $this->db->where('to_date <=', $second_date);
+        if ($status != null) {
+            $this->db->where('status', $status);
+        }
         return $this->db->get('xin_leave_applications')->result();
     }
 
@@ -536,6 +539,7 @@ class Attendance_model extends CI_Model
         $this->db->select('
                 xin_employees.user_id, 
                 xin_employees.employee_id, 
+                xin_employees.leave_effective,
                 xin_employees.office_shift_id as shift_id, 
                 xin_employees.first_name, 
                 xin_employees.last_name, 
