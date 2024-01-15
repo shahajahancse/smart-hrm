@@ -1666,7 +1666,7 @@ class Admin extends API_Controller
                 if (empty($status)) {
                     $this->api_return([
                         'status' => false,
-                        'message' => 'Please select Second Date',
+                        'message' => 'Please select status',
                         'data' => [],
                     ], 200);
                     exit;

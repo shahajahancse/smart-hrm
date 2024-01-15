@@ -996,6 +996,89 @@ class Timesheet extends MY_Controller {
 		}
 		
 	}
+	public function leave_status_change() {
+		
+		$id =$this->input->post('leave_id');
+		$stutuss=$this->input->post('status');
+
+
+		$leave_info=$this->db->where('leave_id',$id)->get('xin_leave_applications')->row();
+		$employee_id=$leave_info->employee_id;
+		$start_date=$leave_info->from_date;
+		$end_date=$leave_info->to_date;
+		$leave_type=$leave_info->leave_type_id;
+		$qty=$leave_info->qty;
+		
+				// [leave_id] => 377
+				// [company_id] => 1
+				// [employee_id] => 12
+				// [department_id] => 0
+				// [leave_type_id] => 1
+				// [leave_type] => el
+				// [qty] => 1.0
+				// [from_date] => 2023-12-24
+				// [to_date] => 2023-12-24
+				// [applied_on] => 2023-12-18 09:53:28
+				// [reason] => Wedding ceremony of my elder brother.
+				// [remarks] => 
+				// [status] => 4
+				// [is_half_day] => 0
+				// [notify_leave] => 1
+				// [leave_attachment] => 
+				// [team_lead_approved] => 1
+				// [team_lead_comment] => 
+				// [created_at] => 2023-12-18 09:53:28
+				// [current_year] => 2023
+			
+
+
+		if ($stutuss==4 ||$stutuss==3 ||$stutuss==2){
+			$notyfi_data=3;
+		}else{
+			$notyfi_data=1;
+		};
+
+		$data = array(
+			'status' => $stutuss,
+			'notify_leave' => $notyfi_data,
+		);
+
+		$result = $this->Timesheet_model->update_leave_record($data,$id);
+
+		if ($result == TRUE) {
+			if ($stutuss==2) {
+				$emp_id = $employee_id;
+				$y = date('Y', strtotime($start_date));
+				$leave_data = cals_leave($emp_id, $y);	
+				$leave_type_id=$leave_type;
+					if ($leave_type_id==1) {
+						$rdata = array(
+							'el_balanace' => $leave_data->el_balanace - $qty
+						);
+					}else{
+						$rdata = array(
+							'sl_balanace' =>$leave_data->sl_balanace - $qty
+						);
+					}
+					$this->db->where('id', $leave_data->id);
+					$this->db->update('leave_balanace', $rdata);
+				}
+			if($qty > 0){
+				for ($i=0; $i < $qty; $i++) { 
+					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($start_date)));
+					$this->Attendance_model->attn_process($process_date, array($employee_id));
+				}
+			} else {
+				$process_date = $start_date;
+				$this->Attendance_model->attn_process($process_date, array($employee_id));
+			}
+
+
+		} else {
+			echo 'error';
+		}
+		
+	}
 	
 	
 

@@ -140,15 +140,33 @@ $stype="Monthly Leave report";
 							<td>
 								<?php 
 								if($value->status==1){
-									echo '<span class="text-danger">Pending</span>';
+									echo '<strong class="text-danger current_status">Pending</strong> <br>
+									<div class="dropdown" >
+										<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Change Status
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',2,this)" role="menuitem" tabindex="-1" href="#">Approved</a></li>
+											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',3,this)" role="menuitem" tabindex="-1" href="#">Rejected</a></li>
+											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',4,this)" role="menuitem" tabindex="-1" href="#">First Level Approval</a></li>
+										</ul>
+									</div>';
 								}elseif($value->status==2){
 									echo '<span class="text-success">Approved</span>';
 								}elseif($value->status==3){
 									echo '<span class="text-danger">Rejected</span>';
 								}elseif($value->status==4){
-									echo '<span class="text-info">First Level Approval</span>';
+									echo '<strong class="text-info current_status">First Level Approval</strong> <br>
+									<div class="dropdown" >
+										<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Change Status
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',2,this)" role="menuitem" tabindex="-1" href="#">Approved</a></li>
+											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',3,this)" role="menuitem" tabindex="-1" href="#">Rejected</a></li>
+										</ul>
+									</div>';
 								}elseif($value->status==5){
-									echo '<span class="text-info">Team Lead Approval</span>';
+									echo '<span class="text-info">Team Lead Approval</span>
+									';
 								}
 								?>
 							</td>
@@ -181,3 +199,39 @@ $stype="Monthly Leave report";
 
 <script src="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- Morris.js charts -->
+
+<img src="<?=base_url('skin/images/loading.gif')?>">
+<script>
+	function leave_status_change(leave_id,status,obj){
+		event.preventDefault();
+		var row = $(obj).closest('td');
+
+		$(row).html('<img src="<?=base_url('skin/img/loading.gif')?>">');
+		$.ajax({
+			type: "POST",
+			url: "<?= base_url('admin/timesheet/leave_status_change') ?>",
+			data: {
+				leave_id: leave_id,
+				status: status
+			},
+			success: function (data) {
+				if (data == 'error') {
+					alert('Something went wrong');
+				}else{
+					var stext='';
+					if(status==2){
+						stext='Approved';
+					}else if(status==3){
+						stext='Rejected';
+					}else{
+						stext='First Level Approval';
+					}
+					$(row).html('<span class="text-success">'+stext+'</span>');
+				}
+			},
+			error: function (xhr, status, error) {
+				console.log(xhr.responseText);
+			}
+		})
+	}
+</script>
