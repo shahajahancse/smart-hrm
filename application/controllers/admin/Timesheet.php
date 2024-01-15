@@ -1079,6 +1079,19 @@ class Timesheet extends MY_Controller {
 		}
 		
 	}
+
+	public function update_leave_balance(){
+		$leave_id = $this->input->post('leave_id');
+
+		$leave_info=$this->db->where('leave_id',$leave_id)->get('xin_leave_applications')->row();
+		$employee_id=$leave_info->employee_id;
+		$start_date=$leave_info->from_date;
+
+
+		$y = date('Y', strtotime($start_date));
+		$leave_data = cals_leave($employee_id, $y);
+		echo json_encode($leave_data);
+	}
 	
 	
 
