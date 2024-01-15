@@ -1386,8 +1386,9 @@ class Reports extends MY_Controller
 
 	      $data['emp_list'] =$this->Reports_model->pending_inc_pro_prb_report($emp_id, $pstatus, $first_date, $second_date);
 	      $data['done_list'] =$this->Reports_model->done_inc_pro_prb_report($emp_id, $status, $first_date, $second_date);
-      } else if ($done == 1 && $done  != 'undefined' && $status == 7) {
-		   $data['emp_list'] =$this->Reports_model->all_pending_report($emp_id, $first_date, $second_date);
+      } else if ($done == 1 && $done  != 'undefined' && $status == 7 ) {
+		   $data['pending_list'] =$this->Reports_model->all_pending_report($emp_id, $first_date, $second_date);
+		   $data['done_list'] =$this->Reports_model->all_done_report($emp_id, $first_date, $second_date);
       } else {
 	      $data['emp_list'] =$this->Reports_model->show_report($emp_id,$status,$first_date,$second_date);
       }
@@ -1422,9 +1423,10 @@ class Reports extends MY_Controller
 				$this->load->view('admin/reports/int_Pro_reg_excel', $data);
 			}
 			if($status == 7){
-				$data['data_type'] = 'Intern, Probation & Increment Pending List';
+				$data['data_type'] = 'Intern, Probation & Increment';
 				$this->load->view('admin/reports/intern_excelipn', $data);
 			}
+
 		} else if ($done == 1 && $done  != 'undefined') {
 			if($status == 1){
 				$data['data_type'] = 'Probation to Regular';
@@ -1450,7 +1452,7 @@ class Reports extends MY_Controller
 				$this->load->view('admin/reports/int_Pro_reg', $data);
 			}
 			if($status == 7){
-				$data['data_type'] = 'Intern, Probation & Increment Pending List';
+				$data['data_type'] = 'Intern, Probation & Increment';
 				$this->load->view('admin/reports/intern', $data);
 			}
 			

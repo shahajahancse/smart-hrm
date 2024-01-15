@@ -22,19 +22,19 @@
         <div class="row">
           <div class="col-md-12">
             <div class="row">
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-group">
                     <label for="process_date">First Date</label>
                     <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>">
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-group">
                   <label for="process_date">Second Date</label>
                   <input class="form-control attendance_date" placeholder="Second Date" id="second_date" name="second_date" type="text" autocomplete="off">
                 </div>
               </div>
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <div class="form-group">
                   <label for="upload_file">Type</label>
                   <select class="form-control" name="type" id="type">
@@ -44,8 +44,8 @@
                     <option value="5">Probation</option>
                   </select>
                 </div>
-              </div>
-              <div class="col-md-3">
+              </div> -->
+              <div class="col-md-4">
                 <div class="form-group">
                   <label for="upload_file">Status</label>
                   <select class="form-control" name="status" id="status">
@@ -74,7 +74,7 @@
             <div class="form-group" style="margin-top:20px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 5px;">
 
               <button class="btn dbtn btn-sm " onclick="show_report(1)">Employee Joining List</button>
-              <button class="btn dbtn btn-sm" onclick="show_report(7,1)">Pending List All</button>
+              <button class="btn dbtn btn-sm" onclick="show_report(7,1)">All Increment List</button>
               <button class="btn dbtn btn-sm" onclick="show_report(2,1)">Increment</button>
               <button class="btn dbtn btn-sm" onclick="show_report(3,1)">Promotion</button>
               <button class="btn dbtn btn-sm" onclick="show_report(1,1)">Probation to Regular</button>

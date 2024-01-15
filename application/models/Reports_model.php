@@ -200,6 +200,44 @@ class Reports_model extends CI_Model {
         return $result = $this->db->get('xin_employees')->result();
 	}
 
+	public function all_done_report($emp_ids=null, $first_date=null, $second_date=null){
+		$this->db->select('
+			xin_employees.user_id,
+			xin_employees.first_name,
+			xin_employees.last_name,
+			xin_employees.email,
+			xin_employees.contact_no,
+			xin_employees.address,
+			xin_employees.note_file,
+			xin_employees.remark,
+            xin_employees.user_password,
+			xin_employees.basic_salary,
+			xin_employees.notify_incre_prob as next_incre_date,
+			xin_employees.date_of_joining,
+			xin_employees.status,
+
+			xin_departments.department_name,
+			xin_designations.designation_name,
+
+			xin_employee_incre_prob.status as instatus,
+			xin_employee_incre_prob.old_salary,
+			xin_employee_incre_prob.new_salary,
+			xin_employee_incre_prob.effective_date as last_incre_date,
+		')
+		->from('xin_employees')		
+		->join('xin_departments','xin_employees.department_id = xin_departments.department_id','left')		
+		->join('xin_designations','xin_employees.designation_id = xin_designations.designation_id','left')		
+		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.emp_id','left');
+
+		$this->db->where_in('xin_employees.user_id',$emp_ids);
+		$this->db->where('xin_employee_incre_prob.effective_date between "' . $first_date . '" AND "' . $second_date . '"');
+
+		$this->db->order_by('xin_employee_incre_prob.effective_date','DESC');
+		$this->db->group_by('xin_employees.user_id');
+		$data = $this->db->get()->result();
+	    return $data;
+	}
+
 	public function all_pending_report($emp_ids=null, $first_date=null, $second_date=null){
 		
 		$this->db->select('
