@@ -1,4 +1,5 @@
 <?php 
+$this->load->model('Attendance_model');
 
 $stype="Monthly Leave report";
 ?>
@@ -84,7 +85,7 @@ $stype="Monthly Leave report";
 										<td><?=(empty($total_leave))? 0:$total_leave->el_total?></td>
 										<td><?= (empty($total_leave))? 0:$total_leave->sl_total?></td>
 									</tr>
-									<tr>
+									<tr id="balance<?=$employee_id?>">
 										<td>Balance</td>
 										<td style="color: #0b24e7; font-weight: bold;" ><?= (empty($total_leave))? 0: $total_leave->el_balanace?></td>
 										<td style="color: #0b24e7; font-weight: bold;" ><?= (empty($total_leave))? 0:$total_leave->sl_balanace?></td>
@@ -131,7 +132,12 @@ $stype="Monthly Leave report";
 						<tr>
 							<td><?php echo $key+1; ?></td>
 							<td><?php echo date('d-F-Y H:i A', strtotime($value->applied_on)); ?> - (<?=date('l', strtotime($value->applied_on)) ?>)</td>
-							<td><?php echo date('d-F-Y', strtotime($value->from_date)); ?> -  (<?=date('l', strtotime($value->from_date)) ?>)</td>
+							<td><?php echo date('d-F-Y', strtotime($value->from_date)); ?> -  (<?=date('l', strtotime($value->from_date)) ?>)   <?php 
+							
+							
+							// $red_alert_check=$this->Attendance_model->red_alert_check($value->from_date)
+							
+							?></td>
 							<td><?php echo date('d-F-Y', strtotime($value->to_date)); ?> -  (<?=date('l', strtotime($value->to_date)) ?>)</td>
 							<td><?php $tqty= $tqty+$value->qty;  echo $value->qty; ?></td>
 							<td><?php echo ($value->leave_type_id==1)? '<span>Earn Leave</span>' : '<span>Sick Leave</span>';?></td>
@@ -200,7 +206,6 @@ $stype="Monthly Leave report";
 <script src="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- Morris.js charts -->
 
-<img src="<?=base_url('skin/images/loading.gif')?>">
 <script>
 	function leave_status_change(leave_id,status,obj){
 		event.preventDefault();
@@ -221,6 +226,7 @@ $stype="Monthly Leave report";
 					var stext='';
 					if(status==2){
 						stext='Approved';
+						update_balance(leave_id);
 					}else if(status==3){
 						stext='Rejected';
 					}else{
@@ -233,5 +239,30 @@ $stype="Monthly Leave report";
 				console.log(xhr.responseText);
 			}
 		})
+	}
+</script>
+
+
+
+<script>
+	function update_balance(leave_id){
+		event.preventDefault();
+		$.ajax({
+			type: "POST",
+			url: "<?= base_url('admin/timesheet/update_leave_balance') ?>",
+			data: {
+				leave_id: leave_id
+			},
+			success: function (data) {
+				total_leave = JSON.parse(data);
+				var td_item = `
+					<td>Balance</td>
+					<td style="color: #0b24e7; font-weight: bold;">${(!total_leave) ? 0 : total_leave.el_balanace}</td>
+					<td style="color: #0b24e7; font-weight: bold;">${(!total_leave) ? 0 : total_leave.sl_balanace}</td>
+				`;
+				$(`#balance${total_leave.emp_id}`).html(td_item);
+			}
+		})
+
 	}
 </script>

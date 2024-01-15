@@ -14,7 +14,7 @@ class Attendance_model extends CI_Model
         $check_day = date("Y-m-d", strtotime("-1 day", strtotime($process_date)));
         $att_check = $this->db->where('attendance_date', $check_day)->get('xin_attendance_time');
         if($att_check->num_rows() < 1) {
-            echo 'Please first process '. $check_day;
+            echo 'Please first process '. $check_day; 
             exit;
         } elseif (strtotime("+1 day", strtotime(date('Y-m-d'))) < strtotime($process_date)) {
             echo 'Sorry! advanced process not allowed, Please first process '. date('Y-m-d');
@@ -1098,5 +1098,8 @@ class Attendance_model extends CI_Model
     {
         $this->db->where('place_id', $place_id);
         $this->db->delete('xin_employee_move_place');
+    }
+    public function red_alert_check(){
+        
     }
 }
