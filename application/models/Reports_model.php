@@ -643,7 +643,50 @@ class Reports_model extends CI_Model {
         $this->db->group_by('ap.id');
         return $this->db->get()->result();  
     }
+	public function get_product_reports_info_2($status = 'all')
+    {
+        $this->db->select('
+                    ap.id as a_id,
+                    ap.cat_id,
+                    ap.device_model,
+                    ap.device_name_id,
+                    ap.description,
+                    ap.status,
+                    ap.remark,
+                    ap.number,
+                    ap.user_id,
+                    pac.cat_name,
+                    pac.cat_short_name,
+                    pam.model_name,
+                    pam.image,
+                    mobile_numbers.number,
+                    xin_employees.first_name,
+                    xin_employees.last_name,
+        ');
+        $this->db->from('product_accessories as ap');
+        $this->db->join('product_accessories_model as pam', 'ap.device_model = pam.id', 'left');
+        $this->db->join('product_accessory_categories as pac', 'ap.cat_id = pac.id', 'left');
+        $this->db->join('mobile_numbers', 'ap.number = mobile_numbers.id', 'left');
+        $this->db->join('xin_employees', 'ap.user_id = xin_employees.user_id', 'left');
 
+        if ($status == 'all') {
+            $this->db->where_in('ap.status', [1, 2, 3, 4, 5]);
+        } else if ($status == 'store') {
+            $this->db->where('ap.status', 2);
+            $this->db->order_by('ap.id', "ASC");
+        } else if ($status == 'damage') {
+            $this->db->where('ap.status', 4);
+            $this->db->order_by('ap.id', "ASC");
+        } else {
+            $this->db->where('ap.cat_id', $status);
+            $this->db->order_by('ap.id', "ASC");
+        }
+
+
+        $this->db->order_by('ap.status', "ASC");
+        $this->db->group_by('ap.id');
+        return $this->db->get()->result();
+    }
 	public function leave_application($first_date=null,$second_date=null,$emp_id=null){
 		$this->db->select('xin_employees.first_name,xin_departments.department_name,xin_designations.designation_name,xin_employees.last_name,xin_leave_applications.*');
 		$this->db->from('xin_leave_applications');
