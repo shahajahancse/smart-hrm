@@ -249,7 +249,9 @@ class Reports extends MY_Controller
 		$employee_id=[];
         $leave=  $this->Attendance_model->leavesm($emp_id, $first_date, $second_date);
 		foreach($leave as $l){
-			$employee_id[] = $l->employee_id;
+			if (!in_array($l->employee_id, $employee_id)) {
+				$employee_id[] = $l->employee_id;
+			}
 		}
 		$data['employee_id']=$employee_id;
 		

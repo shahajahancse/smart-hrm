@@ -767,12 +767,12 @@ td, th {
                                     <div id="leave-statistics">
                                         <p><strong>Earn leave (<span id="leave_count_el_p"></span>/<span id="leave_count_el_total"></span>)</strong></p>
                                         <div class="progress" style="margin: 7px;height: 19px;background: aqua;">
-                                            <div class="progress-bar" id="leave_count_el_prog" style="background: #ff8484;width: 75%;"></div>
+                                            <div class="progress-bar" id="leave_count_el_prog" style="background: #ff8484;width: 100%;"></div>
                                         </div>
                                         <div id="leave-statistics">
                                             <p><strong>Sick leave (<span id="leave_count_sl_p"></span>/<span id="leave_count_sl_total"></span>)</strong></p>
                                             <div class="progress" style="margin: 7px;height: 19px;background: aqua;">
-                                                <div class="progress-bar" id="leave_count_sl_prog" style="background: #ff8484;width: 75%;"></div>
+                                                <div class="progress-bar" id="leave_count_sl_prog" style="background: #ff8484;width: 100%;"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -1311,7 +1311,7 @@ function movetype() {
                     var leave_calel=JSON.parse(response).leave_calel;
                     var leave_calel_percent=JSON.parse(response).leave_calel_percent;
                     var leave_calsl=JSON.parse(response).leave_calsl;
-                    var leave_calsl_percent=JSON.parse(response).leave_calsl_percent;
+                    var leave_calsl_percent=JSON.parse(response).leave_calls_percent;
 
                     var leave_totalsl=JSON.parse(response).leave_totalsl;
                     var leave_totalel=JSON.parse(response).leave_totalel;

@@ -837,26 +837,23 @@ class Timesheet extends MY_Controller {
 		$year = date('Y', strtotime($leave_data->from_date));
 
 		$leave_data_balance = cals_leave($employee_id, $year);	
-		// dd($leave_data_balance);
-		// dd($leave_data_balance);
-		// // dd($leave_data_balance);
-		// // stdClass Object
-		// // (
-		// // 	[id] => 23
-		// // 	[emp_id] => 58
-		// // 	[el_total] => 2.00
-		// // 	[sl_total] => 0.50
-		// // 	[el_balanace] => 1.00
-		// // 	[sl_balanace] => 0.00
-		// // 	[year] => 2023
-		// // )
+		
 		$data['leave_totalel']=$leave_data_balance->el_total;
 		$data['leave_totalsl']=$leave_data_balance->sl_total;
 
 		$data['leave_calel']=$leave_data_balance->el_balanace;
-		$data['leave_calel_percent']=($leave_data_balance->el_total-$leave_data_balance->el_balanace)*100/$leave_data_balance->el_total;
+
+		if ($leave_data_balance->el_total != 0) {
+			$data['leave_calel_percent'] = ($leave_data_balance->el_total - $leave_data_balance->el_balanace) * 100 / $leave_data_balance->el_total;
+		} else {
+			$data['leave_calel_percent'] = 0;
+		}
 		$data['leave_calsl']=$leave_data_balance->sl_balanace;
-		$data['leave_calsl_percent']=($leave_data_balance->sl_total-$leave_data_balance->sl_balanace)*100/$leave_data_balance->sl_total;
+
+		$data['leave_calls_percent'] = 0;
+		if ($leave_data_balance->sl_total != 0) {
+			$data['leave_calls_percent'] = ($leave_data_balance->sl_total - $leave_data_balance->sl_balanace) * 100 / $leave_data_balance->sl_total;
+		}
 		echo json_encode($data);
 	}
 	// Validate and add info in database
