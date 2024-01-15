@@ -229,9 +229,11 @@ class Reports_model extends CI_Model {
 		->join('xin_designations','xin_employees.designation_id = xin_designations.designation_id','left')		
 		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.emp_id','left');
 
-		$this->db->where_in('xin_employees.user_id',$emp_ids);
-		$this->db->where('xin_employee_incre_prob.effective_date between "' . $first_date . '" AND "' . $second_date . '"');
-
+		if (!empty($emp_ids)) {
+			$this->db->where_in('xin_employees.user_id',$emp_ids);
+		}
+		$this->db->where_in('xin_employees.status', array(1,4,5));
+		$this->db->where('xin_employee_incre_prob.effective_date between "'.$first_date.'" AND "'.$second_date.'"');
 		$this->db->order_by('xin_employee_incre_prob.effective_date','DESC');
 		$this->db->group_by('xin_employees.user_id');
 		$data = $this->db->get()->result();
@@ -267,9 +269,11 @@ class Reports_model extends CI_Model {
 		->join('xin_designations','xin_employees.designation_id = xin_designations.designation_id','left')		
 		->join('xin_employee_incre_prob','xin_employees.user_id = xin_employee_incre_prob.emp_id','left');
 
-		$this->db->where_in('xin_employees.user_id',$emp_ids);
-		$this->db->where('xin_employees.notify_incre_prob between "' . $first_date . '" AND "' . $second_date . '"');
-
+		if (!empty($emp_ids)) {
+			$this->db->where_in('xin_employees.user_id',$emp_ids);
+		}
+		$this->db->where_in('xin_employees.status', array(1,4,5));
+		$this->db->where('xin_employees.notify_incre_prob between "'.$first_date.'" AND "'.$second_date.'"');
 		$this->db->order_by('xin_employee_incre_prob.effective_date','DESC');
 		$this->db->group_by('xin_employees.user_id');
 		$data = $this->db->get()->result();

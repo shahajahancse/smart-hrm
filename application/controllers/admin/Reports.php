@@ -1360,6 +1360,25 @@ class Reports extends MY_Controller
 
 	}
 
+	public function fetch_data(){
+		$data['session'] = $this->session->userdata('username');
+      $first_date = $this->input->post('first_date');
+      $second_date = $this->input->post('second_date');
+      $elc = $this->input->post('elc');
+
+		$data['pending_list'] =$this->Reports_model->all_pending_report(null, $first_date, $second_date);
+		$data['done_list'] =$this->Reports_model->all_done_report(null, $first_date, $second_date);
+		// dd($data);
+		$data['first_date'] = $first_date;
+		$data['second_date'] = $second_date;
+		$data['data_type'] = 'Intern, Probation & Increment';
+		if ($elc == 1 && !empty($elc)) {
+			$this->load->view('admin/reports/intern_json_excel', $data);
+		} else {
+			$this->load->view('admin/reports/intern_json', $data);
+		}
+   }
+
 	public function show_report($elc=null){
 		// dd($_POST);
 		$data['session'] = $this->session->userdata('username');

@@ -128,7 +128,7 @@
       status = document.getElementById('status').value;
       var url = "<?php echo base_url('admin/reports/get_employeess'); ?>";
       $("#select_all").prop("checked", false);
-      $('#fileDiv #removeTr').remove();
+      $('#fileDiv .removeTr').remove();
 
       $.ajax({
         url: url,
@@ -142,7 +142,7 @@
             var i = 1;
             var items = '';
             $.each(arr, function (index, value) {
-              items += '<tr id="removeTr">';
+              items += '<tr class="removeTr">';
               items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' + value.emp_id + '" ></td>';
                items += '<td class="success">' + (i++) + '</td>';
               items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + " (" +value.emp_id + ")" + '</td>';
