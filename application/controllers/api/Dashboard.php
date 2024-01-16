@@ -59,6 +59,7 @@ class Dashboard extends API_Controller
             ],
         200);
     }
+
     public function index(){
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
@@ -107,9 +108,9 @@ class Dashboard extends API_Controller
                 $data['late_day'] = $attendanceData->count_late;
 
                 $data['Salary_table'] = $this->Salary_model->getall_salary_with_idap_this_y($userid);
-                $leave_calel=get_cal_leave($userid, 1);
-                $leave_calsl=get_cal_leave($userid, 2);
-                $data['leave']=$leave_calel+$leave_calsl;
+                // $leave_calel=get_cal_leave($userid, 1);
+                // $leave_calsl=get_cal_leave($userid, 2);
+                // $data['leave']=$leave_calel+$leave_calsl;
                 $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
                 $lunch_data = $this->db
                                 ->select('lunch_payment.*')
@@ -133,8 +134,12 @@ class Dashboard extends API_Controller
             $data['saved_lunch']    =   $saved_lunch;
             $data['taken_lunch' ]   =   $taken_lunch;
 
-            $data['earn_leave']=get_cal_leave($userid, 1);
-            $data['sick_leave']=get_cal_leave($userid, 2);
+            $le = cals_leave($userid, date('Y'));
+            $data['earn_total'] = $le->el_total;
+            $data['sick_total'] = $le->sl_total;
+            $data['earn_leave'] = $le->el_balanace;
+            $data['sick_leave'] = $le->sl_balanace;
+            $data['leave'] = $le->sl_balanace+$le->el_balanace;
             $data['Upcoming_holydays']= $this->db->select('*')->limit(5)->where("start_date > '".date('Y-m-d')."'")->get('xin_holidays')->result();
             $data['notice'] = $this->db->get('xin_events')->result();
                 $this->api_return([

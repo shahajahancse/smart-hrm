@@ -31,9 +31,9 @@
     $balanceMeal = $paymeal - $taken_meal;
 
     // get 12 month to current month
-    $i = date("Y-m", strtotime("-12 months"));
+    $i = date("Y-m", strtotime("-11 months"));
     $monthNames = array();
-    while ($i <  date("Y-m")) {
+    while ($i <=  date("Y-m")) {
         $monthNames[] = date('F', strtotime($i));
         $i = date('Y-m', strtotime('+1 months'. $i));
     }
