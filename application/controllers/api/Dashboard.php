@@ -135,11 +135,20 @@ class Dashboard extends API_Controller
             $data['taken_lunch' ]   =   $taken_lunch;
 
             $le = cals_leave($userid, date('Y'));
-            $data['earn_total'] = $le->el_total;
-            $data['sick_total'] = $le->sl_total;
-            $data['earn_leave'] = $le->el_balanace;
-            $data['sick_leave'] = $le->sl_balanace;
-            $data['leave'] = $le->sl_balanace+$le->el_balanace;
+            if (empty($le)) {
+                $data['earn_total'] = '0';
+                $data['sick_total'] ='0';
+                $data['earn_leave'] = 0;
+                $data['sick_leave'] = 0;
+                $data['leave'] = 0;
+            }else{
+              $data['earn_total'] = strval($le->el_total);
+              $data['sick_total'] = strval($le->sl_total);
+              $data['earn_leave'] = floor($le->el_balanace);
+              $data['sick_leave'] = floor($le->sl_balanace);
+              $data['leave'] = floor($le->sl_balanace) + floor($le->el_balanace);
+            }
+
             $data['Upcoming_holydays']= $this->db->select('*')->limit(5)->where("start_date > '".date('Y-m-d')."'")->get('xin_holidays')->result();
             $data['notice'] = $this->db->get('xin_events')->result();
                 $this->api_return([

@@ -10,7 +10,8 @@ if ( ! function_exists('api_auth'))
         $q = $CI->db->get()->row();
         if (!empty($q)) {
             $CI->db->select('
-                e.username as user_id,
+                e.user_id,
+                e.username ,
                 e.employee_id, 
                 e.first_name, 
                 e.last_name, 
@@ -29,6 +30,7 @@ if ( ! function_exists('api_auth'))
                 e.salary, 
                 e.basic_salary,
                 e.floor_status, 
+                e.contact_no,
                 d.department_name,
                 de.designation_name,
                 xin_employee_bankaccount.account_number

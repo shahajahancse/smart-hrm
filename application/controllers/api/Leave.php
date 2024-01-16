@@ -92,6 +92,19 @@ class Leave extends API_Controller
             $this->db->where('year',date('Y'));
             $emp_leave=$this->db->get('leave_balanace')->row();
 
+            $this->db->where('user_id',$userid);
+            $is_leave=$this->db->get('xin_employees')->row();
+
+            if ($is_leave->is_leave_on==0) {
+                $this->api_return([
+                    'status'  =>   false,
+                    'message'  =>   'You Are Not Eligible For Leave',
+                    'data'     =>   [],
+                ], 404);
+                exit();
+            }
+
+
            
             $leave_date = $this->db->select('from_date,to_date')->where('employee_id',$userid)->get('xin_leave_applications')->result();
 			
@@ -201,6 +214,7 @@ class Leave extends API_Controller
 
 
             $ss=1;
+
             if ($this->input->post('leave_type') == 2) {
 
                 if ($emp_leave->sl_balanace < $no_of_days) {
