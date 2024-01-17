@@ -114,9 +114,10 @@
                         }else{
                             $inactive_meal+=1;
                         };
-                        $total_emp_cost+=$row->meal_amount*45;
-                        $total_offic_cost+=$row->meal_amount*45;
-                        $total_cost+=$row->meal_amount*90;
+                        $lunch_package=lunch_package($row->date);
+                        $total_emp_cost+=$row->meal_amount*$lunch_package->stuf_give_tk;
+                        $total_offic_cost+=$row->meal_amount*$lunch_package->office_give_tk;
+                        $total_cost+=$row->meal_amount*$lunch_package->permeal;
                     }
                 
                 ?>
@@ -166,9 +167,10 @@
             $this->load->model("Lunch_model"); 
              $emp_data = $this->Lunch_model->get_data_date_wise_geust($first_date,$second_date);
              $data=$emp_data['emp_data'];
-        foreach ($data as $key => $row){
+             foreach ($data as $key => $row){
+                $lunch_package=lunch_package($row->date);
                 $grand_active_meal+=$row->guest_m;
-                $grand_total_cost+=$row->guest_m*90;
+                $grand_total_cost+=$row->guest_m*$lunch_package->permeal;
             ?>
                 <tr>
                     <td><?= $key+1 ?></td>

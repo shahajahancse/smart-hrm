@@ -13,7 +13,10 @@
     font-family: Arial, sans-serif;
     font-size: 18px;
     color: #333;
+
     line-height: 1.5;
+
+
 }
 
 .panels {
@@ -304,7 +307,10 @@ $(document).ready(function() {
 
 });
 </script>
+<?php 
 
+
+?>
 <script>
 function togglePaymentBox() {
     var paymentBox = document.getElementById('paymentBox');
@@ -333,8 +339,9 @@ function calmeal() {
         method: 'POST',
         data: data,
         success: function(response) {
-                document.getElementById('total_meal').value = response;
-                var total_amount = response * 90
+          var data=JSON.parse(response)
+                document.getElementById('total_meal').value = data.total_m;
+                var total_amount =  data.total_am
                 document.getElementById('total_amount').value = total_amount;
                 var pre_due = document.getElementById('pre_due').value;
                 var payable_amount = parseInt(parseInt(total_amount) + parseInt(pre_due));

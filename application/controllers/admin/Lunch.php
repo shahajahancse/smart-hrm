@@ -40,6 +40,7 @@ class Lunch extends MY_Controller
         if (empty($session)) {
             redirect('admin/');
         }
+        // dd(lunch_package(date('2023-09-01')));
         $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
         $data['first_date']=$result->end_date;
         $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
@@ -157,10 +158,20 @@ class Lunch extends MY_Controller
                 }
                 $this->db->insert_batch('lunch_details', $form_data);
             }
+
+
+
+
+
+
+
+
+
+            $lunch_package=lunch_package($date);
             $total_m = $emp_m + $guest_m;
-            $total_cost = ($emp_m*45) + ($guest_m* 90);
-            $emp_cost = $emp_m * 45;
-            $guest_cost = $guest_m * 90;
+            $total_cost = ($emp_m*$lunch_package->stuf_give_tk) + ($guest_m * $lunch_package->permeal);
+            $emp_cost = $emp_m * $lunch_package->stuf_give_tk;
+            $guest_cost = $guest_m * $lunch_package->permeal;
             $data2 = array(
                 'total_m' => $total_m,
                 'emp_m' => $emp_m,
@@ -411,54 +422,54 @@ class Lunch extends MY_Controller
         $this->load->view('admin/lunch/payment_report_page', $data);
     }
     //manually lunch data entry
-    public function manual_lunch_entry()
-    {
-        $session = $this->session->userdata('username');
-        if (empty($session)) {
-            redirect('admin/');
-        }
-        // dd($_POST);
-        $this->form_validation->set_rules('empid[]', 'Employee name', 'required|trim');
-        $this->form_validation->set_rules('pay_amount[]', 'Pay meal Amount', 'required|trim');
-        $this->form_validation->set_rules('cost_meal[]', 'Cost meal Quantity', 'required|trim');
-        $this->form_validation->set_rules('cost_amount[]', 'Cost meal Amount', 'required|trim');
-        $this->form_validation->set_rules('balance[]', 'Balance Amount', 'required|trim');
-        //Validate and input data
-        if ($this->form_validation->run() == true) {
-            $empid       = $this->input->post('empid');
-            $pay_amount  = $this->input->post('pay_amount');
-            $cost_meal   = $this->input->post('cost_meal');
-            $cost_amount = $this->input->post('cost_amount');
-            $balance     = $this->input->post('balance');
-            $p_meal      = $this->input->post('probability_meal');
-            for ($i=0; $i<sizeof($empid); $i++) {
-                $data[] = array(
-                    'emp_id'      => $empid[$i],
-                    'prev_meal'   => $cost_meal[$i],
-                    'prev_cost'   => $cost_amount[$i],
-                    'prev_pay'    => $pay_amount[$i],
-                    'prev_amount' => $balance[$i],
-                    'pay_amount'  => ($p_meal * 45),
-                    'from_date'   => $this->input->post('from_date'),
-                    'end_date'    => $this->input->post('end_date'),
-                    'status'      => 0,
-                );
-            }
-            $this->db->insert_batch('lunch_payment', $data);
-            $this->session->set_flashdata('message', 'Successfully insert done');
-            return redirect('admin/lunch/index');
-        }
-        $data['employees'] = $this->Lunch_model->all_employees();
-        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
-        $data['breadcrumbs'] = 'Manual Lunch Entry';
-        $data['path_url'] = 'lunch';
-        if (!empty($session)) {
-            $data['subview'] = $this->load->view("admin/lunch/manual_lunch_entry", $data, true);
-            $this->load->view('admin/layout/layout_main', $data); //page load
-        } else {
-            redirect('admin/');
-        }
-    }
+    // public function manual_lunch_entry()
+    // {
+    //     $session = $this->session->userdata('username');
+    //     if (empty($session)) {
+    //         redirect('admin/');
+    //     }
+    //     // dd($_POST);
+    //     $this->form_validation->set_rules('empid[]', 'Employee name', 'required|trim');
+    //     $this->form_validation->set_rules('pay_amount[]', 'Pay meal Amount', 'required|trim');
+    //     $this->form_validation->set_rules('cost_meal[]', 'Cost meal Quantity', 'required|trim');
+    //     $this->form_validation->set_rules('cost_amount[]', 'Cost meal Amount', 'required|trim');
+    //     $this->form_validation->set_rules('balance[]', 'Balance Amount', 'required|trim');
+    //     //Validate and input data
+    //     if ($this->form_validation->run() == true) {
+    //         $empid       = $this->input->post('empid');
+    //         $pay_amount  = $this->input->post('pay_amount');
+    //         $cost_meal   = $this->input->post('cost_meal');
+    //         $cost_amount = $this->input->post('cost_amount');
+    //         $balance     = $this->input->post('balance');
+    //         $p_meal      = $this->input->post('probability_meal');
+    //         for ($i=0; $i<sizeof($empid); $i++) {
+    //             $data[] = array(
+    //                 'emp_id'      => $empid[$i],
+    //                 'prev_meal'   => $cost_meal[$i],
+    //                 'prev_cost'   => $cost_amount[$i],
+    //                 'prev_pay'    => $pay_amount[$i],
+    //                 'prev_amount' => $balance[$i],
+    //                 'pay_amount'  => ($p_meal * 45),
+    //                 'from_date'   => $this->input->post('from_date'),
+    //                 'end_date'    => $this->input->post('end_date'),
+    //                 'status'      => 0,
+    //             );
+    //         }
+    //         $this->db->insert_batch('lunch_payment', $data);
+    //         $this->session->set_flashdata('message', 'Successfully insert done');
+    //         return redirect('admin/lunch/index');
+    //     }
+    //     $data['employees'] = $this->Lunch_model->all_employees();
+    //     $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
+    //     $data['breadcrumbs'] = 'Manual Lunch Entry';
+    //     $data['path_url'] = 'lunch';
+    //     if (!empty($session)) {
+    //         $data['subview'] = $this->load->view("admin/lunch/manual_lunch_entry", $data, true);
+    //         $this->load->view('admin/layout/layout_main', $data); //page load
+    //     } else {
+    //         redirect('admin/');
+    //     }
+    // }
     public function emp_pay_list()
     {
         $session = $this->session->userdata('username');
@@ -510,21 +521,21 @@ class Lunch extends MY_Controller
         $this->db->where('end_date', date('Y-m-d', strtotime($firstDate . ' -1 day')));
         $preepay = $this->db->get('lunch_payment')->result();
 
-        if(count($preepay)>0){
-            echo json_encode(['error'=>'There are Unpaid Employee Found , Please Check the Collection Sheet']);
-            exit();
-        };
+        // if(count($preepay)>0){
+        //     echo json_encode(['error'=>'There are Unpaid Employee Found , Please Check the Collection Sheet']);
+        //     exit();
+        // };
 
         $currentDate = strtotime($firstDate);
-        while ($currentDate <= strtotime($secondDate)) {
-            $this->db->where('date',  date("Y-m-d", $currentDate));
-            $ifdate = $this->db->get('lunch')->result();
-            if (count($ifdate) == 0) {
-                echo json_encode(['error' => 'Please first Add Lunch on ' . date("Y-m-d", $currentDate)]);
-                exit();
-            }
-            $currentDate = strtotime("+1 day", $currentDate);
-        }
+        // while ($currentDate <= strtotime($secondDate)) {
+        //     $this->db->where('date',  date("Y-m-d", $currentDate));
+        //     $ifdate = $this->db->get('lunch')->result();
+        //     if (count($ifdate) == 0) {
+        //         echo json_encode(['error' => 'Please first Add Lunch on ' . date("Y-m-d", $currentDate)]);
+        //         exit();
+        //     }
+        //     $currentDate = strtotime("+1 day", $currentDate);
+        // }
 
         $data['lunch_data'] = $this->Lunch_model->process($firstDate, $secondDate, $probable_date);
         echo json_encode(['success'=>'Successfully Processing Done']);
@@ -570,15 +581,17 @@ class Lunch extends MY_Controller
     }
     public function get_payment_data()
     {
-        echo $total_m= $this->Lunch_model->chack_meal($this->input->post('first_date'), $this->input->post('second_date'));
+         $total_m= $this->Lunch_model->chack_meal($this->input->post('first_date'), $this->input->post('second_date'));
+        echo json_encode($total_m);
     }
     public function get_payment_data_list()
     {
-        $total_m = $this->Lunch_model->chack_meal($this->input->post('first_date'), $this->input->post('second_date'));
+        $total = $this->Lunch_model->chack_meal($this->input->post('first_date'), $this->input->post('second_date'));
         $data['payment_data']= $this->Lunch_model->chack_meal_data($this->input->post('first_date'), $this->input->post('second_date'));
         $table= $this->load->view("admin/lunch/lunchtable", $data, true);
         $response = array(
-            'total_m' => $total_m,
+            'total_m' => $total->total_m,
+            'total_am' => $total->total_am,
             'table' => $table
         );
         header('Content-Type: application/json');

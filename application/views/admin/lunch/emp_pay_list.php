@@ -212,7 +212,10 @@ input[type="email"] {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<?php
+$lunch_package=lunch_package(date('Y-m-d'));
 
+?>
 <script>
 $(document).ready(function() {
     // Event handler for the select box change event
@@ -245,11 +248,8 @@ $(document).ready(function() {
                         return; // Exit the success callback
                     }
                 }
-                var pay_m = parseInt(responseData[0].pay_amount) - parseInt(responseData[0]
-                    .prev_amount);
-                var payday = parseInt(pay_m) / 45
-
-
+                var pay_m = parseInt(responseData[0].pay_amount) - parseInt(responseData[0].prev_amount);
+                var payday = parseInt(pay_m) / parseInt(<?php echo $lunch_package->stuf_give_tk; ?>);
 
                 // Generate the form dynamically
                 var formHtml = '';
@@ -389,7 +389,7 @@ $(document).ready(function() {
 
 function calculatePayment() {
     var p_month_day = document.getElementById('p_month_day').value;
-    document.getElementById("p_month_pay").value = parseInt(p_month_day * 45);
+    document.getElementById("p_month_pay").value = parseInt(p_month_day * parseInt(<?php echo $lunch_package->stuf_give_tk; ?>));
 }
 </script>
 

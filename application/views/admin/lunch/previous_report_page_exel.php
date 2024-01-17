@@ -46,8 +46,10 @@
         </thead>
         <tbody style="text-align: center;">
             <?php  $totalamount=0; $previouspay=0; $totalprev_meal=0; $totalprev_cost=0; $totalprev_amt=0;
-            foreach ($lunch_data as $key=>$employee):  
-                $pbm=($employee->prev_amount/45);
+            foreach ($lunch_data as $key=>$employee):
+                $lunch_package=lunch_package($employee->from_date);
+
+                $pbm=($employee->prev_amount/$lunch_package->stuf_give_tk);
 
                 $totalprev_meal+=$employee->prev_meal;
                 $totalprev_cost+=$employee->prev_cost;

@@ -100,14 +100,18 @@ $this->load->view('admin/head_bangla');
                         </thead>
                         <tbody>
                             <?php $numKey=0; ?>
-                            <?php foreach ($lunch_details as $key => $detail) { ?>
+                            <?php foreach ($lunch_details as $key => $detail) { 
+                                $lunch_package=lunch_package($detail->date);
+
+                                
+                                ?>
                             <tr>
                                 <td><?= $key+1 ?></td>
                                 <?php $numKey=$key+1; ?>
                                 <td><?= $detail->first_name ?> <?= $detail->last_name ?></td>
                                 <td style="text-align: center;"><?= $detail->meal_amount ?></td>
-                                <td style="text-align: center;"><?= $detail->meal_amount*45 ?></td>
-                                <td style="text-align: center;"><?= $detail->meal_amount*45 ?></td>
+                                <td style="text-align: center;"><?= $detail->meal_amount*$lunch_package->stuf_give_tk ?></td>
+                                <td style="text-align: center;"><?= $detail->meal_amount*$lunch_package->office_give_tk ?></td>
                                 <!-- <td><?= $detail->comment ?></td> -->
                                 <td style="text-align: center;" title="<?php echo $detail->comment; ?>">
                                     <?php echo implode(' ', array_slice(explode(' ', $detail->comment ), 0, 4)); ?></td>
@@ -119,7 +123,9 @@ $this->load->view('admin/head_bangla');
                                 <td><?= " Guest Meals"?></td>
                                 <td style="text-align: center;"><?= $data->guest_m ?></td>
                                 <td style="text-align: center;"><?=$data->guest_m*0   ?></td>
-                                <td style="text-align: center;"><?= $data->guest_m*90   ?></td>
+                               <? $lunch_package=lunch_package($detail->date); ?>
+
+                                <td style="text-align: center;"><?= $data->guest_m*$lunch_package->permeal   ?></td>
                                 <td style="text-align: center;" title="<?php echo $detail->comment; ?>">
                                     <?php echo implode(' ', array_slice(explode(' ', $detail->comment ), 0, 4)); ?></td>
                             </tr>

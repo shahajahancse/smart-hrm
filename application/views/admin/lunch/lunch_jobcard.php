@@ -103,7 +103,11 @@ foreach ($all_employees as $key => $value) {
                 <th>Total</th>
                 <th>Remarks</th>
 
-                <?php foreach ($emp_data['emp_data'] as $key => $row) { ?>
+                <?php foreach ($emp_data['emp_data'] as $key => $row) { 
+                   $lunch_package=lunch_package($row->date);
+
+                    
+                    ?>
                 <tr>
                     <td>&nbsp;
                         <?php echo $row->date; ?>
@@ -133,20 +137,20 @@ foreach ($all_employees as $key => $value) {
                     </td>
 
                     <td>&nbsp;
-                        <?php echo $row->meal_amount*45;
-					$total_emp_cost+=$row->meal_amount*45;
+                        <?php echo $row->meal_amount*$lunch_package->stuf_give_tk;
+					$total_emp_cost+=$row->meal_amount*$lunch_package->stuf_give_tk;
 					?>
                     </td>
 
                     <td>&nbsp;
-                        <?php echo $row->meal_amount*45;
-					$total_offic_cost+=$row->meal_amount*45;
+                        <?php echo $row->meal_amount*$lunch_package->office_give_tk;
+					$total_offic_cost+=$row->meal_amount*$lunch_package->office_give_tk;
 					?>
                     </td>
 
                     <td>&nbsp;
-                        <?php echo $row->meal_amount*90;
-					$total_cost+=$row->meal_amount*90;
+                        <?php echo $row->meal_amount*$lunch_package->permeal;
+					$total_cost+=$row->meal_amount*$lunch_package->permeal;
 					?>
                     </td>
 

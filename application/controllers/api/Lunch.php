@@ -65,8 +65,10 @@ class Lunch extends API_Controller
             $taken_lunch=0;
             foreach ($current_month_lonch['emp_data'] as $r) {
                 $taken_lunch+=$r->meal_amount;
+              
             }
-            $total_lunch    =   $data1->pay_amount/45;
+
+            $total_lunch    =   $data1->probable_meal;
             $total_payment  =   $data1->pay_amount;
             $saved_lunch    =   $total_lunch-$taken_lunch;
             $data['total_lunch']    =   $total_lunch;

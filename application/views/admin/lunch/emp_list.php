@@ -4,8 +4,10 @@ $total_amount=0;
 $paid_amount=0;
 $total_emp=0;
 $paid_total_emp=0;
+$total_meal=0;
 foreach ($empdata as $i => $value) {
     $total_amount+=$value->collection_amount;
+    $total_meal+=$value->probable_meal;
     $total_emp+=1;
     if($value->status == 1){
         $paid_amount+=$value->collection_amount;
@@ -36,7 +38,7 @@ td {}
                     <tr>
                         <th style="padding: 3px;">Total Meal</th>
                         <td style="padding: 3px;">:</td>
-                        <td style="padding: 3px;"><?= $total_amount/45 ?></td>
+                        <td style="padding: 3px;"><?= $total_meal ?></td>
                     </tr>
                     <tr>
                         <th style="padding: 3px;">Total Amount</th>
@@ -107,14 +109,16 @@ td {}
                     <tbody>
                         <?php foreach ($empdata as $key => $data) { 
                             $taken_meal=0;
+                            $taken_amount=0;
                             $this->load->model("Lunch_model");
                             $emp_data = $this->Lunch_model->get_data_date_wise($first_date,$second_date, $data->emp_id);
                         
                             foreach ($emp_data['emp_data'] as $r) {
-                            
+                                $lunch_package=lunch_package($r->date);
                                 $taken_meal+=$r->meal_amount;
+                                $taken_amount+=$r->meal_amount*$lunch_package->stuf_give_tk;
                             }
-                            $paymeal=$data->pay_amount/45;
+                            $paymeal=$data->probable_meal;
                             $balanceMeal= $paymeal-$taken_meal;
 
                             
@@ -129,14 +133,14 @@ td {}
                                 </h5>
                             </td>
                             <td><?= $data->designation_name ?></td>
-                            <td><?= $data->pay_amount/45?></td>
+                            <td><?= $paymeal?></td>
                             <td><?= $data->pay_amount?></td>
                             <td><?= $data->prev_amount?></td>
                             <td><?= $data->collection_amount?></td>
                             <td><?= $taken_meal ?></td>
-                            <td><?= $taken_meal*45 ?></td>
+                            <td><?= $taken_amount ?></td>
                             <td><?= $balanceMeal?></td>
-                            <td><?= $balanceMeal*45 ?></td>
+                            <td><?= ($data->pay_amount - $taken_amount) ?></td>
                             <td class="<?= ($data->status == 1) ? 'success' : 'info' ?>">
                                 <?= ($data->status == 1) ? 'Colected' : 'Unpaid' ?>
                             </td>

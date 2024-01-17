@@ -107,62 +107,61 @@
     <div class="container">
         <div class="box-body">
             <div class="box-datatable ">
-                <table class="table table-bordered table-hover table-striped">
-                    <thead style="text-align: center;">
-                        <tr style="color:blue;">
-                            <th>SL</th>
-                            <th>Name</th>
-                            <th>Previous Meal</th>
-                            <th>Previous Cost</th>
-                            <th>Previous Pay</th>
-                            <th>Previous Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody style="text-align: center;">
-                        <?php  $totalamount=0; $previouspay=0; $totalprev_meal=0; $totalprev_cost=0; $totalprev_amt=0;
-                        foreach ($lunch_data as $key=>$employee):  
-                            $pbm=($employee->prev_amount/45);
+            <table class="table table-bordered table-hover table-striped">
+        <thead style="text-align: center;">
+            <tr>
+                <th style="text-align: center;">SL</th>
+                <th style="text-align: center;">Name</th>
+                <th style="text-align: center;">Previous Meal</th>
+                <th style="text-align: center;">Previous Cost</th>
+                <th style="text-align: center;">Previous Pay</th>
+                <th style="text-align: center;">Previous Amount</th>
+            </tr>
+        </thead>
+        <tbody style="text-align: center;">
+            <?php  $totalamount=0; $previouspay=0; $totalprev_meal=0; $totalprev_cost=0; $totalprev_amt=0;
+            foreach ($lunch_data as $key=>$employee):
+                $lunch_package=lunch_package($employee->from_date);
 
-                            $totalprev_meal+=$employee->prev_meal;
-                            $totalprev_cost+=$employee->prev_cost;
-                            $previouspay   +=$employee->prev_pay;  
-                            $totalprev_amt +=$employee->prev_amount;  
+                $pbm=($employee->prev_amount/$lunch_package->stuf_give_tk);
 
-                            $totalamount+=$employee->pay_amount;
-                            ?>
+                $totalprev_meal+=$employee->prev_meal;
+                $totalprev_cost+=$employee->prev_cost;
+                $previouspay   +=$employee->prev_pay;  
+                $totalprev_amt +=$employee->prev_amount;  
 
-                            <tr>
-                                <td><?php echo $key+1 ?></td>
-                                <td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?>
-                                    <?php echo $employee->last_name; ?></td>
+                $totalamount+=$employee->pay_amount;
+                ?>
 
-                                <td><?php echo $employee->prev_meal;?></td>
-                                <td><?php echo $employee->prev_cost;?></td>
-                                <td><?php echo $employee->prev_pay;?></td>
-                                <td><?php echo $employee->prev_amount;?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-
-                    <?php if($r==1){?>
-                    <tfoot style="text-align: center;font-weight: bold;">
-                        <tr>
-                            <td colspan="2">Total</td>
-                            <td colspan="1"><?= $totalprev_meal ?></td>
-                            <td colspan="1"><?= $totalprev_cost ?></td>
-                            <td colspan="1"><?= $previouspay ?></td>
-                            <td colspan="1"><?= $totalprev_amt ?></td>
-                        </tr>
-                    </tfoot>
-                    <?php }else{ ?>
-                    <tfoot style="text-align: center;font-weight: bold;">
-                        <tr>
-                            <td colspan="5">Total</td>
-                            <td colspan="1"><?= $totalamount ?></td>
-                        </tr>
-                    </tfoot>
-                    <?php } ?>
-                </table>
+                <tr>
+                    <td style="text-align: center;"><?php echo $key+1 ?></td>
+                    <td>&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_meal;?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_cost;?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_pay;?></td>
+                    <td style="text-align: center;"><?php echo $employee->prev_amount;?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+            <?php if($r==1){?>
+            <tfoot style="text-align: center;font-weight: bold;">
+                <tr>
+                    <td colspan="2">Total</td>
+                    <td colspan="1"><?= $totalprev_meal ?></td>
+                    <td colspan="1"><?= $totalprev_cost ?></td>
+                    <td colspan="1"><?= $previouspay ?></td>
+                    <td colspan="1"><?= $totalprev_amt ?></td>
+                </tr>
+            </tfoot>
+            <?php }else{ ?>
+            <tfoot style="text-align: center;font-weight: bold;">
+                <tr>
+                    <td colspan="5">Total</td>
+                    <td colspan="1"><?= $totalamount ?></td>
+                </tr>
+            </tfoot>
+            <?php } ?>
+    </table>
             </div>
         </div>
     </div>

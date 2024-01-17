@@ -122,49 +122,49 @@
         </div>
     </div>
     <div class="table-responsive" style="margin-top: 0px; padding:10px;">
-        <table class="table table-bordered table-hover table-striped">
+    <table class="table table-bordered table-hover table-striped">
             <thead style="text-align: center;">
                 <tr>
-                    <th>SL</th>
-                    <th>Name</th>
-                    <th>Current M. Lunch day</th>
-                    <th>Stock Lunch Balance</th>
-                    <th>Balance Days</th>
-                    <th>Collection Day</th>
-
-                    <th>Collection Amount</th>
-                    <th>Status</th>
-                    <th>Signature</th>
+                    <th style="color: blue;">SL</th>
+                    <th style="color: blue;">Name</th>
+                    <th style="color: blue;">Current M. Lunch day</th>
+                    <th style="color: blue;">Stock Lunch Balance</th>
+                    <th style="color: blue;">Balance Days</th>
+                    <th style="color: blue;">Collection Day</th>
+                    <th style="color: blue;">Collection Amount</th>
+                    <th style="color: blue;">Status</th>
                 </tr>
             </thead>
             <tbody style="text-align: center;">
-                <?php  $totalamount=$previouspay=$total_cl_ml=$total_probable_meal=$total_stock=$totalbalacemeal=0;
+            <?php 
 
+            
+            $totalamount=$previouspay=$total_cl_ml=$total_probable_meal=$total_stock=$totalbalacemeal=0;
                 foreach ($lunch_data as $key=>$employee):  
-                    $pbm = ($employee->prev_amount/45);
+                    $lunch_package=lunch_package($employee->from_date);
 
-                    $total_cl_ml += ($employee->collection_amount/45);
+                    $pbm = ($employee->prev_amount/$lunch_package->stuf_give_tk);
+                    $total_cl_ml += ($employee->collection_amount/$lunch_package->stuf_give_tk);
                     $totalamount += $employee->collection_amount;
+                    $previouspay+=$employee->prev_pay;
 
-                    $total_stock += $pbm;
                     $total_probable_meal += $employee->probable_meal;
+                    $total_stock += $employee->stock_meal;
                     $totalbalacemeal += $employee->probable_meal-$pbm;
                     ?>
-                    <tr>
-                        <td><?php echo $key+1 ?></td>
-                        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;<?php echo $employee->first_name;?>
-                            <?php echo $employee->last_name; ?></td>
-                        <td><?php echo $employee->probable_meal;?></td>
-                        <td><?php echo $pbm;?></td>
-                        <td><?php echo $employee->probable_meal-$pbm;?></td>
-                        <td><?php echo $employee->collection_amount/45;?></td>
 
-                        <td><?php echo $employee->collection_amount;?></td>
-                        <td style="color: <?php echo $employee->status == 1 ? '#26ab31' : 'red'; ?>">
-                            <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
-                        </td>
-                        <td></td>
-                    </tr>
+                <tr>
+                    <td style="text-align:center"><?php echo $key+1 ?></td>
+                    <td><?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
+                    <td style="text-align:center"><?php echo $employee->probable_meal;?></td>
+                    <td style="text-align:center"><?php echo $pbm;?></td>
+                    <td style="text-align:center"><?php echo $employee->probable_meal-$pbm;?></td>
+                    <td style="text-align:center"><?php echo $employee->pay_amount/$lunch_package->stuf_give_tk;?></td>
+                    <td style="text-align:center"><?php echo $employee->pay_amount;?></td>
+                    <td style="color: <?php echo $employee->status == 1 ? 'blue' : 'red'; ?> text-align:center">
+                        <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
+                    </td>
+                </tr>
                 <?php endforeach; ?>
             </tbody>
             <tfoot style="text-align: center;font-weight: bold;">

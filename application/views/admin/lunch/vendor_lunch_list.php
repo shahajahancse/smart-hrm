@@ -405,7 +405,7 @@ function calmeal() {
             console.log(response);
             document.getElementById('tablebody').innerHTML = response.table;
             document.getElementById('total_meals').value = response.total_m;
-            document.getElementById('total_amounts').value = parseInt(response.total_m) * 90;
+            document.getElementById('total_amounts').value = parseInt(response.total_am);
         },
         error: function(xhr, status, error) {
             // Handle errors

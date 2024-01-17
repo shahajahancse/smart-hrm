@@ -85,7 +85,23 @@ if ( ! function_exists('GetDayDate'))
 
 
 
-if ( ! function_exists('leave_cal'))
+if ( ! function_exists('lunch_package'))
+{
+    // leave cal
+    function lunch_package($date)
+    {
+        $CI =& get_instance();
+
+       return $CI->db->where('effective_date <=', $date)->order_by('effective_date', 'desc')->get('lunch_package')->row();
+
+    }
+}
+
+
+
+
+
+if ( ! function_exists('cals_leave'))
 {
     // leave cal
     function cals_leave($id, $year)

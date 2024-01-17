@@ -67,24 +67,27 @@ class Lunch_model extends CI_Model {
             $emp_id = $row->user_id;
             $doj = $row->date_of_joining;
 
-            $this->db->select('SUM(meal_amount) as prev_meal');
+            $this->db->select('meal_amount,date');
             $this->db->where('date >=', $firstDate);
             $this->db->where('date <=', $secondDate);
             $this->db->where('emp_id', $emp_id);
-            $result = $this->db->get('lunch_details')->row();
-        
-            $prev_meal = isset($result->prev_meal)? $result->prev_meal:0;
+            $result = $this->db->get('lunch_details')->result();
+            
+            $prev_meal=0;
+            $prev_cost=0;
+            foreach($result as  $lu){
+                $lunch_package= lunch_package($lu->date);
+                $prev_meal+=$lu->meal_amount; 
+                $prev_cost+=$lu->meal_amount*$lunch_package->stuf_give_tk;
+            }
 
 
-            $prev_cost=$prev_meal*45;
             $prev_pay=0;
-
             $this->db->where('emp_id', $row->user_id);
             $this->db->where('end_date', date('Y-m-d', strtotime($firstDate . ' -1 day')));
             
             $preepay= $this->db->get('lunch_payment')->result();
 
-            //   dd( $preepay);
             if (count($preepay)>0 && $preepay[0]->status==1){
                 $prev_pay+=$preepay[0]->pay_amount;
             };
@@ -93,7 +96,8 @@ class Lunch_model extends CI_Model {
             
             if ($row->active_lunch==1) {
                 $probable_meal = $this->chackprobalemeal($secondDate, $probable_date, $emp_id, $doj);
-                $pay_amount=$probable_meal*45;
+                $lunch_package_latest= lunch_package($secondDate);
+                $pay_amount=$probable_meal*$lunch_package_latest->stuf_give_tk;
                 $collection_amount=$pay_amount-$prev_amount;
                 $status = 0;
             }else{
@@ -359,13 +363,23 @@ class Lunch_model extends CI_Model {
         $data = $this->db->get('lunch_vendor_meal')->result();
         if (count($data) > 0) {
             $total_m=0;
+            $total_am=0;
+            
             foreach($data as $m){
+                $lunch_package=lunch_package($m->date);
+
                 $total_m+=$m->meal_qty;
+                $total_am+=$m->meal_qty*$lunch_package->permeal;
             }
-            return $total_m;
+            $data['total_m']=$total_m;
+            $data['total_am']=$total_am;
+
+            return $data;
           
         }else{
-            return 0;
+            $data['total_m']=0;
+            $data['total_am']=0;
+            return $data ;
         }
     } 
     public function chack_meal_employee($first_date,$second_date){

@@ -4,16 +4,18 @@ if (count($empdata)>0){
 
 
 $data1=$empdata[0];
-// dd($data1);
 $taken_meal=0;
+$taken_amount=0;
+
 $this->load->model("Lunch_model");
 $emp_data = $this->Lunch_model->get_data_date_wise($data1->end_date,$data1->next_date, $data1->emp_id);
 
 foreach ($emp_data['emp_data'] as $r) {
-   
+    $lunch_package=lunch_package($r->date);
     $taken_meal+=$r->meal_amount;
+    $taken_amount+=$r->meal_amount*$lunch_package->stuf_give_tk;
 }
-$paymeal=$data1->pay_amount/45;
+$paymeal=$data1->probable_meal;
 $balanceMeal= $paymeal-$taken_meal;
 }
 ?>
@@ -32,7 +34,7 @@ if (count($empdata)>0){
 <div class="divrow col-md-12">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
         <div class="heading">Total Lunch</div>
-        <div class="heading2"><?= (isset($data1->pay_amount))? $data1->pay_amount/45:'0' ?></div>
+        <div class="heading2"><?= (isset($data1->pay_amount))? $data1->probable_meal:'0' ?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
         <div class="heading">Total Payment</div>
@@ -44,7 +46,7 @@ if (count($empdata)>0){
     </div>
     <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
         <div class="heading">Taken Amount</div>
-        <div class="heading2"><?= (isset($paymeal))? $taken_meal*45 :'0'?></div>
+        <div class="heading2"><?= (isset($paymeal))? $taken_amount :'0'?></div>
     </div>
 </div>
 
@@ -77,7 +79,7 @@ if (count($empdata)>0){
             <td scope="row"><?= $key+1 ?></td>
             <td scope="row"><?= date('d-M-Y', strtotime($value->end_date)) ?> to
                 <?= date('d-M-Y', strtotime($value->next_date)) ?></td>
-            <td scope="row"><?= $value->pay_amount/45 ?></td>
+            <td scope="row"><?= $value->probable_meal ?></td>
             <td scope="row"><?= $value->pay_amount ?></td>
             <td scope="row"><?= $value->prev_amount?></td>
             <td scope="row"><?= $value->collection_amount ?></td>
