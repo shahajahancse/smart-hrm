@@ -7,6 +7,15 @@ class Reports_model extends CI_Model {
     {
         parent::__construct();
         $this->load->database();
+		$this->load->model("Timesheet_model");
+        $this->load->model("Attendance_model");
+        $this->load->model("Inventory_model");
+        $this->load->model("Reports_model");
+        $this->load->model("Lunch_model");
+        $this->load->model("Xin_model");
+        $this->load->model("Job_card_model");
+        $this->load->library('upload');
+
     }
 
 	// get payslip list> reports
@@ -707,5 +716,232 @@ class Reports_model extends CI_Model {
 		// dd($query);
 		return $query;
 	}
+	public function get_job_card($emp_id, $first_date, $second_date)
+    {
+		
+        $this->db->select('
+				xin_employees.user_id,
+				xin_employees.first_name,
+				xin_employees.last_name,
+				xin_departments.department_name,
+				xin_designations.designation_name,
+			');
+        $this->db->from('xin_employees');
+        $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+        $this->db->where('xin_employees.user_id', $emp_id);
+        $info = $this->db->get()->row();
+        $emp_data = $this->Job_card_model->emp_job_card($first_date, $second_date, $emp_id);
+       $attendance_data=[];
+		$leave_count = 0;
+		$present_count = 0;
+		$holiday_count = 0;
+		$extrap_count = 0;
+		$att_status = '';
+		$day_off_count=0;
+		$late_count=0;
+		$perror_count=0;
+		$early_count=0;
+		$absent_count=0;
+		foreach ($emp_data['emp_data'] as $key => $row) {
+           
+			if ($row->status == 'Leave') {
+                $leave_type = $this->Job_card_model->get_leave_type($row->attendance_date, $emp_id);
+                $att_status = $leave_type;
+                $leave_count++;
+            } elseif ($row->status == 'Hleave') {
+                $leave_type = $this->Job_card_model->get_leave_type($row->attendance_date, $emp_id);
+                $att_status = $leave_type;
+                $leave_count = $leave_count + 0.5;
+
+                if ($row->attendance_status == 'HalfDay' && $row->status == 'Hleave') {
+                    $att_status = $leave_type . '  + HalfDay';
+                    $present_count = $present_count + 0.5;
+                }
+            } elseif ($row->status == 'Holiday') {
+                $att_status = "Holiday";
+                $holiday_count++;
+                if ($row->attendance_status == 'Present' && $row->status == 'Holiday') {
+                    $extrap_count = $extrap_count + 1;
+                    $att_status = '(Holiday + P)';
+                } else {
+                    $row->clock_in = "";
+                    $row->clock_out = "";
+                }
+
+            } elseif ($row->status == 'Off Day') {
+                $att_status = "Day Off";
+                $day_off_count++;
+                if ($row->attendance_status == 'Present' && $row->status == 'Off Day') {
+                    $extrap_count = $extrap_count + 1;
+                    $att_status = '(Off Day + P)';
+                } else {
+                    $row->clock_in = "";
+                    $row->clock_out = "";
+                }
+
+            } else if ($row->attendance_status == 'HalfDay' && $row->status == 'HalfDay') {
+                $present_count = $present_count + 0.5;
+                $att_status = 'HalfDay';
+                $absent_count = $absent_count + 0.5;
+            } elseif (($row->clock_in != '' && $row->clock_out != '')) {
+                $att_status = "P";
+                $present_count++;
+                if ($row->attendance_status == 'Meeting') {
+                    $att_status = 'Meeting';
+                }
+            } elseif ($row->clock_in != '' || $row->clock_out != '') {
+                $att_status = "P(Error)";
+                $perror_count++;
+            } else {
+                $att_status = "A";
+                $absent_count++;
+            }
+			$part_data=[];
+
+            $part_data['attendance_date'] = $row->attendance_date;
+
+            if ($row->clock_in == "") {
+               $part_data['clock_in']=" ";
+            } else {
+				$part_data['clock_in']= date('h:i:s a', strtotime($row->clock_in));
+            }
+            if ($row->clock_out == "") {
+				$part_data['clock_out']= "&nbsp;";
+            } else {
+           		$part_data['clock_out']=  date('h:i:s a', strtotime($row->clock_out));
+            }
+
+			
+            if ($row->late_status == 1) {
+                $late_count++;
+				$part_data['late']= 'late';
+            } else {
+				$part_data['late']= '';
+            }
+
+
+			$part_data['lunch_in'] = $row->lunch_out != null ? date('h:i:s a', strtotime($row->lunch_out)) : '';
+
+			$part_data['lunch_out'] = $row->lunch_in != null ? date('h:i:s a', strtotime($row->lunch_in)) : '';
+
+			$part_data['att_status'] = $att_status;
+			$attendance_data[$key] = $part_data;
+
+        }
+		$all_data['info'] =$info;
+		$all_data['attendance_data'] = $attendance_data;
+		$all_data['leave_count'] = $leave_count;
+		$all_data['present_count'] = $present_count;
+		$all_data['holiday_count'] = $holiday_count;
+		$all_data['extrap_count'] = $extrap_count;
+		return $all_data;
+    }
+	public function get_extra_present($first_date, $second_date){
+        $this->db->select('xin_attendance_time.* , xin_employees.first_name, xin_employees.last_name');
+        $this->db->from('xin_attendance_time');
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_attendance_time.employee_id');
+        $this->db->where('xin_attendance_time.attendance_date >=', $first_date);
+        $this->db->where('xin_attendance_time.attendance_date <=', $second_date);
+        $this->db->where('xin_attendance_time.attendance_status', 'Present');
+        $this->db->where('xin_attendance_time.status', 'Off Day');
+        $this->db->group_by('xin_attendance_time.employee_id');
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function get_leave_report($emp_id, $first_date, $second_date, $status){
+
+        $this->db->select('xin_leave_applications.*, xin_employees.first_name, xin_employees.last_name');
+        $this->db->from('xin_leave_applications');
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_leave_applications.employee_id');
+        $this->db->where('xin_leave_applications.from_date >=', $first_date);
+        $this->db->where('xin_leave_applications.to_date <=', $second_date);
+        $this->db->where('xin_leave_applications.status', $status);
+        $this->db->where_in('xin_leave_applications.employee_id', $emp_id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function get_attendence_report($emp_id, $first_date, $second_date, $status){
+
+        $this->db->select('xin_attendance_time.*, xin_employees.first_name, xin_employees.last_name');
+        $this->db->from('xin_attendance_time');
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_attendance_time.employee_id');
+        $this->db->where("xin_attendance_time.attendance_date between '$first_date' and '$second_date'");
+        
+        if ($status == 'Present') {
+            $this->db->where('xin_attendance_time.status', 'Present');
+        }elseif ($status == 'Absent') {
+            $this->db->where('xin_attendance_time.status', 'Absent');
+        }elseif ($status == 'Late') {
+            $this->db->where('xin_attendance_time.status', 'Present');
+            $this->db->where('xin_attendance_time.late_status', 1);
+        }elseif ($status == 'Early Out') {
+            $this->db->where('xin_attendance_time.status', 'Present');
+            $this->db->where('xin_attendance_time.early_out_status', 1);
+        }
+
+
+        $this->db->where_in('xin_attendance_time.employee_id', $emp_id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    //wrong
+    public function get_requisition_report($first_date, $second_date, $status){
+        $this->db->select("
+        xin_employees.first_name,
+        xin_employees.last_name,
+        products.product_name,
+        products_requisition_details.*
+    ")
+    ->from("products_requisition_details")
+    ->join('xin_employees','products_requisition_details.user_id = xin_employees.user_id','left')
+    ->join('products','products_requisition_details.product_id = products.id','left')
+    ->where_in('products_requisition_details.status',$status)
+    ->where("products_requisition_details.created_at between '$first_date' and '$second_date'")
+    ->group_by('products_requisition_details.id')
+    ->order_by('products_requisition_details.id', 'desc');
+    return	$this->db->get()->result();
+        
+    }
+    public function get_store_in_report($first_date, $second_date){
+        $this->db->select('
+            p.id,
+            p.product_id,
+            p.quantity,
+            p.ap_quantity,
+            p.user_id,
+            p.status,
+            p.created_at,
+            p.updated_by,
+            emp.first_name,
+            emp.last_name,
+            products.product_name
+            ')->from('products_purches_details as p')
+            ->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left')
+            ->join('products', 'p.product_id = products.id', 'left');
+            $this->db->order_by('p.id', 'desc');
+            $this->db->where("p.created_at between '$first_date' and '$second_date'");
+        $this->db->where('p.status',3);
+        return	$this->db->get()->result();
+    }
+    public function get_store_out_report($first_date, $second_date){
+        $this->db->select("
+        xin_employees.first_name,
+        xin_employees.last_name,
+        products.product_name,
+        products_requisition_details.*
+    ")
+    ->from("products_requisition_details")
+    ->join('xin_employees','products_requisition_details.user_id = xin_employees.user_id','left')
+    ->join('products','products_requisition_details.product_id = products.id','left')
+    ->where_in('products_requisition_details.status',3)
+    ->where("products_requisition_details.created_at between '$first_date' and '$second_date'")
+    ->group_by('products_requisition_details.id')
+    ->order_by('products_requisition_details.id', 'desc');
+    return	$this->db->get()->result();
+        
+    }
+   
+	
 }
 ?>

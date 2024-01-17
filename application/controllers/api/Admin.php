@@ -16,6 +16,7 @@ class Admin extends API_Controller
         $this->load->model("Reports_model");
         $this->load->model("Lunch_model");
         $this->load->model("Xin_model");
+        $this->load->model("Job_card_model");
         $this->load->library('upload');
     }
 
