@@ -521,21 +521,21 @@ class Lunch extends MY_Controller
         $this->db->where('end_date', date('Y-m-d', strtotime($firstDate . ' -1 day')));
         $preepay = $this->db->get('lunch_payment')->result();
 
-        // if(count($preepay)>0){
-        //     echo json_encode(['error'=>'There are Unpaid Employee Found , Please Check the Collection Sheet']);
-        //     exit();
-        // };
+        if(count($preepay)>0){
+            echo json_encode(['error'=>'There are Unpaid Employee Found , Please Check the Collection Sheet']);
+            exit();
+        };
 
         $currentDate = strtotime($firstDate);
-        // while ($currentDate <= strtotime($secondDate)) {
-        //     $this->db->where('date',  date("Y-m-d", $currentDate));
-        //     $ifdate = $this->db->get('lunch')->result();
-        //     if (count($ifdate) == 0) {
-        //         echo json_encode(['error' => 'Please first Add Lunch on ' . date("Y-m-d", $currentDate)]);
-        //         exit();
-        //     }
-        //     $currentDate = strtotime("+1 day", $currentDate);
-        // }
+        while ($currentDate <= strtotime($secondDate)) {
+            $this->db->where('date',  date("Y-m-d", $currentDate));
+            $ifdate = $this->db->get('lunch')->result();
+            if (count($ifdate) == 0) {
+                echo json_encode(['error' => 'Please first Add Lunch on ' . date("Y-m-d", $currentDate)]);
+                exit();
+            }
+            $currentDate = strtotime("+1 day", $currentDate);
+        }
 
         $data['lunch_data'] = $this->Lunch_model->process($firstDate, $secondDate, $probable_date);
         echo json_encode(['success'=>'Successfully Processing Done']);
