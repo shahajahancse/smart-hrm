@@ -6,9 +6,11 @@ if (count($empdata)>0){
 $data1=$empdata[0];
 $taken_meal=0;
 $taken_amount=0;
+$first_date = date('Y-m-d', strtotime($data1->end_date . ' +1 day'));
+$second_date = date('Y-m-d', strtotime($data1->next_date . ' +1 day'));
 
 $this->load->model("Lunch_model");
-$emp_data = $this->Lunch_model->get_data_date_wise($data1->end_date,$data1->next_date, $data1->emp_id);
+$emp_data = $this->Lunch_model->get_data_date_wise($first_date, $second_date, $data1->emp_id);
 
 foreach ($emp_data['emp_data'] as $r) {
     $lunch_package=lunch_package($r->date);
@@ -27,7 +29,7 @@ $balanceMeal= $paymeal-$taken_meal;
     <?php
 if (count($empdata)>0){
 ?>
-    <?= date('d-M-Y', strtotime($data1->end_date)) ?> to <?= date('d-M-Y', strtotime($data1->next_date)) ?> Lunch Bill
+    <?= date('d-M-Y', strtotime($first_date)) ?> to <?= date('d-M-Y', strtotime($second_date)) ?> Lunch Bill
     Summery
     <?php } ?>
 </div>

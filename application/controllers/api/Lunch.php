@@ -43,8 +43,7 @@ class Lunch extends API_Controller
         if ($user_info['status'] == true) {
             $user_data=$user_info['user_info'];
             $result = $this->db->order_by('id', 'desc')->get('lunch_payment', 1)->row();
-            $data['first_date']=$result->end_date;
-            $data['second_date']=$result->next_date;
+         
             $lunch_data = $this->db
                                 ->select('lunch_payment.*')
                                 ->from('lunch_payment')
@@ -61,7 +60,14 @@ class Lunch extends API_Controller
                                 ->get()
                                 ->result();
             $data1=$lunch_data[0];
-            $current_month_lonch = $this->Lunch_model->get_data_date_wise($data1->end_date, $data1->next_date, $data1->emp_id);
+            $first_date = date('Y-m-d', strtotime($data1->end_date . ' +1 day'));
+            $second_date = date('Y-m-d', strtotime($data1->next_date . ' +1 day'));
+            $data['first_date']=$first_date;
+            $data['second_date']=$second_date;
+
+         
+
+            $current_month_lonch = $this->Lunch_model->get_data_date_wise($first_date, $second_date,$data1->emp_id);
             $taken_lunch=0;
             foreach ($current_month_lonch['emp_data'] as $r) {
                 $taken_lunch+=$r->meal_amount;

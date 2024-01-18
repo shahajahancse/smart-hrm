@@ -135,22 +135,24 @@
                     <th style="color: blue;">Status</th>
                 </tr>
             </thead>
-            <tbody style="text-align: center;">
-            <?php 
+           <tbody style="text-align: center;">
+            <?php  
 
             
             $totalamount=$previouspay=$total_cl_ml=$total_probable_meal=$total_stock=$totalbalacemeal=0;
-                foreach ($lunch_data as $key=>$employee):  
-                    $lunch_package=lunch_package($employee->from_date);
+                foreach ($lunch_data as $key=>$employee): 
+                    // dd($employee); 
 
+                    $lunch_package=lunch_package($employee->from_date);
                     $pbm = ($employee->prev_amount/$lunch_package->stuf_give_tk);
                     $total_cl_ml += ($employee->collection_amount/$lunch_package->stuf_give_tk);
-                    $totalamount += $employee->collection_amount;
                     $previouspay+=$employee->prev_pay;
-
+                    
                     $total_probable_meal += $employee->probable_meal;
-                    $total_stock += $employee->stock_meal;
+                    $totalamount += $employee->collection_amount;
+                    $total_stock += $employee->prev_amount/$lunch_package->stuf_give_tk;
                     $totalbalacemeal += $employee->probable_meal-$pbm;
+
                     ?>
 
                 <tr>
@@ -160,7 +162,7 @@
                     <td style="text-align:center"><?php echo $pbm;?></td>
                     <td style="text-align:center"><?php echo $employee->probable_meal-$pbm;?></td>
                     <td style="text-align:center"><?php echo $employee->pay_amount/$lunch_package->stuf_give_tk;?></td>
-                    <td style="text-align:center"><?php echo $employee->pay_amount;?></td>
+                    <td style="text-align:center"><?php echo $employee->collection_amount;?></td>
                     <td style="color: <?php echo $employee->status == 1 ? 'blue' : 'red'; ?> text-align:center">
                         <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
                     </td>

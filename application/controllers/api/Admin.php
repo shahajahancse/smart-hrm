@@ -60,6 +60,45 @@ class Admin extends API_Controller
             ], 401);
         }
     }
+    public function leave_list_date()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $start_date = $this->input->post('start_date');
+                $end_date = $this->input->post('end_date');
+                $status = $this->input->post('status');
+
+                $result = $this->Timesheet_model->get_leaves_with_info_with_date($start_date, $end_date, $status);
+                if ($result) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $result,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
     public function single_leave_status()
     {
         $authorization = $this->input->get_request_header('Authorization');
@@ -75,10 +114,32 @@ class Admin extends API_Controller
                         'data' => [],
                     ], 200);
                 }
-                $data['leave_calel'] = 12 - get_cal_leave($data['result']->employee_id, 1);
-                $data['leave_calel_percent'] = $data['leave_calel'] * 100 / 12;
-                $data['leave_calsl'] = 4 - get_cal_leave($data['result']->employee_id, 2);
-                $data['leave_calsl_percent'] = $data['leave_calsl'] * 100 / 4;
+
+                $year = date('Y', strtotime($data['result']->from_date));
+                $leave_data_balance = cals_leave($data['result']->employee_id, $year);	
+                if (empty($leave_data_balance)) {
+                    $data['leave_totalel']=0;
+                    $data['leave_totalsl']=0;
+                    $data['leave_calel']=0;
+                    $data['leave_calel_percent'] = 0;
+                    $data['leave_calsl']=0;
+                    $data['leave_calls_percent'] = 0;
+                    $data['leave_calls_percent'] =0;
+                }else{
+                    $data['leave_totalel']=$leave_data_balance->el_total;
+                    $data['leave_totalsl']=$leave_data_balance->sl_total;
+                    $data['leave_calel']=$leave_data_balance->el_balanace;
+                    if ($leave_data_balance->el_total != 0) {
+                        $data['leave_calel_percent'] = ($leave_data_balance->el_total - $leave_data_balance->el_balanace) * 100 / $leave_data_balance->el_total;
+                    } else {
+                        $data['leave_calel_percent'] = 0;
+                    }
+                    $data['leave_calsl']=$leave_data_balance->sl_balanace;
+                    $data['leave_calls_percent'] = 0;
+                    if ($leave_data_balance->sl_total != 0) {
+                        $data['leave_calls_percent'] = ($leave_data_balance->sl_total - $leave_data_balance->sl_balanace) * 100 / $leave_data_balance->sl_total;
+                    }
+                }
                 if ($data) {
                     $this->api_return([
                         'status' => true,
