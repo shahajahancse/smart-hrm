@@ -1880,6 +1880,65 @@ class Admin extends API_Controller
             ], 401);
         }
     }
+
+    public function increment_pending_done(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+
+                $first_date = $this->input->post('first_date');
+                if (empty($first_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select First Date',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+
+                $second_date = $this->input->post('second_date');
+                if (empty($second_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select Second Date',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+
+
+                $data['pending_list'] =$this->Reports_model->all_pending_report($emp_id=null, $first_date, $second_date);
+		        $data['done_list'] =$this->Reports_model->all_done_report($emp_id=null, $first_date, $second_date);
+
+                if ($data) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
     
 }
 

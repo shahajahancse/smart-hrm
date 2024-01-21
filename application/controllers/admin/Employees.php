@@ -2179,13 +2179,6 @@ class Employees extends MY_Controller {
 	   } else if($this->input->post('salary')==='') {
 		$Return['error'] = "salary not specified";
 	   }
-
-		/*else if($this->input->post('email')==='') {
-			 $Return['error'] = $this->lang->line('xin_employee_error_email');
-		}*/
-		/* else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
-			$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
-		} */
 		else if($this->Employees_model->check_employee_email($this->input->post('email')) > 0) {
 			 $Return['error'] = $this->lang->line('xin_employee_email_already_exist');
 		} else if($this->input->post('date_of_birth')==='') {

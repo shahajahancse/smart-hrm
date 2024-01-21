@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -93,12 +92,14 @@
 
     <div class="container">
         <a onclick="window.print()" class="btn btn-primary" style="float: right;margin-top: 26px;">Print</a>
-       <?php if(isset($status)): ?>
+        <?php if(isset($status)): ?>
         <div class="export-button">
-            <form style="float: right;margin-top: 27px;margin-right: 5px;" action="<?php echo base_url();?>admin/Lunch/paymentreport" method="post">
+            <form style="float: right;margin-top: 27px;margin-right: 5px;"
+                action="<?php echo base_url();?>admin/Lunch/paymentreport" method="post">
                 <input type="hidden" name="status" value="<?php echo $status; ?>"></input>
                 <input type="hidden" name="excel" value="1"></input>
-                <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS Export</button>
+                <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS
+                    Export</button>
             </form>
         </div>
         <?php endif; ?>
@@ -117,12 +118,12 @@
 
             <?= isset($lunch_data[0]->end_date) ? $convertedDate1 : ''; ?> to
 
-            <?= isset($convertedDate2) ? $convertedDate2: ''; ?> 
+            <?= isset($convertedDate2) ? $convertedDate2: ''; ?>
 
         </div>
     </div>
     <div class="table-responsive" style="margin-top: 0px; padding:10px;">
-    <table class="table table-bordered table-hover table-striped">
+        <table class="table table-bordered table-hover table-striped">
             <thead style="text-align: center;">
                 <tr>
                     <th style="color: blue;">SL</th>
@@ -135,14 +136,13 @@
                     <th style="color: blue;">Status</th>
                 </tr>
             </thead>
-           <tbody style="text-align: center;">
-            <?php  
+            <tbody style="text-align: center;">
+                <?php  
 
             
             $totalamount=$previouspay=$total_cl_ml=$total_probable_meal=$total_stock=$totalbalacemeal=0;
                 foreach ($lunch_data as $key=>$employee): 
                     // dd($employee); 
-
                     $lunch_package=lunch_package($employee->from_date);
                     $pbm = ($employee->prev_amount/$lunch_package->stuf_give_tk);
                     $total_cl_ml += ($employee->collection_amount/$lunch_package->stuf_give_tk);
@@ -159,10 +159,11 @@
                     <td style="text-align:center"><?php echo $key+1 ?></td>
                     <td><?php echo $employee->first_name;?> <?php echo $employee->last_name; ?></td>
                     <td style="text-align:center"><?php echo $employee->probable_meal;?></td>
-                    <td style="text-align:center"><?php echo $pbm;?></td>
-                    <td style="text-align:center"><?php echo $employee->probable_meal-$pbm;?></td>
-                    <td style="text-align:center"><?php echo $employee->pay_amount/$lunch_package->stuf_give_tk;?></td>
-                    <td style="text-align:center"><?php echo $employee->collection_amount;?></td>
+                    <td style="text-align:center"><?php echo number_format($pbm, 2);?></td>
+                    <td style="text-align:center"><?php echo number_format($employee->probable_meal - $pbm, 2);?></td>
+                    <td style="text-align:center">
+                        <?php echo number_format($employee->pay_amount / $lunch_package->stuf_give_tk, 2);?></td>
+                    <td style="text-align:center"><?php echo number_format($employee->collection_amount, 2);?></td>
                     <td style="color: <?php echo $employee->status == 1 ? 'blue' : 'red'; ?> text-align:center">
                         <?php echo $employee->status == 1 ? 'Paid' : 'Unpaid'; ?>
                     </td>
