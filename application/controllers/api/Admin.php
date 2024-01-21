@@ -1880,13 +1880,11 @@ class Admin extends API_Controller
             ], 401);
         }
     }
-
     public function increment_pending_done(){
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
         if ($user_info['status'] == true) {
             if ($user_info['user_info']->user_role_id != 3) {
-
                 $first_date = $this->input->post('first_date');
                 if (empty($first_date)) {
                     $this->api_return([
@@ -1906,11 +1904,8 @@ class Admin extends API_Controller
                     ], 200);
                     exit;
                 }
-
-
                 $data['pending_list'] =$this->Reports_model->all_pending_report($emp_id=null, $first_date, $second_date);
 		        $data['done_list'] =$this->Reports_model->all_done_report($emp_id=null, $first_date, $second_date);
-
                 if ($data) {
                     $this->api_return([
                         'status' => true,
@@ -1927,7 +1922,7 @@ class Admin extends API_Controller
             } else {
                 $this->api_return([
                     'status' => false,
-                    'message' => 'Unauthorized User',
+                    'message' => 'Unauthorized User, Access Only Admin', 
                     'data' => [],
                 ], 401);
             };
@@ -1939,26 +1934,4 @@ class Admin extends API_Controller
             ], 401);
         }
     }
-    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

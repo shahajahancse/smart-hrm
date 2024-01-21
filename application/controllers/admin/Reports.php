@@ -1380,19 +1380,16 @@ class Reports extends MY_Controller
    }
 
 	public function show_report($elc=null){
-		// dd($_POST);
 		$data['session'] = $this->session->userdata('username');
 		if(empty($data['session'])){ 
 			redirect('admin/');
 		}
-
       $elc = $this->input->post('elc');
       $sql = $this->input->post('sql');
       $status = $this->input->post('status');
       $done = $this->input->post('done');
       $first_date = $this->input->post('first_date');
       $second_date = $this->input->post('second_date');
-
       $emp_id = explode(',', trim($sql));
       if ($done == 1 && $done  != 'undefined' && $status != 7) {
       	if ($status == 1) {
@@ -1402,7 +1399,6 @@ class Reports extends MY_Controller
       	} else {
       		$pstatus = 4;
       	}
-
 	      $data['emp_list'] =$this->Reports_model->pending_inc_pro_prb_report($emp_id, $pstatus, $first_date, $second_date);
 	      $data['done_list'] =$this->Reports_model->done_inc_pro_prb_report($emp_id, $status, $first_date, $second_date);
       } else if ($done == 1 && $done  != 'undefined' && $status == 7 ) {
