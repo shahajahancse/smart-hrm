@@ -510,12 +510,35 @@ class Lunch_model extends CI_Model {
         } else {
             return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
         }
-
-    
     }
 
 
-    
+    public function get_payment_status($emp_id,$date){
+        $this->db->order_by('id', 'DESC');
+        $this->db->limit(1);
+        $this->db->where('emp_id', $emp_id);
+        $query = $this->db->get('lunch_payment');
 
+        if ($query->num_rows() > 0) {
+
+            $end_date = $query->row()->end_date;
+
+            $date3 = date('Y-m-d', strtotime('-3 days', strtotime($date))); 
+            $paymentreport=0;
+            if ($date3>=$end_date) {
+                if($query->row()->status==0){
+                    $paymentreport=0;
+                }else{
+                    $paymentreport=1;
+                }
+            }else{
+                $paymentreport=1;
+            }
+        }else{
+            $paymentreport=0;
+        }
+       return $paymentreport;
+
+    }
 }
 ?>

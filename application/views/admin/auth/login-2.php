@@ -1,3 +1,6 @@
+
+
+
 <?php $system = $this->Xin_model->read_setting_info(1);?>
 <?php $company = $this->Xin_model->read_company_setting_info(1);?>
 <?php $site_lang = $this->load->helper('language');?>
@@ -84,7 +87,9 @@ endif;
                 <!-- brand-logo start -->
                 <div class="brand-logo">
                   <img src="<?php echo base_url();?>uploads/logo/signin/<?php echo $company[0]->sign_in_logo;?>" alt="hrsale-logo">
-                </div><!-- ./brand-logo -->
+                </div>
+                <strong style="color:red;">. To log in, please use your corporate email address and the same password you used before this update. If you encounter any difficulties, don't hesitate to contact our HR department</strong>
+
                 <p><?php echo $this->lang->line('xin_hrsale_hr_system_login_panel');?></p>
               </div>
             </div>
@@ -128,6 +133,13 @@ endif;
                           <input type="password" class="form-control" id="ipassword" name="ipassword" placeholder="Enter Password" autocomplete="off">
                         </div>
                       </div>
+
+
+
+
+
+
+
                       <!-- start remember-row -->
                       <div class="row remember-row">
                         <div class="col-xs-6 col-sm-6">

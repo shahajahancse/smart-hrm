@@ -96,17 +96,56 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
                 <p style="font-size: 18px; color: black; background-color: aquamarine;">Absent</p>
             </td>
         </tr>
-        <?php $st = false; } ?>
+        <?php $st = false; } 
+
+
+        
+        
+        
+        ?>
         <tr>
             <input type="hidden" name="empid[]" value="<?= $raw->emp_id ?>">
             <input type="hidden" name="p_status[]" value="<?= $raw->p_stutus ?>">
             <th scope="row"><?= $key + 1 ?></th>
             <td><?=  $raw->first_name .' '. $raw->last_name; ?></td>
             <td><?= $raw->p_stutus ?></td>
-            <?php $set = (isset($raw->meal_amount) && $raw->meal_amount != null) ? $raw->meal_amount : ($raw->p_stutus == 'Present' && !isset($raw->meal_amount)? 1:0); ?>
-            <td><input max="1" min="0" type="number" onchange="summeal()"
-                    <?= ($raw->p_stutus == 'Present')? 'class="all_meal activmeal"'  : 'class="activmeal"'; ?>name="m_amount[]"
-                    value="<?= $set; ?>" style="width: 83px;"></td>
+
+                <?php 
+                 $pay_status=''; 
+                if (isset($raw->meal_amount) && $raw->meal_amount != null) {
+                    $set = $raw->meal_amount;
+                } else {
+                    if ($raw->p_stutus == 'Present' && !isset($raw->meal_amount)) {
+                        $set = 1;
+                    } else {
+                        $set = 0;
+                    }
+                    $this->load->model("Lunch_model");
+
+                    $emp_data = $this->Lunch_model->get_payment_status($raw->emp_id, $date);
+                    $pay_status='';
+                    if ($emp_data == 0) {
+                        $set = 0;
+                        $pay_status='<span style="color:red;">Not Paid</span>';
+                    }
+                }
+
+
+
+
+
+                ?>         
+                   <td>
+                    <?= $pay_status ?>
+                <input
+                 max="1"
+                 min="0"
+                 type="number"
+                 onchange="summeal()"
+                 <?= ($raw->p_stutus == 'Present')? 'class="all_meal activmeal"'  : 'class="activmeal"'; ?>
+                 name="m_amount[]"
+                    value="<?= $set; ?>" style="width: 83px;">
+                </td>
             <td><input type="text" name="comment[]" value="<?= isset($raw->comment) ? $raw->comment : ''; ?>"></td>
         </tr>
         <?php } ?>
