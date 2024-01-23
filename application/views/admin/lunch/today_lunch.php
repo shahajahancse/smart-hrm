@@ -114,6 +114,11 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
                  $pay_status=''; 
                 if (isset($raw->meal_amount) && $raw->meal_amount != null) {
                     $set = $raw->meal_amount;
+                    $this->load->model("Lunch_model");
+                    $emp_data = $this->Lunch_model->get_payment_status($raw->emp_id, $date);
+                    if ($emp_data == 0) {
+                        $pay_status='<span style="color:red;">Not Paid</span>';
+                    }
                 } else {
                     if ($raw->p_stutus == 'Present' && !isset($raw->meal_amount)) {
                         $set = 1;
@@ -121,9 +126,7 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
                         $set = 0;
                     }
                     $this->load->model("Lunch_model");
-
                     $emp_data = $this->Lunch_model->get_payment_status($raw->emp_id, $date);
-                    $pay_status='';
                     if ($emp_data == 0) {
                         $set = 0;
                         $pay_status='<span style="color:red;">Not Paid</span>';
