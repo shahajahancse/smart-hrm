@@ -910,8 +910,8 @@ class Admin extends API_Controller
 
                 $upcoming_upgrade=[];
                 $upcoming_increment=$this->Timesheet_model->upcomming_intrn_prob_promo($first_date,$second_date,1);
-                $upcoming_intern=$this->Timesheet_model->upcomming_intrn_prob_promoo($first_date,$second_date,4);
-                $upcoming_probation=$this->Timesheet_model->upcomming_intrn_prob_promoo($first_date,$second_date,5);
+                $upcoming_intern=$this->Timesheet_model->upcomming_intrn_prob_promoo(null,null,4);
+                $upcoming_probation=$this->Timesheet_model->upcomming_intrn_prob_promoo(null,null,5);
 
                 $upcoming_upgrade['upcoming_increment']=($upcoming_increment==null)?0:count($upcoming_increment);
                 $upcoming_upgrade['upcoming_intern']=($upcoming_intern==null)?0:count($upcoming_intern);
@@ -1090,12 +1090,19 @@ class Admin extends API_Controller
             if ($user_info['user_info']->user_role_id != 3) {
                 // present
                 if(!$this->input->post('date')){
-                    $this->api_return([
-                        'status' => false,
-                        'message' => 'Date Not Found',
-                        'data' => [],
-                    ], 200);
-                    exit();
+                    
+                    $first_date=null;
+                    $second_date=null;
+                    
+                    // $this->api_return([
+                    //     'status' => false,
+                    //     'message' => 'Date Not Found',
+                    //     'data' => [],
+                    // ], 200);
+                    // exit();
+                } else {
+                    $first_date=date('Y-m-01',strtotime($this->input->post('date')));
+                    $second_date=date('Y-m-t',strtotime($this->input->post('date')));
                 }
                 if(!$this->input->post('status')){
                     $this->api_return([
@@ -1106,11 +1113,10 @@ class Admin extends API_Controller
                     exit();
                 }
 
-                $first_date=date('Y-m-01',strtotime($this->input->post('date')));
-                $second_date=date('Y-m-t',strtotime($this->input->post('date')));
+               
                 $status=$this->input->post('status');
 
-                $data=$this->Timesheet_model->upcomming_intrn_prob_promo($first_date,$second_date,$status);
+                $data=$this->Timesheet_model->upcomming_intrn_prob_promoo($first_date,$second_date,$status);
                 if (!empty($data)) {
                     $this->api_return([
                         'status' => true,

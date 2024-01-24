@@ -918,7 +918,10 @@
 		$this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
 		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
 		$this->db->where('xin_employees.status', $status);
-		// $this->db->where('xin_employees.notify_incre_prob BETWEEN "'.$first_date.'" AND "'.$second_date.'"');
+		if(!empty($first_date) && !empty($second_date)) {
+			$this->db->where('xin_employees.notify_incre_prob BETWEEN "'.$first_date.'" AND "'.$second_date.'"');
+		}
+		
 		$this->db->order_by('xin_employees.basic_salary', 'asc');
 		return $this->db->get()->result();
 		
