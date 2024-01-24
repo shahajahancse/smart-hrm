@@ -126,18 +126,18 @@ class Admin extends API_Controller
                     $data['leave_calls_percent'] = 0;
                     $data['leave_calls_percent'] =0;
                 }else{
-                    $data['leave_totalel']=$leave_data_balance->el_total;
-                    $data['leave_totalsl']=$leave_data_balance->sl_total;
-                    $data['leave_calel']=$leave_data_balance->el_balanace;
-                    if ($leave_data_balance->el_total != 0) {
-                        $data['leave_calel_percent'] = ($leave_data_balance->el_total - $leave_data_balance->el_balanace) * 100 / $leave_data_balance->el_total;
+                    $data['leave_totalel'] = floatval($leave_data_balance->el_total);
+                    $data['leave_totalsl'] = floatval($leave_data_balance->sl_total);
+                    $data['leave_calel'] = floatval($leave_data_balance->el_balanace);
+                    if (floatval($leave_data_balance->el_total) != 0) {
+                        $data['leave_calel_percent'] = (floatval($leave_data_balance->el_total) - floatval($leave_data_balance->el_balanace)) * 100 / floatval($leave_data_balance->el_total);
                     } else {
                         $data['leave_calel_percent'] = 0;
                     }
-                    $data['leave_calsl']=$leave_data_balance->sl_balanace;
+                    $data['leave_calsl'] = floatval($leave_data_balance->sl_balanace);
                     $data['leave_calls_percent'] = 0;
-                    if ($leave_data_balance->sl_total != 0) {
-                        $data['leave_calls_percent'] = ($leave_data_balance->sl_total - $leave_data_balance->sl_balanace) * 100 / $leave_data_balance->sl_total;
+                    if (floatval($leave_data_balance->sl_total) != 0) {
+                        $data['leave_calls_percent'] = (floatval($leave_data_balance->sl_total) - floatval($leave_data_balance->sl_balanace)) * 100 / floatval($leave_data_balance->sl_total);
                     }
                 }
                 if ($data) {
@@ -910,8 +910,8 @@ class Admin extends API_Controller
 
                 $upcoming_upgrade=[];
                 $upcoming_increment=$this->Timesheet_model->upcomming_intrn_prob_promo($first_date,$second_date,1);
-                $upcoming_intern=$this->Timesheet_model->upcomming_intrn_prob_promo($first_date,$second_date,4);
-                $upcoming_probation=$this->Timesheet_model->upcomming_intrn_prob_promo($first_date,$second_date,5);
+                $upcoming_intern=$this->Timesheet_model->upcomming_intrn_prob_promoo($first_date,$second_date,4);
+                $upcoming_probation=$this->Timesheet_model->upcomming_intrn_prob_promoo($first_date,$second_date,5);
 
                 $upcoming_upgrade['upcoming_increment']=($upcoming_increment==null)?0:count($upcoming_increment);
                 $upcoming_upgrade['upcoming_intern']=($upcoming_intern==null)?0:count($upcoming_intern);
@@ -1906,6 +1906,196 @@ class Admin extends API_Controller
                 }
                 $data['pending_list'] =$this->Reports_model->all_pending_report($emp_id=null, $first_date, $second_date);
 		        $data['done_list'] =$this->Reports_model->all_done_report($emp_id=null, $first_date, $second_date);
+                if ($data) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User, Access Only Admin', 
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function leave_report_monthly_all_employee(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $first_date = $this->input->post('first_date');
+                if (empty($first_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select First Date',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+                $data=$this->Reports_model->leave_report_monthly_all_employee($first_date);
+                if ($data) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User, Access Only Admin', 
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function leave_report_monthly_single_employee(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $first_date = $this->input->post('first_date');
+                if (empty($first_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select First Date',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+                $employee_id = $this->input->post('employee_id');
+                if (empty($first_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select Employee',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+                $data=$this->Reports_model->leave_report_monthly_single_employee($employee_id,$first_date);
+                if ($data) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User, Access Only Admin', 
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }  
+    public function leave_report_yearly_all_employee(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $first_date = $this->input->post('first_date');
+                if (empty($first_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select First Date',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+                $data=$this->Reports_model->leave_report_yearly_all_employee($first_date);
+                if ($data) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $data,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User, Access Only Admin', 
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function leave_report_yearly_single_employee(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $first_date = $this->input->post('first_date');
+                if (empty($first_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select First Date',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+                $employee_id = $this->input->post('employee_id');
+                if (empty($first_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select Employee',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+                $data=$this->Reports_model->leave_report_yearly_single_employee($employee_id,$first_date);
                 if ($data) {
                     $this->api_return([
                         'status' => true,

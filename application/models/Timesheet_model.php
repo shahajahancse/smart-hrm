@@ -817,7 +817,7 @@
 		return $data->result(); 
 	}
 	public function get_leaves_leave_id_with_info($id = null) {
-		$this->db->select("la.*, e.*,la.status as leave_status, lt.type_name, d.department_name, des.designation_name");
+		$this->db->select("la.*, e.first_name, e.last_name,e.basic_salary,la.status, lt.type_name, d.department_name, des.designation_name");
 		$this->db->from("xin_leave_applications as la");
 		$this->db->join("xin_employees as e", "e.user_id = la.employee_id", 'left');
 		$this->db->join("xin_leave_type as lt", "lt.leave_type_id = la.leave_type_id", 'left');
@@ -907,6 +907,18 @@
 		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
 		$this->db->where('xin_employees.status', $status);
 		$this->db->where('xin_employees.notify_incre_prob BETWEEN "'.$first_date.'" AND "'.$second_date.'"');
+		$this->db->order_by('xin_employees.basic_salary', 'asc');
+		return $this->db->get()->result();
+		
+	}
+	public function upcomming_intrn_prob_promoo($first_date, $second_date,$status){
+
+		$this->db->select('xin_employees.first_name,xin_employees.last_name,xin_employees.notify_incre_prob,xin_departments.department_name,xin_designations.designation_name,xin_employees.status');
+		$this->db->from('xin_employees');
+		$this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+		$this->db->where('xin_employees.status', $status);
+		// $this->db->where('xin_employees.notify_incre_prob BETWEEN "'.$first_date.'" AND "'.$second_date.'"');
 		$this->db->order_by('xin_employees.basic_salary', 'asc');
 		return $this->db->get()->result();
 		
