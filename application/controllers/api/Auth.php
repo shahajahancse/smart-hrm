@@ -45,7 +45,7 @@ class Auth extends API_Controller
         ]);
 
         $data = array(
-            'username' => $this->input->post('username'),
+            'email' => $this->input->post('username'),
             'password' => $this->input->post('password'),
         );
         $auth = $this->login_auth($data);
@@ -129,8 +129,8 @@ class Auth extends API_Controller
     // Read data using username and password
     private function login_auth($data)
     {
-      $sql = 'SELECT * FROM xin_employees WHERE username = ? AND is_active = ? AND status IN (?, ?, ?,?)';
-      $binds = array($data['username'], 1, 1, 4, 5,0);
+      $sql = 'SELECT * FROM xin_employees WHERE email = ? AND is_active = ? AND status IN (?, ?, ?,?)';
+      $binds = array($data['email'], 1, 1, 4, 5,0);
       $query = $this->db->query($sql, $binds);
         $options = array('cost' => 12);
         $password_hash = password_hash($data['password'], PASSWORD_BCRYPT, $options);
