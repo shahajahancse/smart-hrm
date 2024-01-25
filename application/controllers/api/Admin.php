@@ -1020,7 +1020,7 @@ class Admin extends API_Controller
 
 
                 $Present_status=[];
-                $present=$this->Timesheet_model->get_today_present(0,'Present',$date);
+                $present=$this->Timesheet_model->get_today_present(null,'Present',$date);
                 $Present_status['total_present']= count($present);
                 $Present_status['present']=($present==null)?[]:$present;
                 // Present end

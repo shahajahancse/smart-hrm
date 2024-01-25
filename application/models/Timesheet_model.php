@@ -842,6 +842,8 @@
             xin_attendance_time.attendance_date,
             xin_attendance_time.clock_in,
             xin_attendance_time.clock_out,
+            xin_attendance_time.lunch_in,
+            xin_attendance_time.lunch_out,
             xin_attendance_time.status,
             xin_attendance_time.late_status,
             xin_attendance_time.comment,
@@ -851,7 +853,9 @@
         $this->db->from('xin_departments');
         $this->db->from('xin_designations');
         $this->db->from('xin_attendance_time');
-        $this->db->where("xin_attendance_time.late_status", $late_status);
+		if ($late_status == 1) {
+			$this->db->where("xin_attendance_time.late_status", $late_status);
+		}
         $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $date);
         $this->db->where_in("xin_attendance_time.status", $status);
