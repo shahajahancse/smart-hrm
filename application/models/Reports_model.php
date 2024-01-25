@@ -706,14 +706,16 @@ class Reports_model extends CI_Model
 
         if ($status == 'all') {
             $this->db->where_in('ap.status', [1, 2, 3, 4, 5]);
+        } else if ($status == 'working') {
+            $this->db->where('ap.status', 1);
         } else if ($status == 'store') {
             $this->db->where('ap.status', 2);
-            $this->db->order_by('ap.id', "ASC");
-        } else if ($status == 'damage') {
+        }  else if ($status == 'servicing') {
+            $this->db->where('ap.status', 3);
+        }  else if ($status == 'damage') {
             $this->db->where('ap.status', 4);
-            $this->db->order_by('ap.id', "ASC");
         } else {
-            $this->db->where('ap.cat_id', $status);
+            $this->db->where('ap.cat_id', 5);
             $this->db->order_by('ap.id', "ASC");
         }
 
