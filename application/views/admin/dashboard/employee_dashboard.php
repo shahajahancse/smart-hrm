@@ -19,16 +19,22 @@
 
     $data1 = isset($empdata[0]) ? $empdata[0] : 0;
     $taken_meal = 0;
+    $paymeal = 0;
+    $balanceMeal = 0;
+    
+    if (!empty($data1)) {
+        $this->load->model("Lunch_model");
+        $emp_data = $this->Lunch_model->get_data_date_wise($data1->end_date, $data1->next_date, $data1->emp_id);
 
-    $this->load->model("Lunch_model");
-    $emp_data = $this->Lunch_model->get_data_date_wise($data1->end_date, $data1->next_date, $data1->emp_id);
+        foreach ($emp_data['emp_data'] as $r) {
+            $taken_meal += $r->meal_amount;
+        }
 
-    foreach ($emp_data['emp_data'] as $r) {
-        $taken_meal += $r->meal_amount;
+        $paymeal = isset($data1->pay_amount) ? $data1->pay_amount / 45 : 0;
+        $balanceMeal = $paymeal - $taken_meal;
     }
 
-    $paymeal = isset($data1->pay_amount) ? $data1->pay_amount / 45 : 0;
-    $balanceMeal = $paymeal - $taken_meal;
+
 
     // get 12 month to current month
     $i = date("Y-m", strtotime("-11 months"));
