@@ -831,7 +831,7 @@ class Timesheet extends MY_Controller {
 	}
 	public function modal_leave_data_ajax($id) {
 		$data['result'] = $this->Timesheet_model->get_leaves_leave_id_with_info($id);
-		$employee_id=$data['result']->user_id;
+		$employee_id=$data['result']->employee_id;
 		$this->db->where('leave_id', $id);
 		$leave_data=$this->db->get('xin_leave_applications')->row();
 		$year = date('Y', strtotime($leave_data->from_date));

@@ -804,7 +804,7 @@
 		$data = $this->db->order_by("la.leave_id", "DESC")->get();
 		return $data->result(); 
 	}
-	public function get_leaves_with_info_with_date($start_date, $end_date, $status) {
+	public function get_leaves_with_info_with_date($start_date, $end_date, $status=null) {
 		$this->db->select("la.*, e.first_name, e.last_name, lt.type_name, d.department_name, des.designation_name");
 		$this->db->from("xin_leave_applications as la");
 		$this->db->join("xin_employees as e", "e.user_id = la.employee_id", 'left');
@@ -812,7 +812,9 @@
 		$this->db->join("xin_departments as d", "d.department_id = e.department_id", 'left');
 		$this->db->join("xin_designations as des", "des.designation_id = e.designation_id", 'left');
 		$this->db->where("la.from_date BETWEEN '$start_date' AND '$end_date'");
-		$this->db->where("la.status", $status);
+		if(!$status==null){
+			$this->db->where("la.status", $status);
+		}
 		$data = $this->db->order_by("la.leave_id", "DESC")->get();
 		return $data->result(); 
 	}
@@ -856,10 +858,12 @@
 		if ($late_status == 1) {
 			$this->db->where("xin_attendance_time.late_status", $late_status);
 		}
-        $this->db->where("xin_employees.is_active", 1);
         $this->db->where("xin_attendance_time.attendance_date", $date);
+        $this->db->where_in("xin_employees.status", [1,4,5]);
+
         $this->db->where_in("xin_attendance_time.status", $status);
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
+        $this->db->where('xin_employees.is_active = "1"');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
         $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
         $this->db->order_by('xin_attendance_time.clock_in', "ASC");
@@ -930,5 +934,16 @@
 		return $this->db->get()->result();
 		
 	}
+	public function extra_present_approval($first_date, $second_date){
+	$this->db->select("xin_attendance_time.*, xin_employees.first_name, xin_employees.last_name,");
+	$this->db->from("xin_attendance_time");
+	$this->db->join("xin_employees", "xin_employees.user_id = xin_attendance_time.employee_id");
+	$this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
+	$this->db->where("xin_attendance_time.status","Off Day");
+	$this->db->where("xin_attendance_time.attendance_status", "Present");
+	$this->db->group_by("xin_attendance_time.employee_id");
+	$query = $this->db->get()->result();
+	return $query;
+    }
 }
 ?>

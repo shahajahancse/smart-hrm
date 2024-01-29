@@ -16,6 +16,21 @@ $absent_count  = 0;
 $this->load->model('Job_card_model');
 
 foreach ($all_employees as $key => $value) { 
+	$emp_data = $this->Job_card_model->absent_report($first_date,$second_date, $value->user_id);
+	$m_absent=0;
+	foreach ($emp_data['emp_data'] as $key => $row) {
+		if($row->attendance_status == 'HalfDay' && $row->status == 'HalfDay') {
+			$att_status = 'Half Day Absent';
+			$m_absent = $absent_count + 0.5;
+		}else{
+			$att_status = "Absent";
+			$m_absent++;
+		}
+	}
+	if ($m_absent == 0) {
+		continue;
+	}
+
 
 
 	echo "<div style='min-height:700px; overflow:hidden;'>";
@@ -24,7 +39,7 @@ foreach ($all_employees as $key => $value) {
 
 
 	echo "<span style='font-size:13px; font-weight:bold;'>";
-	echo "Job Card Report from  $first_date -TO- $second_date";
+	echo "Absent Card Report from  $first_date -TO- $second_date";
 	echo "</span>";
 	echo "<br /><br />";
 	
@@ -78,7 +93,6 @@ foreach ($all_employees as $key => $value) {
 		echo "</tr>";
 	echo "<table>";
 
-	$emp_data = $this->Job_card_model->absent_report($first_date,$second_date, $value->user_id);
 	// dd($emp_data);
 
 	

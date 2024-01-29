@@ -92,6 +92,10 @@ class Employees_model extends CI_Model {
 	  $query = $this->db->where_in('status', array(1,4,5))->get("xin_employees");
 	  return $query->num_rows();
 	}
+	public function get_total_present() {
+		
+	 
+	}
 		 
 	public function read_employee_information($id) {
 	
@@ -111,7 +115,6 @@ class Employees_model extends CI_Model {
 	}
 	// check employeeID
 	public function check_employee_id($id) {
-	
 		$sql = 'SELECT * FROM xin_employees WHERE employee_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);

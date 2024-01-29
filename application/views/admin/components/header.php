@@ -1356,7 +1356,9 @@ function movetype() {
                     }else{
                         $('#Half_Day_m').removeAttr('checked');
                     }
-                    $('#status_m').val(result.leave_status);
+
+                    $('#status_m').val(result.status);
+
                     $('#remark_m').val(result.remarks);
                     $('#emp_id_m').val(result.employee_id);
                 }
