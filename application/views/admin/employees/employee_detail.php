@@ -51,7 +51,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                 <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_payslips"><?php echo $this->lang->line('left_payslips');?></a> </li>       -->
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#NDA">NDA</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#remarks">Remarks</a> </li>
-                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#set_team_lead">Team Lead</a></li>
+                <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#set_team_lead">Team Lead</a></li> -->
             </ul>
             <div class="tab-content">
                 <div class="tab-pane <?php echo $get_animate;?> active" id="xin_general">
@@ -2863,175 +2863,31 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                         </h3>
                                     </div>
                                     <div class="box-body pb-2">
+                                    <?php $attributes = array('name' => 'leave', 'id' => 'leave', 'autocomplete' => 'off');?>
+                                        <?php echo form_open('admin/employees/leave_efected', $attributes);?>
+                                        <input type="hidden" name="user_id" value="<?= $user_id?>">
                                         <div class="row">
-                                            <?php $leave_categories_ids = explode(',',$leave_user[0]->leave_categories); ?>
-                                            <?php foreach($all_leave_types as $type) {
-                                if(in_array($type->leave_type_id,$leave_categories_ids)){?>
-                                            <?php
-                                $hlfcount =0;
-                                //$count_l =0;
-                                $leave_halfday_cal = employee_leave_halfday_cal($type->leave_type_id,$this->uri->segment(4));
-                                foreach($leave_halfday_cal as $lhalfday):
-                                    $hlfcount += 0.5;
-                                endforeach;
-                                
-                                $count_l = count_leaves_info($type->leave_type_id,$this->uri->segment(4));
-                                $count_l = $count_l - $hlfcount;
-                            ?>
-                                            <?php
-                                $edays_per_year = $type->days_per_year;
-                                
-                                if($count_l == 0){
-                                    $progress_class = '';
-                                    $count_data = 0;
-                                } else {
-                                    if($edays_per_year > 0){
-                                        $count_data = $count_l / $edays_per_year* 100;
-                                    } else {
-                                        $count_data = 0;
-                                    }
-                                    // progress
-                                    if($count_data <= 20) {
-                                        $progress_class = 'progress-success';
-                                    } else if($count_data > 20 && $count_data <= 50){
-                                        $progress_class = 'progress-info';
-                                    } else if($count_data > 50 && $count_data <= 75){
-                                        $progress_class = 'progress-warning';
-                                    } else {
-                                        $progress_class = 'progress-danger';
-                                    }
-                                }
-                            ?>
                                             <div class="col-md-3">
-                                                <div class="box mb-4">
-                                                    <div class="box-body">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="fa fa-calendar-check-o display-4 text-success">
-                                                            </div>
-                                                            <div class="ml-3">
-                                                                <div class="text-muted small">
-                                                                    <?php echo $type->type_name;?>
-                                                                    (<?php echo $count_l;?>/<?php echo $edays_per_year;?>)
-                                                                </div>
-                                                                <div class="text-large">
-                                                                    <div class="progress" style="height: 6px;">
-                                                                        <div class="progress-bar"
-                                                                            style="width: <?php echo $count_data;?>%;">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <label for=""> Select Status</label>
+                                                <select name="leave_start" id="leave_start" class='col-md-12 form-control'>
+                                                    <option value="0" <?=($is_leave_on==1)?'disabled':'selected'?> >No</option>
+                                                    <option value="1" <?=($is_leave_on==1)?'selected':''?> >Yes</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="">Efective date</label>
+                                                <input type="date" class="form-control" name="leave_effective_date" value="<?=$leave_effective?>" <?=($is_leave_on==1)?'readonly':''?> >
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="form-actions box-footer">
+                                                        <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_save'))); ?>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php
-                                            } }
-                                            ?>
                                         </div>
-                                    </div>
-                                    <?php $leave = $this->Timesheet_model->get_employee_leaves($user_id); ?>
-                                    <div class="box <?php echo $get_animate;?>">
-                                        <div class="box-header with-border">
-                                            <h3 class="box-title"><?php echo $this->lang->line('xin_list_all');?>
-                                                <?php echo $this->lang->line('left_leave');?></h3>
-                                        </div>
-                                        <div class="box-body">
-                                            <div class="box-datatable table-responsive">
-                                                <table
-                                                    class="datatables-demo table table-striped table-bordered xin_hrsale_table"
-                                                    id="xin_hr_table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th><?php echo $this->lang->line('xin_view');?></th>
-                                                            <th width="250">
-                                                                <?php echo $this->lang->line('xin_leave_type');?></th>
-                                                            <th><?php echo $this->lang->line('left_department');?></th>
-                                                            <th><i class="fa fa-calendar"></i>
-                                                                <?php echo $this->lang->line('xin_leave_duration');?>
-                                                            </th>
-                                                            <th><i class="fa fa-calendar"></i>
-                                                                <?php echo $this->lang->line('xin_applied_on');?></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php foreach($leave->result() as $r) { ?>
-                                                        <?php
-                                                              // get start date and end date
-                                                              $user = $this->Xin_model->read_user_info($r->employee_id);
-                                                              if(!is_null($user)){
-                                                                $full_name = $user[0]->first_name. ' '.$user[0]->last_name;
-                                                                // department
-                                                                $department = $this->Department_model->read_department_information($user[0]->department_id);
-                                                                if(!is_null($department)){
-                                                                  $department_name = $department[0]->department_name;
-                                                                } else {
-                                                                  $department_name = '--';	
-                                                                }
-                                                              } else {
-                                                                $full_name = '--';	
-                                                                $department_name = '--';
-                                                              }
-                                                              
-                                                              // get leave type
-                                                              $leave_type = $this->Timesheet_model->read_leave_type_information($r->leave_type_id);
-                                                              if(!is_null($leave_type)){
-                                                                $type_name = $leave_type[0]->type_name;
-                                                              } else {
-                                                                $type_name = '--';	
-                                                              }
-                                                              
-                                                              // get company
-                                                              $company = $this->Xin_model->read_company_info($r->company_id);
-                                                              if(!is_null($company)){
-                                                                $comp_name = $company[0]->name;
-                                                              } else {
-                                                                $comp_name = '--';	
-                                                              }
-                                                              
-                                                              $datetime1 = new DateTime($r->from_date);
-                                                              $datetime2 = new DateTime($r->to_date);
-                                                              $interval = $datetime1->diff($datetime2);
-                                                              if(strtotime($r->from_date) == strtotime($r->to_date)){
-                                                                $no_of_days =1;
-                                                              } else {
-                                                                $no_of_days = $interval->format('%a') + 1;
-                                                              }
-                                                              $applied_on = $this->Xin_model->set_date_format($r->applied_on);
-                                                              if($r->is_half_day == 1){
-                                                              $duration = $this->Xin_model->set_date_format($r->from_date).' '.$this->lang->line('dashboard_to').' '.$this->Xin_model->set_date_format($r->to_date).'<br>'.$this->lang->line('xin_hrsale_total_days').': '.$this->lang->line('xin_hr_leave_half_day');
-                                                              } else {
-                                                                $duration = $this->Xin_model->set_date_format($r->from_date).' '.$this->lang->line('dashboard_to').' '.$this->Xin_model->set_date_format($r->to_date).'<br>'.$this->lang->line('xin_hrsale_total_days').': '.$no_of_days;
-                                                              }
-                                                              
-                                                              
-                                                              if($r->status==1): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_pending').'</span>';
-                                                              elseif($r->status==2): $status = '<span class="badge bg-green">'.$this->lang->line('xin_approved').'</span>';
-                                                              elseif($r->status==4): $status = '<span class="badge bg-green">'.$this->lang->line('xin_role_first_level_approved').'</span>';
-                                                              else: $status = '<span class="badge bg-red">'.$this->lang->line('xin_rejected').'</span>'; endif;
-                                                              
-                                                              if(in_array('290',$role_resources_ids)) { //view
-                                                                $view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/timesheet/leave_details/id/'.$r->leave_id.'/" target="_blank"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
-                                                              } else {
-                                                                $view = '';
-                                                              }
-                                                              $combhr = $view;
-                                                              $itype_name = $type_name.'<br><small class="text-muted"><i>'.$this->lang->line('xin_reason').': '.$r->reason.'<i></i></i></small><br><small class="text-muted"><i>'.$status.'<i></i></i></small><br><small class="text-muted"><i>'.$this->lang->line('left_company').': '.$comp_name.'<i></i></i></small>';
-                                                              ?>
-                                                        <tr>
-                                                            <td><?php echo $combhr;?></td>
-                                                            <td><?php echo $itype_name;?></td>
-                                                            <td><?php echo $department_name;?></td>
-                                                            <td><i class="fa fa-calendar"></i> <?php echo $duration;?>
-                                                            </td>
-                                                            <td><i class="fa fa-calendar"></i> <?php echo $applied_on;?>
-                                                            </td>
-                                                        </tr>
-                                                        <?php } ?>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                        <?php echo form_close(); ?>
+
                                     </div>
                                 </div>
                             </div>

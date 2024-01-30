@@ -1358,7 +1358,6 @@ class Employees extends MY_Controller {
 		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
 			redirect('admin/');
 		}
-	
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -1380,6 +1379,8 @@ class Employees extends MY_Controller {
 			'path_url' => 'employees_detail',
 			'first_name' => $result[0]->first_name,
 			'last_name' => $result[0]->last_name,
+			'is_leave_on' => $result[0]->is_leave_on,
+			'leave_effective' => $result[0]->leave_effective,
 			'note_file' => $result[0]->note_file,
 			'remark' => $result[0]->remark,
 			'user_id' => $result[0]->user_id,
@@ -2607,8 +2608,9 @@ class Employees extends MY_Controller {
 			'status' => $this->input->post('status'),
 			'floor_status' => $this->input->post('floor_status'),
 			'letter_status' => $this->input->post('letter_status'),
+			'is_leave_on' => $this->input->post('leave_start'),
+			'leave_effective' => $this->input->post('leave_effective_date'),
 		);
-		// dd($data);
 		$id = $this->input->post('user_id');
 		$proxi_id= $this->input->post('proxi_id');
 		$result = $this->Employees_model->basic_info($data,$id);
@@ -6890,5 +6892,43 @@ exit();
 		$user_id=$this->input->post('user_id');
 		$data=$this->input->post('team_lead');
 		$this->db->where('user_id',$user_id)->update('xin_employees',['lead_user_id'=>$data]);
+	}
+	public function  leave_efected(){
+		$user_id=$this->input->post('user_id');
+		$leave_start=$this->input->post('leave_start');
+		$leave_effective_date=$this->input->post('leave_effective_date');
+		if($this->db->where('user_id',$user_id)->update('xin_employees',['leave_effective'=>$leave_effective_date,'is_leave_on'=>$leave_start])){
+				
+				$year=date('Y',strtotime($leave_effective_date));
+			    $d1 = new DateTime("$year-12-31" ); 
+            	$d2 = new DateTime($leave_effective_date);   
+            	$Months = $d2->diff($d1); 
+            	$month = $Months->m;
+            	$qty = round(($month / 3), 2);
+
+            	
+            	$numberString = (string) $qty;
+				$parts = explode('.', $numberString);
+				$integerPart = $parts[0];
+				if (isset($parts[1])) {
+					$decimalPart = $parts[1];
+				} else {
+					$decimalPart = 0;
+				}
+
+				if ($decimalPart > 50) {
+            		$integerPart += 0.5;
+            	}
+
+				$data = array(
+					'emp_id' => $this->input->post('user_id'),
+					'el_total' => $month,
+					'sl_total' => $integerPart,
+					'year' => $year,
+				);
+				$this->db->insert('leave_balanace', $data);
+				redirect('/admin/employees/detail/'.$this->input->post('user_id'),'refresh');
+		}
+
 	}
 }

@@ -78,6 +78,19 @@ if (isset($success)) {
                         <td class="text-right"><?php echo $this->Xin_model->set_date_format($created_at);?></td>
                       </tr>
                       <tr>
+                        <th scope="row">Applied from date</th>
+                        <td class="text-right">
+                          <input type="text" readonly value="<?php echo date('Y-m-d', strtotime($this->Xin_model->set_date_format($applyed_from_date))); ?>" />
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row">Applied to date</th>
+                        <td class="text-right">
+                          <input type="text" readonly value="<?php echo date('Y-m-d', strtotime($this->Xin_model->set_date_format($applyed_to_date))); ?>" />
+                        </td>
+                      </tr>
+                      <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_start_date');?></th>
                         <td class="text-right">
                           <input type="date" name="start_date"  id="start_date" value="<?php echo date('Y-m-d', strtotime($this->Xin_model->set_date_format($from_date))); ?>" />
