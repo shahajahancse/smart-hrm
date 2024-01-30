@@ -1099,7 +1099,10 @@ class Attendance_model extends CI_Model
         $this->db->where('place_id', $place_id);
         $this->db->delete('xin_employee_move_place');
     }
-    public function red_alert_check(){
-        
+    public function red_alert_check($id){
+        // $this->db->where('leave_id', $id);
+        // $data=$this->db->get('xin_leave_applications')->row();
+        // $from_date=
+
     }
 }
