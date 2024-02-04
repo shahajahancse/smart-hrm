@@ -6,7 +6,7 @@
 <?php
 	if(in_array($user_info[0]->user_role_id, array(1,2,4,5,6))):
 
-$dd='dashboard_2';
+$dd='dashboard_3';
 
 		if($dd == 'dashboard_1') {
 			$this->load->view('admin/dashboard/administrator_dashboard_1');

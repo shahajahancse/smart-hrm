@@ -498,10 +498,12 @@ class Attendance_model extends CI_Model
         $this->db->order_by('employee_id', 'ASC');
         return $this->db->get('xin_leave_applications')->result();
     }
-    public function leavesm($emp_ids, $first_date, $second_date)
+    public function leavesm($emp_ids =null, $first_date, $second_date)
     {
         $this->db->select('*');
-        $this->db->where_in('employee_id', $emp_ids);
+        if ( $emp_ids != null) {
+            $this->db->where_in('employee_id', $emp_ids);
+        }
         $this->db->where('from_date >=', $first_date);
         $this->db->where('to_date <=', $second_date);
         $this->db->order_by('employee_id', 'ASC');
@@ -581,7 +583,7 @@ class Attendance_model extends CI_Model
 
     }
 
-    public function daily_report($attendance_date, $emp_id, $status = null, $late_status=null)
+    public function daily_report($attendance_date, $emp_id=null, $status = null, $late_status=null)
     {
 
         $this->db->select('
@@ -617,7 +619,9 @@ class Attendance_model extends CI_Model
         if($status[0]!='all') {
             $this->db->where_in("xin_attendance_time.status", $status);
         }
-        $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
+        if (!empty($emp_id)) {
+            $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
+        }
         $this->db->where('xin_employees.department_id = xin_departments.department_id');
         $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
         $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
@@ -769,6 +773,14 @@ class Attendance_model extends CI_Model
         $this->db->where("xin_attendance_time.late_status", 1);
         $this->db->where("xin_attendance_time.employee_id", $value);
         return count($this->db->get()->result());
+    }
+    public function get_total_late_monthly($first_date, $second_date)
+    {
+        $this->db->select('xin_attendance_time.attendance_date');
+        $this->db->from('xin_attendance_time');
+        $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
+        $this->db->where("xin_attendance_time.late_status", 1);
+        return $this->db->get()->result();
     }
 
     public function get_total_overtime($value, $first_date, $second_date)
@@ -1104,5 +1116,13 @@ class Attendance_model extends CI_Model
         // $data=$this->db->get('xin_leave_applications')->row();
         // $from_date=
 
+    }
+    public function get_total_meeting_monthly($first_date,$last_date){
+        $this->db->select('*');
+        $this->db->from('xin_employee_move_register');
+        $this->db->where('date BETWEEN "'.$first_date.'" AND "'.$last_date.'"');
+        return $this->db->get()->result();
+
+        
     }
 }

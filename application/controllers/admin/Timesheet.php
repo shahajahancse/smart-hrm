@@ -527,10 +527,10 @@ class Timesheet extends MY_Controller {
 			$remarks = $this->input->post('remarks');
 			$st_date = strtotime($start_date);
 			$ed_date = strtotime($end_date);
-			if($start_date<= date('Y-m-d',strtotime('-3 day'))){
-				$this->session->set_flashdata('error', 'Leave start date must be greater than 3 days');
-				redirect('admin/timesheet/leave');
-			}
+			// if($start_date<= date('Y-m-d',strtotime('-3 day'))){
+			// 	$this->session->set_flashdata('error', 'Leave start date must be greater than 3 days');
+			// 	redirect('admin/timesheet/leave');
+			// }
 			// $qt_remarks = htmlspecialchars(addslashes($remarks), ENT_QUOTES);
 			
 			/* Server side PHP input validation */		
@@ -698,14 +698,14 @@ class Timesheet extends MY_Controller {
 				$this->db->where('id', $leave_data->id);
 				$this->db->update('leave_balanace', $rdata);
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave_added'));
-			if($data['qty'] > 0){
+			if($data['qty'] >= 1){
 				for ($i=0; $i < $data['qty']; $i++) { 
 					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
 					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
 				}
 			} else {
 				$process_date = $data['from_date'];
-				$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+				$this->Attendance_model->attn_process($process_date, array($emp_id));
 			}
 			redirect('admin/timesheet/leave');
 
@@ -818,13 +818,15 @@ class Timesheet extends MY_Controller {
 
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
 			// automatically leave process start
-			if($data['qty'] > 0){
-				if ($from_date < date('Y-m-d')) {
+			if($data['qty'] >= 1){
 					for ($i=0; $i < $data['qty']; $i++) { 
 						$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
 						$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
 					}
-				}
+				
+			}else{
+				$this->Attendance_model->attn_process($data['from_date'], array($_POST['emp_id']));
+
 			}
 		}else{
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
@@ -920,13 +922,7 @@ class Timesheet extends MY_Controller {
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
 
 			// automatically leave process start
-			if($data['qty'] > 0){
-
-
-
-
-
-
+			if($data['qty'] >= 1){
 				for ($i=0; $i < $data['qty']; $i++) { 
 					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
 					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
@@ -1014,28 +1010,7 @@ class Timesheet extends MY_Controller {
 		$end_date=$leave_info->to_date;
 		$leave_type=$leave_info->leave_type_id;
 		$qty=$leave_info->qty;
-		
-				// [leave_id] => 377
-				// [company_id] => 1
-				// [employee_id] => 12
-				// [department_id] => 0
-				// [leave_type_id] => 1
-				// [leave_type] => el
-				// [qty] => 1.0
-				// [from_date] => 2023-12-24
-				// [to_date] => 2023-12-24
-				// [applied_on] => 2023-12-18 09:53:28
-				// [reason] => Wedding ceremony of my elder brother.
-				// [remarks] => 
-				// [status] => 4
-				// [is_half_day] => 0
-				// [notify_leave] => 1
-				// [leave_attachment] => 
-				// [team_lead_approved] => 1
-				// [team_lead_comment] => 
-				// [created_at] => 2023-12-18 09:53:28
-				// [current_year] => 2023
-			
+
 
 
 		if ($stutuss==4 ||$stutuss==3 ||$stutuss==2){

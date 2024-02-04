@@ -258,8 +258,8 @@ $stype="Monthly Leave report";
 										<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Change Status
 										<span class="caret"></span></button>
 										<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',3,this)" role="menuitem" tabindex="-1" href="#">Rejected</a></li>
-											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',4,this)" role="menuitem" tabindex="-1" href="#">First Level Approval</a></li>
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},3,this)" role="menuitem" tabindex="-1" href="#">Rejected</a></li>
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},4,this)" role="menuitem" tabindex="-1" href="#">First Level Approval</a></li>
 										</ul>
 									</div>'`;
 						update_balance(leave_id);
@@ -269,8 +269,8 @@ $stype="Monthly Leave report";
 										<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Change Status
 										<span class="caret"></span></button>
 										<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',2,this)" role="menuitem" tabindex="-1" href="#">Approved</a></li>
-											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',4,this)" role="menuitem" tabindex="-1" href="#">First Level Approval</a></li>
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},2,this)" role="menuitem" tabindex="-1" href="#">Approved</a></li>
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},4,this)" role="menuitem" tabindex="-1" href="#">First Level Approval</a></li>
 										</ul>
 									</div>'`;
 					}else{
@@ -279,8 +279,8 @@ $stype="Monthly Leave report";
 										<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Change Status
 										<span class="caret"></span></button>
 										<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',2,this)" role="menuitem" tabindex="-1" href="#">Approved</a></li>
-											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',3,this)" role="menuitem" tabindex="-1" href="#">Rejected</a></li>
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},2,this)" role="menuitem" tabindex="-1" href="#">Approved</a></li>
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},3,this)" role="menuitem" tabindex="-1" href="#">Rejected</a></li>
 										</ul>
 									</div>'`;
 					}

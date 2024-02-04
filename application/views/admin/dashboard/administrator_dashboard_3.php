@@ -1,282 +1,469 @@
 <?php
 $session = $this->session->userdata('username');
-$system = $this->Xin_model->read_setting_info(1);
-$company_info = $this->Xin_model->read_company_setting_info(1);
 $user = $this->Xin_model->read_employee_info($session['user_id']);
-$theme = $this->Xin_model->read_theme_info(1);
+
 ?>
 
-<div class="box-widget widget-user-2"> 
-  <!-- Add the bg color to the header using any of the bg-* classes -->
-  <div class="widget-user-header">
-    <h4 class="widget-user-username welcome-hrsale-user"><?php echo $this->lang->line('xin_title_wcb');?>, <?php echo $user[0]->first_name.' '.$user[0]->last_name;?>!</h4>
-    <h5 class="widget-user-desc welcome-hrsale-user-text"><?php echo $this->lang->line('xin_title_today_is');?> <?php echo date('l, j F Y');?></h5>
-  </div>
-</div>
-<?php /*?><?php $company_license = $this->Xin_model->company_license_expiry();?>
-<?php foreach($company_license as $clicense):?>
-<div class="alert alert-warning alert-dismissible">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-  <h4><i class="icon fa fa-warning"></i> Alert!</h4>
-  License <?php echo $clicense->license_name;?> is going to expire soon. </div>
-<?php endforeach;?>
-<?php $company_license_exp = $this->Xin_model->company_license_expired();?>
-<?php foreach($company_license_exp as $clicense_exp):?>
-<div class="alert alert-warning alert-dismissible">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-  <h4><i class="icon fa fa-warning"></i> Alert!</h4>
-  License <?php echo $clicense_exp->license_name;?> is expired. </div>
-<?php endforeach;?><?php */?>
-<?php if($theme[0]->statistics_cards=='4' || $theme[0]->statistics_cards=='8' || $theme[0]->statistics_cards=='12'){?>
-<div class="row">
-<div class="col-xl-3 col-md-3">
-    <div class="card hrsale-box-three hrsale-dash-purple">
-        <div class="card-body">
-            <i class="fa fa-users hrsale-dash-icon"></i>
-            <div class="hrsale-box-three-content">
-                <p class="m-0 text-uppercase text-white font-600 font-secondary text-overflow" title="<?php echo $this->lang->line('xin_people');?>"><?php echo $this->lang->line('xin_people');?></p>
-                <h3 class="text-white"><span data-plugin="counterup"><a class="text-white" href="<?php echo site_url('admin/employees');?>"><?php echo $this->Employees_model->get_total_employees();?></a></span> <small><i class="mdi mdi-arrow-up text-white"></i></small></h3>
-                <p class="text-white m-0"><span class="badge badge-info"> <?php echo $this->lang->line('xin_employees_active');?> <?php echo active_employees();?> </span><span class="ml-2"> <span class="badge bg-red"> <?php echo $this->lang->line('xin_employees_inactive');?> <?php echo inactive_employees();?> </span></span></p>
-            </div>
-        </div>
-    </div>
-</div><!-- end col -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
-<div class="col-xl-3 col-md-3">
-    <div class="card hrsale-box-three hrsale-dash-info">
-        <div class="card-body">
-            <i class="fa fa-lock hrsale-dash-icon"></i>
-            <div class="hrsale-box-three-content">
-                <p class="m-0 text-white text-uppercase font-600 font-secondary text-overflow" title="<?php echo $this->lang->line('xin_roles');?>"><?php echo $this->lang->line('xin_permission');?></p>
-                <h3 class="text-white"><span data-plugin="counterup"><?php echo $this->lang->line('xin_roles');?></span> <small><i class="mdi mdi-arrow-up text-white"></i></small></h3>
-                <p class="text-white m-0"><a class="text-white" href="<?php echo site_url('admin/roles');?>"><?php echo $this->lang->line('left_set_roles');?></a></p>
-            </div>
-        </div>
-    </div>
-</div><!-- end col -->
-<div class="col-xl-3 col-md-3">
-    <div class="card hrsale-box-three hrsale-dash-pink">
-        <div class="card-body">
-            <i class="fa fa-calendar hrsale-dash-icon"></i>
-            <div class="hrsale-box-three-content">
-                <p class="m-0 text-white text-uppercase font-600 font-secondary text-overflow" title="<?php echo $this->lang->line('left_leave');?>"><?php echo $this->lang->line('xin_hrsale_manage');?></p>
-                <h3 class="text-white"><span data-plugin="counterup"><?php echo $this->lang->line('left_leave');?></span> <small><i class="mdi mdi-arrow-up text-white"></i></small></h3>
-                <p class="text-white m-0"><a class="text-white" href="<?php echo site_url('admin/timesheet/leave');?>"><?php echo $this->lang->line('xin_hr_view_applications');?></a></p>
-            </div>
-        </div>
-    </div>
-</div><!-- end col -->
+:root {
+    --light: #f6f6f9;
+    --primary: #1976D2;
+    --light-primary: #CFE8FF;
+    --grey: #eee;
+    --dark-grey: #AAAAAA;
+    --dark: #363949;
+    --danger: #D32F2F;
+    --light-danger: #FECDD3;
+    --warning: #FBC02D;
+    --light-warning: #FFF2C6;
+    --success: #388E3C;
+    --light-success: #BBF7D0;
+}
 
-    <div class="col-xl-3 col-md-3">
-    <div class="card hrsale-box-three hrsale-dash-success">
-        <div class="card-body">
-            <i class="fa fa-cog hrsale-dash-icon"></i>
-            <div class="hrsale-box-three-content">
-                <p class="m-0 text-uppercase text-white font-600 font-secondary text-overflow" title="<?php echo $this->lang->line('xin_configure_hr');?>"><?php echo $this->lang->line('xin_configure_hr');?></p>
-                <h3 class="text-white"><span data-plugin="counterup"><?php echo $this->lang->line('left_settings');?></span> <small><i class="mdi mdi-arrow-up text-white"></i></small></h3>
-                <p class="text-white m-0"><a class="text-white" href="<?php echo site_url('admin/settings');?>"><?php echo $this->lang->line('header_configuration');?></a></p>
-            </div>
-        </div>
+.p-0 {
+    padding: 0 !important;
+}
+
+.d_card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 9px 0px;
+}
+
+.c_card {
+    border-radius: 10px;
+    padding: 5px;
+    display: flex;
+    margin: 9px 0px;
+    cursor: pointer;
+    background: linear-gradient(156deg, transparent, transparent);
+    box-shadow: 0px 0px 2px 2px #8f8f8f;
+    flex-direction: column;
+}
+
+.c_card:hover {
+    box-shadow: 0px 0px 35px 4px #8f8f8f
+}
+
+.c_cardn {
+    border-radius: 10px;
+    padding: 5px;
+    display: flex;
+    margin: 9px 0px;
+    cursor: pointer;
+    background: linear-gradient(156deg, transparent, transparent);
+    box-shadow: 0px 0px 2px 2px #8f8f8f;
+    flex-direction: column;
+}
+
+.c_cardn:hover {
+    box-shadow: 0px 0px 35px 4px #8f8f8f
+}
+
+#floatingDiv {
+    height: 247px;
+    width: 200px;
+    background-image: linear-gradient(141deg, #cdd0ff, #a9f1c3);
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 999;
+    overflow-y: scroll;
+}
+
+.fli {
+    list-style: none;
+    border: 1px solid;
+    width: 174px;
+    padding: 6px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+}
+
+#floatingDiv::-webkit-scrollbar {
+    display: none;
+
+}
+</style>
+
+
+<div style="display: none">
+    <div id="all_employee_list">
     </div>
-</div><!-- end col -->
+    <div id="all_present_list">
+    </div>
+    <div id="all_absent_list">
+    </div>
+    <div id="all_leave_list">
+    </div>
+    <div id="all_late_list">
+    </div>
 </div>
-<?php } ?>
-<?php if($theme[0]->statistics_cards=='8' || $theme[0]->statistics_cards=='12'){?>
+
+
+
+
+
 <div class="row">
-<?php if($system[0]->module_files=='true'){?>
-<div class="col-xl-3 col-md-3">
-    <div class="card hrsale-box-three hrsale-dash-warning">
-        <div class="card-body">
-            <i class="fa fa-files-o hrsale-dash-icon"></i>
-            <div class="hrsale-box-three-content">
-                <p class="m-0 text-white text-uppercase font-600 font-secondary text-overflow" title="<?php echo $this->lang->line('xin_e_details_document');?>"><?php echo $this->lang->line('xin_hrsale_manage');?></p>
-                <h3 class="text-white"><span data-plugin="counterup"><?php echo $this->lang->line('xin_e_details_document');?></span> <small><i class="mdi mdi-arrow-up text-white"></i></small></h3>
-                <p class="text-white m-0"><a class="text-white" href="<?php echo site_url('admin/files');?>"><?php echo $this->lang->line('xin_hr_upload_documents');?></a></p>
+    <div class='col-md-12'>
+        <h2><?php echo $this->lang->line('dashboard_title'); ?></h2>
+        <h4 class="widget-user-username welcome-hrsale-user">
+            <?php echo $this->lang->line('xin_title_wcb'); ?>,
+            <span style="color: #1976D2"><?php echo $user[0]->first_name . ' ' . $user[0]->last_name; ?>!</span>
+        </h4>
+    </div>
+    <div class='col-md-12 row'>
+        <div class="col-md-6">
+            <div class="d_card" style="background-image: linear-gradient(114deg, #85d2ff, #dbede9);">
+                <div class="row" style="display: flex;flex-direction: row;align-items: center;">
+                    <h4 class="col-md-6">Daily Attendance</h4>
+                    <input class="col-md-3" type="date" onchange="get_data_count()" value="<?= date('Y-m-d') ?>"
+                        name="date" id="date_first_card"
+                        style="border: 1px solid #009cf5;background: transparent;padding: 3px;border-radius: 7px;">
+                    <div class="col-md-3">
+                        <a onclick="daily_report('all')" class="btn btn-primary btn-sm"
+                            style="text-align: -webkit-center; cursor: pointer;">Get Report <i
+                                class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="c_card" id="all-employees">
+                            <h5>All Employees</h5>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count-all-employees">0</h3>
+                                <i class="fa fa-user col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="c_card" id="present">
+                            <h5>Present</h5>
+                            <div class="col-md-12">
+                                <h3 class="count-present col-md-6" id="count-present">0</h3>
+                                <i class="fa fa-laptop col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="c_card" id="absent">
+                            <h5>Absent</h5>
+                            <div class="col-md-12">
+                                <h3 class="count-absent col-md-6" id="count-absent">0</h3>
+                                <i class="fa fa-home col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="c_card" id="late">
+                            <h5>Late</h5>
+                            <div class="col-md-12">
+                                <h3 class="count-late col-md-6" id="count-late">0</h3>
+                                <i class="fa fa-clock-o col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"
+                                    class=" col-md-6"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div><!-- end col -->
-<?php } else {?>
-<div class="col-xl-3 col-md-3">
-    <div class="card hrsale-box-three hrsale-dash-warning">
-        <div class="card-body">
-            <i class="fa fa-plane hrsale-dash-icon"></i>
-            <div class="hrsale-box-three-content">
-                <p class="m-0 text-white text-uppercase font-600 font-secondary text-overflow" title="<?php echo $this->lang->line('xin_hr_office_holidays');?>"><?php echo $this->lang->line('xin_hr_office_holidays');?></p>
-                <h3 class="text-white"><span data-plugin="counterup"><?php echo $this->lang->line('left_holidays');?></span> <small><i class="mdi mdi-arrow-up text-white"></i></small></h3>
-                <p class="text-white m-0"><a class="text-white" href="<?php echo site_url('admin/timesheet/holidays');?>"><?php echo $this->lang->line('xin_view');?></a></p>
+        <div class="col-md-6">
+            <div class="d_card" style="background-image: linear-gradient(114deg, #85d2ff, #dbede9);">
+                <div class="row" style="display: flex;flex-direction: row;align-items: center;">
+                    <h4 class="col-md-6">Monthly</h4>
+                    <input class="col-md-4" type="month" onchange="get_monthly_data()" value="<?= date('Y-m') ?>"
+                        id="date_monthly"
+                        style="border: 1px solid #009cf5;background: transparent;padding: 3px;border-radius: 7px;">
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="c_cardn">
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">Leave</h5>
+                                <a href="javascript:void(0)" onclick="get_leave_monthly(event)" class="col-md-6 p-0"
+                                    style="text-align: -webkit-center;cursor: pointer;margin-top: 6px;">Get Report
+                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_leave_monthly">0</h3>
+                                <i class="fa fa-user col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="c_cardn">
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">Extra Present</h5>
+                                <a href="javascript:void(0)" onclick="get_extra_present_monthly(event)"
+                                    class="col-md-6 p-0"
+                                    style="text-align: -webkit-center;cursor: pointer;margin-top: 6px;">Get Report
+                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_extra_present_monthly">0</h3>
+                                <i class="fa fa-user col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="c_cardn">
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">Late</h5>
+                                <a href="javascript:void(0)" onclick="get_late_monthly(event)" class="col-md-6 p-0"
+                                    style="text-align: -webkit-center;cursor: pointer;margin-top: 6px;">Get Report
+                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_late_monthly">0</h3>
+                                <i class="fa fa-user col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="c_cardn">
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">Meeting</h5>
+                                <a href="javascript:void(0)" onclick="get_meeting_monthly(event)" class="col-md-6 p-0"
+                                    style="text-align: -webkit-center;cursor: pointer;margin-top: 6px;">Get Report
+                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_meeting_monthly">0</h3>
+                                <i class="fa fa-user col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
-</div><!-- end col -->
-<?php } ?>
-<div class="col-xl-3 col-md-3">
-    <div class="card hrsale-box-three hrsale-dash-danger">
-        <div class="card-body">
-            <i class="fa fa-table hrsale-dash-icon"></i>
-            <div class="hrsale-box-three-content">
-                <p class="m-0 text-white text-uppercase font-600 font-secondary text-overflow" title="<?php echo $this->lang->line('xin_theme_title');?>"><?php echo $this->lang->line('xin_theme_title');?></p>
-                <h3 class="text-white"><span data-plugin="counterup"><?php echo $this->lang->line('left_settings');?></span> <small><i class="mdi mdi-arrow-up text-white"></i></small></h3>
-                <p class="text-white m-0"><a class="text-white" href="<?php echo site_url('admin/theme');?>"><?php echo $this->lang->line('header_configuration');?></a></p>
-            </div>
-        </div>
-    </div>
-</div><!-- end col -->
-<?php if($system[0]->module_projects_tasks=='true'){?>
-<div class="col-xl-3 col-md-3">
-    <div class="card hrsale-box-three hrsale-dash-primary">
-        <div class="card-body">
-            <i class="fa fa-table hrsale-dash-icon"></i>
-            <div class="hrsale-box-three-content">
-                <p class="m-0 text-white text-uppercase font-600 font-secondary text-overflow" title="<?php echo $this->lang->line('dashboard_projects');?>"><?php echo $this->lang->line('dashboard_projects');?></p>
-                <h3 class="text-white"><span data-plugin="counterup"><a class="text-white" href="<?php echo site_url('admin/project');?>"><?php echo $this->lang->line('project');?> <?php echo $this->Xin_model->get_all_projects();?></a></span> <small><i class="mdi mdi-arrow-up text-white"></i></small></h3>
-                <p class="text-white m-0"><span class="badge bg-red"> <?php echo $this->lang->line('xin_in_progress');?> <?php echo $this->Project_model->inprogress_projects();?> </span> <span class="ml-2"> <span class="badge badge-info"> <?php echo $this->lang->line('xin_completed');?> <?php echo $this->Project_model->complete_projects();?> </span></span></p>
-            </div>
-        </div>
-    </div>
-</div><!-- end col -->
-<div class="col-xl-3 col-md-3">
-    <div class="card hrsale-box-three hrsale-dash-inverse">
-        <div class="card-body">
-            <i class="fa fa-table hrsale-dash-icon"></i>
-            <div class="hrsale-box-three-content">
-                <p class="m-0 text-white text-uppercase font-600 font-secondary text-overflow" title="<?php echo $this->lang->line('xin_tasks');?>"><?php echo $this->lang->line('xin_tasks');?></p>
-                <h3 class="text-white"><span data-plugin="counterup"><a class="text-white" href="<?php echo site_url('admin/timesheet/tasks');?>"><?php echo $this->Xin_model->get_all_tasks();?></a></span> <small><i class="mdi mdi-arrow-up text-white"></i></small></h3>
-                <p class="text-white m-0"><span class="badge bg-red"> <?php echo $this->lang->line('xin_in_progress');?> <?php echo inprogress_tasks();?> </span> <span class="ml-2"> <span class="badge badge-info"> <?php echo $this->lang->line('xin_completed');?> <?php echo completed_tasks();?> </span></span></p>
-            </div>
-        </div>
-    </div>
-</div><!-- end col -->
-<?php } else {?>
-<div class="col-xl-3 col-md-3">
-    <div class="card hrsale-box-three hrsale-dash-primary">
-        <div class="card-body">
-            <i class="fa fa-table hrsale-dash-icon"></i>
-            <div class="hrsale-box-three-content">
-                <p class="m-0 text-white text-uppercase font-600 font-secondary text-overflow" title="<?php echo $this->lang->line('xin_configure_hr');?>"><?php echo $this->lang->line('xin_configure_hr');?></p>
-                <h3 class="text-white"><span data-plugin="counterup"><?php echo $this->lang->line('xin_modules');?></span> <small><i class="mdi mdi-arrow-up text-white"></i></small></h3>
-                <p class="text-white m-0"><a class="text-white" href="<?php echo site_url('admin/settings/modules');?>"><?php echo $this->lang->line('xin_setup_modules');?></a></p>
-            </div>
-        </div>
-    </div>
-</div><!-- end col -->
-<div class="col-xl-3 col-md-3">
-    <div class="card hrsale-box-three hrsale-dash-inverse">
-        <div class="card-body">
-            <i class="fa fa-table hrsale-dash-icon"></i>
-            <div class="hrsale-box-three-content">
-                <p class="m-0 text-white text-uppercase font-600 font-secondary text-overflow" title="<?php echo $this->lang->line('xin_configure_hr');?>"><?php echo $this->lang->line('xin_configure_hr');?></p>
-                <h3 class="text-white"><span data-plugin="counterup"><?php echo $this->lang->line('left_office_shifts');?></span> <small><i class="mdi mdi-arrow-up text-white"></i></small></h3>
-                <p class="text-white m-0"><a class="text-white" href="<?php echo site_url('admin/timesheet/office_shift');?>"><?php echo $this->lang->line('xin_view');?></a></p>
-            </div>
-        </div>
-    </div>
-</div><!-- end col -->
-<?php } ?>
-</div>
-<?php } ?>
-<div class="row">
-  <div class="col-md-6">
-    <div class="box">
-      <div class="box-header with-border">
-        <h3 class="box-title"><?php echo $this->lang->line('xin_employee_department_txt');?></h3>
-      </div>
-      <div class="box-body">
-        <div class="box-block">
-          <div class="col-md-7">
-            <div class="overflow-scrolls" style="overflow:auto; height:200px;">
-              <div class="table-responsive">
-                <table class="table mb-0 table-dashboard">
-                  <tbody>
-                    <?php $c_color = array('#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC');?>
-                    <?php $j=0;foreach($this->Department_model->all_departments() as $department) { ?>
-                    <?php
-									$condition = "department_id =" . "'" . $department->department_id . "'";
-									$this->db->select('*');
-									$this->db->from('xin_employees');
-									$this->db->where($condition);
-									$query = $this->db->get();
-									// check if department available
-									if ($query->num_rows() > 0) {
-								?>
-                    <tr>
-                      <td><div style="width:4px;border:5px solid <?php echo $c_color[$j];?>;"></div></td>
-                      <td><?php echo htmlspecialchars_decode($department->department_name);?> (<?php echo $query->num_rows();?>)</td>
-                    </tr>
-                    <?php $j++; } ?>
-                    <?php  } ?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-5">
-            <canvas id="employee_department" height="200" width="" style="display: block;  height: 200px;"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="box">
-      <div class="box-header with-border">
-        <h3 class="box-title"><?php echo $this->lang->line('xin_employee_designation_txt');?></h3>
-      </div>
-      <div class="box-body">
-        <div class="box-block">
-          <div class="col-md-7">
-            <div class="overflow-scrolls" style="overflow:auto; height:200px;">
-              <div class="table-responsive">
-                <table class="table mb-0 table-dashboard">
-                  <tbody>
-                    <?php $c_color2 = array('#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED');?>
-                    <?php $k=0;foreach($this->Designation_model->all_designations() as $designation) { ?>
-                    <?php
-									$condition1 = "designation_id =" . "'" . $designation->designation_id . "'";
-									$this->db->select('*');
-									$this->db->from('xin_employees');
-									$this->db->where($condition1);
-									$query1 = $this->db->get();
-									// check if department available
-									if ($query1->num_rows() > 0) {
-								?>
-                    <tr>
-                      <td><div style="width:4px;border:5px solid <?php echo $c_color2[$k];?>;"></div></td>
-                      <td><?php echo htmlspecialchars_decode($designation->designation_name);?> (<?php echo $query1->num_rows();?>)</td>
-                    </tr>
-                    <?php $k++; } ?>
-                    <?php  } ?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-5">
-            <canvas id="employee_designation" height="200" width="" style="display: block; height: 200px;"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <?php $exp_am = $this->Expense_model->get_total_expenses();?>
-  <div class="col-md-6 col-sm-6 col-xs-12">
-    <div class="info-box"> <span class="info-box-icon info-box-icon-hrsale"><i class="fa fa-money text-red"></i></span>
-      <div class="info-box-content info-box-content-hrsale"> <span class="info-box-text"><?php echo $this->lang->line('dashboard_total_expenses');?> <span class="pull-right text-green dashboard-text"><?php echo $this->Xin_model->currency_sign($exp_am[0]->exp_amount);?></span></span> <span class="info-box-number"><a class="text-muted" href="<?php echo site_url('admin/expense');?>"> <?php echo $this->lang->line('xin_view');?> <i class="fa fa-arrow-right"></i></a></span> </div>
-      <!-- /.info-box-content --> 
-    </div>
-    <!-- /.info-box --> 
-  </div>
-  <?php $all_sal = total_salaries_paid();?>
-  <div class="col-md-6 col-sm-6 col-xs-12">
-    <div class="info-box"> <span class="info-box-icon info-box-icon-hrsale"><i class="fa fa-dollar text-red"></i></span>
-      <div class="info-box-content info-box-content-hrsale"> <span class="info-box-text"><?php echo $this->lang->line('dashboard_total_salaries');?> <span class="pull-right text-green dashboard-text"><?php echo $this->Xin_model->currency_sign($all_sal);?></span></span> <span class="info-box-number"><a class="text-muted" href="<?php echo site_url('admin/payroll/payment_history');?>"> <?php echo $this->lang->line('xin_view');?> <i class="fa fa-arrow-right"></i></a></span> </div>
-      <!-- /.info-box-content --> 
-    </div>
-    <!-- /.info-box --> 
-  </div>
-</div>
-<?php if($theme[0]->dashboard_calendar == 'true'):?>
-<?php $this->load->view('admin/calendar/calendar_hr');?>
-<?php endif; ?>
+
+    <script>
+    $(document).ready(function() {
+        $('.c_card').hover(function() {
+            var $this = $(this);
+            // setTimeout(function() {
+            $('#floatingDiv').remove();
+            $('<div id="floatingDiv"></div>').css({
+                position: 'absolute',
+                top: $this.offset().top / 10,
+                left: $this.offset().left / 3,
+                backgroundColor: 'lightgray'
+            }).appendTo($this);
+            get_data($this);
+            //},300); // 1000 milliseconds = 1 second
+        }, function() {
+            $('#floatingDiv').remove();
+        });
+    });
+
+    function get_data($element) {
+        var who = $element.attr('id');
+        if (who === 'all-employees') {
+            // Copy the content of 'all_employee_list'
+            var allEmployeeListContent = $('#all_employee_list').html();
+
+            // Append the content to 'floatingDiv'
+            $('#floatingDiv').empty();
+            $('#floatingDiv').append(allEmployeeListContent);
+        }
+        if (who === 'present') {
+            // Copy the content of 'all_employee_list'
+            var allEmployeeListContent = $('#all_present_list').html();
+            $('#floatingDiv').empty();
+            $('#floatingDiv').append(allEmployeeListContent);
+        }
+        if (who === 'absent') {
+            // Copy the content of 'all_employee_list'
+            var allEmployeeListContent = $('#all_absent_list').html();
+            $('#floatingDiv').empty();
+            $('#floatingDiv').append(allEmployeeListContent);
+        }
+        if (who === 'leave') {
+            // Copy the content of 'all_employee_list'
+            var allEmployeeListContent = $('#all_leave_list').html();
+            $('#floatingDiv').empty();
+            $('#floatingDiv').append(allEmployeeListContent);
+        }
+        if (who === 'late') {
+            // Copy the content of 'all_employee_list'
+            var allEmployeeListContent = $('#all_late_list').html();
+            $('#floatingDiv').empty();
+            $('#floatingDiv').append(allEmployeeListContent);
+        }
+    }
+    </script>
+
+    <script>
+    $(document).ready(function() {
+        get_data_count()
+        get_monthly_data()
+
+    })
+
+    function get_data_count() {
+        var loader =
+            '<img src="<?php echo base_url() ?>skin/img/loader.gif" alt="loader" style="height: 24px;width: 24px;">';
+        $('#count-all-employees').html(loader);
+        $('#count-present').html(loader);
+        $('#count-absent').html(loader);
+        $('#count-late').html(loader);
+
+        const date = $('#date_first_card').val();
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo site_url("admin/dashboard/get_count") ?>',
+            data: {
+                date: date
+            },
+            success: function(response) {
+                var data = JSON.parse(response);
+                $('#count-all-employees').html(data.all_employees.length);
+                $('#count-present').html(data.present.length);
+                $('#count-absent').html(data.absent.length);
+                $('#count-late').html(data.late.length);
+                $('#all_present_list').empty();
+                $('#all_employee_list').empty();
+                $('#all_absent_list').empty();
+                $('#all_late_list').empty();
+                $.each(data.present, function(key, value) {
+                    $('#all_present_list').append('<li class="fli">' + value.first_name + ' ' +
+                        value.last_name +
+                        ' <br> <span class="badge badge-success" >Present</span></li>');
+                    $('#all_employee_list').append('<li class="fli">' + value.first_name + ' ' +
+                        value.last_name +
+                        ' <br> <span class="badge badge-success" >Present</span></li>');
+                })
+                $.each(data.absent, function(key, value) {
+                    $('#all_absent_list').append('<li class="fli">' + value.first_name + ' ' + value
+                        .last_name +
+                        ' <br> <span class="badge badge-danger" >Absent</span></li>');
+                    $('#all_employee_list').append('<li class="fli">' + value.first_name + ' ' +
+                        value.last_name +
+                        ' <br> <span class="badge badge-danger" >Absent</span></li>');
+
+                })
+                $.each(data.late, function(key, value) {
+                    $('#all_late_list').append('<li class="fli">' + value.first_name + ' ' + value
+                        .last_name + ' <br> <span class="badge badge-danger" >Late</span></li>');
+                    $('#all_employee_list').append('<li class="fli">' + value.first_name + ' ' +
+                        value.last_name +
+                        ' <br> <span class="badge badge-danger" >Late</span></li>');
+                })
+            }
+        })
+    }
+    </script>
+    <script>
+    function daily_report(status, late_status=null) {
+        var ajaxRequest;
+        ajaxRequest = new XMLHttpRequest();
+        attendance_date = document.getElementById('date_first_card').value;
+        var data = "attendance_date=" + attendance_date + "&status=" + status + "&late_status=" + late_status;
+        url = '<?php echo site_url("admin/dashboard/daily_report") ?>';
+        ajaxRequest.open("POST", url, true);
+        ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        ajaxRequest.send(data);
+
+        ajaxRequest.onreadystatechange = function() {
+            if (ajaxRequest.readyState == 4) {
+                // console.log(ajaxRequest);
+                var resp = ajaxRequest.responseText;
+                a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1000,height=800');
+                a.document.write(resp);
+            }
+        }
+    }
+    </script>
+    <script>
+    function get_monthly_data() {
+        var loader =
+            '<img src="<?php echo base_url() ?>skin/img/loader.gif" alt="loader" style="height: 24px;width: 24px;">';
+        $('#count_leave_monthly').html(loader);
+        $('#count_extra_present_monthly').html(loader);
+        $('#count_late_monthly').html(loader);
+        $('#count_meeting_monthly').html(loader);
+
+        const date = $('#date_monthly').val();
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo site_url("admin/dashboard/get_monthly_count") ?>',
+            data: {
+                date: date
+            },
+            success: function(response) {
+                var data = JSON.parse(response);
+                $('#count_leave_monthly').html(data.leave.length);
+                $('#count_extra_present_monthly').html(data.extra_present.length);
+                $('#count_late_monthly').html(data.late.length);
+                $('#count_meeting_monthly').html(data.meeting.length);
+            }
+        })
+
+    }
+    </script>
+    <script>
+        function get_leave_monthly(e) {
+            e.preventDefault();
+            var ajaxRequest;  // The variable that makes Ajax possible!
+            ajaxRequest = new XMLHttpRequest();
+
+            first_date = document.getElementById('date_monthly').value;
+        
+            var data = "first_date="+first_date;
+            url = '<?= base_url("admin/dashboard/get_leave_monthly")?>';
+            ajaxRequest.open("POST", url, true);
+            ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+            ajaxRequest.send(data);
+            ajaxRequest.onreadystatechange = function(){
+            if(ajaxRequest.readyState == 4){
+                // console.log(ajaxRequest.responseText); return;
+                var resp = ajaxRequest.responseText;
+                a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+                a.document.write(resp);
+                // a.close();
+            }
+            }
+
+        }
+        function get_extra_present_monthly(e) {
+            e.preventDefault();
+            var ajaxRequest;  // The variable that makes Ajax possible!
+            ajaxRequest = new XMLHttpRequest();
+
+            first_date = document.getElementById('date_monthly').value;
+        
+            var data = "first_date="+first_date;
+            url = '<?= base_url("admin/dashboard/get_extra_present_monthly")?>';
+            ajaxRequest.open("POST", url, true);
+            ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+            ajaxRequest.send(data);
+            ajaxRequest.onreadystatechange = function(){
+            if(ajaxRequest.readyState == 4){
+                // console.log(ajaxRequest.responseText); return;
+                var resp = ajaxRequest.responseText;
+                a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+                a.document.write(resp);
+                // a.close();
+            }
+            }
+
+        }
+    </script>

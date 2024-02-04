@@ -217,6 +217,149 @@ class Dashboard extends MY_Controller {
 	public function chart(){
 		$this->load->view('admin/dashboard/chart');
 	}
+	public function get_count(){
+		$date=$this->input->post('date');
+		$present=$this->Timesheet_model->get_today_present(0,'Present',$date);
+		$absent=$this->Timesheet_model->get_today_present(0,'Absent',$date);
+		$late=$this->Timesheet_model->get_today_present(1,'Present',$date);
+		$leave=$this->Timesheet_model->get_today_leave($date);
+		if ($leave==null) {
+			$leave=[];
+		}
+		if ($late==null) {
+			$late=[];
+		}
+		if ($absent==null) {
+			$absent=[];
+		}
+		if ($present==null) {
+			$present=[];
+		}
+		$data['absent']=$absent;
+		$data['present']=$present;
+		$data['late']=$late;
+		$data['all_employees'] = array_merge($leave, $absent, $present);
+		 echo json_encode($data);
+	}
+	public function daily_report()
+    {
+        $report_date = $this->input->post('attendance_date');
+        $attendance_date = date("Y-m-d", strtotime($report_date));
+        $status = $this->input->post('status');
+        $late_status = $this->input->post('late_status');
+        $data['status']= $status;
+        if ($status == 'Present') {
+            $status = array('Present', 'HalfDay');
+        } else {
+            $status = array($status);
+        }
+        $data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id = null, $status,$late_status);
+        $data["attendance_date"] = $attendance_date;
+
+        if(is_string($data["values"])) {
+            echo $data["values"];
+        } else {
+            // dd($data["values"]);
+            $this->load->view('admin/attendance/daily_report', $data);
+        }
+    }
+	public function get_monthly_count(){
+		$date=$this->input->post('date');
+		$first_date=date('Y-m-01', strtotime($date));
+		$last_date=date('Y-m-t', strtotime($date));
+		$leave=$this->Timesheet_model->get_leaves_with_info_with_date($first_date,$last_date);
+		if ($leave==null) {
+			$leave=[];
+		}
+		$extra_present=$this->Timesheet_model->extra_present_approval($first_date,$last_date);
+		if ($extra_present==null) {
+			$extra_present=[];
+		}
+		$late=$this->Attendance_model->get_total_late_monthly($first_date,$last_date);
+		if ($late==null) {
+			$late=[];
+		}
+		$meeting=$this->Attendance_model->get_total_meeting_monthly($first_date,$last_date);
+		
+		if ($meeting==null) {
+			$meeting=[];
+		}
+		$data['leave']=$leave;
+		$data['late']=$late;
+		$data['meeting']=$meeting;
+		$data['extra_present']=$extra_present;
+		echo json_encode($data);
+	}
+	public function get_leave_monthly()
+	{
+	   
+		 $prossecc_date= $this->input->post('first_date');
+		 $first_date = date('Y-m-01',strtotime($prossecc_date));
+		 $second_date = date('Y-m-t',strtotime($prossecc_date));
+	
+		 $data['first_date'] = $first_date;
+		 $data['second_date'] = $second_date;
+		 $employee_id=[];
+		 $leave=  $this->Attendance_model->leavesm($emp_id = null, $first_date, $second_date);
+		 foreach($leave as $l){
+			 if (!in_array($l->employee_id, $employee_id)) {
+				 $employee_id[] = $l->employee_id;
+			 }
+		 }
+		 $data['employee_id']=$employee_id;
+		   echo $this->load->view("admin/reports/leave_report", $data, true);
+	}
+	public function get_extra_present_monthly()
+	{
+		 $prossecc_date= $this->input->post('first_date');
+		 $first_date = date('Y-m-01',strtotime($prossecc_date));
+		 $second_date = date('Y-m-t',strtotime($prossecc_date));
+		 $this->db->select('
+		 xin_employees.user_id as emp_id,
+		 xin_employees.employee_id,
+		 xin_employees.first_name,
+		 xin_employees.last_name,
+		 xin_employees.department_id,
+		 xin_employees.designation_id,
+		 xin_employees.date_of_joining,
+		 xin_departments.department_name,
+		 xin_designations.designation_name,
+		 xin_attendance_time.attendance_date,
+		 xin_attendance_time.clock_in,
+		 xin_attendance_time.clock_out,
+		 xin_attendance_time.attendance_status,
+		 xin_attendance_time.status,
+		 xin_attendance_time.late_status,
+		 xin_attendance_time.comment,
+	   ');
+ 
+		 $this->db->from('xin_employees');
+		 $this->db->from('xin_departments');
+		 $this->db->from('xin_designations');
+		 $this->db->from('xin_attendance_time');
+ 
+ 
+		 $this->db->where("xin_employees.is_active", 1);
+		 $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'" );
+
+		 $this->db->where('xin_employees.department_id = xin_departments.department_id');
+		 $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
+		 $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
+ 
+		 $this->db->where_in("xin_attendance_time.attendance_status", 'Present');
+		 $this->db->where_in("xin_attendance_time.status", 'Off Day');
+ 
+ 
+		 $this->db->order_by('xin_attendance_time.clock_in', "ASC");
+		 $this->db->group_by('xin_attendance_time.employee_id');
+		 
+ 
+		 $data["values"] = $this->db->get()->result();
+		 $data['first_date'] = $first_date;
+		 $data['second_date'] = $second_date;
+		 $this->load->view('admin/attendance/extra_present', $data);
+	
+	}
 	
 	// get opened and closed tickets for chart
 	public function employee_working_status()
