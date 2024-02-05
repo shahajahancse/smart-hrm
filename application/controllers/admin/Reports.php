@@ -1579,7 +1579,7 @@ class Reports extends MY_Controller
         $status 			 = $this->input->post('status');
         $first_date			 = $this->input->post('first_date');
         $second_date 		 = $this->input->post('second_date');
-        $data['first_date']  = $first_date;
+        $data['first_date']  = $first_date; 
         $data['second_date'] = $second_date;
         $data['status'] 	 = $status;
         $emp_id 			 = explode(',', trim($sql));

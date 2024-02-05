@@ -44,9 +44,9 @@ class Dashboard extends MY_Controller {
 		   $this->load->helper('date');
 		   $this->load->model("Lunch_model");
 		   $this->load->model('Attendance_model');
+		   $this->load->model('Reports_model');
 			$d=$this->db->get('xin_system_setting')->row();
 			if($d->project_proccess_date<=date('Y-m-d')){
-				
 				$this->save_service();
 				
 			};
@@ -290,6 +290,25 @@ class Dashboard extends MY_Controller {
 		$data['extra_present']=$extra_present;
 		echo json_encode($data);
 	}
+	public function get_payroll_count(){
+		$first_date=$this->input->post('date1');
+		$second_date=$this->input->post('date2');
+		$emp_id=[];
+		 $emp=  $this->db->where('is_active', 1)->get('xin_employees')->result();
+		 foreach($emp as $l){
+			 if (!in_array($l->user_id, $emp_id)) {
+				 $emp_id[] = $l->user_id;
+			 }
+		 }
+		 $this->load->model('Reports_model');
+		 $this->load->model('Lunch_model');
+		$data['mobile_bill']=$this->Reports_model->show_mobile_bill_report($first_date,$second_date,$status=null,$emp_id);
+		$statusC = 'all';
+        $data["ta_da"] = $this->Attendance_model->movment_status_report($first_date, $second_date, $statusC);
+		$data['lunch_paid']=$this->Lunch_model->paymentreport(1);
+		$data['lunch_unpaid']=$this->Lunch_model->paymentreport(0);
+		echo json_encode($data);
+	}
 	public function get_leave_monthly()
 	{
 	   
@@ -360,6 +379,112 @@ class Dashboard extends MY_Controller {
 		 $this->load->view('admin/attendance/extra_present', $data);
 	
 	}
+	public function get_late_monthly()
+	{
+		 $prossecc_date= $this->input->post('first_date');
+		 $first_date = date('Y-m-01',strtotime($prossecc_date));
+		 $second_date = date('Y-m-t',strtotime($prossecc_date));
+		 $type = 1;
+		 $data['first_date'] = $first_date;
+		 $data['second_date'] = $second_date;
+		 
+		 $emp_id=[];
+		 $leave=  $this->db->where('is_active', 1)->get('xin_employees')->result();
+		 foreach($leave as $l){
+			 if (!in_array($l->user_id, $emp_id)) {
+				 $emp_id[] = $l->user_id;
+			 }
+		 }
+		 $data['late_id'] = $emp_id;
+		 $data['type'] = $type;
+		 echo $this->load->view("admin/attendance/late_details", $data, true);
+		 
+	
+	}
+
+	public function get_movment_monthly()
+	{
+		 $prossecc_date= $this->input->post('first_date');
+		 $f1_date = date('Y-m-01',strtotime($prossecc_date));
+		 $f2_date = date('Y-m-t',strtotime($prossecc_date));
+		 $statusC = 'all';
+        $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date, $statusC);
+        $data['statusC']= $statusC;
+        $data['first_date'] = $f1_date;
+        $data['second_date'] = $f2_date;
+        if(is_string($data["values"])) {
+            echo $data["values"];
+        } else {
+            echo $this->load->view("admin/attendance/movment_status_report", $data, true);
+        }
+		 
+	
+	}
+
+	public function get_mobile_bill(){
+		$first_date = $this->input->post('first_date');
+		$second_date = $this->input->post('second_date');
+
+		$emp_id=[];
+		$leave=  $this->db->where('is_active', 1)->get('xin_employees')->result();
+		foreach($leave as $l){
+			if (!in_array($l->user_id, $emp_id)) {
+				$emp_id[] = $l->user_id;
+			}
+		}
+        $data['first_date']  = $first_date; 
+        $data['second_date'] = $second_date;
+        $data['status'] 	 = 'All';
+		$data['reports']     = $this->Reports_model->show_mobile_bill_report($first_date,$second_date,$status=null,$emp_id);
+		$this->load->view('admin/reports/show_mobile_bill_report',$data);
+	}
+	public function get_ta_da(){
+		$first_date = $this->input->post('first_date');
+		$second_date = $this->input->post('second_date');
+
+		$emp_id=[];
+		$emp=  $this->db->where('is_active', 1)->get('xin_employees')->result();
+		foreach($emp as $l){
+			if (!in_array($l->user_id, $emp_id)) {
+				$emp_id[] = $l->user_id;
+			}
+		}
+
+
+		
+        $f1_date = date("Y-m-d", strtotime($first_date));
+        $f2_date = date("Y-m-d", strtotime($second_date));
+        $statusC = 'all';
+        
+        $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date, $statusC);
+
+        $data['statusC']= $statusC;
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        if(is_string($data["values"])) {
+            echo $data["values"];
+        } else {
+            echo $this->load->view("admin/attendance/movment_status_report", $data, true);
+        }
+	}
+	public function get_lunch_paid(){
+		$status = 1;
+        $data['status'] = $status;
+        $data['lunch_data'] = $this->Lunch_model->paymentreport($status);
+        $data['r'] = 'Payment';
+        $this->load->view('admin/lunch/payment_report_page', $data);
+	}
+	public function get_lunch_unpaid(){
+		$status = 0;
+        $data['status'] = $status;
+        $data['lunch_data'] = $this->Lunch_model->paymentreport($status);
+        $data['r'] = 'Payment';
+        $this->load->view('admin/lunch/payment_report_page', $data);
+	}
+
+
+
+
 	
 	// get opened and closed tickets for chart
 	public function employee_working_status()

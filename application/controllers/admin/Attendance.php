@@ -718,11 +718,7 @@ class Attendance extends MY_Controller
         $f1_date = date("Y-m-d", strtotime($first_date));
         $f2_date = date("Y-m-d", strtotime($second_date));
         $statusC = $this->input->post('statusC');
-
-
-        //    $sql = $this->input->post('sql');
-        //    $emp_id = explode(',', trim($sql));
-
+        
         $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date, $statusC);
 
         $data['statusC']= $statusC;
