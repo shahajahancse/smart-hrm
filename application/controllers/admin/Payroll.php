@@ -157,6 +157,18 @@ class Payroll extends MY_Controller {
 		$status = $this->input->post('status');
 		$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
+
+
+		// $first_date= date('Y-m-01', strtotime($salary_month));
+		// $last_date= date('Y-m-t', strtotime($salary_month));
+		// $total_days = date('t', strtotime($salary_month));
+
+		// for ($i=25; $i <= $total_days ; $i++) { 
+		// 	$process_date= date('Y-m-d', strtotime($first_date. ' + '.$i.' day'));
+		// 	$this->load->model("Attendance_model");
+		// 	$this->Attendance_model->attn_process($process_date, $emp_id);
+		// }
+
     	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;

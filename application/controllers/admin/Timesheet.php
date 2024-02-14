@@ -698,24 +698,29 @@ class Timesheet extends MY_Controller {
 				$this->db->where('id', $leave_data->id);
 				$this->db->update('leave_balanace', $rdata);
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave_added'));
-			if($data['qty'] >= 1){
-				for ($i=0; $i < $data['qty']; $i++) { 
-					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
-					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
-				}
-			} else {
-				$process_date = $data['from_date'];
-				$this->Attendance_model->attn_process($process_date, array($emp_id));
-			}
+			
+			$this->attandence_pro($from_date,$qty,$emp_id);
+
 			redirect('admin/timesheet/leave');
-
-
 		} else {
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
 			redirect('admin/timesheet/leave');
 		}
 	
 	}
+	public function attandence_pro($first_date,$qty,$emp_id){
+		if ($qty>=1) {
+			for ($i=1; $i < $qty ; $i++) { 
+				$process_date= date('Y-m-d', strtotime($first_date. ' + '.$i.' day'));
+				$this->load->model("Attendance_model");
+				$this->Attendance_model->attn_process($process_date, $emp_id);
+			}
+		}else{
+			$this->load->model("Attendance_model");
+			$this->Attendance_model->attn_process($first_date, $emp_id);
+		}	
+	}
+
 	public function leave_reject($id) {
 		$data = array(
 			'status' => 3,
@@ -818,16 +823,7 @@ class Timesheet extends MY_Controller {
 
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
 			// automatically leave process start
-			if($data['qty'] >= 1){
-					for ($i=0; $i < $data['qty']; $i++) { 
-						$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
-						$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
-					}
-				
-			}else{
-				$this->Attendance_model->attn_process($data['from_date'], array($_POST['emp_id']));
-
-			}
+			$this->attandence_pro($from_date,$total_days,$emp_id);
 		}else{
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
 		}
@@ -920,18 +916,7 @@ class Timesheet extends MY_Controller {
 					$this->db->update('leave_balanace', $rdata);
 				}
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
-
-			// automatically leave process start
-			if($data['qty'] >= 1){
-				for ($i=0; $i < $data['qty']; $i++) { 
-					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
-					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
-				}
-			} else {
-				$process_date = $data['from_date'];
-				$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
-			}
-			// automatically leave process end
+			$this->attandence_pro($this->input->post('start_date'),$qnty,$emp_id);
 
 
 			$setting = $this->Xin_model->read_setting_info(1);
@@ -1044,23 +1029,12 @@ class Timesheet extends MY_Controller {
 					$this->db->where('id', $leave_data->id);
 					$this->db->update('leave_balanace', $rdata);
 				}
-			if($qty > 0){
-				for ($i=0; $i < $qty; $i++) { 
-					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($start_date)));
-					$this->Attendance_model->attn_process($process_date, array($employee_id));
-				}
-			} else {
-				$process_date = $start_date;
-				$this->Attendance_model->attn_process($process_date, array($employee_id));
-			}
-
-
+				$this->attandence_pro($start_date,$qty,$employee_id);
 		} else {
 			echo 'error';
 		}
 		
 	}
-
 	public function update_leave_balance(){
 		$leave_id = $this->input->post('leave_id');
 

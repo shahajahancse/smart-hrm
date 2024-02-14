@@ -116,7 +116,7 @@
 								$total_aba_deduct+=$values[$i]->aba_deduct;
 								$total_adv_deduct+=$values[$i]->advanced_salary;
 								$total_extra_pay+=$values[$i]->extra_pay;
-								$  +=$values[$i]->modify_salary;
+								$total_modify_salary +=$values[$i]->modify_salary;
 							?>
 							<tr>
 								<td><?=$i+1?></td>

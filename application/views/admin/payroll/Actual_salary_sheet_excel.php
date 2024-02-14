@@ -266,7 +266,7 @@ tbody{
                                 </tr>
                             </table>
                         </td>
-                        <td><?=$values[$i]->net_salary?></td>
+                        <td><?=($values[$i]->net_salary)-($values[$i]->aba_deduct+$values[$i]->late_deduct+$values[$i]->absent_deduct+$values[$i]->advanced_salary)?></td>
                         <td><?=$values[$i]->extra_pay?></td>
                         <td><?=$values[$i]->m_pay_day?></td>
                         <td><?=$values[$i]->modify_salary?></td>

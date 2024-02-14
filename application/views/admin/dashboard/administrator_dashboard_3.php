@@ -22,6 +22,7 @@ h5,h4 {
     color: #000000;
 }
 
+
 .c_card {
     border-radius: 10px;
     padding: 5px;
@@ -381,7 +382,7 @@ h5,h4 {
                                     <i class="fa-solid fa-user fa-2x"></i>
                                 </div>
                             </div>
-                        </a>
+                        </a> 
                     </div>
                     <div class="col-md-6">
                         <a href="<?=base_url('admin/reports/employee_leave_report')?>">

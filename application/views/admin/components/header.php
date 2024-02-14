@@ -168,6 +168,77 @@ input:checked+.slider:after {
         </div>
     </div>
 </div>
+<div id="warning_add_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"> Details</h4>
+            </div>
+            <div class="modal-body">
+                <form id="warning_add_form">
+                    <input type="hidden" name="user_id" id="warning_user_id">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" name="warning_date" id="warning_date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Warning</label>
+                                <textarea name="warning_remarks" id="warning_remarks"
+                                    style="height: 71px; width: -webkit-fill-available;"></textarea>
+                            </div>
+                        </div>
+                        <div class="float-right mr-3">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="salary_review_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Salary Review</h4>
+            </div>
+            <div class="modal-body">
+                <form id="salary_review_form">
+                    <input type="hidden" name="user_id" id="salary_review_user_id">
+                    <div class="row">
+                        
+                        <div class="col-md-12">
+                            <h4>Employee Name: <span id="salary_review_emp_name"></span></h4>  
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                                <label for=""> Old Salary</label>
+                                <input  class="form-control"  type="number" id="salary_review_old_amount"  readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for=""> New Salary</label>
+                                <input type="number" class="form-control" id="salary_review_new_amount" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="">Remarks</label>
+                            <textarea name="salary_review_remark" style="width:-webkit-fill-available; height: 64px;" id="salary_review_remark" ></textarea>
+                        </div>
+                        <div class="float-right mr-3">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
 .boxm {
     padding: 20px;
@@ -221,34 +292,31 @@ p {
                 id="msgs_count"><?php echo $unread_msgs;?></span><?php } ?>
         </a>
         <?php } ?>
-<style>
-    .notli {
-    padding: 1px;
-    margin: 10px;
-    border-radius: 11px;
-    box-shadow: 0px 0px 1px 3px #c3c3c3;
-}
+        <style>
+        .notli {
+            padding: 1px;
+            margin: 10px;
+            border-radius: 11px;
+            box-shadow: 0px 0px 1px 3px #c3c3c3;
+        }
 
-.menu::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	border-radius: 10px;
-	background-color: #F5F5F5;
-}
+        .menu::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            background-color: #F5F5F5;
+        }
 
-.menu::-webkit-scrollbar
-{
-	width: 7px;
-	background-color: #F5F5F5;
-}
+        .menu::-webkit-scrollbar {
+            width: 7px;
+            background-color: #F5F5F5;
+        }
 
-.menu::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color: #555;
-}
-</style>
+        .menu::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+            background-color: #555;
+        }
+        </style>
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <li>
@@ -282,16 +350,20 @@ p {
                 .lir {
                     cursor: pointer !important;
                 }
+
                 .menu>li>a>.nrcolor {
                     color: #ff0101 !important;
                 }
+
                 .menu>li>a>.ngcolor {
                     color: #037c29 !important;
                 }
+
                 .navbar-nav>.messages-menu>.dropdown-menu>li .menu>li>a {
                     margin: 0;
                     padding: 3px 1px;
                 }
+
                 .navbar-custom-menu>.navbar-nav>li>.dropdown-menu {
                     position: absolute;
                     right: 0;
@@ -339,14 +411,15 @@ p {
                                 $statuss="--";
                             }
                                     ?>
-                                <li class ="notli">
+                                <li class="notli">
                                     <!-- start message -->
                                     <?php
                                     $roolid=$session['role_id'];
                                     if($roolid==3) {
                                         ?>
-                                    <a  onclick='modal_leave_data_ajax(<?php echo $row->leave_id ?>)' data-target="#edit-leave-modal-data"  data-toggle="modal" style="cursor: pointer;"
-                                        data-leave_id="<?php echo $row->leave_id ?>"
+                                    <a onclick='modal_leave_data_ajax(<?php echo $row->leave_id ?>)'
+                                        data-target="#edit-leave-modal-data" data-toggle="modal"
+                                        style="cursor: pointer;" data-leave_id="<?php echo $row->leave_id ?>"
                                         data-emname="<?php echo $emp_name ?>"
                                         data-company_id="<?php echo $row->company_id ?>"
                                         data-employee_id="<?php echo $row->employee_id ?>"
@@ -431,6 +504,45 @@ p {
                                     </a>
                                 </li>
                                 <?php } ?>
+
+                                <?php
+                                $this->db->select('*');
+                                $this->db->from('xin_employees');
+                                $this->db->where('salary_review_is',1);
+                                $this->db->where('salary_review_date between "'.date('Y-m-d', strtotime('-1 month')).'" and "'.date('Y-m-d', strtotime('+2 month')).'"');
+                                $review_list= $this->db->get()->result(); 
+                                foreach( $review_list as $row){?>
+
+                                <li class="lir notli">
+                                    <!-- start message -->
+                                    <a onclick="salary_review_modal_a(<?php echo $row->user_id; ?>)">
+                                        <div class="pull-left">
+                                            <?php  if($row->profile_picture!='' && $row->profile_picture!='no file') {?>
+                                            <img src="<?php  echo base_url('uploads/profile/'.$row->profile_picture);?>"
+                                                alt="" id="user_avatar" class="img-circle user_profile_avatar">
+                                            <?php } else {?>
+                                            <?php  if($row->gender=='Male') { ?>
+                                            <?php   $de_file = base_url().'uploads/profile/default_male.jpg';?>
+                                            <?php } else { ?>
+                                            <?php   $de_file = base_url().'uploads/profile/default_female.jpg';?>
+                                            <?php } ?>
+                                            <img src="<?php  echo $de_file;?>" alt="" id="user_avatar"
+                                                class="img-circle user_profile_avatar">
+                                            <?php  } ?>
+                                        </div>
+                                        <h4 class="">
+                                            <?php echo $row->first_name. ' '.$row->last_name;?> </h4>
+                                        <p class="">
+                                            Review on <?php echo date("d-M-Y", strtotime($row->salary_review_date));?> </p>
+                                    </a>
+                                </li>
+                                <?php }
+                                
+                                ?>
+
+
+
+
                             </ul>
                             <br>
                             <?php } ?>
@@ -466,7 +578,7 @@ p {
                                         <h4 class="<?php echo ($red_zone < date('Y-m-d')) ? 'nrcolor' : 'ngcolor' ?>">
                                             <?php echo $row->first_name. ' '.$row->last_name;?> </h4>
                                         <p class="<?php echo ($red_zone < date('Y-m-d')) ? 'nrcolor' : 'ngcolor' ?>">
-                                        Intern on <?php echo date("d-M-Y", strtotime($ipdate));?> </p>
+                                            Intern on <?php echo date("d-M-Y", strtotime($ipdate));?> </p>
                                     </a>
                                 </li>
                                 <?php } ?>
@@ -718,7 +830,9 @@ p {
     padding: 5px;
     width: -webkit-fill-available;
 }
-td, th {
+
+td,
+th {
     padding: 0 !important;
 }
 </style>
@@ -765,19 +879,23 @@ td, th {
                             <div class="myboxx_body">
                                 <div class="box-block card-dashboard">
                                     <div id="leave-statistics">
-                                        <p><strong>Earn leave (<span id="leave_count_el_p"></span>/<span id="leave_count_el_total"></span>)</strong></p>
+                                        <p><strong>Earn leave (<span id="leave_count_el_p"></span>/<span
+                                                    id="leave_count_el_total"></span>)</strong></p>
                                         <div class="progress" style="margin: 7px;height: 19px;background: aqua;">
-                                            <div class="progress-bar" id="leave_count_el_prog" style="background: #ff8484;width: 100%;"></div>
+                                            <div class="progress-bar" id="leave_count_el_prog"
+                                                style="background: #ff8484;width: 100%;"></div>
                                         </div>
                                         <div id="leave-statistics">
-                                            <p><strong>Sick leave (<span id="leave_count_sl_p"></span>/<span id="leave_count_sl_total"></span>)</strong></p>
+                                            <p><strong>Sick leave (<span id="leave_count_sl_p"></span>/<span
+                                                        id="leave_count_sl_total"></span>)</strong></p>
                                             <div class="progress" style="margin: 7px;height: 19px;background: aqua;">
-                                                <div class="progress-bar" id="leave_count_sl_prog" style="background: #ff8484;width: 100%;"></div>
+                                                <div class="progress-bar" id="leave_count_sl_prog"
+                                                    style="background: #ff8484;width: 100%;"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            
+
                             </div>
                         </div>
                     </div>
@@ -787,84 +905,95 @@ td, th {
                                 Leave Information
                             </div>
                             <div class="myboxx_body">
-                            <div class="col-md-6" style="padding: 5px;border: 1px solid #cfcfcf;border-radius: 4px;">
-                                <table class="table table-bordered col-md-12" style="margin: 0;">
-                                    <tr>
-                                        <th style="padding: 3px 8px!important;">Leave Type</th>
-                                        <td style="padding: 3px 8px!important;" id="leave_type_m"></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="padding: 3px 8px!important;">Application Date</th>
-                                        <td style="padding: 3px 8px!important;" id="application_date_m"></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="padding: 3px 8px!important;">Attachment</th>
-                                        <td style="padding: 3px 8px!important;"><a href="" id="attachment_m" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Download</a></td>
-                                    </tr>
-                                
-                                </table>
-                                <label for=""> Reason</label>
-                                <textarea  style="width: 412px; height: 64px;" id="reason_m" readonly></textarea>
-                            </div>
-                            <div class="col-md-6" style="padding: 5px;border: 1px solid #cfcfcf;border-radius: 4px;">
-                                <table class="table table-bordered col-md-12" style="margin: 0;">
-                                    <tr>
-                                        <th style="padding: 3px 8px!important;">From Date</th>
-                                        <td style="padding: 3px 8px!important;" colspan="2"><input type="date" id="from_date_m" name="from_date" value="<?=date('Y-m-d')?>"></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="padding: 3px 8px!important;">To Date</th>
-                                        <td style="padding: 3px 8px!important;" colspan="2"><input type="date" id="to_date_m" name="to_date" value="<?=date('Y-m-d')?>"></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="padding: 3px 8px!important;">Total Days</th>
-                                        <td style="padding: 3px 8px!important;"><input onchange=checkhulf() type="text" name="total_days" id="total_days_m" value="1" ></td> 
-                                        <td> <input type="checkbox" onchange=checkhulf() id="Half_Day_m" name="Half_Day"> Halfday </td>
-                                    </tr>
-                                    <tr>
-                                        <th style="padding: 3px 8px!important;">Status</th>
-                                        <td style="padding: 3px 8px!important;">
-                                            <select class="form-control" id="status_m" name="status" <?=$user[0]->user_role_id==3 ? 'disabled' : ''?>>
-                                            <option value="1">Pending</option>
-                                            <option value="4">First Level Approval</option>
-                                            <option value="2">Approved</option>
-                                            <option value="3">Rejected</option>
-                                            </select>
-                                        </td>
-                                    </tr>
+                                <div class="col-md-6"
+                                    style="padding: 5px;border: 1px solid #cfcfcf;border-radius: 4px;">
+                                    <table class="table table-bordered col-md-12" style="margin: 0;">
+                                        <tr>
+                                            <th style="padding: 3px 8px!important;">Leave Type</th>
+                                            <td style="padding: 3px 8px!important;" id="leave_type_m"></td>
+                                        </tr>
+                                        <tr>
+                                            <th style="padding: 3px 8px!important;">Application Date</th>
+                                            <td style="padding: 3px 8px!important;" id="application_date_m"></td>
+                                        </tr>
+                                        <tr>
+                                            <th style="padding: 3px 8px!important;">Attachment</th>
+                                            <td style="padding: 3px 8px!important;"><a href="" id="attachment_m"
+                                                    target="_blank" class="btn btn-primary btn-sm"><i
+                                                        class="fa fa-download"></i> Download</a></td>
+                                        </tr>
 
-                                    <tr>
-                                        <th style="padding: 3px 8px!important;">Team Lead Comment</th>
-                                        <td style="padding: 3px 8px!important;" colspan="2">
-                                        <textarea type="text" name="team_lead_comment" id="team_lead_comment" <?= $user[0]->is_emp_lead != 2 ? 'disabled' : ''?>> </textarea>
-                                        <input type="hidden" name="team_lead_approved" id="team_lead_approved"  value='<?= $user[0]->is_emp_lead != 2 ? 0 : 1?>' >
-                                        
-                                        </td>
-                                    </tr>
-                                    <?php  if($user[0]->user_role_id !=3 ): ?>
-                                    <tr>
-                                        <th style="padding: 3px 8px!important;">Remark</th>
-                                        <td style="padding: 3px 8px!important;" colspan="2">
-                                        <input type="text" name="remark" id="remark_m">
-                                        </td>
-                                    </tr>
-                                    <?php endif; ?>
-                                  
-                                    
-                                </table>
-                            </div>
-                            
+                                    </table>
+                                    <label for=""> Reason</label>
+                                    <textarea style="width: 412px; height: 64px;" id="reason_m" readonly></textarea>
+                                </div>
+                                <div class="col-md-6"
+                                    style="padding: 5px;border: 1px solid #cfcfcf;border-radius: 4px;">
+                                    <table class="table table-bordered col-md-12" style="margin: 0;">
+                                        <tr>
+                                            <th style="padding: 3px 8px!important;">From Date</th>
+                                            <td style="padding: 3px 8px!important;" colspan="2"><input type="date"
+                                                    id="from_date_m" name="from_date" value="<?=date('Y-m-d')?>"></td>
+                                        </tr>
+                                        <tr>
+                                            <th style="padding: 3px 8px!important;">To Date</th>
+                                            <td style="padding: 3px 8px!important;" colspan="2"><input type="date"
+                                                    id="to_date_m" name="to_date" value="<?=date('Y-m-d')?>"></td>
+                                        </tr>
+                                        <tr>
+                                            <th style="padding: 3px 8px!important;">Total Days</th>
+                                            <td style="padding: 3px 8px!important;"><input onchange=checkhulf()
+                                                    type="text" name="total_days" id="total_days_m" value="1"></td>
+                                            <td> <input type="checkbox" onchange=checkhulf() id="Half_Day_m"
+                                                    name="Half_Day"> Halfday </td>
+                                        </tr>
+                                        <tr>
+                                            <th style="padding: 3px 8px!important;">Status</th>
+                                            <td style="padding: 3px 8px!important;">
+                                                <select class="form-control" id="status_m" name="status"
+                                                    <?=$user[0]->user_role_id==3 ? 'disabled' : ''?>>
+                                                    <option value="1">Pending</option>
+                                                    <option value="4">First Level Approval</option>
+                                                    <option value="2">Approved</option>
+                                                    <option value="3">Rejected</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <th style="padding: 3px 8px!important;">Team Lead Comment</th>
+                                            <td style="padding: 3px 8px!important;" colspan="2">
+                                                <textarea type="text" name="team_lead_comment" id="team_lead_comment"
+                                                    <?= $user[0]->is_emp_lead != 2 ? 'disabled' : ''?>> </textarea>
+                                                <input type="hidden" name="team_lead_approved" id="team_lead_approved"
+                                                    value='<?= $user[0]->is_emp_lead != 2 ? 0 : 1?>'>
+
+                                            </td>
+                                        </tr>
+                                        <?php  if($user[0]->user_role_id !=3 ): ?>
+                                        <tr>
+                                            <th style="padding: 3px 8px!important;">Remark</th>
+                                            <td style="padding: 3px 8px!important;" colspan="2">
+                                                <input type="text" name="remark" id="remark_m">
+                                            </td>
+                                        </tr>
+                                        <?php endif; ?>
+
+
+                                    </table>
+                                </div>
+
                             </div>
                         </div>
-                    
+
                     </div>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="leave_id" id="leave_id_m" />
                     <input type="hidden" name="emp_id" id="emp_id_m" />
                     <?php if ($user[0]->is_emp_lead == 2 || $user[0]->user_role_id !=3)  { ?>
-                        <input type="submit" name="submit" value="Submit" class="btn btn-primary">
-                   <?php } ?>
+                    <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+                    <?php } ?>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -1299,73 +1428,150 @@ function movetype() {
 }
 </script>
 <script>
-    function modal_leave_data_ajax(id) {
-        $.ajax({
-            type: 'get',
-            url: '<?= base_url("admin/timesheet/modal_leave_data_ajax/") ?>' + id,
-            success: function(response) {
-                console.log(response);
-                if (response) {
-                    var result=JSON.parse(response).result;
-                    
-                    var leave_calel=JSON.parse(response).leave_calel;
-                    var leave_calel_percent=JSON.parse(response).leave_calel_percent;
-                    var leave_calsl=JSON.parse(response).leave_calsl;
-                    var leave_calsl_percent=JSON.parse(response).leave_calls_percent;
+function modal_leave_data_ajax(id) {
+    $.ajax({
+        type: 'get',
+        url: '<?= base_url("admin/timesheet/modal_leave_data_ajax/") ?>' + id,
+        success: function(response) {
+            console.log(response);
+            if (response) {
+                var result = JSON.parse(response).result;
 
-                    var leave_totalsl=JSON.parse(response).leave_totalsl;
-                    var leave_totalel=JSON.parse(response).leave_totalel;
+                var leave_calel = JSON.parse(response).leave_calel;
+                var leave_calel_percent = JSON.parse(response).leave_calel_percent;
+                var leave_calsl = JSON.parse(response).leave_calsl;
+                var leave_calsl_percent = JSON.parse(response).leave_calls_percent;
 
-                    $('#employee_name_m').html(result.first_name+' '+ result.last_name);
-                    $('#leave_id_m').val(result.leave_id);
-                    $('#department_name_m').html(result.department_name);
-                    $('#designation_name_m').html(result.designation_name);
-                    $('#basic_salary_m').html(result.basic_salary);
-                    $('#team_lead_comment').html(result.team_lead_comment);
-                    if (result.team_lead_approved==1) {
-                        $('#team_lead_approved').val(1);
-                    }
+                var leave_totalsl = JSON.parse(response).leave_totalsl;
+                var leave_totalel = JSON.parse(response).leave_totalel;
 
-                    $('#leave_count_el_p').html(leave_calel);
-                    $('#leave_count_sl_p').html(leave_calsl);
-
-                    $('#leave_count_sl_total').html(leave_totalsl);
-                    $('#leave_count_el_total').html(leave_totalel);
-                    
-                    $('#leave_count_el_prog').css('width', `${leave_calel_percent}%`);
-                    $('#leave_count_sl_prog').css('width', `${leave_calsl_percent}%`);
-                    console.log(result.leave_type_id);
-                    if (result.leave_type==='el') {
-                        $('#leave_type_m').html('Earn Leave');
-                    } else {
-                        $('#leave_type_m').html('Sick Leave');
-                    }
-
-                    $('#application_date_m').html(result.applied_on);
-                    if (result.leave_attachment == '') {
-                        $('#attachment_m').css("display", "none");
-                        
-                    }
-                    $('#attachment_m').attr('href','<?= base_url('uploads/leave') ?>'+result.leave_attachment);
-                    $('#from_date_m').val(result.from_date);
-                    $('#to_date_m').val(result.to_date);
-                    $('#total_days_m').val(result.qty);
-                    $('#reason_m').val(result.reason);
-                    if(result.is_half_day==1){
-                        $('#Half_Day_m').attr('checked','checked');
-                    }else{
-                        $('#Half_Day_m').removeAttr('checked');
-                    }
-
-                    $('#status_m').val(result.status);
-
-                    $('#remark_m').val(result.remarks);
-                    $('#emp_id_m').val(result.employee_id);
+                $('#employee_name_m').html(result.first_name + ' ' + result.last_name);
+                $('#leave_id_m').val(result.leave_id);
+                $('#department_name_m').html(result.department_name);
+                $('#designation_name_m').html(result.designation_name);
+                $('#basic_salary_m').html(result.basic_salary);
+                $('#team_lead_comment').html(result.team_lead_comment);
+                if (result.team_lead_approved == 1) {
+                    $('#team_lead_approved').val(1);
                 }
-            },
-            error: function(response) {
-                
+
+                $('#leave_count_el_p').html(leave_calel);
+                $('#leave_count_sl_p').html(leave_calsl);
+
+                $('#leave_count_sl_total').html(leave_totalsl);
+                $('#leave_count_el_total').html(leave_totalel);
+
+                $('#leave_count_el_prog').css('width', `${leave_calel_percent}%`);
+                $('#leave_count_sl_prog').css('width', `${leave_calsl_percent}%`);
+                console.log(result.leave_type_id);
+                if (result.leave_type === 'el') {
+                    $('#leave_type_m').html('Earn Leave');
+                } else {
+                    $('#leave_type_m').html('Sick Leave');
+                }
+
+                $('#application_date_m').html(result.applied_on);
+                if (result.leave_attachment == '') {
+                    $('#attachment_m').css("display", "none");
+
+                }
+                $('#attachment_m').attr('href', '<?= base_url('uploads/leave') ?>' + result
+                    .leave_attachment);
+                $('#from_date_m').val(result.from_date);
+                $('#to_date_m').val(result.to_date);
+                $('#total_days_m').val(result.qty);
+                $('#reason_m').val(result.reason);
+                if (result.is_half_day == 1) {
+                    $('#Half_Day_m').attr('checked', 'checked');
+                } else {
+                    $('#Half_Day_m').removeAttr('checked');
+                }
+
+                $('#status_m').val(result.status);
+
+                $('#remark_m').val(result.remarks);
+                $('#emp_id_m').val(result.employee_id);
             }
-        })
-    }
+        },
+        error: function(response) {
+
+        }
+    })
+}
+</script>
+<script>
+function employee_warning(id) {
+    $('#warning_user_id').val(id);
+    $('#warning_add_modal').modal('show');
+}
+</script>
+<script>
+function salary_review_modal_a(id) {
+    $('#salary_review_user_id').val(id);
+    $('#salary_review_emp_name').empty();
+    $('#salary_review_old_amount').empty();
+    $('#salary_review_new_amount').empty();
+    $('#salary_review_remark').empty();
+    $('#salary_review_modal').modal('show');
+    $.ajax({
+        type: 'post',
+        url: '<?= base_url('admin/employees/get_imployee_info') ?>',
+        data: {
+            id: id
+        },
+        success: function(response) {
+            var data=JSON.parse(response);
+            $('#salary_review_emp_name').text(data.first_name + ' ' + data.last_name);
+            $('#salary_review_old_amount').val(data.salary);
+        }
+
+
+    })
+    
+}
+</script>
+<script>
+$('#salary_review_form').submit(function(e) {
+    e.preventDefault();
+    var salary_review_user_id = $('#salary_review_user_id').val();
+    var salary_review_new_amount = $('#salary_review_new_amount').val();
+    var salary_review_remark = $('#salary_review_remark').val();
+    var targetUrl = "<?=base_url('admin/employees/salary_review_form/')?>"
+    $.ajax({
+        url: targetUrl,
+        type: "POST",
+        data: {
+            salary_review_user_id: salary_review_user_id,
+            salary_review_new_amount: salary_review_new_amount,
+            salary_review_remark: salary_review_remark
+        },
+        success: function(response) {
+            showSuccessAlert('Update Success');
+        }
+    })
+})
+</script>
+<script>
+$('#salary_review_form').submit(function(e) {
+    e.preventDefault();
+    var warning_user_id = $('#warning_user_id').val();
+    var warning_date = $('#warning_date').val();
+    var warning_remarks = $('#warning_remarks').val();
+    var targetUrl = "<?=base_url('admin/employees/add_employee_warning/')?>"
+    $.ajax({
+        url: targetUrl,
+        type: "POST",
+        data: {
+            warning_user_id: warning_user_id,
+            warning_date: warning_date,
+            warning_remarks: warning_remarks
+        },
+        success: function(response) {
+            showSuccessAlert('Successfully added');
+        }
+
+    })
+
+
+})
 </script>

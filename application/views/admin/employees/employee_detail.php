@@ -51,6 +51,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                 <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#xin_payslips"><?php echo $this->lang->line('left_payslips');?></a> </li>       -->
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#NDA">NDA</a> </li>
                 <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#remarks">Remarks</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#salary_review">Salary Review</a> </li>
                 <!-- <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#set_team_lead">Team Lead</a></li> -->
             </ul>
             <div class="tab-content">
@@ -3001,6 +3002,62 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                 <?php echo form_close(); ?>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane <?php echo $get_animate;?>" id="salary_review">
+                    <div class="box-body">
+                        <div class="row no-gutters row-bordered row-border-light">
+                            <div class="col-md-12">
+                                <div class="tab-content">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">Remarks</h3>
+                                    </div>
+                                    <div class="box-body pb-2">
+                                         <?php $attributes = array('name' => 'remarks_info', 'id' => 'remarks_info', 'autocomplete' => 'off');?>
+                                        <?php echo form_open_multipart('admin/employees/salary_review_add', $attributes);?>
+                                            <input type="hidden" name="user_id" value="<?= $user_id?>">
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group col-md-6">
+                                                        <select style="width: 199px;" onchange="getSalaryReview()" name="salary_review_is" id="salary_review_is">
+                                                            <option value="1" <?= isset($salary_review_is) && $salary_review_is == 1 ? 'selected' : ''?>>Yes</option>
+                                                            <option value="0" <?= isset($salary_review_is) && $salary_review_is == 0 ? 'selected' : ''?>>No</option>
+                                                        </select>
+                                                  
+                                                       <input style="width: 199px;" type="date" value="<?= isset($salary_review_date) ? $salary_review_date : ''?>" name="salary_review_date" id="salary_review_date">
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <div class="form-actions box-footer">
+                                                                <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_save'))); ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        <?php echo form_close(); ?>
+                                        <script>
+                                            function getSalaryReview(){
+                                                var salary_review_is = $('#salary_review_is').val();
+                                                if (salary_review_is==1) {
+                                                    $('#salary_review_date').show(); 
+                                                }else{
+                                                    $('#salary_review_date').hide();
+                                                }
+
+                                            }
+                                            $(document).ready(function(){
+                                                getSalaryReview();
+                                            })
+                                        </script>
                                     </div>
                                 </div>
                             </div>

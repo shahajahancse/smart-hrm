@@ -62,6 +62,8 @@ class Attendance extends MY_Controller
         $status = $this->input->post('status');
         $sql = $this->input->post('sql');
         $emp_id = explode(',', trim($sql));
+        date("Y-m-d", strtotime($process_date));
+        $this->db->trans_start();
 
         $process_date = date("Y-m-d", strtotime($process_date));
         $this->Attendance_model->attn_process($process_date, $emp_id);
@@ -732,6 +734,7 @@ class Attendance extends MY_Controller
 
 
 
+
     }
 
 
@@ -1287,7 +1290,7 @@ class Attendance extends MY_Controller
       $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
       $this->db->where("xin_attendance_time.status","Off Day");
       $this->db->where("xin_attendance_time.attendance_status", "Present");
-      $this->db->group_by("xin_attendance_time.employee_id");
+      $this->db->order_by("xin_attendance_time.employee_id");
       $query = $this->db->get()->result();
       echo  json_encode($query);
     }

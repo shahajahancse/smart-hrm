@@ -350,6 +350,7 @@ class Employees extends MY_Controller {
 								<span data-toggle="tooltip" data-placement="top" title="Increment/Promotion">
 									<button type="button" class="btn btn-xs btn-success" onclick="incrementFun('. $r->user_id . ')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
 								</span><hr>';
+							
 				} else {
 					$lr_opt = '';
 				}			
@@ -385,12 +386,15 @@ class Employees extends MY_Controller {
                     </button>
                     <div class="dropdown-menu  pull-left" style="min-width: 123px !important;border-radius: 5px;left: -64px;box-shadow: 0px 0px 5px 1px #8e8e8e;top: 27px;" aria-labelledby="dropdownMenuButton">
 						
+							
                         <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a>
 
                         '. $lrip .'
 
+
                         <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;"> <button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"> <span class="fa fa-trash"></span>  </button>   Delete </a>
-						
+						<a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" onclick="employee_warning('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Employee Warning"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Employee Warning</a>
+
 						</div>
                 </div>';
 			} else {
@@ -404,7 +408,8 @@ class Employees extends MY_Controller {
                         <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a>
 
                         '. $lrip .'
-						</div>
+						<a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" onclick="employee_warning('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Employee Warning"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Warning</a>
+					</div>
                 </div>';
 
 			}
@@ -1410,7 +1415,7 @@ class Employees extends MY_Controller {
 			'address' => $result[0]->address,
 			'per_address' => $result[0]->per_address,
 			'wages_type' => $result[0]->wages_type,
-			'basic_salary' => $result[0]->basic_salary,
+			'basic_salary' => $result[0]->salary,
 			'is_active' => $result[0]->is_active,
 			'date_of_joining' => $result[0]->date_of_joining,
 			'all_departments' => $this->Department_model->all_departments(),
@@ -1420,6 +1425,10 @@ class Employees extends MY_Controller {
 			'profile_picture' => $result[0]->profile_picture,
 			'facebook_link' => $result[0]->facebook_link,
 			'twitter_link' => $result[0]->twitter_link,
+
+			'salary_review_is' => $result[0]->salary_review_is,
+			'salary_review_date' => $result[0]->salary_review_date,
+
 			'blogger_link' => $result[0]->blogger_link,
 			'linkdedin_link' => $result[0]->linkdedin_link,
 			'google_plus_link' => $result[0]->google_plus_link,
@@ -5417,7 +5426,8 @@ public function nda() {
 		}
 		$data = array(
 			'wages_type' => $this->input->post('wages_type'),
-			'basic_salary' => $this->input->post('basic_salary')
+			'basic_salary' => $this->input->post('basic_salary'),
+			'salary' => $this->input->post('basic_salary')
 		);
 		$id = $this->input->post('user_id');
 		$result = $this->Employees_model->basic_info($data,$id);
@@ -6930,5 +6940,54 @@ exit();
 				redirect('/admin/employees/detail/'.$this->input->post('user_id'),'refresh');
 		}
 
+	}
+	public function add_employee_warning(){
+		$warning_user_id=$this->input->post('warning_user_id');
+		$warning_date=$this->input->post('warning_date');
+		$warning_remarks=$this->input->post('warning_remarks');
+		$data = array(
+			'emp_id' => $warning_user_id,
+			'month' => $warning_date,
+			'text' => $warning_remarks
+		);
+		$this->db->insert('employee_warning', $data);
+		echo"success";
+	}
+	public function salary_review_add(){
+		$user_id=$this->input->post('user_id');
+		$salary_review_is=$this->input->post('salary_review_is');
+		$salary_review_date=$this->input->post('salary_review_date');
+		$data = array(
+			'salary_review_is' => $salary_review_is,
+			'salary_review_date' => $salary_review_date,
+		);
+		$this->db->where('user_id',$user_id)->update('xin_employees',$data);
+
+	$this->session->set_flashdata('addedd', 'Successfully Added');
+	redirect('admin/employees/detail/'.$this->input->post('user_id'));
+	}
+	public function salary_review_form(){
+		$salary_review_user_id=$this->input->post('salary_review_user_id');
+		$salary_review_new_amount=$this->input->post('salary_review_new_amount');
+		$salary_review_remark=$this->input->post('salary_review_remark');
+		$data = array(
+			'user_id' => $salary_review_user_id,
+			'new_salary' => $salary_review_new_amount,
+			'remark' => $salary_review_remark,
+		);
+		if($this->db->insert('salary_review',$data)){
+			$data1 = array(
+				'salary' => $salary_review_new_amount,
+				'basic_salary' => $salary_review_new_amount,
+				'salary_review_is' => 0,
+			);
+			$this->db->where('user_id',$salary_review_user_id)->update('xin_employees',$data1);
+		}
+		echo'true';
+	}
+	public function get_imployee_info(){
+		$user_id=$this->input->post('id');
+		$user_info = $this->Xin_model->read_user_info($user_id)[0];	
+		echo json_encode($user_info);
 	}
 }
