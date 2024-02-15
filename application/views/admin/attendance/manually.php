@@ -161,9 +161,11 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
           if(ajaxRequest.readyState == 4){
             // console.log(ajaxRequest);
             var resp = ajaxRequest.responseText;
-            alert(resp);
-            // a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1000,height=800');
-            // a.document.write(resp);
+            if (resp == 'Successfully') {
+              showSuccessAlert('Successfully Added Attendance','no');
+            }else{
+              showErrorAlert(resp);
+            }
           }
         }
 
