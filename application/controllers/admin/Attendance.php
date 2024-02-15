@@ -145,7 +145,27 @@ class Attendance extends MY_Controller
                         echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name";
                         exit;
                     }
+                    if ($status != '' && $status == 1) {
+                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-120 minutes'))) {
+                            echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
+                            exit;
+                        }
+                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-120 minutes'))) {
+                            echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
+                            exit;
+                        }
+                    }else{
+                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-1 day'))) {
+                            echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
+                            exit;
+                        }
+                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-1 day'))) {
+                            echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
+                            exit;
+                        }
+                    }
                 }
+                
 
                 // insert in time
                 if ($in_time != '') {
@@ -241,7 +261,7 @@ class Attendance extends MY_Controller
                 echo "failed";
                 exit;
             } else {
-                echo "Successfully Insert Done";
+                echo "Successfully";
                 exit;
             }
         }
