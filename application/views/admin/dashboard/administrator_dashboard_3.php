@@ -240,6 +240,161 @@ h5,h4 {
         </div>
 
     </div>
+    <!-- store -->
+    <div class='col-md-12 row'>
+        <div class="col-md-6">
+            <div class="d_card" style="background: aliceblue;">
+                <div class="row">
+                    <h4 class="col-md-12">Requisition</h4><br>
+                    <div class="col-md-12">
+                        <input class="col-md-4" type="date" onchange="get_data_requisition_count()"
+                            value="<?= date('Y-m-d',strtotime('-1 month')) ?>" name="date" id="date_1_requisition"
+                            style="border: 1px solid #009cf5;background: transparent;padding: 3px;border-radius: 7px;">
+                        <span class="col-md-1" style="margin-top: 5px;">to</span>
+                        <input class="col-md-4" type="date" onchange="get_data_requisition_count()"
+                            value="<?= date('Y-m-d') ?>" name="date" id="date_2_requisition"
+                            style="border: 1px solid #009cf5;background: transparent;padding: 3px;border-radius: 7px;">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a class="c_cardn" href="<?php echo site_url('admin/inventory/index');?>">
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">All Requisition</h5>
+                             
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_requisition_all">0</h3>
+                                <i class="fa-solid fa-truck col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a class="c_cardn" href="<?php echo site_url('admin/inventory/pending_list');?>">
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">Pending</h5>
+                                
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_requisition_pending">0</h3>
+                                <i class="fa-solid fa-hourglass col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a class="c_cardn" href="<?php echo site_url('admin/inventory/aproved_list');?>">
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">Approved</h5>
+                                
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_requisition_approved">0</h3>
+                                <i class="fa-solid fa-check col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+
+                        <a class="c_cardn" href="<?php echo site_url('admin/inventory/delivery_list');?>">
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">Handover</h5>
+                              
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_requisition_handover">0</h3>
+                                <i class="fa-solid fa-handshake col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="d_card" style="background: aliceblue;">
+                <div class="row">
+                    <h4 class="col-md-12">Purchase</h4> <br>
+                    <div class="col-md-12">
+                        <input class="col-md-4" type="date" onchange="get_data_purchase_count()"
+                            value="<?= date('Y-m-d',strtotime('-1 month')) ?>" name="date" id="date_1_purchase"
+                            style="border: 1px solid #009cf5;background: transparent;padding: 3px;border-radius: 7px;">
+                        <span class="col-md-1" style="margin-top: 5px;">to</span>
+                        <input class="col-md-4" type="date" onchange="get_data_purchase_count()"
+                            value="<?= date('Y-m-d') ?>" name="date" id="date_2_purchase"
+                            style="border: 1px solid #009cf5;background: transparent;padding: 3px;border-radius: 7px;">
+                        <!-- <div class="col-md-3" style="margin-top: 3px;">
+                            <a onclick="daily_report('all')" class="btn btn-primary btn-sm"
+                                style="text-align: -webkit-center; cursor: pointer;">Get Report <i
+                                    class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a class="c_cardn" href="<?php echo site_url('admin/inventory/purchase');?>" >
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">All Purchase</h5>
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_purchase_all">0</h3>
+                                <i class="fa-solid fa-mobile-retro col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a class="c_cardn" href="<?php echo site_url('admin/inventory/purchase_panding_list');?>" >
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">Pending</h5>
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_purchase_pending">0</h3>
+                                <i class="fa-solid fa-car-side col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a class="c_cardn" href="<?php echo site_url('admin/inventory/purchase_aproved_list');?>" >
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">Approved</h5>
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_purchase_approved">0</h3>
+                                <i class="fa-solid fa-money-bills col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+
+                        <a class="c_cardn" href="<?php echo site_url('admin/inventory/purchase_order_received_list');?>" >
+                            <div class="col-md-12 p-0">
+                                <h5 class="col-md-6 p-0">Received</h5>
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="count-all-employees col-md-6" id="count_purchase_received">0</h3>
+                               
+                                <i class="fa-solid fa-money-bills col-md-6 fa-3x"
+                                    style="height: -webkit-fill-available;text-align: -webkit-center;margin: 6px -3px;"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+
     <div class='col-md-12 row'>
         <div class="col-md-6">
             <div class="d_card" style="background: aliceblue;">
@@ -247,11 +402,11 @@ h5,h4 {
                     <h4 class="col-md-12">Payroll</h4> <br>
                     <div class="col-md-12">
                         <input class="col-md-4" type="date" onchange="get_data_payroll_count()"
-                            value="<?= date('Y-m-01') ?>" name="date" id="date_1_payroll"
+                            value="<?= date('Y-m-d',strtotime('-1 month')) ?>" name="date" id="date_1_payroll"
                             style="border: 1px solid #009cf5;background: transparent;padding: 3px;border-radius: 7px;">
                         <span class="col-md-1" style="margin-top: 5px;">to</span>
                         <input class="col-md-4" type="date" onchange="get_data_payroll_count()"
-                            value="<?= date('Y-m-t') ?>" name="date" id="date_2_payroll"
+                            value="<?= date('Y-m-d') ?>" name="date" id="date_2_payroll"
                             style="border: 1px solid #009cf5;background: transparent;padding: 3px;border-radius: 7px;">
                         <!-- <div class="col-md-3" style="margin-top: 3px;">
                             <a onclick="daily_report('all')" class="btn btn-primary btn-sm"
@@ -482,6 +637,9 @@ $(document).ready(function() {
     get_data_count()
     get_monthly_data()
     get_data_payroll_count()
+    get_data_requisition_count()
+    get_data_purchase_count()
+
 
 })
 
@@ -637,6 +795,64 @@ function get_data_payroll_count() {
             $('#count_ta_da').html(data.ta_da.length);
             $('#count_lunch_paid').html(data.lunch_paid.length);
             $('#count_lunch_unpaid').html(data.lunch_unpaid.length);
+        }
+    })
+
+}
+</script>
+<script>
+function get_data_requisition_count() {
+    var loader =
+        '<img src="<?php echo base_url() ?>skin/img/loader.gif" alt="loader" style="height: 24px;width: 24px;">';
+    $('#count_requisition_all').html(loader);
+    $('#count_requisition_pending').html(loader);
+    $('#count_requisition_approved').html(loader);
+    $('#count_requisition_handover').html(loader);
+
+    const date1 = $('#date_1_requisition').val();
+    const date2 = $('#date_2_requisition').val();
+    $.ajax({
+        type: 'POST',
+        url: '<?php echo site_url("admin/dashboard/get_requisition_count") ?>',
+        data: {
+            date1: date1,
+            date2: date2
+        },
+        success: function(response) {
+            var data = JSON.parse(response);
+            $('#count_requisition_all').html(data.all_requisition);
+            $('#count_requisition_pending').html(data.pending);
+            $('#count_requisition_approved').html(data.approved);
+            $('#count_requisition_handover').html(data.handover);
+        }
+    })
+
+}
+</script>
+<script>
+function get_data_purchase_count() {
+    var loader =
+        '<img src="<?php echo base_url() ?>skin/img/loader.gif" alt="loader" style="height: 24px;width: 24px;">';
+    $('#count_purchase_all').html(loader);
+    $('#count_purchase_pending').html(loader);
+    $('#count_purchase_approved').html(loader);
+    $('#count_purchase_received').html(loader);
+
+    const date1 = $('#date_1_purchase').val();
+    const date2 = $('#date_2_purchase').val();
+    $.ajax({
+        type: 'POST',
+        url: '<?php echo site_url("admin/dashboard/get_purchase_count") ?>',
+        data: {
+            date1: date1,
+            date2: date2
+        },
+        success: function(response) {
+            var data = JSON.parse(response);
+            $('#count_purchase_all').html(data.all_purchase);
+            $('#count_purchase_pending').html(data.pending);
+            $('#count_purchase_approved').html(data.approved);
+            $('#count_purchase_received').html(data.received);
         }
     })
 
@@ -839,4 +1055,29 @@ function get_lunch_unpaid(e) {
     }
 
 }
+</script>
+<script>
+    function counter() {
+        $(".counter").each(function () {
+        var $this = $(this),
+            countTo = $this.attr("data-countto");
+        countDuration = parseInt($this.attr("data-duration"));
+        $({ counter: $this.text() }).animate(
+            {
+            counter: countTo
+            },
+            {
+            duration: countDuration,
+            easing: "linear",
+            step: function () {
+                $this.text(Math.floor(this.counter));
+            },
+            complete: function () {
+                $this.text(this.counter);
+            }
+            }
+        );
+        });
+        
+    }
 </script>

@@ -309,6 +309,42 @@ class Dashboard extends MY_Controller {
 		$data['lunch_unpaid']=$this->Lunch_model->paymentreport(0);
 		echo json_encode($data);
 	}
+	public function get_requisition_count(){
+		$first_date=$this->input->post('date1');
+		$second_date=$this->input->post('date2');
+		 $a = $this->db->select('
+		 COUNT(id) as all_requisition,
+		 SUM(case when status = 1 then 1 else 0 end) as pending,
+		 SUM(case when status = 2 then 1 else 0 end) as approved,
+		 SUM(case when status = 3 then 1 else 0 end) as handover,
+		 ')
+		->where('requisition_date BETWEEN "'. $first_date . '" AND "'. $second_date .'"')
+		->get('products_requisition_details')
+		->row();
+		$data['all_requisition'] = $a->all_requisition;
+		$data['pending'] = $a->pending;
+		$data['approved'] = $a->approved;
+		$data['handover'] = $a->handover;
+		echo json_encode($data);
+	}
+	public function get_purchase_count(){
+		$first_date=$this->input->post('date1');
+		$second_date=$this->input->post('date2');
+		 $a = $this->db->select('
+		 COUNT(id) as all_purchase,
+		 SUM(case when status = 1 then 1 else 0 end) as pending,
+		 SUM(case when status = 2 then 1 else 0 end) as approved,
+		 SUM(case when status = 3 then 1 else 0 end) as received,
+		 ')
+		 ->where("created_at BETWEEN '$first_date' AND '$second_date'")
+		 ->get('products_purches_details')
+		->row();
+		$data['all_purchase'] = $a->all_purchase;
+		$data['pending'] = ($a->pending!=null)?$a->pending:0;
+		$data['approved'] = ($a->approved !=null)?$a->approved:0;
+		$data['received'] = ($a->received !=null)?$a->received:0;
+		echo json_encode($data);
+	}
 	public function get_leave_monthly()
 	{
 	   
