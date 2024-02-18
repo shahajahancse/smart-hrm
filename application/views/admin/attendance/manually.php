@@ -65,6 +65,12 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
             <textarea type="text" id="reason_value" class="form-control" name="reason"></textarea>
           </div>
         </div>
+        <div class="col-lg-6" id="location">
+          <div class="form-group">
+            <label>Location</label>
+            <textarea type="text" id="location_value" class="form-control" name="location_value"></textarea>
+          </div>
+        </div>
 
         <div class="col-lg-12">
         <button type="submit" class="btn btn-sm btn-success" style="padding: 6px 10px !important;margin-right:16px">Submit</button>
@@ -95,6 +101,7 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
 
     $(document).ready(function(){
         $('#reason').hide();
+        $('#location').hide();
 
         $('.clockpicker').clockpicker();
             var input = $('.timepicker').clockpicker({
@@ -116,8 +123,10 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
           var value = document.querySelector("input[type='radio'][name=check_value]:checked").value;
           if (value == 1) {
             $('#reason').show();
+            $('#location').show();
           } else {
             $('#reason').hide();
+            $('#location').hide();
           }
           // alert(value);
         });
@@ -136,6 +145,7 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
         in_time = document.getElementById('in_time').value;
         out_time = document.getElementById('out_time').value;
         reason = document.getElementById('reason_value').value;
+        location = document.getElementById('location_value').value;
 
         var emp_id = document.getElementsByName('select_emp_id[]');
         var sql = get_checked_value(emp_id);
@@ -150,7 +160,7 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
         okyes=confirm('Are you sure you want to Insert?');
         if(okyes==false) return;
 
-        var data = "date="+date+"&in_time="+in_time+"&out_time="+out_time+"&reason="+reason+"&sql="+sql+"&status="+status;
+        var data = "date="+date+"&in_time="+in_time+"&out_time="+out_time+"&reason="+reason+"&location="+location+"&sql="+sql+"&status="+status;
 
 
         ajaxRequest.open("POST", url, true);

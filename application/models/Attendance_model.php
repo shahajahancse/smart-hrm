@@ -776,7 +776,7 @@ class Attendance_model extends CI_Model
     }
     public function get_total_late_monthly($first_date, $second_date)
     {
-        $this->db->select('xin_attendance_time.attendance_date');
+        $this->db->select('xin_attendance_time.*');
         $this->db->from('xin_attendance_time');
         $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
         $this->db->where("xin_attendance_time.late_status", 1);

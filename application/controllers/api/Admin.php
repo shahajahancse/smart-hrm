@@ -999,6 +999,363 @@ class Admin extends API_Controller
             ], 401);
         };
     }
+
+
+    // dashboard 2 work 
+    public function admin_dashboard_2()
+    {
+
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $data = [];
+                $data['daily_date']=date('Y-m-d');
+                $data['daily_report']=$this->get_count($data['daily_date']);
+
+                $data['monthly_date']=date('Y-m');
+                $data['monthly_report']=$this->get_monthly_count($data['monthly_date']);
+
+                $data['requisition_first_date']=date('Y-m-01');
+                $data['requisition_last_date']=date('Y-m-t');
+                $data['requisition']=$this->get_requisition_count($data['requisition_first_date'],$data['requisition_last_date']);
+                
+                
+                $data['purchase_first_date']=date('Y-m-01');
+                $data['purchase_last_date']=date('Y-m-t');
+                $data['purchase']=$this->get_purchase_count($data['purchase_first_date'],$data['purchase_last_date']);
+               
+                $data['payroll_first_date']=date('Y-m-01');
+                $data['payroll_last_date']=date('Y-m-t');
+                $data['payroll']=$this->get_payroll_count($data['payroll_first_date'],$data['payroll_last_date']);
+
+
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                    'data' => $data,
+                ], 200);
+                
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        };
+    }
+
+    public function get_count($date){
+		$present=$this->Timesheet_model->get_today_present(0,'Present',$date);
+		$absent=$this->Timesheet_model->get_today_present(0,'Absent',$date);
+		$late=$this->Timesheet_model->get_today_present(1,'Present',$date);
+		$leave=$this->Timesheet_model->get_today_leave($date);
+		if ($leave==null) {
+			$leave=[];
+		}
+		if ($late==null) {
+			$late=[];
+		}
+		if ($absent==null) {
+			$absent=[];
+		}
+		if ($present==null) {
+			$present=[];
+		}
+		$data['absent']=$absent;
+		$data['present']=$present;
+		$data['late']=$late;
+		$data['all_employees'] = array_merge($leave, $absent, $present);
+		return $data;
+	}
+	public function daily_report()
+    {
+        $report_date = $this->input->post('attendance_date');
+        $attendance_date = date("Y-m-d", strtotime($report_date));
+        $status = $this->input->post('status');
+        $late_status = $this->input->post('late_status');
+        $data['status']= $status;
+        if ($status == 'Present') {
+            $status = array('Present', 'HalfDay');
+        } else {
+            $status = array($status);
+        }
+        $data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id = null, $status,$late_status);
+        $data["attendance_date"] = $attendance_date;
+
+        if(is_string($data["values"])) {
+            echo $data["values"];
+        } else {
+            // dd($data["values"]);
+            $this->load->view('admin/attendance/daily_report', $data);
+        }
+    }
+	public function get_monthly_count($date){
+		$first_date=date('Y-m-01', strtotime($date));
+		$last_date=date('Y-m-t', strtotime($date));
+		$leave=$this->Timesheet_model->get_leaves_with_info_with_date($first_date,$last_date);
+		if ($leave==null) {
+			$leave=[];
+		}
+		$extra_present=$this->Timesheet_model->extra_present_approval($first_date,$last_date);
+		if ($extra_present==null) {
+			$extra_present=[];
+		}
+		$late=$this->Attendance_model->get_total_late_monthly($first_date,$last_date);
+		if ($late==null) {
+			$late=[];
+		}
+		$meeting=$this->Attendance_model->get_total_meeting_monthly($first_date,$last_date);
+		
+		if ($meeting==null) {
+			$meeting=[];
+		}
+		$data['leave']=$leave;
+		$data['late']=$late;
+		$data['meeting']=$meeting;
+		$data['extra_present']=$extra_present;
+        return $data;
+	}
+	public function get_payroll_count($first_date,$second_date){
+	
+		$emp_id=[];
+		 $emp=  $this->db->where('is_active', 1)->get('xin_employees')->result();
+		 foreach($emp as $l){
+			 if (!in_array($l->user_id, $emp_id)) {
+				 $emp_id[] = $l->user_id;
+			 }
+		 }
+		 $this->load->model('Reports_model');
+		 $this->load->model('Lunch_model');
+		$data['mobile_bill']=$this->Reports_model->show_mobile_bill_report($first_date,$second_date,$status=null,$emp_id);
+		$statusC = 'all';
+        $data["ta_da"] = $this->Attendance_model->movment_status_report($first_date, $second_date, $statusC);
+		$data['lunch_paid']=$this->Lunch_model->paymentreport(1);
+		$data['lunch_unpaid']=$this->Lunch_model->paymentreport(0);
+        return $data;
+	}
+	public function get_requisition_count($first_date,$second_date){
+	
+		 $a = $this->db->select('
+		 COUNT(id) as all_requisition,
+		 SUM(case when status = 1 then 1 else 0 end) as pending,
+		 SUM(case when status = 2 then 1 else 0 end) as approved,
+		 SUM(case when status = 3 then 1 else 0 end) as handover,
+		 ')
+		->where('requisition_date BETWEEN "'. $first_date . '" AND "'. $second_date .'"')
+		->get('products_requisition_details')
+		->row();
+		$data['all_requisition'] = $a->all_requisition;
+		$data['pending'] = $a->pending;
+		$data['approved'] = $a->approved;
+		$data['handover'] = $a->handover;
+        return $data;
+	}
+	public function get_purchase_count($first_date,$second_date){
+	
+		 $a = $this->db->select('
+		 COUNT(id) as all_purchase,
+		 SUM(case when status = 1 then 1 else 0 end) as pending,
+		 SUM(case when status = 2 then 1 else 0 end) as approved,
+		 SUM(case when status = 3 then 1 else 0 end) as received,
+		 ')
+		 ->where("created_at BETWEEN '$first_date' AND '$second_date'")
+		 ->get('products_purches_details')
+		->row();
+		$data['all_purchase'] = $a->all_purchase;
+		$data['pending'] = ($a->pending!=null)?$a->pending:0;
+		$data['approved'] = ($a->approved !=null)?$a->approved:0;
+		$data['received'] = ($a->received !=null)?$a->received:0;
+        return $data;
+	}
+	public function get_leave_monthly()
+	{
+	   
+		 $prossecc_date= $this->input->post('first_date');
+		 $first_date = date('Y-m-01',strtotime($prossecc_date));
+		 $second_date = date('Y-m-t',strtotime($prossecc_date));
+	
+		 $data['first_date'] = $first_date;
+		 $data['second_date'] = $second_date;
+		 $employee_id=[];
+		 $leave=  $this->Attendance_model->leavesm($emp_id = null, $first_date, $second_date);
+		 foreach($leave as $l){
+			 if (!in_array($l->employee_id, $employee_id)) {
+				 $employee_id[] = $l->employee_id;
+			 }
+		 }
+		 $data['employee_id']=$employee_id;
+		   echo $this->load->view("admin/reports/leave_report", $data, true);
+	}
+	public function get_extra_present_monthly()
+	{
+		 $prossecc_date= $this->input->post('first_date');
+		 $first_date = date('Y-m-01',strtotime($prossecc_date));
+		 $second_date = date('Y-m-t',strtotime($prossecc_date));
+		 $this->db->select('
+		 xin_employees.user_id as emp_id,
+		 xin_employees.employee_id,
+		 xin_employees.first_name,
+		 xin_employees.last_name,
+		 xin_employees.department_id,
+		 xin_employees.designation_id,
+		 xin_employees.date_of_joining,
+		 xin_departments.department_name,
+		 xin_designations.designation_name,
+		 xin_attendance_time.attendance_date,
+		 xin_attendance_time.clock_in,
+		 xin_attendance_time.clock_out,
+		 xin_attendance_time.attendance_status,
+		 xin_attendance_time.status,
+		 xin_attendance_time.late_status,
+		 xin_attendance_time.comment,
+	   ');
+ 
+		 $this->db->from('xin_employees');
+		 $this->db->from('xin_departments');
+		 $this->db->from('xin_designations');
+		 $this->db->from('xin_attendance_time');
+ 
+ 
+		 $this->db->where("xin_employees.is_active", 1);
+		 $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'" );
+
+		 $this->db->where('xin_employees.department_id = xin_departments.department_id');
+		 $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
+		 $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
+ 
+		 $this->db->where_in("xin_attendance_time.attendance_status", 'Present');
+		 $this->db->where_in("xin_attendance_time.status", 'Off Day');
+ 
+ 
+		 $this->db->order_by('xin_attendance_time.clock_in', "ASC");
+		 $this->db->group_by('xin_attendance_time.employee_id');
+		 
+ 
+		 $data["values"] = $this->db->get()->result();
+		 $data['first_date'] = $first_date;
+		 $data['second_date'] = $second_date;
+		 $this->load->view('admin/attendance/extra_present', $data);
+	
+	}
+	public function get_late_monthly()
+	{
+		 $prossecc_date= $this->input->post('first_date');
+		 $first_date = date('Y-m-01',strtotime($prossecc_date));
+		 $second_date = date('Y-m-t',strtotime($prossecc_date));
+		 $type = 1;
+		 $data['first_date'] = $first_date;
+		 $data['second_date'] = $second_date;
+		 
+		 $emp_id=[];
+		 $leave=  $this->db->where('is_active', 1)->get('xin_employees')->result();
+		 foreach($leave as $l){
+			 if (!in_array($l->user_id, $emp_id)) {
+				 $emp_id[] = $l->user_id;
+			 }
+		 }
+		 $data['late_id'] = $emp_id;
+		 $data['type'] = $type;
+		 echo $this->load->view("admin/attendance/late_details", $data, true);
+		 
+	
+	}
+
+	public function get_movment_monthly()
+	{
+		 $prossecc_date= $this->input->post('first_date');
+		 $f1_date = date('Y-m-01',strtotime($prossecc_date));
+		 $f2_date = date('Y-m-t',strtotime($prossecc_date));
+		 $statusC = 'all';
+        $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date, $statusC);
+        $data['statusC']= $statusC;
+        $data['first_date'] = $f1_date;
+        $data['second_date'] = $f2_date;
+        if(is_string($data["values"])) {
+            echo $data["values"];
+        } else {
+            echo $this->load->view("admin/attendance/movment_status_report", $data, true);
+        }
+		 
+	
+	}
+
+	public function get_mobile_bill(){
+		$first_date = $this->input->post('first_date');
+		$second_date = $this->input->post('second_date');
+
+		$emp_id=[];
+		$leave=  $this->db->where('is_active', 1)->get('xin_employees')->result();
+		foreach($leave as $l){
+			if (!in_array($l->user_id, $emp_id)) {
+				$emp_id[] = $l->user_id;
+			}
+		}
+        $data['first_date']  = $first_date; 
+        $data['second_date'] = $second_date;
+        $data['status'] 	 = 'All';
+		$data['reports']     = $this->Reports_model->show_mobile_bill_report($first_date,$second_date,$status=null,$emp_id);
+		$this->load->view('admin/reports/show_mobile_bill_report',$data);
+	}
+	public function get_ta_da(){
+		$first_date = $this->input->post('first_date');
+		$second_date = $this->input->post('second_date');
+
+		$emp_id=[];
+		$emp=  $this->db->where('is_active', 1)->get('xin_employees')->result();
+		foreach($emp as $l){
+			if (!in_array($l->user_id, $emp_id)) {
+				$emp_id[] = $l->user_id;
+			}
+		}
+
+
+		
+        $f1_date = date("Y-m-d", strtotime($first_date));
+        $f2_date = date("Y-m-d", strtotime($second_date));
+        $statusC = 'all';
+        
+        $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date, $statusC);
+
+        $data['statusC']= $statusC;
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        if(is_string($data["values"])) {
+            echo $data["values"];
+        } else {
+            echo $this->load->view("admin/attendance/movment_status_report", $data, true);
+        }
+	}
+	public function get_lunch_paid(){
+		$status = 1;
+        $data['status'] = $status;
+        $data['lunch_data'] = $this->Lunch_model->paymentreport($status);
+        $data['r'] = 'Payment';
+        $this->load->view('admin/lunch/payment_report_page', $data);
+	}
+	public function get_lunch_unpaid(){
+		$status = 0;
+        $data['status'] = $status;
+        $data['lunch_data'] = $this->Lunch_model->paymentreport($status);
+        $data['r'] = 'Payment';
+        $this->load->view('admin/lunch/payment_report_page', $data);
+	}
+
+
+    // dashboard 2 work end 
+
+
+
+
+
+
     public function attendence()
     {
         $authorization = $this->input->get_request_header('Authorization');
