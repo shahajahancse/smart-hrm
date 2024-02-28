@@ -583,6 +583,47 @@ class Reports_model extends CI_Model
         $this->db->group_by('ap.id');
         return $this->db->get()->result();
     }
+
+    public function device_report(){
+        $data['desktop'] =$this->db->select('xin_emp_desktop.*, xin_employees.user_id,xin_employees.first_name, xin_employees.last_name')
+                                   ->from('xin_employees')
+                                   ->join('xin_emp_desktop','xin_emp_desktop.user_id = xin_employees.user_id')
+                                   ->group_by('xin_emp_desktop.id')
+                                   ->order_by('xin_emp_desktop.pc_no')
+                                   ->get()->result();
+        $data['laptop'] =$this->db->select('xin_emp_laptop.*, xin_employees.user_id,xin_employees.first_name, xin_employees.last_name')
+                 ->from('xin_employees')
+                 ->join('xin_emp_laptop','xin_emp_laptop.user_id = xin_employees.user_id')
+                 ->group_by('xin_emp_laptop.id')
+                 ->order_by('xin_emp_laptop.laptop_no')
+                 ->get()->result();         
+        return $data;
+    }
+    public function show_store_report(){
+        $data['desktop'] =$this->db->select('xin_emp_desktop.*, xin_employees.user_id,xin_employees.first_name, xin_employees.last_name')
+                 ->from('xin_emp_desktop,xin_employees')
+                 ->where('xin_emp_desktop.status',2)
+                 ->group_by('xin_emp_desktop.id')
+                 ->order_by('xin_emp_desktop.pc_no')
+                 ->get()->result();   
+        $data['laptop'] =$this->db->select('xin_emp_laptop.*, xin_employees.user_id,xin_employees.first_name, xin_employees.last_name')
+            ->from('xin_emp_laptop,xin_employees')
+            ->where('xin_emp_laptop.status',2)
+            ->group_by('xin_emp_laptop.id')
+            ->order_by('xin_emp_laptop.laptop_no')
+            ->get()->result();           
+        // dd($data);               
+        return $data;
+    }
+    public function show_damage_report(){
+        $data['laptop'] =$this->db->select('xin_emp_laptop.*, xin_employees.user_id,xin_employees.first_name, xin_employees.last_name')
+                 ->from('xin_emp_laptop,xin_employees')
+                 ->where('xin_emp_laptop.status',3)
+                 ->group_by('xin_emp_laptop.id')
+                 ->get()->result();   
+        // dd($data);               
+        return $data;
+    }
     public function show_move_report($first_date = null, $second_date = null, $status = null, $emp_id = null)
     {
         $this->db->select('
