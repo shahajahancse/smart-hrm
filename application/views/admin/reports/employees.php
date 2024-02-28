@@ -76,6 +76,7 @@
               <button class="btn dbtn btn-sm " onclick="show_report(1)">Employee Joining List</button>
               <button class="btn dbtn btn-sm" onclick="show_report(7,1)">All Increment List</button>
               <button class="btn dbtn btn-sm" onclick="show_report(2,1)">Increment</button>
+              <button class="btn dbtn btn-sm" onclick="salary_review_report()">Salary Review</button>
               <button class="btn dbtn btn-sm" onclick="show_report(3,1)">Promotion</button>
               <button class="btn dbtn btn-sm" onclick="show_report(1,1)">Probation to Regular</button>
               <button class="btn dbtn btn-sm" onclick="show_report(4,1)">Intern to Probation</button>
@@ -186,6 +187,48 @@
     }
     var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql+'&done='+done;
     url = base_url + "/show_report";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+        // console.log(ajaxRequest);
+        var resp = ajaxRequest.responseText;
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1400,height=800');
+        a.document.write(resp);
+      }
+    }
+  }
+  function salary_review_report(){
+    var ajaxRequest;  // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+    status = document.getElementById('status').value;
+    first_date = document.getElementById('process_date').value;
+    second_date = document.getElementById('second_date').value;
+    if(status ==''){
+      alert('Please select status');
+      return ;
+    }
+
+ 
+      if(first_date ==''){
+        alert('Please select first date');
+        return ;
+      }
+      if(second_date ==''){
+        alert('Please select second date');
+        return ;
+      }
+    
+
+    var checkboxes = document.getElementsByName('select_emp_id[]');
+    var sql = get_checked_value(checkboxes);
+    if(sql ==''){
+      alert('Please select employee Id');
+      return ;
+    }
+    var data = "first_date="+first_date+"&second_date="+second_date+'&sql='+sql
+    url = base_url + "/salary_review_report";
     ajaxRequest.open("POST", url, true);
     ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
     ajaxRequest.send(data);

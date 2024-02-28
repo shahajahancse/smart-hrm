@@ -1170,5 +1170,52 @@ class Lunch extends MY_Controller
         $data['subview'] 		= $this->load->view("admin/lunch/lunch_emp_bill", $data, true);
         $this->load->view('admin/layout/layout_main', $data);
     }
+    public function tempdata(){
+        $first_date =date('2023-12-15');
+        $madal_date_1=date('2023-12-t');
+        $madal_date_2=date('2024-01-01');
+        $second_date = date('2024-01-17');
+        $this->db->where('date BETWEEN "'.$first_date.'" AND "'.$second_date.'"');
+        $emp_lunch_data=$this->db->get('lunch_details')->result();
+        $employee_id=[];
+        foreach($emp_lunch_data as $g){
+            if(!in_array($g->emp_id, $employee_id)){
+            $employee_id[] = $g->emp_id;
+            }
+        };
+        
+            $data['employee_id'] = $employee_id;
+            $data['first_date'] = $first_date;
+            $data['second_date'] = $second_date;
+            $data['madal_date_f'] = $madal_date_1;
+            $data['madal_date_s'] = $madal_date_2;
+        
+        
+            $this->load->view('admin/lunch/temp_data', $data);
+    }
+    public function temp_data_ex(){
+        $first_date =date('2023-12-15');
+        $madal_date_1=date('2023-12-t');
+        $madal_date_2=date('2024-01-01');
+        $second_date = date('2024-01-17');
+        $this->db->where('date BETWEEN "'.$first_date.'" AND "'.$second_date.'"');
+        $emp_lunch_data=$this->db->get('lunch_details')->result();
+        $employee_id=[];
+        foreach($emp_lunch_data as $g){
+            if(!in_array($g->emp_id, $employee_id)){
+            $employee_id[] = $g->emp_id;
+            }
+        };
+        
+            $data['employee_id'] = $employee_id;
+            $data['first_date'] = $first_date;
+            $data['second_date'] = $second_date;
+            $data['madal_date_f'] = $madal_date_1;
+            $data['madal_date_s'] = $madal_date_2;
+        
+        
+            $this->load->view('admin/lunch/temp_data_ex', $data);
+    }
+
 
 }

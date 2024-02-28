@@ -129,6 +129,7 @@ tbody{
                 <div style='font-size:18px; font-weight:bold; text-align:center;margin-top:10px'><?=xin_company_info(1)->company_name ?></div>
                 <div style='font-size:14px; font-weight:bold; text-align:center;margin-top:10px'><?=xin_company_info(1)->address_1 ?></div>
                 <div style='font-size:12px;align-items: center;text-align: center;'>Salary Month :<?=$salary_month ?></div>
+                <div style='font-size:12px;align-items: center;text-align: center;'>P=Present, A=Absent, L=Late, E=Extra Pay,W=Weekend, H=Holyday,ABA=Before After Absent</div>
 
                 </div>
                 
@@ -265,7 +266,7 @@ tbody{
                                 </tr>
                             </table>
                         </td>
-                        <td><?=$values[$i]->net_salary?></td>
+                        <td><?=($values[$i]->net_salary)-($values[$i]->aba_deduct+$values[$i]->late_deduct+$values[$i]->absent_deduct+$values[$i]->advanced_salary)?></td>
                         <td><?=$values[$i]->extra_pay?></td>
                         <td><?=$values[$i]->m_pay_day?></td>
                         <td><?=$values[$i]->modify_salary?></td>
@@ -274,7 +275,7 @@ tbody{
                         <?php
                         $total_grand_net_salary+=$values[$i]->grand_net_salary+$values[$i]->modify_salary-$values[$i]->aba_deduct;
                         $total_basic_salary+=$values[$i]->basic_salary;
-                        $total_net_salary+=$values[$i]->net_salary;
+                        $total_net_salary+=($values[$i]->net_salary)-($values[$i]->aba_deduct+$values[$i]->late_deduct+$values[$i]->absent_deduct+$values[$i]->advanced_salary);
                         $total_late_deduct+=$values[$i]->late_deduct;
                         $total_absent_deduct+=$values[$i]->absent_deduct;
                         $total_aba_deduct+=$values[$i]->aba_deduct;
@@ -284,7 +285,7 @@ tbody{
                         // granttotal
                         $grand_total_grand_net_salary+=$values[$i]->grand_net_salary+$values[$i]->modify_salary-$values[$i]->aba_deduct;
                         $grand_total_basic_salary+=$values[$i]->basic_salary;
-                        $grand_total_net_salary+=$values[$i]->net_salary;
+                        $grand_total_net_salary+=($values[$i]->net_salary)-($values[$i]->aba_deduct+$values[$i]->late_deduct+$values[$i]->absent_deduct+$values[$i]->advanced_salary);
                         $grand_total_late_deduct+=$values[$i]->late_deduct;
                         $grand_total_absent_deduct+=$values[$i]->absent_deduct;
                         $grand_total_aba_deduct+=$values[$i]->aba_deduct;

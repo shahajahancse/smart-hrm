@@ -207,9 +207,11 @@ function showSuccessAlert(message, url = null) {
         timer: 2000,
         showConfirmButton: false
     }).then(function() {
-        if (url) {
+        if (url=='no') {
+            // window.location.href = url;
+        }if (url) {
             window.location.href = url;
-        } else {
+        }  else {
             location.reload();
         }
     });

@@ -62,6 +62,8 @@ class Attendance extends MY_Controller
         $status = $this->input->post('status');
         $sql = $this->input->post('sql');
         $emp_id = explode(',', trim($sql));
+        date("Y-m-d", strtotime($process_date));
+        $this->db->trans_start();
 
         $process_date = date("Y-m-d", strtotime($process_date));
         $this->Attendance_model->attn_process($process_date, $emp_id);
@@ -114,6 +116,7 @@ class Attendance extends MY_Controller
             $in_time = $this->input->post('in_time');
             $out_time = $this->input->post('out_time');
             $reason = $this->input->post('reason');
+            $location = $this->input->post('location');
             $status = $this->input->post('status');
             $sql = $this->input->post('sql');
 
@@ -143,7 +146,27 @@ class Attendance extends MY_Controller
                         echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name";
                         exit;
                     }
+                    if ($status != '' && $status == 1) {
+                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-120 minutes'))) {
+                            echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
+                            exit;
+                        }
+                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-120 minutes'))) {
+                            echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
+                            exit;
+                        }
+                    }else{
+                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-1 day'))) {
+                            echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
+                            exit;
+                        }
+                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-1 day'))) {
+                            echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
+                            exit;
+                        }
+                    }
                 }
+                
 
                 // insert in time
                 if ($in_time != '') {
@@ -193,6 +216,7 @@ class Attendance extends MY_Controller
                             'in_time'     => $in_time,
                             'astatus' 	  => 1,
                             'reason'	  => $reason,
+                            'place_adress'	  => $location,
                         );
                         $this->db->insert("xin_employee_move_register", $comData);
 
@@ -202,6 +226,8 @@ class Attendance extends MY_Controller
                                 'out_time'    => $out_time,
                                 'in_time'     => $in_time,
                                 'reason'	  => $reason,
+                                'place_adress'	  => $location,
+
                             );
                         } elseif ($in_time != '' && $out_time != '') {
                             $comData = array(
@@ -212,11 +238,13 @@ class Attendance extends MY_Controller
                             $comData = array(
                                 'in_time'     => $in_time,
                                 'reason'	  => $reason,
+                                'place_adress'	  => $location,
                             );
                         } elseif ($out_time != '' && $reason != '') {
                             $comData = array(
                                 'out_time'    => $out_time,
                                 'reason'	  => $reason,
+                                'place_adress'	  => $location,
                             );
                         } elseif ($in_time != '') {
                             $comData = array(
@@ -239,7 +267,7 @@ class Attendance extends MY_Controller
                 echo "failed";
                 exit;
             } else {
-                echo "Successfully Insert Done";
+                echo "Successfully";
                 exit;
             }
         }
@@ -597,8 +625,7 @@ class Attendance extends MY_Controller
         $this->db->where_in("xin_attendance_time.status", 'Off Day');
 
 
-        $this->db->order_by('xin_attendance_time.clock_in', "ASC");
-        $this->db->group_by('xin_attendance_time.employee_id');
+        $this->db->order_by('xin_attendance_time.employee_id', "ASC");
         
 
         $data["values"] = $this->db->get()->result();
@@ -718,11 +745,7 @@ class Attendance extends MY_Controller
         $f1_date = date("Y-m-d", strtotime($first_date));
         $f2_date = date("Y-m-d", strtotime($second_date));
         $statusC = $this->input->post('statusC');
-
-
-        //    $sql = $this->input->post('sql');
-        //    $emp_id = explode(',', trim($sql));
-
+        
         $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date, $statusC);
 
         $data['statusC']= $statusC;
@@ -733,6 +756,7 @@ class Attendance extends MY_Controller
         } else {
             echo $this->load->view("admin/attendance/movment_status_report", $data, true);
         }
+
 
 
 
@@ -1291,7 +1315,7 @@ class Attendance extends MY_Controller
       $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
       $this->db->where("xin_attendance_time.status","Off Day");
       $this->db->where("xin_attendance_time.attendance_status", "Present");
-      $this->db->group_by("xin_attendance_time.employee_id");
+      $this->db->order_by("xin_attendance_time.employee_id");
       $query = $this->db->get()->result();
       echo  json_encode($query);
     }

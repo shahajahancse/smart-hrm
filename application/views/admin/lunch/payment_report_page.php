@@ -145,7 +145,7 @@
                     // dd($employee); 
                     $lunch_package=lunch_package($employee->from_date);
                     $pbm = ($employee->prev_amount/$lunch_package->stuf_give_tk);
-                    $total_cl_ml += ($employee->collection_amount/$lunch_package->stuf_give_tk);
+                    $total_cl_ml += ($employee->pay_amount/$lunch_package->stuf_give_tk);
                     $previouspay+=$employee->prev_pay;
                     
                     $total_probable_meal += $employee->probable_meal;

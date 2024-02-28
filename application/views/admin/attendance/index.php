@@ -309,7 +309,8 @@ content: 'zfdsdf';
                     style="margin-top: 30px;">
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="jobCard()">Job Card</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="extra_present()">Extra Present</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="movReport(2)">Unpaid Movement</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="movReport('all')">All Movement</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="movReport(0)">Unpaid Movement</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="movReport(1)">Process Movement</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="movReport(3)">Reject Movement</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="movReport(4)">Paid Movement</button>

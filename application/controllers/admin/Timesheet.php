@@ -527,6 +527,10 @@ class Timesheet extends MY_Controller {
 			$remarks = $this->input->post('remarks');
 			$st_date = strtotime($start_date);
 			$ed_date = strtotime($end_date);
+			// if($start_date<= date('Y-m-d',strtotime('-3 day'))){
+			// 	$this->session->set_flashdata('error', 'Leave start date must be greater than 3 days');
+			// 	redirect('admin/timesheet/leave');
+			// }
 			// $qt_remarks = htmlspecialchars(addslashes($remarks), ENT_QUOTES);
 			
 			/* Server side PHP input validation */		
@@ -636,6 +640,8 @@ class Timesheet extends MY_Controller {
 			'leave_type' => ($this->input->post('leave_type') == 1)? 'el':'sl',
 			'from_date' => $this->input->post('start_date'),
 			'to_date' => $this->input->post('end_date'),
+			'applyed_from_date' => $this->input->post('start_date'),
+			'applyed_to_date' => $this->input->post('end_date'),
 			'applied_on' => date('Y-m-d h:i:s'),
 			'reason' => $this->input->post('reason'),
 			'qty' => $no_of_days,
@@ -692,24 +698,29 @@ class Timesheet extends MY_Controller {
 				$this->db->where('id', $leave_data->id);
 				$this->db->update('leave_balanace', $rdata);
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave_added'));
-			if($data['qty'] > 0){
-				for ($i=0; $i < $data['qty']; $i++) { 
-					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
-					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
-				}
-			} else {
-				$process_date = $data['from_date'];
-				$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
-			}
+			
+			$this->attandence_pro($from_date,$qty,$emp_id);
+
 			redirect('admin/timesheet/leave');
-
-
 		} else {
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
 			redirect('admin/timesheet/leave');
 		}
 	
 	}
+	public function attandence_pro($first_date,$qty,$emp_id){
+		if ($qty>=1) {
+			for ($i=1; $i < $qty ; $i++) { 
+				$process_date= date('Y-m-d', strtotime($first_date. ' + '.$i.' day'));
+				$this->load->model("Attendance_model");
+				$this->Attendance_model->attn_process($process_date, $emp_id);
+			}
+		}else{
+			$this->load->model("Attendance_model");
+			$this->Attendance_model->attn_process($first_date, $emp_id);
+		}	
+	}
+
 	public function leave_reject($id) {
 		$data = array(
 			'status' => 3,
@@ -812,14 +823,7 @@ class Timesheet extends MY_Controller {
 
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
 			// automatically leave process start
-			if($data['qty'] > 0){
-				if ($from_date < date('Y-m-d')) {
-					for ($i=0; $i < $data['qty']; $i++) { 
-						$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
-						$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
-					}
-				}
-			}
+			$this->attandence_pro($from_date,$total_days,$emp_id);
 		}else{
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
 		}
@@ -831,7 +835,7 @@ class Timesheet extends MY_Controller {
 	}
 	public function modal_leave_data_ajax($id) {
 		$data['result'] = $this->Timesheet_model->get_leaves_leave_id_with_info($id);
-		$employee_id=$data['result']->user_id;
+		$employee_id=$data['result']->employee_id;
 		$this->db->where('leave_id', $id);
 		$leave_data=$this->db->get('xin_leave_applications')->row();
 		$year = date('Y', strtotime($leave_data->from_date));
@@ -912,24 +916,7 @@ class Timesheet extends MY_Controller {
 					$this->db->update('leave_balanace', $rdata);
 				}
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
-
-			// automatically leave process start
-			if($data['qty'] > 0){
-
-
-
-
-
-
-				for ($i=0; $i < $data['qty']; $i++) { 
-					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($data['from_date'])));
-					$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
-				}
-			} else {
-				$process_date = $data['from_date'];
-				$this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
-			}
-			// automatically leave process end
+			$this->attandence_pro($this->input->post('start_date'),$qnty,$emp_id);
 
 
 			$setting = $this->Xin_model->read_setting_info(1);
@@ -1008,28 +995,7 @@ class Timesheet extends MY_Controller {
 		$end_date=$leave_info->to_date;
 		$leave_type=$leave_info->leave_type_id;
 		$qty=$leave_info->qty;
-		
-				// [leave_id] => 377
-				// [company_id] => 1
-				// [employee_id] => 12
-				// [department_id] => 0
-				// [leave_type_id] => 1
-				// [leave_type] => el
-				// [qty] => 1.0
-				// [from_date] => 2023-12-24
-				// [to_date] => 2023-12-24
-				// [applied_on] => 2023-12-18 09:53:28
-				// [reason] => Wedding ceremony of my elder brother.
-				// [remarks] => 
-				// [status] => 4
-				// [is_half_day] => 0
-				// [notify_leave] => 1
-				// [leave_attachment] => 
-				// [team_lead_approved] => 1
-				// [team_lead_comment] => 
-				// [created_at] => 2023-12-18 09:53:28
-				// [current_year] => 2023
-			
+
 
 
 		if ($stutuss==4 ||$stutuss==3 ||$stutuss==2){
@@ -1063,23 +1029,12 @@ class Timesheet extends MY_Controller {
 					$this->db->where('id', $leave_data->id);
 					$this->db->update('leave_balanace', $rdata);
 				}
-			if($qty > 0){
-				for ($i=0; $i < $qty; $i++) { 
-					$process_date = date("Y-m-d",strtotime("+$i day", strtotime($start_date)));
-					$this->Attendance_model->attn_process($process_date, array($employee_id));
-				}
-			} else {
-				$process_date = $start_date;
-				$this->Attendance_model->attn_process($process_date, array($employee_id));
-			}
-
-
+				$this->attandence_pro($start_date,$qty,$employee_id);
 		} else {
 			echo 'error';
 		}
 		
 	}
-
 	public function update_leave_balance(){
 		$leave_id = $this->input->post('leave_id');
 
@@ -1153,6 +1108,8 @@ class Timesheet extends MY_Controller {
 			'leave_type_id' => $result[0]->leave_type_id,
 			'from_date' => $result[0]->from_date,
 			'to_date' => $result[0]->to_date,
+			'applyed_from_date' => $result[0]->applyed_from_date,
+			'applyed_to_date' => $result[0]->applyed_to_date,
 			'applied_on' => $result[0]->applied_on,
 			'reason' => $result[0]->reason,
 			'remarks' => $result[0]->remarks,

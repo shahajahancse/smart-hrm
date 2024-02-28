@@ -175,6 +175,8 @@
         alert('Please select employee Id');
         return ;
       }
+      document.getElementById('loader').style.display = 'block';
+
  
       /*var okyes;
       okyes=confirm('Are you sure you want to generate excel sheet?');
@@ -189,6 +191,7 @@
       ajaxRequest.send(data);
 
       ajaxRequest.onreadystatechange = function(){
+        document.getElementById('loader').style.display = 'none'; 
         if(ajaxRequest.readyState == 4){
           // console.log(ajaxRequest);
           var resp = ajaxRequest.responseText;

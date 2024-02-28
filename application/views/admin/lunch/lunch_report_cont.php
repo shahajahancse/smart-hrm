@@ -131,9 +131,9 @@ $exc=1;
                         <th style="text-align:center">Emp M</th>
                         <th style="text-align:center">Guest M</th>
                         <th style="text-align:center">Total M</th>
-                        <th style="text-align:center">Emp Cost</th>
+                        <!-- <th style="text-align:center">Emp Cost</th>
                         <th style="text-align:center">Guest Cost</th>
-                        <th style="text-align:center">Total Cost</th>
+                        <th style="text-align:center">Total Cost</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -141,9 +141,9 @@ $exc=1;
                     $total_emp_meal = 0;
                     $total_guest_meal = 0;
                     $total_meal = 0;
-                    $total_empoloyee_cost = 0;
-                    $total_guest_cost = 0;
-                    $total_cost = 0;
+                    // $total_empoloyee_cost = 0;
+                    // $total_guest_cost = 0;
+                    // $total_cost = 0;
                     
                 
                 
@@ -161,9 +161,9 @@ $exc=1;
                             $total_emp_meal += $item->emp_m;
                             $total_guest_meal += $item->guest_m;
                             $total_meal += $item->total_m;
-                            $total_empoloyee_cost += $item->emp_cost;
-                            $total_guest_cost += $item->guest_cost;
-                            $total_cost += $item->total_cost;
+                            // $total_empoloyee_cost += $item->emp_cost;
+                            // $total_guest_cost += $item->guest_cost;
+                            // $total_cost += $item->total_cost;
 
 
                 
@@ -172,9 +172,9 @@ $exc=1;
                         <td><?php echo $item->emp_m; ?></td>
                         <td><?php echo $item->guest_m; ?></td>
                         <td><?php echo $item->total_m; ?></td>
-                        <td><?php echo $item->emp_cost; ?></td>
+                        <!-- <td><?php echo $item->emp_cost; ?></td>
                         <td><?php echo $item->guest_cost; ?></td>
-                        <td><?php echo $item->total_cost; ?></td>
+                        <td><?php echo $item->total_cost; ?></td> -->
                     </tr>
                     <?php endforeach; ?>
 
@@ -185,9 +185,9 @@ $exc=1;
                         <td><?=  $total_emp_meal ?></td>
                         <td><?=  $total_guest_meal ?></td>
                         <td><?=  $total_meal  ?></td>
-                        <td><?=  $total_empoloyee_cost?></td>
+                        <!-- <td><?=  $total_empoloyee_cost?></td>
                         <td><?=   $total_guest_cost  ?></td>
-                        <td><?=  $total_cost ?></td>
+                        <td><?=  $total_cost ?></td> -->
                     </tr>
                 </tfoot>
             </table>

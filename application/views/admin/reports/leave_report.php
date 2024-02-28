@@ -131,11 +131,15 @@ $stype="Monthly Leave report";
 							?>
 						<tr>
 							<td><?php echo $key+1; ?></td>
-							<td><?php echo date('d-F-Y H:i A', strtotime($value->applied_on)); ?> - (<?=date('l', strtotime($value->applied_on)) ?>)</td>
+							<td>
+								<?php echo date('d-F-Y H:i A', strtotime($value->applied_on)); ?> - (<?=date('l', strtotime($value->applied_on)) ?>)
+
+						
+							</td>
 							<td><?php echo date('d-F-Y', strtotime($value->from_date)); ?> -  (<?=date('l', strtotime($value->from_date)) ?>)   <?php 
 							
 							
-							// $red_alert_check=$this->Attendance_model->red_alert_check($value->from_date)
+							$red_alert_check=$this->Attendance_model->red_alert_check($value->leave_id)
 							
 							?></td>
 							<td><?php echo date('d-F-Y', strtotime($value->to_date)); ?> -  (<?=date('l', strtotime($value->to_date)) ?>)</td>
@@ -157,9 +161,26 @@ $stype="Monthly Leave report";
 										</ul>
 									</div>';
 								}elseif($value->status==2){
-									echo '<span class="text-success">Approved</span>';
+									echo '<span class="text-success">Approved</span><br>
+									<div class="dropdown" >
+										<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Change Status
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',3,this)" role="menuitem" tabindex="-1" href="#">Rejected</a></li>
+											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',4,this)" role="menuitem" tabindex="-1" href="#">First Level Approval</a></li>
+											</ul>
+									</div>';
 								}elseif($value->status==3){
-									echo '<span class="text-danger">Rejected</span>';
+									echo '<span class="text-danger">Rejected</span><br>
+									<div class="dropdown" >
+										<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Change Status
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',2,this)" role="menuitem" tabindex="-1" href="#">Approved</a></li>
+											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',4,this)" role="menuitem" tabindex="-1" href="#">First Level Approval</a></li>
+
+										</ul>
+									</div>';
 								}elseif($value->status==4){
 									echo '<strong class="text-info current_status">First Level Approval</strong> <br>
 									<div class="dropdown" >
@@ -171,8 +192,15 @@ $stype="Monthly Leave report";
 										</ul>
 									</div>';
 								}elseif($value->status==5){
-									echo '<span class="text-info">Team Lead Approval</span>
-									';
+									echo '<span class="text-info">Team Lead Approval</span><br>
+									<div class="dropdown" >
+										<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Change Status
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',2,this)" role="menuitem" tabindex="-1" href="#">Approved</a></li>
+											<li role="presentation"><a onclick="leave_status_change('.$value->leave_id.',3,this)" role="menuitem" tabindex="-1" href="#">Rejected</a></li>
+										</ul>
+									</div>';
 								}
 								?>
 							</td>
@@ -225,12 +253,36 @@ $stype="Monthly Leave report";
 				}else{
 					var stext='';
 					if(status==2){
-						stext='Approved';
+						stext=`<strong class="text-danger current_status">Approved</strong> <br>
+									<div class="dropdown" >
+										<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Change Status
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},3,this)" role="menuitem" tabindex="-1" href="#">Rejected</a></li>
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},4,this)" role="menuitem" tabindex="-1" href="#">First Level Approval</a></li>
+										</ul>
+									</div>'`;
 						update_balance(leave_id);
 					}else if(status==3){
-						stext='Rejected';
+						stext=`<strong class="text-danger current_status">Rejected</strong> <br>
+									<div class="dropdown" >
+										<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Change Status
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},2,this)" role="menuitem" tabindex="-1" href="#">Approved</a></li>
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},4,this)" role="menuitem" tabindex="-1" href="#">First Level Approval</a></li>
+										</ul>
+									</div>'`;
 					}else{
-						stext='First Level Approval';
+						stext=`<strong class="text-danger current_status">First Level Approval</strong> <br>
+									<div class="dropdown" >
+										<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Change Status
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},2,this)" role="menuitem" tabindex="-1" href="#">Approved</a></li>
+											<li role="presentation"><a onclick="leave_status_change(${leave_id},3,this)" role="menuitem" tabindex="-1" href="#">Rejected</a></li>
+										</ul>
+									</div>'`;
 					}
 					$(row).html('<span class="text-success">'+stext+'</span>');
 				}

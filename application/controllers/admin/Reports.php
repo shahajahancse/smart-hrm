@@ -1579,7 +1579,7 @@ class Reports extends MY_Controller
         $status 			 = $this->input->post('status');
         $first_date			 = $this->input->post('first_date');
         $second_date 		 = $this->input->post('second_date');
-        $data['first_date']  = $first_date;
+        $data['first_date']  = $first_date; 
         $data['second_date'] = $second_date;
         $data['status'] 	 = $status;
         $emp_id 			 = explode(',', trim($sql));
@@ -1764,6 +1764,21 @@ class Reports extends MY_Controller
 		}else{
 			$this->load->view("admin/reports/leave_application", $data);
 		}
+	}
+	public function salary_review_report(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+        $sql = $this->input->post('sql');
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+		$data['first_date']= $first_date;
+		$data['second_date']= $second_date;
+        $emp_id = explode(',', trim($sql));
+		$data['emp_id']= $emp_id;
+	    $this->load->view("admin/reports/salary_review_report", $data);
+		
 	}
 } 
 ?>
