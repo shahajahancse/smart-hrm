@@ -639,7 +639,7 @@ public function add_daily_package()
 		$data['breadcrumbs'] = 'Purchase';
 	    $data['results'] 	 = $this->Inventory_model->product_requisition_details($id);
 		 if(!empty($data['results'])){
-			$data['id'] 	 = $data['results'][0]->id;
+		$data['id'] = $data['results'][0]->id;
 		}else{
 			$data['id']  	 = '';
 		}

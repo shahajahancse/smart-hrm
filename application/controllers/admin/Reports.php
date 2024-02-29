@@ -1562,6 +1562,20 @@ class Reports extends MY_Controller
 		$data['reports']     = $this->Reports_model->get_product_reports_info($first_date,$second_date,$status,$emp_id);
 		$this->load->view('admin/reports/inventory_report',$data);
 	}
+	public function show_device_report(){
+		$data  = $this->Reports_model->device_report();
+		$this->load->view('admin/reports/device_report',$data);
+	}
+	public function show_device_report_laptop(){
+		$data  = $this->Reports_model->device_report();
+		$this->load->view('admin/reports/device_report_laptop',$data);
+	}
+
+	public function show_store_report(){
+		$data     = $this->Reports_model->show_store_report();
+		// dd($data);
+		$this->load->view('admin/reports/show_store_report',$data);
+	}
 	public function show_move_report(){
 		$sql 				 = $this->input->post('sql');
         $status 			 = $this->input->post('status');
