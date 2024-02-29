@@ -264,7 +264,7 @@ class inventory_model extends CI_Model
 		->where("products_purches_details.product_id = products.id")
 		->where("products_purches_details.id",$id)
 		->order_by('products_purches_details.id', 'desc');
-		return $this->db->get()->row();
+		return $this->db->get()->result();
 	}
 
 	public  function requisition_details($id=null){
