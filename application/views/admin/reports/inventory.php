@@ -46,15 +46,16 @@
   <div class="box">
     <div class="box-body">
       <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#tab1">Inventory Report</a></li>
+        <li class="active"><a data-toggle="tab" href="#tab1">Device Report</a></li>
         <li><a data-toggle="tab" href="#tab2">Movement Report</a></li>
         <li><a data-toggle="tab" href="#tab3">Mobile Bill Report</a></li>
       </ul>
 
       <div class="tab-content">
         <div id="tab1" class="tab-pane fade in active" style="margin-top:20px">
-          <button class="btn btn-sm btn-success" onclick="show_report('all')">All Report</button>
-          <select class="btn btn-sm btn-success" style="margin-left:10px" id="mySelect">
+          <button class="btn btn-sm btn-success" onclick="device_report()">Desktop</button>
+          <button class="btn btn-sm btn-success" onclick="device_report_laptop()">Laptop</button>
+          <select class="btn btn-sm btn-success" style="" id="mySelect">
             <option value="">Category Wise report </option>
               <?php
                 $categories =$this->db->select('id,cat_name')->get('product_accessory_categories')->result(); 
@@ -63,9 +64,9 @@
               <option value="<?php echo $category->id?>" onclick="show_report(2)"><?php echo $category->cat_name?></option>
               <?php }?>
           </select>
-            <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('using')">Employee using device</button><br><br>
-            <button class="btn btn-sm btn-success" onclick="show_report('store')">Stored Report</button>
-            <button class="btn btn-sm btn-success" style="margin-left:10px" onclick="show_report('damage')">Damaged Report</button>
+            <button class="btn btn-sm btn-success" style="margin-left:" onclick="show_report('using')">Employee using device</button><br><br>
+            <button class="btn btn-sm btn-success" onclick="show_store_report('store')">Stored Report</button>
+            <button class="btn btn-sm btn-success" style="margin-left:" onclick="show_report('damage')">Damaged Report</button>
         </div>
         <div id="tab2" class="tab-pane fade"  style="margin-top:20px">
           <button class="btn btn-sm btn-success" onclick="move_report('daily')">Daily Report</button>
@@ -242,7 +243,77 @@ function mobile_bill_report(r){
   }
 }
 
+function device_report(){
+  var ajaxRequest;  // The variable that makes Ajax possible!
+  ajaxRequest = new XMLHttpRequest();
+  var status = $('#status').val();
+  var first_date = $('#process_date').val();
+  var second_date = $('#second_date').val();
+  var checkboxes = document.getElementsByName('select_emp_id[]');
+  var sql = get_checked_value(checkboxes);
 
+
+  var data = "";
+  url = base_url + "/show_device_report";
+  ajaxRequest.open("POST", url, true);
+  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+  ajaxRequest.send(data);
+  ajaxRequest.onreadystatechange = function(){
+    if(ajaxRequest.readyState == 4){
+    var resp = ajaxRequest.responseText;
+    a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+    a.document.write(resp);
+    }
+  }
+}
+
+
+function device_report_laptop(){
+  var ajaxRequest;  // The variable that makes Ajax possible!
+  ajaxRequest = new XMLHttpRequest();
+  var status = $('#status').val();
+  var first_date = $('#process_date').val();
+  var second_date = $('#second_date').val();
+  var checkboxes = document.getElementsByName('select_emp_id[]');
+  var sql = get_checked_value(checkboxes);
+
+
+  var data = "";
+  url = base_url + "/show_device_report_laptop";
+  ajaxRequest.open("POST", url, true);
+  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+  ajaxRequest.send(data);
+  ajaxRequest.onreadystatechange = function(){
+    if(ajaxRequest.readyState == 4){
+    var resp = ajaxRequest.responseText;
+    a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+    a.document.write(resp);
+    }
+  }
+}
+function show_store_report(){
+  var ajaxRequest;  // The variable that makes Ajax possible!
+  ajaxRequest = new XMLHttpRequest();
+  var status = $('#status').val();
+  var first_date = $('#process_date').val();
+  var second_date = $('#second_date').val();
+  var checkboxes = document.getElementsByName('select_emp_id[]');
+  var sql = get_checked_value(checkboxes);
+
+
+  var data = "";
+  url = base_url + "/show_store_report";
+  ajaxRequest.open("POST", url, true);
+  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+  ajaxRequest.send(data);
+  ajaxRequest.onreadystatechange = function(){
+    if(ajaxRequest.readyState == 4){
+    var resp = ajaxRequest.responseText;
+    a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+    a.document.write(resp);
+    }
+  }
+}
 
 
 

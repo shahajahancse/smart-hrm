@@ -226,5 +226,13 @@ function showErrorAlert(message) {
         text: message,
         showConfirmButton: true
     })
+
 }
+
+
+$(document).ready(function(){
+  if (!$('table').parent('div').hasClass('table-responsive')) {
+    $('table').parent('div').addClass('table-responsive');
+  }
+})
 </script>
