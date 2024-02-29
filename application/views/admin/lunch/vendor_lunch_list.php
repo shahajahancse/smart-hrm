@@ -266,7 +266,7 @@ function togglePaymentBox() {
 <script>
 function changemeal() {
     var inputData = $("#total_meal").val();
-    $("#total_amount").val(inputData * 90);
+    $("#total_amount").val(inputData * 100);
 }
 </script>
 <script>

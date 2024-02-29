@@ -814,7 +814,7 @@ class Admin extends API_Controller
         };
     }
     public function daily_payment_out()
-    {
+    { 
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
         if ($user_info['status'] == true) {
@@ -1010,26 +1010,185 @@ class Admin extends API_Controller
         if ($user_info['status'] == true) {
             if ($user_info['user_info']->user_role_id != 3) {
                 $data = [];
-                $data['daily_date']=date('Y-m-d');
+
+                $data['daily_date']=date('Y-m-d',strtotime($this->input->post('daily_date')));
                 $data['daily_report']=$this->get_count($data['daily_date']);
 
-                $data['monthly_date']=date('Y-m');
+                $data['monthly_date']=date('Y-m',strtotime($this->input->post('monthly_date')));
                 $data['monthly_report']=$this->get_monthly_count($data['monthly_date']);
-
-                $data['requisition_first_date']=date('Y-m-01');
-                $data['requisition_last_date']=date('Y-m-t');
+                                
+                $data['requisition_first_date']=date('Y-m-d',strtotime($this->input->post('requisition_first_date')));
+                $data['requisition_last_date']=date('Y-m-d',strtotime($this->input->post('requisition_last_date')));
                 $data['requisition']=$this->get_requisition_count($data['requisition_first_date'],$data['requisition_last_date']);
-                
-                
-                $data['purchase_first_date']=date('Y-m-01');
-                $data['purchase_last_date']=date('Y-m-t');
+                            
+                $data['purchase_first_date']=date('Y-m-d',strtotime($this->input->post('purchase_first_date')));
+                $data['purchase_last_date']=date('Y-m-d',strtotime($this->input->post('purchase_last_date')));
                 $data['purchase']=$this->get_purchase_count($data['purchase_first_date'],$data['purchase_last_date']);
-               
-                $data['payroll_first_date']=date('Y-m-01');
-                $data['payroll_last_date']=date('Y-m-t');
+                                
+                $data['payroll_first_date']=date('Y-m-d',strtotime($this->input->post('payroll_first_date')));
+                $data['payroll_last_date']=date('Y-m-d',strtotime($this->input->post('payroll_last_date')));
                 $data['payroll']=$this->get_payroll_count($data['payroll_first_date'],$data['payroll_last_date']);
+                
 
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                    'data' => $data,
+                ], 200);
+                
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        };
+    }
+    public function admin_dashboard_2_daily()
+    {
 
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $data = [];
+                $data['daily_date']=date('Y-m-d',strtotime($this->input->post('date')));
+                $data['daily_report']=$this->get_count($data['daily_date']);
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                    'data' => $data,
+                ], 200);
+                
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        };
+    }
+    public function admin_dashboard_2_monthly()
+    {
+
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $data = [];
+                $data['monthly_date']=date('Y-m',strtotime($this->input->post('date')));
+                $data['monthly_report']=$this->get_monthly_count($data['monthly_date']);
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                    'data' => $data,
+                ], 200);
+                
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        };
+    }
+    public function admin_dashboard_2_requisition()
+    {
+
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $data = [];
+                $data['requisition_first_date']=date('Y-m-d',strtotime($this->input->post('first_date')));
+                $data['requisition_last_date']=date('Y-m-d',strtotime($this->input->post('last_date')));
+                $data['requisition']=$this->get_requisition_count($data['requisition_first_date'],$data['requisition_last_date']);
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                    'data' => $data,
+                ], 200);
+                
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        };
+    }
+    public function admin_dashboard_2_purchase()
+    {
+
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $data = [];
+                $data['purchase_first_date']=date('Y-m-d',strtotime($this->input->post('first_date')));
+                $data['purchase_last_date']=date('Y-m-d',strtotime($this->input->post('last_date')));
+                $data['purchase']=$this->get_purchase_count($data['purchase_first_date'],$data['purchase_last_date']);
+                $this->api_return([
+                    'status' => true,
+                    'message' => 'successful',
+                    'data' => $data,
+                ], 200);
+                
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        };
+    }
+    public function admin_dashboard_2_payroll()
+    {
+
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                $data = [];
+               
+                $data['payroll_first_date']=date('Y-m-d',strtotime($this->input->post('first_date')));
+                $data['payroll_last_date']=date('Y-m-d',strtotime($this->input->post('last_date')));
+                $data['payroll']=$this->get_payroll_count($data['payroll_first_date'],$data['payroll_last_date']);
                 $this->api_return([
                     'status' => true,
                     'message' => 'successful',

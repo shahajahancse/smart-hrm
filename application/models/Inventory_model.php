@@ -150,7 +150,7 @@ class inventory_model extends CI_Model
 
 	public function purchase_products_status($id,$role_id,$status){
 		// dd($status);
-		if($role_id==1 || $role_id==2 || $role_id==4 ){
+		// if($role_id==1 || $role_id==2 || $role_id==4  ){
 			$this->db->select('
 				xin_employees.first_name,
 				xin_employees.last_name, 
@@ -165,7 +165,7 @@ class inventory_model extends CI_Model
 			->where("products_purches_details.user_id = xin_employees.user_id")
 			->where("products_purches_details.status =$status")
 			->order_by('products_purches_details.id', 'desc');
-			}
+			// }
 		return	$this->db->get()->result();
 	} 
 

@@ -35,7 +35,7 @@ class Accounting extends MY_Controller
     {
         parent::__construct();
         //load the models
-        $this->load->model('Xin_model');
+        $this->load->model('Xpin_model');
         $this->load->model('Finance_model');
         $this->load->model('Expense_model');
         $this->load->model('Invoices_model');

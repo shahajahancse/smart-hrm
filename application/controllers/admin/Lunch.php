@@ -590,8 +590,8 @@ class Lunch extends MY_Controller
         $data['payment_data']= $this->Lunch_model->chack_meal_data($this->input->post('first_date'), $this->input->post('second_date'));
         $table= $this->load->view("admin/lunch/lunchtable", $data, true);
         $response = array(
-            'total_m' => $total->total_m,
-            'total_am' => $total->total_am,
+            'total_m' => $total['total_m'],
+            'total_am' => $total['total_am'],
             'table' => $table
         );
         header('Content-Type: application/json');
