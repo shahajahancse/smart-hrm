@@ -642,7 +642,6 @@ class Settings extends MY_Controller
     // security level type > list
     public function security_level_list()
     {
-
         $data['title'] = $this->Xin_model->site_title();
         $session = $this->session->userdata('username');
         if (!empty($session)) {

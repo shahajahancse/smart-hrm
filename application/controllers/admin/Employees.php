@@ -83,52 +83,6 @@ class Employees extends MY_Controller {
 			dd($el .'=='. $sl);
 	}
 
-	public function lb()
-	{
-		exit();
-		$user_info = $this->db->where('status', 1)->get('xin_employees')->result();
-		foreach ($user_info as $key => $row) {
-			if ($row->is_leave_on == 1 && strtotime($row->leave_effective) < strtotime('2024-01-05')) {
-				$data = array(
-					'emp_id' => $row->user_id,
-					'el_total' => 12,
-					'sl_total' => 4,
-					'year' => '2024',
-				);
-			} else {
-				$d1 = new DateTime('2024-12-31'); 
-            	$d2 = new DateTime($row->leave_effective);   
-            	$Months = $d2->diff($d1); 
-            	$month = $Months->m;
-            	$qty = round(($month / 3), 2);
-
-            	
-            	$numberString = (string) $qty;
-				$parts = explode('.', $numberString);
-				$integerPart = $parts[0];
-				if (isset($parts[1])) {
-					$decimalPart = $parts[1];
-				} else {
-					$decimalPart = 0;
-				}
-
-				if ($decimalPart > 50) {
-            		$integerPart += 0.5;
-            	}
-
-				$data = array(
-					'emp_id' => $row->user_id,
-					'el_total' => $month,
-					'sl_total' => $integerPart,
-					'year' => '2024',
-				);
-			}
-				// echo "<pre>". $row->user_id;
-				// dd($data);
-			$this->db->insert('leave_balanace', $data);
-		}
-		dd('done');
-	}
 	
 	 public function index()
      {
@@ -548,7 +502,6 @@ class Employees extends MY_Controller {
 
 	public function remarks(){
 		if($_FILES['n_file']['size']!=0){
-			//checking image type
 			$allowed =  array('png','jpg','jpeg','pdf','gif');
 			$filename = $_FILES['n_file']['name'];
 			$ext = pathinfo($filename, PATHINFO_EXTENSION);
@@ -3207,8 +3160,6 @@ public function nda() {
 		/* Server side PHP input validation */		
 		if($this->input->post('document_type_id')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_d_type');
-		} else if($this->Xin_model->validate_date($this->input->post('date_of_expiry'),'Y-m-d') == false) {
-			 $Return['error'] = $this->lang->line('xin_hr_date_format_error');
 		} else if($this->input->post('title')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_document_title');
 		} /*else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('title')) != 1) {
@@ -3252,7 +3203,11 @@ public function nda() {
 		$title = $this->Xin_model->clean_post($this->input->post('title'));
 		$description = $this->Xin_model->clean_post($this->input->post('description'));
 		// clean date fields
-		$date_of_expiry = $this->Xin_model->clean_date_post($this->input->post('date_of_expiry'));
+		if($this->input->post('date_of_expiry')!='') {	
+			$date_of_expiry = $this->Xin_model->clean_date_post($this->input->post('date_of_expiry'));
+		}else{
+			$date_of_expiry='';
+		}
 	
 		$data = array(
 		'document_type_id' => $this->input->post('document_type_id'),
@@ -3545,38 +3500,30 @@ public function nda() {
 		$st_date = strtotime($from_year);
 		$ed_date = strtotime($to_year);
 			
-		if($this->input->post('name')==='') {
-       		 $Return['error'] = $this->lang->line('xin_employee_error_sch_uni');
-		} else if(preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('name'))!=1) {
-		// } else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('name'))!=1) {
-			$Return['error'] = $this->lang->line('xin_hr_string_error');
-		} else if($this->input->post('from_year')==='') {
-			$Return['error'] = $this->lang->line('xin_employee_error_frm_date');
-		} else if($this->Xin_model->validate_date($this->input->post('from_year'),'Y-m-d') == false) {
-			 $Return['error'] = $this->lang->line('xin_hr_date_format_error');
-		} else if($this->input->post('to_year')==='') {
-			 $Return['error'] = $this->lang->line('xin_employee_error_to_date');
-		} else if($this->Xin_model->validate_date($this->input->post('to_year'),'Y-m-d') == false) {
-			 $Return['error'] = $this->lang->line('xin_hr_date_format_error');
-		} else if($st_date > $ed_date) {
-			$Return['error'] = $this->lang->line('xin_employee_error_date_shouldbe');
-		}
+		// if($this->input->post('name')==='') {
+       	// 	 $Return['error'] = $this->lang->line('xin_employee_error_sch_uni');
+		// } else if(preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('name'))!=1) {
+		// // } else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('name'))!=1) {
+		// 	$Return['error'] = $this->lang->line('xin_hr_string_error');
+		// } 
 				
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
 		
 		$name = $this->Xin_model->clean_post($this->input->post('name'));
-		$from_year = $this->Xin_model->clean_date_post($this->input->post('from_year'));
-		$to_year = $this->Xin_model->clean_date_post($this->input->post('to_year'));
+		// $from_year = $this->Xin_model->clean_date_post($this->input->post('from_year'));
+		// $to_year = $this->Xin_model->clean_date_post($this->input->post('to_year'));
 		$description = $this->Xin_model->clean_post($this->input->post('description'));
 		$data = array(
 		'name' => $name,
 		'education_level_id' => $this->input->post('education_level'),
-		'from_year' => $from_year,
+		// 'from_year' => $from_year,
 		'language_id' => $this->input->post('language'),
-		'to_year' => $this->input->post('to_year'),
-		'skill_id' => $this->input->post('skill'),
+		// 'to_year' => $this->input->post('to_year'),
+		// 'skill_id' => $this->input->post('skill'),
+		'passing_year' => $this->input->post('passing_year'),
+		'duration' => $this->input->post('duration'),
 		'description' => $description,
 		'employee_id' => $this->input->post('user_id'),
 		'created_at' => date('d-m-Y'),
@@ -4640,10 +4587,10 @@ public function nda() {
 				 }
 				 $ol .= '</ol>';
 			}*/
-			$sdate = $this->Xin_model->set_date_format($r->from_year);
-			$edate = $this->Xin_model->set_date_format($r->to_year);	
+			// $sdate = $this->Xin_model->set_date_format($r->from_year);
+			// $edate = $this->Xin_model->set_date_format($r->to_year);	
 			
-			$time_period = $sdate.' - '.$edate;
+			$time_period = $r->passing_year;
 			// get date
 			$pdate = $time_period;
 			$data[] = array(

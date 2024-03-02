@@ -1161,7 +1161,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-6" >
                                                         <div class="form-group">
                                                             <label for="date_of_expiry"
                                                                 class="control-label"><?php echo $this->lang->line('xin_e_details_doe');?><i
@@ -1174,7 +1174,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-6" style="display:none;">
                                                         <div class="form-group">
                                                             <label for="title"
                                                                 class="control-label"><?php echo $this->lang->line('xin_e_details_dtitle');?><i
@@ -1182,7 +1182,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                                         style="color:red">*</span></i></label>
                                                             <input class="form-control"
                                                                 placeholder="<?php echo $this->lang->line('xin_e_details_dtitle');?>"
-                                                                name="title" type="text">
+                                                                name="title" value="no title" type="text">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -1196,7 +1196,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-6" style="display:none;">
                                                         <div class="form-group">
                                                             <label for="description"
                                                                 class="control-label"><?php echo $this->lang->line('xin_description');?></label>
@@ -1266,7 +1266,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                                     </th>
                                                                     <th><?php echo $this->lang->line('xin_e_details_inst_name');?>
                                                                     </th>
-                                                                    <th><?php echo $this->lang->line('xin_e_details_timeperiod');?>
+                                                                    <th> Passing Year
                                                                     </th>
                                                                     <th><?php echo $this->lang->line('xin_e_details_edu_level');?>
                                                                     </th>
@@ -1321,7 +1321,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-12" style="display:none;">
                                                         <div class="form-group">
                                                             <label for="from_year"
                                                                 class="control-label"><?php echo $this->lang->line('xin_e_details_timeperiod');?><i
@@ -1343,6 +1343,25 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                     </div>
                                                 </div>
                                                 <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                           
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <label for="">Passing Year</label>
+                                                                    <input class="form-control"
+                                                                        name="passing_year" type="text">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label for="">Duration</label>
+                                                                    <input class="form-control" 
+                                                                        name="duration" type="text">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="display:none;">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="language"
@@ -2980,7 +2999,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                     <fieldset class="form-group">
                                                         <label for="logo">Note</label>
                                                         <input type="file" class="form-control-file" id="n_file" name="n_file"
-                                                            accept=".gif, .png, .jpg, .jpeg">
+                                                            accept=".gif, .png, .jpg, .jpeg, .pdf">
                                                         <small><?php echo $this->lang->line('xin_e_details_picture_type');?></small>
                                                     </fieldset>
                                                 </div>

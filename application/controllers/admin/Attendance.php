@@ -53,6 +53,11 @@ class Attendance extends MY_Controller
         $this->load->view('admin/layout/layout_main', $data); //page load
 
     }
+    // public function leave_all_cal()
+    // {
+    //     $this->Attendance_model->leave_cal_all();
+
+    // }
 
     // public function attendance_process($process_date, $status)
     public function attendance_process()

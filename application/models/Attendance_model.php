@@ -310,6 +310,7 @@ class Attendance_model extends CI_Model
                     }
                 }
             }
+            // $this->leave_cal_all($emp_id,$check_day);
         }
         return 'Successfully Process Done';
     }
@@ -781,6 +782,77 @@ class Attendance_model extends CI_Model
         $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
         $this->db->where("xin_attendance_time.late_status", 1);
         return $this->db->get()->result();
+    }
+    
+	public function leave_cal_all($id,$date)
+	{
+		$user_info = $this->db->where('status', 1)
+        ->where('user_id', $id)
+        ->get('xin_employees')->result();
+		foreach ($user_info as $key => $row) {
+            if ($row->is_leave_on == 0 ) {
+                    $data = array(
+                        'emp_id' => $row->user_id,
+                        'el_total' => 0,
+                        'sl_total' => 0,
+                        'el_balanace' => 0,
+                        'sl_balance' => 0,
+                        'year' => date('Y', strtotime($date)),
+                    );
+                }else{
+                    $d1 = new DateTime(date('Y-12-31', strtotime($date))); 
+                    $d2 = new DateTime($row->leave_effective);  
+                    if ($d1 < $d2) {
+                        $data = array(
+                            'emp_id' => $row->user_id,
+                            'el_total' => 0,
+                            'sl_total' => 0,
+                            'el_balanace' => 0,
+                            'sl_balance' => 0,
+                            'year' => date('Y', strtotime($date)),
+                        );
+                    } else{
+                        $Months = $d2->diff($d1); 
+                        $month = $Months->m;
+                        $qty = round(($month / 3), 2);
+                        $numberString = (string) $qty;
+                        $parts = explode('.', $numberString);
+                        $integerPart = $parts[0];
+                        if (isset($parts[1])) {
+                            $decimalPart = $parts[1];
+                        } else {
+                            $decimalPart = 0;
+                        }
+        
+                        if ($decimalPart > 50) {
+                            $integerPart += 0.5;
+                        }
+                        $leave_en = $this->check_leave_balance($row->user_id, date('Y', strtotime($date)));
+                        $data = array(
+                            'emp_id' => $row->user_id,
+                            'el_total' => $month,
+                            'sl_total' => $integerPart,
+                            'el_balanace' => ($month-$leave_en->el),
+                            'sl_balanace' => ($integerPart-$leave_en->sl),
+                            'year' => date('Y', strtotime($date)),
+                        );
+                    }
+                }
+            $pre=$this->db->where('emp_id', $row->user_id)->where('year', date('Y', strtotime($date)))->get('leave_balanace');
+            if($pre->num_rows()==0){
+                $this->db->insert('leave_balanace', $data);
+            }else{
+                $this->db->where('emp_id', $row->user_id)->where('year', date('Y', strtotime($date)))->update('leave_balanace', $data);
+            }
+		}
+	}
+    public function check_leave_balance($value, $year) {
+        $this->db->select('COALESCE(SUM(CASE WHEN leave_type_id = 1 THEN qty ELSE 0 END), 0) as el, COALESCE(SUM(CASE WHEN leave_type_id = 2 THEN qty ELSE 0 END), 0) as sl', false);
+        $this->db->from('xin_leave_applications');
+        $this->db->where('employee_id', $value);
+        $this->db->where('current_year', $year);
+        $this->db->where('status', 2);
+        return $this->db->get()->row();
     }
 
     public function get_total_overtime($value, $first_date, $second_date)
