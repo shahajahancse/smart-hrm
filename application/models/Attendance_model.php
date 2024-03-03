@@ -76,7 +76,7 @@ class Attendance_model extends CI_Model
                     'default_shift' => 1,
                     'in_start_time' => '06:30:00',
                     'in_time' => '10:00:00',
-                    'late_start' => '10:05:01',
+                    'late_start' => '10:06:01',
                     'lunch_time' => '13:10:00',
                     'lunch_minute' => 60,
                     'out_start_time' => '13:00:00',
@@ -310,7 +310,7 @@ class Attendance_model extends CI_Model
                     }
                 }
             }
-            // $this->leave_cal_all($emp_id,$check_day);
+            $this->leave_cal_all($emp_id,$process_date);
         }
         return 'Successfully Process Done';
     }
@@ -796,24 +796,27 @@ class Attendance_model extends CI_Model
                         'el_total' => 0,
                         'sl_total' => 0,
                         'el_balanace' => 0,
-                        'sl_balance' => 0,
+                        'sl_balanace' => 0,
                         'year' => date('Y', strtotime($date)),
                     );
                 }else{
                     $d1 = new DateTime(date('Y-12-31', strtotime($date))); 
-                    $d2 = new DateTime($row->leave_effective);  
+                    $d2 = new DateTime($row->leave_effective); 
                     if ($d1 < $d2) {
                         $data = array(
                             'emp_id' => $row->user_id,
                             'el_total' => 0,
                             'sl_total' => 0,
                             'el_balanace' => 0,
-                            'sl_balance' => 0,
+                            'sl_balanace' => 0,
                             'year' => date('Y', strtotime($date)),
                         );
                     } else{
-                        $Months = $d2->diff($d1); 
+                        $Months = $d2->diff($d1);
                         $month = $Months->m;
+                        if ($Months->y==1) {
+                            $month = 12;
+                        }
                         $qty = round(($month / 3), 2);
                         $numberString = (string) $qty;
                         $parts = explode('.', $numberString);

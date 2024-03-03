@@ -151,8 +151,8 @@ body {
                         <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;"
                             required>
                             <option value="">Select Leave Type**</option>
-                            <option value="1" <?=($earn == 0.00)?'disabled':'' ?>>Earn Leave (<?=$earn?>)</option>
-                            <option value="2" <?=($sick == 0.00)?'disabled':'' ?>>Sick Leave (<?=$sick?>)</option>
+                            <option value="1" <?=($earn == 0)?'disabled':'' ?>>Earn Leave (<?=$earn?>)</option>
+                            <option value="2" <?=($sick == 0)?'disabled':'' ?>>Sick Leave (<?=$sick?>)</option>
                         </select>
                     </div>
                 </div>

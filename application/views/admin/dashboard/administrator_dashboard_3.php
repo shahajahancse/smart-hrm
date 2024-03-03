@@ -560,10 +560,10 @@ h5,h4 {
                         </a>
                     </div>
                     <div class="col-md-6">
-                        <a href="<?=base_url('admin/reports/accounts_report')?>">
+                        <a href="<?php echo site_url('admin/employees/increment_pro_list'); ?>">
                             <div class="c_cardn" style="padding: 7px 19px;margin: 7px 0px;">
                                 <div class="col-md-12 p-0" style="display: flex;align-items: center;gap: 25px;">
-                                    <h4 class="col-md-6 p-0">Accounts</h4>
+                                    <h4 class="col-md-6 p-0" style="width: 130px;overflow: hidden;white-space: nowrap;">All Increment/Probotion List</h4>
                                     <i class="fa-solid fa-dollar fa-2x"></i>
                                 </div>
                             </div>

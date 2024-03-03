@@ -85,6 +85,7 @@ if($theme[0]->sub_menu_icons != ''){
 		}
   }
   $exp_count = $idocuments_expired + $iimg_documents + $icompany_license + $iwarranty_assets;
+  $exp_count = 0;
   ?>
   <!-- sidebar menu: : style can be found in sidebar.less -->
   <ul class="sidebar-menu" data-widget="tree"> 

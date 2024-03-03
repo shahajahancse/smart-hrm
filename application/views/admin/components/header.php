@@ -1121,7 +1121,7 @@ th {
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Current Salary</label>
-                        <input class="form-control" id="old_salary" name="old_salary" value="" disabled />
+                        <input class="form-control" id="old_salary" name="old_salary" value=""  />
                     </div>
                 </div>
 
