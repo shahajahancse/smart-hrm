@@ -777,8 +777,9 @@ class Attendance_model extends CI_Model
     }
     public function get_total_late_monthly($first_date, $second_date)
     {
-        $this->db->select('xin_attendance_time.*');
+        $this->db->select('xin_attendance_time.*,xin_employees.*');
         $this->db->from('xin_attendance_time');
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_attendance_time.employee_id');
         $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
         $this->db->where("xin_attendance_time.late_status", 1);
         return $this->db->get()->result();
@@ -1196,11 +1197,10 @@ class Attendance_model extends CI_Model
 
     }
     public function get_total_meeting_monthly($first_date,$last_date){
-        $this->db->select('*');
+        $this->db->select('xin_employee_move_register.*, xin_employees.*');
         $this->db->from('xin_employee_move_register');
+        $this->db->join('xin_employees', 'xin_employee_move_register.employee_id = xin_employees.user_id');
         $this->db->where('date BETWEEN "'.$first_date.'" AND "'.$last_date.'"');
         return $this->db->get()->result();
-
-        
     }
 }

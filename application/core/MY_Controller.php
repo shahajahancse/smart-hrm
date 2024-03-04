@@ -15,7 +15,18 @@ class MY_Controller extends CI_Controller
 		$this->load->helper('security');
 		$this->load->library('form_validation');
 		// ini_set('session.cookie_lifetime', 0);
-		
+		$siteLang = $ci->session->userdata();
+
+		$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+		$fullUrl = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		// dd(base_url('admin/'));
+		if($fullUrl != base_url('admin/logout') && $fullUrl != base_url('admin/auth/login') && $fullUrl != base_url('admin/')) {
+			// dd($fullUrl);
+			if($ci->session->userdata()['username']['base_url']!=base_url()){
+				redirect(base_url('admin/logout'));
+			 };
+		}
+
 		// set default timezone  
 		$system = $this->read_setting_info(1);
 		date_default_timezone_set($system[0]->system_timezone);

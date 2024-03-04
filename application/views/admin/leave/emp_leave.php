@@ -146,7 +146,7 @@ body {
         <div class="col-md-12 timediv" style="padding: 0;">
             <div class="col-md-4" style="padding: 0;">
                 <div class="input">
-                    <div class="level">Select Leave Type**</div>
+                    <div class="level">Select Leave Type **</div>
                     <div class="pseudo6">
                         <select id="leave_type" name="leave_type" style="width: 98%;border: none;cursor: pointer;"
                             required>

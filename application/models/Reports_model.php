@@ -969,7 +969,7 @@ class Reports_model extends CI_Model
         return $this->db->get()->result();
 
     }
-    public function get_store_in_report($first_date, $second_date)
+    public function get_store_in_report($first_date, $second_date, $status=null)
     {
         $this->db->select('
             p.id,
@@ -988,7 +988,11 @@ class Reports_model extends CI_Model
             ->join('products', 'p.product_id = products.id', 'left');
         $this->db->order_by('p.id', 'desc');
         $this->db->where("p.created_at between '$first_date' and '$second_date'");
-        $this->db->where('p.status', 3);
+        if ($status != null) {
+            $this->db->where('p.status', $status);
+        }else{     
+            $this->db->where('p.status', 3);
+        }
         return $this->db->get()->result();
     }
     public function get_store_out_report($first_date, $second_date)
