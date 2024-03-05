@@ -23,9 +23,7 @@
             <th class="text-center">Team Leader</th>
             <th class="text-center">Email</th>
             <th class="text-center">Phone</th>
-            <?php if($session['role_id'] ==1){?>
             <th class="text-center">Gross Salary</th>
-            <?php }?>
             <th class="text-center">Joining Date</th>
             <th class="text-center">Job Duration</th>
             <th class="text-center">Last Increment Date</th>

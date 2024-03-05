@@ -699,9 +699,9 @@
                                 <table class="datatables-demo table table-responsive table-striped table-bordered"
                                     id="left_table">
                                     <?php
-        if(count($lefts)=='') {
-            echo "<h3 class='text-center text-danger'>Data not Found</h3>";
-        } else {?>
+                                    if(count($lefts)=='') {
+                                        echo "<h3 class='text-center text-danger'>Data not Found</h3>";
+                                    } else {?>
                                     <thead>
                                         <tr>
                                             <th class="text-center" scope="col">Sl. No.</th>
@@ -714,7 +714,7 @@
                                     </thead>
                                     <tbody>
                                         <?php $i=1;
-            foreach($lefts as $left) {?>
+                                         foreach($lefts as $left) {?>
                                         <tr>
                                             <td class="text-center" scope="row"><?php echo $i++?></td>
                                             <td class="text-center"><?php echo $left->first_name.' '.$left->last_name?>
