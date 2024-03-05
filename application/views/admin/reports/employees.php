@@ -81,7 +81,7 @@
               <button class="btn dbtn btn-sm" onclick="show_report(1,1)">Probation to Regular</button>
               <button class="btn dbtn btn-sm" onclick="show_report(4,1)">Intern to Probation</button>
               <button class="btn dbtn btn-sm" onclick="show_report(5,1)">Intern to Regular</button>
-
+              <button class="btn dbtn btn-sm" onclick="employee_increment()">Single Increment/Promotion List</button>
               <button class="btn btn-success btn-sm" onclick="show_report(5)">Using Device</button>
             </div>
           </div>
@@ -187,6 +187,39 @@
     }
     var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql+'&done='+done;
     url = base_url + "/show_report";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+        // console.log(ajaxRequest);
+        var resp = ajaxRequest.responseText;
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1400,height=800');
+        a.document.write(resp);
+      }
+    }
+  }
+  function employee_increment(){
+    var ajaxRequest;  // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+    status = document.getElementById('status').value;
+    if(status ==''){
+      alert('Please select status');
+      return ;
+    }
+    var checkboxes = document.getElementsByName('select_emp_id[]');
+    var sql = get_checked_value(checkboxes);
+    if(sql ==''){
+      alert('Please select employee Id');
+      return ;
+    }
+    let array = sql.split(",");
+    if(array.length!= 1){
+      alert('Please select only one employee');
+      return
+    };
+    var data = "sql="+sql;
+    url = base_url + "/employee_increment";
     ajaxRequest.open("POST", url, true);
     ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
     ajaxRequest.send(data);
