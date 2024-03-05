@@ -72,7 +72,8 @@ class Auth extends MY_Controller {
 				$session_data = array(
 				'c_user_id' => $result[0]->user_id,
 				'c_email' => $result[0]->email,
-				'user_type' => $result[0]->user_type
+				'user_type' => $result[0]->user_type,
+				'base_url' =>base_url(),
 				);
 				// Add user data in session
 				$this->session->set_userdata('c_email', $session_data);

@@ -1346,6 +1346,17 @@ class Reports extends MY_Controller
 		$this->load->view('admin/layout/layout_main', $data); //page load
 
 	}
+	public function employee_increment(){
+		$sql = $this->input->post('sql');
+		$emp_id = explode(',', trim($sql))[0];
+		$data['list'] =$this->db->where('emp_id', $emp_id)->get('xin_employee_incre_prob')->result();
+		// dd($data['list']);
+		$data['user_info'] =$this->Attendance_model->get_emp_info($emp_id);
+		
+		$this->load->view('admin/reports/employee_increment',$data);
+
+
+	}
 
 	public function late_report() {
 		$session = $this->session->userdata('username');

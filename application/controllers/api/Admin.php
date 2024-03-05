@@ -1302,38 +1302,53 @@ class Admin extends API_Controller
 	}
 	public function get_requisition_count($first_date,$second_date){
 	
-		 $a = $this->db->select('
-		 COUNT(id) as all_requisition,
-		 SUM(case when status = 1 then 1 else 0 end) as pending,
-		 SUM(case when status = 2 then 1 else 0 end) as approved,
-		 SUM(case when status = 3 then 1 else 0 end) as handover,
-		 ')
+        // dd($first_date .' = '. $second_date);
+		 $a = $this->db->select('*')
 		->where('requisition_date BETWEEN "'. $first_date . '" AND "'. $second_date .'"')
 		->get('products_requisition_details')
-		->row();
-		$data['all_requisition'] = $a->all_requisition;
-		$data['pending'] = $a->pending;
-		$data['approved'] = $a->approved;
-		$data['handover'] = $a->handover;
+		->result();
+		$data['all_requisition'] = $a;
+		$data['pending'] = [];
+		$data['approved'] = [];
+		$data['handover'] = [];
+        foreach ($a as $key => $value) {
+            if ($value->status == 1) {
+                $data['pending'][] = $value;
+            }
+            if ($value->status == 2) {
+                $data['approved'][] = $value;
+            }
+            if ($value->status == 3) {
+                $data['handover'][] = $value;
+            }
+        }
+
         return $data;
 	}
 	public function get_purchase_count($first_date,$second_date){
 	
-		 $a = $this->db->select('
-		 COUNT(id) as all_purchase,
-		 SUM(case when status = 1 then 1 else 0 end) as pending,
-		 SUM(case when status = 2 then 1 else 0 end) as approved,
-		 SUM(case when status = 3 then 1 else 0 end) as received,
-		 ')
-		 ->where("created_at BETWEEN '$first_date' AND '$second_date'")
-		 ->get('products_purches_details')
-		->row();
-		$data['all_purchase'] = $a->all_purchase;
-		$data['pending'] = ($a->pending!=null)?$a->pending:0;
-		$data['approved'] = ($a->approved !=null)?$a->approved:0;
-		$data['received'] = ($a->received !=null)?$a->received:0;
-        return $data;
-	}
+        $a = $this->db->select('*')
+        ->where("created_at BETWEEN '$first_date' AND '$second_date'")
+        ->get('products_purches_details')
+       ->result();
+       $data['all_purchase'] = $a;
+       $data['pending'] = [];
+       $data['approved'] =[];
+       $data['received'] =[];
+
+       foreach ($a as $key => $value) {
+           if ($value->status == 1) {
+               $data['pending'][] = $value;
+           }
+           if ($value->status == 2) {
+               $data['approved'][] = $value;
+           }
+           if ($value->status == 3) {
+               $data['received'][] = $value;
+           }
+       }
+       return $data;
+   }
 	public function get_leave_monthly()
 	{
 	   
@@ -2100,6 +2115,72 @@ class Admin extends API_Controller
                 }
 
                 $result = $this->Reports_model->get_requisition_report($first_date, $second_date, $status);
+               
+                if ($result) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' => $result,
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+    }
+    public function purchase_report(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                
+                $first_date = $this->input->post('first_date');
+                if (empty($first_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select First Date',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+
+                $second_date = $this->input->post('second_date');
+                if (empty($second_date)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select Second Date',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+
+                $status = $this->input->post('status');
+                if (empty($status)) {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Please select  Status',
+                        'data' => [],
+                    ], 200);
+                    exit;
+                }
+
+                $result = $this->Reports_model->get_store_in_report($first_date, $second_date, $status);
                
                 if ($result) {
                     $this->api_return([

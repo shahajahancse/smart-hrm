@@ -89,6 +89,7 @@ class Auth extends MY_Controller
 				'role_id' => $result[0]->user_role_id,
 				'username' => $result[0]->username,
 				'email' => $result[0]->email,
+				'base_url' =>base_url(),
 				);
 				// Add user data in session
 				$this->session->set_userdata('username', $session_data);

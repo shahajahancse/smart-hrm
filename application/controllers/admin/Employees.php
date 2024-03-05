@@ -436,6 +436,7 @@ class Employees extends MY_Controller {
 				'new_desig_id' => $user_info->designation_id,
 				'new_salary' => $this->input->post('new_salary'),
 				'effective_date' => $this->input->post('effective_date'),
+				'end_date'=> $this->input->post('notify_incre_prob'),
 				'status' => $this->input->post('status'),
 				'remark' => $this->input->post('remarks'),
 				'letter_status' => 0,
@@ -450,6 +451,7 @@ class Employees extends MY_Controller {
 				'new_desig_id' => $this->input->post('new_desig_id'),
 				'new_salary' => $this->input->post('new_salary'),
 				'effective_date' => $this->input->post('effective_date'),
+				'end_date'=> $this->input->post('notify_incre_prob'),
 				'status' => $this->input->post('status'),
 				'remark' => $this->input->post('remarks'),
 				'letter_status' => 0,
@@ -502,7 +504,17 @@ class Employees extends MY_Controller {
 		}
 		exit;
     }
-
+	
+	// public function re_entry_data(){
+	// 	$data=$this->db->get('xin_employee_incre_prob')->result();
+	// 	foreach($data as $row){
+	// 			if ($row->status==1) {
+	// 				$next_date=date('Y-m-d', strtotime($row->effective_date. ' + 6 month'));
+	// 				$this->db->where('id', $row->id);
+	// 				$this->db->update('xin_employee_incre_prob', array('end_date' => date('Y-m-d', strtotime($next_date. ' - 1 day'))));
+	// 			}
+	// 		}	
+	// }
 	public function remarks(){
 		if($_FILES['n_file']['size']!=0){
 			$allowed =  array('png','jpg','jpeg','pdf','gif');
