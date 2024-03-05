@@ -331,6 +331,8 @@ foreach ($all_employees as $key => $value) {
 	
 	echo "</div>";
 	echo "<br>";
+	echo "<div style='page-break-after: always;'></div>";
+
 }
 ?>
 
