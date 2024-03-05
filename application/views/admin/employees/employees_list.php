@@ -635,6 +635,7 @@
 
 <div class="box <?php echo $get_animate;?>">
     <div class="box-header with-border">
+        
 
         <h3 class="box-title">Employee List</h3>
         <!-- <?php if($user_info[0]->user_role_id==1) { ?> -->
