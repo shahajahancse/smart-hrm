@@ -52,9 +52,7 @@
                 $this->db->where_in('pa.user_id',$value->user_id);
                 $query = $this->db->get()->result();
             ?>
-            <?php if($session['role_id'] ==1){?>
             <td><?= $value->basic_salary?></td>
-            <?php }?>
             <td><?= $value->date_of_joining?></td>
             <?php 
                 $date1 = new DateTime($value->date_of_joining);
