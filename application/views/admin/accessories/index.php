@@ -42,7 +42,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
     <a class="btn btn-sm btn-info" style="float:right" href="<?php echo base_url('admin/accessories/item_add')?>">Add Item</a>
   </div>
   <ul class="nav nav-tabs">
-      <li class="">
+      <!-- <li class="">
         <a href="#working" data-toggle="tab" id="1">On Working</a>
       </li>
       <li>
@@ -56,7 +56,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
       </li>
       <li>
         <a href="#destroyed" data-toggle="tab" id="4">Destroyed</a>
-      </li>
+      </li> -->
       <li class="active">
         <a href="#all" data-toggle="tab" id="6" >All List</a>
       </li>
