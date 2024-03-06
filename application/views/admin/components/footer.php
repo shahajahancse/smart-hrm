@@ -207,12 +207,12 @@ function showSuccessAlert(message, url = null) {
         timer: 2000,
         showConfirmButton: false
     }).then(function() {
-        if (url=='no') {
-            // window.location.href = url;
-        }if (url) {
-            window.location.href = url;
-        }  else {
-            location.reload();
+        if (url!='no') {
+            if (url) {
+              window.location.href = url;
+          }else {
+              location.reload();
+          }
         }
     });
 }
@@ -226,10 +226,7 @@ function showErrorAlert(message) {
         text: message,
         showConfirmButton: true
     })
-
 }
-
-
 $(document).ready(function(){
   if (!$('table').parent('div').hasClass('table-responsive')) {
     $('table').parent('div').addClass('table-responsive');
