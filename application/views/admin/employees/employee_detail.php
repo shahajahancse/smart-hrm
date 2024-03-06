@@ -611,6 +611,16 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="address">User PC Password</label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="User PC password" name="user_password"
+                                                                    value="<?php echo $user_password;?>" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <?php $module_attributes = $this->Custom_fields_model->all_hrsale_module_attributes();?>
                                                 <div class="row">
