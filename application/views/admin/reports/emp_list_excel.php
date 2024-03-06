@@ -24,9 +24,7 @@ header('Cache-Control: max-age=0'); //no cache
             <th class="text-center">Team Leader</th>
             <th class="text-center">Email</th>
             <th class="text-center">Phone</th>
-            <?php if($session['role_id'] ==1){?>
             <th class="text-center">Gross Salary</th>
-            <?php }?>
             <th class="text-center">Joining Date</th>
             <th class="text-center">Job Duration</th>
             <th class="text-center">Last Increment Date</th>
@@ -52,9 +50,7 @@ header('Cache-Control: max-age=0'); //no cache
                 $this->db->where_in('pa.user_id',$value->user_id);
                 $query = $this->db->get()->result();
             ?>
-            <?php if($session['role_id'] ==1){?>
             <td><?= $value->basic_salary?></td>
-            <?php }?>
             <td><?= $value->date_of_joining?></td>
             <?php 
                 $date1 = new DateTime($value->date_of_joining);

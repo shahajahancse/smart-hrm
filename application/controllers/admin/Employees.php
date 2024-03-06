@@ -342,13 +342,9 @@ class Employees extends MY_Controller {
 						
 							
                         <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a>
-
                         '. $lrip .'
-
-
                         <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;"> <button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"> <span class="fa fa-trash"></span>  </button>   Delete </a>
 						<a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" onclick="employee_warning('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Employee Warning"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Employee Warning</a>
-
 						</div>
                 </div>';
 			} else {
