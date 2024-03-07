@@ -481,6 +481,9 @@ class Attendance_model extends CI_Model
 
     public function get_employees($emp_ids, $status = null)
     {
+        if (empty($emp_ids)) {
+            return [];
+        }
         $this->db->select('user_id, office_shift_id as shift_id, date_of_joining');
         /*if ($status != null) {
             $this->db->where('status',$status);
