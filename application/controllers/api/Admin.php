@@ -20,6 +20,28 @@ class Admin extends API_Controller
         $this->load->library('upload');
     }
 
+    public function sendRecentPunches() {
+        $dataa=json_decode($_POST['data']);
+        foreach($dataa as $data) {
+        $proxi_id=$data->deviceUserId;
+        $time=$data->recordTimeDhaka;
+        $in_time=date('Y-m-d H:i:s', strtotime($time));
+        $this->db->where("proxi_id", $proxi_id);
+        $this->db->where("date_time", $in_time);
+        $query1 = $this->db->get("xin_att_machine");
+        $num_rows1 = $query1->num_rows();
+
+        if($num_rows1 == 0) {
+            $data = array(
+                    'proxi_id' 	=> $proxi_id,
+                    'date_time'	=> $in_time,
+                    'device_id' => 0,
+                );
+            $this->db->insert("xin_att_machine", $data);
+        }
+        }
+        
+    }
     // leave
     public function leave_list()
     {
