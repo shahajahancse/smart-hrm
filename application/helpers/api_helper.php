@@ -67,11 +67,7 @@ if ( ! function_exists('api_auth'))
             $extension = pathinfo($file_extention, PATHINFO_EXTENSION);
             $base64Image = 'data:image/' . $extension . ';base64,' . base64_encode($imageData);
             $query->profile_picture = $base64Image;
-            $sql = $CI->db->select('mobile_numbers.number as official_number')
-                          ->from('mobile_numbers')
-                          ->join('product_accessories','mobile_numbers.id = product_accessories.number')
-                          ->where('product_accessories.user_id',$query->user_id)
-                          ->get()->row();      
+            $sql = [];
             if (empty($sql)) {
                 $sql = array('official_number'=> null );
             }    

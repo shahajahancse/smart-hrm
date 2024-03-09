@@ -23,9 +23,7 @@
             <th class="text-center">Team Leader</th>
             <th class="text-center">Email</th>
             <th class="text-center">Phone</th>
-            <?php if($session['role_id'] ==1){?>
             <th class="text-center">Gross Salary</th>
-            <?php }?>
             <th class="text-center">Joining Date</th>
             <th class="text-center">Job Duration</th>
             <th class="text-center">Last Increment Date</th>
@@ -47,16 +45,14 @@
             <td><?= $value->email?></td>
             <td><?= $value->contact_no?></td>
             <?php 
-                $this->db->select('pam.model_name,pac.cat_name,pac.cat_short_name,pa.device_name_id');
-                $this->db->from('product_accessories as pa');
-                $this->db->join('product_accessory_categories as pac','pa.cat_id = pac.id','left');	
-                $this->db->join('product_accessories_model as pam','pa.device_model = pam.id','left');
-                $this->db->where_in('pa.user_id',$value->user_id);
-                $query = $this->db->get()->result();
+                // $this->db->select('pam.model_name,pac.cat_name,pac.cat_short_name,pa.device_name_id');
+                // $this->db->from('product_accessories as pa');
+                // $this->db->join('product_accessory_categories as pac','pa.cat_id = pac.id','left');	
+                // $this->db->join('product_accessories_model as pam','pa.device_model = pam.id','left');
+                // $this->db->where_in('pa.user_id',$value->user_id);
+                // $query = $this->db->get()->result();
             ?>
-            <?php if($session['role_id'] ==1){?>
             <td><?= $value->basic_salary?></td>
-            <?php }?>
             <td><?= $value->date_of_joining?></td>
             <?php 
                 $date1 = new DateTime($value->date_of_joining);

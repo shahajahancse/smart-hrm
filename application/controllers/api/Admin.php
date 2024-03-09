@@ -20,6 +20,34 @@ class Admin extends API_Controller
         $this->load->library('upload');
     }
 
+    public function sendRecentPunches() {
+        $dataa=json_decode($_POST['data']);
+        // $emp_ids=[];
+        foreach($dataa as $data) {
+        $proxi_id=$data->deviceUserId;
+        $time=$data->recordTimeDhaka;
+        $in_time=date('Y-m-d H:i:s', strtotime($time));
+        if (date('Y-m-d', strtotime($in_time)) != date('Y-m-d')) {
+            continue;
+        }
+        $this->db->where("proxi_id", $proxi_id);
+        $this->db->where("date_time", $in_time);
+        $query1 = $this->db->get("xin_att_machine");
+
+        $emp_id=$this->db->select('emp_id')->where('proxi_id', $proxi_id)->get('xin_proxi')->row();
+        // array_push($emp_ids, $emp_id->emp_id);
+        $num_rows1 = $query1->num_rows();
+        if($num_rows1 == 0) {
+            $data = array(
+                    'proxi_id' 	=> $proxi_id,
+                    'date_time'	=> $in_time,
+                    'device_id' => 0,
+                );
+            $this->db->insert("xin_att_machine", $data);
+        }
+        $this->Attendance_model->attn_process(date('Y-m-d', strtotime($in_time)), array($emp_id->emp_id));
+        }
+    }
     // leave
     public function leave_list()
     {
@@ -207,12 +235,15 @@ class Admin extends API_Controller
                 $id = $this->input->post('leave_id');
                 $result = $this->Timesheet_model->update_leave_record($data, $id);
                 if ($result == true) {
-                    // if ($data['qty'] > 0) {
-                    //     for ($i = 0; $i < $data['qty']; $i++) {
-                    //         $process_date = date("Y-m-d", strtotime("+$i day", strtotime($data['from_date'])));
-                    //         $this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
-                    //     }
-                    // }
+                    if ($data['qty'] > 1) {
+                        for ($i = 0; $i < $data['qty']; $i++) {
+                            $process_date = date("Y-m-d", strtotime("+$i day", strtotime($data['from_date'])));
+                            $this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+                        }
+                    }else{
+                        $process_date = $data['from_date'];
+                        $this->Attendance_model->attn_process($process_date, array($_POST['emp_id']));
+                    }
                     $this->api_return([
                         'status' => true,
                         'message' => 'successful',
