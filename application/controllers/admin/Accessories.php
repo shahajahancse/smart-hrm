@@ -424,6 +424,22 @@ class Accessories extends MY_Controller {
         return $this->db->delete('xin_employee_desk');
     }
 
+    public function employee_using_device() {
+        $data['title'] = 'Employee Using Device'.' | '.$this->Xin_model->site_title();
+        $data['breadcrumbs'] = "Item List";
+        $datas['subview']= $this->load->view('admin/accessories/employee_using_device',$data,TRUE);  
+        $this->load->view('admin/layout/layout_main', $datas); 
+    }
+    public function employee_using_device_list(){
+        // CREATE TABLE `admin_smarthr`.`employee_using_device` ( `id` INT(255) NOT NULL AUTO_INCREMENT ,  `user_id` INT(255) NOT NULL ,  `device_id` INT(255) NOT NULL ,    PRIMARY KEY  (`id`)) ENGINE = InnoDB;
+
+        $this->db->select('employee_using_device.*, xin_employees.first_name, xin_employees.last_name');
+        $this->db->from('employee_using_device');
+        $this->db->join('xin_employees', 'xin_employees.user_id = employee_using_device.user_id');
+        $query = $this->db->get();
+        $data['data'] = $query->result();
+    }
+
 }
 
 ?>
