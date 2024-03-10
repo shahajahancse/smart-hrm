@@ -33,9 +33,6 @@ class Admin extends API_Controller
         $this->db->where("proxi_id", $proxi_id);
         $this->db->where("date_time", $in_time);
         $query1 = $this->db->get("xin_att_machine");
-
-        $emp_id=$this->db->select('emp_id')->where('proxi_id', $proxi_id)->get('xin_proxi')->row();
-        // array_push($emp_ids, $emp_id->emp_id);
         $num_rows1 = $query1->num_rows();
         if($num_rows1 == 0) {
             $data = array(

@@ -7,9 +7,11 @@ class Attendance_model extends CI_Model
     public function __construct()
     {
         parent::__construct();
+        $this->load->library('Zklibrary');
     }
 
     public function attn_process($process_date, $emp_ids, $status = null){
+        $this->get_attn_data_from_machine($process_date);
 
         $check_day = date("Y-m-d", strtotime("-1 day", strtotime($process_date)));
         $att_check = $this->db->where('attendance_date', $check_day)->get('xin_attendance_time');
@@ -269,9 +271,9 @@ class Attendance_model extends CI_Model
                 $early_out_status = 1;
             }
             // dd($out_time .' '. $early_out_time .' '. $early_out_status);
-            if ($status == 'Off Day') {
-                $late_status = 0;
-            }
+            // if ($status == 'Off Day') {
+            //     $late_status = 0;
+            // }
             $data = array(
                 'employee_id'       => $emp_id,
                 'office_shift_id'   => 1,
@@ -318,6 +320,61 @@ class Attendance_model extends CI_Model
         return 'Successfully Process Done';
     }
 
+
+    public function get_attn_data_from_machine($date){
+        $devices = array(
+            array("ip" => "192.168.30.14", "port" => 4370),
+            array("ip" => "192.168.30.20", "port" => 4370)
+        );
+        $startTime = strtotime($date.' 00:00:00');
+        $endTime = strtotime($date.' 23:59:59');
+        $batchData = array(); // Array to store batch insert data
+        // Prepare an array to store employee IDs associated with prox IDs
+        foreach ($devices as $index => $device){
+            $attendance = $this->retrieveAttendance($device["ip"], $device["port"], $startTime, $endTime);
+            foreach ($attendance as $at) {
+                $proxi_id = $at[1];
+                $time = $at[3];
+                $in_time = date('Y-m-d H:i:s', strtotime($time));
+                $this->db->where("proxi_id", $proxi_id);
+                $this->db->where("date_time", $in_time);
+                $query1 = $this->db->get("xin_att_machine");
+                $num_rows1 = $query1->num_rows();
+                if($num_rows1 == 0) {
+                    $batchData[] = array(
+                        'proxi_id'  => $proxi_id,
+                        'date_time' => $in_time,
+                        'device_id' => $index,
+                    );
+                }
+            }
+        }
+        if (!empty($batchData)) {
+            $this->db->insert_batch("xin_att_machine", $batchData);
+        }
+    }
+    function retrieveAttendance($ip, $port, $startTime, $endTime)
+    {
+        $zk = new ZKLibrary($ip, $port);
+        $zk->connect();
+        $zk->disableDevice();
+        $attendance = $zk->getAttendance();
+        $zk->enableDevice();
+        $zk->disconnect();
+        $filteredAttendance = array();
+        foreach ($attendance as $at) {
+            $dateTime = strtotime($at[3]);
+            if ($dateTime >= $startTime && $dateTime <= $endTime) {
+                $filteredAttendance[] = $at;
+            }
+        }
+        return $filteredAttendance;
+    }
+
+
+
+    
+    
     public function lunch_auto_off($date)
     {
         $this->db->select("id");
@@ -353,6 +410,14 @@ class Attendance_model extends CI_Model
             'comment'       => '.',
             'date'          => $date,
         );
+        $this->db->where('lunch_id', $lunch_id);
+        $this->db->where('emp_id', $emp_id);
+        $this->db->get('lunch_details')->row();
+        if($this->db->affected_rows() > 0) {
+            $this->db->where('lunch_id', $lunch_id);
+            $this->db->where('emp_id', $emp_id);
+            $this->db->update('lunch_details', $form_data);
+        }
         $this->db->insert('lunch_details', $form_data);
         return true;
     }
