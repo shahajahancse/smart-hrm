@@ -208,7 +208,6 @@ class Accessories extends MY_Controller {
     }
 
     public function item_add($id=null){
-        // dd($id);
         $data = $this->page_loads();
         if($id !=null){
             $data['title']         = 'Update Item'.' | '.$this->Xin_model->site_title();
@@ -233,10 +232,10 @@ class Accessories extends MY_Controller {
                 'device_model'   => $this->input->post('device_model'),
                 'description'    => $this->input->post('description'),
                 'remark'         => $this->input->post('remark'),
-                'image'          => "",
-                'user_id'        => $user_id,
+                // 'image'          => "",
+                // 'user_id'        => $user_id,
                 'status'         => $this->input->post('status'),
-                'use_number'     => $this->input->post('use_number'),
+                // 'use_number'     => $this->input->post('use_number'),
                 'number'         => $this->input->post('number'),
             );    
             // dd($form_data);
@@ -251,10 +250,10 @@ class Accessories extends MY_Controller {
                         $lastInsertedId = $this->db->insert_id();
                         $query = $this->db->get_where('product_accessories', array('id' => $lastInsertedId));
                         $result = $query->row();
-                        if($result->user_id !=null){
+                        if($result->id !=null){
                             $data= array(
                             'p_a_id'        => $result->id,
-                            'user_id'       => $result->user_id,
+                            // 'user_id'       => $result->user_id,
                             'provide_by'    => $data['user_id'],
                             'provide_date'  => date('Y-m-d H:i:s'),
                             'created_by'    => $data['user_id'],

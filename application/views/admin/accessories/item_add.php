@@ -35,12 +35,7 @@
             
             <input type="hidden" name="hidden_id" value="<?php echo isset($row->id)? $row->id:''; ?>">
 
-            <div class="col-md-3" >
-              <div class="form-group">
-                <label for="description">Device Number</label>
-                <input class="form-control" placeholder="Device Number" name="device_name_id"  type="text" value="<?php echo isset($row->device_name_id)? $row->device_name_id:''; ?>" > 
-              </div>
-            </div>
+
 
             <div class="col-md-3" >
               <label for="Status">Device Model</label>
@@ -59,6 +54,12 @@
             </div>
 
             <div class="col-md-3" >
+              <div class="form-group">
+                <label for="description">Device Number</label>
+                <input class="form-control" placeholder="Device Number" name="device_name_id"  type="text" value="<?php echo isset($row->device_name_id)? $row->device_name_id:''; ?>" > 
+              </div>
+            </div>
+            <div class="col-md-3" >
               <label for="Status">Item Status</label>
               <select name="status" class="form-control"  id="status">  
                 <option value="">Select status</option>
@@ -74,43 +75,19 @@
           <div class="row">
             <div class="col-md-4" >
               <div class="form-group">
-                <label for="description">Dtails</label>
+                <label for="description">Details</label>
                 <textarea class="form-control" placeholder="Details" name="description" type="text" ><?php echo isset($row->description)? $row->description:''; ?></textarea>
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <label for="description">Coments</label>
-                <textarea class="form-control" placeholder="Coments" name="remark" type="text" ><?php echo isset($row->remark)? $row->remark:''; ?></textarea>
+                <label for="description">Comments</label>
+                <textarea class="form-control" placeholder="Comments" name="remark" type="text" ><?php echo isset($row->remark)? $row->remark:''; ?></textarea>
               </div>
             </div>
-            
-            <div class="col-md-4" >
-              <label for="Status">User</label>
-              <select name="user_id" id="user_id" class="form-control" disabled>  
-                <option value="">Select User</option>
-                <?php foreach ($users as $key => $user) {?>
-                  <option value="<?php echo $user->user_id ?>" <?php echo (isset($row->user_id) && $row->user_id == $user->user_id)? 'selected':''; ?> ><?php echo $user->first_name.' '.$user->last_name ?></option>
-                <?php }?>
-                  <option value="sr_1" <?php echo (isset($row->user_id) && $row->user_id =='sr_1' )? 'selected':''; ?>>Server Room</option>
-                  <option value="uh_2" <?php echo (isset($row->user_id) && $row->user_id == 'uh_2')? 'selected':''; ?>>Using Home</option>
-                  <option value="fc_3" <?php echo (isset($row->user_id) && $row->user_id == 'fc_3')? 'selected':''; ?>>3rd Floor Common</option>
-                  <option value="fc_4" <?php echo (isset($row->user_id) && $row->user_id == 'fc_4')? 'selected':''; ?>>5th Floor Common</option>
-              </select>
-            </div>   
-          </div>
-          <div class="row">
-            <div class="col-md-2"  >
-              <label for="Status">Use Sim Number</label>
-              <select name="use_number" id="use_number" class="form-control" disabled>  
-                <option value="" disabled selected>Select</option>
-                <option value="1" <?php echo (isset($row->use_number) && $row->use_number == 1)? 'selected':''; ?> >Yes</option>
-                <option value="2" <?php echo (isset($row->use_number) && $row->use_number == 2)? 'selected':''; ?> >No</option>
-              </select>
-            </div>
-            <div class="col-md-3" >
+            <div class="col-md-3" id="number" style="display:none">
               <label for="Status">Select Sim Number</label>
-              <select name="number" id="number"  class="form-control" disabled>  
+              <select name="number" class="form-control">  
                 <option value="">Select Number</option>
                 <?php $numbers =$this->db->select('*')->get('mobile_numbers')->result(); foreach($numbers as $number){?>
                 <option value="<?php echo $number->id?>" <?php echo (isset($row->number) && $row->number == $number->number )? 'selected':''; ?> ><?php echo $number->number?></option>
@@ -118,6 +95,7 @@
               </select>
             </div>
           </div>
+
           </div>        
           </div>
           <?php if(isset($row->id)==null){?>
@@ -136,7 +114,8 @@
 <script>
   $(document).ready(function(){
     $('#user_id').select2();
-  });
+    $('#cat_id').select2();
+
 
 <?php if(isset($row)){?>
 var val = $('#cat_id').find(":selected").val();  
@@ -155,58 +134,23 @@ $.ajax({
 $('#cat_id').on('change',function(){
   var val = $('#cat_id').find(":selected").val();  
   var category = $('#cat_id').find(":selected").text();
-    $.ajax({
-      type: "GET",
-      url: "<?php echo base_url('admin/accessories/get_model/')?>"+val,
-      data:'cat_id='+val,
-      success: function(data){
+  $.ajax({
+    type: "GET",
+    url: "<?php echo base_url('admin/accessories/get_model/')?>"+val,
+    data:'cat_id='+val,
+    success: function(data){
       $("#model_name").html(data);
-      }
-    });
-  var mobile = category.search(/phone/i); 
+    }
+  });
   var sim = category.search(/Sim/i); 
-  if(mobile==-1 || sim ==-1){
-    $("#use_number").prop('disabled', true);
-    $("#use_number").val(null);
+  if( sim ==-1){
     $("#number").val(null);
-    $("#number").prop('disabled', true);
-  }
-
-  if(mobile !== -1){
-    $("#use_number").prop('disabled', false);
-    $('#use_number').on('change',function(){
-       var status = $('#use_number').find(":selected").val();  
-      if(status==1){
-       $("#number").prop('disabled', false);
-      }else{
-       $("#number").prop('disabled', true);
-       $("#number").val(null);
-      }
-    });
-  }
-
-  if(sim !== -1){
-    $("#use_number").prop('disabled', false);
-    $('#use_number').on('change',function(){
-       var status = $('#use_number').find(":selected").val();  
-      if(status==1){
-       $("#number").prop('disabled', false);
-      }else{
-       $("#number").prop('disabled', true);
-      }
-    });
-  }
-});
-// able/disable user name list according to item status [ 1 == able , else disable ]
-$('#status').on('change',function(){
-  var status = $('#status').find(":selected").val();  
-  if(status==1 || status==5){
-  $("#user_id").prop('disabled', false);
+    $("#number").hide();
   }else{
-  $("#user_id").prop('disabled', true);
-    $("#user_id").val(null);
+    $("#number").show();
   }
 });
+
 
 <?php 
 if(isset($row->status)==1){
@@ -218,12 +162,6 @@ if(isset($row->status)==1){
   $("#user_id").prop('disabled', true);
     $("#user_id").val(null);
   }
-<?php }?>
-  var status = $('#use_number').find(":selected").val();  
-      if(status==1){
-       $("#number").prop('disabled', false);
-      }else{
-       $("#number").prop('disabled', true);
-       $("#number").val(null);
-      }
+ <?php }?>
+}); 
 </script>

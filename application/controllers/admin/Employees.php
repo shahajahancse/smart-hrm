@@ -1414,6 +1414,7 @@ class Employees extends MY_Controller {
 			'all_leave_types' => $this->Timesheet_model->all_leave_types(),
 			// 'is_emp_lead' => $result[0]->is_emp_lead,
 			'lead_user_id' => $result[0]->lead_user_id,
+			'user_password' => $result[0]->user_password,
 			);
 		// dd($data);
 			if($result[0]->nda_status!=0) {
@@ -2583,6 +2584,7 @@ class Employees extends MY_Controller {
 			'letter_status' => $this->input->post('letter_status'),
 			'is_leave_on' => $this->input->post('leave_start'),
 			'leave_effective' => $this->input->post('leave_effective_date'),
+			'user_password' => $this->input->post('user_password'),
 		);
 		$id = $this->input->post('user_id');
 		$proxi_id= $this->input->post('proxi_id');
