@@ -22,10 +22,10 @@ class Attendance extends MY_Controller
     public function __construct()
     {
         parent::__construct();
-        $session = $this->session->userdata('username');
-        if(empty($session)) {
-            redirect('admin/');
-        }
+        // $session = $this->session->userdata('username');
+        // if(empty($session)) {
+        //     redirect('admin/');
+        // }
         //load the model
         $this->load->model('Attendance_model');
         $this->load->model("Xin_model");
@@ -60,6 +60,8 @@ class Attendance extends MY_Controller
     // }
 
     // public function attendance_process($process_date, $status)
+    
+    
     public function attendance_process()
     {
         // dd($sql);

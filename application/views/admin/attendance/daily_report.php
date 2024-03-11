@@ -63,9 +63,10 @@
                 <td>Status</td>
                 <td>Comment</td>
 	        </thead>
-            <?php $i=1; foreach($values as $row){?>
+            <?php  $i=1; foreach($values as $row){?>
             <tbody >
             		<?php 
+					
             			// $status = $row->attendance_status == "Present" && $row->late_status == 0 && ( $row->clock_in == "" || $row->clock_out =="") ? "P(ERROR)":
                   //           (  $row->attendance_status == "Absent"  ? "A" :
                   //           (  $row->attendance_status == "Leave"   ? "L" : ( $row->attendance_status == "Present" && $row->late_status == 1 ? "P(Late)":($row->attendance_status == "Present" && $row->late_status == 0  ? "P"  : ($row->attendance_status == "Meeting" && $row->late_status == 0  ? "M":"H") ))))
@@ -74,7 +75,9 @@
                   	$status = "A";
                   } else if (($row->status == "Present" && $row->late_status == 0) && ($row->clock_in == "" || $row->clock_out == "")) {
                   	$status = "P(ERROR)";
-                  } else if ($row->status == "Present" && $row->late_status == 1) {
+                  }else if ($row->status == "Off Day"){
+					$status = "Off Day";
+				 } else if ($row->status == "Present" && $row->late_status == 1) {
                   	$status = "P(Late)";
                   } else if ($row->status == "Present" && $row->late_status == 0) {
                   	$status = "P";

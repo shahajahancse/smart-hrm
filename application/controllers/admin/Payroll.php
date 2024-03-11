@@ -42,6 +42,15 @@ class Payroll extends MY_Controller {
 		/*Final JSON response*/
 		exit(json_encode($Return));
 	}
+	public function employee_list_with_salary() {
+		$data['title'] = $this->lang->line('left_payroll_templates').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = "Payroll";
+		$data['path_url'] = 'payroll_templates';
+		// $data['all_office_shifts'] = $this->Location_model->all_office_locations();
+		$data['subview'] = $this->load->view("admin/payroll/employee_list_with_salary", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+
+	}
 
 
 	public function index()
