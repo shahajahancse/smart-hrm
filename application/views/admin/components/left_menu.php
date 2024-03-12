@@ -521,6 +521,10 @@ if($theme[0]->sub_menu_icons != ''){
           <?php if(in_array('1102',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['item_add_active']))echo $arr_mod['item_add_active'];?>"> <a href="<?php echo site_url('admin/accessories/item_add');?>"> <i class="fa fa-plus-circle" style="color:green"></i> Item Add </a> </li>
           <?php } ?>  
+          
+          <?php if(in_array('1102',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['employee_using_device']))echo $arr_mod['employee_using_device'];?>"> <a href="<?php echo site_url('admin/accessories/employee_using_device');?>"> <i class="fa fa-plus-circle" style="color:green"></i> Employee Using Device </a> </li>
+          <?php } ?>  
 
           <?php if(in_array('1103',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['acc_repo_active']))echo $arr_mod['acc_repo_active'];?>"> <a href="<?php echo site_url('admin/accessories/reports');?>"> <i class="fa fa-line-chart" style="color:seagreen"></i> Reports </a> </li>

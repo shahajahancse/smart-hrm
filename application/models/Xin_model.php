@@ -558,6 +558,10 @@ class Xin_model extends CI_Model {
 			$arr['access_open'] = 'active';
 			$arr['item_add_active'] = 'active';
 			return $arr;
+		} else if($mClass=='accessories' && $mMethod=='employee_using_device') {
+			$arr['access_open'] = 'active';
+			$arr['employee_using_device'] = 'active';
+			return $arr;
 		}  else if($mClass=='accessories' && $mMethod=='reports') {
 			$arr['access_open'] = 'active';
 			$arr['acc_repo_active'] = 'active'; 
