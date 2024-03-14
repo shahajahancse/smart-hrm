@@ -4,7 +4,8 @@
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <div class="card <?php echo $get_animate;?>" style="margin-left:15px;margin-top:15px;margin-right: 15px;border-radius: 0px;">
   <div class="card-body">
-<table class="datatables-demo table table-striped table-bordered" id="equipment_list" style="width: 100%;background: white;margin-left: 0px;">
+    <h4>Coming Soon</h4>
+<!-- <table class="datatables-demo table table-striped table-bordered" id="equipment_list" style="width: 100%;background: white;margin-left: 0px;">
     <thead>
         <tr>
         <th class="text-center" style="width: 50px;">No.</th>
@@ -39,7 +40,7 @@
             </tr>
         <?php  }}?>
     </tbody>
-</table>
+</table> -->
     </div>
 </div>
 

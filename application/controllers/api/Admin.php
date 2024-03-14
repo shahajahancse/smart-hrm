@@ -1,6 +1,6 @@
 <?php
 
-defined('BASEPATH') or exit('No direct script access allowed');
+// defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
@@ -8,6 +8,12 @@ class Admin extends API_Controller
 {
     public function __construct()
     {
+        header('Access-Control-Allow-Origin: *');
+        // Allow methods: GET, POST, OPTIONS
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        // Allow header Content-Type: application/json
+        header("Access-Control-Allow-Headers: Content-Type");
+        
         parent::__construct();
         $this->load->helper('api_helper');
         $this->load->model("Timesheet_model");
@@ -21,29 +27,32 @@ class Admin extends API_Controller
     }
 
     public function sendRecentPunches() {
-        $dataa=json_decode($_POST['data']);
-        // $emp_ids=[];
+
+        $dataa=$_POST['data'];
+        $emp_ids=[];
         foreach($dataa as $data) {
-        $proxi_id=$data->deviceUserId;
-        $time=$data->recordTimeDhaka;
+        $proxi_id=$data['id'];
+        $time=$data['time'];
         $in_time=date('Y-m-d H:i:s', strtotime($time));
-        if (date('Y-m-d', strtotime($in_time)) != date('Y-m-d')) {
-            continue;
-        }
         $this->db->where("proxi_id", $proxi_id);
         $this->db->where("date_time", $in_time);
         $query1 = $this->db->get("xin_att_machine");
         $num_rows1 = $query1->num_rows();
+        $emp_id=$this->db->select('emp_id')->where('proxi_id', $proxi_id)->get('xin_proxi')->row();
+        // dd($emp_id->emp_id);
+        if (!empty($emp_id)) {
+            array_push($emp_ids, $emp_id->emp_id);
+        }
         if($num_rows1 == 0) {
             $data = array(
                     'proxi_id' 	=> $proxi_id,
                     'date_time'	=> $in_time,
-                    'device_id' => 0,
+                    'device_id' => $data['state'],
                 );
             $this->db->insert("xin_att_machine", $data);
         }
-        $this->Attendance_model->attn_process(date('Y-m-d', strtotime($in_time)), array($emp_id->emp_id));
-        }
+    }
+    $this->Attendance_model->attn_process(date('Y-m-d', strtotime($in_time)), $emp_ids);
     }
     // leave
     public function leave_list()

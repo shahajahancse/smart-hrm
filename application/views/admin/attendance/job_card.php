@@ -107,6 +107,7 @@ foreach ($all_employees as $key => $value) {
 		  <th>Lunch In Time</th>
 		  <th>Attendance Status</th>
 		  <th>Remarks</th>
+		  <th>Comment</th>
 		  ";
 
 		foreach ($emp_data['emp_data'] as $key => $row) {
@@ -238,6 +239,10 @@ foreach ($all_employees as $key => $value) {
 				
 				echo "<td>&nbsp;";
 				echo $remark;
+				echo "</td>";
+
+				echo "<td>&nbsp;";
+				echo $row->comment;
 				echo "</td>";
 				
 			echo "</tr>";

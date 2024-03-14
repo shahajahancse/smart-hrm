@@ -67,7 +67,22 @@ class Attendance_model extends CI_Model
             $shift_schedule  = $this->get_shift_schedule($emp_id, $process_date, $shift_id);
 
             $proxi_id   = $this->get_proxi($emp_id);
-            if (strtotime('2024-01-11') <= strtotime($process_date)) {
+          if (strtotime('2024-03-12') <= strtotime($process_date)) {
+                $shift_schedule = (object) array(
+                    'office_shift_id' => 1,
+                    'company_id' => 1,
+                    'shift_name' => 'Morning Shift',
+                    'default_shift' => 1,
+                    'in_start_time' => '06:30:00',
+                    'in_time' => '09:00:00',
+                    'late_start' => '09:10:01',
+                    'lunch_time' => '13:10:00',
+                    'lunch_minute' => 20,
+                    'out_start_time' => '13:00:00',
+                    'ot_start_time' => '17:00:00',
+                    'out_end_time' => '23:59:59',
+                );
+            }elseif (strtotime('2024-03-11') <= strtotime($process_date)) {
                 $shift_schedule = (object) array(
                     'office_shift_id' => 1,
                     'company_id' => 1,
@@ -79,22 +94,7 @@ class Attendance_model extends CI_Model
                     'lunch_time' => '13:10:00',
                     'lunch_minute' => 60,
                     'out_start_time' => '13:00:00',
-                    'ot_start_time' => '18:30:00',
-                    'out_end_time' => '23:59:59',
-                );
-            }elseif (strtotime('2024-01-12') <= strtotime($process_date)) {
-                $shift_schedule = (object) array(
-                    'office_shift_id' => 1,
-                    'company_id' => 1,
-                    'shift_name' => 'Morning Shift',
-                    'default_shift' => 1,
-                    'in_start_time' => '06:30:00',
-                    'in_time' => '09:00:00',
-                    'late_start' => '09:06:01',
-                    'lunch_time' => '13:10:00',
-                    'lunch_minute' => 20,
-                    'out_start_time' => '13:00:00',
-                    'ot_start_time' => '15:00:00',
+                    'ot_start_time' => '19:00:00',
                     'out_end_time' => '23:59:59',
                 );
             } else {
@@ -325,7 +325,7 @@ class Attendance_model extends CI_Model
                     } elseif($query->row()->status == 'Off Day') {
                         $this->checking_absent_after_offday_holiday($emp_id, $check_day, array($check_day), 'Off Day');
                     }
-                }
+                } 
             }
             $this->leave_cal_all($emp_id,$process_date);
 
