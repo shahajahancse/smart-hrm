@@ -54,7 +54,12 @@ class Xin_model extends CI_Model {
 			}
 			$this->db->where('employee_id', $employee_id);
 			$this->db->where('salary_month', $month);
-			$this->db->update('xin_salary_payslips');
+			
+			if($this->db->update('xin_salary_payslips')){
+				return true;
+			}else{
+				return false;
+			}
 	}
 	
 		

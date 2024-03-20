@@ -645,6 +645,15 @@ class Admin extends API_Controller
                     $date = $date;
                     $m_day = $value['modify_day'];
                     $result = $this->Xin_model->update_salaryall($user_id, $salary, $date, $m_day);
+                    if ($result==false) {
+                        $this->api_return([
+                            'status' => false,
+                            'message' => 'Unsuccessful',
+                            'error'=>$this->db->error(),
+                            'data' => [],
+                        ], 200);
+                        exit;
+                    }
                 }
 
              
