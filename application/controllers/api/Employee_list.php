@@ -40,14 +40,13 @@ class Employee_list extends API_Controller
     public function index(){
             $this->db->select('xin_employees.*,xin_departments.department_name,xin_designations.designation_name');
             $this->db->from('xin_employees');
-            $this->db->from('xin_departments');
-            $this->db->from('xin_designations');
-            $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
-            $this->db->where('xin_employees.department_id = xin_departments.department_id');
-            $this->db->where('xin_employees.user_role_id',3);
-            $this->db->where('xin_employees.status',1);
+            $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
+            $this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
+            $this->db->where('xin_employees.user_role_id', 3);
+            $this->db->where_in('xin_employees.status', [1,4,5]);
             $this->db->order_by('xin_employees.basic_salary','DESC');
             $data['Employee']=$this->db->get()->result();
+
             $this->api_return([
                 'success' => true,
                 'massage'=>'Success',

@@ -590,11 +590,17 @@ class Admin extends API_Controller
         if ($user_info['status'] == true) {
             if ($user_info['user_info']->user_role_id != 3) {
                 $salary_month = $this->db->select('*')->from('xin_salary_payslips')->order_by('payslip_id', 'DESC')->limit(1)->get()->row()->salary_month;
-                $data = $this->Xin_model->modify_salary($salary_month);
+                $total_day= date('t', strtotime($salary_month));
+                $month= date('m', strtotime($salary_month));
+                $year= date('Y', strtotime($salary_month));
+                $data= $this->Xin_model->modify_salary($salary_month);
                 if (!empty($data)) {
                     $this->api_return([
                         'status' => true,
                         'message' => 'successful',
+                        'total_day' => (int)$total_day,
+                        'month' => (int)$month,
+                        'year' => (int)$year,
                         'data' => $data,
                     ], 200);
                 } else {
@@ -1962,6 +1968,45 @@ class Admin extends API_Controller
                 'data' => [],
             ], 401);
         }
+    }
+    public function single_extra_present_approval(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                
+                $time_attendance_id = $this->input->post('time_attendance_id');
+                $extra_ap = $this->input->post('extra_ap');
+
+                $this->db->where('time_attendance_id', $time_attendance_id);
+                if ($this->db->update('xin_attendance_time', ['extra_ap' => $extra_ap])) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' =>[],
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+        
     }
     public function leave_report(){
         $authorization = $this->input->get_request_header('Authorization');
