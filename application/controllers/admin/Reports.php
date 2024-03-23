@@ -1354,9 +1354,66 @@ class Reports extends MY_Controller
 		$data['user_info'] =$this->Attendance_model->get_emp_info($emp_id);
 		
 		$this->load->view('admin/reports/employee_increment',$data);
-
-
 	}
+
+
+
+	public function employee_bonus(){
+
+		$all_employee=$this->db->where_in('status',[1,4,5])->get('xin_employees')->result();
+
+		$exist_employee=[];
+		$no_intern_one_year=[];
+		$joining_one_year=[];
+		$no_year=[];
+		$const_date=date('Y-04-10');
+		$emni_pass_date=date('Y-m-d',strtotime('-18 month', strtotime($const_date)));
+		$pass_date=date('Y-m-d',strtotime('-1 year', strtotime($const_date)));
+		// dd($emni_pass_date);
+
+		foreach ($all_employee as $key => $value) {
+			$emp_id=$value->user_id;
+			$joining_date=$value->date_of_joining;
+			if ($joining_date <= $emni_pass_date) {
+				$no_intern_one_year[] = $value->user_id;
+			}else{
+				$this->db->where('emp_id', $emp_id);
+				$this->db->where('status', 1);
+				$this->db->order_by('effective_date', 'desc');
+				$this->db->limit(1);
+				$last_date=$this->db->get('xin_employee_incre_prob')->row();
+				// dd($last_date);
+
+				if (!empty($last_date) && $joining_date <= $pass_date) {
+					$no_intern_one_year[] = $value->user_id;
+				}else{
+					$exist_employee[]= $value;
+				}
+				
+			}
+		}
+
+		foreach ($exist_employee as $key => $value) {
+				if ($value->date_of_joining <= $pass_date) {
+					$joining_one_year[] = $value->user_id;
+				}else{
+					$no_year[] = $value->user_id;
+				}
+		}
+
+
+		$data['no_intern_one_year'] = $no_intern_one_year;
+		$data['joining_one_year'] = $joining_one_year;
+		$data['no_year'] = $no_year;
+		$this->load->view('admin/reports/employee_bonus',$data);
+	}
+
+
+
+
+
+
+
 
 	public function late_report() {
 		$session = $this->session->userdata('username');

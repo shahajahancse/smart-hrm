@@ -21,15 +21,18 @@ class Attendance_model extends CI_Model
             echo 'Sorry! advanced process not allowed, Please first process '. date('Y-m-d');
             exit;
         }
-        if (strtotime('2023-06-31') >= strtotime($process_date)) {
-            echo 'Sorry! Before 2023-06-31 process not allowed';
+        if (strtotime('2024-02-29') >= strtotime($process_date)) {
+            echo 'Sorry! Before 2024-02-29 process not allowed';
             exit;
         }
 
-
-        $off_day = $this->dayoff_check($process_date);
-        $holiday_day = $this->holiday_check($process_date);
-
+        if (date('2024-03-23') == $process_date) {
+            $off_day = false;
+            $holiday_day = false;
+        }else{
+            $off_day = $this->dayoff_check($process_date);
+            $holiday_day = $this->holiday_check($process_date);
+        }
         // lumch auto off in holiday & weekend
         $lunch_id = null;
         if ($off_day == true || $holiday_day == true) {
