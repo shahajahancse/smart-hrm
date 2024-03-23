@@ -874,8 +874,7 @@ class Attendance_model extends CI_Model
     
 	public function leave_cal_all($id,$date)
 	{
-		$user_info = $this->db->where('status', 1)
-        ->where('user_id', $id)
+		$user_info = $this->db->where('user_id', $id)
         ->get('xin_employees')->result();
 		foreach ($user_info as $key => $row) {
             if ($row->is_leave_on == 0 ) {
