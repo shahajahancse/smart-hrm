@@ -177,6 +177,15 @@ foreach ($all_employees as $key => $value) {
 			{
 				$att_status = "P(Error)";
 				$perror_count++;
+				// if ($row->attendance_date > date('Y-03-12')) {
+				// 	$this->db->where('employee_id', $value->user_id);
+				// 	$this->db->where('attendance_date', $row->attendance_date);
+				// 	$this->db->update('xin_attendance_time', array('clock_out' => $row->attendance_date . ' 19:00:00'));
+				// }else{
+				// 	$this->db->where('employee_id', $value->user_id);
+				// 	$this->db->where('attendance_date', $row->attendance_date);
+				// 	$this->db->update('xin_attendance_time', array('clock_out' => $row->attendance_date . ' 16:30:00'));
+				// }
 			}
 			else
 			{

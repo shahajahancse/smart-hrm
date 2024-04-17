@@ -70,7 +70,22 @@ class Attendance_model extends CI_Model
             $shift_schedule  = $this->get_shift_schedule($emp_id, $process_date, $shift_id);
 
             $proxi_id   = $this->get_proxi($emp_id);
-          if (strtotime('2024-03-12') <= strtotime($process_date)) {
+            if (strtotime('2024-04-15') <= strtotime($process_date)) {
+                $shift_schedule = (object) array(
+                    'office_shift_id' => 1,
+                    'company_id' => 1,
+                    'shift_name' => 'Morning Shift',
+                    'default_shift' => 1,
+                    'in_start_time' => '06:30:00',
+                    'in_time' => '09:30:00',
+                    'late_start' => '09:40:01',
+                    'lunch_time' => '13:10:00',
+                    'lunch_minute' => 60,
+                    'out_start_time' => '13:00:00',
+                    'ot_start_time' => '18:30:00',
+                    'out_end_time' => '23:59:59',
+                );
+            }elseif (strtotime('2024-03-12') <= strtotime($process_date)) {
                 $shift_schedule = (object) array(
                     'office_shift_id' => 1,
                     'company_id' => 1,
@@ -865,8 +880,9 @@ class Attendance_model extends CI_Model
     }
     public function get_total_late_monthly($first_date, $second_date)
     {
-        $this->db->select('xin_attendance_time.*');
+        $this->db->select('xin_attendance_time.*, xin_employees.first_name, xin_employees.last_name');
         $this->db->from('xin_attendance_time');
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_attendance_time.employee_id');
         $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
         $this->db->where("xin_attendance_time.late_status", 1);
         return $this->db->get()->result();
@@ -1285,8 +1301,9 @@ class Attendance_model extends CI_Model
 
     }
     public function get_total_meeting_monthly($first_date,$last_date){
-        $this->db->select('*');
+        $this->db->select('xin_employee_move_register.*, xin_employees.first_name, xin_employees.last_name');
         $this->db->from('xin_employee_move_register');
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_employee_move_register.employee_id');
         $this->db->where('date BETWEEN "'.$first_date.'" AND "'.$last_date.'"');
         return $this->db->get()->result();
 
