@@ -147,27 +147,28 @@ class Attendance extends MY_Controller
                 }
                 $session = $this->session->userdata('username');
 
-                if (!is_null($session) && array_key_exists('role_id', $session) && in_array($session['role_id'], [1, 2], true)) {
+                if (!is_null($session) && array_key_exists('role_id', $session) && in_array($session['role_id'], [1], true)) {
                     $employee_managment = $this->db->where('user_id', $row)->get('xin_employees')->row();
                     if ($employee_managment->is_management == 1) {
                         echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name";
                         exit;
                     }
                     if ($status != '' && $status == 1) {
-                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-120 minutes'))) {
+                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-72 hours'))) {
                             echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
                             exit;
                         }
-                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-120 minutes'))) {
+                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-72 hours'))) {
                             echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
                             exit;
                         }
                     }else{
-                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-1 day'))) {
+
+                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-3 day'))) {
                             echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
                             exit;
                         }
-                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-1 day'))) {
+                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-3 day'))) {
                             echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
                             exit;
                         }

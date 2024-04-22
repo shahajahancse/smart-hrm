@@ -5,7 +5,6 @@
 <?php $session = $this->session->userdata('username');?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
-<?php// if(in_array('315',$role_resources_ids)) {?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $project_no = $this->Xin_model->generate_random_string();?>
 <style>
@@ -145,7 +144,6 @@
     </div>
   </div>
 </div>
-<?php //} ?>
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border">
     <h3 class="box-title"> <?php echo $this->lang->line('xin_list_all');?> <?php echo $this->lang->line('xin_project_timelogs');?> </h3>

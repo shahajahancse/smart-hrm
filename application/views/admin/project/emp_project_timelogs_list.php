@@ -81,8 +81,8 @@ $log_data=$this->db->get()->result();
                 </td>
                 <td>
                   <?php if ($log->status==0) {?>
-                    <li><a href="<?= site_url('admin/project/approve_timelogs/'.$log->timelogs_id) ?>"><i class="fa fa-check"></i> Approve</a></li>
-                    <li><a href="<?= site_url('admin/project/reject_timelogs/'.$log->timelogs_id) ?>"><i class="fa fa-times"></i> Reject</a></li>
+                    <a class="btn btn-xs btn-success" href="<?= site_url('admin/project/approve_timelogs/'.$log->timelogs_id) ?>"><i class="fa fa-check"></i> Approve</a>
+                    <a class="btn btn-xs btn-danger" href="<?= site_url('admin/project/reject_timelogs/'.$log->timelogs_id) ?>"><i class="fa fa-times"></i> Reject</a>
                   <?php } else {?>
                   <?php }?>
                   
