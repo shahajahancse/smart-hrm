@@ -377,16 +377,59 @@ class Project extends MY_Controller
         $data['breadcrumbs'] = $this->lang->line('xin_project_timelogs');
         $data['path_url'] = 'project_timelogs';
         $role_resources_ids = $this->Xin_model->user_role_resource();
-        if (in_array('44', $role_resources_ids)) {
             if (!empty($session)) {
                 $data['subview'] = $this->load->view("admin/project/project_timelogs_list", $data, true);
                 $this->load->view('admin/layout/layout_main', $data); //page load
             } else {
                 redirect('admin/');
             }
-        } else {
+        
+    }
+    public function reject_timelogs($id){
+        $this->where('timelogs_id', $id);
+        if($this->db->update('xin_projects_timelogs', array('status' => 2))){
+            $this->session->set_flashdata('message', 'Timelogs Rejected');
+            redirect('admin/project/emp_timelogs');
+        }else{
+            $this->session->set_flashdata('message', 'Error Rejected');
+            redirect('admin/project/emp_timelogs');
+        }
+    }
+    public function approve_timelogs($id){
+        $this->db->where('timelogs_id', $id);
+        if($this->db->update('xin_projects_timelogs', array('status' => 1))){
+            $this->session->set_flashdata('message', 'Timelogs Rejected');
+            redirect('admin/project/emp_timelogs');
+        }else{
+            $this->session->set_flashdata('message', 'Error Rejected');
+            redirect('admin/project/emp_timelogs');
+        }
+    }
+    public function emp_timelogs()
+    {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $system = $this->Xin_model->read_setting_info(1);
+        if ($system[0]->module_projects_tasks != 'true') {
             redirect('admin/dashboard');
         }
+        $data['title'] = $this->lang->line('xin_project_timelogs') . ' | ' . $this->Xin_model->site_title();
+        $data['all_employees'] = $this->Xin_model->all_employees();
+        $data['all_companies'] = $this->Xin_model->get_companies();
+        $data['all_projects'] = $this->Project_model->get_all_projects();
+        $data['all_clients'] = $this->Clients_model->get_all_clients();
+        $data['breadcrumbs'] = $this->lang->line('xin_project_timelogs');
+        $data['path_url'] = 'project_timelogs';
+        $role_resources_ids = $this->Xin_model->user_role_resource();
+            if (!empty($session)) {
+                $data['subview'] = $this->load->view("admin/project/emp_project_timelogs_list", $data, true);
+                $this->load->view('admin/layout/layout_main', $data); //page load
+            } else {
+                redirect('admin/');
+            }
+        
     }
 
     //projects calendar
@@ -873,7 +916,6 @@ class Project extends MY_Controller
         $data['title'] = $this->Xin_model->site_title();
         $task_status = $this->input->get('task_status');
         //$result = $this->Project_model->read_project_information($id);
-
         $data = array(
             'task_status' => $task_status,
             'all_projects' => $this->Project_model->get_all_projects(),
@@ -2130,7 +2172,6 @@ class Project extends MY_Controller
     }
     public function timelogs_list()
     {
-
         $data['title'] = $this->Xin_model->site_title();
         $session = $this->session->userdata('username');
         if (!empty($session)) {
@@ -2168,6 +2209,20 @@ class Project extends MY_Controller
                 $project_name = '--';
             }
             $start_date = $this->Xin_model->set_date_format($r->start_date);
+            $movement = $r->movement;
+            if ($r->status == 0) {
+                $status = '<span class="label label-success">Pending</span>';
+            } else if ($r->status == 1) {
+                $status = '<span class="label label-warning">Approved</span>';
+            } else if ($r->status == 2) {
+                $status = '<span class="label label-danger">Rejected</span>';
+            }else{
+                $status = '<span class="label label-danger">error</span>';
+            }
+            
+
+
+
             $end_date = $this->Xin_model->set_date_format($r->end_date);
             $edit = '<span data-toggle="tooltip" data-placement="top" title="' . $this->lang->line('xin_edit') . '"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"  data-toggle="modal" data-target=".edit-modal-timelog-data"  data-timelogs_id="' . $r->timelogs_id . '"><span class="fa fa-pencil"></span></button></span>';
             $delete = '<span data-toggle="tooltip" data-placement="top" title="' . $this->lang->line('xin_delete') . '"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="' . $r->timelogs_id . '"><span class="fa fa-trash"></span></button></span>';
@@ -2178,13 +2233,14 @@ class Project extends MY_Controller
             }
 
             $data[] = array(
-                $combhr,
                 $project_name,
                 $full_name,
                 $start_date,
-                $end_date,
                 $r->total_hours,
+                $movement,
                 $r->timelogs_memo,
+                $status,
+                $combhr,
             );
         }
 
@@ -2197,6 +2253,25 @@ class Project extends MY_Controller
         echo json_encode($output);
         exit();
     }
+    public function timelogs_report(){
+        $data['title'] = 'Timelogs Report'.' | '.$this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Timelogs Report';
+        $data['path_url'] = '';
+        // $data['all_office_shifts'] = $this->Location_model->all_office_locations();
+        $data['subview'] = $this->load->view("admin/project/project_timelogs_report", $data, true);
+        $this->load->view('admin/layout/layout_main', $data); //page load
+
+    }
+    public function logreport(){
+        $data['first_date']=$this->input->post('first_date');
+        $data['second_date']=$this->input->post('second_date');
+        $sql=$this->input->post('sql');
+        $data['emp_id']= explode(',', trim($sql));
+        $data['type']=$this->input->post('type');
+        $data['status']=$this->input->post('status');
+        echo $this->load->view("admin/project/logreport", $data, true);
+    }
+
     public function project_timelogs_list()
     {
 
@@ -2380,6 +2455,7 @@ class Project extends MY_Controller
                 'project_id' => $this->input->post('project_id'),
                 'company_id' => $cid,
                 'employee_id' => $this->input->post('employee_id'),
+                'movement'=>$this->input->post('movement'),
                 'start_time' => $this->input->post('start_time'),
                 'end_time' => $this->input->post('end_time'),
                 'start_date' => $this->input->post('start_date'),

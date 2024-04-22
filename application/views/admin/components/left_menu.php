@@ -559,8 +559,8 @@ if($theme[0]->sub_menu_icons != ''){
     <!-- Inventory / Accessories -->
 
 
-    <?php //if($system[0]->module_projects_tasks=='true'){?>
-    <?php  if(in_array('44',$role_resources_ids) || in_array('45',$role_resources_ids) || in_array('104',$role_resources_ids) || in_array('119',$role_resources_ids) || in_array('122',$role_resources_ids)) {?>
+    <?php if($system[0]->module_projects_tasks=='true'){?>
+    <?php  //if(in_array('44',$role_resources_ids) || in_array('45',$role_resources_ids) || in_array('104',$role_resources_ids) || in_array('119',$role_resources_ids) || in_array('122',$role_resources_ids)) {?>
     <li class="<?php if(!empty($arr_mod['project_open']))echo $arr_mod['project_open'];?> treeview"> <a href="#"> <i class="fa fa-tasks"></i> <span><?php echo "Projects";?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
       <ul class="treeview-menu">
         <?php if(in_array('119',$role_resources_ids)) { ?>
@@ -573,31 +573,46 @@ if($theme[0]->sub_menu_icons != ''){
         <li class="sidenav-link <?php if(!empty($arr_mod['payment_active']))echo $arr_mod['payment_active'];?>"> <a href="<?php echo site_url('admin/project/get_payment_page');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Get Payment </a> </li>
         <?php } ?>  
         
-        <!-- < ?php if(in_array('44',$role_resources_ids)) { ?>
+        <?php// if(in_array('44',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['timelogs_active']))echo $arr_mod['timelogs_active'];?>"> <a href="<?php echo site_url('admin/project/timelogs');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_project_timelogs');?> </a> </li>
-        < ?php } ?>  
-        < ?php if(in_array('44',$role_resources_ids)) { ?>
+
+
+        <?php
+        $session = $this->session->userdata('username');
+        $user_info = $this->Xin_model->read_user_info($session['user_id']);
+        if($user_info[0]->is_emp_lead==2){
+        ?>
+        <li class="sidenav-link <?php if(!empty($arr_mod['timelogs_active']))echo $arr_mod['timelogs_active'];?>"> <a href="<?php echo site_url('admin/project/emp_timelogs');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Employee Timelogs </a> </li>
+       <?php 
+        }
+
+        if ($user_info[0]->user_role_id!=3) {?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['timelogs_active']))echo $arr_mod['timelogs_active'];?>"> <a href="<?php echo site_url('admin/project/timelogs_report');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Timelogs Report</a> </li>
+       <?php }
+        ?>
+        <?php //} ?>  
+        <!-- <?php if(in_array('44',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['project_cal_active']))echo $arr_mod['project_cal_active'];?>"> <a href="<?php echo site_url('admin/project/projects_calendar');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_projects_calendar');?> </a> </li>
-        < ?php } ?> 
-        < ?php if(in_array('45',$role_resources_ids)) { ?>
+        <?php } ?>  -->
+        <!-- <?php if(in_array('45',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['tasks_cal_active']))echo $arr_mod['tasks_cal_active'];?>"> <a href="<?php echo site_url('admin/project/tasks_calendar');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_tasks_calendar');?> </a> </li>
-        < ?php } ?> 
-        < ?php if(in_array('45',$role_resources_ids)) { ?>
+        <?php } ?>  -->
+        <!-- <?php if(in_array('45',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['tasks_scrum_board_active']))echo $arr_mod['tasks_scrum_board_active'];?>"> <a href="<?php echo site_url('admin/project/tasks_scrum_board');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_tasks_sboard');?> </a> </li>
-        < ?php } ?>
-        < ?php if(in_array('44',$role_resources_ids)) { ?>
+        <?php } ?> -->
+        <!-- <?php if(in_array('44',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['projects_scrum_board_active']))echo $arr_mod['projects_scrum_board_active'];?>"> <a href="<?php echo site_url('admin/project/projects_scrum_board');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_projects_sboard');?> </a> </li>
-        < ?php } ?>
-        < ?php if(in_array('45',$role_resources_ids)) { ?>
+        <?php } ?> -->
+        <!-- <?php if(in_array('45',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['task_cat_active']))echo $arr_mod['task_cat_active'];?>"> <a href="<?php echo site_url('admin/project/task_categories');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_task_categories');?> </a> </li>
-        < ?php } ?>    
-        < ?php if(in_array('122',$role_resources_ids)) { ?>
+        <?php } ?>    
+        <?php if(in_array('122',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['hr_taxes_inv_active']))echo $arr_mod['hr_taxes_inv_active'];?>"> <a href="<?php echo site_url('admin/invoices/taxes/');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_invoice_tax_type');?> </a> </li>
-        < ?php } ?> -->
+        <?php } ?> -->
       </ul>
     </li>
-    <?php //} ?>
     <?php } ?>
+    <?php// } ?>
     <?php  if(in_array('87',$role_resources_ids)  || in_array('410',$role_resources_ids) || in_array('415',$role_resources_ids) || in_array('121',$role_resources_ids) || in_array('330',$role_resources_ids)) {?>
     <li class="<?php if(!empty($arr_mod['hr_quote_manager_open']))echo $arr_mod['hr_quote_manager_open'];?> treeview"> <a href="#"> <i class="fa fa-calendar-plus-o"></i> <span><?php echo $this->lang->line('xin_quote_manager');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
       <ul class="treeview-menu">

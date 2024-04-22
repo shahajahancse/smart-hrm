@@ -47,9 +47,9 @@ if(isset($_GET['jd']) && isset($_GET['timelogs_id']) && $_GET['data']=='project_
   <div class="col-md-12">
       <div class="form-group">
         <input type="hidden" name="total_hours" id="xtotal_hours" value="<?php echo $total_hours;?>" />
-        <label for="timelogs_memo"><?php echo $this->lang->line('xin_project_timelogs_memo');?> 
+        <label for="timelogs_memo">Details 
          <span id="xtotal_time">&nbsp;</span></label>
-        <input class="form-control" placeholder="<?php echo $this->lang->line('xin_project_timelogs_memo');?>" name="timelogs_memo" type="text" value="<?php echo $timelogs_memo;?>">
+        <input class="form-control" placeholder="Details" name="timelogs_memo" type="text" value="<?php echo $timelogs_memo;?>">
       </div>
     </div>
   </div>
