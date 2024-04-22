@@ -147,7 +147,7 @@ class Attendance extends MY_Controller
                 }
                 $session = $this->session->userdata('username');
 
-                if ($session['role_id'] != 1) {
+                if (!is_null($session) && array_key_exists('role_id', $session) && in_array($session['role_id'], [1, 2], true)) {
                     $employee_managment = $this->db->where('user_id', $row)->get('xin_employees')->row();
                     if ($employee_managment->is_management == 1) {
                         echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name";
@@ -663,11 +663,11 @@ class Attendance extends MY_Controller
         
 
           $total_day = $get_total_present + $get_total_absent+$get_total_leave;
-          $get_percent_present = ($get_total_present / $total_day) * 100;
-          $get_percent_absent = ($get_total_absent / $total_day) * 100;
-          $get_percent_overtime = ($get_total_overtime / $total_day) * 100;
-          $get_percent_late = ($get_total_late / $total_day) * 100;
-          $get_percent_leave = ($get_total_leave / $total_day) * 100;
+          $get_percent_present = ($total_day != 0) ? ($get_total_present / $total_day) * 100 : 0;
+          $get_percent_absent = ($total_day != 0) ? ($get_total_absent / $total_day) * 100 : 0;
+          $get_percent_overtime = ($total_day != 0) ? ($get_total_overtime / $total_day) * 100 : 0;
+          $get_percent_late = ($total_day != 0) ? ($get_total_late / $total_day) * 100 : 0;
+          $get_percent_leave = ($total_day != 0) ? ($get_total_leave / $total_day) * 100 : 0;
 
           $get_employee_info= $this->Xin_model->read_user_info($value);
           $data[$key] = [

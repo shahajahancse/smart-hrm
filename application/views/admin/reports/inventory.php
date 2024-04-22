@@ -67,6 +67,8 @@
             <button class="btn btn-sm btn-success" style="margin-left:" onclick="show_report('using')">Employee using device</button><br><br>
             <button class="btn btn-sm btn-success" onclick="show_store_report('store')">Stored Report</button>
             <button class="btn btn-sm btn-success" style="margin-left:" onclick="show_report('damage')">Damaged Report</button>
+            <button class="btn btn-success btn-sm" onclick="show_report2(5)">Using Device</button>
+
         </div>
         <div id="tab2" class="tab-pane fade"  style="margin-top:20px">
           <button class="btn btn-sm btn-success" onclick="move_report('daily')">Daily Report</button>
@@ -328,4 +330,46 @@ function show_store_report(){
         $(this).prop("selectedIndex", "");
       });
   });
+  function show_report2(r, done){
+    var ajaxRequest;  // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+    status = document.getElementById('status').value;
+    first_date = document.getElementById('process_date').value;   
+    second_date = document.getElementById('second_date').value;
+    if(status ==''){
+      alert('Please select status');
+      return ;
+    }
+
+    if(r == 2 ){
+      if(first_date ==''){
+        alert('Please select first date');
+        return ;
+      }
+      if(second_date ==''){
+        alert('Please select second date');
+        return ;
+      }
+    }
+
+    var checkboxes = document.getElementsByName('select_emp_id[]');
+    var sql = get_checked_value(checkboxes);
+    if(sql ==''){
+      alert('Please select employee Id');
+      return ;
+    }
+    var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql+'&done='+done;
+    url = base_url + "/show_report";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+        // console.log(ajaxRequest);
+        var resp = ajaxRequest.responseText;
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1400,height=800');
+        a.document.write(resp);
+      }
+    }
+  }
 </script>
