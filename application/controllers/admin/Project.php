@@ -386,22 +386,26 @@ class Project extends MY_Controller
         
     }
     public function reject_timelogs($id){
+        $Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+        $Return['csrf_hash'] = $this->security->get_csrf_hash();
         $this->db->where('timelogs_id', $id);
         if($this->db->update('xin_projects_timelogs', array('status' => 2))){
-            $this->session->set_flashdata('message', 'Timelogs Rejected');
+            $Return['result'] = 'Timelogs Rejected';
             redirect('admin/project/emp_timelogs');
         }else{
-            $this->session->set_flashdata('message', 'Error Rejected');
+            $Return['error'] = 'Error Rejected';
             redirect('admin/project/emp_timelogs');
         }
     }
     public function approve_timelogs($id){
+        $Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+        $Return['csrf_hash'] = $this->security->get_csrf_hash();
         $this->db->where('timelogs_id', $id);
         if($this->db->update('xin_projects_timelogs', array('status' => 1))){
-            $this->session->set_flashdata('message', 'Timelogs Rejected');
+            $Return['result'] = 'Timelogs Approved';
             redirect('admin/project/emp_timelogs');
         }else{
-            $this->session->set_flashdata('message', 'Error Rejected');
+            $Return['error'] = 'Error Approved';
             redirect('admin/project/emp_timelogs');
         }
     }
@@ -2211,9 +2215,9 @@ class Project extends MY_Controller
             $start_date = $this->Xin_model->set_date_format($r->start_date);
             $movement = $r->movement;
             if ($r->status == 0) {
-                $status = '<span class="label label-success">Pending</span>';
+                $status = '<span class="label label-warning">Pending</span>';
             } else if ($r->status == 1) {
-                $status = '<span class="label label-warning">Approved</span>';
+                $status = '<span class="label label-success">Approved</span>';
             } else if ($r->status == 2) {
                 $status = '<span class="label label-danger">Rejected</span>';
             }else{
