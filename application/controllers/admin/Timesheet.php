@@ -566,7 +566,6 @@ class Timesheet extends MY_Controller {
 					redirect('admin/timesheet/leave');
 				}
 			}
-			
 			$datetime1 = new DateTime($this->input->post('start_date'));
 			$datetime2 = new DateTime($this->input->post('end_date'));
 			$interval = $datetime1->diff($datetime2);
@@ -576,6 +575,7 @@ class Timesheet extends MY_Controller {
 				$this->session->set_flashdata('error',  $this->lang->line('xin_hr_cant_appply_morethan').' 1 '.$this->lang->line('xin_day'));
 				redirect('admin/timesheet/leave');
 			}
+			dd('hello');
 
 			
 				
