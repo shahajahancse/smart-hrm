@@ -386,7 +386,7 @@ class Project extends MY_Controller
         
     }
     public function reject_timelogs($id){
-        $this->where('timelogs_id', $id);
+        $this->db->where('timelogs_id', $id);
         if($this->db->update('xin_projects_timelogs', array('status' => 2))){
             $this->session->set_flashdata('message', 'Timelogs Rejected');
             redirect('admin/project/emp_timelogs');
