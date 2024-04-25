@@ -42,6 +42,15 @@ class Payroll extends MY_Controller {
 		/*Final JSON response*/
 		exit(json_encode($Return));
 	}
+	public function employee_list_with_salary() {
+		$data['title'] = $this->lang->line('left_payroll_templates').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = "Payroll";
+		$data['path_url'] = 'payroll_templates';
+		// $data['all_office_shifts'] = $this->Location_model->all_office_locations();
+		$data['subview'] = $this->load->view("admin/payroll/employee_list_with_salary", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+
+	}
 
 
 	public function index()
@@ -3512,6 +3521,21 @@ class Payroll extends MY_Controller {
 		}
 						   $this->load->view('admin/layout/layout_main', $data); 
 	}
+
+	// public function advanced_menu(){
+	// 	$users = $this->db->select('user_id,first_name,last_name,salary')->where_in('status',[1,4,5])->get('xin_employees')->result();
+    //     foreach($users as $user) {
+	// 		$data['emp_id']   		   = $user->user_id;
+	// 		$data['requested_amount']  = (int) ($user->salary * 0.7);
+	// 		$data['approved_amount']   = $data['requested_amount'];
+	// 		$data['effective_month']   = date('2024-03-01');
+	// 		$data['reason']   		   = 'Eid Advance';
+	// 		$data['approved_by']       = 1;
+	// 		$data['status']            = 2;
+	// 		$insert = $this->db->insert('xin_advance_salaries',$data);
+	// 	}
+					
+	// }
 
 	public function advanced_salary_add(){
 

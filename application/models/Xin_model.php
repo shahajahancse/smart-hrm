@@ -45,9 +45,23 @@ class Xin_model extends CI_Model {
 		}
 		$this->db->query("UPDATE `xin_salary_payslips` SET `modify_salary`=".$modify_salary." WHERE `employee_id`=".$id);	
 	}
-	public function update_salaryall($id,$modify_salary,$date,$m_day){
-		$this->db->query("UPDATE `xin_salary_payslips` SET `m_pay_day` = '".$m_day."', `modify_salary` = '".$modify_salary."' WHERE `employee_id` = '".$id."' AND `salary_month` = '".$date."'");
+	public function update_salaryall($employee_id, $new_salary, $month, $pay_day=0) {
+		$this->db->set('modify_salary', $new_salary);
+			if ($pay_day != 0) {
+				$this->db->set('m_pay_day', $pay_day);
+			}else{
+				$this->db->set('m_pay_day', $this->input->post('m_pay_day'));
+			}
+			$this->db->where('employee_id', $employee_id);
+			$this->db->where('salary_month', $month);
+			
+			if($this->db->update('xin_salary_payslips')){
+				return true;
+			}else{
+				return false;
+			}
 	}
+	
 		
 	// is logged in to system
 	public function is_logged_in($id)
@@ -557,6 +571,10 @@ class Xin_model extends CI_Model {
 		} else if($mClass=='accessories' && $mMethod=='item_add') {
 			$arr['access_open'] = 'active';
 			$arr['item_add_active'] = 'active';
+			return $arr;
+		} else if($mClass=='accessories' && $mMethod=='employee_using_device') {
+			$arr['access_open'] = 'active';
+			$arr['employee_using_device'] = 'active';
 			return $arr;
 		}  else if($mClass=='accessories' && $mMethod=='reports') {
 			$arr['access_open'] = 'active';

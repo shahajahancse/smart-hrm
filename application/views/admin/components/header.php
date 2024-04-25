@@ -331,7 +331,7 @@ p {
                 if(in_array($user[0]->user_role_id, array(1,2,4))) {
                     $leaveapp = $this->Xin_model->get_notify_leave_applications();
                     $start_date = date('Y-m-d', strtotime('-4 month', strtotime(date("Y-m-01"))));
-                    $end_date = date('Y-m-d', strtotime('+2 month', strtotime(date("Y-m-00"))));
+                    $end_date = date('Y-m-d', strtotime('+3 month', strtotime(date("Y-m-t"))));
                     $incrementapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 1);
                     $probationapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 5);
                     $internapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 4);

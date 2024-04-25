@@ -9,6 +9,11 @@ if(isset($_GET['jd']) && isset($_GET['timelogs_id']) && $_GET['data']=='project_
 <?php } else {?>
 <?php $user_date = 'euser_timelog_date';?>
 <?php } ?>
+<style>
+	.main-header{
+		z-index: 999 !important;
+	}
+</style>
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
   <h4 class="modal-title" id="edit-modal-data"><?php echo $this->lang->line('xin_project_timelog_edit');?></h4>
@@ -47,9 +52,9 @@ if(isset($_GET['jd']) && isset($_GET['timelogs_id']) && $_GET['data']=='project_
   <div class="col-md-12">
       <div class="form-group">
         <input type="hidden" name="total_hours" id="xtotal_hours" value="<?php echo $total_hours;?>" />
-        <label for="timelogs_memo"><?php echo $this->lang->line('xin_project_timelogs_memo');?> 
+        <label for="timelogs_memo">Details 
          <span id="xtotal_time">&nbsp;</span></label>
-        <input class="form-control" placeholder="<?php echo $this->lang->line('xin_project_timelogs_memo');?>" name="timelogs_memo" type="text" value="<?php echo $timelogs_memo;?>">
+        <input class="form-control" placeholder="Details" name="timelogs_memo" type="text" value="<?php echo $timelogs_memo;?>">
       </div>
     </div>
   </div>

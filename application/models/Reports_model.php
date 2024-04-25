@@ -909,7 +909,7 @@ class Reports_model extends CI_Model
         $this->db->where('xin_attendance_time.attendance_date <=', $second_date);
         $this->db->where('xin_attendance_time.attendance_status', 'Present');
         $this->db->where('xin_attendance_time.status', 'Off Day');
-        $this->db->group_by('xin_attendance_time.employee_id');
+        // $this->db->group_by('xin_attendance_time.employee_id');
         $query = $this->db->get();
         return $query->result();
     }

@@ -545,7 +545,7 @@ if($theme[0]->sub_menu_icons != ''){
         <li class="sidenav-link <?php if(!empty($arr_mod['tasks_cal_active']))echo $arr_mod['tasks_cal_active'];?>"> <a href="<?php echo site_url('admin/project/tasks_calendar');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_tasks_calendar');?> </a> </li>
         <?php } ?> 
         <?php if(in_array('45',$role_resources_ids)) { ?>
-        <li class="sidenav-link <?php if(!empty($arr_mod['tasks_scrum_board_active']))echo $arr_mod['tasks_scrum_board_active'];?>"> <a href="<?php echo site_url('admin/project/tasks_scrum_board');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_tasks_sboard');?> </a> </li>
+        <li class="sidenav-link <?php if(!empty($arr_mod['tasks_scrum_board_active']))echo $arr_mod['tasks_scrum_board_active'];?>"> <a href="<?php echo site_url('admin/project/tasks_scrum_board');?>"> <i class="fa <?php echo $submenuicon;?>"></i> hello </a> </li>
         <?php } ?>
         <?php if(in_array('44',$role_resources_ids)) { ?>
         <li class="sidenav-link <?php if(!empty($arr_mod['projects_scrum_board_active']))echo $arr_mod['projects_scrum_board_active'];?>"> <a href="<?php echo site_url('admin/project/projects_scrum_board');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_projects_sboard');?> </a> </li>

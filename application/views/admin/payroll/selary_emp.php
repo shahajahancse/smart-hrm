@@ -31,12 +31,12 @@ if(count($lastmonthsalarys)>0) {
     <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
         <div class="heading">Deduction</div>
         <div class="heading2">
-            <?=  (isset($lastmonthsalaryy)) ? $lastmonthsalaryy->late_deduct+$lastmonthsalaryy->absent_deduct : '0'?>
+            <?=  (isset($lastmonthsalaryy)) ? $lastmonthsalaryy->late_deduct+$lastmonthsalaryy->absent_deduct+$lastmonthsalaryy->lunch_deduct : '0'?>
         </div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">
         <div class="heading">Modify Salary</div>
-        <div class="heading2"><?= (isset($lastmonthsalaryy)) ? $lastmonthsalaryy->modify_salary+$lastmonthsalaryy->aba_deduct : '0' ?></div>
+        <div class="heading2"><?= (isset($lastmonthsalaryy)) ? $lastmonthsalaryy->modify_salary : '0' ?></div>
     </div>
     <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
         <div class="heading">Pay Salary </div>

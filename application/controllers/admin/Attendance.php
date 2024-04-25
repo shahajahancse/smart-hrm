@@ -147,27 +147,28 @@ class Attendance extends MY_Controller
                 }
                 $session = $this->session->userdata('username');
 
-                if ($session['role_id'] != 1) {
+                if (!is_null($session) && array_key_exists('role_id', $session) && in_array($session['role_id'], [1], true)) {
                     $employee_managment = $this->db->where('user_id', $row)->get('xin_employees')->row();
                     if ($employee_managment->is_management == 1) {
                         echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name";
                         exit;
                     }
                     if ($status != '' && $status == 1) {
-                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-120 minutes'))) {
+                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-72 hours'))) {
                             echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
                             exit;
                         }
-                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-120 minutes'))) {
+                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-72 hours'))) {
                             echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
                             exit;
                         }
                     }else{
-                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-1 day'))) {
+
+                        if($in_time != '' && $in_time <=date('Y-m-d H:i', strtotime('-3 day'))) {
                             echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
                             exit;
                         }
-                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-1 day'))) {
+                        if($out_time != '' && $out_time <=date('Y-m-d H:i', strtotime('-3 day'))) {
                             echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name on this time";
                             exit;
                         }
@@ -663,11 +664,11 @@ class Attendance extends MY_Controller
         
 
           $total_day = $get_total_present + $get_total_absent+$get_total_leave;
-          $get_percent_present = ($get_total_present / $total_day) * 100;
-          $get_percent_absent = ($get_total_absent / $total_day) * 100;
-          $get_percent_overtime = ($get_total_overtime / $total_day) * 100;
-          $get_percent_late = ($get_total_late / $total_day) * 100;
-          $get_percent_leave = ($get_total_leave / $total_day) * 100;
+          $get_percent_present = ($total_day != 0) ? ($get_total_present / $total_day) * 100 : 0;
+          $get_percent_absent = ($total_day != 0) ? ($get_total_absent / $total_day) * 100 : 0;
+          $get_percent_overtime = ($total_day != 0) ? ($get_total_overtime / $total_day) * 100 : 0;
+          $get_percent_late = ($total_day != 0) ? ($get_total_late / $total_day) * 100 : 0;
+          $get_percent_leave = ($total_day != 0) ? ($get_total_leave / $total_day) * 100 : 0;
 
           $get_employee_info= $this->Xin_model->read_user_info($value);
           $data[$key] = [

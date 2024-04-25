@@ -1,6 +1,6 @@
 <?php
 
-defined('BASEPATH') or exit('No direct script access allowed');
+// defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once APPPATH . 'libraries/API_Controller.php';
 
@@ -8,6 +8,12 @@ class Admin extends API_Controller
 {
     public function __construct()
     {
+        header('Access-Control-Allow-Origin: *');
+        // Allow methods: GET, POST, OPTIONS
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        // Allow header Content-Type: application/json
+        header("Access-Control-Allow-Headers: Content-Type");
+        
         parent::__construct();
         $this->load->helper('api_helper');
         $this->load->model("Timesheet_model");
@@ -21,32 +27,32 @@ class Admin extends API_Controller
     }
 
     public function sendRecentPunches() {
-        $dataa=json_decode($_POST['data']);
-        // $emp_ids=[];
+
+        $dataa=$_POST['data'];
+        $emp_ids=[];
         foreach($dataa as $data) {
-        $proxi_id=$data->deviceUserId;
-        $time=$data->recordTimeDhaka;
+        $proxi_id=$data['id'];
+        $time=$data['time'];
         $in_time=date('Y-m-d H:i:s', strtotime($time));
-        if (date('Y-m-d', strtotime($in_time)) != date('Y-m-d')) {
-            continue;
-        }
         $this->db->where("proxi_id", $proxi_id);
         $this->db->where("date_time", $in_time);
         $query1 = $this->db->get("xin_att_machine");
-
-        $emp_id=$this->db->select('emp_id')->where('proxi_id', $proxi_id)->get('xin_proxi')->row();
-        // array_push($emp_ids, $emp_id->emp_id);
         $num_rows1 = $query1->num_rows();
+        $emp_id=$this->db->select('emp_id')->where('proxi_id', $proxi_id)->get('xin_proxi')->row();
+        // dd($emp_id->emp_id);
+        if (!empty($emp_id)) {
+            array_push($emp_ids, $emp_id->emp_id);
+        }
         if($num_rows1 == 0) {
             $data = array(
                     'proxi_id' 	=> $proxi_id,
                     'date_time'	=> $in_time,
-                    'device_id' => 0,
+                    'device_id' => $data['state'],
                 );
             $this->db->insert("xin_att_machine", $data);
         }
-        $this->Attendance_model->attn_process(date('Y-m-d', strtotime($in_time)), array($emp_id->emp_id));
-        }
+    }
+    $this->Attendance_model->attn_process(date('Y-m-d', strtotime($in_time)), $emp_ids);
     }
     // leave
     public function leave_list()
@@ -584,11 +590,17 @@ class Admin extends API_Controller
         if ($user_info['status'] == true) {
             if ($user_info['user_info']->user_role_id != 3) {
                 $salary_month = $this->db->select('*')->from('xin_salary_payslips')->order_by('payslip_id', 'DESC')->limit(1)->get()->row()->salary_month;
-                $data = $this->Xin_model->modify_salary($salary_month);
+                $total_day= date('t', strtotime($salary_month));
+                $month= date('m', strtotime($salary_month));
+                $year= date('Y', strtotime($salary_month));
+                $data= $this->Xin_model->modify_salary($salary_month);
                 if (!empty($data)) {
                     $this->api_return([
                         'status' => true,
                         'message' => 'successful',
+                        'total_day' => (int)$total_day,
+                        'month' => (int)$month,
+                        'year' => (int)$year,
                         'data' => $data,
                     ], 200);
                 } else {
@@ -633,6 +645,15 @@ class Admin extends API_Controller
                     $date = $date;
                     $m_day = $value['modify_day'];
                     $result = $this->Xin_model->update_salaryall($user_id, $salary, $date, $m_day);
+                    if ($result==false) {
+                        $this->api_return([
+                            'status' => false,
+                            'message' => 'Unsuccessful',
+                            'error'=>$this->db->error(),
+                            'data' => [],
+                        ], 200);
+                        exit;
+                    }
                 }
 
              
@@ -1956,6 +1977,45 @@ class Admin extends API_Controller
                 'data' => [],
             ], 401);
         }
+    }
+    public function single_extra_present_approval(){
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+            if ($user_info['user_info']->user_role_id != 3) {
+                
+                $time_attendance_id = $this->input->post('time_attendance_id');
+                $extra_ap = $this->input->post('extra_ap');
+
+                $this->db->where('time_attendance_id', $time_attendance_id);
+                if ($this->db->update('xin_attendance_time', ['extra_ap' => $extra_ap])) {
+                    $this->api_return([
+                        'status' => true,
+                        'message' => 'successful',
+                        'data' =>[],
+                    ], 200);
+                } else {
+                    $this->api_return([
+                        'status' => false,
+                        'message' => 'Data not found',
+                        'data' => [],
+                    ], 200);
+                }
+            } else {
+                $this->api_return([
+                    'status' => false,
+                    'message' => 'Unauthorized User',
+                    'data' => [],
+                ], 401);
+            };
+        } else {
+            $this->api_return([
+                'status' => false,
+                'message' => 'Unauthorized User',
+                'data' => [],
+            ], 401);
+        }
+        
     }
     public function leave_report(){
         $authorization = $this->input->get_request_header('Authorization');

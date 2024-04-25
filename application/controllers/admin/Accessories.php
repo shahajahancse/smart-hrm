@@ -208,7 +208,6 @@ class Accessories extends MY_Controller {
     }
 
     public function item_add($id=null){
-        // dd($id);
         $data = $this->page_loads();
         if($id !=null){
             $data['title']         = 'Update Item'.' | '.$this->Xin_model->site_title();
@@ -233,10 +232,10 @@ class Accessories extends MY_Controller {
                 'device_model'   => $this->input->post('device_model'),
                 'description'    => $this->input->post('description'),
                 'remark'         => $this->input->post('remark'),
-                'image'          => "",
-                'user_id'        => $user_id,
+                // 'image'          => "",
+                // 'user_id'        => $user_id,
                 'status'         => $this->input->post('status'),
-                'use_number'     => $this->input->post('use_number'),
+                // 'use_number'     => $this->input->post('use_number'),
                 'number'         => $this->input->post('number'),
             );    
             // dd($form_data);
@@ -251,10 +250,10 @@ class Accessories extends MY_Controller {
                         $lastInsertedId = $this->db->insert_id();
                         $query = $this->db->get_where('product_accessories', array('id' => $lastInsertedId));
                         $result = $query->row();
-                        if($result->user_id !=null){
+                        if($result->id !=null){
                             $data= array(
                             'p_a_id'        => $result->id,
-                            'user_id'       => $result->user_id,
+                            // 'user_id'       => $result->user_id,
                             'provide_by'    => $data['user_id'],
                             'provide_date'  => date('Y-m-d H:i:s'),
                             'created_by'    => $data['user_id'],
@@ -422,6 +421,91 @@ class Accessories extends MY_Controller {
         $item_id = $this->input->post('id');
         $this->db->where('id', $item_id);
         return $this->db->delete('xin_employee_desk');
+    }
+
+    public function employee_using_device() {
+        $data['title'] = 'Employee Using Device'.' | '.$this->Xin_model->site_title();
+        $data['breadcrumbs'] = "Item List";
+        $datas['subview']= $this->load->view('admin/accessories/employee_using_device',$data,TRUE);  
+        $this->load->view('admin/layout/layout_main', $datas); 
+    }
+    public function employee_using_device_list(){
+        // CREATE TABLE `admin_smarthr`.`employee_using_device` ( `id` INT(255) NOT NULL AUTO_INCREMENT ,  `user_id` INT(255) NOT NULL ,  `device_id` INT(255) NOT NULL ,    PRIMARY KEY  (`id`)) ENGINE = InnoDB;
+
+        $employee_id = $this->input->post('employee_id');
+        $this->db->select('
+        employee_using_device.*, 
+        xin_employees.first_name,
+        xin_employees.last_name,
+        product_accessories.id as product_id,
+        product_accessories.device_name_id,
+        product_accessories_model.model_name,
+        product_accessory_categories.cat_name,
+        product_accessory_categories.cat_short_name
+        
+        ');
+
+        $this->db->from('employee_using_device');
+        $this->db->join('xin_employees', 'xin_employees.user_id = employee_using_device.user_id', 'left');
+        $this->db->join('product_accessories', 'product_accessories.id = employee_using_device.device_id', 'left');
+        $this->db->join('product_accessories_model', 'product_accessories_model.id = product_accessories.device_model', 'left');
+        $this->db->join('product_accessory_categories', 'product_accessory_categories.id = product_accessories.cat_id', 'left');
+        $this->db->where('employee_using_device.user_id', $employee_id);
+        $query = $this->db->get();
+        $data = $query->result();
+        echo json_encode($data);
+    }
+    public function employee_device_list_by_cat(){
+
+        $cat_id = $this->input->post('cat_id');
+        $this->db->select('
+        product_accessories.id as product_id,
+        product_accessories.device_name_id,
+        product_accessories_model.model_name,
+        product_accessory_categories.cat_name,
+        product_accessory_categories.cat_short_name
+        
+        ');
+
+        $this->db->from('product_accessories');
+        $this->db->join('product_accessories_model', 'product_accessories_model.id = product_accessories.device_model', 'left');
+        $this->db->join('product_accessory_categories', 'product_accessory_categories.id = product_accessories.cat_id', 'left');
+        $this->db->where('product_accessories.cat_id', $cat_id);
+        $this->db->where('product_accessories.status', 2);
+        $this ->db->order_by('product_accessories.device_name_id', 'ASC');
+        $query = $this->db->get();
+        $data = $query->result();
+        echo json_encode($data);
+    }
+    public function update_device_using(){
+        $device_id= $this->input->post('device_id');
+        $this->db->where('device_id', $device_id);
+        if (count($this->db->get('employee_using_device')->row()) > 0) {
+            exit();
+        }
+        $employee_id= $this->input->post('employee_id');
+        $data = array(
+            'user_id' => $employee_id,
+            'device_id' => $device_id
+        );
+        $this->db->insert('employee_using_device', $data);
+        $data2=array(
+            'status' => 1
+        );
+        $this->db->where('id', $device_id);
+        $this->db->update('product_accessories', $data2);
+    }
+    public function remove_device_using(){
+        $device_id= $this->input->post('product_id');
+        $this->db->where('device_id', $device_id);
+        $this->db->delete('employee_using_device');
+
+        $data2=array(
+            'status' => 2
+        );
+        $this->db->where('id', $device_id);
+        $this->db->update('product_accessories', $data2);
+
     }
 
 }
