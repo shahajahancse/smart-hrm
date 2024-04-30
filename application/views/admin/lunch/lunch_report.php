@@ -87,6 +87,7 @@
                                 <label for="upload_file">status</label>
                                 <select class="form-control" name="status" id="status">
                                     <option value="">Select one</option>
+                                    <option value=0>All</option>
                                     <option value="1">regular</option>
                                     <option value="2">left</option>
                                     <option value="3">resign</option>
@@ -189,7 +190,9 @@
                 <th class=" text-center" style="background:#0177bc;color:white">Name</th>
             </tr>
         </table>
-    </div>
+        <div id="loader2" align="center" style="margin:0 auto; width:100%; overflow:hidden; display:none; margin-top:10px;">
+        <img src="<?php echo base_url();?>/uploads/ajax-loader.gif" />
+    </div>    </div>
 </div>
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 
@@ -212,6 +215,8 @@ $(document).ready(function() {
     // on load employee
     $("#status").change(function() {
         status = document.getElementById('status').value;
+        $('.rr').remove();
+        $('#loader2').show();
         var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
         $.ajax({
             url: url,
@@ -224,11 +229,12 @@ $(document).ready(function() {
 
 
             success: function(response) {
+                $('#loader2').hide();
                 arr = response.employees;
                 if (arr.length != 0) {
                     var items = '';
                     $.each(arr, function(index, value) {
-                        items += '<tr id="removeTr">';
+                        items += '<tr id="removeTr" class="rr">';
                         items +=
                             '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' +
                             value.emp_id + '" ></td>';

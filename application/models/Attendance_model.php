@@ -1257,7 +1257,7 @@ class Attendance_model extends CI_Model
             $this->db->where('status', $status);
         } else if($status == 3){
             $this->db->where_in('status', $status);
-        } else{
+        } elseif($status == 0){
             $this->db->where_in('status', [1,2,3,4,5]);
         }
         $this->db->where('company_id', 1);

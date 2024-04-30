@@ -55,14 +55,17 @@
     $schedule = $this->db->get('xin_office_shift')->row();
 
     // get employee salary from january to current month
-    $salarys = $this->db->select('salary_month,modify_salary,grand_net_salary')
+    $salarys = $this->db->select('salary_month,modify_salary,grand_net_salary,advanced_salary')
                         ->where('employee_id', $userid)
+                        ->limit(12)
+                        ->order_by('payslip_id', 'desc')
                         ->get('xin_salary_payslips')
                         ->result();
+    $salarys=array_reverse($salarys);
     $salary = array();
     $salary_month = array();
     foreach ($salarys as $salaryObj) {
-        $salary[] = floor($salaryObj->grand_net_salary + $salaryObj->modify_salary);
+        $salary[] = floor($salaryObj->grand_net_salary + $salaryObj->modify_salary+$salaryObj->advanced_salary);
         $salary_month[] = date('F', strtotime($salaryObj->salary_month));
     }
     // dd($salary_month);
@@ -586,14 +589,7 @@ hr {
                 <div class="card-body">
                     <div style="display:flex">
                         <h5>Salary Statistics</h5>
-                        <div class="col-md-3">
-                            <select class="form-control  form-inline" id="year_id">
-                                <?php for($i=2023;$i<=date('Y');$i++) {?>
-                                <option value="<?php echo $i?>" <?php echo $i==date('Y') ? 'selected' : ''?>>
-                                    <?php echo $i?></option>
-                                <?php }?>
-                            </select>
-                        </div>
+                       
                         <!-- <h5 style="margin-right:0; margin-left: auto;">Yearly 1234M</h5> -->
                     </div>
                     <div id="my_div">
@@ -913,9 +909,12 @@ $(document).ready(function() {
 <script>
 const monthNames = <?php echo json_encode($monthNames); ?>;
 const dataValues = <?php echo json_encode($salary); ?>;
+console.log(dataValues);
+console.log(monthNames);
 
 const ctx = document.getElementById('myChart').getContext('2d');
 const zerosToPad = monthNames.length - dataValues.length;
+console.log(zerosToPad);
 const zeroArray = new Array(zerosToPad).fill(0);
 const paddedDataValues = zeroArray.concat(dataValues);
 
