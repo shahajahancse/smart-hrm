@@ -29,6 +29,9 @@ class Attendance_model extends CI_Model
         if (date('2024-03-23') == $process_date) {
             $off_day = false;
             $holiday_day = false;
+        }elseif(date('2024-05-04') == $process_date ) {
+            $off_day = false;
+            $holiday_day = false;
         }else{
             $off_day = $this->dayoff_check($process_date);
             $holiday_day = $this->holiday_check($process_date);
@@ -39,6 +42,7 @@ class Attendance_model extends CI_Model
             $lunch_id = $this->lunch_auto_off($process_date);
         }
         // lumch auto off
+
 
         $employees = $this->get_employees($emp_ids, $status=null);
         foreach ($employees as $key => $row) {

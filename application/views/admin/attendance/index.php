@@ -215,6 +215,7 @@ content: 'zfdsdf';
                                 <label for="upload_file">status</label>
                                 <select class="form-control" name="status" id="status">
                                     <option value="">Select one</option>
+                                    <option value="0">All</option>
                                     <option value="1">regular</option>
                                     <option value="2">left</option>
                                     <option value="3">resign</option>
