@@ -2581,11 +2581,17 @@ class Employees extends MY_Controller {
 			'is_active' => $this->input->post('is_active'),
 			'status' => $this->input->post('status'),
 			'floor_status' => $this->input->post('floor_status'),
-			'letter_status' => $this->input->post('letter_status'),
-			'is_leave_on' => $this->input->post('leave_start'),
-			'leave_effective' => $this->input->post('leave_effective_date'),
 			'user_password' => $this->input->post('user_password'),
 		);
+		if($this->input->post('letter_status')!=''){
+			$data['letter_status'] = $this->input->post('letter_status');
+		}
+		if ($this->input->post('leave_start')!='') {
+			$data['leave_start'] = $this->input->post('leave_start');
+		}
+		if ($this->input->post('leave_effective_date')!='') {
+			$data['leave_effective'] = $this->input->post('leave_effective_date');
+		}
 		$id = $this->input->post('user_id');
 		$proxi_id= $this->input->post('proxi_id');
 		$result = $this->Employees_model->basic_info($data,$id);

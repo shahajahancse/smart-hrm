@@ -1366,7 +1366,7 @@ class Reports extends MY_Controller
 		$no_intern_one_year=[];
 		$joining_one_year=[];
 		$no_year=[];
-		$const_date=date('Y-04-10');
+		$const_date=date('Y-06-16');
 		$emni_pass_date=date('Y-m-d',strtotime('-18 month', strtotime($const_date)));
 		$pass_date=date('Y-m-d',strtotime('-1 year', strtotime($const_date)));
 		// dd($emni_pass_date);
@@ -1382,9 +1382,8 @@ class Reports extends MY_Controller
 				$this->db->order_by('effective_date', 'desc');
 				$this->db->limit(1);
 				$last_date=$this->db->get('xin_employee_incre_prob')->row();
-				// dd($last_date);
 
-				if (!empty($last_date) && $joining_date <= $pass_date) {
+				if (!empty($last_date) && $last_date->effective_date <= $pass_date) {
 					$no_intern_one_year[] = $value->user_id;
 				}else{
 					$exist_employee[]= $value;
@@ -1400,6 +1399,7 @@ class Reports extends MY_Controller
 					$no_year[] = $value->user_id;
 				}
 		}
+
 
 
 		$data['no_intern_one_year'] = $no_intern_one_year;

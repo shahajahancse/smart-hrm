@@ -34,7 +34,8 @@
         				<td><?= $value->date_of_joining ?></td>
         				<td><?= $value->salary ?></td>
         			</tr>
-      <?php }  ?>
+      <?php }
+      ?>
 
     </tbody>
 
@@ -64,7 +65,7 @@
         				<td><?= $value->date_of_joining ?></td>
         				<td><?= $value->salary ?></td>
         			</tr>
-      <?php }  ?>
+      <?php }?>
 
     </tbody>
 
