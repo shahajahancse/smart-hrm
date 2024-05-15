@@ -286,7 +286,7 @@ if($theme[0]->sub_menu_icons != ''){
           <li class="sidenav-link <?php if(!empty($arr_mod['leave_active']))echo $arr_mod['leave_active'];?>"> <a href="<?php echo site_url('admin/timesheet/leave');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_manage_leaves');?> </a> </li>
           <?php } ?>
           <?php if(in_array('377',$role_resources_ids)) { ?>
-          <li class="<?php if(!empty($arr_mod['eemp_active']))echo $arr_mod['eemp_active'];?>"><a href="<?php echo site_url('admin/employees/emp_list');?>"><i class="fa <?php echo $submenuicon;?>"></i> Employee List </a></li>
+          <!-- <li class="<?php if(!empty($arr_mod['eemp_active']))echo $arr_mod['eemp_active'];?>"><a href="<?php echo site_url('admin/employees/emp_list');?>"><i class="fa <?php echo $submenuicon;?>"></i> Employee List </a></li> -->
           <?php } ?>
           <?php if(in_array('3770',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['issue_active']))echo $arr_mod['issue_active'];?>"><a href="<?php echo site_url('admin/employees/employee_issue');?>"><i class="fa <?php echo $submenuicon;?>"></i> Add Issues </a></li>

@@ -21,7 +21,7 @@ class Attendance_model extends CI_Model
             echo 'Sorry! advanced process not allowed, Please first process '. date('Y-m-d');
             exit;
         }
-        if (strtotime('2024-02-29') >= strtotime($process_date)) {
+        if (strtotime(date('Y-m-d', strtotime('-50 days',$process_date))) >= strtotime($process_date)) {
             echo 'Sorry! Before 2024-02-29 process not allowed';
             exit;
         }
@@ -48,6 +48,22 @@ class Attendance_model extends CI_Model
         foreach ($employees as $key => $row) {
             $oining_date = $row->date_of_joining;
             $emp_id      = $row->user_id;
+
+            // hard code mashud rana
+            if (date('2024-04-19') == $process_date || date('2024-04-20') == $process_date) {
+                if ($emp_id == 67 && date('2024-04-19') == $process_date) {
+                    $off_day = false;
+                    $holiday_day = false;
+                }elseif ($emp_id == 67 && date('2024-04-20') == $process_date) {
+                    $off_day = false;
+                    $holiday_day = false;
+                }else{
+                    $off_day = $this->dayoff_check($process_date);
+                    $holiday_day = $this->holiday_check($process_date);
+                }
+            }
+            // hard code
+
             $shift_id = $row->shift_id;
             $in_time  = '';
             $out_time = '';
@@ -226,13 +242,16 @@ class Attendance_model extends CI_Model
                         $astatus = 'Off Day';
                         $status = 'Off Day';
                     }
-                } elseif ($in_time == '' && $out_time == '') {
+                }elseif ($in_time == '' && $out_time == '') {
                     $astatus = 'Absent';
                     $status = 'Absent';
-                } else {
+                }elseif($in_time != '' && $out_time == '') {
+                    $astatus = 'HalfDay';
+                    $status = 'HalfDay';
+                }elseif($in_time == '' && $out_time != '') {
                     $astatus = 'Absent';
-                    $status = 'Present';
-
+                    $status = 'Absent';
+                }else{
                     // Half day calculation here
                     if ($in_time != '' && $out_time != '') {
                         $half_morning = date("Y-m-d H:i:s", strtotime($process_date.' '.'11:59:59'));
@@ -727,6 +746,7 @@ class Attendance_model extends CI_Model
         if($status[0]!='all') {
             $this->db->where_in("xin_attendance_time.status", $status);
         }
+        
         if (!empty($emp_id)) {
             $this->db->where_in("xin_attendance_time.employee_id", $emp_id);
         }

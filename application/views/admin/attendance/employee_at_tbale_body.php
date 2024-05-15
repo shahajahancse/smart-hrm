@@ -10,12 +10,18 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach($alldata as $key=>$data){ ?>
+        <?php foreach($alldata as $key=>$data){ 
+
+            $s=$data->status;
+            if ($data->attendance_date==date('Y-m-d')) {
+                $s='Continue';
+            }
+            ?>
         <tr>
             <td><?= $key+1 ?></td>
             <td><?= $data->attendance_date ?></td>
-            <td><?= ($data->clock_in=='')? $data->status :date('h:i A',strtotime($data->clock_in)) ?></td>
-            <td><?= ($data->clock_out=='')? $data->status :date('h:i A',strtotime($data->clock_out)) ?></td>
+            <td><?= ($data->clock_in=='')? $s :date('h:i A',strtotime($data->clock_in)) ?></td>
+            <td><?= ($data->clock_out=='')? $s :date('h:i A',strtotime($data->clock_out)) ?></td>
             <td><?= $data->late_time ?></td>
             <td><?= floor($data->production / 60) .":". round($data->production % 60, 2) ?></td>
         </tr>

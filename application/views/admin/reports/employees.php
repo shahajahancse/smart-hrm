@@ -74,6 +74,7 @@
             <div class="form-group" style="margin-top:20px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 5px;">
 
               <button class="btn dbtn btn-sm " onclick="show_report(1)">Employee Joining List</button>
+              <button class="btn dbtn btn-sm " onclick="employee_regular_report()">Regular List</button>
               <button class="btn dbtn btn-sm" onclick="show_report(7,1)">All Increment List</button>
               <button class="btn dbtn btn-sm" onclick="show_report(2,1)">Increment</button>
               <button class="btn dbtn btn-sm" onclick="salary_review_report()">Salary Review</button>
@@ -187,6 +188,28 @@
     }
     var data = "first_date="+first_date+"&second_date="+second_date+"&status="+r+'&sql='+sql+'&done='+done;
     url = base_url + "/show_report";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+        // console.log(ajaxRequest);
+        var resp = ajaxRequest.responseText;
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1400,height=800');
+        a.document.write(resp);
+      }
+    }
+  }
+  function employee_regular_report(){
+    var ajaxRequest;  // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+    first_date = document.getElementById('process_date').value;
+    if(first_date ==''){
+      alert('Please select status');
+      return ;
+    }
+    var data = "first_date="+first_date;
+    url = base_url + "/employee_regular_report";
     ajaxRequest.open("POST", url, true);
     ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
     ajaxRequest.send(data);
