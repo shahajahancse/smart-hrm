@@ -147,7 +147,7 @@ class Attendance extends MY_Controller
                 }
                 $session = $this->session->userdata('username');
 
-                if (!is_null($session) && array_key_exists('role_id', $session) && in_array($session['role_id'], [1], true)) {
+                if (!is_null($session) && array_key_exists('role_id', $session) && !in_array($session['role_id'], [1], true)) {
                     $employee_managment = $this->db->where('user_id', $row)->get('xin_employees')->row();
                     if ($employee_managment->is_management == 1) {
                         echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name";
