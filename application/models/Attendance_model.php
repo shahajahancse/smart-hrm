@@ -11,7 +11,6 @@ class Attendance_model extends CI_Model
     }
 
     public function attn_process($process_date, $emp_ids, $status = null){
-        // $this->get_attn_data_from_machine($process_date);
         $check_day = date("Y-m-d", strtotime("-1 day", strtotime($process_date)));
         $att_check = $this->db->where('attendance_date', $check_day)->get('xin_attendance_time');
         if($att_check->num_rows() < 1) {
@@ -21,15 +20,18 @@ class Attendance_model extends CI_Model
             echo 'Sorry! advanced process not allowed, Please first process '. date('Y-m-d');
             exit;
         }
-        if (strtotime(date('Y-m-d', strtotime('-50 days',$process_date))) >= strtotime($process_date)) {
-            echo 'Sorry! Before 2024-02-29 process not allowed';
-            exit;
-        }
+        // if (strtotime(date('Y-m-d', strtotime('-50 days',$process_date))) >= strtotime($process_date)) {
+        //     echo 'Sorry! Before 2024-02-29 process not allowed';
+        //     exit;
+        // }
 
         if (date('2024-03-23') == $process_date) {
             $off_day = false;
             $holiday_day = false;
         }elseif(date('2024-05-04') == $process_date ) {
+            $off_day = false;
+            $holiday_day = false;
+        }elseif(date('2024-05-18') == $process_date ) {
             $off_day = false;
             $holiday_day = false;
         }else{
