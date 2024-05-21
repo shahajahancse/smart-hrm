@@ -1360,13 +1360,16 @@ class Reports extends MY_Controller
 
 	public function employee_bonus(){
 
+		// dd($this->input->post());
 		$all_employee=$this->db->where_in('status',[1,4,5])->get('xin_employees')->result();
 
 		$exist_employee=[];
 		$no_intern_one_year=[];
 		$joining_one_year=[];
 		$no_year=[];
-		$const_date=date('Y-06-16');
+		$const_date=date('Y-m-d', $_POST['date']);
+		$data['const_date'] = $const_date;
+
 		$emni_pass_date=date('Y-m-d',strtotime('-18 month', strtotime($const_date)));
 		$pass_date=date('Y-m-d',strtotime('-1 year', strtotime($const_date)));
 		// dd($emni_pass_date);
@@ -1383,11 +1386,24 @@ class Reports extends MY_Controller
 				$this->db->limit(1);
 				$last_date=$this->db->get('xin_employee_incre_prob')->row();
 
-				if (!empty($last_date) && $last_date->effective_date <= $pass_date) {
-					$no_intern_one_year[] = $value->user_id;
-				}else{
-					$exist_employee[]= $value;
+				if(!empty($last_date)){
+					$this->db->where('emp_id', $emp_id);
+					$this->db->where('status', 4);
+					$this->db->order_by('effective_date', 'desc');
+					$this->db->limit(1);
+					$if_inter=$this->db->get('xin_employee_incre_prob')->row();
+					if(!empty($if_inter)){
+						$her_join_date=$if_inter->end_date;
+					}else{
+						$her_join_date=$value->date_of_joining;
+					}
+					if ($her_join_date <= $pass_date) {
+						$no_intern_one_year[] = $value->user_id;
+					}else{
+						$exist_employee[]= $value;
+					}
 				}
+
 				
 			}
 		}
@@ -1576,6 +1592,7 @@ class Reports extends MY_Controller
    }
 	public function employee_regular_report(){
 		
+
     	$first_date = $this->input->post('first_date');
 		$all_employee=$this->db->where_in('status',[1,4,5])->get('xin_employees')->result();
 
@@ -1588,6 +1605,26 @@ class Reports extends MY_Controller
 		$pass_date=date('Y-m-d',strtotime('-1 year', strtotime($const_date)));
 		// dd($emni_pass_date);
 
+		// foreach ($all_employee as $key => $value) {
+		// 	$emp_id=$value->user_id;
+		// 	$joining_date=$value->date_of_joining;
+		// 	if ($joining_date <= $emni_pass_date) {
+		// 		$no_intern_one_year[] = $value->user_id;
+		// 	}else{
+		// 		$this->db->where('emp_id', $emp_id);
+		// 		$this->db->where('status', 1);
+		// 		$this->db->order_by('effective_date', 'desc');
+		// 		$this->db->limit(1);
+		// 		$last_date=$this->db->get('xin_employee_incre_prob')->row();
+
+		// 		if (!empty($last_date) && $last_date->effective_date <= $pass_date) {
+		// 			$no_intern_one_year[] = $value->user_id;
+		// 		}else{
+		// 			$exist_employee[]= $value;
+		// 		}
+				
+		// 	}
+		// }
 		foreach ($all_employee as $key => $value) {
 			$emp_id=$value->user_id;
 			$joining_date=$value->date_of_joining;
@@ -1600,11 +1637,26 @@ class Reports extends MY_Controller
 				$this->db->limit(1);
 				$last_date=$this->db->get('xin_employee_incre_prob')->row();
 
-				if (!empty($last_date) && $last_date->effective_date <= $pass_date) {
-					$no_intern_one_year[] = $value->user_id;
+				if(!empty($last_date)){
+					$this->db->where('emp_id', $emp_id);
+					$this->db->where('status', 4);
+					$this->db->order_by('effective_date', 'desc');
+					$this->db->limit(1);
+					$if_inter=$this->db->get('xin_employee_incre_prob')->row();
+					if(!empty($if_inter)){
+						$her_join_date=$if_inter->end_date;
+					}else{
+						$her_join_date=date('Y-m-d', strtotime($value->date_of_joining));
+					}
+					if ($her_join_date <= $pass_date) {
+						$no_intern_one_year[] = $value->user_id;
+					}else{
+						$exist_employee[]= $value;
+					}
 				}else{
 					$exist_employee[]= $value;
 				}
+
 				
 			}
 		}

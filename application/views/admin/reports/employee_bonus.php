@@ -73,6 +73,7 @@
                     <th>Department Name</th>
                     <th>Designation Name</th>
                     <th>Date of Joining</th>
+                    <th>Job Duration</th>
                     <th>Salary</th>
                 </tr>
             </thead>
@@ -96,6 +97,13 @@
                     <td><?= $value->department_name ?></td>
                     <td><?= $value->designation_name ?></td>
                     <td><?= $value->date_of_joining ?></td>
+                    <?php
+                    $date1 = date('Y-06-16');
+                    $date2 = $value->date_of_joining;
+                    $diff = date_diff(date_create($date2), date_create($date1));
+                    $duration = $diff->format("%y years %m months %d days");
+                    ?>
+                    <td><?= $duration ?></td>
                     <td><?= $value->salary ?></td>
                 </tr>
                 <?php }
@@ -115,6 +123,7 @@
                     <th>Department Name</th>
                     <th>Designation Name</th>
                     <th>Date of Joining</th>
+                    <th>Job Duration</th>
                     <th>Salary</th>
                 </tr>
             </thead>
@@ -139,6 +148,13 @@
                     <td><?= $value->department_name ?></td>
                     <td><?= $value->designation_name ?></td>
                     <td><?= $value->date_of_joining ?></td>
+                    <?php
+                    $date1 = date('Y-06-16');
+                    $date2 = $value->date_of_joining;
+                    $diff = date_diff(date_create($date2), date_create($date1));
+                    $duration = $diff->format("%y years %m months %d days");
+                    ?>
+                    <td><?= $duration ?></td>
                     <td><?= $value->salary ?></td>
                 </tr>
                 <?php }?>
@@ -157,6 +173,7 @@
                     <th>Department Name</th>
                     <th>Designation Name</th>
                     <th>Date of Joining</th>
+                    <th>Job Duration</th>
                     <th>Salary</th>
                 </tr>
             </thead>
@@ -182,6 +199,13 @@
                     <td><?= $value->department_name ?></td>
                     <td><?= $value->designation_name ?></td>
                     <td><?= $value->date_of_joining ?></td>
+                    <?php
+                    $date1 = date('Y-06-17');
+                    $date2 = $value->date_of_joining;
+                    $diff = date_diff(date_create($date2), date_create($date1));
+                    $duration = $diff->format("%y years %m months %d days");
+                    ?>
+                    <td><?= $duration ?></td>
                     <td><?= $value->salary ?></td>
                 </tr>
                 <?php }  ?>

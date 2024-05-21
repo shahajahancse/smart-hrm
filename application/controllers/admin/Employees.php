@@ -6902,7 +6902,19 @@ exit();
 					'sl_total' => $integerPart,
 					'year' => $year,
 				);
-				$this->db->insert('leave_balanace', $data);
+
+
+
+				$this->db->where('emp_id', $emp_id);
+				$this->db->where('year', $year);
+				$l_b_data=$this->db->get('leave_balanace')->row();
+				if (!empty($l_b_data)) {
+					$this->db->where('emp_id', $emp_id);
+					$this->db->where('year', $year);
+					$this->db->update('leave_balanace', $data);
+				}else{
+					$this->db->insert('leave_balanace', $data);
+				}
 				redirect('/admin/employees/detail/'.$this->input->post('user_id'),'refresh');
 		}
 

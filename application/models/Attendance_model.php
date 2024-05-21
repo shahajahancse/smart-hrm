@@ -254,6 +254,8 @@ class Attendance_model extends CI_Model
                     $astatus = 'Absent';
                     $status = 'Absent';
                 }else{
+                    $astatus = 'Absent';
+                    $status = 'Present';
                     // Half day calculation here
                     if ($in_time != '' && $out_time != '') {
                         $half_morning = date("Y-m-d H:i:s", strtotime($process_date.' '.'11:59:59'));
@@ -330,6 +332,7 @@ class Attendance_model extends CI_Model
             // if ($status == 'Off Day') {
             //     $late_status = 0;
             // }
+
             $data = array(
                 'employee_id'       => $emp_id,
                 'office_shift_id'   => 1,
@@ -347,6 +350,7 @@ class Attendance_model extends CI_Model
                 'lunch_late_status' => $lunch_late_status,
                 'early_out_status'  => $early_out_status,
             );
+
 
             $query = $this->db->where('employee_id', $emp_id)->where('attendance_date', $process_date)->get('xin_attendance_time');
             if($query->num_rows() > 0) {
@@ -375,6 +379,20 @@ class Attendance_model extends CI_Model
         }
         return 'Successfully Process Done';
     }
+
+
+    public function leave_process($leave_id) {
+        $data= $this->db->where('leave_id', $leave_id)->get('xin_leave_applications')->row();
+        $first_date = date('Y-m-d', strtotime($data->from_date));
+        $last_date = date('Y-m-d', strtotime($data->to_date));
+        $employee_id = $data->employee_id;
+        $currentDate = $first_date;
+        do {
+            $this->attn_process($currentDate, [$employee_id]);
+            $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
+        } while ($currentDate <= $last_date);
+    }
+
 
 
     public function get_attn_data_from_machine($date){

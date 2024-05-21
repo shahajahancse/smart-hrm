@@ -31,7 +31,10 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($products as $key => $row) { ?>
+        <?php foreach ($products as $key => $row) {
+          
+          
+          ?>
           <tr>
             <td class="text-center"><?= $key + 1 ?></td>
             <td class="text-center"><?= $row->product_name ?></td>

@@ -64,7 +64,9 @@ table tbody tr td {
                         <td>Status</td>
                         <td>Comment</td>
                     </thead>
-                    <?php  $i=1; foreach($values as $row){?>
+                    <?php
+                    
+                    $i=1; foreach($values as $row){?>
                     <tbody>
                         <?php 
 					

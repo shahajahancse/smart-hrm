@@ -544,17 +544,21 @@ hr {
                                     <span class="progress-label-top">Lunch Time</span>
                                     <span class="progress-count"><i class="fa fa-clock-o"  aria-hidden="true"></i></i></span>
                                     <span
-                                        class="progress-label"><?php echo !empty($punch_time)?date('h:i A', strtotime($punch_time->lunch_in)):'-' ?></span>
+                                        class="progress-label"><?php echo !empty($punch_time && $punch_time->lunch_in)?date('h:i A', strtotime($punch_time->lunch_in)):'-' ?></span>
                                 </li>
                                 <li class="step-wizard-item <?=$lunch_end_class?>">
                                     <span class="progress-label-top">Lunch End</span>
                                     <span class="progress-count"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                    <span class="progress-label"><?php echo !empty($punch_time)?date('h:i A', strtotime($punch_time->lunch_out)):'-' ?></span>
+                                    <span class="progress-label"><?php echo !empty($punch_time && $punch_time->lunch_out)?date('h:i A', strtotime($punch_time->lunch_out)):'-' ?></span>
                                 </li>
                                 <li class="step-wizard-item <?=$out_time_class?>">
                                     <span class="progress-label-top">Punch Out</span>
                                     <span class="progress-count"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                    <span class="progress-label "><?php echo !empty($punch_time)  ? $out_time : "Not punch yet"; ?></span>
+                                    <?php if(isset($punch_time) && isset($punch_time->out_time)) : ?>
+                                        <span class="progress-label"><?php echo $punch_time->out_time; ?></span>
+                                    <?php else: ?>
+                                        <span class="progress-label">Not punch yet</span>
+                                    <?php endif; ?>
                                 </li>
                             </ul>
                         </section>

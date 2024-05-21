@@ -163,8 +163,7 @@ body {
                     <div class="pseudo6">
                         <input name="start_date" value="<?= date('Y-m-d') ?>" 
                         class="col-md-12 "
-
-                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="start_date"
+                            style="width: 98%;border: none;cursor: pointer;" type="date"  min="<?= date('Y-m-d', strtotime('-2 day')) ?>" name="" id="start_date"
                             required>
                     </div>
                 </div>
@@ -174,7 +173,7 @@ body {
                 <div class="input">
                     <div class="level">Select End Date**</div>
                     <div class="pseudo6">
-                        <input name="end_date" value="<?= date('Y-m-d') ?>" class="col-md-12"
+                        <input name="end_date" value="<?= date('Y-m-d') ?>" min="<?= date('Y-m-d', strtotime('-2 day')) ?>" class="col-md-12"
                             style="width: 98%;border: none;cursor: pointer;" type="date" name="" id="end_date" required>
                     </div>
                 </div>
@@ -302,11 +301,19 @@ body {
 
 <div style="clear: both;">
     <?php if($this->session->flashdata('success')):?>
-    <div class="alert alert-danger" id="flash_message" style="text-align: center;padding: 6px;">
+    <div class="alert alert-success" id="flash_message" style="text-align: center;padding: 6px;">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
         <?php echo $this->session->flashdata('success');?>
+    </div>
+    <?php endif; ?>
+    <?php if($this->session->flashdata('error')):?>
+    <div class="alert alert-danger" id="flash_message" style="text-align: center;padding: 6px;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <?php echo $this->session->flashdata('error');?>
     </div>
     <?php endif; ?>
 </div>
