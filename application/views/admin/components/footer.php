@@ -248,3 +248,13 @@ $(document).ready(function(){
         });
     }
   </script>
+
+
+<script>
+
+  $(window).on('load', function() {
+    $("#inn_loader").hide();
+  })
+
+</script>
+

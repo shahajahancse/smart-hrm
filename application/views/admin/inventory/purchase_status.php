@@ -52,7 +52,7 @@ $(function() {
                     <?php  foreach ($products as $key => $rows) { ?>
                     <tr>
                         <td class="text-center"><?php echo($key+1)."."; ?></td>
-                        <?php if($user_role_id==1 || $user_role_id == 2) {?>
+                        <?php if($user_role_id==1 || $user_role_id == 2 || $user_role_id == 4) {?>
                         <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                         <?php } 
                         $this->load->model('Inventory_model');
@@ -87,7 +87,7 @@ $(function() {
                             </div>
                         </td>
 
-                        <?php }  if($user_role_id==4) {?>
+                        <?php }  if($user_role_id==999) {?>
                         <td class="text-center"><?php echo $rows->first_name." ".$rows->last_name; ?></td>
                         <td class="text-center"><?php echo $rows->status==1 ? "
                       <span class='badge' style='background-color:#ffc107'><b>Pending</b></span>" :
