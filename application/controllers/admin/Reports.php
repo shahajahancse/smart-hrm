@@ -233,6 +233,15 @@ class Reports extends MY_Controller
 		$data['date']=$this->input->post('first_date');
         echo $this->load->view("admin/reports/yerly_leave", $data, true);
 	}
+	public function getyarly_data() {
+		$date = date('Y-m-01', strtotime($this->input->post('year').'-01-01'));
+		
+		$session = $this->session->userdata('username');
+        $emp_id = [$session['user_id']];
+        $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+		$data['date']=$date;
+        echo $this->load->view("admin/reports/yerly_leave", $data, true);
+	}
 	public function leave_report()
    {
       

@@ -28,7 +28,8 @@ foreach ($all_employees as $key => $value) {
 
 
 	echo "<span style='font-size:13px; font-weight:bold;'>";
-	echo "Yerly Leave Report";
+	echo "Yerly Leave Report of ";
+	echo date('Y', strtotime($date));
 	echo "</span>";
 	echo "<br /><br />";
 	

@@ -54,13 +54,12 @@ body {
 
 .modal-content {
     background-color: #fff;
-    padding: 2px;
-    margin: 8% 0% 0% 26%;
+    padding: 4px 35px;
+    margin: 8% 0% 0% 23%;
     border: 1px solid #888;
-    width: 55%;
+    width: 65%;
     overflow: auto;
 }
-
 .close {
     color: #aaa;
     float: right;
@@ -130,9 +129,6 @@ body {
     <?php echo form_open('admin/timesheet/add_leave', $attributes, $hidden);?>
     <input type="hidden" name="company_id" id="company_id" value="1" />
     <input type="hidden" name="employee_id" id="employee_id" value="<?php echo $userid; ?>"> />
-
-
-
     <div class="modal-content">
         <div class="col-md-12" style="height: 30px;">
             <span id="close" class="close"><svg style="width: 20px;height: 20px;flex-shrink: 0;"
@@ -206,20 +202,13 @@ body {
             </div>
         <div class="col-md-12">
             <div class="form-actions box-footer">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick= closeModal()>Close</button>
             </div>
         </div>
-
-
-
     </div>
     <?php echo form_close(); ?>
 </div>
-
-
-
-
 
 
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
@@ -276,8 +265,10 @@ body {
     </div>
     <div class="col-md-3 divform-group">
         <div class="input">
-            <?php $years = range(1900, strftime("%Y", time())); ?>
-
+            <?php $years = range(1900, strftime("%Y", time())); 
+            $years = array_reverse($years);
+            
+            ?>
             <div class="level">Select Year</div>
             <div class="pseudo6">
                 <select onchange=getdata(this) id="year" style="width: 98%;border: none;cursor: pointer;">
@@ -293,7 +284,10 @@ body {
 
     </div>
     <div class="col-md-3 divform-group">
-        <input type="button" onclick="location.reload();" value="Get All Data" class="input serceb">
+      
+        <button onclick="getyarly_data()" value="" class="input serceb">
+            Get yearly report  <span class="label label-danger">New</span>
+       </button>
     </div>
 
 </div>
@@ -404,3 +398,39 @@ function calculateDays() {
 document.getElementById('start_date').addEventListener('change', calculateDays);
 document.getElementById('end_date').addEventListener('change', calculateDays);
 </script>
+
+<script>
+    function getyarly_data() {
+        var year = document.getElementById('year').value;
+        Swal.fire({
+            title: 'You Selected ' + year,
+            text: 'If not please select another year',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Generate it!'
+        }).then((result) => {
+            if (result.value) {
+                var url = '<?php echo base_url('admin/reports/getyarly_data'); ?>';
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: { year: year },
+                    success: function(resp) {
+                        var a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+                        a.document.write(resp);
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'There was an error generating the report'
+                        });
+                    }
+                });
+            } 
+        });
+    }
+</script>
+
