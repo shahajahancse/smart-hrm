@@ -4731,20 +4731,20 @@ public function leave_efectinve_table(){
 	$this->load->view('admin/layout/layout_main', $data);
 
 }
-public function give_efectivefore_leave_add(){
-	exit();
-	$employee_id = $this->input->post('employee_id');
-	$is_leave_on = $this->input->post('is_leave_on');
-	$leave_effective = $this->input->post('leave_effective');
+// public function give_efectivefore_leave_add(){
+// 	exit();
+// 	$employee_id = $this->input->post('employee_id');
+// 	$is_leave_on = $this->input->post('is_leave_on');
+// 	$leave_effective = $this->input->post('leave_effective');
 
-	foreach($employee_id as $key => $value){
-		$data = array(
-			'is_leave_on' => $is_leave_on[$key],
-			'leave_effective' => $leave_effective[$key]
-		);
-		$this->db->where('user_id',$value);
-		$this->db->update('xin_employees',$data);
-	}
-	echo"done";
-}
+// 	foreach($employee_id as $key => $value){
+// 		$data = array(
+// 			'is_leave_on' => $is_leave_on[$key],
+// 			'leave_effective' => $leave_effective[$key]
+// 		);
+// 		$this->db->where('user_id',$value);
+// 		$this->db->update('xin_employees',$data);
+// 	}
+// 	echo"done";
+// }
 }

@@ -157,14 +157,19 @@ class Attendance_model extends CI_Model
             $late_start_time = date("Y-m-d H:i:s", strtotime($process_date.' '.$late_start_time));
 
             $lunch_time      = date("Y-m-d H:i:s", strtotime($process_date.' '.$lunch_time));
-            $lunch_end       = date('Y-m-d H:i:s', strtotime($lunch_time. ' +'.$lunch_minute));
+            $lunch_end       = date('Y-m-d H:i:s', strtotime($lunch_time. ' +'.$lunch_minute. ' minutes'));
             $lunch_late_time = date('Y-m-d H:i:s', strtotime($lunch_end. ' +5 minutes'));
             $early_out_time  = date("Y-m-d H:i:s", strtotime($process_date.' '.$ot_start_time));
 
             // get lunch in and out time and check lunch late status
             $half_evening = date('Y-m-d H:i:s', strtotime($early_out_time. ' -3 hours'));
-            $lunch_out   = $this->check_in_out_time($proxi_id, $out_start_time, $lunch_end, 'ASC');
-            $lunch_in    = $this->check_in_out_time($proxi_id, $lunch_time, $half_evening, 'DESC');
+            $lunch_out   = $this->check_in_out_time($proxi_id, $lunch_time, $lunch_end, 'ASC');
+            if ($lunch_out) {
+                $oott= date('Y-m-d H:i:s', strtotime($lunch_out. ' +1 minutes'));
+            }else {
+                $oott= date('Y-m-d H:i:s', strtotime($lunch_time. ' +1 minutes'));
+            }
+            $lunch_in    = $this->check_in_out_time($proxi_id, $oott, $half_evening, 'DESC');
             if (strtotime($lunch_in) > strtotime($lunch_late_time)) {
                 $lunch_late_status = 1;
             }
@@ -538,6 +543,8 @@ class Attendance_model extends CI_Model
 
     public function check_in_out_time($proxi_id, $start_time, $end_time, $order)
     {
+
+
         $date_time = '';
         $this->db->select("date_time");
         $this->db->where("date_time BETWEEN '$start_time' and '$end_time'");
