@@ -74,195 +74,195 @@ if($theme[0]->animation_style == '') {
 <!-- loader -->
 
 <style>
-  .pencil {
-  display: block;
-  width: 10em;
-  height: 10em;
-}
+    .pencil {
+    display: block;
+    width: 10em;
+    height: 10em;
+    }
 
-.pencil__body1,
-.pencil__body2,
-.pencil__body3,
-.pencil__eraser,
-.pencil__eraser-skew,
-.pencil__point,
-.pencil__rotate,
-.pencil__stroke {
-  animation-duration: 3s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
+    .pencil__body1,
+    .pencil__body2,
+    .pencil__body3,
+    .pencil__eraser,
+    .pencil__eraser-skew,
+    .pencil__point,
+    .pencil__rotate,
+    .pencil__stroke {
+    animation-duration: 3s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    }
 
-.pencil__body1,
-.pencil__body2,
-.pencil__body3 {
-  transform: rotate(-90deg);
-}
-
-.pencil__body1 {
-  animation-name: pencilBody1;
-}
-
-.pencil__body2 {
-  animation-name: pencilBody2;
-}
-
-.pencil__body3 {
-  animation-name: pencilBody3;
-}
-
-.pencil__eraser {
-  animation-name: pencilEraser;
-  transform: rotate(-90deg) translate(49px,0);
-}
-
-.pencil__eraser-skew {
-  animation-name: pencilEraserSkew;
-  animation-timing-function: ease-in-out;
-}
-
-.pencil__point {
-  animation-name: pencilPoint;
-  transform: rotate(-90deg) translate(49px,-30px);
-}
-
-.pencil__rotate {
-  animation-name: pencilRotate;
-}
-
-.pencil__stroke {
-  animation-name: pencilStroke;
-  transform: translate(100px,100px) rotate(-113deg);
-}
-
-/* Animations */
-@keyframes pencilBody1 {
-  from,
-	to {
-    stroke-dashoffset: 351.86;
+    .pencil__body1,
+    .pencil__body2,
+    .pencil__body3 {
     transform: rotate(-90deg);
-  }
+    }
 
-  50% {
-    stroke-dashoffset: 150.8;
- /* 3/8 of diameter */
-    transform: rotate(-225deg);
-  }
-}
+    .pencil__body1 {
+    animation-name: pencilBody1;
+    }
 
-@keyframes pencilBody2 {
-  from,
-	to {
-    stroke-dashoffset: 406.84;
-    transform: rotate(-90deg);
-  }
+    .pencil__body2 {
+    animation-name: pencilBody2;
+    }
 
-  50% {
-    stroke-dashoffset: 174.36;
-    transform: rotate(-225deg);
-  }
-}
+    .pencil__body3 {
+    animation-name: pencilBody3;
+    }
 
-@keyframes pencilBody3 {
-  from,
-	to {
-    stroke-dashoffset: 296.88;
-    transform: rotate(-90deg);
-  }
+    .pencil__eraser {
+    animation-name: pencilEraser;
+    transform: rotate(-90deg) translate(49px,0);
+    }
 
-  50% {
-    stroke-dashoffset: 127.23;
-    transform: rotate(-225deg);
-  }
-}
+    .pencil__eraser-skew {
+    animation-name: pencilEraserSkew;
+    animation-timing-function: ease-in-out;
+    }
 
-@keyframes pencilEraser {
-  from,
-	to {
-    transform: rotate(-45deg) translate(49px,0);
-  }
-
-  50% {
-    transform: rotate(0deg) translate(49px,0);
-  }
-}
-
-@keyframes pencilEraserSkew {
-  from,
-	32.5%,
-	67.5%,
-	to {
-    transform: skewX(0);
-  }
-
-  35%,
-	65% {
-    transform: skewX(-4deg);
-  }
-
-  37.5%, 
-	62.5% {
-    transform: skewX(8deg);
-  }
-
-  40%,
-	45%,
-	50%,
-	55%,
-	60% {
-    transform: skewX(-15deg);
-  }
-
-  42.5%,
-	47.5%,
-	52.5%,
-	57.5% {
-    transform: skewX(15deg);
-  }
-}
-
-@keyframes pencilPoint {
-  from,
-	to {
+    .pencil__point {
+    animation-name: pencilPoint;
     transform: rotate(-90deg) translate(49px,-30px);
-  }
+    }
 
-  50% {
-    transform: rotate(-225deg) translate(49px,-30px);
-  }
-}
+    .pencil__rotate {
+    animation-name: pencilRotate;
+    }
 
-@keyframes pencilRotate {
-  from {
-    transform: translate(100px,100px) rotate(0);
-  }
-
-  to {
-    transform: translate(100px,100px) rotate(720deg);
-  }
-}
-
-@keyframes pencilStroke {
-  from {
-    stroke-dashoffset: 439.82;
+    .pencil__stroke {
+    animation-name: pencilStroke;
     transform: translate(100px,100px) rotate(-113deg);
-  }
+    }
 
-  50% {
-    stroke-dashoffset: 164.93;
-    transform: translate(100px,100px) rotate(-113deg);
-  }
+    /* Animations */
+    @keyframes pencilBody1 {
+    from,
+        to {
+        stroke-dashoffset: 351.86;
+        transform: rotate(-90deg);
+    }
 
-  75%,
-	to {
-    stroke-dashoffset: 439.82;
-    transform: translate(100px,100px) rotate(112deg);
-  }
-}
+    50% {
+        stroke-dashoffset: 150.8;
+    /* 3/8 of diameter */
+        transform: rotate(-225deg);
+    }
+    }
+
+    @keyframes pencilBody2 {
+    from,
+        to {
+        stroke-dashoffset: 406.84;
+        transform: rotate(-90deg);
+    }
+
+    50% {
+        stroke-dashoffset: 174.36;
+        transform: rotate(-225deg);
+    }
+    }
+
+    @keyframes pencilBody3 {
+    from,
+        to {
+        stroke-dashoffset: 296.88;
+        transform: rotate(-90deg);
+    }
+
+    50% {
+        stroke-dashoffset: 127.23;
+        transform: rotate(-225deg);
+    }
+    }
+
+    @keyframes pencilEraser {
+    from,
+        to {
+        transform: rotate(-45deg) translate(49px,0);
+    }
+
+    50% {
+        transform: rotate(0deg) translate(49px,0);
+    }
+    }
+
+    @keyframes pencilEraserSkew {
+    from,
+        32.5%,
+        67.5%,
+        to {
+        transform: skewX(0);
+    }
+
+    35%,
+        65% {
+        transform: skewX(-4deg);
+    }
+
+    37.5%, 
+        62.5% {
+        transform: skewX(8deg);
+    }
+
+    40%,
+        45%,
+        50%,
+        55%,
+        60% {
+        transform: skewX(-15deg);
+    }
+
+    42.5%,
+        47.5%,
+        52.5%,
+        57.5% {
+        transform: skewX(15deg);
+    }
+    }
+
+    @keyframes pencilPoint {
+    from,
+        to {
+        transform: rotate(-90deg) translate(49px,-30px);
+    }
+
+    50% {
+        transform: rotate(-225deg) translate(49px,-30px);
+    }
+    }
+
+    @keyframes pencilRotate {
+    from {
+        transform: translate(100px,100px) rotate(0);
+    }
+
+    to {
+        transform: translate(100px,100px) rotate(720deg);
+    }
+    }
+
+    @keyframes pencilStroke {
+    from {
+        stroke-dashoffset: 439.82;
+        transform: translate(100px,100px) rotate(-113deg);
+    }
+
+    50% {
+        stroke-dashoffset: 164.93;
+        transform: translate(100px,100px) rotate(-113deg);
+    }
+
+    75%,
+        to {
+        stroke-dashoffset: 439.82;
+        transform: translate(100px,100px) rotate(112deg);
+    }
+    }
 </style>
-<div id=inn_loader style="display: block;position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: 99999999999999999999900000000000000000000;background: #00000091;">
+<div id="inn_loader" style="display: block;position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: 99999999999999999999900000000000000000000;background: #ffffffcf;">
   <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
-    <svg xmlns="http://www.w3.org/2000/svg" height="200px" width="200px" viewBox="0 0 200 200" class="pencil">
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" height="200px" width="200px" viewBox="0 0 200 200" class="pencil">
       <defs>
         <clipPath id="pencil-eraser">
           <rect height="30" width="30" ry="5" rx="5"></rect>
@@ -292,7 +292,8 @@ if($theme[0]->animation_style == '') {
           <polygon points="15 0,20 10,10 10" fill="hsl(223,10%,10%)"></polygon>
         </g>
       </g>
-    </svg>
+    </svg> -->
+    <img src="<?php echo base_url('innlode.gif') ?>" alt="">
   </div>
 </div>
 

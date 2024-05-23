@@ -62,53 +62,8 @@
 <div class="col-lg-8">
     <div class="box mb-4 <?php echo $get_animate;?>">
         <div class="box-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="process_date">First Date</label>
-                                <input class="form-control attendance_date"
-                                    placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date"
-                                    name="process_date" type="text" value="<?php echo date('Y-m-d');?>" required>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="process_date">Second Date</label>
-                                <input class="form-control attendance_date"
-                                    placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date"
-                                    name="second_date" type="text" autocomplete="off">
-                            </div>
-                        </div>
+        <?php   $this->load->view('admin/filter'); ?>
 
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="upload_file">status</label>
-                                <select class="form-control" name="status" id="status">
-                                    <option value="">Select one</option>
-                                    <option value="0">all</option>
-                                    <option value="1">regular</option>
-                                    <option value="2">left</option>
-                                    <option value="3">resign</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="upload_file">Previous Report</label>
-                                <select class="form-control" name="prever_report" id="prever_report">
-                                    <option value="">Select one</option>
-                                    <?php foreach($prever_report as $prever):?>
-                                    <option value="<?=$prever->end_date?>"><?=$prever->end_date?> >> <?=$prever->next_date?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -150,16 +105,8 @@
 </div>
 
 <div class="col-lg-4">
-    <div class="box" style="height: 74vh;overflow-y: scroll;">
-        <table class="table table-striped table-hover" id="fileDiv">
-            <tr style="position: sticky;top: 0;z-index:1">
-                <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox"
-                        name="select-all" /></th>
-                <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
-                <th class=" text-center" style="background:#0177bc;color:white">Name</th>
-            </tr>
-        </table>
-    </div>
+<?php   $this->load->view('admin/filtered_data'); ?>
+
 </div>
 
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>

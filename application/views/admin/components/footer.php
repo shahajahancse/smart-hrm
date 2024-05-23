@@ -257,4 +257,10 @@ $(document).ready(function(){
   })
 
 </script>
+<script>
+
+  $(window).on('load', function() {  
+    $(".select22").select2();
+  })
+</script>
 

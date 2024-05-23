@@ -1321,6 +1321,7 @@ class Reports extends MY_Controller
 	public function get_employeess(){
 
         $status = $this->input->get('status');
+		
 		// dd($status);
 		$this->db->select('user_id as emp_id, first_name, last_name');
         if ($status == 0) {
@@ -1338,6 +1339,44 @@ class Reports extends MY_Controller
 		if($status == 4){
 			$this->db->where_in('status',[1,2,3,4,5]);
 		}
+        $this->db->where('company_id', 1);
+        $this->db->order_by('user_id', 'asc');
+        $data["employees"] = $this->db->get('xin_employees')->result();
+        echo json_encode($data);
+    }
+	public function get_employeess_v2(){
+	
+        $status = $this->input->get('status');
+		$floor = $this->input->get('floor');
+		$department = $this->input->get('department');
+		$designation = $this->input->get('designation');
+		$this->db->select('user_id as emp_id, first_name, last_name');
+		//status
+        if ($status == 0) {
+			$this->db->where_in('status', [1,4,5]);
+        }elseif($status == 1){
+			$this->db->where_in('status',[2,3]);
+		}else{
+			$this->db->where_in('status',[1,2,3,4,5]);
+		}
+		// status end 
+		//floor
+		if ($floor == 5) {
+			$this->db->where('floor_status', 5);
+		}elseif($floor == 3){
+			$this->db->where('floor_status', 3);
+		}
+		// floor end
+		//department
+		if ($department != '') {
+			$this->db->where('department_id', $department);
+		}
+		//department end
+		//designation
+		if ($designation != '') {
+			$this->db->where('designation_id', $designation);
+		}
+		//designation end
         $this->db->where('company_id', 1);
         $this->db->order_by('user_id', 'asc');
         $data["employees"] = $this->db->get('xin_employees')->result();
@@ -1972,6 +2011,11 @@ class Reports extends MY_Controller
 		$data['emp_id']= $emp_id;
 	    $this->load->view("admin/reports/salary_review_report", $data);
 		
+	}
+	public function get_designations(){
+		$department_id = $this->input->post('department_id');
+		$data = $this->Designation_model->ajax_is_designation_information($department_id);
+		echo json_encode($data);
 	}
 } 
 ?>

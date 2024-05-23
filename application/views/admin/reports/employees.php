@@ -13,53 +13,13 @@
   }
 </style>
 <div class="row m-b-1 <?php echo $get_animate;?>">
-  <div class="col-md-7">
+  <div class="col-md-8">
     <div class="box">
       <div class="box-header with-border">
         <h3 class="box-title">Employees Report </h3>
       </div>
       <div class="box-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group">
-                    <label for="process_date">First Date</label>
-                    <input class="form-control attendance_date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date" name="process_date" type="text" value="<?php echo date('Y-m-d');?>">
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="process_date">Second Date</label>
-                  <input class="form-control attendance_date" placeholder="Second Date" id="second_date" name="second_date" type="text" autocomplete="off">
-                </div>
-              </div>
-              <!-- <div class="col-md-3">
-                <div class="form-group">
-                  <label for="upload_file">Type</label>
-                  <select class="form-control" name="type" id="type">
-                    <option value="">Select one</option>
-                    <option value="1">Regular</option>
-                    <option value="4">Intern</option>
-                    <option value="5">Probation</option>
-                  </select>
-                </div>
-              </div> -->
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="upload_file">Status</label>
-                  <select class="form-control" name="status" id="status">
-                    <option value="">Select one</option>
-                    <option value="0">Regular</option>
-                    <!-- <option value="1">Regular</option> -->
-                    <option value="2">Left</option>
-                    <option value="3">Resign</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <?php   $this->load->view('admin/filter'); ?>
       </div>
     </div>
     <div class="box">
@@ -98,18 +58,8 @@
       </div>
     </div>
   </div>
-
-
-  <div class="col-lg-5">
-    <div class="box" style="height: 74vh;overflow-y: scroll;">
-      <table class="table table-striped table-hover" id="fileDiv">
-        <tr style="position: sticky;top: 0;z-index:1">
-            <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox" name="select-all" /></th>
-            <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
-            <th class=" text-center" style="background:#0177bc;color:white">Name</th>
-        </tr>
-      </table>
-    </div>
+  <div class="col-lg-4">
+  <?php   $this->load->view('admin/filtered_data'); ?>
   </div>
 </div>
 
@@ -124,38 +74,6 @@
       $("#select_all").click(function(){
         $('input:checkbox').not(this).prop('checked', this.checked);
       });
-
-      // on load employee
-    $("#status").change(function () {
-      status = document.getElementById('status').value;
-      var url = "<?php echo base_url('admin/reports/get_employeess'); ?>";
-      $("#select_all").prop("checked", false);
-      $('#fileDiv .removeTr').remove();
-
-      $.ajax({
-        url: url,
-        type: 'GET',
-        data: { "status": status },
-        contentType: "application/json",
-        dataType: "json",
-        success: function (response) {
-          arr = response.employees;
-          if (arr.length != 0) {
-            var i = 1;
-            var items = '';
-            $.each(arr, function (index, value) {
-              items += '<tr class="removeTr">';
-              items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' + value.emp_id + '" ></td>';
-               items += '<td class="success">' + (i++) + '</td>';
-              items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + " (" +value.emp_id + ")" + '</td>';
-              items += '</tr>';
-            });
-            // Append the new rows
-            $('#fileDiv tr:last').after(items);
-          }
-        }
-      });
-    });
   });
 
   function show_report(r, done){

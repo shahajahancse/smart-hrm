@@ -1359,4 +1359,51 @@ class Attendance extends MY_Controller
         $this->db->update('xin_attendance_time', $data);
         echo 'success';
     }
+
+    public function firebase_testing(){
+        $firebase_server_key = 'AIzaSyAocs5RyWdSwsPYKMAThQfwOAbyuaYXeVU';
+        // Replace with the device's registration token
+        $token = 'device_token_here';
+        // Notification details
+        $title = 'Test Notification';
+        $body = 'This is a test notification';
+        // Prepare data
+        $data = [
+            'to' => $token,
+            'notification' => [
+                'title' => $title,
+                'body' => $body,
+            ],
+            'data' => [
+                'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                'id' => '1',
+                'status' => 'done'
+            ]
+        ];
+
+        // Set CURL request options
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $headers = [
+            'Authorization: key=' . $firebase_server_key,
+            'Content-Type: application/json'
+        ];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        // Send a request and get the response
+        $result = curl_exec($ch);
+        if ($result === false) {
+            die('Curl failed: ' . curl_error($ch));
+        }
+        curl_close($ch);
+
+        // Print the response
+        echo $result;
+    }
 }
