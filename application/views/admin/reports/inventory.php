@@ -81,39 +81,39 @@ $(document).ready(function() {
         $('input:checkbox').not(this).prop('checked', this.checked);
     });
     // on load employee
-    $("#status").change(function() {
-        status = document.getElementById('status').value;
-        var url = "<?php echo base_url('admin/reports/get_employeess'); ?>";
-        $("#select_all").prop("checked", false);
-        $('#fileDiv #removeTr').remove();
-        $.ajax({
-            url: url,
-            type: 'GET',
-            data: {
-                "status": status
-            },
-            contentType: "application/json",
-            dataType: "json",
-            success: function(response) {
-                arr = response.employees;
-                if (arr.length != 0) {
-                    var i = 1;
-                    var items = '';
-                    $.each(arr, function(index, value) {
-                        items += '<tr id="removeTr">';
-                        items +=
-                            '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' +
-                            value.emp_id + '" ></td>';
-                        items += '<td class="success">' + (i++) + '</td>';
-                        items += '<td class="warning ">' + value.first_name + ' ' +
-                            value.last_name + " (" + value.emp_id + ")" + '</td>';
-                        items += '</tr>';
-                    });
-                    $('#fileDiv tr:last').after(items);
-                }
-            }
-        });
-    });
+    // $("#status").change(function() {
+    //     status = document.getElementById('status').value;
+    //     var url = "<?php echo base_url('admin/reports/get_employeess'); ?>";
+    //     $("#select_all").prop("checked", false);
+    //     $('#fileDiv #removeTr').remove();
+    //     $.ajax({
+    //         url: url,
+    //         type: 'GET',
+    //         data: {
+    //             "status": status
+    //         },
+    //         contentType: "application/json",
+    //         dataType: "json",
+    //         success: function(response) {
+    //             arr = response.employees;
+    //             if (arr.length != 0) {
+    //                 var i = 1;
+    //                 var items = '';
+    //                 $.each(arr, function(index, value) {
+    //                     items += '<tr id="removeTr">';
+    //                     items +=
+    //                         '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' +
+    //                         value.emp_id + '" ></td>';
+    //                     items += '<td class="success">' + (i++) + '</td>';
+    //                     items += '<td class="warning ">' + value.first_name + ' ' +
+    //                         value.last_name + " (" + value.emp_id + ")" + '</td>';
+    //                     items += '</tr>';
+    //                 });
+    //                 $('#fileDiv tr:last').after(items);
+    //             }
+    //         }
+    //     });
+    // });
 });
 $("#mySelect").on("change", function() {
     var selectedValue = $(this).val();
