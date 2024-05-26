@@ -191,6 +191,11 @@ content: 'zfdsdf';
     <div class="box mb-4 <?php echo $get_animate;?>">
         <div class="box-body">
         <?php   $this->load->view('admin/filter'); ?>
+            <div class="col-md-12 text-right">
+                <div class="form-group"> &nbsp;
+                    <button class="btn btn-success" onclick="attn_process()">Process</button>
+                </div>
+            </div>
         </div>
     </div>
     <div id="loader" align="center" style="margin:0 auto; width:600px; overflow:hidden; display:none; margin-top:10px;">
