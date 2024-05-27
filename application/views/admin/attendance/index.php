@@ -294,6 +294,7 @@ content: 'zfdsdf';
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="absent()">Absent</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="extra_present()">Extra Present</button>
                     <button class="btn  btn-sm mr-5 sbtn mt-2" onclick="overall_performance()">Over All Performance</button>
+                    <button class="btn  btn-sm mr-5 sbtn mt-2" onclick="overall_performance_yearly()">Get Yearly report</button>
                 </div>
 
             </div>

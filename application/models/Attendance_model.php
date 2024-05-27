@@ -903,21 +903,39 @@ class Attendance_model extends CI_Model
     }
     public function get_total_present($value, $first_date, $second_date)
     {
-        $this->db->select('xin_attendance_time.attendance_date');
+        $this->db->select('SUM(CASE WHEN xin_attendance_time.status = "Present" THEN 1 WHEN xin_attendance_time.status = "HalfDay" THEN 0.5 ELSE 0 END) as total_present');
         $this->db->from('xin_attendance_time');
         $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
         $this->db->where("xin_attendance_time.status", 'Present');
         $this->db->where("xin_attendance_time.employee_id", $value);
-        return count($this->db->get()->result());
+        $result = $this->db->get()->row();
+
+        if (empty($result)) {
+            return 0;
+        }
+
+        $data = $result;
+        if (isset($data->total_present)) {
+            return $data->total_present;
+        } else {
+            return 0;
+        }
     }
     public function get_total_absent($value, $first_date, $second_date)
     {
-        $this->db->select('xin_attendance_time.attendance_date');
+        $this->db->select('SUM(CASE WHEN xin_attendance_time.status = "Absent" THEN 1 ELSE 0 END) as total_absent');
         $this->db->from('xin_attendance_time');
         $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'");
         $this->db->where("xin_attendance_time.status", 'Absent');
         $this->db->where("xin_attendance_time.employee_id", $value);
-        return count($this->db->get()->result());
+        $result = $this->db->get();
+
+        if ($result->num_rows() > 0) {
+            $row = $result->row();
+            return $row->total_absent;
+        } else {
+            return 0;
+        }
     }
 
     public function get_total_late($value, $first_date, $second_date)

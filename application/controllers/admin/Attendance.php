@@ -717,6 +717,102 @@ class Attendance extends MY_Controller
 
         
     }
+    public function overall_performance_yearly()
+    {
+        $last_date = $this->input->post('first_date');
+        $f_date = date('Y-01-01',strtotime($last_date));
+        $year=date('Y',strtotime($f_date));
+        $last_month=date('m',strtotime($last_date));
+
+        $sql = $this->input->post('sql');
+        if (empty($sql)) {
+            $emp_id = array();
+        } else {
+            $emp_id = explode(',', trim($sql));
+        }
+        $data=[];
+        foreach($emp_id as $key => $value){
+            $employee_data_month=[];
+            
+        for($i=1;$i<=$last_month;$i++){
+            $first_date = date("Y-m-01", strtotime("{$year}-{$i}-01"));
+            $second_date = date("Y-m-t", strtotime("{$year}-{$i}-01"));
+            $get_total_present = $this->Attendance_model->get_total_present($value, $first_date, $second_date);
+            $get_total_absent = $this->Attendance_model->get_total_absent($value, $first_date, $second_date);
+            $get_total_late = $this->Attendance_model->get_total_late($value, $first_date, $second_date);
+            $get_total_overtime = $this->Attendance_model->get_total_overtime($value, $first_date, $second_date);
+            $get_total_leave = $this->Attendance_model->get_total_leave($value, $first_date, $second_date);
+            $total_day = $get_total_present + $get_total_absent+$get_total_leave;
+            $employee_data_month[$i] = [
+                'month' => date('F', strtotime($first_date)),
+                'total_day' => $total_day,
+                'total_present' => $get_total_present,
+                'total_absent' => $get_total_absent,
+                'total_late' => $get_total_late,
+                'total_overtime' => $get_total_overtime,
+                'total_leave' => $get_total_leave,
+            ];
+        }
+        $get_employee_info= $this->Xin_model->read_user_info($value);
+
+            $data[$key] = [
+                'emp_id' => $value,
+                'first_name' => $get_employee_info[0]->first_name,
+                'last_name' => $get_employee_info[0]->last_name,
+                'employee_data_month' => $employee_data_month
+            ];
+        }
+        $d['data']=$data;
+        $d['year'] = $year;
+        echo $this->load->view("admin/attendance/overall_performance_yearly", $d, true);
+    }
+    // public function overall_performance_yearly()
+    // {
+        
+    //     $last_date = $this->input->post('first_date');
+    //     $f_date = date('Y-01-01',strtotime($last_date));
+    //     $year=date('Y',strtotime($f_date));
+    //     $last_month=date('m',strtotime($last_date));
+
+    //     $sql = $this->input->post('sql');
+    //     if (empty($sql)) {
+    //         $emp_id = array();
+    //     } else {
+    //         $emp_id = explode(',', trim($sql));
+    //     }
+    //     $data=[];
+    //     foreach($emp_id as $key => $value){
+    //         $employee_data_month=[];
+            
+    //     for($i=1;$i<=$last_month;$i++){
+    //         $first_date = $year.'-'.$i.'-01';
+    //         $second_date = $year.'-'.$i.'-31';
+    //         $get_total_present = $this->Attendance_model->get_total_present($value, $first_date, $second_date);
+    //         $get_total_absent = $this->Attendance_model->get_total_absent($value, $first_date, $second_date);
+    //         $get_total_late = $this->Attendance_model->get_total_late($value, $first_date, $second_date);
+    //         $get_total_overtime = $this->Attendance_model->get_total_overtime($value, $first_date, $second_date);
+    //         $get_total_leave = $this->Attendance_model->get_total_leave($value, $first_date, $second_date);
+    //         $total_day = $get_total_present + $get_total_absent+$get_total_leave;
+    //         $employee_data_month[$i] = [
+    //             'month' => date('F', strtotime($first_date)),
+    //             'total_day' => $total_day,
+    //             'total_present' => $get_total_present,
+    //             'total_absent' => $get_total_absent,
+    //             'total_late' => $get_total_late,
+    //             'total_overtime' => $get_total_overtime,
+    //             'total_leave' => $get_total_leave,
+    //         ];
+    //     }
+    //     $get_employee_info= $this->Xin_model->read_user_info($value);
+
+    //         $data[$key] = [
+    //             'emp_id' => $value,
+    //             'first_name' => $get_employee_info[0]->first_name,
+    //             'last_name' => $get_employee_info[0]->last_name,
+    //             'employee_data_month' => $employee_data_month
+    //         ];
+    //     }
+    // }
     public function late_details()
     {
         $first_date = $this->input->post('first_date');
