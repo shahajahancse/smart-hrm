@@ -557,7 +557,7 @@ class Timesheet extends MY_Controller {
 				redirect('admin/timesheet/leave');
 			}
 			//get leave date of a employee ... 
-			$leave_date = $this->db->select('from_date,to_date')->where('employee_id',$_POST['employee_id'])->get('xin_leave_applications')->result();
+			$leave_date = $this->db->select('*')->where('employee_id',$_POST['employee_id'])->get('xin_leave_applications')->result();
 			
 			//check duplicate leave date 
 			foreach($leave_date as $date){
