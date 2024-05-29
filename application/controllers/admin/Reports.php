@@ -1356,7 +1356,7 @@ class Reports extends MY_Controller
 			$this->db->where_in('status', [1,4,5]);
         }elseif($status == 1){
 			$this->db->where_in('status',[2,3]);
-		}else{
+		}elseif($status == 'All'){
 			$this->db->where_in('status',[1,2,3,4,5]);
 		}
 		// status end 
