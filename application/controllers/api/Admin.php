@@ -27,13 +27,14 @@ class Admin extends API_Controller
     }
 
     public function get_device_token() {
+        // dd($_POST);
         $punch_id=$_POST['data'];
-        $this->where('proxi_id', $punch_id);
-        $user=$this->get('xin_proxi')->row();
+        $this->db->where('proxi_id', $punch_id);
+        $user=$this->db->get('xin_proxi')->row();
         if(!empty($user)) {
             $user_id=$user->emp_id;
-            $this->where('user_id', $user_id);
-            $api=$this->get('api_keys')->row();
+            $this->db->where('user_id', $user_id);
+            $api=$this->db->get('api_keys')->row();
             if (!empty($api)) {
                 $device_id=$api->device_token;
                 if (!empty($device_id)) {
@@ -41,6 +42,34 @@ class Admin extends API_Controller
                 }
             }
         }
+    }
+    public function sendRecentPunches() {
+
+        $dataa=$_POST['data'];
+        $emp_ids=[];
+        foreach($dataa as $data) {
+        $proxi_id=$data['id'];
+        $time=$data['time'];
+        $in_time=date('Y-m-d H:i:s', strtotime($time));
+        $this->db->where("proxi_id", $proxi_id);
+        $this->db->where("date_time", $in_time);
+        $query1 = $this->db->get("xin_att_machine");
+        $num_rows1 = $query1->num_rows();
+        $emp_id=$this->db->select('emp_id')->where('proxi_id', $proxi_id)->get('xin_proxi')->row();
+        // dd($emp_id->emp_id);
+        if (!empty($emp_id)) {
+            array_push($emp_ids, $emp_id->emp_id);
+        }
+        if($num_rows1 == 0) {
+            $data = array(
+                    'proxi_id' 	=> $proxi_id,
+                    'date_time'	=> $in_time,
+                    'device_id' => $data['state'],
+                );
+            $this->db->insert("xin_att_machine", $data);
+        }
+    }
+    $this->Attendance_model->attn_process(date('Y-m-d', strtotime($in_time)), $emp_ids);
     }
     // leave
     public function leave_list()

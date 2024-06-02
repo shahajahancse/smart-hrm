@@ -527,7 +527,7 @@ class Timesheet extends MY_Controller {
 			$remarks = $this->input->post('remarks');
 			$st_date = strtotime($start_date);
 			$ed_date = strtotime($end_date);
-			if($start_date<= date('Y-m-d',strtotime('-3 day'))){
+			if($start_date<= date('Y-m-d',strtotime('-4 day'))){
 				$this->session->set_flashdata('error', 'Leave start date must be greater than 3 days');
 				redirect('admin/timesheet/leave');
 			}
@@ -557,7 +557,7 @@ class Timesheet extends MY_Controller {
 				redirect('admin/timesheet/leave');
 			}
 			//get leave date of a employee ... 
-			$leave_date = $this->db->select('*')->where('employee_id',$_POST['employee_id'])->get('xin_leave_applications')->result();
+			$leave_date = $this->db->select('from_date,to_date')->where('employee_id',$_POST['employee_id'])->get('xin_leave_applications')->result();
 			
 			//check duplicate leave date 
 			foreach($leave_date as $date){
