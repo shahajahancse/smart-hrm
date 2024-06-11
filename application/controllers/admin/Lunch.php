@@ -736,6 +736,27 @@ class Lunch extends MY_Controller
         $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
         echo $this->load->view("admin/lunch/lunch_jobcard", $data, true);
     }
+    public function get_job_card_emp()
+    {
+        $session = $this->session->userdata('username');
+        //  dd($session['user_id']);
+        if(empty($session)) {
+            echo 'Session not found';
+        }
+        $session = $this->session->userdata('username');
+        $emp_id  = [$session[ 'user_id' ]];
+
+
+
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+      
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $data['company_info'] = $this->Xin_model->get_company_info(1);
+        $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+        echo $this->load->view("admin/lunch/lunch_jobcard", $data, true);
+    }
 
     public function lunch_off()
     {
@@ -1218,4 +1239,27 @@ class Lunch extends MY_Controller
     }
 
 
+    public function command_delete_dublicate(){
+        $emp= $this->db->select('user_id')->where('user_role_id', 3)->get('xin_employees')->result_array();
+        $emp_id=array_column($emp, 'user_id');
+        //dd($emp_id);
+        foreach($emp_id as $g){
+            $this->db->where('emp_id', $g);
+            $lunch_details = $this->db->get('lunch_details')->result();
+            $date='';
+            $test_id='';
+            foreach($lunch_details as $l){
+                if($date!=$l->date && $test_id!=$l->emp_id){
+                    $date=$l->date;
+                    $test_id=$l->emp_id;
+                }else{
+                    $this->db->where('date', $l->date);
+                    $this->db->where('emp_id', $g);
+                    $this->db->delete('lunch_details');
+                }
+            }
+        }
+    }
+
+    
 }

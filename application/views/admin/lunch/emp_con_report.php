@@ -78,7 +78,6 @@
                     <th style="text-align:left"> &nbsp;&nbsp;Name</th>
                     <th style="text-align:left" &nbsp;&nbsp;>Designation</th>
                     <th>Active.M</th>
-                    <th>Inactive.M</th>
                     <th>Employee.C</th>
                     <th>Office.C</th>
                     <th>T.Amount</th>
@@ -93,14 +92,9 @@
             $grand_total_cost    = 0;
             ?>
 
-                <?php foreach ($all_employees as $key=>$employee): ?>
-                <tr>
-                    <td><?= $key+1 ?></td>
-                    <td style="text-align:left"> &nbsp;&nbsp;<?= $employee->first_name ?> <?= $employee->last_name ?>
-                    </td>
-                    <td style="text-align:left">&nbsp;&nbsp;<?= $employee->designation_name?></td>
-                    <?php     
-                        $this->load->model("Lunch_model"); 
+                <?php foreach ($all_employees as $key=>$employee):
+                    
+                    $this->load->model("Lunch_model"); 
                     $emp_data = $this->Lunch_model->get_data_date_wise($first_date,$second_date, $employee->user_id);
                     $active_meal = 0;
                     $inactive_meal  = 0;
@@ -119,10 +113,19 @@
                         $total_offic_cost+=$row->meal_amount*$lunch_package->office_give_tk;
                         $total_cost+=$row->meal_amount*$lunch_package->permeal;
                     }
-                
-                ?>
+                    if($active_meal==0){
+                        continue;
+                    }
+                    
+                    
+                    ?>
+                <tr>
+                    <td><?= $key+1 ?></td>
+                    <td style="text-align:left"> &nbsp;&nbsp;<?= $employee->first_name ?> <?= $employee->last_name ?>
+                    </td>
+                    <td style="text-align:left">&nbsp;&nbsp;<?= $employee->designation_name?></td>
+                   
                     <td><?= $active_meal ?></td>
-                    <td><?= $inactive_meal ?></td>
                     <td><?= $total_emp_cost ?></td>
                     <td><?= $total_offic_cost ?></td>
                     <td><?= $total_cost ?></td>
@@ -140,7 +143,6 @@
                 <tr>
                     <td colspan=3 style="text-align: center;font-weight: bold;">Total</td>
                     <td><?=  $grand_active_meal?></td>
-                    <td><?=  $grand_inactive_meal?></td>
                     <td><?=  $grand_total_emp_cost?></td>
                     <td><?=  $grand_total_offic_cost?></td>
                     <td><?=  $grand_total_cost?></td>

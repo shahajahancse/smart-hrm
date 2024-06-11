@@ -233,6 +233,15 @@ class Reports extends MY_Controller
 		$data['date']=$this->input->post('first_date');
         echo $this->load->view("admin/reports/yerly_leave", $data, true);
 	}
+	public function getyarly_data() {
+		$date = date('Y-m-01', strtotime($this->input->post('year').'-01-01'));
+		
+		$session = $this->session->userdata('username');
+        $emp_id = [$session['user_id']];
+        $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+		$data['date']=$date;
+        echo $this->load->view("admin/reports/yerly_leave", $data, true);
+	}
 	public function leave_report()
    {
       
@@ -1312,6 +1321,7 @@ class Reports extends MY_Controller
 	public function get_employeess(){
 
         $status = $this->input->get('status');
+		
 		// dd($status);
 		$this->db->select('user_id as emp_id, first_name, last_name');
         if ($status == 0) {
@@ -1329,6 +1339,44 @@ class Reports extends MY_Controller
 		if($status == 4){
 			$this->db->where_in('status',[1,2,3,4,5]);
 		}
+        $this->db->where('company_id', 1);
+        $this->db->order_by('user_id', 'asc');
+        $data["employees"] = $this->db->get('xin_employees')->result();
+        echo json_encode($data);
+    }
+	public function get_employeess_v2(){
+	
+        $status = $this->input->get('status');
+		$floor = $this->input->get('floor');
+		$department = $this->input->get('department');
+		$designation = $this->input->get('designation');
+		$this->db->select('user_id as emp_id, first_name, last_name');
+		//status
+        if ($status == 0) {
+			$this->db->where_in('status', [1,4,5]);
+        }elseif($status == 1){
+			$this->db->where_in('status',[2,3]);
+		}elseif($status == 'All'){
+			$this->db->where_in('status',[1,2,3,4,5]);
+		}
+		// status end 
+		//floor
+		if ($floor == 5) {
+			$this->db->where('floor_status', 5);
+		}elseif($floor == 3){
+			$this->db->where('floor_status', 3);
+		}
+		// floor end
+		//department
+		if ($department != '') {
+			$this->db->where('department_id', $department);
+		}
+		//department end
+		//designation
+		if ($designation != '') {
+			$this->db->where('designation_id', $designation);
+		}
+		//designation end
         $this->db->where('company_id', 1);
         $this->db->order_by('user_id', 'asc');
         $data["employees"] = $this->db->get('xin_employees')->result();
@@ -1354,9 +1402,82 @@ class Reports extends MY_Controller
 		$data['user_info'] =$this->Attendance_model->get_emp_info($emp_id);
 		
 		$this->load->view('admin/reports/employee_increment',$data);
-
-
 	}
+
+
+
+	public function employee_bonus(){
+
+		// dd($this->input->post());
+		$all_employee=$this->db->where_in('status',[1,4,5])->get('xin_employees')->result();
+
+		$exist_employee=[];
+		$no_intern_one_year=[];
+		$joining_one_year=[];
+		$no_year=[];
+		$const_date=date('Y-m-d', $_POST['date']);
+		$data['const_date'] = $const_date;
+
+		$emni_pass_date=date('Y-m-d',strtotime('-18 month', strtotime($const_date)));
+		$pass_date=date('Y-m-d',strtotime('-1 year', strtotime($const_date)));
+		// dd($emni_pass_date);
+
+		foreach ($all_employee as $key => $value) {
+			$emp_id=$value->user_id;
+			$joining_date=$value->date_of_joining;
+			if ($joining_date <= $emni_pass_date) {
+				$no_intern_one_year[] = $value->user_id;
+			}else{
+				$this->db->where('emp_id', $emp_id);
+				$this->db->where('status', 1);
+				$this->db->order_by('effective_date', 'desc');
+				$this->db->limit(1);
+				$last_date=$this->db->get('xin_employee_incre_prob')->row();
+
+				if(!empty($last_date)){
+					$this->db->where('emp_id', $emp_id);
+					$this->db->where('status', 4);
+					$this->db->order_by('effective_date', 'desc');
+					$this->db->limit(1);
+					$if_inter=$this->db->get('xin_employee_incre_prob')->row();
+					if(!empty($if_inter)){
+						$her_join_date=$if_inter->end_date;
+					}else{
+						$her_join_date=$value->date_of_joining;
+					}
+					if ($her_join_date <= $pass_date) {
+						$no_intern_one_year[] = $value->user_id;
+					}else{
+						$exist_employee[]= $value;
+					}
+				}
+
+				
+			}
+		}
+
+		foreach ($exist_employee as $key => $value) {
+				if ($value->date_of_joining <= $pass_date) {
+					$joining_one_year[] = $value->user_id;
+				}else{
+					$no_year[] = $value->user_id;
+				}
+		}
+
+
+
+		$data['no_intern_one_year'] = $no_intern_one_year;
+		$data['joining_one_year'] = $joining_one_year;
+		$data['no_year'] = $no_year;
+		$this->load->view('admin/reports/employee_bonus',$data);
+	}
+
+
+
+
+
+
+
 
 	public function late_report() {
 		$session = $this->session->userdata('username');
@@ -1516,6 +1637,92 @@ class Reports extends MY_Controller
 				$this->load->view('admin/reports/using_device', $data);
 			}
 		}
+   }
+	public function employee_regular_report(){
+		
+
+    	$first_date = $this->input->post('first_date');
+		$all_employee=$this->db->where_in('status',[1,4,5])->get('xin_employees')->result();
+
+		$exist_employee=[];
+		$no_intern_one_year=[];
+		$joining_one_year=[];
+		$no_year=[];
+		$const_date=date('Y-m-d', strtotime($first_date));
+		$emni_pass_date=date('Y-m-d',strtotime('-18 month', strtotime($const_date)));
+		$pass_date=date('Y-m-d',strtotime('-1 year', strtotime($const_date)));
+		// dd($emni_pass_date);
+
+		// foreach ($all_employee as $key => $value) {
+		// 	$emp_id=$value->user_id;
+		// 	$joining_date=$value->date_of_joining;
+		// 	if ($joining_date <= $emni_pass_date) {
+		// 		$no_intern_one_year[] = $value->user_id;
+		// 	}else{
+		// 		$this->db->where('emp_id', $emp_id);
+		// 		$this->db->where('status', 1);
+		// 		$this->db->order_by('effective_date', 'desc');
+		// 		$this->db->limit(1);
+		// 		$last_date=$this->db->get('xin_employee_incre_prob')->row();
+
+		// 		if (!empty($last_date) && $last_date->effective_date <= $pass_date) {
+		// 			$no_intern_one_year[] = $value->user_id;
+		// 		}else{
+		// 			$exist_employee[]= $value;
+		// 		}
+				
+		// 	}
+		// }
+		foreach ($all_employee as $key => $value) {
+			$emp_id=$value->user_id;
+			$joining_date=$value->date_of_joining;
+			if ($joining_date <= $emni_pass_date) {
+				$no_intern_one_year[] = $value->user_id;
+			}else{
+				$this->db->where('emp_id', $emp_id);
+				$this->db->where('status', 1);
+				$this->db->order_by('effective_date', 'desc');
+				$this->db->limit(1);
+				$last_date=$this->db->get('xin_employee_incre_prob')->row();
+
+				if(!empty($last_date)){
+					$this->db->where('emp_id', $emp_id);
+					$this->db->where('status', 4);
+					$this->db->order_by('effective_date', 'desc');
+					$this->db->limit(1);
+					$if_inter=$this->db->get('xin_employee_incre_prob')->row();
+					if(!empty($if_inter)){
+						$her_join_date=$if_inter->end_date;
+					}else{
+						$her_join_date=date('Y-m-d', strtotime($value->date_of_joining));
+					}
+					if ($her_join_date <= $pass_date) {
+						$no_intern_one_year[] = $value->user_id;
+					}else{
+						$exist_employee[]= $value;
+					}
+				}else{
+					$exist_employee[]= $value;
+				}
+
+				
+			}
+		}
+
+		foreach ($exist_employee as $key => $value) {
+				if ($value->date_of_joining <= $pass_date) {
+					$joining_one_year[] = $value->user_id;
+				}else{
+					$no_year[] = $value->user_id;
+				}
+		}
+
+
+
+		$data['no_intern_one_year'] = $no_intern_one_year;
+		$data['joining_one_year'] = $joining_one_year;
+		$data['no_year'] = $no_year;
+		$this->load->view('admin/reports/employee_bonus',$data);
    }
 
 	public function show_late_report(){
@@ -1804,6 +2011,11 @@ class Reports extends MY_Controller
 		$data['emp_id']= $emp_id;
 	    $this->load->view("admin/reports/salary_review_report", $data);
 		
+	}
+	public function get_designations(){
+		$department_id = $this->input->post('department_id');
+		$data = $this->Designation_model->ajax_is_designation_information($department_id);
+		echo json_encode($data);
 	}
 } 
 ?>

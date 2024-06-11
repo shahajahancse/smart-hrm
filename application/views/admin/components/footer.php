@@ -197,6 +197,13 @@ if($theme[0]->fixed_layout=='true') {
 <!-- /.control-sidebar --> 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
+<?php if ($this->session->flashdata('messagess')): ?>
+	<script>
+		showSuccessAlert('<?php echo $this->session->flashdata('messagess');?>');
+	</script>
+<?php endif; ?>
+
+
 <script>
 // Function to show a SweetAlert success message
 function showSuccessAlert(message, url = null) {
@@ -233,3 +240,27 @@ $(document).ready(function(){
   }
 })
 </script>
+<script>
+   function alert(d) {
+        Swal.fire({
+            // icon: "warning",
+            title: d,
+        });
+    }
+  </script>
+
+
+<script>
+
+  $(window).on('load', function() {
+    $("#inn_loader").hide();
+  })
+
+</script>
+<script>
+
+  $(window).on('load', function() {  
+    $(".select22").select2();
+  })
+</script>
+

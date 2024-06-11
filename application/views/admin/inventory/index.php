@@ -1,13 +1,11 @@
 <?php
-// dd($session); 
-$session = $this->session->userdata('username');
+// // dd($session); 
+ $session = $this->session->userdata('username');
 // $using_list = $this->db->select('COUNT(user_id) as using_list')->where('user_id',$session['user_id'])->where('status',1)->get('product_accessories')->row()->using_list;
-// $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(status) as status')->where('user_id',$session['user_id'])->get('products_requisition_details')->row();
-// dd($requisition_list);
-$using_list=[];
-$requisition_list = [];
-$check = $this->db->select('number')->where('number !=','')->where('id',$session['user_id'])->get('product_accessories')->row();
-// dd($check ."<br>nai");
+ $requisition_list = $this->db->select('COUNT(user_id) as using_list, COUNT(status) as status')->where('user_id',$session['user_id'])->get('products_requisition_details')->row();
+// // dd($requisition_list);
+// $check = $this->db->select('use_number,number')->where('number !=','')->where('user_id',$session['user_id'])->get('product_accessories')->row();
+// // dd($check ."<br>nai");
 ?>
 
 <style>
@@ -68,7 +66,7 @@ $check = $this->db->select('number')->where('number !=','')->where('id',$session
     <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
         <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
             <div class="h5">Total Using Items</div>
-            <div class="h5"><?= 0 // $using_list ?></div>
+            <div class="h5"><?= 0 ?></div>
         </div>
 
         <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
@@ -94,9 +92,9 @@ $check = $this->db->select('number')->where('number !=','')->where('id',$session
     <span class="t2" >If you need stationery items (Pen, Paper, Diary, etc.) or devices to work, feel free to fill out the requisition form.</span>
 <div class="dropdown" style="float: right;">
 
-    <?php if(empty($check)){?>
+    <!-- <?php //if(empty($check)){?> -->
       <a class="btn btn-info btn-sm" type="button"  href="<?= base_url('admin/inventory/create') ?>" >Requisition</a>
-    <?php }else{  if(($check->use_number == 1 && $check->number !='')){?>
+    <!-- <?php// }else{  if(( $check->number !='')){?>
       <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
        Requisition
       </button>
@@ -105,7 +103,7 @@ $check = $this->db->select('number')->where('number !=','')->where('id',$session
       <div class="custom-divider"></div>
       <a href="<?= base_url('admin/inventory/create_phone') ?>" class="dropdown-item">For Mobile Bill </a>
     </div>
-    <?php } }?>
+    <?php //} }?> -->
 </div>
 
  </div>

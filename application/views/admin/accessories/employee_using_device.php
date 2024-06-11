@@ -101,11 +101,12 @@
                 <div class="col-md-12">
                     <ul style="padding: 0;" id="device_using_List">
                     </ul>
+                  
                 </div>
             </div>
             <div class="col-md-6 card whiteBox" data-who="device_List">
                 <h4>Stored Device</h4>
-                <div class="col-md-12" style="margin-bottom: 10px;">
+                <div class="col-md-12" style="margin-bottom: 10px;display: inline-table;">
                 <label for="">Select Catagories</label>
                 <select name="cat_id" id="cat_id" class="form-control">
                     <option value="">Select Catagories</option>
@@ -115,8 +116,9 @@
                         <option value="<?= $value->id ?>"><?= $value->cat_name ?></option>
                     <?php } ?>
                 </select>
+                <input type="text" class="form-control" id="search_device_using" placeholder="Search device by name or number" aria-label="Search device by name or number" aria-describedby="basic-addon2" style="margin-top: 8px;">
                 </div>
-                <div class="col-md-12" style="margin-top: 58px;">
+                <div class="col-md-12">
                     <ul style="padding: 0;" id="device_List">
                     </ul>
             </div>
@@ -136,6 +138,7 @@
     }
     $(document).ready(function(){
     $('#employee_id, #cat_id').select2();
+    name_search()
 
     $('#employee_id, #cat_id').on('change', function(){
         var isEmployee = $(this).attr('id') === 'employee_id';
@@ -158,6 +161,7 @@
                 });
                 $(listToUpdate).empty().append(lis);
                 if (!isEmployee) startDrag();
+                name_search()
             }
         });
     });
@@ -212,13 +216,15 @@
         var id = localStorage.getItem('id');
         var employeeId = $('#employee_id').val();
 
-        if (!employeeId) {
-            alert('Please select Employee');
-            $('#cat_id, #employee_id').trigger('change');
-            return false;
-        }
+       
 
         if (id) {
+            if (!employeeId) {
+                localStorage.removeItem('id');
+                alert('Please select Employee');
+                $('#cat_id, #employee_id').trigger('change');
+                return false;
+            }
             $.ajax({
                 type: "POST",
                 url: '<?= site_url("admin/accessories/update_device_using") ?>',
@@ -230,8 +236,6 @@
                     localStorage.removeItem('id');
                 }
             });
-        } else {
-            alert('Please select Device');
         }
         setTimeout(() => {
             $('#cat_id, #employee_id').trigger('change');
@@ -241,4 +245,24 @@
   
 });
  
+</script>
+<script>
+
+    function name_search() {
+        
+        var search_device_using = document.getElementById('search_device_using');
+        var device_using_List = document.getElementById('device_List');
+        search_device_using.addEventListener('input', function(){
+            var text = this.value.toLowerCase().trim();
+            var li_list = device_using_List.getElementsByTagName('li');
+            for (var i = 0; i < li_list.length; i++) {
+                var element = li_list[i];
+                if (element.innerText.toLowerCase().includes(text)) {
+                    element.style.display = "list-item";
+                } else {
+                    element.style.display = "none";
+                }
+            }
+        });
+    }
 </script>

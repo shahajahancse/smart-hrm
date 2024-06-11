@@ -424,7 +424,7 @@ class Reports_model extends CI_Model
         }
 
         if ($status == 1) {
-            $this->db->where_in('xin_employees.status', [1, 4, 5]);
+            //$this->db->where_in('xin_employees.status', [1, 4, 5]);
             if ($first_date != null && $second_date != null) {
                 $this->db->where('xin_employees.date_of_joining between "' . $first_date . '" AND "' . $second_date . '"');
             }
@@ -909,7 +909,7 @@ class Reports_model extends CI_Model
         $this->db->where('xin_attendance_time.attendance_date <=', $second_date);
         $this->db->where('xin_attendance_time.attendance_status', 'Present');
         $this->db->where('xin_attendance_time.status', 'Off Day');
-        $this->db->group_by('xin_attendance_time.employee_id');
+        // $this->db->group_by('xin_attendance_time.employee_id');
         $query = $this->db->get();
         return $query->result();
     }

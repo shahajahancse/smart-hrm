@@ -493,6 +493,36 @@
         }
       }
     }
+    function overall_performance_yearly()
+    {
+     
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+      first_date = document.getElementById('process_date').value;
+      var checkboxes = document.getElementsByName('select_emp_id[]');
+      var sql = get_checked_value(checkboxes);
+      if(first_date =='')
+      {
+        alert('Please select first date');
+        return ;
+      }
+     
+      var data = "first_date="+first_date+'&sql='+sql;
+      url = base_url + "/overall_performance_yearly";
+      ajaxRequest.open("POST", url, true);
+      ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+       ajaxRequest.send(data);
+      ajaxRequest.onreadystatechange = function(){
+        $('#loading').css({
+          visibility: 'hidden'
+      });
+        if(ajaxRequest.readyState == 4){
+          var resp = ajaxRequest.responseText;
+          a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+          a.document.write(resp);
+        }
+      }
+    }
 
     function latecount(type)
     {

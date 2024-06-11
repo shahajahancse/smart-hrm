@@ -188,7 +188,8 @@
                     <tr>
                         <td>Extra Pay</td>
                         <td><?= $values[0]->extra_pay ?></td>
-                        <td colspan="2"></td>
+                        <td class="info-label">Lunch</td>
+                        <td><?= $values[0]->lunch_deduct ?></td>
                     </tr>
                 </tbody>
             </table>

@@ -87,6 +87,7 @@ class inventory_model extends CI_Model
 			prd.approved_qty,
 			prd.status,
 			prd.created_at,
+			prd.note,
 		");
 		$this->db->from("products_requisition_details as prd");
 		$this->db->from("products as p");

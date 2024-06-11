@@ -20,6 +20,7 @@ class Salary_model extends CI_Model {
         $end_date    = date("Y-m", strtotime($process_month)).'-'.$num_of_days;
 
         $get_employee = $this->get_employee_info($grid_emp_id);
+        // dd($get_employee);
 
         foreach ($get_employee as $key => $row) {
             $emp_id          = $row->user_id;
@@ -92,13 +93,21 @@ class Salary_model extends CI_Model {
             $extra_p = $this->attendance_count_status($emp_id,"Present",$first_date,$end_date,'attendance_status');
             $meeting = $this->attendance_count_status($emp_id,"Meeting",$first_date,$end_date,'attendance_status');*/
             $rows = $this->count_attendance_status_wise($emp_id,$first_date,$end_date);
+            //dd($rows);
             $leave = $this->leave_count_status($emp_id, $first_date,$end_date, 2);
 
-            $present = $rows->attend + $rows->HalfDay;
+            $present = ($rows->attend + $rows->HalfDay) - ($rows->present_error2 + $rows->present_error1);
+
+
+
             $leaves = $leave->el + $leave->sl;
             $extra_attend = $rows->extra_p;
             // $extra_attend = ($rows->extra_p + $rows->meeting) - $rows->attend;
             $absent = $num_of_days - ($leaves + $rows->weekend + $rows->holiday + $present + $ba_absent);
+
+
+
+
             // dd($rows);
             //=======PRESENT STATUS END======
 
@@ -160,9 +169,7 @@ class Salary_model extends CI_Model {
                 'm_pay_day'    => 0,
                 'modify_salary' => 0,
                 'other_payment' => $extra_pay,
-                'net_salary' => $pay_salary,
                 'advanced_salary' => $advanced,
-                'grand_net_salary' => (($pay_salary + $extra_pay ) - $advanced),
                 'wages_type' => 1,
                 'is_half_monthly_payroll' => 0,
                 'total_commissions' => 0,
@@ -183,10 +190,31 @@ class Salary_model extends CI_Model {
             if ($query->num_rows() > 0) {
                 $data['modify_salary'] = $query->row()->modify_salary;
                 $data['m_pay_day'] = $query->row()->m_pay_day;
-                
+
+                $lunch_data=$this->db->where('emp_id',$emp_id)->where('salary_month',$salary_month)->order_by('id',"desc")->limit(1)->get('lunch_payment')->row();
+                if(!empty($lunch_data)){
+                        $lunch_deduct = $lunch_data->collection_amount;
+                        $data['lunch_deduct'] = $lunch_deduct;
+                        $data['net_salary'] = $pay_salary-$lunch_deduct;
+                        $data['grand_net_salary' ]= (($pay_salary + $extra_pay ) - $advanced)-$lunch_deduct;
+                }
+
                 $this->db->where('payslip_id', $query->row()->payslip_id);
                 $this->db->update('xin_salary_payslips',$data);
             } else {
+                $lunch_deduct=0;
+                // $emp_id
+                $lunch_data=$this->db->where('emp_id',$emp_id)->order_by('id',"desc")->limit(1)->get('lunch_payment')->row();
+                if(!empty($lunch_data)){
+                    if ($lunch_data->status == 0) {
+                        $lunch_deduct = $lunch_data->collection_amount;
+                        $this->db->where('id', $lunch_data->id);
+                        $this->db->update('lunch_payment', array('status' => 1, 'salary_month' =>$salary_month));
+                    }
+                }
+                $data['lunch_deduct'] = $lunch_deduct;
+                $data['net_salary'] = $pay_salary-$lunch_deduct;
+                $data['grand_net_salary' ]= (($pay_salary + $extra_pay ) - $advanced)-$lunch_deduct;
                 $this->db->insert('xin_salary_payslips', $data);
             }
         }
@@ -223,19 +251,23 @@ class Salary_model extends CI_Model {
     function count_attendance_status_wise($emp_id,$FS_on_date,$FS_off_date)
     {
         $this->db->select("
-                SUM(CASE WHEN status = 'Present'  THEN 1 ELSE 0 END ) AS attend,
+                SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END ) AS attend,
                 SUM(CASE WHEN status = 'Absent'   THEN 1 ELSE 0 END ) AS absent,
                 SUM(CASE WHEN status = 'Off Day'  THEN 1 ELSE 0 END ) AS weekend,
                 SUM(CASE WHEN status = 'Holiday'  THEN 1 ELSE 0 END ) AS holiday,  
                 SUM(CASE WHEN attendance_status = 'HalfDay'  THEN 0.5 ELSE 0 END ) AS HalfDay, 
+                SUM(CASE WHEN status = 'Present' AND clock_in = '' AND clock_out != '' THEN 0.5 ELSE 0 END ) AS present_error1, 
+                SUM(CASE WHEN status = 'Present' AND clock_in != '' AND clock_out = '' THEN 0.5 ELSE 0 END ) AS present_error2,                 
                 SUM(CASE WHEN extra_ap = 1 THEN 1 ELSE 0 END) AS extra_p, 
                 SUM(CASE WHEN late_status = '1' THEN 1 ELSE 0 END ) AS late_status, 
             ");
         $this->db->where('employee_id',$emp_id);
         $this->db->where("attendance_date BETWEEN '$FS_on_date' AND '$FS_off_date'");
         $query = $this->db->get('xin_attendance_time');
+
         
         return $query->row();
+
     }
 
     function get_days($from, $to)
@@ -349,6 +381,7 @@ class Salary_model extends CI_Model {
             sp.d_day,
             sp.absent_deduct,
             sp.advanced_salary,
+            sp.lunch_deduct,
             sp.other_payment as extra_pay,
             sp.modify_salary,
             sp.net_salary,

@@ -71,6 +71,7 @@ class Inventory extends MY_Controller {
 					'product_id'	   => $_POST['product_id'][$i],
 					'quantity'		   => $_POST['quantity'][$i],
 					'note'		   => $_POST['note'][$i],
+					'priority'		   => $_POST['priority'][$i],
 					'requisition_date' => $_POST['requisition_date'],
 					'status'		   => 1,
 					'created_at'     => date("y-m-d"),

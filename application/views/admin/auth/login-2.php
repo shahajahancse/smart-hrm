@@ -88,7 +88,6 @@ endif;
                 <div class="brand-logo">
                   <img src="<?php echo base_url();?>uploads/logo/signin/<?php echo $company[0]->sign_in_logo;?>" alt="hrsale-logo">
                 </div>
-                <strong style="color:red;">. To log in, please use your corporate email address and the same password you used before this update. If you encounter any difficulties, don't hesitate to contact our HR department</strong>
 
                 <p><?php echo $this->lang->line('xin_hrsale_hr_system_login_panel');?></p>
               </div>

@@ -190,50 +190,14 @@ content: 'zfdsdf';
 <div class="col-lg-8">
     <div class="box mb-4 <?php echo $get_animate;?>">
         <div class="box-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="process_date">First Date</label>
-                                <input class="form-control attendance_date"
-                                    placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date"
-                                    name="process_date" type="text" value="<?php echo date('Y-m-d');?>" required>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="process_date">Second Date</label>
-                                <input class="form-control attendance_date"
-                                    placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date"
-                                    name="second_date" type="text" autocomplete="off">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="upload_file">status</label>
-                                <select class="form-control" name="status" id="status">
-                                    <option value="">Select one</option>
-                                    <option value="1">regular</option>
-                                    <option value="2">left</option>
-                                    <option value="3">resign</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group"> &nbsp;
-                                <label for="first_name">&nbsp;</label><br />
-                                <button class="btn btn-success" onclick="attn_process()">Process</button>
-                            </div>
-                        </div>
-                    </div>
+        <?php   $this->load->view('admin/filter'); ?>
+            <div class="col-md-12 text-right">
+                <div class="form-group"> &nbsp;
+                    <button class="btn btn-success" onclick="attn_process()">Process</button>
                 </div>
             </div>
         </div>
     </div>
-
     <div id="loader" align="center" style="margin:0 auto; width:600px; overflow:hidden; display:none; margin-top:10px;">
         <img src="<?php echo base_url();?>/uploads/ajax-loader.gif" />
     </div>
@@ -330,6 +294,7 @@ content: 'zfdsdf';
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="absent()">Absent</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="extra_present()">Extra Present</button>
                     <button class="btn  btn-sm mr-5 sbtn mt-2" onclick="overall_performance()">Over All Performance</button>
+                    <button class="btn  btn-sm mr-5 sbtn mt-2" onclick="overall_performance_yearly()">Get Yearly report</button>
                 </div>
 
             </div>
@@ -344,16 +309,7 @@ content: 'zfdsdf';
 </div>
 
 <div class="col-lg-4">
-    <div class="box" style="height: 74vh;overflow-y: scroll;">
-        <table class="table table-striped table-hover" id="fileDiv">
-            <tr style="position: sticky;top: 0;z-index:1">
-                <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox"
-                        name="select-all" /></th>
-                <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
-                <th class=" text-center" style="background:#0177bc;color:white">Name</th>
-            </tr>
-        </table>
-    </div>
+    <?php   $this->load->view('admin/filtered_data'); ?>
 </div>
 
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
@@ -373,41 +329,41 @@ $(document).ready(function() {
     });
 
     // on load employee
-    $("#status").change(function() {
-        status = document.getElementById('status').value;
-        var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
-        $.ajax({
-            url: url,
-            type: 'GET',
-            data: {
-                "status": status
-            },
-            contentType: "application/json",
-            dataType: "json",
+    // $("#status").change(function() {
+    //     status = document.getElementById('status').value;
+    //     var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
+    //     $.ajax({
+    //         url: url,
+    //         type: 'GET',
+    //         data: {
+    //             "status": status
+    //         },
+    //         contentType: "application/json",
+    //         dataType: "json",
 
 
-            success: function(response) {
-                arr = response.employees;
-                if (arr.length != 0) {
-                    var items = '';
-                    $.each(arr, function(index, value) {
-                        items += '<tr id="removeTr">';
-                        items +=
-                            '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' +
-                            value.emp_id + '" ></td>';
-                        items += '<td class="success">' + value.emp_id + '</td>';
-                        items += '<td class="warning ">' + value.first_name + ' ' +
-                            value.last_name + '</td>';
-                        items += '</tr>';
-                    });
-                    // console.log(items);
-                    $('#fileDiv tr:last').after(items);
-                } else {
-                    $('#fileDiv #removeTr').remove();
-                }
-            }
-        });
-    });
+    //         success: function(response) {
+    //             arr = response.employees;
+    //             if (arr.length != 0) {
+    //                 var items = '';
+    //                 $.each(arr, function(index, value) {
+    //                     items += '<tr id="removeTr">';
+    //                     items +=
+    //                         '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' +
+    //                         value.emp_id + '" ></td>';
+    //                     items += '<td class="success">' + value.emp_id + '</td>';
+    //                     items += '<td class="warning ">' + value.first_name + ' ' +
+    //                         value.last_name + '</td>';
+    //                     items += '</tr>';
+    //                 });
+    //                 // console.log(items);
+    //                 $('#fileDiv tr:last').after(items);
+    //             } else {
+    //                 $('#fileDiv #removeTr').remove();
+    //             }
+    //         }
+    //     });
+    // });
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>

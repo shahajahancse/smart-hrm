@@ -17,6 +17,11 @@ body {
     border-top-right-radius: .25rem;
 }
 
+.modal-dialog {
+    width: 600px;
+    margin: 95px auto;
+}
+
 .list-group>li:nth-child(5n+0) {
     border-bottom-left-radius: .25rem;
     border-bottom-right-radius: .25rem;
@@ -31,6 +36,40 @@ body {
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/emp_attandenc.css') ?>">
+
+<div class="modal fade" id="jobcardinput" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Job Card Form</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="">Start Date</label>
+                        <input type="Date" class="form-control" id="emp_j_from_date">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="">To Date</label>
+                        <input type="Date" class="form-control" id="emp_j_to_date">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" onclick="get_job_card()" class="btn btn-primary">Get</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
 <div class="divrow col-md-12" style="margin-bottom: 27px;margin-top: -15px!important;">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
         <div class="heading">Active Days</div>
@@ -90,13 +129,12 @@ body {
 
     </div>
     <div class="col-md-3 divform-group">
-        <a onclick="location.reload();">
+        <a data-toggle="modal" data-target="#jobcardinput">
             <div class="input serceb">
-                Get All Data
+                <span class="label label-danger" style="animation: pulse 1s infinite;">New</span>
+                Get Job Card
             </div>
         </a>
-
-
     </div>
 </div>
 <div id="datatable" class="table-responsive">
@@ -104,8 +142,6 @@ body {
 </div>
 <script>
 function getdata(status) {
-
-    // console.log(status.id);
     if (status.id == 'datef') {
         var firstdate = document.getElementById('datef').value
         var seconddate = document.getElementById('datef').value
@@ -143,5 +179,41 @@ function getdata(status) {
             $('#datatable').html(resp);
         }
     });
+}
+</script>
+<script>
+function get_job_card() {
+    var ajaxRequest; // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+
+    first_date = document.getElementById('emp_j_from_date').value;
+    second_date = document.getElementById('emp_j_to_date').value;
+
+    if (first_date == '') {
+        alert('Please select first date');
+        return;
+    }
+    if (second_date == '') {
+        alert('Please select second date');
+        return;
+    }
+
+    var data = "first_date=" + first_date + '&second_date=' + second_date;
+
+    url = '<?php echo base_url('admin/attendance/get_job_card_emp'); ?>';
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    // alert(url); return;
+
+    ajaxRequest.onreadystatechange = function() {
+        if (ajaxRequest.readyState == 4) {
+            // console.log(ajaxRequest.responseText); return;
+            var resp = ajaxRequest.responseText;
+            a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+            a.document.write(resp);
+            // a.close();
+        }
+    }
 }
 </script>

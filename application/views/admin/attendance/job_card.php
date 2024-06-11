@@ -107,6 +107,7 @@ foreach ($all_employees as $key => $value) {
 		  <th>Lunch In Time</th>
 		  <th>Attendance Status</th>
 		  <th>Remarks</th>
+		  <th>Comment</th>
 		  ";
 
 		foreach ($emp_data['emp_data'] as $key => $row) {
@@ -174,18 +175,21 @@ foreach ($all_employees as $key => $value) {
 			}
 			elseif($row->clock_in !='' || $row->clock_out !='')
 			{
-				$att_status = "P(Error)";
-				$perror_count++;
+				if($row->clock_in != '' &&  $row->clock_out == '') {
+					$att_status = 'HalfDay';
+                }elseif($row->clock_in == '' &&  $row->clock_out != '') {
+                    $att_status ='Absent';
+                }else{
+					$att_status = 'There is an error';
+				}
+
 			}
 			else
 			{
 				$att_status = "A";
 				$absent_count++;
 			}
-
-
 			echo "<tr>";
-			
 				echo "<td>&nbsp;";
 				echo $row->attendance_date;
 				echo "</td>";
@@ -211,8 +215,6 @@ foreach ($all_employees as $key => $value) {
 					echo date('h:i:s a',strtotime($row->clock_out));
 				}
 				echo "</td>";
-				
-
 				if($row->late_status == 1)
 				{
 					$remark = "Late";
@@ -222,8 +224,6 @@ foreach ($all_employees as $key => $value) {
 				{
 					$remark = "";
 				}
-				
-				
 				echo "<td>&nbsp;";
 				echo $row->lunch_out!=null? date('h:i:s a',strtotime($row->lunch_out)):'';
 				echo "</td>";
@@ -231,22 +231,18 @@ foreach ($all_employees as $key => $value) {
 				echo "<td>&nbsp;";
 				echo $row->lunch_in!=null?  date('h:i:s a',strtotime($row->lunch_in)):'';
 				echo "</td>";
-
 				echo "<td style='text-transform:uppercase;'>&nbsp;";
 				echo $att_status;
 				echo "</td>";
-				
 				echo "<td>&nbsp;";
 				echo $remark;
 				echo "</td>";
-				
+				echo "<td>&nbsp;";
+				echo $row->comment;
+				echo "</td>";
 			echo "</tr>";
 		}
-
-	
-
 	echo "</table>";
-	
 	echo "<br>";
 	echo "<table class='table table-bordered table-sm' style='font-size:13px;'>";
 	echo "<tr align='center'>";

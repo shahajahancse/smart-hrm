@@ -3522,6 +3522,21 @@ class Payroll extends MY_Controller {
 						   $this->load->view('admin/layout/layout_main', $data); 
 	}
 
+	// public function advanced_menu(){
+	// 	$users = $this->db->select('user_id,first_name,last_name,salary')->where_in('status',[1,4,5])->get('xin_employees')->result();
+    //     foreach($users as $user) {
+	// 		$data['emp_id']   		   = $user->user_id;
+	// 		$data['requested_amount']  = (int) ($user->salary * 0.7);
+	// 		$data['approved_amount']   = $data['requested_amount'];
+	// 		$data['effective_month']   = date('2024-03-01');
+	// 		$data['reason']   		   = 'Eid Advance';
+	// 		$data['approved_by']       = 1;
+	// 		$data['status']            = 2;
+	// 		$insert = $this->db->insert('xin_advance_salaries',$data);
+	// 	}
+					
+	// }
+
 	public function advanced_salary_add(){
 
 		if( isset($_POST['btn_advanced'])){

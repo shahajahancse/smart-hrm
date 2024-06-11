@@ -23,6 +23,7 @@
 			$total_absent_deduct=0;
 			$total_aba_deduct=0;
 			$total_adv_deduct=0;
+			$total_lunch_deduct=0;
 			$total_extra_pay=0;
 			$total_modify_salary=0;
                    
@@ -43,7 +44,7 @@
 							<th style='width: 190px;'>Status</th>
 							<th style='width: 55px;'>Leave</th>
 							<th  style='width:55px;'>Late</th>
-							<th style='width: 150px;'>Deduction</th>
+							<th style='width: 200px;'>Deduction</th>
 							<th  class='bnb' style="width: 37px;">Net Salary</th>
 							<th  class='bnb' style="width: 37px;">Extra Pay</th>
 							<th  class='bnb' style="width: 28px;">D.A Day</th>
@@ -95,6 +96,8 @@
                                         <th  class=''>Abse</th>
                                         <th  class=''>BA</th>
                                         <th  class=''>Adv</th>
+                                        <th  class=''>Lunch</th>
+
                                     </tr>
                                 </table>
                             </th>
@@ -110,11 +113,12 @@
 						for ($i = 0; $i < count($values); $i++) {
 								$total_grand_net_salary+=$values[$i]->grand_net_salary+$values[$i]->modify_salary-$values[$i]->aba_deduct;
 								$total_basic_salary+=$values[$i]->basic_salary;
-								$total_net_salary+=($values[$i]->net_salary)-($values[$i]->aba_deduct+$values[$i]->late_deduct+$values[$i]->absent_deduct+$values[$i]->advanced_salary);
+								$total_net_salary+=($values[$i]->net_salary)-($values[$i]->aba_deduct+$values[$i]->advanced_salary);
 								$total_late_deduct+=$values[$i]->late_deduct;
 								$total_absent_deduct+=$values[$i]->absent_deduct;
 								$total_aba_deduct+=$values[$i]->aba_deduct;
 								$total_adv_deduct+=$values[$i]->advanced_salary;
+								$total_lunch_deduct+=$values[$i]->lunch_deduct;
 								$total_extra_pay+=$values[$i]->extra_pay;
 								$total_modify_salary +=$values[$i]->modify_salary;
 							?>
@@ -160,10 +164,11 @@
 											<td  class='cat4'><?=$values[$i]->absent_deduct?></td>
 											<td  class='cat4'><?=$values[$i]->aba_deduct?></td>
 											<td  class='cat4'><?=$values[$i]->advanced_salary?></td>
+											<td  class='cat4'><?=$values[$i]->lunch_deduct?></td>
 										</tr>
 									</table>
 								</td>
-								<td><?=($values[$i]->net_salary)-($values[$i]->aba_deduct+$values[$i]->late_deduct+$values[$i]->absent_deduct+$values[$i]->advanced_salary)?></td>
+								<td><?=($values[$i]->net_salary)-($values[$i]->aba_deduct+$values[$i]->advanced_salary)?></td>
 								<td><?=$values[$i]->extra_pay?></td>
 								<td><?=$values[$i]->m_pay_day?></td>
 								<td><?=$values[$i]->modify_salary?></td>
@@ -181,10 +186,11 @@
 								<td colspan='1'>
 									<table border='q'>
 										<tr>
-											<td class="col-md-3" colspan='1'><?=intval($total_late_deduct)?></td>
-											<td class="col-md-3" colspan='1'><?=intval($total_absent_deduct)?></td>
-											<td class="col-md-3" colspan='1'><?=intval($total_aba_deduct)?></td>
-											<td class="col-md-3" colspan='1'><?=intval($total_adv_deduct)?></td>
+											<td class="col-md-2" colspan='1'><?=intval($total_late_deduct)?></td>
+											<td class="col-md-2" colspan='1'><?=intval($total_absent_deduct)?></td>
+											<td class="col-md-2" colspan='1'><?=intval($total_aba_deduct)?></td>
+											<td class="col-md-2" colspan='1'><?=intval($total_adv_deduct)?></td>
+											<td class="col-md-2" colspan='1'><?=intval($total_lunch_deduct)?></td>
 										</tr>
 									</table>
 								</td>

@@ -88,6 +88,16 @@ class Leave extends API_Controller
             }
 
 
+            if($start_date<= date('Y-m-d',strtotime('-4 day'))){
+				$this->api_return([
+                    'status'  =>   false,
+                    'message'  =>   'Leave start date must be greater than 3 days',
+                    'data'     =>   [],
+                ], 404);
+                exit();
+			}
+
+
             $this->db->where('emp_id',$userid);
             $this->db->where('year',date('Y'));
             $emp_leave=$this->db->get('leave_balanace')->row();

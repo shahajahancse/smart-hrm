@@ -472,6 +472,7 @@ class Accessories extends MY_Controller {
         $this->db->join('product_accessory_categories', 'product_accessory_categories.id = product_accessories.cat_id', 'left');
         $this->db->where('product_accessories.cat_id', $cat_id);
         $this->db->where('product_accessories.status', 2);
+        $this ->db->order_by('product_accessories.device_name_id', 'ASC');
         $query = $this->db->get();
         $data = $query->result();
         echo json_encode($data);
