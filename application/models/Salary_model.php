@@ -20,6 +20,7 @@ class Salary_model extends CI_Model {
         $end_date    = date("Y-m", strtotime($process_month)).'-'.$num_of_days;
 
         $get_employee = $this->get_employee_info($grid_emp_id);
+        // dd($get_employee);
 
         foreach ($get_employee as $key => $row) {
             $emp_id          = $row->user_id;
@@ -92,6 +93,7 @@ class Salary_model extends CI_Model {
             $extra_p = $this->attendance_count_status($emp_id,"Present",$first_date,$end_date,'attendance_status');
             $meeting = $this->attendance_count_status($emp_id,"Meeting",$first_date,$end_date,'attendance_status');*/
             $rows = $this->count_attendance_status_wise($emp_id,$first_date,$end_date);
+            //dd($rows);
             $leave = $this->leave_count_status($emp_id, $first_date,$end_date, 2);
 
             $present = ($rows->attend + $rows->HalfDay) - ($rows->present_error2 + $rows->present_error1);

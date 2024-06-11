@@ -44,7 +44,6 @@ class Admin extends API_Controller
         }
     }
     public function sendRecentPunches() {
-
         $dataa=$_POST['data'];
         $emp_ids=[];
         foreach($dataa as $data) {

@@ -209,6 +209,7 @@ class Attendance_model extends CI_Model
 
             // check leave
             $leave = $this->leave_chech($process_date, $emp_id);
+            //dd($leave);
             // dd($leave);
             // check present status
             $status = '';
@@ -489,12 +490,13 @@ class Attendance_model extends CI_Model
             'comment'       => '.',
             'date'          => $date,
         );
-        $this->db->where('lunch_id', $lunch_id);
+        //$this->db->where('lunch_id', $lunch_id);
         $this->db->where('emp_id', $emp_id);
+        $this->db->where('date', $date);
         $this->db->get('lunch_details')->row();
         if($this->db->affected_rows() > 0) {
-            $this->db->where('lunch_id', $lunch_id);
             $this->db->where('emp_id', $emp_id);
+            $this->db->where('date', $date);
             $this->db->update('lunch_details', $form_data);
         }
         $this->db->insert('lunch_details', $form_data);
@@ -598,7 +600,7 @@ class Attendance_model extends CI_Model
         $this->db->where("employee_id", $emp_id);
         $this->db->where("status", 2);
         $query = $this->db->get("xin_leave_applications");
-        // dd($query->result());
+         //dd($query->result());
         if($query->num_rows() > 0) {
             if ($query->row()->is_half_day == 1) {
                 $leave = array(
@@ -974,8 +976,9 @@ class Attendance_model extends CI_Model
                 }else{
                     $d1 = new DateTime(date('Y-12-31', strtotime($date))); 
                     $d2 = new DateTime($row->leave_effective);
+                    $d2->modify('-1 day');
                     if ($d1 < $d2) {
-                        dd('hi');
+                        //dd('hi');
                         $data = array(
                             'emp_id' => $row->user_id,
                             'el_total' => 0,
@@ -1210,7 +1213,7 @@ class Attendance_model extends CI_Model
         xin_employees.employee_id,
         xin_employees.first_name,
         xin_employees.last_name
-    ');
+        ');
 
         $this->db->from('xin_employees');
         $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
@@ -1234,25 +1237,25 @@ class Attendance_model extends CI_Model
         }
     }
 
-  public function get_movement_register($id = null)
-  {
-      $this->db->select('
-          empm.id, mr.title AS title, em.first_name, em.last_name, empm.employee_id AS emp_id, empm.date, empm.out_time, empm.in_time, empm.status
-      ');
-  
-      $this->db->from('xin_employee_move_register as empm');
-  
-      if ($id != null) {
-          $this->db->where('empm.employee_id', $id);
-      }
-  
-      $this->db->join('xin_employees as em', 'em.user_id = empm.employee_id');
-      $this->db->join('xin_employee_move_reason as mr', 'empm.reason = mr.id');
-  
-      $this->db->order_by('empm.id', 'DESC');
-  
-      return $this->db->get()->result();
-  }
+    public function get_movement_register($id = null)
+    {
+        $this->db->select('
+            empm.id, mr.title AS title, em.first_name, em.last_name, empm.employee_id AS emp_id, empm.date, empm.out_time, empm.in_time, empm.status
+        ');
+    
+        $this->db->from('xin_employee_move_register as empm');
+    
+        if ($id != null) {
+            $this->db->where('empm.employee_id', $id);
+        }
+    
+        $this->db->join('xin_employees as em', 'em.user_id = empm.employee_id');
+        $this->db->join('xin_employee_move_reason as mr', 'empm.reason = mr.id');
+    
+        $this->db->order_by('empm.id', 'DESC');
+    
+        return $this->db->get()->result();
+    }
   
 
 

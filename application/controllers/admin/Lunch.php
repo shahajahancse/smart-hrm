@@ -1239,4 +1239,27 @@ class Lunch extends MY_Controller
     }
 
 
+    public function command_delete_dublicate(){
+        $emp= $this->db->select('user_id')->where('user_role_id', 3)->get('xin_employees')->result_array();
+        $emp_id=array_column($emp, 'user_id');
+        //dd($emp_id);
+        foreach($emp_id as $g){
+            $this->db->where('emp_id', $g);
+            $lunch_details = $this->db->get('lunch_details')->result();
+            $date='';
+            $test_id='';
+            foreach($lunch_details as $l){
+                if($date!=$l->date && $test_id!=$l->emp_id){
+                    $date=$l->date;
+                    $test_id=$l->emp_id;
+                }else{
+                    $this->db->where('date', $l->date);
+                    $this->db->where('emp_id', $g);
+                    $this->db->delete('lunch_details');
+                }
+            }
+        }
+    }
+
+    
 }
