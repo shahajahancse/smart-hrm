@@ -53,7 +53,7 @@ class Lunch_model extends CI_Model {
     }
     public function all_employees($date)
     {
-        $query = $this->db->query("SELECT * FROM xin_employees WHERE status IN (1,4,5,6)");
+        $query = $this->db->query("SELECT * FROM xin_employees");
         return $query->result();
     }
 
@@ -67,11 +67,22 @@ class Lunch_model extends CI_Model {
             $emp_id = $row->user_id;
             $doj = $row->date_of_joining;
 
+            $last_working_data=$this->db->where('emp_id', $emp_id)->order_by('effective_date', 'DESC')->limit(1)->get('xin_employee_left_resign')->row();
+//dd($last_working_data->effective_date.' < '.$firstDate);
+            if (!empty($last_working_data)) {
+                $last_working_date=$last_working_data->effective_date;
+                if ($last_working_date < $firstDate) {
+                  continue;
+                }
+            }
+           // dd('here');
             $this->db->select('meal_amount,date');
             $this->db->where('date >=', $firstDate);
             $this->db->where('date <=', $secondDate);
             $this->db->where('emp_id', $emp_id);
             $result = $this->db->get('lunch_details')->result();
+            //dd($result);
+           
             
             $prev_meal=0;
             $prev_cost=0;
@@ -87,6 +98,8 @@ class Lunch_model extends CI_Model {
             $this->db->where('end_date', date('Y-m-d', strtotime($firstDate . ' -1 day')));
             
             $preepay= $this->db->get('lunch_payment')->result();
+            //dd($preepay);
+           
 
             if (count($preepay)>0 && $preepay[0]->status==1){
                 $prev_pay+=$preepay[0]->pay_amount;
@@ -94,13 +107,16 @@ class Lunch_model extends CI_Model {
 
             $prev_amount=$prev_pay-$prev_cost;
             
-            if ($row->active_lunch==1) {
+            
+            if ($row->active_lunch==1 && empty($last_working_data)) {
+                //dd('here');
                 $probable_meal = $this->chackprobalemeal($secondDate, $probable_date, $emp_id, $doj);
                 $lunch_package_latest= lunch_package($secondDate);
                 $pay_amount=$probable_meal*$lunch_package_latest->stuf_give_tk;
                 $collection_amount=$pay_amount-$prev_amount;
                 $status = 0;
             }else{
+                //dd('here_not');
                 $probable_meal=0;
                 if ($prev_amount==0) {
                     continue;
@@ -109,7 +125,7 @@ class Lunch_model extends CI_Model {
                     $collection_amount=$prev_amount;
                     $status = 0;
                 }else{
-                    $pay_amount=$prev_amount;
+                    $pay_amount=(-$prev_amount);
                     $collection_amount=$prev_amount;
                     $status = 0;
                 }
@@ -130,6 +146,7 @@ class Lunch_model extends CI_Model {
                 'next_date' => $probable_date,
                 'status' => $status
             );
+            //dd($data);
 
             $this->db->where('from_date', $firstDate);
             $this->db->where('end_date', $secondDate);
