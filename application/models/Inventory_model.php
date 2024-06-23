@@ -130,16 +130,20 @@ class inventory_model extends CI_Model
 			p.product_id,
 			p.quantity,
 			p.ap_quantity,
+			p.approx_amount,
+			p.approx_t_amount,
 			p.user_id,
 			p.status,
 			p.created_at,
 			p.updated_by,
 			emp.first_name,
 			emp.last_name,
-			products.product_name
+			products.product_name,
+			product_unit.unit_name
 		')->from('products_purches_details as p')
 		->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left')
-		->join('products', 'p.product_id = products.id', 'left');
+		->join('products', 'p.product_id = products.id', 'left')
+		->join('product_unit', 'products.unit_id = product_unit.id', 'left');
 		$this->db->order_by('p.id', 'desc');
 		$this->db->limit($limit, $offset);
 			$this->db->where('p.status',$status);

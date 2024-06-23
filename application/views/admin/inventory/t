@@ -1,0 +1,54 @@
+let audioContext;
+
+        // Function to initialize the audio context after a user gesture
+        function initializeAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Function to play a sound using the Web Audio API
+        function playAlertSound() {
+            if (!audioContext) return;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // 440 Hz is the frequency of the note A4
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.start();
+            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 1); // 1 second fade out
+        }
+
+        // Add an event listener for user interaction to initialize the audio context
+        // document.addEventListener('click', initializeAudio);
+        // document.addEventListener('keydown', initializeAudio);
+
+        setInterval(function() {
+            $.ajax({
+                url: 'https://railspaapi.shohoz.com/v1.0/web/bookings/search-trips-v2?from_city=Dhaka&to_city=Santahar&date_of_journey=23-Jun-2024&seat_class=S_CHAIR',
+                dataType: 'json',
+                success: function(data) {
+                    var trains = data.data.trains; // Access the trains data
+                    var alertShown = false;
+
+                    trains.forEach(function(train) {
+                        train.seat_types.forEach(function(seatType) {
+                            if (seatType.type === "S_CHAIR" && seatType.seat_counts.online > 1) {
+                                initializeAudio();
+                                alert("Train " + train.trip_number + " has more than 1 online seat available.");
+                                playAlertSound();
+                                alertShown = true;
+                                return false; // Exit the loop if condition is met
+                            }
+                        });
+                        if (alertShown) return false; // Exit the outer loop if alert is shown
+                    });
+
+                    console.log(trains);
+                }
+            });
+        }, 1000); // 1000 milliseconds = 1 second
