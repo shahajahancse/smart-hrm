@@ -131,20 +131,16 @@ class inventory_model extends CI_Model
 			p.product_id,
 			p.quantity,
 			p.ap_quantity,
-			p.approx_amount,
-			p.approx_t_amount,
 			p.user_id,
 			p.status,
 			p.created_at,
 			p.updated_by,
 			emp.first_name,
 			emp.last_name,
-			products.product_name,
-			product_unit.unit_name
+			products.product_name
 		')->from('products_purches_details as p')
 		->join('xin_employees as emp', 'emp.user_id = p.user_id', 'left')
-		->join('products', 'p.product_id = products.id', 'left')
-		->join('product_unit', 'products.unit_id = product_unit.id', 'left');
+		->join('products', 'p.product_id = products.id', 'left');
 		$this->db->order_by('p.id', 'desc');
 		$this->db->limit($limit, $offset);
 			$this->db->where('p.status',$status);
@@ -350,6 +346,7 @@ class inventory_model extends CI_Model
 			products_requisition_details.approved_qty,
 			products_requisition_details.user_id,
 			products_requisition_details.created_at,
+			products_requisition_details.note,
 			products_categories.category_name,
 			products_sub_categories.sub_cate_name,
 			products.product_name,
@@ -377,18 +374,20 @@ class inventory_model extends CI_Model
 			$this->db->where("products_requisition_details.status",$statusC);
 		}	
 
+		// dd($statusC);
+
 		if($f1_date !='' &&  $f2_date == ''){
 			$f1_date = date('Y-m-d', strtotime($f1_date));
-			$this->db->where("products_purches_details.created_at BETWEEN '$f1_date' AND '$f1_date'");
+			$this->db->where("products_requisition_details.created_at BETWEEN '$f1_date' AND '$f1_date'");
 		}else if($f1_date !='' &&  $f2_date != ''){
 			$f1_date = date('Y-m-d', strtotime($f1_date));
 			$f2_date = date('Y-m-d', strtotime($f2_date));
-			$this->db->where("products_purches_details.created_at BETWEEN '$f1_date' AND '$f2_date'");
+			$this->db->where("products_requisition_details.created_at BETWEEN '$f1_date' AND '$f2_date'");
 		}
 		$this->db->group_by('products_requisition_details.id');
 		$query= $this->db->get();
-		$data = $query->result();
 		if ($query->num_rows() > 0) {
+			$data = $query->result();
 			return $data;
 		} else {
 			return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
