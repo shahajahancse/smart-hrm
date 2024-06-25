@@ -1,5 +1,5 @@
 <?php
-// dd($results)
+ //dd($results)
 
 ?>
 <style>
@@ -46,6 +46,7 @@ td, th {
             <!-- <th>Days</th> -->
             <th>Quantity</th>
             <th>Approved Qty</th>
+            <th>Remarks</th>
             <th>Status</th>
         </tr>
     </thead>
@@ -71,6 +72,7 @@ td, th {
             <!-- <td>< ?= $dayName ?></td> -->
             <td><?= $raw->quantity ?></td>
             <td><?= $raw->ap_quantity ?></td>
+            <td><?= @$raw->note ?></td>
 
             <td><?php
                 if(isset($raw->purchase_status)){

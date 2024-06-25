@@ -169,6 +169,7 @@
                 title: 'Add Purchase',
                 html:data,
                 showCancelButton: true,
+                
                 showConfirmButton:true,
                 cancelButtonText: 'Cancel',
                 confirmButtonText: 'Add',

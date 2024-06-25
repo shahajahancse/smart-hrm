@@ -112,13 +112,13 @@ $(function() {
                         $data = $this->Inventory_model->req_purchase_details($rows->id);
                         // dd($data);
                         ?>
-                        <td class="text-center"><?php echo $data->product_name ?></td> 
-                        <td class="text-center"><?php echo intval($data->quantity).' '.$data->unit_name ?></td>
-                        <td class="text-center"><?php echo  intval($data->ap_quantity).' '.$data->unit_name ?></td>
+                        <td class="text-center"><?php echo @$data->product_name ?></td> 
+                        <td class="text-center"><?php echo intval(@$data->quantity).' '.@$data->unit_name ?></td>
+                        <td class="text-center"><?php echo  intval(@$data->ap_quantity).' '.@$data->unit_name ?></td>
                         <td class="text-center">
-                            <?php echo $rows->status == 1 ?"<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>": ($rows->status == 2 ?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( $rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Deliver</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>")); ?>
+                            <?php echo @$rows->status == 1 ?"<span class='badge' style='background-color:#ffc107'><b>Pending</b></span>": (@$rows->status == 2 ?  "<span class='badge' style='background-color:#28a745'><b>Approved</b></span>": ( @$rows->status ==3? "<span class='badge' style='background-color:#28a745'><b>Deliver</b></span>":"<span class='badge' style='background-color:#d56666'><b>Rejected</b></span>")); ?>
                         </td>
-                        <td class="text-center"><?php echo date('d M Y',strtotime($rows->created_at)); ?></td>
+                        <td class="text-center"><?php echo date('d M Y',strtotime(@$rows->created_at)); ?></td>
                         <td class="text-center">
                             <div class="dropdown">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -127,18 +127,18 @@ $(function() {
                                 <div class="dropdown-menu" style="min-width: 110px !important;margin-left:-49px;border-radius:0;line-height: 2;  " aria-labelledby="dropdownMenuButton">
                                     <?php if($session['role_id']==4){?>
                                         <?php if($rows->status == 1){?>
-                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Edit</a> <br>
-                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_delete/'.$rows->id);?>">Delete</a> <br>
+                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.@$rows->id);?>">Edit</a> <br>
+                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_delete/'.@$rows->id);?>">Delete</a> <br>
                                         <?php }else{?>
-                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_delete/'.$rows->id);?>">Delete</a> <br>
+                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-info" href="<?= base_url('admin/inventory/product_purchase_delete/'.@$rows->id);?>">Delete</a> <br>
                                         <?php }?>
                                     <?php }?>
                                     <?php if($session['role_id'] == 1 ||  $session['role_id'] == 2){?>
                                         <?php if($rows->status==1){?>
-                                                <a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.$rows->id);?>">Approved</a> <br>
-                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-danger" href="<?= base_url('admin/inventory/product_purchase_rejected/'.$rows->id);?>">Reject</a><br>
+                                                <a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_edit_approved/'.@$rows->id);?>">Approved</a> <br>
+                                            <hr style="margin:1px;"><a style="padding-left:5px; font-weight:bold" class="text-danger" href="<?= base_url('admin/inventory/product_purchase_rejected/'.@$rows->id);?>">Reject</a><br>
                                             <?php }else{?>
-                                           <a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_recived/'.$rows->id);?>">Order Receive</a><br>
+                                           <a style="padding-left:5px; font-weight:bold" class="text-success" href="<?= base_url('admin/inventory/product_purchase_recived/'.@$rows->id);?>">Order Receive</a><br>
                                        <?php  }?>
                                     <?php }?>
                                 </div>

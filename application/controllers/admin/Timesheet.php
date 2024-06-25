@@ -975,6 +975,11 @@ class Timesheet extends MY_Controller {
 		
 		$id =$this->input->post('leave_id');
 		$stutuss=$this->input->post('status');
+		$reason=$this->input->post('reason');
+		
+		if ($reason==null || $reason=="") {
+			$reason="N/A";
+		}
 
 
 		$leave_info=$this->db->where('leave_id',$id)->get('xin_leave_applications')->row();
@@ -995,6 +1000,7 @@ class Timesheet extends MY_Controller {
 		$data = array(
 			'status' => $stutuss,
 			'notify_leave' => $notyfi_data,
+			'remarks' => $reason
 		);
 
 		$result = $this->Timesheet_model->update_leave_record($data,$id);

@@ -43,6 +43,7 @@ class inventory_model extends CI_Model
 			p.id, 
 			p.product_name, 
 			pr.id as requsition_id,
+			pr.note,
 			pr.quantity, 
 			pr.approved_qty as ap_quantity, 
 			pr.status as requisition_status,
