@@ -45,6 +45,8 @@ class inventory_model extends CI_Model
 			pr.id as requsition_id,
 			pr.note,
 			pr.quantity, 
+			pr.user_id, 
+			pr.updated_by, 
 			pr.approved_qty as ap_quantity, 
 			pr.status as requisition_status,
 			SUBSTR(pr.created_at, 1, 10) as created_at,

@@ -767,6 +767,7 @@ class Timesheet extends MY_Controller {
 	public function leave_reject($id) {
 		$data = array(
 			'status' => 3,
+			'rejected_by' => $this->session->userdata('username')->user_id,
 		);
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
 		if($result == TRUE) {
@@ -819,6 +820,7 @@ class Timesheet extends MY_Controller {
 				'is_half_day' => $hulfday,
 				'team_lead_approved' => $team_lead_approved,
 				'team_lead_comment' => $team_lead_comment,
+				'rejected_by' =>$this->session->userdata('username')['user_id']
 			);
 		}else{
 			$qnty= $total_days;
@@ -937,7 +939,8 @@ class Timesheet extends MY_Controller {
 			'from_date' => $this->input->post('start_date'),
 			'to_date' => $this->input->post('end_date'),
 			'qty' => $qnty,
-			'is_half_day' => $hulfday
+			'is_half_day' => $hulfday,
+			'rejected_by' =>$this->session->userdata('username')['user_id']
 		);
 
 
@@ -997,10 +1000,13 @@ class Timesheet extends MY_Controller {
 			$notyfi_data=1;
 		};
 
+		//dd($this->session->userdata('username')['user_id']);
+
 		$data = array(
 			'status' => $stutuss,
 			'notify_leave' => $notyfi_data,
-			'remarks' => $reason
+			'remarks' => $reason,
+			'rejected_by' =>$this->session->userdata('username')['user_id'],
 		);
 
 		$result = $this->Timesheet_model->update_leave_record($data,$id);

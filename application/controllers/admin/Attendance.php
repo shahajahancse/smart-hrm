@@ -1067,6 +1067,96 @@ class Attendance extends MY_Controller
             $this->load->view('admin/layout/layout_main', $data);
         }
     }
+    public function punch_request(){
+        $punch_type=$this->input->post('punch_type');
+        $p_date=$this->input->post('p_date');
+        $p_time=$this->input->post('p_time');
+        $session = $this->session->userdata('username');
+        $user_id  = $session[ 'user_id' ];
+        $proxi_id = $this->db->where('emp_id', $user_id)->get('xin_proxi')->row()->proxi_id;
+
+        $sql = "CREATE TABLE IF NOT EXISTS `xin_employee_punch_request` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `employee_id` int(11) NOT NULL,
+            `proxi_id` int(11) NOT NULL,
+            `punch_type` varchar(255) NOT NULL,
+            `p_date` date NOT NULL,
+            `p_time` time NOT NULL,
+            `status` tinyint(1) NOT NULL,
+            PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+        $this->db->query($sql);
+
+        $data = array(
+            'employee_id' => $session['user_id'],
+            'proxi_id' => $proxi_id,
+            'punch_type' => $punch_type,
+            'p_date' => $p_date,
+            'p_time' => $p_time,
+            'status' => 0,
+        );
+        $this->db->insert('xin_employee_punch_request', $data);
+        echo 'Success';
+    }
+
+
+    public function punch_request_list(){
+        $session = $this->session->userdata('username');
+        $userid  = $session[ 'user_id' ];
+        $this->db->select("xin_employee_punch_request.*, xin_employees.first_name, xin_employees.last_name");
+        $this->db->from('xin_employee_punch_request');
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_employee_punch_request.employee_id');
+        $this->db->order_by("id", "desc");
+        $data['alldata'] = $this->db->get()->result();
+        $data['breadcrumbs'] = 'Punch Request List';
+        $data['title'] = 'Punch Request List | '.$this->Xin_model->site_title();
+
+        $data['subview'] = $this->load->view("admin/attendance/punch_request_list", $data, TRUE);
+        $this->load->view('admin/layout/layout_main', $data);
+    }
+    public function accept_request(){
+        $id = $this->input->post('id');
+        $data = array(
+            'status' => 1
+        );
+        $this->db->where('id', $id);
+        $this->db->update('xin_employee_punch_request', $data);
+
+        $r_data = $this->db->where('id', $id)->get('xin_employee_punch_request')->row();
+        $date=$r_data->p_date;
+        $in_time=$r_data->p_time;
+        $time= $date .' '. $in_time;
+
+
+        $this->db->where("proxi_id", $r_data->proxi_id);
+        $this->db->where("date_time", $time);
+        $query1 = $this->db->get("xin_att_machine");
+        $num_rows1 = $query1->num_rows();
+        if($num_rows1 == 0) {
+            $data = array(
+                    'proxi_id' 	=>  $r_data->proxi_id,
+                    'date_time'	=> $time,
+                    'device_id' => 0,
+                );
+            $this->db->insert("xin_att_machine", $data);
+        }
+        $this->Attendance_model->attn_process($date, $r_data->employee_id);
+        echo 'Success';
+    }
+
+    public function reject_request(){
+        $id = $this->input->post('id');
+        $data = array(
+            'status' => 2
+        );
+        $this->db->where('id', $id);
+        $this->db->update('xin_employee_punch_request', $data);
+        echo 'Success';
+    }
+
+
+
+
 
     public function employee_movement($type = null)
     {

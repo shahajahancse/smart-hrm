@@ -66,6 +66,42 @@ body {
 
     </div>
 </div>
+<div class="modal fade" id="punch_request" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Job Card Form</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="">Type</label>
+                        <select  id="punch_type" class="form-control select2">
+                            <option value="in">Punch In</option>
+                            <option value="out">Punch Out</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="">Date</label>
+                        <input type="date" min="<?= date('Y-m-d', strtotime('-2 day')) ?>" max="<?= date('Y-m-d') ?>" class="form-control" id="p_date">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="">Time</label>
+                        <input type="time" class="form-control" id="p_time">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" onclick="punch_request()" data-dismiss="modal" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 
 
@@ -111,7 +147,7 @@ body {
         </div>
 
     </div>
-    <div class="col-md-3 divform-group">
+    <div class="col-md-2 divform-group">
         <div class="input">
             <?php $years = range(1900, strftime("%Y", time())); ?>
 
@@ -128,11 +164,17 @@ body {
         </div>
 
     </div>
-    <div class="col-md-3 divform-group">
+    <div class="col-md-2 divform-group">
         <a data-toggle="modal" data-target="#jobcardinput">
             <div class="input serceb">
-                <span class="label label-danger" style="animation: pulse 1s infinite;">New</span>
                 Get Job Card
+            </div>
+        </a>
+    </div>
+    <div class="col-md-2 divform-group">
+        <a data-toggle="modal" data-target="#punch_request">
+            <div class="input serceb">
+                Punch Request
             </div>
         </a>
     </div>
@@ -182,38 +224,74 @@ function getdata(status) {
 }
 </script>
 <script>
-function get_job_card() {
-    var ajaxRequest; // The variable that makes Ajax possible!
-    ajaxRequest = new XMLHttpRequest();
+    function get_job_card() {
+        var ajaxRequest; // The variable that makes Ajax possible!
+        ajaxRequest = new XMLHttpRequest();
 
-    first_date = document.getElementById('emp_j_from_date').value;
-    second_date = document.getElementById('emp_j_to_date').value;
+        first_date = document.getElementById('emp_j_from_date').value;
+        second_date = document.getElementById('emp_j_to_date').value;
 
-    if (first_date == '') {
-        alert('Please select first date');
-        return;
-    }
-    if (second_date == '') {
-        alert('Please select second date');
-        return;
-    }
+        if (first_date == '') {
+            alert('Please select first date');
+            return;
+        }
+        if (second_date == '') {
+            alert('Please select second date');
+            return;
+        }
 
-    var data = "first_date=" + first_date + '&second_date=' + second_date;
+        var data = "first_date=" + first_date + '&second_date=' + second_date;
 
-    url = '<?php echo base_url('admin/attendance/get_job_card_emp'); ?>';
-    ajaxRequest.open("POST", url, true);
-    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-    ajaxRequest.send(data);
-    // alert(url); return;
+        url = '<?php echo base_url('admin/attendance/get_job_card_emp'); ?>';
+        ajaxRequest.open("POST", url, true);
+        ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        ajaxRequest.send(data);
+        // alert(url); return;
 
-    ajaxRequest.onreadystatechange = function() {
-        if (ajaxRequest.readyState == 4) {
-            // console.log(ajaxRequest.responseText); return;
-            var resp = ajaxRequest.responseText;
-            a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
-            a.document.write(resp);
-            // a.close();
+        ajaxRequest.onreadystatechange = function() {
+            if (ajaxRequest.readyState == 4) {
+                // console.log(ajaxRequest.responseText); return;
+                var resp = ajaxRequest.responseText;
+                a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+                a.document.write(resp);
+                // a.close();
+            }
         }
     }
-}
+</script>
+<script>
+    function punch_request() {
+        var ajaxRequest; // The variable that makes Ajax possible!
+        ajaxRequest = new XMLHttpRequest();
+
+        punch_type = document.getElementById('punch_type').value;
+        p_date = document.getElementById('p_date').value;
+        p_time = document.getElementById('p_time').value;
+
+        if (punch_type == '') {
+            alert('Please select punch type');
+            return;
+        }
+        if (p_date == '') {
+            alert('Please select date');
+            return;
+        }
+        if (p_time == '') {
+            alert('Please select time');
+            return;
+        }
+       
+
+        var data = "punch_type=" + punch_type + '&p_date=' + p_date + '&p_time=' + p_time;
+
+        url = '<?php echo base_url('admin/attendance/punch_request'); ?>';
+        ajaxRequest.open("POST", url, true);
+        ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        ajaxRequest.send(data);
+        ajaxRequest.onreadystatechange = function() {
+            if (ajaxRequest.readyState == 4) {
+               alert(ajaxRequest.responseText);
+            }
+        }
+    }
 </script>
