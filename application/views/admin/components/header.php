@@ -1187,7 +1187,8 @@ th {
                                             <th style="padding: 3px 8px!important;">Status</th>
                                             <td style="padding: 3px 8px!important;">
                                                 <select class="form-control" id="status_m" name="status"
-                                                    <?=$user[0]->user_role_id==3 ? 'disabled' : ''?>>
+                                                    <?=$user[0]->user_role_id==3 ? $user[0]->is_emp_lead != 2 ? 'disabled' : '' : ''?>   
+                                                     >
                                                     <option value="1">Pending</option>
                                                     <option value="4">First Level Approval</option>
                                                     <option value="2">Approved</option>

@@ -86,7 +86,7 @@ body {
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="">Date</label>
-                        <input type="date" min="<?= date('Y-m-d', strtotime('-2 day')) ?>" max="<?= date('Y-m-d') ?>" class="form-control" id="p_date">
+                        <input type="date" min="<?= date('Y-m-d', strtotime('-2 day')) ?>" max="<?= date('Y-m-d') ?>" value="<?= date('Y-m-d') ?>" class="form-control" id="p_date">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="">Time</label>

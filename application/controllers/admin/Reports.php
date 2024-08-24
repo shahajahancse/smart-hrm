@@ -233,6 +233,13 @@ class Reports extends MY_Controller
 		$data['date']=$this->input->post('first_date');
         echo $this->load->view("admin/reports/yerly_leave", $data, true);
 	}
+	public function yerly_leave_earn_list() {
+        $sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+        $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+		$data['date']=$this->input->post('first_date');
+        echo $this->load->view("admin/reports/yerly_leave_earn_list", $data, true);
+	}
 	public function getyarly_data() {
 		$date = date('Y-m-01', strtotime($this->input->post('year').'-01-01'));
 		
@@ -1352,7 +1359,7 @@ class Reports extends MY_Controller
 		$designation = $this->input->get('designation');
 		$this->db->select('user_id as emp_id, first_name, last_name');
 		//status
-        if ($status == 0) {
+		if ($status == 0 && $status != 'All') {
 			$this->db->where_in('status', [1,4,5]);
         }elseif($status == 1){
 			$this->db->where_in('status',[2,3]);
@@ -1840,7 +1847,12 @@ class Reports extends MY_Controller
 		}
 		$data['first_date'] = $first_date;
         $data['second_date'] = $second_date;
-		$data['values'] = $this->db->select('xin_employees.user_id,xin_employees.first_name,xin_employees.last_name,employee_issue.comment,employee_issue.emp_id')->where_in('emp_id',$emp_id)->from('employee_issue')->join('xin_employees','xin_employees.user_id = employee_issue.emp_id')->get()->result();
+		$data['values'] = $this->db->select('xin_employees.user_id,xin_employees.first_name,xin_employees.last_name,employee_issue.comment,employee_issue.emp_id')
+						->where('employee_issue.create_at >=',$first_date)->where('employee_issue.create_at <=',$second_date)
+						->where_in('emp_id',$emp_id)
+						->from('employee_issue')
+						->join('xin_employees','xin_employees.user_id = employee_issue.emp_id')
+						->get()->result();
 		// dd($data);
 		$this->load->view('admin/reports/issuees_report',$data);
 	}

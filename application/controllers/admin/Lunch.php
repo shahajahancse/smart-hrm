@@ -53,7 +53,6 @@ class Lunch extends MY_Controller
         } else {
             redirect('admin/');
         }
-
     }
     public function today_lunch($id = null)
     {
@@ -559,6 +558,32 @@ class Lunch extends MY_Controller
         $this->db->where('emp_id', $empid);
         $this->db->update('lunch_payment', $data);
         $response ='operation Successfull.';
+        echo json_encode($response);
+    }
+    public function new_submit_payment()
+    {
+        // Retrieve the form data from the POST request
+        $new_employeeId = $this->input->get('new_employeeId');
+        $new_pay_amt = $this->input->get('new_pay_amt');
+        $last_prement= $this->db->query("SELECT * FROM `lunch_payment` ORDER BY id DESC LIMIT 1")->row();
+        $data = array(
+            'emp_id' => $new_employeeId ,
+            'prev_meal' =>0,
+            'prev_cost' => 0,
+            'prev_pay' => 0,
+            'prev_amount' => 0,
+            'probable_meal' => 0,
+            'pay_amount' => $new_pay_amt,
+            'collection_amount' => $new_pay_amt,
+            'from_date' => $last_prement->from_date,
+            'end_date' => $last_prement->end_date,
+            'next_date' => $last_prement->next_date,
+            'salary_month' => '',
+            'updated_at' => $last_prement->updated_at,
+            'status' => 1,
+        );
+        $this->db->insert('lunch_payment', $data);
+        $response ='Operation Successfull';
         echo json_encode($response);
     }
     public function vendor_payment()
@@ -1239,27 +1264,27 @@ class Lunch extends MY_Controller
     }
 
 
-    public function command_delete_dublicate(){
-        $emp= $this->db->select('user_id')->where('user_role_id', 3)->get('xin_employees')->result_array();
-        $emp_id=array_column($emp, 'user_id');
-        //dd($emp_id);
-        foreach($emp_id as $g){
-            $this->db->where('emp_id', $g);
-            $lunch_details = $this->db->get('lunch_details')->result();
-            $date='';
-            $test_id='';
-            foreach($lunch_details as $l){
-                if($date!=$l->date && $test_id!=$l->emp_id){
-                    $date=$l->date;
-                    $test_id=$l->emp_id;
-                }else{
-                    $this->db->where('date', $l->date);
-                    $this->db->where('emp_id', $g);
-                    $this->db->delete('lunch_details');
-                }
-            }
-        }
-    }
+    // public function command_delete_dublicate(){
+    //     $emp= $this->db->select('user_id')->where('user_role_id', 3)->get('xin_employees')->result_array();
+    //     $emp_id=array_column($emp, 'user_id');
+    //     //dd($emp_id);
+    //     foreach($emp_id as $g){
+    //         $this->db->where('emp_id', $g);
+    //         $lunch_details = $this->db->get('lunch_details')->result();
+    //         $date='';
+    //         $test_id='';
+    //         foreach($lunch_details as $l){
+    //             if($date!=$l->date && $test_id!=$l->emp_id){
+    //                 $date=$l->date;
+    //                 $test_id=$l->emp_id;
+    //             }else{
+    //                 $this->db->where('date', $l->date);
+    //                 $this->db->where('emp_id', $g);
+    //                 $this->db->delete('lunch_details');
+    //             }
+    //         }
+    //     }
+    // }
 
     
 }

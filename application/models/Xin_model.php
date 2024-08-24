@@ -4,7 +4,7 @@ class Xin_model extends CI_Model {
  
     public function __construct()
     {
-        parent::__construct();
+		parent::__construct();
         $this->load->database();
     }
  
@@ -1347,6 +1347,8 @@ class Xin_model extends CI_Model {
 	
 	// get title
 	public function site_title() {
+		//dd('Xin_model');
+
 		$system = $this->read_setting_info(1);
 		return $system[0]->application_name;
 	}

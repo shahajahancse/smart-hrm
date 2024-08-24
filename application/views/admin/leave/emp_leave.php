@@ -159,7 +159,7 @@ body {
                     <div class="pseudo6">
                         <input name="start_date" value="<?= date('Y-m-d') ?>" 
                         class="col-md-12 "
-                            style="width: 98%;border: none;cursor: pointer;" type="date" min="<?= date('Y-m-d', strtotime('-3 days')) ?>"   name="" id="start_date"
+                            style="width: 98%;border: none;cursor: pointer;" type="date"   name="" id="start_date"
                             required>
                     </div>
                 </div>
@@ -170,7 +170,7 @@ body {
                     <div class="level">Select End Date**</div>
                     <div class="pseudo6">
                         <input name="end_date" value="<?= date('Y-m-d') ?>" class="col-md-12"
-                            style="width: 98%;border: none;cursor: pointer;" type="date" name="" min="<?= date('Y-m-d', strtotime('-3 days')) ?>" id="end_date" required>
+                            style="width: 98%;border: none;cursor: pointer;" type="date" name=""  id="end_date" required>
                     </div>
                 </div>
             </div>

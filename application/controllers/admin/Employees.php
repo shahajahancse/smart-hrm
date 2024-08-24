@@ -2283,6 +2283,7 @@ class Employees extends MY_Controller {
 			'sub_department_id' => $this->input->post('subdepartment_id'),
 			'designation_id' => $this->input->post('designation_id'),
 			'salary' => $this->input->post('salary'),
+			'basic_salary' => $this->input->post('salary'),
 			'date_of_joining' => $date_of_joining,
 			'notify_incre_prob' => $probation_end,
 			'contact_no' => $contact_no,
@@ -6811,23 +6812,25 @@ exit();
 
 		$data['employees'] = $this->Xin_model->all_employees();
 		$data['session']  = $this->session->userdata('username');
+		$session = $this->session->userdata('username');
+
         // Check the HTTP request method to determine the action
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($action === 'add') {
                 // Handle adding a new purpose (Create)
-                $emp_id = $this->input->post('emp_id');
+                $emp_id = $session['user_id'];
                 $comment = $this->input->post('comment');
                     $data = array(
                         'emp_id' => $emp_id,
-                        'comment' => $comment
-                      
+                        'comment' => $comment,
+						'create_at' => date('Y-m-d')
                     );
                     $this->db->insert('employee_issue', $data);
                     echo 'success';
                 
             } elseif ($action === 'edit' && $id) {
                 // Handle editing an existing purpose (Update)
-				$emp_id = $this->input->post('emp_id');
+				$emp_id = $session['user_id'];
                 $comment = $this->input->post('comment');
                     $data = array(
 						'emp_id' => $emp_id,
@@ -6848,7 +6851,7 @@ exit();
                 $purpose = $query->row_array();
                 echo json_encode($purpose);
             } else {
-                $data['purposes'] = $this->db->get('employee_issue')->result();
+                $data['purposes'] = $this->db->where('emp_id', $session['user_id'])->get('employee_issue')->result();
                 $data['title'] = 'Employee Isuue';
                 $data['breadcrumbs'] = 'Employee Isuue';
                 $data['subview'] = $this->load->view("admin/employees/employee_issue", $data, true);

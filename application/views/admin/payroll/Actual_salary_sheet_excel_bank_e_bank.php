@@ -1,23 +1,11 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_hrsale_custom.css">
-
-<style>
-  *{
-    font-size: 14px;
-  }
-.container {
-  padding: 0;
-  width: 80%;
-  margin: 0 auto;
-  
-}
-
-@media print {
-    .btn{
-        display: none;
-    }
- }
-</style>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<body style="width:800px;">
+    <?php
+        $filename = "Salary_$salary_month.xls";
+        header('Content-Type: application/vnd.ms-excel'); // Mime type
+        header('Content-Disposition: attachment;filename="'.$filename.'"'); // Tell the browser the file name
+        header('Cache-Control: max-age=0'); // No cache
+    ?>
 <?php
     $grand_total_emni = 0;
     foreach ($values as $key => $row) {
@@ -74,45 +62,36 @@
 
 ?>
 
-<div class="export-button">
-    <form action="<?php echo base_url();?>admin/payroll/Actual_salary_sheet_excel_bank" method="post">
-      <input type="hidden" name="salary_month" value="<?php echo $salary_month; ?>"></input>
-      <input type="hidden" name="sql" value="<?php echo implode(",",$emp_id); ?>"></input>
-      <input type="hidden" name="excel" value="1"></input>
-      <input type="hidden" name="status" value="<?php echo $status; ?>"></input>
-      <button type="submit" class="btn btn-primary" style="border: 0; cursor:pointer;" alt="XLS Export">XLS Export</button>
-    </form>
-</div>
+
 <?php $salary_month=date("M-Y",strtotime($salary_month)) ?>
 
-<div class="container">
-  <table style="width: 100%; margin-top: 50px;">
+     <table style="width: 100%; margin-top: 20px;">
     <tr height="85px">
       <td colspan="5" style="text-align:left;">
-        <div style="margin-top:12.8px;display: flex;justify-content: space-between;">
+        <div style="font-size:12px;margin-top:12.8px;display: flex;justify-content: space-between;">
           <div>Date : <?=date("Y M d")?></div>
           <div>Ref: MHL-D/REF/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
         </div>
-        <div style=" font-weight:bold; text-align:left;">To</div>
-        <div style=" text-align:left;">Manager</div>
-        <div style=" text-align:left;">Rupali Bank Ltd</div>
-        <div style=" text-align:left;">Adabor, Ring Road, Dhaka</div>
-        <div style=" text-align:left; font-weight:bold;">Subject: - Transfer <?php echo $salary_month; ?> salary from company account to employee's salary account.</div>
-        <div style=" text-align:left; font-weight:bold;">Dear concern,</div>
-        <div style=" text-align:left;">Greetings from Mysoft Heaven (BD) Ltd.</div>
-        <div style=" text-align:left;">We have been maintaining a current account in your bank (Account name: - Mysoft Heaven (BD) Ltd,<br>Account No: - 5991020000012). We would like to transfer =<?=$grand_total_emni?>/- (Taka : <?php echo numToWordsRec($grand_total_emni); ?> Only) from our company account to our employee's salary account. The list of employee's accounts where need to transfer the fund within today. </div>
+        <div style="font-size:12px; font-weight:bold; text-align:left;">To</div>
+        <div style="font-size:12px; text-align:left;">Manager</div>
+        <div style="font-size:12px; text-align:left;">Rupali Bank Ltd</div>
+        <div style="font-size:12px; text-align:left;">Adabor, Ring Road, Dhaka</div>
+        <div style="font-size:12px; text-align:left; font-weight:bold;">Subject: - Transfer <?php echo $salary_month; ?> salary from company account to employee's salary account.</div>
+        <div style="font-size:12px; text-align:left; font-weight:bold;">Dear concern,</div>
+        <div style="font-size:12px; text-align:left;">Greetings from Mysoft Heaven (BD) Ltd.</div>
+        <div style="font-size:12px; text-align:left;">We have been maintaining a current account in your bank (Account name: - Mysoft Heaven (BD) Ltd,<br>Account No: - 5991020000012). We would like to transfer =<?=$grand_total_emni?>/- (Taka : <?php echo numToWordsRec($grand_total_emni); ?> Only) from our company account to our employee's salary account. The list of employee's accounts where need to transfer the fund within today. </div>
         <br>
         <div style="text-align: center;text-decoration: underline;">Salary Of <?php echo $salary_month; ?></div>
       </td>
     </tr>
   </table>
-  <table border="1" width="100%" style="border-collapse: collapse;">
+  <table border="1" width="100%" style="border-collapse: collapse;font-size:12px;">
     <tr>
-      <th class="text-center">SL</th>
-      <th class="text-center">Employee Name</th>
-      <th class="text-center">Designation Name</th> 
-      <th class="text-center">Grand Net Salary</th>
-      <th class="text-center">Bank Account</th>
+      <th style="font-size:12px;" class="text-center">SL</th>
+      <th style="font-size:12px;" class="text-center">Employee Name</th>
+      <th style="font-size:12px;" class="text-center">Designation Name</th> 
+      <th style="font-size:12px;" class="text-center">Grand Net Salary</th>
+      <th style="font-size:12px;" class="text-center">Bank Account &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
     </tr>
   
     <?php
@@ -120,12 +99,12 @@
       foreach ($values as $key => $row) {
         $grand_total = $grand_total + $row->grand_net_salary + ($row->modify_salary) - $row->aba_deduct;
     ?>
-    <tr>
+    <tr >
       <td class="text-center"><?= ($key + 1) ?>.</td>
       <td class="text-center"><?= $row->first_name . ' ' . $row->last_name ?></td>
       <td class="text-center"><?= $row->designation_name ?></td>
       <td class="text-right"><?= ceil($row->grand_net_salary + ($row->modify_salary) - $row->aba_deduct) ?></td>
-      <td class="text-center"><?= $row->account_number ?></td>
+      <td class="text-center"><?php echo (string) $row->account_number ?></td>
     </tr>
     <?php } ?>
     
@@ -135,18 +114,21 @@
       <th class="text-center"></th>
     </tr>
   </table>
-  <table style="width: 100%;margin-bottom: 20px">
+  <table style="width: 100%;margin-bottom: 20px font-size:12px;">
     <tr>
       <td colspan="5" style="text-align:left;">
-        <div style="  text-align:left;">Therefore, please transfer the amount to the listed employee's account within today.</div>
+        <div style="font-size:12px;  text-align:left;">Therefore, please transfer the amount to the listed employee's account within today.</div>
         <br>
-        <div style=" font-weight:bold; text-align:left;">Regards</div>
+        <div style="font-size:12px; font-weight:bold; text-align:left;">Regards</div>
         <br>
         <br>
-        <div style=" font-weight:bold; text-align:left;">Managing Director</div>
-        <div style=" font-weight:bold; text-align:left;">Mysoft Heaven (BD) Ltd.</div>
+        <div style="font-size:12px; font-weight:bold; text-align:left;">Managing Director</div>
+        <div style="font-size:12px; font-weight:bold; text-align:left;">Mysoft Heaven (BD) Ltd.</div>
       </td>
     </tr>
   </table>
-</div>
-<?php exit() ?>
+	<br>
+	<br>
+	<br>
+</body>
+</html>

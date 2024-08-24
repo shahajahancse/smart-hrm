@@ -120,7 +120,7 @@
       foreach ($values as $key => $row) {
         $grand_total = $grand_total + $row->grand_net_salary + ($row->modify_salary) - $row->aba_deduct;
     ?>
-    <tr>
+    <tr >
       <td class="text-center"><?= ($key + 1) ?>.</td>
       <td class="text-center"><?= $row->first_name . ' ' . $row->last_name ?></td>
       <td class="text-center"><?= $row->designation_name ?></td>

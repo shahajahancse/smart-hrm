@@ -11,8 +11,6 @@
     <div class="container" align="center">
 
         <?php
-// dd($all_employees);
-
 $active_meal = 0;
 $inactive_meal  = 0;
 $total_emp_cost  = 0;
@@ -104,6 +102,9 @@ foreach ($all_employees as $key => $value) {
                 <th>Remarks</th>
 
                 <?php foreach ($emp_data['emp_data'] as $key => $row) { 
+                    if(!$row->meal_amount>0){
+                        continue;
+                    }
                    $lunch_package=lunch_package($row->date);
 
                     
@@ -168,9 +169,9 @@ foreach ($all_employees as $key => $value) {
                     <td>
                         ACTIVE MEAL
                     </td>
-                    <td>
+                    <!-- <td>
                         INACTIVE MEAL
-                    </td>
+                    </td> -->
                     <td>
                         TOTAL EMPLOYEE COST
                     </td>
@@ -186,9 +187,9 @@ foreach ($all_employees as $key => $value) {
                     <td>
                         <?php echo $active_meal; ?>
                     </td>
-                    <td>
-                        <?php echo $inactive_meal; ?>
-                    </td>
+                    <!-- <td>
+                        <?php //echo $inactive_meal; ?>
+                    </td> -->
                     <td>
                         <?php echo $total_emp_cost; ?>
                     </td>

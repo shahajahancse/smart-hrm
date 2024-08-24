@@ -200,7 +200,7 @@
         }
       }
     }
-function Actual_salary_sheet_excel_bank(s)
+function Actual_salary_sheet_excel_bank(s,bank)
     {
       // alert(csrf_token); return;
       var ajaxRequest;  // The variable that makes Ajax possible!
@@ -242,7 +242,7 @@ function Actual_salary_sheet_excel_bank(s)
       okyes=confirm('Are you sure you want to generate excel sheet?');
       if(okyes==false) return;*/
 
-       var data = "salary_month="+salary_month+"&status="+status+'&sql='+sql+"&excel="+s;
+       var data = "salary_month="+salary_month+"&status="+status+'&sql='+sql+"&excel="+s+"&bank="+bank;
   
       // console.log(data); return;
       url = base_url + "/Actual_salary_sheet_excel_bank";

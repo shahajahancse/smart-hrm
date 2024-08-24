@@ -36,7 +36,7 @@ th td{
         <select name="team_lead" id="team_lead" class="team_lead" onchange="changeTeamLead(<?= $e->user_id?>,this.value)">
           <option >Select Team Lead</option>
           <?php
-            $this->db->where_in('status', [0,1]);
+            
             $this->db->where('is_emp_lead', 2);
             $this->db->where_not_in('user_id',$e->user_id);
             $employ = $this->db->get('xin_employees')->result();

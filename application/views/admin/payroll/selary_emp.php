@@ -2,6 +2,7 @@
 
 $userid  = $session[ 'user_id' ];
 $lastmonthsalarys  = $this->Salary_model->getpassedmonthsalary($userid);
+//dd($lastmonthsalarys);
 if(count($lastmonthsalarys)>0) {
 
 
