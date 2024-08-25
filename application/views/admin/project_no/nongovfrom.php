@@ -77,37 +77,31 @@ input:checked+.slider:after {
 <div style="display: flex;flex-direction: column;gap: 21px;">
     <div class="row">
         <h5>Software Section</h5>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="inputBox">
-                <input required type="number" name="software_Budget" id="software_Budget" value=0 >
+                <input required type="number" name="software_Budget" id="software_Budget" value=0 onkeyup="setinstallmentdate()">
                 <strong>Software Budget<span style="color: red;">*</span></strong>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="inputBox">
-                <input required type="number" name="instalment" id="instalment" value=1 >
+                <input required type="number" name="instalment" id="instalment" value=1 onkeyup="setinstallmentdate()">
                 <strong>Instalment<span style="color: red;">*</span></strong>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="inputBox">
                 <input required type="date" value="<?= date('Y-m-d') ?>" name="start_date" id="start_date">
                 <strong>Start Date<span style="color: red;">*</span></strong>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="inputBox">
                 <input required="required" type="date" value="<?= date('Y-m-d') ?>" name="end_date" id="end_date"
-                    ">
+                    onchange="getinstallmentfrom()">
                 <strong>End Date<span style="color: red;">*</span></strong>
             </div>
         </div>
-        <!-- <div class="col-md-2">
-            <div class="inputBox">
-                <input required="required" type="date" value="<?= date('Y-m-d') ?>" name="first_installment_date" id="first_installment_date">
-                <strong>First Installment Date<span style="color: red;">*</span></strong>
-            </div>
-        </div> -->
     </div>
     <div class="row">
         <h5>Installment Section</h5>
@@ -136,42 +130,13 @@ input:checked+.slider:after {
         </div>
     </div>
     <div class="row">
-        <h5 style="float: left;margin-right: 10px;">Free Service</h5>
+        <h5 style="float: left;margin-right: 10px;">Service</h5>
         <label class="switch">
-            <input type="checkbox" onchange="free_serviceEn(this)" name="free_serviceEnabled">
+            <input type="checkbox" onchange="serviceEn(this)" name="serviceEnabled">
             <span class="slider"></span>
         </label>
         <div class="col-md-12" >
-            <div class="row" id="free_service_section" style="padding: 6px;display: none;">
-                <div class="col-md-4">
-                    <div class="inputBox">
-                        <div class="inputBox">
-                            <input type="date" value="<?= date('Y-m-d') ?>" min="<?= date('Y-m-01') ?>" name="free_service_start_date"
-                                id="free_service_start_date">
-                            <strong>Free Service Start Date<span style="color: red;">*</span></strong>
-                        </div> 
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="inputBox">
-                        <div class="inputBox">
-                            <input type="date" value="<?= date('Y-m-d') ?>" name="free_service_end_date"
-                                id="free_service_end_date">
-                            <strong>Free Service End Date<span style="color: red;">*</span></strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row" style="display: none;">
-        <h5 style="float: left;margin-right: 10px;">Paid Service</h5>
-        <label class="switch">
-            <input type="checkbox" onchange="serviceEnabled(this)" name="serviceEnabled">
-            <span class="slider"></span>
-        </label>
-        <div class="col-md-12">
-            <div class="row" id="service_section" style="padding: 6px;">
+            <div class="row" id="service_section" style="padding: 6px;display: none;">
                 <div class="col-md-3">
                     <div class="inputBox">
                         <select name="Service_type" id="Service_type" class="col-md-12">
@@ -194,29 +159,12 @@ input:checked+.slider:after {
                 <div class="col-md-3">
                     <div class="inputBox">
                         <div class="inputBox">
-                            <input type="date" value="<?= date('Y-m-d') ?>" name="Service_start_Date"
-                                id="Service_Increment_Date">
-                            <strong>Service Start Date<span style="color: red;">*</span></strong>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="inputBox">
-                        <div class="inputBox">
                             <input type="date" value="<?= date('Y-m-d') ?>" name="Service_Increment_Date"
                                 id="Service_Increment_Date">
                             <strong>Next Increment Date<span style="color: red;">*</span></strong>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <h5>Agreement File </h5>
-        <div class="col-md-12">
-            <div class="inputBox">
-                <input type="file" style="height: 37px;" name="agreement_file">
             </div>
         </div>
     </div>
@@ -238,23 +186,25 @@ input:checked+.slider:after {
     setinstallmentdate()
 </script>
 <script>
-function free_serviceEn(element) {
+function serviceEn(element) {
     if (element.checked) {
         console.log("Checkbox is checked");
-        $('#free_service_section').animate({
+        $('#service_section').animate({
             opacity: "show",
             height: "show",
             display: "inline-block"
         });
-        $('#free_service_start_date').attr('required', true);
-        $('#free_service_end_date').attr('required', true);
+        $('#Service_type').attr('required', true);
+        $('#Service_amount').attr('required', true);
+        $('#Service_Increment_Date').attr('required', true);
     } else {
-        $('#free_service_section').animate({
+        $('#service_section').animate({
             opacity: "hide",
             height: "hide"
         });
-        $('#free_service_start_date').removeAttr('required');
-        $('#free_service_end_date').removeAttr('required');
+        $('#Service_type').removeAttr('required');
+        $('#Service_amount').removeAttr('required');
+        $('#Service_Increment_Date').removeAttr('required');
     }
 }
 </script>

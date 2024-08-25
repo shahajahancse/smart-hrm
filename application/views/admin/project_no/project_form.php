@@ -180,7 +180,8 @@
 .swal2-container {
     z-index: 11111;
 }
-
+</style>
+<style>
 #loading {
     visibility: hidden;
     position: fixed;
@@ -286,7 +287,7 @@
                 <li class="col-md-6" style="padding: 0;"><a style="text-align: center;" onclick="getFromClient(1)"
                         data-toggle="tab" href="#gov">Government Project</a></li>
                 <li class="col-md-6" style="padding: 0;"><a style="text-align: center;" onclick="getFromClient(2)"
-                        data-toggle="tab" href="#nongov">Private Project</a></li>
+                        data-toggle="tab" href="#nongov">Non Government Project</a></li>
             </ul>
             <div class="tab-content">
                 <div id="gov" class="box tab-pane fade" style="overflow: hidden;padding: 0px 6px 12px 6px;">
@@ -388,7 +389,6 @@ $('#add_project_form').submit(function(event) {
     });
 });
 </script>
-
 
 <script>
 function setinstallmentdate() {
