@@ -200,7 +200,7 @@ if($theme[0]->animation_style == '') {
         transform: skewX(-4deg);
     }
 
-    37.5%, 
+    37.5%,
         62.5% {
         transform: skewX(8deg);
     }
@@ -448,9 +448,9 @@ input:checked+.slider:after {
                 <form id="salary_review_form">
                     <input type="hidden" name="user_id" id="salary_review_user_id">
                     <div class="row">
-                        
+
                         <div class="col-md-12">
-                            <h4>Employee Name: <span id="salary_review_emp_name"></span></h4>  
+                            <h4>Employee Name: <span id="salary_review_emp_name"></span></h4>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group col-md-6">
@@ -746,7 +746,7 @@ p {
                                 $this->db->from('xin_employees');
                                 $this->db->where('salary_review_is',1);
                                 $this->db->where('salary_review_date between "'.date('Y-m-d', strtotime('-1 month')).'" and "'.date('Y-m-d', strtotime('+2 month')).'"');
-                                $review_list= $this->db->get()->result(); 
+                                $review_list= $this->db->get()->result();
                                 foreach( $review_list as $row){?>
 
                                 <li class="lir notli">
@@ -773,7 +773,7 @@ p {
                                     </a>
                                 </li>
                                 <?php }
-                                
+
                                 ?>
 
 
@@ -1187,11 +1187,13 @@ th {
                                             <th style="padding: 3px 8px!important;">Status</th>
                                             <td style="padding: 3px 8px!important;">
                                                 <select class="form-control" id="status_m" name="status"
-                                                    <?=$user[0]->user_role_id==3 ? $user[0]->is_emp_lead != 2 ? 'disabled' : '' : ''?>   
+                                                    <?=$user[0]->user_role_id==3 ? $user[0]->is_emp_lead != 2 ? 'disabled' : '' : ''?>
                                                      >
                                                     <option value="1">Pending</option>
                                                     <option value="4">First Level Approval</option>
-                                                    <option value="2">Approved</option>
+                                                    <?php if (in_array($user[0]->user_role_id, array(1,2))) { ?>
+                                                        <option value="2">Approved</option>
+                                                    <?php } ?>
                                                     <option value="3">Rejected</option>
                                                 </select>
                                             </td>
@@ -1528,7 +1530,7 @@ $(document).ready(function() {
         } else {
             $("#notify_incre_prob").attr('style', 'border: 1px solid #ccd6e6 !important');
         }
-        // end validation 
+        // end validation
 
         // ajax request on form submit
         var emp_id = $('#hidden_emp_id').val();
@@ -1670,7 +1672,6 @@ function modal_leave_data_ajax(id) {
         type: 'get',
         url: '<?= base_url("admin/timesheet/modal_leave_data_ajax/") ?>' + id,
         success: function(response) {
-            console.log(response);
             if (response) {
                 var result = JSON.parse(response).result;
 
@@ -1764,7 +1765,7 @@ function salary_review_modal_a(id) {
 
 
     })
-    
+
 }
 </script>
 <script>

@@ -281,6 +281,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                                 </select>
                                                             </div>
                                                         </div>
+                                                        <?php //dd($all_user_roles); ?>
 
                                                         <div class="col-md-4">
                                                             <div class="form-group">
@@ -293,19 +294,25 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                                     data-placeholder="<?php echo $this->lang->line('xin_employee_role');?>">
                                                                     <option value=""></option>
                                                                     <?php foreach($all_user_roles as $role) {?>
-                                                                    <?php if($user_info[0]->user_role_id==1){?>
-                                                                    <option value="<?php echo $role->role_id?>"
-                                                                        <?php if($user_role_id==$role->role_id):?>
-                                                                        selected <?php endif;?>>
-                                                                        <?php echo $role->role_name?></option>
-                                                                    <?php } else {?>
-                                                                    <?php if($role->role_id!=1){?>
-                                                                    <option value="<?php echo $role->role_id?>"
-                                                                        <?php if($user_role_id==$role->role_id):?>
-                                                                        selected <?php endif;?>>
-                                                                        <?php echo $role->role_name?></option>
-                                                                    <?php } ?>
-                                                                    <?php } ?>
+                                                                        <?php if($user_info[0]->user_role_id == 1){ ?>
+                                                                        <option value="<?php echo $role->role_id?>"
+                                                                            <?php if($user_role_id==$role->role_id):?>
+                                                                            selected <?php endif;?>>
+                                                                            <?php echo $role->role_name?></option>
+                                                                        <?php } else if ($user_info[0]->user_role_id == 2) { ?>
+                                                                            <?php if($role->role_id!=1){?>
+                                                                            <option value="<?php echo $role->role_id?>"
+                                                                                <?php if($user_role_id==$role->role_id):?>
+                                                                                selected <?php endif;?>>
+                                                                                <?php echo $role->role_name?></option>
+                                                                            <?php } ?>
+                                                                        <?php } else { ?>
+                                                                            <?php if(!in_array($role->role_id, array(1,2,6,7))){ ?>
+                                                                            <option value="<?php echo $role->role_id?>"
+                                                                                <?php if($user_role_id==$role->role_id):?>
+                                                                                selected <?php endif;?>>
+                                                                                <?php echo $role->role_name?></option>
+                                                                        <?php } } ?>
                                                                     <?php } ?>
                                                                 </select>
                                                             </div>
@@ -546,7 +553,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class="row">  
+                                                    <!-- <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
                                <input type="hidden" value="0" name="view_companies_id[]" />
@@ -1355,7 +1362,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                           
+
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <label for="">Passing Year</label>
@@ -1364,7 +1371,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                                 </div>
                                                                 <div class="col-md-6">
                                                                     <label for="">Duration</label>
-                                                                    <input class="form-control" 
+                                                                    <input class="form-control"
                                                                         name="duration" type="text">
                                                                 </div>
                                                             </div>
@@ -3016,9 +3023,9 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                 <div class="form-group">
                                                     <label for="email" class="control-label">Remarks</label>
                                                     <textarea class="form-control" name="remarks" id="remarks"
-                                                        placeholder="Remarks"><?= isset($remark) ? $remark : '' ?></textarea> 
+                                                        placeholder="Remarks"><?= isset($remark) ? $remark : '' ?></textarea>
                                                 </div>
-                                                
+
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
@@ -3057,11 +3064,11 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                             <option value="1" <?= isset($salary_review_is) && $salary_review_is == 1 ? 'selected' : ''?>>Yes</option>
                                                             <option value="0" <?= isset($salary_review_is) && $salary_review_is == 0 ? 'selected' : ''?>>No</option>
                                                         </select>
-                                                  
+
                                                        <input style="width: 199px;" type="date" value="<?= isset($salary_review_date) ? $salary_review_date : ''?>" name="salary_review_date" id="salary_review_date">
                                                     </div>
                                                 </div>
-                                                
+
                                             </div>
                                             <div class="row">
                                                     <div class="col-md-12">
@@ -3077,7 +3084,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                             function getSalaryReview(){
                                                 var salary_review_is = $('#salary_review_is').val();
                                                 if (salary_review_is==1) {
-                                                    $('#salary_review_date').show(); 
+                                                    $('#salary_review_date').show();
                                                 }else{
                                                     $('#salary_review_date').hide();
                                                 }
@@ -3112,11 +3119,11 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                         <?php $data = $this->db->select('user_id, first_name, last_name')
                                                                 ->where_in('status', [0,1])
                                                                 ->where('lead_user_id =', 0)
-                                                                ->where('is_emp_lead =', 2) 
+                                                                ->where('is_emp_lead =', 2)
                                                                 ->order_by('user_id')
                                                                 ->get('xin_employees')
                                                                 ->result();
-                                                            foreach($data as $row){  
+                                                            foreach($data as $row){
                                                         ?>
                                                         <option value="<?php echo $row->user_id?>" <?php echo $row->user_id == $lead_user_id ? 'selected':''?>><?php echo $row->first_name.''.$row->last_name?></option>
                                                         <?php }?>
@@ -3208,16 +3215,16 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($user)){
 								$full_name = $user[0]->first_name.' '.$user[0]->last_name;
 							} else {
-								$full_name = '--';	
+								$full_name = '--';
 							}
 							// get award type
 							$award_type = $this->Awards_model->read_award_type_information($r->award_type_id);
 							if(!is_null($award_type)){
 								$award_type = $award_type[0]->award_type;
 							} else {
-								$award_type = '--';	
+								$award_type = '--';
 							}
-							
+
 							$d = explode('-',$r->award_month_year);
 							$get_month = date('F', mktime(0, 0, 0, $d[1], 10));
 							$award_date = $get_month.', '.$d[0];
@@ -3226,15 +3233,15 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 								$currency = $this->Xin_model->currency_sign(0);
 							} else {
 								$currency = $this->Xin_model->currency_sign($r->cash_price);
-							}		
+							}
 							// get company
 							$company = $this->Xin_model->read_company_info($r->company_id);
 							if(!is_null($company)){
 								$comp_name = $company[0]->name;
 							} else {
-								$comp_name = '--';	
+								$comp_name = '--';
 							}
-							
+
 							if(in_array('232',$role_resources_ids)) { //view
 								$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-xfield_id="'. $r->award_id . '" data-field_type="awards"><span class="fa fa-eye"></span></button></span>';
 							} else {
@@ -3293,14 +3300,14 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($company)){
 								$comp_name = $company[0]->name;
 							} else {
-								$comp_name = '--';	
+								$comp_name = '--';
 							}
 							// status
 							//if($r->status==0): $status = $this->lang->line('xin_pending');
 							//elseif($r->status==1): $status = $this->lang->line('xin_accepted'); else: $status = $this->lang->line('xin_rejected'); endif;
 							if($r->status==0): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_pending').'</span>';
 								elseif($r->status==1): $status = '<span class="badge bg-green">'.$this->lang->line('xin_accepted').'</span>';else: $status = '<span class="badge bg-red">'.$this->lang->line('xin_rejected'); endif;
-							
+
 							if(in_array('235',$role_resources_ids)) { //view
 								$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-xfield_id="'. $r->travel_id . '" data-field_type="travel"><span class="fa fa-eye"></span></button></span>';
 							} else {
@@ -3359,7 +3366,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($type)){
 								$itype = $type[0]->type;
 							} else {
-								$itype = '--';	
+								$itype = '--';
 							}
 							// get trainer
 							$trainer = $this->Trainers_model->read_trainer_information($r->trainer_id);
@@ -3367,7 +3374,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($trainer)){
 								$trainer_name = $trainer[0]->first_name.' '.$trainer[0]->last_name;
 							} else {
-								$trainer_name = '--';	
+								$trainer_name = '--';
 							}
 							// get start date
 							$start_date = $this->Xin_model->set_date_format($r->start_date);
@@ -3404,7 +3411,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($company)){
 							$comp_name = $company[0]->name;
 							} else {
-							  $comp_name = '--';	
+							  $comp_name = '--';
 							}
 							if(in_array('344',$role_resources_ids)) { //view
 								$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/training/details/'.$r->training_id.'" target="_blank"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
@@ -3455,10 +3462,10 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                         </thead>
                                                         <tbody>
                                                             <?php foreach($ticket->result() as $r) { ?>
-                                                            <?php		
+                                                            <?php
 							// priority
 							if($r->ticket_priority==1): $priority = $this->lang->line('xin_low'); elseif($r->ticket_priority==2): $priority = $this->lang->line('xin_medium'); elseif($r->ticket_priority==3): $priority = $this->lang->line('xin_high'); elseif($r->ticket_priority==4): $priority = $this->lang->line('xin_critical');  endif;
-							 
+
 							 // status
 							 //if($r->ticket_status==1): $status = $this->lang->line('xin_open'); elseif($r->ticket_status==2): $status = $this->lang->line('xin_closed'); endif;
 							 if($r->ticket_status==1): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_open').'</span>';
@@ -3468,10 +3475,10 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							 $_date = explode(' ',$r->created_at);
 							 $edate = $this->Xin_model->set_date_format($_date[0]);
 							 $_created_at = $edate. ' '. $created_at;
-							
-							
+
+
 								$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/tickets/details/'.$r->ticket_id.'" target="_blank"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
-							
+
 							$combhr = $view;
 							$iticket_code = $r->ticket_code.'<br><small class="text-muted"><i>'.$status.'<i></i></i></small>';
 							?>
@@ -3523,27 +3530,27 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($department)){
 								$department_name = $department[0]->department_name;
 							} else {
-								$department_name = '--';	
+								$department_name = '--';
 							}
 							// get location by id
 							$location = $this->Location_model->read_location_information($r->transfer_location);
 							if(!is_null($location)){
 								$location_name = $location[0]->location_name;
 							} else {
-								$location_name = '--';	
+								$location_name = '--';
 							}
 							// get status
 							if($r->status==0): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_pending').'</span>';
 							elseif($r->status==1): $status = '<span class="badge bg-green">'.$this->lang->line('xin_accepted').'</span>';else: $status = '<span class="badge bg-red">'.$this->lang->line('xin_rejected').'</span>'; endif;
-							
+
 							// get company
 							$company = $this->Xin_model->read_company_info($r->company_id);
 							if(!is_null($company)){
 								$comp_name = $company[0]->name;
 							} else {
-								$comp_name = '--';	
+								$comp_name = '--';
 							}
-							
+
 							if(in_array('233',$role_resources_ids)) { //view
 								$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-xfield_id="'. $r->transfer_id . '" data-field_type="transfers"><span class="fa fa-eye"></span></button></span>';
 							} else {
@@ -3596,7 +3603,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($company)){
 								$comp_name = $company[0]->name;
 							} else {
-								$comp_name = '--';	
+								$comp_name = '--';
 							}
 							// get promotion date
 							$promotion_date = $this->Xin_model->set_date_format($r->promotion_date);
@@ -3657,9 +3664,9 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($user)){
 								$complaint_from = $user[0]->first_name.' '.$user[0]->last_name;
 							} else {
-								$complaint_from = '--';	
+								$complaint_from = '--';
 							}
-							
+
 							if($r->complaint_against == '') {
 								$ol = '--';
 							} else {
@@ -3671,13 +3678,13 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 									} else {
 										$ol .= '';
 									}
-									
+
 								 }
 								 $ol .= '</ol>';
 							}
 							// get complaint date
 							$complaint_date = $this->Xin_model->set_date_format($r->complaint_date);
-						
+
 							if(in_array('237',$role_resources_ids)) { //view
 								$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-xfield_id="'. $r->complaint_id . '" data-field_type="complaints"><span class="fa fa-eye"></span></button></span>';
 							} else {
@@ -3688,7 +3695,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($company)){
 								$comp_name = $company[0]->name;
 							} else {
-								$comp_name = '--';	
+								$comp_name = '--';
 							}
 							// get status
 							if($r->status==0): $status = '<span class="badge bg-red">'.$this->lang->line('xin_pending').'</span>';
@@ -3744,7 +3751,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($user)){
 								$warning_to = $user[0]->first_name.' '.$user[0]->last_name;
 							} else {
-								$warning_to = '--';	
+								$warning_to = '--';
 							}
 							// get user > warning by
 							$user_by = $this->Xin_model->read_user_info($r->warning_by);
@@ -3752,11 +3759,11 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($user_by)){
 								$warning_by = $user_by[0]->first_name.' '.$user_by[0]->last_name;
 							} else {
-								$warning_by = '--';	
+								$warning_by = '--';
 							}
 							// get warning date
 							$warning_date = $this->Xin_model->set_date_format($r->warning_date);
-									
+
 							// get status
 							if($r->status==0): $status = $this->lang->line('xin_pending');
 							elseif($r->status==1): $status = $this->lang->line('xin_accepted'); else: $status = $this->lang->line('xin_rejected'); endif;
@@ -3765,16 +3772,16 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($warning_type)){
 								$wtype = $warning_type[0]->type;
 							} else {
-								$wtype = '--';	
+								$wtype = '--';
 							}
 							// get company
 							$company = $this->Xin_model->read_company_info($r->company_id);
 							if(!is_null($company)){
 								$comp_name = $company[0]->name;
 							} else {
-								$comp_name = '--';	
+								$comp_name = '--';
 							}
-							
+
 							if(in_array('238',$role_resources_ids)) { //view
 								$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-xfield_id="'. $r->warning_id . '" data-field_type="warning"><span class="fa fa-eye"></span></button></span>';
 							} else {
@@ -3782,9 +3789,9 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							}
 							if($r->status==0): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_pending').'</span>';
 							elseif($r->status==1): $status = '<span class="badge bg-green">'.$this->lang->line('xin_accepted').'</span>';else: $status = '<span class="badge bg-red">'.$this->lang->line('xin_rejected').'</span>'; endif;
-							
+
 							$combhr = $view;
-							
+
 							$iwarning_to = $warning_to.'<br><small class="text-muted"><i>'.$wtype.'<i></i></i></small><br><small class="text-muted"><i>'.$status.'<i></i></i></small>';
 							?>
                                                             <tr>
@@ -3863,11 +3870,11 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($user)){
 								$full_name = $user[0]->first_name.' '.$user[0]->last_name;
 							} else {
-								$full_name = '--';	
+								$full_name = '--';
 							}
 							// get date
 							$pdate = '<i class="fa fa-calendar position-left"></i> '.$this->Xin_model->set_date_format($r->end_date);
-							
+
 							//project_progress
 							if($r->project_progress <= 20) {
 								$progress_class = 'progress-danger';
@@ -3878,10 +3885,10 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							} else {
 								$progress_class = 'progress-success';
 							}
-							
+
 							// progress
 							$pbar = '<p class="m-b-0-5">'.$this->lang->line('xin_completed').' <span class="pull-xs-right">'.$r->project_progress.'%</span></p><progress class="progress '.$progress_class.' progress-sm" value="'.$r->project_progress.'" max="100">'.$r->project_progress.'%</progress>';
-									
+
 							//status
 							if($r->status == 0) {
 								$status = $this->lang->line('xin_not_started');
@@ -3892,7 +3899,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							} else {
 								$status = $this->lang->line('xin_deffered');
 							}
-							
+
 							// priority
 							if($r->priority == 1) {
 								$priority = '<span class="label label-danger">'.$this->lang->line('xin_highest').'</span>';
@@ -3903,7 +3910,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							} else {
 								$priority = '<span class="label label-success">'.$this->lang->line('xin_low').'</span>';
 							}
-							
+
 							//assigned user
 							if($r->assigned_to == '') {
 								$ol = $this->lang->line('xin_not_assigned');
@@ -3912,12 +3919,12 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 								foreach(explode(',',$r->assigned_to) as $desig_id) {
 									$assigned_to = $this->Xin_model->read_user_info($desig_id);
 									if(!is_null($assigned_to)){
-										
+
 									  $assigned_name = $assigned_to[0]->first_name.' '.$assigned_to[0]->last_name;
 									 if($assigned_to[0]->profile_picture!='' && $assigned_to[0]->profile_picture!='no file') {
 										$ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.base_url().'uploads/profile/'.$assigned_to[0]->profile_picture.'" class="user-image-hr" alt=""></span></a>';
 										} else {
-										if($assigned_to[0]->gender=='Male') { 
+										if($assigned_to[0]->gender=='Male') {
 											$de_file = base_url().'uploads/profile/default_male.jpg';
 										 } else {
 											$de_file = base_url().'uploads/profile/default_female.jpg';
@@ -3931,7 +3938,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 								 }
 								 $ol .= '';
 							}
-							
+
 							$project_summary = '<div class="text-semibold"><a href="'.site_url().'admin/project/detail/'.$r->project_id . '" target="_blank">'.$r->title.'</a></div><div class="text-muted">'.$r->summary.'</div>';
 							?>
                                                             <tr>
@@ -3978,7 +3985,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                             <?php foreach($task->result() as $r) { ?>
                                                             <?php
 							$aim = explode(',',$r->assigned_to);
-				  
+
 							if($r->assigned_to == '' || $r->assigned_to == 'None') {
 								$ol = 'None';
 							} else {
@@ -3987,12 +3994,12 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 									//$user = $this->Xin_model->read_user_info($uid);
 									$assigned_to = $this->Xin_model->read_user_info($uid);
 									if(!is_null($assigned_to)){
-										
+
 									$assigned_name = $assigned_to[0]->first_name.' '.$assigned_to[0]->last_name;
 									 if($assigned_to[0]->profile_picture!='' && $assigned_to[0]->profile_picture!='no file') {
 										$ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.base_url().'uploads/profile/'.$assigned_to[0]->profile_picture.'" class="user-image-hr" alt=""></span></a>';
 										} else {
-										if($assigned_to[0]->gender=='Male') { 
+										if($assigned_to[0]->gender=='Male') {
 											$de_file = base_url().'uploads/profile/default_male.jpg';
 										 } else {
 											$de_file = base_url().'uploads/profile/default_female.jpg';
@@ -4002,7 +4009,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 									}
 								 }
 							 $ol .= '</ol>';
-							}							
+							}
 							// task project
 							$prj_task = $this->Project_model->read_project_information($r->project_id);
 							if(!is_null($prj_task)){
@@ -4010,9 +4017,9 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							} else {
 								$prj_name = '--';
 							}
-							
+
 							/// set task progress
-							if($r->task_progress=='' || $r->task_progress==0): $progress = 0; else: $progress = $r->task_progress; endif;				
+							if($r->task_progress=='' || $r->task_progress==0): $progress = 0; else: $progress = $r->task_progress; endif;
 							// task progress
 							if($r->task_progress <= 20) {
 							$progress_class = 'progress-danger';
@@ -4023,10 +4030,10 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							} else {
 							$progress_class = 'progress-success';
 							}
-							
+
 							$progress_bar = '<p class="m-b-0-5">'.$this->lang->line('xin_completed').' <span class="pull-xs-right">'.$r->task_progress.'%</span></p><progress class="progress '.$progress_class.' progress-sm" value="'.$r->task_progress.'" max="100">'.$r->task_progress.'%</progress>';
 							// task end date
-							$tdate = $this->Xin_model->set_date_format($r->end_date);							
+							$tdate = $this->Xin_model->set_date_format($r->end_date);
 							// task status
 							if($r->task_status == 0) {
 								$status = $this->lang->line('xin_not_started');
@@ -4101,11 +4108,11 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							// user full name
 							if(!is_null($user)){
 							$full_name = $user[0]->first_name.' '.$user[0]->last_name;
-							$emp_link = $user[0]->employee_id;			  		  
+							$emp_link = $user[0]->employee_id;
 							$month_payment = date("F, Y", strtotime($r->salary_month));
-							
+
 							$p_amount = $this->Xin_model->currency_sign($r->net_salary);
-							
+
 							// get date > created at > and format
 							$created_at = $this->Xin_model->set_date_format($r->created_at);
 							// get designation
@@ -4113,14 +4120,14 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($designation)){
 								$designation_name = $designation[0]->designation_name;
 							} else {
-								$designation_name = '--';	
+								$designation_name = '--';
 							}
 							// department
 							$department = $this->Department_model->read_department_information($user[0]->department_id);
 							if(!is_null($department)){
 							$department_name = $department[0]->department_name;
 							} else {
-							$department_name = '--';	
+							$department_name = '--';
 							}
 							$department_designation = $designation_name.' ('.$department_name.')';
 							// get company
@@ -4128,17 +4135,17 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 							if(!is_null($company)){
 								$comp_name = $company[0]->name;
 							} else {
-								$comp_name = '--';	
+								$comp_name = '--';
 							}
 							// bank account
 							$bank_account = $this->Employees_model->get_employee_bank_account_last($user[0]->user_id);
 							if(!is_null($bank_account)){
 								$account_number = $bank_account[0]->account_number;
 							} else {
-								$account_number = '--';	
+								$account_number = '--';
 							}
 							$payslip = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><a href="'.site_url().'admin/payroll/payslip/id/'.$r->payslip_key.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_download').'"><a href="'.site_url().'admin/payroll/pdf_create/p/'.$r->payslip_key.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-download"></span></button></a></span>';
-							
+
 						$ifull_name = nl2br ($full_name."\r\n <small class='text-muted'><i>".$this->lang->line('xin_employees_id').': '.$emp_link."<i></i></i></small>\r\n <small class='text-muted'><i>".$department_designation.'<i></i></i></small>');
 							?>
                                                     <tr>

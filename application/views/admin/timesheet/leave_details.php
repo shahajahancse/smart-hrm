@@ -61,18 +61,18 @@ if (isset($success)) {
                       </tr>
                       <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_leave_type');?></th>
-                        <td class="text-right"> 
+                        <td class="text-right">
                           <select  id="leave_type" name="leave_type" data-plugin="select_hrm" data-placeholder="
                             <?php echo $this->lang->line('xin_leave_type');?>">
-                            <option value="<?= $leave_type_id?> "><?php echo $type;?></option> 
+                            <option value="<?= $leave_type_id?> "><?php echo $type;?></option>
                              <?php $leaves = leave_cal($employee_id);?>
                               <?php foreach($leaves['leaves'] as $key => $row) {  ?>
                                <option value="<?php echo $row['id'];?>"><?php echo $row['leave_name'] .' ('.$row['qty'].' '.$this->lang->line('xin_remaining').')';?></option>
-                                <?php } ?> 
+                                <?php } ?>
                           </select>
                         </td>
                       </tr>
-                     
+
                       <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_applied_on');?></th>
                         <td class="text-right"><?php echo $this->Xin_model->set_date_format($created_at);?></td>
@@ -112,7 +112,7 @@ if (isset($success)) {
                         <a href="<?= base_url('/').$leave_attachment ?>" download><?php echo $this->lang->line('xin_download');?></a>
                         <a href="<?= base_url('/').$leave_attachment ?>" > View </a>
                         <?php else:?>
-                        
+
                         <?php endif;?></td>
                       </tr>
                       <tr>
@@ -143,7 +143,8 @@ if (isset($success)) {
               <h3 class="box-title"> <?php echo $this->lang->line('xin_update_status');?> </h3>
             </div>
             <div class="box-body">
-             
+              <?php //dd($user[0]->user_role_id); ?>
+
                 <div class="row">
                   <div class="col-md-12">
                     <?php  if($user[0]->user_role_id == 1 || $user[0]->user_role_id == 2 || $user[0]->user_role_id == 4) {?>
@@ -152,7 +153,9 @@ if (isset($success)) {
                       <select class="form-control" name="status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
                         <option value="1" <?php if($status=='1'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_pending');?></option>
                         <option value="4" <?php if($status=='4'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_role_first_level_approval');?></option>
+                        <?php if ($user[0]->user_role_id != 4) { ?>
                         <option value="2" <?php if($status=='2'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_approved');?></option>
+                        <?php } ?>
                         <option value="3" <?php if($status=='3'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_rejected');?></option>
                       </select>
                     </div>
@@ -204,19 +207,19 @@ if (isset($success)) {
                   <table class="table table-striped m-md-b-0">
                     <tbody>
                       <?php $show_last_leave = $this->Timesheet_model->employee_show_last_leave($employee_id,$leave_id); ?>
-                      <?php foreach($show_last_leave as $last_leave) { 
+                      <?php foreach($show_last_leave as $last_leave) {
 
                 					// get leave types
                 					$type = $this->Timesheet_model->read_leave_type_information($last_leave->leave_type_id);
                 					if(!is_null($type)){
                 						$type_name = $type[0]->type_name;
                 					} else {
-                						$type_name = '--';	
+                						$type_name = '--';
                 					}
                 					$datetime1 = new DateTime($last_leave->from_date);
                 					$datetime2 = new DateTime($last_leave->to_date);
                 					$interval = $datetime1->diff($datetime2);
-                					
+
                 					if(strtotime($last_leave->from_date) == strtotime($last_leave->to_date)){
                 						$last_leave_no_of_days =1;
                 					} else {
@@ -227,7 +230,7 @@ if (isset($success)) {
                 					} else {
                 						$last_leave_day_info = $last_leave_no_of_days;
                 					}
-                				?>            
+                				?>
                       <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_leave_type');?></th>
                         <td class="text-right"><?php echo $type_name;?></td>
@@ -239,7 +242,7 @@ if (isset($success)) {
                       <tr>
                         <th scope="row"><?php echo $this->lang->line('xin_hrsale_total_days');?></th>
                         <td class="text-right"><?php echo $last_leave_day_info;?></td>
-                      </tr>                
+                      </tr>
                 <?php }?>
                 </tbody>
                   </table>
@@ -274,7 +277,7 @@ if (isset($success)) {
                         ?>
                                 <?php
                           $edays_per_year = $type->days_per_year;
-                          
+
                           if($count_l == 0){
                             $progress_class = '';
                             $count_data = 0;
@@ -321,8 +324,8 @@ if (isset($success)) {
     var startDate = new Date(document.getElementById('start_date').value);
     var endDate = new Date(document.getElementById('end_date').value);
     var checkpoint = document.getElementById('leave_half_day');
-    
-  
+
+
 
     // Calculate the time difference in milliseconds
     var timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
@@ -335,7 +338,7 @@ if (isset($success)) {
     if (days+1 > 1) {
       checkpoint.setAttribute('disabled', 'disabled');
     } else {
-      checkpoint.removeAttribute('disabled');      
+      checkpoint.removeAttribute('disabled');
     }
 
   }

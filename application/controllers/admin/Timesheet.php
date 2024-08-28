@@ -17,7 +17,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Timesheet extends MY_Controller {
-	
+
 	 public function __construct() {
         parent::__construct();
 		//load the model
@@ -35,7 +35,7 @@ class Timesheet extends MY_Controller {
 		$this->load->model('Salary_model');
 		// $this->load->model('Job_card_model');
 	}
-	
+
 	/*Function to set JSON output*/
 	public function output($Return=array()){
 		/*Set response header*/
@@ -49,7 +49,7 @@ class Timesheet extends MY_Controller {
 	public function attn_file_upload()
     {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 
@@ -118,7 +118,7 @@ class Timesheet extends MY_Controller {
 		$query = $this->db->get('xin_att_file_upload');
 		if($query->num_rows() == 0){
 			echo "Please upload attendance file.";
-			exit;	
+			exit;
 		}
 
 		$rawfile_name = $query->row()->upload_file;
@@ -170,7 +170,7 @@ class Timesheet extends MY_Controller {
 	 public function attendance()
      {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('dashboard_attendance').' | '.$this->Xin_model->site_title();
@@ -185,17 +185,17 @@ class Timesheet extends MY_Controller {
 			$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
 				redirect('admin/dashboard/');
-			}	
+			}
 		} else {
 			redirect('admin/dashboard');
-		}	  
+		}
      }
-	 
+
 	 // date wise date_wise_attendance > timesheet
 	 public function date_wise_attendance()
      {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title']             = $this->lang->line('left_date_wise_attendance').' | '.$this->Xin_model->site_title();
@@ -205,7 +205,7 @@ class Timesheet extends MY_Controller {
 		$data['path_url']          = 'date_wise_attendance';
 		$role_resources_ids        = $this->Xin_model->user_role_resource();
 		if(in_array('29',$role_resources_ids)) {
-			if(!empty($session)){ 
+			if(!empty($session)){
 			$data['subview'] = $this->load->view("admin/timesheet/date_wise", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -213,25 +213,25 @@ class Timesheet extends MY_Controller {
 			}
 		} else {
 			redirect('admin/dashboard');
-		}  
+		}
      }
-	 
+
 	 // update_attendance > timesheet
 	 public function update_attendance()
      {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('left_update_attendance').' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('left_update_attendance');
-		$data['path_url'] = 'update_attendance';		
+		$data['path_url'] = 'update_attendance';
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('30',$role_resources_ids)) {
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/timesheet/update_attendance", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -239,22 +239,22 @@ class Timesheet extends MY_Controller {
 			}
 		} else {
 			redirect('admin/dashboard');
-		}	  
+		}
      }
-	 
+
 	 // import > timesheet
 	 public function import() {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('left_import_attendance').' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('left_import_attendance');
-		$data['path_url'] = 'import_attendance';		
+		$data['path_url'] = 'import_attendance';
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('31',$role_resources_ids)) {
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/timesheet/attendance_import", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -262,14 +262,14 @@ class Timesheet extends MY_Controller {
 			}
 		} else {
 			redirect('admin/dashboard');
-		}		  
+		}
      }
 
 
 	 // index > timesheet
 	 public function index() {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$month_year = $this->input->post('month_year');
@@ -278,13 +278,13 @@ class Timesheet extends MY_Controller {
 		$data['title'] = $this->lang->line('xin_employees_monthly_timesheet').' | '.$title;
 
 		$data['breadcrumbs'] = $this->lang->line('xin_monthly_timesheet');
-		$data['path_url'] = 'timesheet_monthly';		
+		$data['path_url'] = 'timesheet_monthly';
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
 		// $data['all_employees'] = $this->Xin_model->all_employees();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
 		if(in_array('10',$role_resources_ids)) {
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/timesheet/timesheet_monthly", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -292,15 +292,15 @@ class Timesheet extends MY_Controller {
 			}
 		} else {
 			redirect('admin/dashboard');
-		}		  
+		}
      }
 
-	  
+
 	//   public function other() {
-	// 	$this->load->view("admin/timesheet/test"); 
+	// 	$this->load->view("admin/timesheet/test");
     //  }
 
-     
+
 	 // monthly_attn_sheet_print > timesheet
 	 // monthly attendance sheet print
 	 public function monthly_attn_sheet_print() {
@@ -310,20 +310,20 @@ class Timesheet extends MY_Controller {
 		if(isset($month_year)): $title = date('F Y', strtotime($month_year)); else: $title = date('F Y'); endif;
 
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
-		
+
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		// dd($data['all_employees']);
 
 	 	echo $this->load->view("admin/timesheet/monthly_attn_sheet_print", $data, TRUE);
-		  
-     } 
-	 
+
+     }
+
 
 
 	 // timecard > timesheet
 	 public function timecalendar() {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_attendance_timecalendar').' | '.$this->Xin_model->site_title();
@@ -333,7 +333,7 @@ class Timesheet extends MY_Controller {
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('261',$role_resources_ids)) {
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/calendar/timecalendar", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -341,62 +341,62 @@ class Timesheet extends MY_Controller {
 			}
 		} else {
 			redirect('admin/dashboard');
-		}		  
+		}
      }
-	 
+
 	// Validate and add info in database
 	public function import_attendance() {
-	
-		if($this->input->post('is_ajax')=='3') {		
+
+		if($this->input->post('is_ajax')=='3') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
+
 		//validate whether uploaded file is a csv file
    		$csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
-		
+
 		if(empty($_FILES['file']['name'])) {
 			$Return['error'] = $this->lang->line('xin_attendance_allowed_size');
 		} else {
 			if(in_array($_FILES['file']['type'],$csvMimes)){
 				if(is_uploaded_file($_FILES['file']['tmp_name'])){
-					
+
 					// check file size
 					if(filesize($_FILES['file']['tmp_name']) > 512000) {
 						$Return['error'] = $this->lang->line('xin_error_attendance_import_size');
 					} else {
-					
+
 					//open uploaded csv file with read only mode
 					$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-					
+
 					//skip first line
 					fgetcsv($csvFile);
-					
+
 					//parse data from csv file line by line
 					while(($line = fgetcsv($csvFile)) !== FALSE){
-							
+
 						$attendance_date = $line[1];
 						$clock_in = $line[2];
 						$clock_out = $line[3];
 						$clock_in2 = $attendance_date.' '.$clock_in;
 						$clock_out2 = $attendance_date.' '.$clock_out;
-						
+
 						//total work
 						$total_work_cin =  new DateTime($clock_in2);
 						$total_work_cout =  new DateTime($clock_out2);
-						
+
 						$interval_cin = $total_work_cout->diff($total_work_cin);
 						$hours_in   = $interval_cin->format('%h');
 						$minutes_in = $interval_cin->format('%i');
 						$total_work = $hours_in .":".$minutes_in;
-						
+
 						$user = $this->Xin_model->read_user_by_employee_id($line[0]);
 						if(!is_null($user)){
 							$user_id = $user[0]->user_id;
 						} else {
 							$user_id = '0';
 						}
-					
+
 						$data = array(
 						'employee_id' => $user_id,
 						'attendance_date' => $attendance_date,
@@ -410,10 +410,10 @@ class Timesheet extends MY_Controller {
 						'clock_in_out' => '0'
 						);
 					$result = $this->Timesheet_model->add_employee_attendance($data);
-				}					
+				}
 				//close opened csv file
 				fclose($csvFile);
-	
+
 				$Return['result'] = $this->lang->line('xin_success_attendance_import');
 				}
 			}else{
@@ -423,22 +423,22 @@ class Timesheet extends MY_Controller {
 			$Return['error'] = $this->lang->line('xin_error_invalid_file');
 		}
 		} // file empty
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
-		
+
+
 		$this->output($Return);
 		exit;
 		}
 	}
-	 
+
 	  // office shift > timesheet
 	 public function office_shift() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('left_office_shift').' | '.$this->Xin_model->site_title();
@@ -447,7 +447,7 @@ class Timesheet extends MY_Controller {
 		$data['path_url'] = 'office_shift';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('7',$role_resources_ids)) {
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/timesheet/office_shift", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -457,22 +457,22 @@ class Timesheet extends MY_Controller {
 			redirect('admin/dashboard');
 		}
      }
-	 
+
 	 // holidays > timesheet
 	 public function holidays() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
-		
+
 		$data['title'] = $this->lang->line('left_holidays').' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('left_holidays');
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
 		$data['path_url'] = 'holidays';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('8',$role_resources_ids)) {
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$data['subview'] = $this->load->view("admin/timesheet/holidays", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -482,15 +482,12 @@ class Timesheet extends MY_Controller {
 			redirect('admin/dashboard');
 		}
      }
-	 
+
 	// leave > timesheet
 	public function leave() {
-		
-
-
 
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 
@@ -508,8 +505,7 @@ class Timesheet extends MY_Controller {
 		// dd($user_info);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('46',$role_resources_ids)) {
-			if(!empty($session)){ 
-				
+			if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/timesheet/leave", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -520,7 +516,7 @@ class Timesheet extends MY_Controller {
 		}
     }
 
-	 
+
 	// Validate and add info in database
 	public function add_leave() {
 
@@ -531,20 +527,20 @@ class Timesheet extends MY_Controller {
 			$ed_date = strtotime($end_date);
 			if($start_date<= date('Y-m-d',strtotime('-4 day'))){
 				$this->session->set_flashdata('error', 'You can not add leave for past 4 days.');
-				redirect('admin/leave/emp_leave');				
-			}		
+				redirect('admin/leave/emp_leave');
+			}
 			if($this->input->post('leave_type')==='') {
 	        	$this->session->set_flashdata('error', 'Please select leave type.');
-				redirect('admin/leave/emp_leave');	
+				redirect('admin/leave/emp_leave');
 			}
-			//get leave date of a employee ... 
-			$leave_date = $this->db->select('*')->where('employee_id',$_POST['employee_id'])->get('xin_leave_applications')->result();
-			
-			//check duplicate leave date 
+			//get leave date of a employee ...
+			$leave_date = $this->db->select('*')->where('status !=',3)->where('employee_id',$_POST['employee_id'])->get('xin_leave_applications')->result();
+
+			//check duplicate leave date
 			foreach($leave_date as $date){
 				if($date->from_date == $start_date || $date->to_date == $end_date) {
 					$this->session->set_flashdata('error', 'Leave date already exists.');
-					redirect('admin/leave/emp_leave');	
+					redirect('admin/leave/emp_leave');
 				}
 
 				// if ($date->leave_type_id==$this->input->post('leave_type')) {
@@ -567,18 +563,18 @@ class Timesheet extends MY_Controller {
 				$this->session->set_flashdata('error', 'Please select only one day for half day leave.');
 				redirect('admin/leave/emp_leave');
 			}
-			if($this->input->post('start_date')!=''){	
-				
+			if($this->input->post('start_date')!=''){
+
 				if($this->input->post('leave_half_day') == 1 && $no_of_days == 1 ) {
 					$no_of_days = 0.5;
-				} 
+				}
 				$total = get_cal_leave($this->input->post('employee_id'), $this->input->post('leave_type'));
 				if ($this->input->post('leave_type') == 2) {
 					$type_name = " Sick leave";
 				} else {
 					$type_name = " Earn leave";
 				}
-				
+
 				if($total <= 0.4){
 					$this->session->set_flashdata('error', 'You have only '.$total.' '.$type_name.' left.');
 					redirect('admin/leave/emp_leave');
@@ -589,7 +585,7 @@ class Timesheet extends MY_Controller {
 			} else {
 				$leave_half_day_opt = $this->input->post('leave_half_day');
 			}
-			
+
 			if($_FILES['attachment']['tmp_name']!='') {
 				$config['upload_path'] = './uploads/leave/'; // Modify this path as needed
 				$config['allowed_types'] = 'gif|jpg|png|pdf';// Add more allowed file types as needed
@@ -641,14 +637,14 @@ class Timesheet extends MY_Controller {
 			'current_year' => date('Y'),
 			);
 			$result = $this->Timesheet_model->add_leave_record($data);
-			
+
 			if ($result == TRUE) {
 				$this->session->set_flashdata('success', 'Successfully Added');
 				redirect('admin/leave/emp_leave');
 			} else {
 				$this->session->set_flashdata('error', 'There is an error');
 				redirect('admin/leave/emp_leave');
-				
+
 			}
 	}
 
@@ -688,11 +684,11 @@ class Timesheet extends MY_Controller {
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
 			redirect('admin/timesheet/leave');
 		}
-	
+
 	}
 	public function attandence_pro($first_date,$qty,$emp_id){
 		if ($qty>=1) {
-			for ($i=1; $i < $qty ; $i++) { 
+			for ($i=1; $i < $qty ; $i++) {
 				$process_date= date('Y-m-d', strtotime($first_date. ' + '.$i.' day'));
 				$this->load->model("Attendance_model");
 				$this->Attendance_model->attn_process($process_date, $emp_id);
@@ -700,7 +696,7 @@ class Timesheet extends MY_Controller {
 		}else{
 			$this->load->model("Attendance_model");
 			$this->Attendance_model->attn_process($first_date, $emp_id);
-		}	
+		}
 	}
 
 	public function leave_reject($id) {
@@ -733,7 +729,7 @@ class Timesheet extends MY_Controller {
 		if ($this->input->post('team_lead_comment')) {
 			$team_lead_comment = $this->input->post('team_lead_comment');
 		}
-	
+
 		$hulfday=0;
 		if($this->input->post('Half_Day')){
 			$hulfday=1;
@@ -747,7 +743,7 @@ class Timesheet extends MY_Controller {
 			}else{
 				$notyfi_data=1;
 			};
-	
+
 			$qnty= $total_days;
 			$data = array(
 				'status' => $status,
@@ -798,11 +794,11 @@ class Timesheet extends MY_Controller {
 					$this->db->where('emp_id', $emp_id);
 					$this->db->where('year', $y);
 				$this->db->update('leave_balanace', $rdata);
-	
 
-			
+
+
 			}
-			
+
 
 
 
@@ -826,8 +822,8 @@ class Timesheet extends MY_Controller {
 		$leave_data=$this->db->get('xin_leave_applications')->row();
 		$year = date('Y', strtotime($leave_data->from_date));
 
-		$leave_data_balance = cals_leave($employee_id, $year);	
-		
+		$leave_data_balance = cals_leave($employee_id, $year);
+
 		$data['leave_totalel']=$leave_data_balance->el_total;
 		$data['leave_totalsl']=$leave_data_balance->sl_total;
 
@@ -848,7 +844,7 @@ class Timesheet extends MY_Controller {
 	}
 	// Validate and add info in database
 	public function update_leave_status() {
-		
+
 		$id = $this->uri->segment(4);
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -888,7 +884,7 @@ class Timesheet extends MY_Controller {
 			if ($stutuss==2) {
 				$emp_id = $_POST['emp_id'];
 				$y = date('Y', strtotime($this->input->post('start_date')));
-				$leave_data = cals_leave($emp_id, $y);	
+				$leave_data = cals_leave($emp_id, $y);
 				$leave_type_id=$this->input->post('leave_type');
 					if ($leave_type_id==1) {
 						$rdata = array(
@@ -911,14 +907,14 @@ class Timesheet extends MY_Controller {
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
 			redirect('admin/timesheet/leave');
 		}
-		
+
 	}
 	public function leave_status_change() {
-		
+
 		$id =$this->input->post('leave_id');
 		$stutuss=$this->input->post('status');
 		$reason=$this->input->post('reason');
-		
+
 		if ($reason==null || $reason=="") {
 			$reason="N/A";
 		}
@@ -954,7 +950,7 @@ class Timesheet extends MY_Controller {
 			if ($stutuss==2) {
 				$emp_id = $employee_id;
 				$y = date('Y', strtotime($start_date));
-				$leave_data = cals_leave($emp_id, $y);	
+				$leave_data = cals_leave($emp_id, $y);
 				$leave_type_id=$leave_type;
 					if ($leave_type_id==1) {
 						$rdata = array(
@@ -973,7 +969,7 @@ class Timesheet extends MY_Controller {
 		} else {
 			echo 'error';
 		}
-		
+
 	}
 	public function update_leave_balance(){
 		$leave_id = $this->input->post('leave_id');
@@ -987,17 +983,17 @@ class Timesheet extends MY_Controller {
 		$leave_data = cals_leave($employee_id, $y);
 		echo json_encode($leave_data);
 	}
-	
-	
+
+
 
 	 // leave > timesheet
 	 public function leave_details() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
-		
+
 		$data['title'] = $this->Xin_model->site_title();
 		$leave_id = $this->uri->segment(5);
 		// leave applications
@@ -1016,7 +1012,7 @@ class Timesheet extends MY_Controller {
 		if(!is_null($type)){
 			$type_name = $type[0]->type_name;
 		} else {
-			$type_name = '--';	
+			$type_name = '--';
 		}
 		// get employee
 		$user = $this->Xin_model->read_user_info($result[0]->employee_id);
@@ -1027,14 +1023,14 @@ class Timesheet extends MY_Controller {
 			if(!is_null($department)){
 				$department_name = $department[0]->department_name;
 			} else {
-				$department_name = '--';	
+				$department_name = '--';
 			}
 		} else {
-			$full_name = '--';	
+			$full_name = '--';
 			$u_role_id = '--';
 			$department_name = '--';
-		}			 
-		
+		}
+
 		$data = array(
 			'title' => $this->lang->line('xin_leave_detail').' | '.$this->Xin_model->site_title(),
 			'type' => $type_name,
@@ -1065,8 +1061,8 @@ class Timesheet extends MY_Controller {
 		$data['path_url'] = 'leave_details';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		// dd($data);
-		
-		if(!empty($session)){ 
+
+		if(!empty($session)){
 			$data['subview'] = $this->load->view("admin/timesheet/leave_details", $data, TRUE);
 			$this->Attendance_model->leave_process($leave_id);
 
@@ -1074,13 +1070,13 @@ class Timesheet extends MY_Controller {
 		} else {
 			redirect('admin/');
 		}
-		  
+
      }
-	 
+
 	 // leave > timesheet
 	 public function task_details() {
 		$data['title'] = $this->Xin_model->site_title();
-		
+
 		$task_id = $this->uri->segment(5);
 		$result = $this->Timesheet_model->read_task_information($task_id);
 		if(is_null($result)){
@@ -1096,13 +1092,13 @@ class Timesheet extends MY_Controller {
 		$this->Timesheet_model->update_task_record($edata,$task_id);
 		/* get User info*/
 		$u_created = $this->Xin_model->read_user_info($result[0]->created_by);
-		
+
 		if(!is_null($u_created)){
 			$f_name = $u_created[0]->first_name.' '.$u_created[0]->last_name;
 		} else {
-			$f_name = '--';	
+			$f_name = '--';
 		}
-		
+
 		// task project
 		$prj_task = $this->Project_model->read_project_information($result[0]->project_id);
 		if(!is_null($prj_task)){
@@ -1110,7 +1106,7 @@ class Timesheet extends MY_Controller {
 		} else {
 			$prj_name = '--';
 		}
-		
+
 		$data = array(
 		'title' => $this->lang->line('xin_task_detail').' | '.$this->Xin_model->site_title(),
 		'task_id' => $result[0]->task_id,
@@ -1135,7 +1131,7 @@ class Timesheet extends MY_Controller {
 		$session = $this->session->userdata('username');
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('45',$role_resources_ids)) {
-		if(!empty($session)){ 
+		if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/timesheet/tasks/task_details", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -1144,14 +1140,14 @@ class Timesheet extends MY_Controller {
 		} else {
 			redirect('admin/dashboard');
 		}
-		  
+
      }
-	 
+
 	 // tasks > timesheet
 	 public function tasks() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$system = $this->Xin_model->read_setting_info(1);
@@ -1166,7 +1162,7 @@ class Timesheet extends MY_Controller {
 		$data['path_url'] = 'tasks';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('45',$role_resources_ids)) {
-			if(!empty($session)){ 
+			if(!empty($session)){
 			$data['subview'] = $this->load->view("admin/timesheet/tasks/task_list", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -1174,24 +1170,24 @@ class Timesheet extends MY_Controller {
 			}
 		} else {
 			redirect('admin/dashboard');
-		}	  
+		}
      }
-	 
+
 	// Validate and update info in database // assign_ticket
 	public function assign_task() {
-	
-		if($this->input->post('type')=='task_user') {		
+
+		if($this->input->post('type')=='task_user') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();		
-		
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
 		if(null!=$this->input->post('assigned_to')) {
 			$assigned_ids = implode(',',$this->input->post('assigned_to'));
 			$employee_ids = $assigned_ids;
 		} else {
 			$employee_ids = '';
 		}
-	
+
 		$data = array(
 		'assigned_to' => $employee_ids
 		);
@@ -1206,19 +1202,19 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// update task user > task details
 	public function task_users() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'task_id' => $id,
 			'all_employees' => $this->Xin_model->all_employees(),
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/tasks/get_task_users", $data);
 		} else {
 			redirect('admin/');
@@ -1228,15 +1224,15 @@ class Timesheet extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	 }
-	 
+
 	  // Validate and update info in database // update_status
 	public function update_task_status() {
-	
-		if($this->input->post('type')=='update_status') {		
+
+		if($this->input->post('type')=='update_status') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();		
-			
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
 		$data = array(
 		'task_progress' => $this->input->post('progres_val'),
 		'task_status' => $this->input->post('status'),
@@ -1252,13 +1248,13 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	 
+
 	 // task list > timesheet
 	 public function task_list() {
-	
+
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/leave", $data);
 		} else {
 			redirect('admin/');
@@ -1267,7 +1263,7 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		if($user_info[0]->user_role_id==1){
@@ -1283,7 +1279,7 @@ class Timesheet extends MY_Controller {
 
           foreach($task->result() as $r) {
 			$aim = explode(',',$r->assigned_to);
-				  
+
 				if($r->assigned_to == '' || $r->assigned_to == 'None') {
 					$ol = 'None';
 				} else {
@@ -1292,12 +1288,12 @@ class Timesheet extends MY_Controller {
 						//$user = $this->Xin_model->read_user_info($uid);
 						$assigned_to = $this->Xin_model->read_user_info($uid);
 						if(!is_null($assigned_to)){
-							
+
 						$assigned_name = $assigned_to[0]->first_name.' '.$assigned_to[0]->last_name;
 						 if($assigned_to[0]->profile_picture!='' && $assigned_to[0]->profile_picture!='no file') {
 							$ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.base_url().'uploads/profile/'.$assigned_to[0]->profile_picture.'" class="user-image-hr" alt=""></span></a>';
 							} else {
-							if($assigned_to[0]->gender=='Male') { 
+							if($assigned_to[0]->gender=='Male') {
 								$de_file = base_url().'uploads/profile/default_male.jpg';
 							 } else {
 								$de_file = base_url().'uploads/profile/default_female.jpg';
@@ -1314,9 +1310,9 @@ class Timesheet extends MY_Controller {
 				if(!is_null($u_created)){
 					$f_name = $u_created[0]->first_name.' '.$u_created[0]->last_name;
 				} else {
-					$f_name = '--';	
+					$f_name = '--';
 				}
-				
+
 				// task project
 				$prj_task = $this->Project_model->read_project_information($r->project_id);
 				if(!is_null($prj_task)){
@@ -1331,9 +1327,9 @@ class Timesheet extends MY_Controller {
 				} else {
 					$task_catname = '--';
 				}
-				
+
 				/// set task progress
-				if($r->task_progress=='' || $r->task_progress==0): $progress = 0; else: $progress = $r->task_progress; endif;				
+				if($r->task_progress=='' || $r->task_progress==0): $progress = 0; else: $progress = $r->task_progress; endif;
 				// task progress
 				if($r->task_progress <= 20) {
 				$progress_class = 'progress-bar-danger';
@@ -1344,10 +1340,10 @@ class Timesheet extends MY_Controller {
 				} else {
 				$progress_class = 'progress-bar-success';
 				}
-				
+
 				$progress_bar = '<p class="m-b-0-5">'.$this->lang->line('xin_completed').' <span class="pull-xs-right">'.$r->task_progress.'%</span>
 				<div class="progress progress-xs"><div class="progress-bar '.$progress_class.' progress-bar-striped" role="progressbar" aria-valuenow="'.$r->task_progress.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$r->task_progress.'%"></div></div></p>';
-				// task status			
+				// task status
 				if($r->task_status == 0) {
 					$status = '<span class="label label-warning">'.$this->lang->line('xin_not_started').'</span>';
 				} else if($r->task_status ==1){
@@ -1380,14 +1376,14 @@ class Timesheet extends MY_Controller {
 					$view = '';
 				}
 				$combhr = $edit.$view.$delete;
-			  $ttask_date = $this->lang->line('xin_start_date').': '.$psdate.'<br>'.$this->lang->line('xin_end_date').': '.$pedate;				
+			  $ttask_date = $this->lang->line('xin_start_date').': '.$psdate.'<br>'.$this->lang->line('xin_end_date').': '.$pedate;
 			   $data[] = array(
 					$combhr,
 					$task_catname.'<br>'.$this->lang->line('xin_project').': <a href="'.site_url().'admin/project/detail/'.$r->project_id.'">'.$prj_name.'</a><br>'.$this->lang->line('xin_hours').': '.$r->task_hour,
 					$ol.$add_users,
 					$ttask_date,
 					$status,
-					
+
 					$f_name,
 					$progress_bar
 			   );
@@ -1402,7 +1398,7 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // project task list > timesheet
 	 public function project_task_list() {
 
@@ -1412,14 +1408,14 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
-		$id = $this->uri->segment(4);		
+
+		$id = $this->uri->segment(4);
 		$task = $this->Timesheet_model->get_project_tasks($id);
-		
+
 		$data = array();
 
           foreach($task->result() as $r) {
-			  
+
 			if($r->assigned_to == '' || $r->assigned_to == 'None') {
 				$ol = $this->lang->line('xin_performance_none');
 			} else {
@@ -1431,7 +1427,7 @@ class Timesheet extends MY_Controller {
 					if($assigned_to[0]->profile_picture!='' && $assigned_to[0]->profile_picture!='no file') {
 						$ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.base_url().'uploads/profile/'.$assigned_to[0]->profile_picture.'" class="user-image-hr ui-w-30 rounded-circle" alt=""></span></a>';
 					} else {
-						if($assigned_to[0]->gender=='Male') { 
+						if($assigned_to[0]->gender=='Male') {
 							$de_file = base_url().'uploads/profile/default_male.jpg';
 						 } else {
 							$de_file = base_url().'uploads/profile/default_female.jpg';
@@ -1456,8 +1452,8 @@ class Timesheet extends MY_Controller {
 			}
 			/// set task progress
 			if($r->task_progress=='' || $r->task_progress==0): $progress = 0; else: $progress = $r->task_progress; endif;
-			
-			
+
+
 			// task progress
 			if($r->task_progress <= 20) {
 			$progress_class = 'progress-danger';
@@ -1468,10 +1464,10 @@ class Timesheet extends MY_Controller {
 			} else {
 			$progress_class = 'progress-success';
 			}
-			
+
 		$progress_bar = '<p class="m-b-0-5">'.$this->lang->line('xin_completed').' <span class="pull-xs-right">'.$r->task_progress.'%</span></p><div class="progress" style="height: 7px;"><div class="progress-bar" style="width: '.$r->task_progress.'%;"></div></div>';
-			
-			
+
+
 			// task status
 			if($r->task_status == 0) {
 				$status = $this->lang->line('xin_not_started');
@@ -1484,10 +1480,10 @@ class Timesheet extends MY_Controller {
 			} else {
 				$status = $this->lang->line('xin_project_hold');
 			}
-			
+
 			// task end date
 			$tdate = $this->Xin_model->set_date_format($r->end_date);
-			 			
+
 		   $data[] = array(
 				'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/timesheet/task_details/id/'.$r->task_id.'/"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light edit-data" data-toggle="modal" data-target=".edit-modal-data" data-task_id="'. $r->task_id.'" data-mname="hr"><span class="fa fa-pencil"></span></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete-task" data-toggle="modal" data-target=".delete-modal-task" data-record-id="'. $r->task_id . '"><span class="fa fa-trash"></span></button></span>',
 				$task_catname,
@@ -1508,7 +1504,7 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // project variation list > timesheet
 	 public function project_variation_list() {
 
@@ -1518,14 +1514,14 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
-		$id = $this->uri->segment(4);		
+
+		$id = $this->uri->segment(4);
 		$task = $this->Timesheet_model->get_project_variations($id);
-		
+
 		$data = array();
 
           foreach($task->result() as $r) {
-			  
+
 			if($r->assigned_to == '' || $r->assigned_to == 'None') {
 				$ol = $this->lang->line('xin_performance_none');
 			} else {
@@ -1537,7 +1533,7 @@ class Timesheet extends MY_Controller {
 					if($assigned_to[0]->profile_picture!='' && $assigned_to[0]->profile_picture!='no file') {
 						$ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.base_url().'uploads/profile/'.$assigned_to[0]->profile_picture.'" class="user-image-hr ui-w-30 rounded-circle" alt=""></span></a>';
 					} else {
-						if($assigned_to[0]->gender=='Male') { 
+						if($assigned_to[0]->gender=='Male') {
 							$de_file = base_url().'uploads/profile/default_male.jpg';
 						 } else {
 							$de_file = base_url().'uploads/profile/default_female.jpg';
@@ -1559,8 +1555,8 @@ class Timesheet extends MY_Controller {
 				$task_catname = $task_cat[0]->category_name;
 			} else {
 				$task_catname = '--';
-			}											
-			
+			}
+
 			// variation status
 			if($r->variation_status == 0) {
 				$status = '<span class="label label-warning">'.$this->lang->line('xin_not_started').'</span>';
@@ -1581,7 +1577,7 @@ class Timesheet extends MY_Controller {
 			// variation end date
 			$vsdate = $this->Xin_model->set_date_format($r->start_date);
 			$vedate = $this->Xin_model->set_date_format($r->end_date);
-			$variation_date = $this->lang->line('xin_start_date').': '.$vsdate.'<br>'.$this->lang->line('xin_end_date').': '.$vedate;			
+			$variation_date = $this->lang->line('xin_start_date').': '.$vsdate.'<br>'.$this->lang->line('xin_end_date').': '.$vedate;
 		   $data[] = array(
 				'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light edit-data" data-toggle="modal" data-target=".edit-modal-variation-data" data-variation_id="'. $r->variation_id.'" data-mname="variation"><span class="fa fa-pencil"></span></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete-variation" data-toggle="modal" data-target=".delete-modal-variation" data-record-id="'. $r->variation_id . '"><span class="fa fa-trash"></span></button></span>',
 				$task_catname.'<br>'.$status,
@@ -1601,7 +1597,7 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 public function comments_list()
      {
 
@@ -1609,7 +1605,7 @@ class Timesheet extends MY_Controller {
 		//$id = $this->input->get('ticket_id');
 		$id = $this->uri->segment(4);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/tasks/task_details", $data);
 		} else {
 			redirect('admin/');
@@ -1618,14 +1614,14 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
-		
+
+
 		$comments = $this->Timesheet_model->get_comments($id);
-		
+
 		$data = array();
 
         foreach($comments->result() as $r) {
-			 			  		
+
 		// get user > employee_
 		$employee = $this->Xin_model->read_user_info($r->user_id);
 		// employee full name
@@ -1636,19 +1632,19 @@ class Timesheet extends MY_Controller {
 			if(!is_null($_designation)){
 				$designation_name = $_designation[0]->designation_name;
 			} else {
-				$designation_name = '--';	
+				$designation_name = '--';
 			}
-			
+
 			// profile picture
 			if($employee[0]->profile_picture!='' && $employee[0]->profile_picture!='no file') {
 				$u_file = base_url().'uploads/profile/'.$employee[0]->profile_picture;
 			} else {
-				if($employee[0]->gender=='Male') { 
+				if($employee[0]->gender=='Male') {
 					$u_file = base_url().'uploads/profile/default_male.jpg';
 				} else {
 					$u_file = base_url().'uploads/profile/default_female.jpg';
 				}
-			} 
+			}
 		} else {
 			$employee_name = '--';
 			$designation_name = '--';
@@ -1668,7 +1664,7 @@ class Timesheet extends MY_Controller {
 			  <span class="fa fa-trash m-r-0-5"></span></a></span>
 							</div>
 						</div>';
-		
+
 		$function = '<div class="c-item">
 					<div class="media">
 						<div class="media-left">
@@ -1686,7 +1682,7 @@ class Timesheet extends MY_Controller {
 						'.$dlink.'
 					</div>
 				</div>';
-		
+
 		$data[] = array(
 			$function
 		);
@@ -1701,26 +1697,26 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	// Validate and add info in database
 	public function set_comment() {
-	
-		if($this->input->post('add_type')=='set_comment') {		
+
+		if($this->input->post('add_type')=='set_comment') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('xin_comment')==='') {
        		 $Return['error'] = $this->lang->line('xin_error_comment_field');
-		} 
+		}
 		$xin_comment = $this->input->post('xin_comment');
 		$qt_xin_comment = htmlspecialchars(addslashes($xin_comment), ENT_QUOTES);
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'task_comments' => $qt_xin_comment,
 		'task_id' => $this->input->post('comment_task_id'),
@@ -1737,7 +1733,7 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	public function comment_delete() {
 		if($this->input->post('data') == 'task_comment') {
 			/* Define return | here result is used to return user data and error for error message */
@@ -1753,16 +1749,16 @@ class Timesheet extends MY_Controller {
 			$this->output($Return);
 		}
 	}
-	
+
 	// Validate and add info in database
 	public function add_attachment() {
-	
-		if($this->input->post('add_type')=='dfile_attachment') {		
+
+		if($this->input->post('add_type')=='dfile_attachment') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('file_name')==='') {
        		 $Return['error'] = $this->lang->line('xin_error_task_file_name');
 		} else if($_FILES['attachment_file']['size'] == 0) {
@@ -1772,18 +1768,18 @@ class Timesheet extends MY_Controller {
 		}
 		$description = $this->input->post('file_description');
 		$file_description = htmlspecialchars(addslashes($description), ENT_QUOTES);
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		// is file upload
 		if(is_uploaded_file($_FILES['attachment_file']['tmp_name'])) {
 			//checking image type
 			$allowed =  array('png','jpg','jpeg','gif','pdf','doc','docx','xls','xlsx','txt');
 			$filename = $_FILES['attachment_file']['name'];
 			$ext = pathinfo($filename, PATHINFO_EXTENSION);
-			
+
 			if(in_array($ext,$allowed)){
 				$tmp_name = $_FILES["attachment_file"]["tmp_name"];
 				$attachment_file = "uploads/task/";
@@ -1800,7 +1796,7 @@ class Timesheet extends MY_Controller {
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		$data = array(
 		'task_id' => $this->input->post('c_task_id'),
 		'upload_by' => $this->input->post('user_id'),
@@ -1819,7 +1815,7 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	  // attachment list
 	  public function attachment_list()
      {
@@ -1828,7 +1824,7 @@ class Timesheet extends MY_Controller {
 		//$id = $this->input->get('ticket_id');
 		$id = $this->uri->segment(4);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/tasks/task_list", $data);
 		} else {
 			redirect('admin/');
@@ -1837,14 +1833,14 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
-		
+
+
 		$attachments = $this->Timesheet_model->get_attachments($id);
 		if($attachments->num_rows() > 0) {
 		$data = array();
 
         foreach($attachments->result() as $r) {
-			 			  				
+
 		$data[] = array('<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_download').'"><a href="'.site_url().'admin/download?type=task&filename='.$r->attachment_file.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-download"></span></button></a></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete-file" data-toggle="modal" data-target=".delete-modal-file" data-record-id="'. $r->task_attachment_id . '"><span class="fa fa-trash"></span></button></span>',
 			$r->file_title,
 			$r->file_description,
@@ -1860,7 +1856,7 @@ class Timesheet extends MY_Controller {
 		);
 		} else {
 			$data[] = array('','','','');
-      
+
 
 	  $output = array(
 		   "draw" => $draw,
@@ -1872,7 +1868,7 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // delete task attachment
 	 public function attachment_delete() {
 		if($this->input->post('data') == 'task_attachment') {
@@ -1896,7 +1892,7 @@ class Timesheet extends MY_Controller {
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/attendance_list", $data);
 		} else {
 			redirect('admin/');
@@ -1911,7 +1907,7 @@ class Timesheet extends MY_Controller {
 
 		if($user_info[0]->user_role_id==3){
 			// if($ref_location_id == 0 || $ref_location_id =='' ) {
-			
+
 							$employee = $this->Employees_model->get_attendance_location_employees($session['user_id']);
 					// $employee = $this->Employees_model->get_attendance_employees();
 
@@ -1925,21 +1921,21 @@ class Timesheet extends MY_Controller {
 				$employee = $this->Xin_model->read_employee_info_att($session['user_id']);
 			}
 		}
-		
+
 		$system = $this->Xin_model->read_setting_info(1);
 		$data = array();
 
         foreach($employee->result() as $r) {
-			if($r->user_role_id!=1){ 			  		
+			if($r->user_role_id!=1){
 			// user full name
-			$full_name = $r->first_name.' '.$r->last_name;	
+			$full_name = $r->first_name.' '.$r->last_name;
 			// get office shift for employee
 			$get_day = strtotime($attendance_date);
 			$day = date('l', $get_day);
-			
+
 			// office shift
 			$office_shift = $this->Timesheet_model->read_office_shift_information($r->office_shift_id);
-			
+
 			// get clock in/clock out of each employee
 			if($day == 'Monday') {
 				if($office_shift[0]->monday_in_time==''){
@@ -2000,7 +1996,7 @@ class Timesheet extends MY_Controller {
 			}
 			// check if clock-in for date
 			$attendance_status = '';
-			$check = $this->Timesheet_model->attendance_first_in_check($r->user_id,$attendance_date);		
+			$check = $this->Timesheet_model->attendance_first_in_check($r->user_id,$attendance_date);
 			if($check->num_rows() > 0){
 				// check clock in time
 				$attendance = $this->Timesheet_model->attendance_first_in($r->user_id,$attendance_date);
@@ -2021,10 +2017,10 @@ class Timesheet extends MY_Controller {
 				} else {
 					$interval_late = $clock_in->diff($office_time);
 					$hours_l   = $interval_late->format('%h');
-					$minutes_l = $interval_late->format('%i');			
+					$minutes_l = $interval_late->format('%i');
 					$total_time_l = $hours_l ."h ".$minutes_l."m";
 				}
-				
+
 				// total hours work/ed
 				$total_hrs = $this->Timesheet_model->total_hours_worked_attendance($r->user_id,$attendance_date);
 				$hrs_old_int1 = '';
@@ -2032,45 +2028,45 @@ class Timesheet extends MY_Controller {
 				$Trest = '';
 				$total_time_rs = '';
 				$hrs_old_int_res1 = '';
-				foreach ($total_hrs->result() as $hour_work){		
-					// total work			
+				foreach ($total_hrs->result() as $hour_work){
+					// total work
 					$timee = $hour_work->total_work.':00';
 					$str_time =$timee;
-		
+
 					$str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
-					
+
 					sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
-					
+
 					$hrs_old_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-					
+
 					$hrs_old_int1 = $hrs_old_seconds;
-					
-					$Total = gmdate("H:i", $hrs_old_int1);	
+
+					$Total = gmdate("H:i", $hrs_old_int1);
 				}
 				if($Total=='') {
 					$total_work = '00:00';
 				} else {
 					$total_work = $Total;
 				}
-				
-				// total rest > 
+
+				// total rest >
 				$total_rest = $this->Timesheet_model->total_rest_attendance($r->user_id,$attendance_date);
-				foreach ($total_rest->result() as $rest){			
+				foreach ($total_rest->result() as $rest){
 					// total rest
 					$str_time_rs = $rest->total_rest.':00';
 					//$str_time_rs =$timee_rs;
-		
+
 					$str_time_rs = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time_rs);
-					
+
 					sscanf($str_time_rs, "%d:%d:%d", $hours_rs, $minutes_rs, $seconds_rs);
-					
+
 					$hrs_old_seconds_rs = $hours_rs * 3600 + $minutes_rs * 60 + $seconds_rs;
-					
+
 					$hrs_old_int_res1 = $hrs_old_seconds_rs;
-					
+
 					$total_time_rs = gmdate("H:i", $hrs_old_int_res1);
 				}
-				
+
 				// check attendance status
 				$status = $attendance[0]->attendance_status;
 				if($total_time_rs=='') {
@@ -2078,7 +2074,7 @@ class Timesheet extends MY_Controller {
 				} else {
 					$Trest = $total_time_rs;
 				}
-			
+
 			} else {
 				$clock_in2 = '-';
 				$total_time_l = '00:00';
@@ -2094,19 +2090,19 @@ class Timesheet extends MY_Controller {
 					$h_date = $this->Timesheet_model->holiday_date($attendance_date);
 					$begin = new DateTime( $h_date[0]->start_date );
 					$end = new DateTime( $h_date[0]->end_date);
-					$end = $end->modify( '+1 day' ); 
-					
+					$end = $end->modify( '+1 day' );
+
 					$interval = new DateInterval('P1D');
 					$daterange = new DatePeriod($begin, $interval ,$end);
-					
+
 					foreach($daterange as $date){
 						$holiday_arr[] =  $date->format("Y-m-d");
 					}
 				} else {
 					$holiday_arr[] = '99-99-99';
 				}
-				
-				
+
+
 				// get leave/employee
 				$leave_date_chck = $this->Timesheet_model->leave_date_check($r->user_id,$attendance_date);
 				$leave_arr = array();
@@ -2114,44 +2110,44 @@ class Timesheet extends MY_Controller {
 					$leave_date = $this->Timesheet_model->leave_date($r->user_id,$attendance_date);
 					$begin1 = new DateTime( $leave_date[0]->from_date );
 					$end1 = new DateTime( $leave_date[0]->to_date);
-					$end1 = $end1->modify( '+1 day' ); 
-					
+					$end1 = $end1->modify( '+1 day' );
+
 					$interval1 = new DateInterval('P1D');
 					$daterange1 = new DatePeriod($begin1, $interval1 ,$end1);
-					
+
 					foreach($daterange1 as $date1){
 						$leave_arr[] =  $date1->format("Y-m-d");
-					}	
+					}
 				} else {
 					$leave_arr[] = '99-99-99';
 				}
-					
+
 				if($office_shift[0]->monday_in_time == '' && $day == 'Monday') {
-					$status = $this->lang->line('xin_holiday');	
+					$status = $this->lang->line('xin_holiday');
 				} else if($office_shift[0]->tuesday_in_time == '' && $day == 'Tuesday') {
-					$status = $this->lang->line('xin_holiday');	
+					$status = $this->lang->line('xin_holiday');
 				} else if($office_shift[0]->wednesday_in_time == '' && $day == 'Wednesday') {
-					$status = $this->lang->line('xin_holiday');	
+					$status = $this->lang->line('xin_holiday');
 				} else if($office_shift[0]->thursday_in_time == '' && $day == 'Thursday') {
-					$status = $this->lang->line('xin_holiday');	
+					$status = $this->lang->line('xin_holiday');
 				} else if($office_shift[0]->friday_in_time == '' && $day == 'Friday') {
-					$status = $this->lang->line('xin_holiday');	
+					$status = $this->lang->line('xin_holiday');
 				} else if($office_shift[0]->saturday_in_time == '' && $day == 'Saturday') {
-					$status = $this->lang->line('xin_holiday');	
+					$status = $this->lang->line('xin_holiday');
 				} else if($office_shift[0]->sunday_in_time == '' && $day == 'Sunday') {
-					$status = $this->lang->line('xin_holiday');	
+					$status = $this->lang->line('xin_holiday');
 				} else if(in_array($attendance_date,$holiday_arr)) { // holiday
 					$status = $this->lang->line('xin_holiday');
 				} else if(in_array($attendance_date,$leave_arr)) { // on leave
 					$status = $this->lang->line('xin_on_leave');
-				} 
+				}
 				else {
 					$status = $this->lang->line('xin_absent');
 				}
 			}
-			
+
 			// check if clock-out for date
-			$check_out = $this->Timesheet_model->attendance_first_out_check($r->user_id,$attendance_date);		
+			$check_out = $this->Timesheet_model->attendance_first_out_check($r->user_id,$attendance_date);
 			if($check_out->num_rows() == 1){
 				/* early time */
 				$early_time =  new DateTime($out_time.' '.$attendance_date);
@@ -2159,7 +2155,7 @@ class Timesheet extends MY_Controller {
 				$first_out = $this->Timesheet_model->attendance_first_out($r->user_id,$attendance_date);
 				// clock out
 				$clock_out = new DateTime($first_out[0]->clock_out);
-				
+
 				if ($first_out[0]->clock_out!='') {
 					$clock_out2 = $clock_out->format('h:i a');
 					if($system[0]->is_ssl_available=='yes'){
@@ -2167,57 +2163,57 @@ class Timesheet extends MY_Controller {
 					} else {
 						$clkOutIp = $clock_out2;
 					}
-				
+
 					// early leaving
 					$early_new_time = strtotime($out_time.' '.$attendance_date);
 					$clock_out_time_new = strtotime($first_out[0]->clock_out);
-				
+
 					if($early_new_time <= $clock_out_time_new) {
 						$total_time_e = '00:00';
-					} else {			
+					} else {
 						$interval_lateo = $clock_out->diff($early_time);
 						$hours_e   = $interval_lateo->format('%h');
-						$minutes_e = $interval_lateo->format('%i');			
+						$minutes_e = $interval_lateo->format('%i');
 						$total_time_e = $hours_e ."h ".$minutes_e."m";
 					}
-					
+
 					/* over time */
 					$over_time =  new DateTime($out_time.' '.$attendance_date);
 					$overtime2 = $over_time->format('h:i a');
 					// over time
 					$over_time_new = strtotime($out_time.' '.$attendance_date);
 					$clock_out_time_new1 = strtotime($first_out[0]->clock_out);
-					
+
 					if($clock_out_time_new1 <= $over_time_new) {
 						$overtime2 = '00:00';
-					} else {			
+					} else {
 						$interval_lateov = $clock_out->diff($over_time);
 						$hours_ov   = $interval_lateov->format('%h');
-						$minutes_ov = $interval_lateov->format('%i');			
+						$minutes_ov = $interval_lateov->format('%i');
 						$overtime2 = $hours_ov ."h ".$minutes_ov."m";
-					}				
-					
+					}
+
 				} else {
 					$clock_out2 =  '-';
 					$total_time_e = '00:00';
 					$overtime2 = '00:00';
 					$clkOutIp = $clock_out2;
 				}
-						
+
 			} else {
 				$clock_out2 =  '-';
 				$total_time_e = '00:00';
 				$overtime2 = '00:00';
 				$clkOutIp = $clock_out2;
-			}	
-			
+			}
+
 			// get company
 			$company = $this->Xin_model->read_company_info($r->company_id);
 			if(!is_null($company)){
 				$comp_name = $company[0]->name;
 			} else {
-				$comp_name = '--';	
-			}	
+				$comp_name = '--';
+			}
 			// attendance date
 			$d_date = $this->Xin_model->set_date_format($attendance_date);
 			//
@@ -2253,18 +2249,18 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	// get company > employees
 	 public function get_employees() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'company_id' => $id
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/get_employees", $data);
 		} else {
 			redirect('admin/');
@@ -2273,19 +2269,19 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-	} 
-	
+	}
+
 	// get company > employees
 	 public function get_leave_employees() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'company_id' => $id
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/get_leave_employees", $data);
 		} else {
 			redirect('admin/');
@@ -2294,20 +2290,20 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-	} 
-	
+	}
+
 	// get company > employees leave
 	 public function get_employees_leave() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
-		
+
 		$leave_type_id = $this->uri->segment(4);
 		$employee_id = $this->uri->segment(5);
-		
+
 		$remaining_leave = $this->Timesheet_model->count_total_leaves($leave_type_id,$employee_id);
 		$type = $this->Timesheet_model->read_leave_type_information($leave_type_id);
 		if(!is_null($type)){
@@ -2315,24 +2311,24 @@ class Timesheet extends MY_Controller {
 			$total = $type[0]->days_per_year;
 			$leave_remaining_total = $total - $remaining_leave;
 		} else {
-			$type_name = '--';	
+			$type_name = '--';
 			$leave_remaining_total = 0;
 		}
 		ob_start();
 		echo $leave_remaining_total." ".$type_name. ' ' .$this->lang->line('xin_remaining');
 		ob_end_flush();
-	} 
+	}
 	// get employee assigned leave types
 	 public function get_employee_assigned_leave_types() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$employee_id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'employee_id' => $employee_id
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/get_employee_assigned_leave_types", $data);
 		} else {
 			redirect('admin/');
@@ -2347,12 +2343,12 @@ class Timesheet extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'company_id' => $id
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/tasks/get_company_project", $data);
 		} else {
 			redirect('admin/');
@@ -2362,18 +2358,18 @@ class Timesheet extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	}
-	
+
 	// get company > employees
 	 public function get_company_employees() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'company_id' => $id
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/tasks/get_employees", $data);
 		} else {
 			redirect('admin/');
@@ -2389,12 +2385,12 @@ class Timesheet extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'company_id' => $id
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/get_update_employees", $data);
 		} else {
 			redirect('admin/');
@@ -2403,7 +2399,7 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-	
+
 	 }
 
 	 // get company > employees
@@ -2411,12 +2407,12 @@ class Timesheet extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'company_id' => $id
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/get_timesheet_employees", $data);
 		} else {
 			redirect('admin/');
@@ -2425,7 +2421,7 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-	
+
 	 }
 	// daily attendance list > timesheet
     public function dtwise_attendance_list()
@@ -2433,7 +2429,7 @@ class Timesheet extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/attendance_list", $data);
 		} else {
 			redirect('admin/');
@@ -2442,10 +2438,10 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
-		
+
+
 		$employee = $this->Xin_model->read_user_attendance_info();
-		
+
 		$data = array();
 
         foreach($employee->result() as $r) {
@@ -2460,7 +2456,7 @@ class Timesheet extends MY_Controller {
 		);
 	  echo json_encode($output);
 	  exit();
-     }	
+     }
 	 // date wise attendance list > timesheet
     public function date_wise_list()
      {
@@ -2468,7 +2464,7 @@ class Timesheet extends MY_Controller {
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/date_wise", $data);
 		} else {
 			redirect('admin/');
@@ -2477,8 +2473,8 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
-		$role_resources_ids = $this->Xin_model->user_role_resource(); 
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('381',$role_resources_ids) && $user_info[0]->user_role_id!=1) {
 			$employee_id = $this->input->get("user_id");
 		} else if($user_info[0]->user_role_id!=1) {
@@ -2488,29 +2484,29 @@ class Timesheet extends MY_Controller {
 		}
 		$system = $this->Xin_model->read_setting_info(1);
 		$employee = $this->Xin_model->read_user_info($employee_id);
-		
+
 		$start_date = new DateTime( $this->input->get("start_date"));
 		$end_date = new DateTime( $this->input->get("end_date") );
-		$end_date = $end_date->modify( '+1 day' ); 
-		
+		$end_date = $end_date->modify( '+1 day' );
+
 		$interval_re = new DateInterval('P1D');
 		$date_range = new DatePeriod($start_date, $interval_re ,$end_date);
 		$attendance_arr = array();
-		
+
 		$data = array();
 		foreach($date_range as $date) {
 		$attendance_date =  $date->format("Y-m-d");
        // foreach($employee->result() as $r) {
-			 			  		
+
 		// user full name
-	//	$full_name = $r->first_name.' '.$r->last_name;	
+	//	$full_name = $r->first_name.' '.$r->last_name;
 		// get office shift for employee
 		$get_day = strtotime($attendance_date);
 		$day = date('l', $get_day);
-		
+
 		// office shift
 		$office_shift = $this->Timesheet_model->read_office_shift_information($employee[0]->office_shift_id);
-		
+
 		// get clock in/clock out of each employee
 		if($day == 'Monday') {
 			if($office_shift[0]->monday_in_time==''){
@@ -2571,7 +2567,7 @@ class Timesheet extends MY_Controller {
 		}
 		// check if clock-in for date
 		$attendance_status = '';
-		$check = $this->Timesheet_model->attendance_first_in_check($employee[0]->user_id,$attendance_date);		
+		$check = $this->Timesheet_model->attendance_first_in_check($employee[0]->user_id,$attendance_date);
 		if($check->num_rows() > 0){
 			// check clock in time
 			$attendance = $this->Timesheet_model->attendance_first_in($employee[0]->user_id,$attendance_date);
@@ -2582,7 +2578,7 @@ class Timesheet extends MY_Controller {
 				$clkInIp = $clock_in2.'<br><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-ipaddress="'.$attendance[0]->clock_in_ip_address.'" data-uid="'.$employee[0]->user_id.'" data-att_type="clock_in" data-start_date="'.$attendance_date.'"><i class="ft-map-pin"></i> '.$this->lang->line('xin_attend_clkin_ip').'</button>';
 			} else {
 				$clkInIp = $clock_in2;
-			}		
+			}
 			$office_time =  new DateTime($in_time.' '.$attendance_date);
 			//time diff > total time late
 			$office_time_new = strtotime($in_time.' '.$attendance_date);
@@ -2592,10 +2588,10 @@ class Timesheet extends MY_Controller {
 			} else {
 				$interval_late = $clock_in->diff($office_time);
 				$hours_l   = $interval_late->format('%h');
-				$minutes_l = $interval_late->format('%i');			
+				$minutes_l = $interval_late->format('%i');
 				$total_time_l = $hours_l ."h ".$minutes_l."m";
 			}
-			
+
 			// total hours work/ed
 			$total_hrs = $this->Timesheet_model->total_hours_worked_attendance($employee[0]->user_id,$attendance_date);
 			$hrs_old_int1 = 0;
@@ -2605,45 +2601,45 @@ class Timesheet extends MY_Controller {
 			$hrs_old_seconds_rs = 0;
 			$total_time_rs = '';
 			$hrs_old_int_res1 = 0;
-			foreach ($total_hrs->result() as $hour_work){		
-				// total work			
+			foreach ($total_hrs->result() as $hour_work){
+				// total work
 				$timee = $hour_work->total_work.':00';
 				$str_time =$timee;
-	
+
 				$str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
-				
+
 				sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
-				
+
 				$hrs_old_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-				
+
 				$hrs_old_int1 += $hrs_old_seconds;
-				
-				$Total = gmdate("H:i", $hrs_old_int1);	
+
+				$Total = gmdate("H:i", $hrs_old_int1);
 			}
 			if($Total=='') {
 				$total_work = '00:00';
 			} else {
 				$total_work = $Total;
 			}
-			
-			// total rest > 
+
+			// total rest >
 			$total_rest = $this->Timesheet_model->total_rest_attendance($employee[0]->user_id,$attendance_date);
-			foreach ($total_rest->result() as $rest){			
+			foreach ($total_rest->result() as $rest){
 				// total rest
 				$str_time_rs = $rest->total_rest.':00';
 				//$str_time_rs =$timee_rs;
-	
+
 				$str_time_rs = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time_rs);
-				
+
 				sscanf($str_time_rs, "%d:%d:%d", $hours_rs, $minutes_rs, $seconds_rs);
-				
+
 				$hrs_old_seconds_rs = $hours_rs * 3600 + $minutes_rs * 60 + $seconds_rs;
-				
+
 				$hrs_old_int_res1 += $hrs_old_seconds_rs;
-				
+
 				$total_time_rs = gmdate("H:i", $hrs_old_int_res1);
 			}
-			
+
 			// check attendance status
 			$status = $attendance[0]->attendance_status;
 			if($total_time_rs=='') {
@@ -2651,7 +2647,7 @@ class Timesheet extends MY_Controller {
 			} else {
 				$Trest = $total_time_rs;
 			}
-		
+
 		} else {
 			$clock_in2 = '-';
 			$total_time_l = '00:00';
@@ -2667,19 +2663,19 @@ class Timesheet extends MY_Controller {
 				$h_date = $this->Timesheet_model->holiday_date($attendance_date);
 				$begin = new DateTime( $h_date[0]->start_date );
 				$end = new DateTime( $h_date[0]->end_date);
-				$end = $end->modify( '+1 day' ); 
-				
+				$end = $end->modify( '+1 day' );
+
 				$interval = new DateInterval('P1D');
 				$daterange = new DatePeriod($begin, $interval ,$end);
-				
+
 				foreach($daterange as $date){
 					$holiday_arr[] =  $date->format("Y-m-d");
 				}
 			} else {
 				$holiday_arr[] = '99-99-99';
 			}
-			
-			
+
+
 			// get leave/employee
 			$leave_date_chck = $this->Timesheet_model->leave_date_check($employee[0]->user_id,$attendance_date);
 			$leave_arr = array();
@@ -2687,46 +2683,46 @@ class Timesheet extends MY_Controller {
 				$leave_date = $this->Timesheet_model->leave_date($employee[0]->user_id,$attendance_date);
 				$begin1 = new DateTime( $leave_date[0]->from_date );
 				$end1 = new DateTime( $leave_date[0]->to_date);
-				$end1 = $end1->modify( '+1 day' ); 
-				
+				$end1 = $end1->modify( '+1 day' );
+
 				$interval1 = new DateInterval('P1D');
 				$daterange1 = new DatePeriod($begin1, $interval1 ,$end1);
-				
+
 				foreach($daterange1 as $date1){
 					$leave_arr[] =  $date1->format("Y-m-d");
-				}	
+				}
 			} else {
 				$leave_arr[] = '99-99-99';
 			}
-				
+
 			if($office_shift[0]->monday_in_time == '' && $day == 'Monday') {
-				$status = $this->lang->line('xin_holiday');	
+				$status = $this->lang->line('xin_holiday');
 			} else if($office_shift[0]->tuesday_in_time == '' && $day == 'Tuesday') {
-				$status = $this->lang->line('xin_holiday');	
+				$status = $this->lang->line('xin_holiday');
 			} else if($office_shift[0]->wednesday_in_time == '' && $day == 'Wednesday') {
-				$status = $this->lang->line('xin_holiday');	
+				$status = $this->lang->line('xin_holiday');
 			} else if($office_shift[0]->thursday_in_time == '' && $day == 'Thursday') {
-				$status = $this->lang->line('xin_holiday');	
+				$status = $this->lang->line('xin_holiday');
 			} else if($office_shift[0]->friday_in_time == '' && $day == 'Friday') {
-				$status = $this->lang->line('xin_holiday');	
+				$status = $this->lang->line('xin_holiday');
 			} else if($office_shift[0]->saturday_in_time == '' && $day == 'Saturday') {
-				$status = $this->lang->line('xin_holiday');	
+				$status = $this->lang->line('xin_holiday');
 			} else if($office_shift[0]->sunday_in_time == '' && $day == 'Sunday') {
-				$status = $this->lang->line('xin_holiday');	
+				$status = $this->lang->line('xin_holiday');
 			} else if(in_array($attendance_date,$holiday_arr)) { // holiday
 				$status = $this->lang->line('xin_holiday');
 			} else if(in_array($attendance_date,$leave_arr)) { // on leave
 				$status = $this->lang->line('xin_on_leave');
-			} 
+			}
 			else {
 				$status = $this->lang->line('xin_absent');
 			}
 		}
-		
-		
-		
+
+
+
 		// check if clock-out for date
-		$check_out = $this->Timesheet_model->attendance_first_out_check($employee[0]->user_id,$attendance_date);		
+		$check_out = $this->Timesheet_model->attendance_first_out_check($employee[0]->user_id,$attendance_date);
 		if($check_out->num_rows() == 1){
 			/* early time */
 			$early_time =  new DateTime($out_time.' '.$attendance_date);
@@ -2734,56 +2730,56 @@ class Timesheet extends MY_Controller {
 			$first_out = $this->Timesheet_model->attendance_first_out($employee[0]->user_id,$attendance_date);
 			// clock out
 			$clock_out = new DateTime($first_out[0]->clock_out);
-			
+
 			if ($first_out[0]->clock_out!='') {
 				$clock_out2 = $clock_out->format('h:i a');
 				if($system[0]->is_ssl_available=='yes'){
 					$clkOutIp = $clock_out2.'<br><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-ipaddress="'.$attendance[0]->clock_out_ip_address.'" data-uid="'.$employee[0]->user_id.'" data-att_type="clock_out" data-start_date="'.$attendance_date.'"><i class="ft-map-pin"></i> '.$this->lang->line('xin_attend_clkout_ip').'</button>';
 				} else {
 					$clkOutIp = $clock_out2;
-				}			
+				}
 				// early leaving
 				$early_new_time = strtotime($out_time.' '.$attendance_date);
 				$clock_out_time_new = strtotime($first_out[0]->clock_out);
-			
+
 				if($early_new_time <= $clock_out_time_new) {
 					$total_time_e = '00:00';
-				} else {			
+				} else {
 					$interval_lateo = $clock_out->diff($early_time);
 					$hours_e   = $interval_lateo->format('%h');
-					$minutes_e = $interval_lateo->format('%i');			
+					$minutes_e = $interval_lateo->format('%i');
 					$total_time_e = $hours_e ."h ".$minutes_e."m";
 				}
-				
+
 				/* over time */
 				$over_time =  new DateTime($out_time.' '.$attendance_date);
 				$overtime2 = $over_time->format('h:i a');
 				// over time
 				$over_time_new = strtotime($out_time.' '.$attendance_date);
 				$clock_out_time_new1 = strtotime($first_out[0]->clock_out);
-				
+
 				if($clock_out_time_new1 <= $over_time_new) {
 					$overtime2 = '00:00';
-				} else {			
+				} else {
 					$interval_lateov = $clock_out->diff($over_time);
 					$hours_ov   = $interval_lateov->format('%h');
-					$minutes_ov = $interval_lateov->format('%i');			
+					$minutes_ov = $interval_lateov->format('%i');
 					$overtime2 = $hours_ov ."h ".$minutes_ov."m";
-				}				
-				
+				}
+
 			} else {
 				$clock_out2 =  '-';
 				$total_time_e = '00:00';
 				$overtime2 = '00:00';
 				$clkOutIp = $clock_out2;
 			}
-					
+
 		} else {
 			$clock_out2 =  '-';
 			$total_time_e = '00:00';
 			$overtime2 = '00:00';
 			$clkOutIp = $clock_out2;
-		}		
+		}
 		// user full name
 			$full_name = $employee[0]->first_name.' '.$employee[0]->last_name;
 			// get company
@@ -2791,8 +2787,8 @@ class Timesheet extends MY_Controller {
 			if(!is_null($company)){
 				$comp_name = $company[0]->name;
 			} else {
-				$comp_name = '--';	
-			}	
+				$comp_name = '--';
+			}
 			// attendance date
 			$tdate = $this->Xin_model->set_date_format($attendance_date);
 			/*if($user_info[0]->user_role_id==1){
@@ -2815,7 +2811,7 @@ class Timesheet extends MY_Controller {
 				$total_work,
 				$Trest
 			);
-		
+
 		/*$data[] = array(
 			$status,
 			$tdate,
@@ -2838,7 +2834,7 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // update_attendance_list > timesheet
 	 public function update_attendance_list() {
 
@@ -2856,14 +2852,14 @@ class Timesheet extends MY_Controller {
 		$designation = $this->designation_model->read_designation_information($user[0]->designation_id);
 		// department
 		$department = $this->department_model->read_department_information($user[0]->department_id);
-		
+
 		$dept_des = $designation[0]->designation_name.' in '.$department[0]->department_name;
 		$employee_name = $full_name.' ('.$dept_des.')';
 		$data = array(
 				'employee_name' => $employee_name,
 				//'employee_id' => $result[0]->employee_id,
 				);*/
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/update_attendance", $data);
 		} else {
 			redirect('admin/');
@@ -2872,20 +2868,20 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
-		
-		
+
+
+
 		$attendance_employee = $this->Timesheet_model->attendance_employee_with_date($employee_id,$attendance_date);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$data = array();
 
           foreach($attendance_employee->result() as $r) {
-			  
+
 			// total work
 			$in_time = new DateTime($r->clock_in);
 			$out_time = new DateTime($r->clock_out);
-			
-			$clock_in = $in_time->format('h:i a');			
+
+			$clock_in = $in_time->format('h:i a');
 			// attendance date
 			$att_date_in = explode(' ',$r->clock_in);
 			$att_date_out = explode(' ',$r->clock_out);
@@ -2898,7 +2894,7 @@ class Timesheet extends MY_Controller {
 				$clock_out = $out_time->format('h:i a');
 				$interval = $in_time->diff($out_time);
 				$hours  = $interval->format('%h');
-				$minutes = $interval->format('%i');			
+				$minutes = $interval->format('%i');
 				$total_time = $hours ."h ".$minutes."m";
 				$codate = $this->Xin_model->set_date_format($att_date_out[0]);
 				$cout_date = $codate.' '.$clock_out;
@@ -2913,7 +2909,7 @@ class Timesheet extends MY_Controller {
 			} else {
 				$delete = '';
 			}
-			
+
 			$combhr = $edit.$delete;
 
 		   $data[] = array(
@@ -2933,13 +2929,13 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // update_attendance_list > timesheet
 	 public function office_shift_list() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/office_shift", $data);
 		} else {
 			redirect('admin/');
@@ -2948,8 +2944,8 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
-		
+
+
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		if($user_info[0]->user_role_id==1){
@@ -2964,7 +2960,7 @@ class Timesheet extends MY_Controller {
 		$data = array();
 
           foreach($office_shift->result() as $r) {
-			  
+
 			/* get Office Shift info*/
 			$monday_in_time = new DateTime($r->monday_in_time);
 			$monday_out_time = new DateTime($r->monday_out_time);
@@ -2980,7 +2976,7 @@ class Timesheet extends MY_Controller {
 			$saturday_out_time = new DateTime($r->saturday_out_time);
 			$sunday_in_time = new DateTime($r->sunday_in_time);
 			$sunday_out_time = new DateTime($r->sunday_out_time);
-			
+
 			if($r->monday_in_time == '') {
 				$monday = '-';
 			} else {
@@ -3016,15 +3012,15 @@ class Timesheet extends MY_Controller {
 			} else {
 				$sunday = $sunday_in_time->format('h:i a') .' ' . $this->lang->line('dashboard_to').' ' .$sunday_out_time->format('h:i a');
 			}
-			
+
 			// get company
 			$company = $this->Xin_model->read_company_info($r->company_id);
 			if(!is_null($company)){
 				$comp_name = $company[0]->name;
 			} else {
-				$comp_name = '--';	
+				$comp_name = '--';
 			}
-			
+
 			if(in_array('281',$role_resources_ids)) { //edit
 				$edit = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light edit-data" data-toggle="modal" data-target=".edit-modal-data" data-office_shift_id="'. $r->office_shift_id.'" ><span class="fa fa-pencil"></span></button></span>';
 			} else {
@@ -3046,7 +3042,7 @@ class Timesheet extends MY_Controller {
 		 	$functions = '';
 		 }
 		 $combhr = $edit.$functions.$delete;
-		
+
 		 if($r->default_shift==1){
 			$success = '<span class="badge badge-success">'.$this->lang->line('xin_default').'</span>';
 		 } else {
@@ -3076,13 +3072,13 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // holidays_list > timesheet
 	 public function holidays_list() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/holidays", $data);
 		} else {
 			redirect('admin/');
@@ -3091,7 +3087,7 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-				
+
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		if($this->input->get("ihr")=='true'){
@@ -3114,7 +3110,7 @@ class Timesheet extends MY_Controller {
 		$data = array();
 
         foreach($holidays->result() as $r) {
-			  
+
 			/* get publish/unpublish label*/
 			 if($r->is_publish==1): $publish = '<span class="badge bg-green">'.$this->lang->line('xin_published').'</span>'; else: $publish = '<span class="badge bg-orange">'.$this->lang->line('xin_unpublished').'</span>'; endif;
 			 // get start date and end date
@@ -3125,7 +3121,7 @@ class Timesheet extends MY_Controller {
 			if(!is_null($company)){
 				$comp_name = $company[0]->name;
 			} else {
-				$comp_name = '--';	
+				$comp_name = '--';
 			}
 			if(in_array('284',$role_resources_ids)) { //edit
 				$edit = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light edit-data" data-toggle="modal" data-target=".edit-modal-data" data-holiday_id="'. $r->holiday_id.'"><span class="fa fa-pencil"></span></button></span>';
@@ -3161,13 +3157,13 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // leave list > timesheet
 	 public function leave_list() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/timesheet/leave", $data);
 		} else {
 			redirect('admin/');
@@ -3176,7 +3172,7 @@ class Timesheet extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$data = array();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
@@ -3200,12 +3196,12 @@ class Timesheet extends MY_Controller {
 				$leave = $this->Timesheet_model->get_leaves($session['user_id']);
 			} else {
 				$leave = $this->Timesheet_model->get_leaves();
-			} 
-			
+			}
+
 		// }
 		// dd($leave->result());
 		foreach($leave->result() as $r) {
-			  
+
 			// get start date and end date
 			$user = $this->Xin_model->read_user_info($r->employee_id);
 			if(!is_null($user)){
@@ -3215,29 +3211,29 @@ class Timesheet extends MY_Controller {
 				if(!is_null($department)){
 					$department_name = $department[0]->department_name;
 				} else {
-					$department_name = '--';	
+					$department_name = '--';
 				}
 			} else {
-				$full_name = '--';	
+				$full_name = '--';
 				$department_name = '--';
 			}
-			 
+
 			// get leave type
 			$leave_type = $this->Timesheet_model->read_leave_type_information($r->leave_type_id);
 			if(!is_null($leave_type)){
 				$type_name = $leave_type[0]->type_name;
 			} else {
-				$type_name = '--';	
+				$type_name = '--';
 			}
-			
+
 			// get company
 			$company = $this->Xin_model->read_company_info($r->company_id);
 			if(!is_null($company)){
 				$comp_name = $company[0]->name;
 			} else {
-				$comp_name = '--';	
+				$comp_name = '--';
 			}
-			 
+
 			$datetime1 = new DateTime($r->from_date);
 			$datetime2 = new DateTime($r->to_date);
 			$interval = $datetime1->diff($datetime2);
@@ -3248,19 +3244,19 @@ class Timesheet extends MY_Controller {
 			}
 			$applied_on = $this->Xin_model->set_date_format($r->applied_on);
 			 /*$duration = $this->Xin_model->set_date_format($r->from_date).' '.$this->lang->line('dashboard_to').' '.$this->Xin_model->set_date_format($r->to_date).'<br>'.$this->lang->line('xin_hrsale_total_days').': '.$no_of_days;*/
-			
+
 			 if($r->is_half_day == 1){
 			$duration = $this->Xin_model->set_date_format($r->from_date).' '.$this->lang->line('dashboard_to').' '.$this->Xin_model->set_date_format($r->to_date).'<br>'.$this->lang->line('xin_hrsale_total_days').': '.$this->lang->line('xin_hr_leave_half_day');
 			} else {
 				$duration = $this->Xin_model->set_date_format($r->from_date).' '.$this->lang->line('dashboard_to').' '.$this->Xin_model->set_date_format($r->to_date).'<br>'.$this->lang->line('xin_hrsale_total_days').': '.$no_of_days;
 			}
-			
+
 			if($r->status==1): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_pending').'</span>';
 			elseif($r->status==2): $status = '<span class="badge bg-green">'.$this->lang->line('xin_approved').'</span>';
 			elseif($r->status==4): $status = '<span class="badge bg-green">'.$this->lang->line('xin_role_first_level_approved').'</span>';
 			else: $status = '<span class="badge bg-red">'.$this->lang->line('xin_rejected').'</span>'; endif;
-			
-			
+
+
 			if(in_array('288',$role_resources_ids)) { //edit
 				$edit = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light edit-data" data-toggle="modal" data-target=".edit-modal-data" data-leave_id="'. $r->leave_id.'" ><span class="fa fa-pencil"></span></button></span>';
 			} else {
@@ -3278,7 +3274,7 @@ class Timesheet extends MY_Controller {
 			}
 			$combhr = $edit.$view.$delete;
 			$itype_name = $type_name.'<br><small class="text-muted"><i>'.$this->lang->line('xin_reason').': '.$r->reason.'<i></i></i></small><br><small class="text-muted"><i>'.$status.'<i></i></i></small><br><small class="text-muted"><i>'.$this->lang->line('left_company').': '.$comp_name.'<i></i></i></small>';
-	
+
 		   $data[] = array(
 				$combhr,
 				$itype_name,
@@ -3297,10 +3293,10 @@ class Timesheet extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	
+
 	//  end
-	 
-	// add attendance > modal form 
+
+	// add attendance > modal form
 	public function update_attendance_add()
 	{
 		$data['title'] = $this->Xin_model->site_title();
@@ -3309,30 +3305,30 @@ class Timesheet extends MY_Controller {
 				'employee_id' => $employee_id,
 				);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/timesheet/dialog_attendance', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	// Validate and add info in database
 	public function add_task() {
-	
-		if($this->input->post('add_type')=='task') {		
+
+		if($this->input->post('add_type')=='task') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
+
 		$start_date = $this->input->post('start_date');
 		$end_date = $this->input->post('end_date');
 		$description = $this->input->post('description');
-	
+
 		$st_date = strtotime($start_date);
 		$ed_date = strtotime($end_date);
 		$qt_description = htmlspecialchars(addslashes($description), ENT_QUOTES);
-		
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('company_id')==='') {
         	$Return['error'] = $this->lang->line('error_company_field');
 		} else if($this->input->post('task_name')==='') {
@@ -3350,15 +3346,15 @@ class Timesheet extends MY_Controller {
 		} else if($this->input->post('assigned_to')==='') {
 			$Return['error'] = $this->lang->line('xin_error_task_assigned_user');
 		}
-						
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		$assigned_ids = implode(',',$this->input->post('assigned_to'));
 		// get company name by project id
 		$co_info  = $this->Project_model->read_project_information($this->input->post('project_id'));
-			
+
 		$data = array(
 		'project_id' => $this->input->post('project_id'),
 		'company_id' => $this->input->post('company_id'),
@@ -3374,40 +3370,40 @@ class Timesheet extends MY_Controller {
 		'created_at' => date('Y-m-d h:i:s')
 		);
 		$result = $this->Timesheet_model->add_task_record($data);
-		
+
 		if ($result == TRUE) {
 			$row = $this->db->select("*")->limit(1)->order_by('task_id',"DESC")->get("xin_tasks")->row();
-			$Return['result'] = $this->lang->line('xin_success_task_added');	
+			$Return['result'] = $this->lang->line('xin_success_task_added');
 			$Return['re_last_id'] = $row->task_id;
-			//get setting info 
+			//get setting info
 			$setting = $this->Xin_model->read_setting_info(1);
 			if($setting[0]->enable_email_notification == 'yes') {
-			
+
 				$this->email->set_mailtype("html");
 				$to_email = array();
 				foreach($this->input->post('assigned_to') as $p_employee) {
-					
+
 					// assigned by
-					$user_info = $this->Xin_model->read_user_info($this->input->post('user_id'));	
-					$full_name = $user_info[0]->first_name.' '.$user_info[0]->last_name;		
-					
+					$user_info = $this->Xin_model->read_user_info($this->input->post('user_id'));
+					$full_name = $user_info[0]->first_name.' '.$user_info[0]->last_name;
+
 					// assigned to
-					$user_to = $this->Xin_model->read_user_info($p_employee);	
+					$user_to = $this->Xin_model->read_user_info($p_employee);
 					//get company info
 					$cinfo = $this->Xin_model->read_company_setting_info(1);
 					//get email template
 					$template = $this->Xin_model->read_email_template(14);
-					
+
 					$subject = $template[0]->subject.' - '.$cinfo[0]->company_name;
 					$logo = base_url().'uploads/logo/signin/'.$cinfo[0]->sign_in_logo;
-					
+
 					$message = '
 			<div style="background:#f6f6f6;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:12px;margin:0;padding:0;padding: 20px;">
 			<img src="'.$logo.'" title="'.$cinfo[0]->company_name.'"><br>'.str_replace(array("{var site_name}","{var site_url}","{var task_name}","{var task_assigned_by}"),array($cinfo[0]->company_name,site_url(),$this->input->post('task_name'),$full_name),htmlspecialchars_decode(stripslashes($template[0]->message))).'</div>';
-			
+
 					hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$user_info[0]->email,$subject,$message);
 				}
-			}		
+			}
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
 		}
@@ -3415,24 +3411,24 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database
 	public function add_project_variation() {
-	
-		if($this->input->post('add_type')=='variation') {		
+
+		if($this->input->post('add_type')=='variation') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
+
 		$start_date = $this->input->post('start_date');
 		$end_date = $this->input->post('end_date');
 		$description = $this->input->post('description');
-	
+
 		$st_date = strtotime($start_date);
 		$ed_date = strtotime($end_date);
 		$qt_description = htmlspecialchars(addslashes($description), ENT_QUOTES);
-		
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('company_id')==='') {
         	$Return['error'] = $this->lang->line('error_company_field');
 		} else if($this->input->post('variation_name')==='') {
@@ -3452,15 +3448,15 @@ class Timesheet extends MY_Controller {
 		} else if($this->input->post('assigned_to')==='') {
 			$Return['error'] = $this->lang->line('xin_error_task_assigned_user');
 		}
-						
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		$assigned_ids = implode(',',$this->input->post('assigned_to'));
 		// get company name by project id
 		$co_info  = $this->Project_model->read_project_information($this->input->post('project_id'));
-			
+
 		$data = array(
 		'project_id' => $this->input->post('project_id'),
 		'company_id' => $this->input->post('company_id'),
@@ -3477,9 +3473,9 @@ class Timesheet extends MY_Controller {
 		'created_at' => date('Y-m-d h:i:s')
 		);
 		$result = $this->Timesheet_model->add_project_variations($data);
-		
+
 		if ($result == TRUE) {
-			$Return['result'] = $this->lang->line('xin_success_task_added');	
+			$Return['result'] = $this->lang->line('xin_success_task_added');
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
 		}
@@ -3487,17 +3483,17 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
-	
+
+
 	// Validate and add info in database
 	public function add_attendance() {
-	
-		if($this->input->post('add_type')=='attendance') {		
+
+		if($this->input->post('add_type')=='attendance') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('attendance_date_m')==='') {
         	$Return['error'] = $this->lang->line('xin_error_attendance_date');
 		} else if($this->input->post('clock_in_m')==='') {
@@ -3505,27 +3501,27 @@ class Timesheet extends MY_Controller {
 		} else if($this->input->post('clock_out_m')==='') {
         	$Return['error'] = $this->lang->line('xin_error_attendance_out_time');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		$attendance_date = $this->input->post('attendance_date_m');
 		$clock_in = $this->input->post('clock_in_m');
 		$clock_out = $this->input->post('clock_out_m');
-		
+
 		$clock_in2 = $attendance_date.' '.$clock_in.':00';
 		$clock_out2 = $attendance_date.' '.$clock_out.':00';
-		
+
 		//total work
 		$total_work_cin =  new DateTime($clock_in2);
 		$total_work_cout =  new DateTime($clock_out2);
-		
+
 		$interval_cin = $total_work_cout->diff($total_work_cin);
 		$hours_in   = $interval_cin->format('%h');
 		$minutes_in = $interval_cin->format('%i');
 		$total_work = $hours_in .":".$minutes_in;
-	
+
 		$data = array(
 		'employee_id' => $this->input->post('employee_id_m'),
 		'attendance_date' => $attendance_date,
@@ -3539,7 +3535,7 @@ class Timesheet extends MY_Controller {
 		'clock_in_out' => '0'
 		);
 		$result = $this->Timesheet_model->add_employee_attendance($data);
-		
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_success_attendance_added');
 		} else {
@@ -3549,11 +3545,11 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database
 	public function add_holiday() {
-	
-		if($this->input->post('add_type')=='holiday') {		
+
+		if($this->input->post('add_type')=='holiday') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -3563,8 +3559,8 @@ class Timesheet extends MY_Controller {
 		$st_date = strtotime($start_date);
 		$ed_date = strtotime($end_date);
 		$qt_description = htmlspecialchars(addslashes($description), ENT_QUOTES);
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('company_id')==='') {
 			$Return['error'] = $this->lang->line('error_company_field');
 		} else if($this->input->post('event_name')==='') {
@@ -3576,11 +3572,11 @@ class Timesheet extends MY_Controller {
 		} else if($st_date > $ed_date) {
 			$Return['error'] = $this->lang->line('xin_error_start_end_date');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'event_name' => $this->input->post('event_name'),
 		'company_id' => $this->input->post('company_id'),
@@ -3591,11 +3587,11 @@ class Timesheet extends MY_Controller {
 		'created_at' => date('Y-m-d')
 		);
 		$result = $this->Timesheet_model->add_holiday_record($data);
-		
+
 		if ($result == TRUE) {
 			$row = $this->db->select("*")->limit(1)->order_by('holiday_id',"DESC")->get("xin_holidays")->row();
 			$Return['result'] = $this->lang->line('xin_holiday_added');
-			$Return['re_last_id'] = $row->holiday_id;	
+			$Return['re_last_id'] = $row->holiday_id;
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
 		}
@@ -3603,13 +3599,13 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database
 	public function edit_holiday() {
-	
+
 		if($this->input->post('edit_type')=='holiday') {
-			
-		$id = $this->uri->segment(4);		
+
+		$id = $this->uri->segment(4);
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -3619,8 +3615,8 @@ class Timesheet extends MY_Controller {
 		$st_date = strtotime($start_date);
 		$ed_date = strtotime($end_date);
 		$qt_description = htmlspecialchars(addslashes($description), ENT_QUOTES);
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('company_id')==='') {
 			$Return['error'] = $this->lang->line('error_company_field');
 		} else if($this->input->post('event_name')==='') {
@@ -3632,11 +3628,11 @@ class Timesheet extends MY_Controller {
 		} else if($st_date > $ed_date) {
 			$Return['error'] = $this->lang->line('xin_error_start_end_date');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'event_name' => $this->input->post('event_name'),
 		'company_id' => $this->input->post('company_id'),
@@ -3645,9 +3641,9 @@ class Timesheet extends MY_Controller {
 		'end_date' => $this->input->post('end_date'),
 		'is_publish' => $this->input->post('is_publish')
 		);
-		
+
 		$result = $this->Timesheet_model->update_holiday_record($data,$id);
-		
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_success_holiday_updated');
 		} else {
@@ -3657,36 +3653,36 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database
 	public function edit_leave() {
-	
+
 		if($this->input->post('edit_type')=='leave') {
-			
-		$id = $this->uri->segment(4);		
+
+		$id = $this->uri->segment(4);
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
+
 		$remarks = $this->input->post('remarks');
 		$qt_remarks = htmlspecialchars(addslashes($remarks), ENT_QUOTES);
-		
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('reason')==='') {
 			$Return['error'] = $this->lang->line('xin_error_leave_type_reason');
 		}
-						
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-			
+
 		$data = array(
 		'reason' => $this->input->post('reason'),
 		'remarks' => $qt_remarks
 		);
-		
+
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
-		
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_success_leave_updated');
 		} else {
@@ -3696,27 +3692,27 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 
 	// Validate and add info in database
 	public function edit_task() {
-	
+
 		if($this->input->post('edit_type')=='task') {
-			
-		$id = $this->uri->segment(4);		
+
+		$id = $this->uri->segment(4);
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
+
 		$start_date = $this->input->post('start_date');
 		$end_date = $this->input->post('end_date');
 		$description = $this->input->post('description');
-	
+
 		$st_date = strtotime($start_date);
 		$ed_date = strtotime($end_date);
 		$qt_description = htmlspecialchars(addslashes($description), ENT_QUOTES);
-		
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('project_id')==='') {
         	$Return['error'] = $this->lang->line('xin_error_project_field');
 		} else if($this->input->post('task_name')==='') {
@@ -3730,17 +3726,17 @@ class Timesheet extends MY_Controller {
 		} else if($this->input->post('task_hour')==='') {
 			$Return['error'] = $this->lang->line('xin_error_task_hour');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		if(null!=$this->input->post('assigned_to')) {
 			$assigned_ids = implode(',',$this->input->post('assigned_to'));
 		} else {
 			$assigned_ids = 'None';
 		}
-			
+
 		$data = array(
 		'task_name' => $this->input->post('task_name'),
 		'project_id' => $this->input->post('project_id'),
@@ -3750,9 +3746,9 @@ class Timesheet extends MY_Controller {
 		'task_hour' => $this->input->post('task_hour'),
 		'description' => $qt_description
 		);
-		
+
 		$result = $this->Timesheet_model->update_task_record($data,$id);
-		
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_success_task_updated');
 		} else {
@@ -3764,23 +3760,23 @@ class Timesheet extends MY_Controller {
 	}
 	// Validate and add info in database
 	public function edit_variation() {
-	
+
 		if($this->input->post('edit_type')=='variation') {
-			
-		$id = $this->uri->segment(4);		
+
+		$id = $this->uri->segment(4);
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
+
 		$start_date = $this->input->post('start_date');
 		$end_date = $this->input->post('end_date');
 		$description = $this->input->post('description');
-	
+
 		$st_date = strtotime($start_date);
 		$ed_date = strtotime($end_date);
 		$qt_description = htmlspecialchars(addslashes($description), ENT_QUOTES);
-		
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('variation_name')==='') {
         	$Return['error'] = $this->lang->line('xin_project_variation_title_field_error');
 		} else if($this->input->post('variation_no')==='') {
@@ -3796,17 +3792,17 @@ class Timesheet extends MY_Controller {
 		} else if($this->input->post('assigned_to')==='') {
 			$Return['error'] = $this->lang->line('xin_error_task_assigned_user');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		if(null!=$this->input->post('assigned_to')) {
 			$assigned_ids = implode(',',$this->input->post('assigned_to'));
 		} else {
 			$assigned_ids = 'None';
 		}
-			
+
 		$data = array(
 		'variation_name' => $this->input->post('variation_name'),
 		'variation_no' => $this->input->post('variation_no'),
@@ -3818,9 +3814,9 @@ class Timesheet extends MY_Controller {
 		'client_approval' => $this->input->post('client_approval'),
 		'description' => $qt_description
 		);
-		
+
 		$result = $this->Timesheet_model->update_project_variations($data,$id);
-		
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_project_variation_added_updated');
 		} else {
@@ -3830,14 +3826,14 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// get record of leave by id > modal
 	public function read_task_record()
 	{
 		$data['title'] = $this->Xin_model->site_title();
 		$task_id = $this->input->get('task_id');
 		$result = $this->Timesheet_model->read_task_information($task_id);
-		
+
 		$data = array(
 				'task_id' => $result[0]->task_id,
 				'project_id' => $result[0]->project_id,
@@ -3857,7 +3853,7 @@ class Timesheet extends MY_Controller {
 				'all_projects' => $this->Project_model->get_all_projects()
 				);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/timesheet/tasks/dialog_task', $data);
 		} else {
 			redirect('admin/');
@@ -3869,7 +3865,7 @@ class Timesheet extends MY_Controller {
 		$data['title'] = $this->Xin_model->site_title();
 		$variation_id = $this->input->get('variation_id');
 		$result = $this->Timesheet_model->read_variation_information($variation_id);
-		
+
 		$data = array(
 				'variation_id' => $result[0]->variation_id,
 				'project_id' => $result[0]->project_id,
@@ -3888,13 +3884,13 @@ class Timesheet extends MY_Controller {
 				'all_employees' => $this->Xin_model->all_employees()
 				);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/timesheet/tasks/dialog_task', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	// get record of leave by id > modal
 	public function read_leave_record()
 	{
@@ -3919,14 +3915,14 @@ class Timesheet extends MY_Controller {
 				'all_leave_types' => $this->Timesheet_model->all_leave_types(),
 				);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/timesheet/dialog_leave', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
-	
+
+
 	// get record of attendance
 	public function read()
 	{
@@ -3936,17 +3932,17 @@ class Timesheet extends MY_Controller {
 		$user = $this->Xin_model->read_user_info($result[0]->employee_id);
 		// user full name
 		$full_name = $user[0]->first_name.' '.$user[0]->last_name;
-		
+
 		$in_time = new DateTime($result[0]->clock_in);
 		$out_time = new DateTime($result[0]->clock_out);
-		
+
 		$clock_in = $in_time->format('H:i');
 		if($result[0]->clock_out == '') {
 			$clock_out = '';
 		} else {
 			$clock_out = $out_time->format('H:i');
 		}
-		
+
 		$data = array(
 				'time_attendance_id' => $result[0]->time_attendance_id,
 				'employee_id' => $result[0]->employee_id,
@@ -3956,20 +3952,20 @@ class Timesheet extends MY_Controller {
 				'clock_out' => $clock_out
 				);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/timesheet/dialog_attendance', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	// get record of holiday
 	public function read_holiday_record()
 	{
 		$data['title'] = $this->Xin_model->site_title();
 		$holiday_id = $this->input->get('holiday_id');
 		$result = $this->Timesheet_model->read_holiday_information($holiday_id);
-		
+
 		$data = array(
 				'holiday_id' => $result[0]->holiday_id,
 				'company_id' => $result[0]->company_id,
@@ -3981,20 +3977,20 @@ class Timesheet extends MY_Controller {
 				'get_all_companies' => $this->Xin_model->get_companies()
 				);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/timesheet/dialog_holiday', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	// get record of office shift
 	public function read_shift_record()
 	{
 		$data['title'] = $this->Xin_model->site_title();
 		$office_shift_id = $this->input->get('office_shift_id');
 		$result = $this->Timesheet_model->read_office_shift_information($office_shift_id);
-		
+
 		$data = array(
 				'office_shift_id' => $result[0]->office_shift_id,
 				'company_id' => $result[0]->company_id,
@@ -4016,7 +4012,7 @@ class Timesheet extends MY_Controller {
 				'sunday_out_time' => $result[0]->sunday_out_time
 				);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/timesheet/dialog_office_shift', $data);
 		} else {
 			redirect('admin/');
@@ -4028,31 +4024,31 @@ class Timesheet extends MY_Controller {
 		$data['title'] = $this->Xin_model->site_title();
 		//$office_shift_id = $this->input->get('office_shift_id');
 		//$result = $this->Timesheet_model->read_office_shift_information($office_shift_id);
-		
+
 		$data = array(
 			//	'office_shift_id' => $result[0]->office_shift_id,
 				//'company_id' => $result[0]->company_id
 				);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/timesheet/dialog_read_map', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	// Validate and update info in database
 	public function edit_attendance() {
-	
+
 		if($this->input->post('edit_type')=='attendance') {
-			
+
 		$id = $this->uri->segment(4);
-		
+
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('attendance_date_e')==='') {
         	$Return['error'] = $this->lang->line('xin_error_attendance_date');
 		} else if($this->input->post('clock_in')==='') {
@@ -4060,19 +4056,19 @@ class Timesheet extends MY_Controller {
 		} /*else if($this->input->post('clock_out')==='') {
         	$Return['error'] = "The office Out Time field is required.";
 		}*/
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		$attendance_date = $this->input->post('attendance_date_e');
 		$clock_in = $this->input->post('clock_in');
-		
+
 		$clock_in2 = $attendance_date.' '.$clock_in.':00';
-		
+
 		//total work
 		$total_work_cin =  new DateTime($clock_in2);
-		
+
 		if($this->input->post('clock_out') ==='') {
 			$data = array(
 			'employee_id' => $this->input->post('emp_att'),
@@ -4086,12 +4082,12 @@ class Timesheet extends MY_Controller {
 			$clock_out = $this->input->post('clock_out');
 			$clock_out2 = $attendance_date.' '.$clock_out.':00';
 			$total_work_cout =  new DateTime($clock_out2);
-			
+
 			$interval_cin = $total_work_cout->diff($total_work_cin);
 			$hours_in   = $interval_cin->format('%h');
 			$minutes_in = $interval_cin->format('%i');
 			$total_work = $hours_in .":".$minutes_in;
-		
+
 			$data = array(
 			'employee_id' => $this->input->post('emp_att'),
 			'attendance_date' => $attendance_date,
@@ -4105,9 +4101,9 @@ class Timesheet extends MY_Controller {
 			'clock_in_out' => '0'
 			);
 		}
-		
-		$result = $this->Timesheet_model->update_attendance_record($data,$id);		
-		
+
+		$result = $this->Timesheet_model->update_attendance_record($data,$id);
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_success_attendance_update');
 		} else {
@@ -4117,29 +4113,29 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// Validate and update info in database
 	public function default_shift() {
-	
+
 		if($this->input->get('office_shift_id')) {
-			
+
 		$id = $this->input->get('office_shift_id');
-		
+
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
+
 		$data = array(
 		'default_shift' => '0'
 		);
-		
+
 		$data2 = array(
 		'default_shift' => '1'
 		);
-		
+
 		$result = $this->Timesheet_model->update_default_shift_zero($data);
-		$result = $this->Timesheet_model->update_default_shift_record($data2,$id);		
-		
+		$result = $this->Timesheet_model->update_default_shift_record($data2,$id);
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_success_shift_default_made');
 		} else {
@@ -4149,16 +4145,16 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database
 	public function add_office_shift() {
-	
-		if($this->input->post('add_type')=='office_shift') {		
+
+		if($this->input->post('add_type')=='office_shift') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('company_id')==='') {
         	$Return['error'] = $this->lang->line('error_company_field');
 		} else if($this->input->post('shift_name')==='') {
@@ -4177,12 +4173,12 @@ class Timesheet extends MY_Controller {
 			$Return['error'] = $this->lang->line('xin_error_shift_saturday_timeout');
 		} else if($this->input->post('sunday_in_time')!='' && $this->input->post('sunday_out_time')==='') {
 			$Return['error'] = $this->lang->line('xin_error_shift_sunday_timeout');
-		} 
-						
+		}
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-			
+
 		$data = array(
 		'shift_name' => $this->input->post('shift_name'),
 		'company_id' => $this->input->post('company_id'),
@@ -4203,7 +4199,7 @@ class Timesheet extends MY_Controller {
 		'created_at' => date('Y-m-d')
 		);
 		$result = $this->Timesheet_model->add_office_shift_record($data);
-		
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_success_shift_added');
 		} else {
@@ -4213,19 +4209,19 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// Validate and update info in database
 	public function edit_office_shift() {
-	
+
 		if($this->input->post('edit_type')=='shift') {
-			
+
 		$id = $this->uri->segment(4);
-		
+
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('company_id')==='') {
 			$Return['error'] = $this->lang->line('error_company_field');
 		} else if($this->input->post('shift_name')==='') {
@@ -4244,12 +4240,12 @@ class Timesheet extends MY_Controller {
 			$Return['error'] = $this->lang->line('xin_error_shift_saturday_timeout');
 		} else if($this->input->post('sunday_in_time')!='' && $this->input->post('sunday_out_time')==='') {
 			$Return['error'] = $this->lang->line('xin_error_shift_sunday_timeout');
-		} 
-						
+		}
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-			
+
 		$data = array(
 		'shift_name' => $this->input->post('shift_name'),
 		'company_id' => $this->input->post('company_id'),
@@ -4268,9 +4264,9 @@ class Timesheet extends MY_Controller {
 		'sunday_in_time' => $this->input->post('sunday_in_time'),
 		'sunday_out_time' => $this->input->post('sunday_out_time')
 		);
-		
-		$result = $this->Timesheet_model->update_shift_record($data,$id);		
-		
+
+		$result = $this->Timesheet_model->update_shift_record($data,$id);
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_success_shift_updated');
 		} else {
@@ -4280,11 +4276,11 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// delete attendance record
 	public function delete_attendance() {
 		if($this->input->post('type')=='delete') {
-			// Define return | here result is used to return user data and error for error message 
+			// Define return | here result is used to return user data and error for error message
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$id = $this->uri->segment(4);
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -4297,11 +4293,11 @@ class Timesheet extends MY_Controller {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete holiday record
 	public function delete_holiday() {
 		if($this->input->post('type')=='delete') {
-			// Define return | here result is used to return user data and error for error message 
+			// Define return | here result is used to return user data and error for error message
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$id = $this->uri->segment(4);
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -4314,11 +4310,11 @@ class Timesheet extends MY_Controller {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete shift record
 	public function delete_shift() {
 		if($this->input->post('type')=='delete') {
-			// Define return | here result is used to return user data and error for error message 
+			// Define return | here result is used to return user data and error for error message
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$id = $this->uri->segment(4);
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -4331,11 +4327,11 @@ class Timesheet extends MY_Controller {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete leave record
 	public function delete_leave() {
 		if($this->input->post('type')=='delete') {
-			// Define return | here result is used to return user data and error for error message 
+			// Define return | here result is used to return user data and error for error message
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$id = $this->uri->segment(4);
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -4348,10 +4344,10 @@ class Timesheet extends MY_Controller {
 			$this->output($Return);
 		}
 	}
-	
+
 	public function delete_task() {
 		if($this->input->post('type')=='delete') {
-			// Define return | here result is used to return user data and error for error message 
+			// Define return | here result is used to return user data and error for error message
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$id = $this->uri->segment(4);
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -4398,11 +4394,11 @@ class Timesheet extends MY_Controller {
 		$data['leave_calsl']=($total_leave->sick_leave !='')?$total_leave->sick_leave:0;
 		$data['leave_calsl_percent']=$data['leave_calsl']*100/4;
 		echo $this->load->view('admin/timesheet/leaveform', $data, true);
-		
+
 	}
 	public function delete_variation() {
 		if($this->input->post('type')=='delete') {
-			// Define return | here result is used to return user data and error for error message 
+			// Define return | here result is used to return user data and error for error message
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$id = $this->uri->segment(4);
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -4415,15 +4411,15 @@ class Timesheet extends MY_Controller {
 			$this->output($Return);
 		}
 	}
-	
+
 	// Validate and update info in database // add_note
 	public function add_note() {
-	
-		if($this->input->post('type')=='add_note') {		
+
+		if($this->input->post('type')=='add_note') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
-			
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
 		$data = array(
 		'task_note' => $this->input->post('task_note')
 		);
@@ -4438,22 +4434,22 @@ class Timesheet extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// set clock in - clock out > attendance
 	public function set_clocking() {
-	
+
 		if($this->input->post('type')=='set_clocking') {
 			$system = $this->Xin_model->read_setting_info(1);
 			//if($system[0]->system_ip_restriction == 'yes'){
 				$sys_arr = explode(',',$system[0]->system_ip_address);
-					//if(in_array($this->input->ip_address(),$sys_arr)) { 
-					//if($system[0]->system_ip_address == $this->input->ip_address()){	
+					//if(in_array($this->input->ip_address(),$sys_arr)) {
+					//if($system[0]->system_ip_address == $this->input->ip_address()){
 					/* Define return | here result is used to return user data and error for error message */
 					$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-					$Return['csrf_hash'] = $this->security->get_csrf_hash();	
-					
+					$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
 					$session = $this->session->userdata('username');
-					
+
 					$employee_id = $session['user_id'];
 					$clock_state = $this->input->post('clock_state');
 					$latitude = $this->input->post('latitude');
@@ -4464,8 +4460,8 @@ class Timesheet extends MY_Controller {
 					//$date = date('Y-m-d H:i:s', strtotime($nowtime . ' + 4 hours'));
 					$date = date('Y-m-d H:i:s');
 					$curtime = $date;
-					$today_date = date('Y-m-d');	
-					
+					$today_date = date('Y-m-d');
+
 					if($clock_state=='clock_in') {
 						$query = $this->Timesheet_model->check_user_attendance();
 						$result = $query->result();
@@ -4474,13 +4470,13 @@ class Timesheet extends MY_Controller {
 						} else {
 							$cout =  new DateTime($result[0]->clock_out);
 							$cin =  new DateTime($curtime);
-							
+
 							$interval_cin = $cin->diff($cout);
 							$hours_in   = $interval_cin->format('%h');
 							$minutes_in = $interval_cin->format('%i');
 							$total_rest = $hours_in .":".$minutes_in;
 						}
-						
+
 						$data = array(
 						'employee_id' => $employee_id,
 						'attendance_date' => $today_date,
@@ -4495,26 +4491,26 @@ class Timesheet extends MY_Controller {
 						'attendance_status' => 'Present',
 						'clock_in_out' => '1'
 						);
-						
+
 						$result = $this->Timesheet_model->add_new_attendance($data);
-									
+
 						if ($result == TRUE) {
 							$Return['result'] = $this->lang->line('xin_success_clocked_in');
 						} else {
 							$Return['error'] = $this->lang->line('xin_error_msg');
 						}
 					} else if($clock_state=='clock_out') {
-						
+
 						$query = $this->Timesheet_model->check_user_attendance_clockout();
 						$clocked_out = $query->result();
 						$total_work_cin =  new DateTime($clocked_out[0]->clock_in);
 						$total_work_cout =  new DateTime($curtime);
-						
+
 						$interval_cin = $total_work_cout->diff($total_work_cin);
 						$hours_in   = $interval_cin->format('%h');
 						$minutes_in = $interval_cin->format('%i');
 						$total_work = $hours_in .":".$minutes_in;
-						
+
 						$data = array(
 							'employee_id' => $employee_id,
 							'clock_out' => $curtime,
@@ -4526,20 +4522,20 @@ class Timesheet extends MY_Controller {
 							'overtime' => $curtime,
 							'total_work' => $total_work
 						);
-						
-			
+
+
 						$id = $this->input->post('time_id');
 						$resuslt2 = $this->Timesheet_model->update_attendance_clockedout($data,$id);
-						
+
 						if ($resuslt2 == TRUE) {
 							$Return['result'] = $this->lang->line('xin_success_clocked_out');
 							$Return['time_id'] = '';
 						} else {
 							$Return['error'] = $this->lang->line('xin_error_msg');
 						}
-					
+
 					}
-						
+
 					$this->output($Return);
 					exit;
 				}
@@ -4547,9 +4543,9 @@ class Timesheet extends MY_Controller {
 				/* Define return | here result is used to return user data and error for error message */
 					//$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 //					$Return['csrf_hash'] = $this->security->get_csrf_hash();
-//					
+//
 //					$session = $this->session->userdata('username');
-//					
+//
 //					$employee_id = $session['user_id'];
 //					$latitude = $this->input->post('latitude');
 //					$longitude = $this->input->post('longitude');
@@ -4560,8 +4556,8 @@ class Timesheet extends MY_Controller {
 //					//$date = date('Y-m-d H:i:s', strtotime($nowtime . ' + 4 hours'));
 //					$date = date('Y-m-d H:i:s');
 //					$curtime = $date;
-//					$today_date = date('Y-m-d');	
-//					
+//					$today_date = date('Y-m-d');
+//
 //					if($clock_state=='clock_in') {
 //						$query = $this->Timesheet_model->check_user_attendance();
 //						$result = $query->result();
@@ -4570,13 +4566,13 @@ class Timesheet extends MY_Controller {
 //						} else {
 //							$cout =  new DateTime($result[0]->clock_out);
 //							$cin =  new DateTime($curtime);
-//							
+//
 //							$interval_cin = $cin->diff($cout);
 //							$hours_in   = $interval_cin->format('%h');
 //							$minutes_in = $interval_cin->format('%i');
 //							$total_rest = $hours_in .":".$minutes_in;
 //						}
-//						
+//
 //						$data = array(
 //						'employee_id' => $employee_id,
 //						'attendance_date' => $today_date,
@@ -4591,26 +4587,26 @@ class Timesheet extends MY_Controller {
 //						'attendance_status' => 'Present',
 //						'clock_in_out' => '1'
 //						);
-//						
+//
 //						$result = $this->Timesheet_model->add_new_attendance($data);
-//									
+//
 //						if ($result == TRUE) {
 //							$Return['result'] = $this->lang->line('xin_success_clocked_in');
 //						} else {
 //							$Return['error'] = $this->lang->line('xin_error_msg');
 //						}
 //					} else if($clock_state=='clock_out') {
-//						
+//
 //						$query = $this->Timesheet_model->check_user_attendance_clockout();
 //						$clocked_out = $query->result();
 //						$total_work_cin =  new DateTime($clocked_out[0]->clock_in);
 //						$total_work_cout =  new DateTime($curtime);
-//						
+//
 //						$interval_cin = $total_work_cout->diff($total_work_cin);
 //						$hours_in   = $interval_cin->format('%h');
 //						$minutes_in = $interval_cin->format('%i');
 //						$total_work = $hours_in .":".$minutes_in;
-//						
+//
 //						$data = array(
 //							'clock_out' => $curtime,
 //							'clock_in_out' => '0',
@@ -4621,20 +4617,20 @@ class Timesheet extends MY_Controller {
 //							'overtime' => $curtime,
 //							'total_work' => $total_work
 //						);
-//						
-//			
+//
+//
 //						$id = $this->input->post('time_id');
 //						$resuslt2 = $this->Timesheet_model->update_attendance_clockedout($data,$id);
-//						
+//
 //						if ($resuslt2 == TRUE) {
 //							$Return['result'] = $this->lang->line('xin_success_clocked_out');
 //							$Return['time_id'] = '';
 //						} else {
 //							$Return['error'] = $this->lang->line('xin_error_msg');
 //						}
-//					
+//
 //					}
-//						
+//
 //					$this->output($Return);
 //					exit;
 			//}
@@ -4660,9 +4656,9 @@ class Timesheet extends MY_Controller {
 
 
 
-// cpmmand dont use this 
+// cpmmand dont use this
 
-  
+
 
 public function leave_efectinve_caculate(){
 	$all_employee=$this->db->where('user_role_id',3)
@@ -4696,15 +4692,15 @@ public function leave_efectinve_caculate(){
 public function leave_efectinve_table(){
 	exit();
 	$year_start ='01-07-2022';
-	
-	
+
+
 	$all_employee = $this->db->query("SELECT * FROM `xin_employees` WHERE `status` = 1 AND `date_of_joining` >= '2022-07-01' ")->result();
 	$data['title'] = $this->lang->line('dashboard_attendance').' | '.$this->Xin_model->site_title();
 	$data['breadcrumbs'] = $this->lang->line('dashboard_attendance');
 	$data['path_url'] = 'attendance';
 
 	$data['all_employee'] = $all_employee;
-	
+
 	$data['subview'] = $this->load->view("admin/timesheet/give_efectivefore_leave", $data, TRUE);
 	$this->load->view('admin/layout/layout_main', $data);
 

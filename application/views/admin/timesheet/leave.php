@@ -4,7 +4,7 @@
 $error = $this->session->flashdata('error');
 $success = $this->session->flashdata('success');
 ?>
-<?php 
+<?php
       $user = $this->Xin_model->read_employee_info($session['user_id']);
       $user_info = $this->Xin_model->read_user_info($session['user_id']);
       $get_animate = $this->Xin_model->get_content_animate();
@@ -41,7 +41,7 @@ if (isset($success)) {
                 </a>
             </div>
         </div>
-        <div id="add_form" class="collapse add-form 
+        <div id="add_form" class="collapse add-form
   			<?php echo $get_animate;?>" data-parent="#accordion" style="">
             <div class="box-body"> <?php $attributes = array('name' => 'add_leave', 'autocomplete' => 'off');?>
                 <?php $hidden = array('_user' => $session['user_id']);?>
@@ -273,6 +273,7 @@ if (isset($success)) {
                                             <i class="fa fa-pencil-square-o"></i> Edit
                                         </a>
                                     </li>
+                                    <?php if (in_array($user[0]->user_role_id, array(1,2))) { ?>
                                     <li class="divider"></li>
                                     <li>
                                         <a style="border-radius: 6px;"
@@ -280,6 +281,7 @@ if (isset($success)) {
                                             <i class="fa fa-check-square-o"></i> Approve
                                         </a>
                                     </li>
+                                    <?php } ?>
                                     <li class="divider"></li>
                                     <li>
                                         <a style="border-radius: 6px;"
@@ -322,7 +324,7 @@ if (isset($success)) {
             $Half_Day.attr('checked','checked');
         }else(
             $Half_Day.removeAttr('checked')
-        ) 
+        )
     }
 </script>
 <script>
@@ -349,7 +351,7 @@ if (isset($error)) {
    function  print_leave(id){
     var ajaxRequest;  // The variable that makes Ajax possible!
       ajaxRequest = new XMLHttpRequest();
-     
+
       var data = "id="+id;
       url = base_url + "/print_leave";
       ajaxRequest.open("POST", url, true);

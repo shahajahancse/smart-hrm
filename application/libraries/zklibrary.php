@@ -74,7 +74,7 @@ class ZKLibrary {
 			$this->port = $port;
 		}
 		$this->protocol = $protocol;
-		if ($protocol == 'TCP') {
+		/* if ($protocol == 'TCP') {
 			$this->start_data = 8;
 			$this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 			//$this->setTimeout($this->sec, $this->usec);
@@ -83,7 +83,7 @@ class ZKLibrary {
 		else {
 			$this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 			// $this->setTimeout($this->sec, $this->usec);
-		}
+		} */
 	}
 	public function __destruct()
 	{
@@ -810,7 +810,7 @@ class ZKLibrary {
 					$received_data = $this->recv();
 				}
 			}
-			
+
 			$users = array();
 			if(count($this->user_data) > 0)
 			{
@@ -824,9 +824,9 @@ class ZKLibrary {
 					}
 				}
 				$user_data = implode('', $this->user_data);
-				
+
 				$user_data = substr($user_data, 11);
-				 
+
 				while(strlen($user_data) > 72)
 				{
 					$u = unpack('H144', substr($user_data, 0, 72));
@@ -852,7 +852,7 @@ class ZKLibrary {
 				}
 			}
 			return $users;
-			
+
 		}
 		catch(ErrorException $e)
 		{
@@ -879,7 +879,7 @@ class ZKLibrary {
 	}
 	public function getUserTemplate($uid, $finger)
 	{
-		
+
 		$template_data = '';
 		$this->user_data = array();
 		$command = CMD_USERTEMP_RRQ;
@@ -895,31 +895,31 @@ class ZKLibrary {
 		try
 		{
 			$this->received_data = $this->recv();
-			
-			
-			
+
+
+
 			$u = unpack('H2h1/H2h2/H2h3/H2h4/H2h5/H2h6', substr( $this->received_data, $this->start_data, 8 ) );
 			$bytes = $this->getSizeTemplate();
-				
-			
+
+
 			if($bytes)
 			{
 				while($bytes > 0)
 				{
 					$received_data = $this->recv(1032);
-					
-					
+
+
 					array_push( $this->user_data, $received_data);
 					$bytes -= 1024;
 				}
 				$this->session_id =  hexdec( $u['h6'].$u['h5'] );
 				//$received_data = $this->recv();
 			}
-			
+
 			$template_data = array();
 			if(count($this->user_data) > 0)
 			{
-				
+
 				for($x=0; $x<count($this->user_data); $x++)
 				{
 					if ($x == 0)
@@ -942,7 +942,7 @@ class ZKLibrary {
 				}
 			}
 			return $template_data;
-			
+
 		}
 		catch(ErrorException $e)
 		{
@@ -1035,7 +1035,7 @@ class ZKLibrary {
 		$byte1 = chr((int)($uid % 256));
 		$byte2 = chr((int)($uid >> 8));
 		//$command_string = $byte1.$byte2.chr($role).str_pad($password, 8, chr(0)).str_pad($name, 28, chr(0)).str_pad(chr(1), 9, chr(0)).str_pad($userid, 8, chr(0)).str_repeat(chr(0),16);
-		
+
 		return $this->execCommand($command, $command_string);
 		/*
 		$chksum = 0;
@@ -1267,7 +1267,7 @@ class ZKLibrary {
 					$received_data = $this->recv();
 				}
 			}
-			
+
 			$attendance = array();
 			if(count($this->attendance_data) > 0)
 			{
