@@ -50,7 +50,8 @@
               <th class="text-left">Product Name</th>
               <th class="text-left">Unit</th>
               <th class="text-left">Quantity</th>
-              <th class="text-left">Note</th>
+              <th class="text-left">Remark</th>
+              <th class="text-left">Priority</th>
               <th class="text-left">Action</th>
             </tr>
             <tr></tr>
@@ -86,21 +87,18 @@
           cat_id = response.cat_id;
           sub_cat_name = response.sub_cate_name;
           sub_cat_id = response.sub_cate_id;
-
           let items = '';
           items+= '<tr>';
           items+= '<input name="product_id[]" value="'+product_id+'" type="hidden" required>';
           items+= '<input name="sub_cate_id[]" value="'+sub_cat_id+'" type="hidden" required>';
           items+= '<input name="cat_id[]" value="'+cat_id+'" type="hidden" required>';
-
           items+= '<td>'+category_name+'</td>';
           items+= '<td>'+sub_cat_name+'</td>';
           items+= '<td>'+product_name+'</td>';
           items+= '<td>'+unit_name+'</td>';
-
           items+= '<td><input name="quantity[]" style="width: 73px;" class="form-control input-sm" required /></td>';
-          items+= '<td><input name="note[]" style="width: 73px;" class="form-control input-sm" required /></td>';
-
+          items+= '<td><textarea name="note[]" class="form-control input-sm" required style="height: 29px; width: 164px;"></textarea></td>';
+          items+= '<td><select name="priority[]" class="form-control input-sm" required><option value="1">High</option><option value="2">Medium</option><option value="3">Low</option></select></td>';
           items+= '<td> <a class="label label-important text-danger" onclick="removeRow(this)"><span style="color:#a94442;font-size:12px">Remove</span> </a></td>';
           items+= '</tr>';
           $('#appRowDiv tr:last').after(items);

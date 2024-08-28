@@ -7,6 +7,7 @@
             <th>To</th>
             <th>No of Days</th>
             <th>Reason</th>
+            <th>Management Comment</th>
             <th>Status</th>
             <th>Approved by</th>
             <th>Actions</th>
@@ -33,6 +34,7 @@
             <td><?= ($data->to_date=='')? '-----' :date('d-M-Y',strtotime($data->to_date)) ?></td>
             <td><?= $data->qty ?></td>
             <td><?= $data->reason ?></td>
+            <td><?= $data->remarks ?></td>
             <td><?= $leave_status ?></td>
 
             <td>Admin</td>

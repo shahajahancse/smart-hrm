@@ -62,7 +62,7 @@ class Attendance extends API_Controller
             $this->db->select("*");
             $this->db->where("employee_id", $userid);
             $this->db->where("attendance_date BETWEEN '$mfirst' AND '$msecond'");
-            $this->db->order_by("time_attendance_id", "desc");
+            $this->db->order_by("attendance_date", "desc");
             $data['all_attendance'] = $this->db->get('xin_attendance_time')->result();
             $this->api_return([
                 'status'    =>  true,

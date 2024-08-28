@@ -25,12 +25,16 @@
           <th class="text-center">Category</th>
           <th class="text-center">Req Qty</th>
           <th class="text-center">Approved Qty</th>
+          <th class="text-center">Remark</th>
           <th class="text-center">Status</th>
           <th class="text-center">Action</th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($products as $key => $row) { ?>
+        <?php foreach ($products as $key => $row) {
+          
+          
+          ?>
           <tr>
             <td class="text-center"><?= $key + 1 ?></td>
             <td class="text-center"><?= $row->product_name ?></td>
@@ -38,6 +42,7 @@
             <td class="text-center"><?= $row->category_name ?></td>
             <td class="text-center"><?= $row->quantity ?></td>
             <td class="text-center"><?= $row->approved_qty ?></td>
+            <td class="text-center"><?= $row->note ?></td>
             <td class="text-center">
               <span class="using">
                 <?= $row->status==1 ?"<i class='fa fa-dot-circle-o' style='color:#ffda00'>Pending</i> ":($row->status==2?"<i class='fa fa-dot-circle-o' style='color:#6ebe09'></i>Approved ":($row->status==3?"<i class='fa fa-dot-circle-o' style='color:#09bea9'></i>  Handover":($row->status==4?"<i class='fa fa-dot-circle-o' style='color:#de0000'></i> Rejected":"First Step Approved")))?>

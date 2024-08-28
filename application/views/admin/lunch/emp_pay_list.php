@@ -207,7 +207,9 @@ input[type="email"] {
     </div>
 </div>
 
-<div id="form-container"></div>
+<div id="form-container">
+
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
@@ -247,6 +249,27 @@ $(document).ready(function() {
                         console.error("Error parsing JSON response:", error);
                         return; // Exit the success callback
                     }
+                }
+                if (responseData.length == 0) {
+                    var formHtml = '';
+                    formHtml += '<form id="new_payment_form" style="overflow: auto;">';
+                    formHtml += '<h2>No Data Found</h2>';
+                    formHtml +='<input type="hidden" class="form-control" id="new_employeeId" name="new_employeeId" value="' + selectedValue + '">';
+                    formHtml += '<div class="form-group col-md-3">';
+                     formHtml += '<label for="firstName">Add pay amount</label>';
+                    formHtml +='<input type="number" class="form-control" id="new_pay_amt" name="new_pay_amt" value="">';
+                    formHtml += '</div>';
+                    formHtml += '</br>';
+                    formHtml +='<div class="form-group col-md-12 ">';
+                    formHtml += '<button type="submit" class="btn btn-primary">Submit</button>';
+                    formHtml += '</div>';
+                    formHtml += '</form>';
+
+
+
+
+                    $('#form-container').html(formHtml);
+                    return 
                 }
                 var pay_m = parseInt(responseData[0].pay_amount) - parseInt(responseData[0].prev_amount);
                 var payday = parseInt(pay_m) / parseInt(<?php echo $lunch_package->stuf_give_tk; ?>);
@@ -369,6 +392,31 @@ $(document).ready(function() {
         // Make an AJAX post request to the controller
         $.ajax({
             url: '<?= base_url('admin/lunch/submit_payment') ?>', // Change the URL to the appropriate controller method
+            method: 'GET',
+            data: formData,
+            success: function(response) {
+                // Handle the success response
+                document.getElementById("loading").style.visibility = "hidden";
+                alert(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors that occur during the request
+                alert(error);
+                document.getElementById("loading").style.visibility = "hidden";
+            }
+        });
+    });
+
+    $('#form-container').on('submit', '#new_payment_form', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        document.getElementById("loading").style.visibility = "visible";
+
+        // Get the form data
+        var formData = $(this).serialize();
+
+        // Make an AJAX post request to the controller
+        $.ajax({
+            url: '<?= base_url('admin/lunch/new_submit_payment') ?>', // Change the URL to the appropriate controller method
             method: 'GET',
             data: formData,
             success: function(response) {

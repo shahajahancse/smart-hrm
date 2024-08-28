@@ -55,14 +55,17 @@
     $schedule = $this->db->get('xin_office_shift')->row();
 
     // get employee salary from january to current month
-    $salarys = $this->db->select('salary_month,modify_salary,grand_net_salary')
+    $salarys = $this->db->select('salary_month,modify_salary,grand_net_salary,advanced_salary')
                         ->where('employee_id', $userid)
+                        ->limit(12)
+                        ->order_by('payslip_id', 'desc')
                         ->get('xin_salary_payslips')
                         ->result();
+    $salarys=array_reverse($salarys);
     $salary = array();
     $salary_month = array();
     foreach ($salarys as $salaryObj) {
-        $salary[] = floor($salaryObj->grand_net_salary + $salaryObj->modify_salary);
+        $salary[] = floor($salaryObj->grand_net_salary + $salaryObj->modify_salary+$salaryObj->advanced_salary);
         $salary_month[] = date('F', strtotime($salaryObj->salary_month));
     }
     // dd($salary_month);
@@ -71,7 +74,7 @@
     // punch time
     $in_time = "00:00";
     $out_time = "00:00";
-    $punch_time = $this->db->select('clock_in, clock_out')
+    $punch_time = $this->db->select('clock_in, clock_out,lunch_in,lunch_out')
                           ->where('employee_id', $userid)
                           ->where('attendance_date', date('Y-m-d'))
                           ->get('xin_attendance_time')
@@ -488,7 +491,7 @@ hr {
                 <div class="card-body">
                     <div style="border-radius: 4px;border: 1px solid #E3E3E3;background: #0177bccf;color:white; padding: 5px 0px;">
                         <span style="padding: 0px 0px 0px 30px"><b>Punch In At</b></span>
-                        <?php if ($in_time == '00:00') {
+                        <?php if ($in_time == '00:00' || $in_time == '' || $in_time == null) {
                             $in_time = "<span class='text-danger' >00:00</span>";
                             $total_working_hour = '0.0';
                         } ?>
@@ -535,23 +538,27 @@ hr {
                                 <li class="step-wizard-item <?= $in_time_class?>">
                                     <span class="progress-label-top">Punch In</span>
                                     <span class="progress-count"><i class="icon-time"></i></span>
-                                    <span class="progress-label"><?php echo !empty($punch_time->clock_in) ? $in_time : "Not punch yet"?></span>
+                                    <span class="progress-label"><?php echo !empty($punch_time) ? $in_time : "Not punch yet"?></span>
                                 </li>
                                 <li class="step-wizard-item <?=$lunch_start_class?>">
                                     <span class="progress-label-top">Lunch Time</span>
                                     <span class="progress-count"><i class="fa fa-clock-o"  aria-hidden="true"></i></i></span>
                                     <span
-                                        class="progress-label"><?php echo date('h:i A', strtotime($schedule->lunch_time)); ?></span>
+                                        class="progress-label"><?php echo !empty($punch_time && $punch_time->lunch_in)?date('h:i A', strtotime($punch_time->lunch_in)):'-' ?></span>
                                 </li>
                                 <li class="step-wizard-item <?=$lunch_end_class?>">
                                     <span class="progress-label-top">Lunch End</span>
                                     <span class="progress-count"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                    <span class="progress-label"><?php echo $lunch_end; ?></span>
+                                    <span class="progress-label"><?php echo !empty($punch_time && $punch_time->lunch_out)?date('h:i A', strtotime($punch_time->lunch_out)):'-' ?></span>
                                 </li>
                                 <li class="step-wizard-item <?=$out_time_class?>">
                                     <span class="progress-label-top">Punch Out</span>
                                     <span class="progress-count"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                    <span class="progress-label "><?php echo !empty($punch_time->clock_out)  ? $out_time : "Not punch yet"; ?></span>
+                                    <?php if(isset($punch_time) && isset($punch_time->out_time)) : ?>
+                                        <span class="progress-label"><?php echo $punch_time->out_time; ?></span>
+                                    <?php else: ?>
+                                        <span class="progress-label">Not punch yet</span>
+                                    <?php endif; ?>
                                 </li>
                             </ul>
                         </section>
@@ -586,14 +593,7 @@ hr {
                 <div class="card-body">
                     <div style="display:flex">
                         <h5>Salary Statistics</h5>
-                        <div class="col-md-3">
-                            <select class="form-control  form-inline" id="year_id">
-                                <?php for($i=2023;$i<=date('Y');$i++) {?>
-                                <option value="<?php echo $i?>" <?php echo $i==date('Y') ? 'selected' : ''?>>
-                                    <?php echo $i?></option>
-                                <?php }?>
-                            </select>
-                        </div>
+                       
                         <!-- <h5 style="margin-right:0; margin-left: auto;">Yearly 1234M</h5> -->
                     </div>
                     <div id="my_div">
@@ -913,9 +913,12 @@ $(document).ready(function() {
 <script>
 const monthNames = <?php echo json_encode($monthNames); ?>;
 const dataValues = <?php echo json_encode($salary); ?>;
+console.log(dataValues);
+console.log(monthNames);
 
 const ctx = document.getElementById('myChart').getContext('2d');
 const zerosToPad = monthNames.length - dataValues.length;
+console.log(zerosToPad);
 const zeroArray = new Array(zerosToPad).fill(0);
 const paddedDataValues = zeroArray.concat(dataValues);
 

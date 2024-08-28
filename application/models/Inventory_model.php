@@ -43,7 +43,10 @@ class inventory_model extends CI_Model
 			p.id, 
 			p.product_name, 
 			pr.id as requsition_id,
+			pr.note,
 			pr.quantity, 
+			pr.user_id, 
+			pr.updated_by, 
 			pr.approved_qty as ap_quantity, 
 			pr.status as requisition_status,
 			SUBSTR(pr.created_at, 1, 10) as created_at,
@@ -87,6 +90,7 @@ class inventory_model extends CI_Model
 			prd.approved_qty,
 			prd.status,
 			prd.created_at,
+			prd.note,
 		");
 		$this->db->from("products_requisition_details as prd");
 		$this->db->from("products as p");
@@ -335,6 +339,8 @@ class inventory_model extends CI_Model
 	}
 				
 	public function requsition_status_report($f1_date=null, $f2_date=null,$statusC= null){
+		// $f1_date = date('Y-m-d', strtotime($f1_date));
+		// $f2_date = date('Y-m-d', strtotime($f2_date));
 		$this->db->select(" 
 			products_requisition_details.id,
 			products_requisition_details.status,
@@ -342,6 +348,7 @@ class inventory_model extends CI_Model
 			products_requisition_details.approved_qty,
 			products_requisition_details.user_id,
 			products_requisition_details.created_at,
+			products_requisition_details.note,
 			products_categories.category_name,
 			products_sub_categories.sub_cate_name,
 			products.product_name,
@@ -368,13 +375,21 @@ class inventory_model extends CI_Model
 		if ($statusC != null) {
 			$this->db->where("products_requisition_details.status",$statusC);
 		}	
-		if($f1_date !=null && $f2_date != null){
+
+		// dd($statusC);
+
+		if($f1_date !='' &&  $f2_date == ''){
+			$f1_date = date('Y-m-d', strtotime($f1_date));
+			$this->db->where("products_requisition_details.created_at BETWEEN '$f1_date' AND '$f1_date'");
+		}else if($f1_date !='' &&  $f2_date != ''){
+			$f1_date = date('Y-m-d', strtotime($f1_date));
+			$f2_date = date('Y-m-d', strtotime($f2_date));
 			$this->db->where("products_requisition_details.created_at BETWEEN '$f1_date' AND '$f2_date'");
 		}
 		$this->db->group_by('products_requisition_details.id');
 		$query= $this->db->get();
-		$data = $query->result();
 		if ($query->num_rows() > 0) {
+			$data = $query->result();
 			return $data;
 		} else {
 			return "<h4 style='color:red; text-align:center'>Requested list is empty</h4>";
@@ -382,7 +397,7 @@ class inventory_model extends CI_Model
 	}
 	
 	public function perches_status_report($f1_date, $f2_date,$statusC) {
-		$f2_date = date('Y-m-d', strtotime($f2_date));
+		
 		$this->db->select(" 
 			products_purches_details.quantity,
 			products_purches_details.ap_quantity,
@@ -408,10 +423,17 @@ class inventory_model extends CI_Model
 		->where("products_sub_categories.id = products.sub_cate_id")	
 		->where("products.id 				= products_purches_details.product_id")	
 		->where("xin_employees.user_id 		= products_purches_details.user_id")
-		->where("products_purches_details.created_at BETWEEN '$f1_date' AND '$f2_date'")
-		->where("products_purches_details.status 		= $statusC")
-		
-		->group_by('products_purches_details.id');
+		->where("products_purches_details.status 		= $statusC");
+		if($f1_date !='' &&  $f2_date == ''){
+			$f1_date = date('Y-m-d', strtotime($f1_date));
+			$this->db->where("products_purches_details.created_at BETWEEN '$f1_date' AND '$f1_date'");
+		}else if($f1_date !='' &&  $f2_date != ''){
+			$f1_date = date('Y-m-d', strtotime($f1_date));
+			$f2_date = date('Y-m-d', strtotime($f2_date));
+			$this->db->where("products_purches_details.created_at BETWEEN '$f1_date' AND '$f2_date'");
+		}
+	
+		$this->db->group_by('products_purches_details.id');
 		$query= $this->db->get();
 		$data = $query->result();
 			

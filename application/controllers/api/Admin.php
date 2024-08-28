@@ -26,8 +26,24 @@ class Admin extends API_Controller
         $this->load->library('upload');
     }
 
+    public function get_device_token() {
+        // dd($_POST);
+        $punch_id=$_POST['data'];
+        $this->db->where('proxi_id', $punch_id);
+        $user=$this->db->get('xin_proxi')->row();
+        if(!empty($user)) {
+            $user_id=$user->emp_id;
+            $this->db->where('user_id', $user_id);
+            $api=$this->db->get('api_keys')->row();
+            if (!empty($api)) {
+                $device_id=$api->device_token;
+                if (!empty($device_id)) {
+                    $this->api_return($device_id, 200);
+                }
+            }
+        }
+    }
     public function sendRecentPunches() {
-
         $dataa=$_POST['data'];
         $emp_ids=[];
         foreach($dataa as $data) {

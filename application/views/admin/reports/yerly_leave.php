@@ -28,7 +28,8 @@ foreach ($all_employees as $key => $value) {
 
 
 	echo "<span style='font-size:13px; font-weight:bold;'>";
-	echo "Yerly Leave Report";
+	echo "Yerly Leave Report of ";
+	echo date('Y', strtotime($date));
 	echo "</span>";
 	echo "<br /><br />";
 	
@@ -184,8 +185,16 @@ foreach ($all_employees as $key => $value) {
 		</tr>
 		<tr>
 			<td>Balance</td>
-			<td style="color: #0b24e7; font-weight: bold;" ><?= (empty($total_leave))? 0: $total_leave->el_balanace?></td>
-			<td style="color: #0b24e7; font-weight: bold;" ><?= (empty($total_leave))? 0:$total_leave->sl_balanace?></td>
+			<?php if(!empty($total_leave) && $total_leave->el_balanace>0): ?>
+				<td style="color: #0b24e7; font-weight: bold;" ><?= $total_leave->el_balanace?></td>
+			<?php else: ?>
+				<td style="color: #0b24e7; font-weight: bold;" >0</td>
+			<?php endif; ?>
+			<?php if(!empty($total_leave) && $total_leave->sl_balanace>0): ?>
+				<td style="color: #0b24e7; font-weight: bold;" ><?= $total_leave->sl_balanace?></td>
+			<?php else: ?>
+				<td style="color: #0b24e7; font-weight: bold;" >0</td>
+			<?php endif; ?>
 		</tr>
 	</table>
 								

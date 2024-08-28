@@ -63,6 +63,28 @@ class Payroll extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data); //page load
 			  
     }
+	public function bank_salary_config()
+    {
+		$data['title'] ='Bank Slip Configuration | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = "Payroll";
+		$data['path_url'] = 'payroll_templates';
+		// $data['all_office_shifts'] = $this->Location_model->all_office_locations();
+		$data['subview'] = $this->load->view("admin/payroll/bank_salary_config", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+			  
+    }
+
+	public function salary_on_bank(){
+		$user_id = $this->input->post('user_id');
+		$checked = $this->input->post('checked');
+		if($checked=="true"){
+			$value=1;
+		}else{
+			$value=0;
+		}
+		$this->db->where('user_id', $user_id);
+		$this->db->update('xin_employees', array('if_salary_bank' => $value));
+	}
 
     // salary process
 	public function salary_process()
@@ -130,8 +152,9 @@ class Payroll extends MY_Controller {
 		$status = $this->input->post('status');
 		$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
+		$bank=0;
 	
-    	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
+    	$data["values"] = $this->Salary_model->salary_sheet_excel($bank,$salary_month, $emp_id);
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;
@@ -166,19 +189,9 @@ class Payroll extends MY_Controller {
 		$status = $this->input->post('status');
 		$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
+		$bank=2;
 
-
-		// $first_date= date('Y-m-01', strtotime($salary_month));
-		// $last_date= date('Y-m-t', strtotime($salary_month));
-		// $total_days = date('t', strtotime($salary_month));
-
-		// for ($i=25; $i <= $total_days ; $i++) { 
-		// 	$process_date= date('Y-m-d', strtotime($first_date. ' + '.$i.' day'));
-		// 	$this->load->model("Attendance_model");
-		// 	$this->Attendance_model->attn_process($process_date, $emp_id);
-		// }
-
-    	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
+    	$data["values"] = $this->Salary_model->salary_sheet_excel($bank,$salary_month, $emp_id);
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;
@@ -206,11 +219,12 @@ class Payroll extends MY_Controller {
     {  
 		
     	$excel = $this->input->post('excel');
+    	$bank = $this->input->post('bank');
     	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
 		$status = $this->input->post('status');
 		$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
-    	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
+    	$data["values"] = $this->Salary_model->salary_sheet_excel($bank,$salary_month, $emp_id);
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;
@@ -223,13 +237,21 @@ class Payroll extends MY_Controller {
             echo $data["values"];
         }
         else
-        {	
-			
-        	if ($excel == 1) {
-	            $this->load->view('admin/payroll/Actual_salary_sheet_excel_bank_e',$data);
-        	} else {
-	            $this->load->view('admin/payroll/Actual_salary_sheet_excel_bank',$data);
-        	}
+        {
+			if ($bank==1) {
+				if ($excel == 1) {
+					$this->load->view('admin/payroll/Actual_salary_sheet_excel_bank_e_bank',$data);
+				} else {
+					$this->load->view('admin/payroll/Actual_salary_sheet_excel_bank_bank',$data);
+				}
+				
+			}else{
+				if ($excel == 1) {
+					$this->load->view('admin/payroll/Actual_salary_sheet_excel_bank_e',$data);
+				} else {
+					$this->load->view('admin/payroll/Actual_salary_sheet_excel_bank',$data);
+				}
+			}
         }
     }
 

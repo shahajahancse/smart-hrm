@@ -240,3 +240,27 @@ $(document).ready(function(){
   }
 })
 </script>
+<script>
+   function alert(d) {
+        Swal.fire({
+            // icon: "warning",
+            title: d,
+        });
+    }
+  </script>
+
+
+<script>
+
+  $(window).on('load', function() {
+    $("#inn_loader").hide();
+  })
+
+</script>
+<script>
+
+  $(window).on('load', function() {  
+    $(".select22").select2();
+  })
+</script>
+

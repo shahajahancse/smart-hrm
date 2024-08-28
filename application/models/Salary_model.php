@@ -20,6 +20,7 @@ class Salary_model extends CI_Model {
         $end_date    = date("Y-m", strtotime($process_month)).'-'.$num_of_days;
 
         $get_employee = $this->get_employee_info($grid_emp_id);
+        // dd($get_employee);
 
         foreach ($get_employee as $key => $row) {
             $emp_id          = $row->user_id;
@@ -27,17 +28,20 @@ class Salary_model extends CI_Model {
             $department_id   = $row->department_id;
             $designation_id  = $row->designation_id;
             $salary          = $row->salary;
+            if ($salary < 1) {
+                $salary= $row->basic_salary;
+            }
 
             $first_date  = date("Y-m-d", strtotime($process_month));
             // skip salary proccess
-            if($salary < 1) {
-                continue;
-            }
+            // if($salary < 1) {
+            //     continue;
+            // }
             $salary_month = trim(substr($end_date,0,7));
             $join_month = trim(substr($doj,0,7));
             if (strtotime($join_month) > strtotime($salary_month)) {
                 continue;
-            } 
+            }
 
             //=======PRESENT STATUS======
             $join_left_resign = 0;
@@ -92,6 +96,7 @@ class Salary_model extends CI_Model {
             $extra_p = $this->attendance_count_status($emp_id,"Present",$first_date,$end_date,'attendance_status');
             $meeting = $this->attendance_count_status($emp_id,"Meeting",$first_date,$end_date,'attendance_status');*/
             $rows = $this->count_attendance_status_wise($emp_id,$first_date,$end_date);
+            //dd($rows);
             $leave = $this->leave_count_status($emp_id, $first_date,$end_date, 2);
 
             $present = ($rows->attend + $rows->HalfDay) - ($rows->present_error2 + $rows->present_error1);
@@ -190,12 +195,13 @@ class Salary_model extends CI_Model {
                 $data['m_pay_day'] = $query->row()->m_pay_day;
 
                 $lunch_data=$this->db->where('emp_id',$emp_id)->where('salary_month',$salary_month)->order_by('id',"desc")->limit(1)->get('lunch_payment')->row();
+                $lunch_deduct=0;
                 if(!empty($lunch_data)){
                         $lunch_deduct = $lunch_data->collection_amount;
-                        $data['lunch_deduct'] = $lunch_deduct;
-                        $data['net_salary'] = $pay_salary-$lunch_deduct;
-                        $data['grand_net_salary' ]= (($pay_salary + $extra_pay ) - $advanced)-$lunch_deduct;
                 }
+                $data['lunch_deduct'] = $lunch_deduct;
+                $data['net_salary'] = $pay_salary-$lunch_deduct;
+                $data['grand_net_salary' ]= (($pay_salary + $extra_pay ) - $advanced)-$lunch_deduct;
 
                 $this->db->where('payslip_id', $query->row()->payslip_id);
                 $this->db->update('xin_salary_payslips',$data);
@@ -347,7 +353,7 @@ class Salary_model extends CI_Model {
     }
 
     // salary sheet excel report
-    public function salary_sheet_excel($salary_month, $emp_id, $status = null)
+    public function salary_sheet_excel($bank,$salary_month, $emp_id, $status = null)
     {
         $this->db->select('
             sp.payslip_id,
@@ -397,6 +403,9 @@ class Salary_model extends CI_Model {
             $this->db->where("xin_attendance_time.status", $status);
         }*/
 
+        if($bank!=2){
+            $this->db->where("em.if_salary_bank", $bank);
+        }
         $this->db->where("sp.salary_month", $salary_month);
         $this->db->where_in("sp.employee_id", $emp_id);
 

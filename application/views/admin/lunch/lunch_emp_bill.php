@@ -24,7 +24,12 @@ $balanceMeal= $paymeal-$taken_meal;
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="<?= base_url('skin/hrsale_assets/css/lunch_emp_bill.css') ?>">
-
+<style>
+    .modal-dialog {
+    width: 600px;
+    margin: 95px auto;
+}
+</style>
 <div class="monthname">
     <?php
 if (count($empdata)>0){
@@ -32,6 +37,38 @@ if (count($empdata)>0){
     <?= date('d-M-Y', strtotime($first_date)) ?> to <?= date('d-M-Y', strtotime($second_date)) ?> Lunch Bill
     Summery
     <?php } ?>
+</div>
+
+
+
+<div class="modal fade" id="jobcardinput" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Job Card Form</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="">Start Date</label>
+                        <input type="Date" class="form-control" id="emp_j_from_date">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="">To Date</label>
+                        <input type="Date" class="form-control" id="emp_j_to_date">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" onclick="get_job_card()" class="btn btn-primary">Get</button>
+
+            </div>
+        </div>
+
+    </div>
 </div>
 <div class="divrow col-md-12">
     <div class="divstats-info col-md-3" style="background-color: #d1ecf1;">
@@ -56,47 +93,90 @@ if (count($empdata)>0){
     <div>Lunch Bill Information</div>
 
 </div>
-<div class="titel_sec_head2 col-md-4">
+<div class="titel_sec_head2 col-md-6">
     <input type="month" class="datesec" id="monthYearInput" value="<?= date('Y-m')?>">
     <a class="btn btns">Submit</a>
+    <a class="btn btns" data-toggle="modal" data-target="#jobcardinput">
+        <div class="input serceb">
+            <span class="label label-danger" style="animation: pulse 1s infinite;">New</span>
+            Get Lunch Card
+        </div>
+    </a>
 </div>
-<div class="table-responsive">
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">SL</th>
-            <th scope="col">Pay Date</th>
-            <th scope="col">Total Meal</th>
-            <th scope="col">Pay Amount</th>
-            <th scope="col">Previous Balance</th>
-            <th scope="col">Net Amount</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-                <?php
-        foreach ($empdataall as $key=>$value){ ?>
-        <tr>
-            <td scope="row"><?= $key+1 ?></td>
-            <td scope="row"><?= date('d-M-Y', strtotime($value->end_date)) ?> to
-                <?= date('d-M-Y', strtotime($value->next_date)) ?></td>
-            <td scope="row"><?= $value->probable_meal ?></td>
-            <td scope="row"><?= $value->pay_amount ?></td>
-            <td scope="row"><?= $value->prev_amount?></td>
-            <td scope="row"><?= $value->collection_amount ?></td>
-            <td scope="row">
-                <?= ($value->status != 1) ? '<span class="danger">Unpaid</span>' : '<span class="suncces">Paid</span>' ?>
-            </td>
-            <td scope="row"><svg style="width: 24px;height: 24px;transform: rotate(-90deg);flex-shrink: 0;"
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path
-                        d="M12 18C12.3978 18 12.7794 18.158 13.0607 18.4393C13.342 18.7206 13.5 19.1022 13.5 19.5C13.5 19.8978 13.342 20.2794 13.0607 20.5607C12.7794 20.842 12.3978 21 12 21C11.6022 21 11.2206 20.842 10.9393 20.5607C10.658 20.2794 10.5 19.8978 10.5 19.5C10.5 19.1022 10.658 18.7206 10.9393 18.4393C11.2206 18.158 11.6022 18 12 18ZM12 10.5C12.3978 10.5 12.7794 10.658 13.0607 10.9393C13.342 11.2206 13.5 11.6022 13.5 12C13.5 12.3978 13.342 12.7794 13.0607 13.0607C12.7794 13.342 12.3978 13.5 12 13.5C11.6022 13.5 11.2206 13.342 10.9393 13.0607C10.658 12.7794 10.5 12.3978 10.5 12C10.5 11.6022 10.658 11.2206 10.9393 10.9393C11.2206 10.658 11.6022 10.5 12 10.5ZM12 3C12.3978 3 12.7794 3.15804 13.0607 3.43934C13.342 3.72064 13.5 4.10217 13.5 4.5C13.5 4.89783 13.342 5.27936 13.0607 5.56066C12.7794 5.84196 12.3978 6 12 6C11.6022 6 11.2206 5.84196 10.9393 5.56066C10.658 5.27936 10.5 4.89783 10.5 4.5C10.5 4.10217 10.658 3.72064 10.9393 3.43934C11.2206 3.15804 11.6022 3 12 3Z"
-                        fill="black" />
-                </svg></td>
-        </tr>
-        <?php } ?>
 
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>SN</th>
+                <th>From Date</th>
+                <th>End Date</th>
+                <th>Previous Meal</th>
+                <th>Previous Cost</th>
+                <th>Previous Pay</th>
+                <th>Previous Balance</th>
+                <th>From date</th>
+                <th>Next probable date Date</th>
+                <th>Probable Meal</th>
+                <th>Pay Amount</th>
+                <th>Collection Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($empdataall as $key=>$value){ ?>
+            <tr>
+                <td><?= $key+1 ?></td>
+                <td><?= $value->from_date ?></td>
+                <td><?= $value->end_date ?></td>
+                <td><?= $value->prev_meal ?></td>
+                <td><?= $value->prev_cost ?></td>
+                <td><?= $value->prev_pay ?></td>
+                <td><?= $value->prev_amount ?></td>
+                <td><?= date('Y-m-d', strtotime($value->end_date . ' +1 day')) ?></td>
+                <td><?= $value->next_date ?></td>
+                <td><?= $value->probable_meal ?></td>
+                <td><?= $value->pay_amount ?></td>
+                <td><?= $value->collection_amount ?></td>
+            </tr>
+            <?php } ?>
+
+        </tbody>
+    </table>
 </div>
+<script>
+function get_job_card() {
+    var ajaxRequest; // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+
+    first_date = document.getElementById('emp_j_from_date').value;
+    second_date = document.getElementById('emp_j_to_date').value;
+
+    if (first_date == '') {
+        alert('Please select first date');
+        return;
+    }
+    if (second_date == '') {
+        alert('Please select second date');
+        return;
+    }
+
+    var data = "first_date=" + first_date + '&second_date=' + second_date;
+
+    url = '<?php echo base_url('admin/lunch/get_job_card_emp'); ?>';
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    // alert(url); return;
+
+    ajaxRequest.onreadystatechange = function() {
+        if (ajaxRequest.readyState == 4) {
+            // console.log(ajaxRequest.responseText); return;
+            var resp = ajaxRequest.responseText;
+            a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+            a.document.write(resp);
+            // a.close();
+        }
+    }
+}
+</script>

@@ -46,9 +46,14 @@ class Leave extends API_Controller
             $this->db->select("*");
             $this->db->where("employee_id", $userid);
             $this->db->order_by("from_date", "desc");
-            $data['leavedata'] = $this->db->get('xin_leave_applications')->result();        
-            $data['leave_calel']=get_cal_leave($userid, 1);
-            $data['leave_calsl']=get_cal_leave($userid, 2);
+            $data['leavedata'] = $this->db->get('xin_leave_applications')->result();   
+            
+            $this->db->where('emp_id',$userid);
+            $this->db->where('year',date('Y'));
+            $emp_leave=$this->db->get('leave_balanace')->row(); 
+
+            $data['leave_cal']=$emp_leave;
+         
             $data['leave_type']=array(
                 'Earn_leave'=>1,
                 'Sick_leave'=>2,
@@ -86,6 +91,16 @@ class Leave extends API_Controller
                 ], 404);
                 exit();
             }
+
+
+            if($start_date<= date('Y-m-d',strtotime('-4 day'))){
+				$this->api_return([
+                    'status'  =>   false,
+                    'message'  =>   'Leave start date must be greater than 3 days',
+                    'data'     =>   [],
+                ], 404);
+                exit();
+			}
 
 
             $this->db->where('emp_id',$userid);

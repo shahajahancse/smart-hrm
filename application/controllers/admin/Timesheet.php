@@ -486,6 +486,9 @@ class Timesheet extends MY_Controller {
 	// leave > timesheet
 	public function leave() {
 		
+
+
+
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -520,99 +523,67 @@ class Timesheet extends MY_Controller {
 	 
 	// Validate and add info in database
 	public function add_leave() {
-	
 
 			$start_date = $this->input->post('start_date');
 			$end_date = $this->input->post('end_date');
 			$remarks = $this->input->post('remarks');
 			$st_date = strtotime($start_date);
 			$ed_date = strtotime($end_date);
-			// if($start_date<= date('Y-m-d',strtotime('-3 day'))){
-			// 	$this->session->set_flashdata('error', 'Leave start date must be greater than 3 days');
-			// 	redirect('admin/timesheet/leave');
-			// }
-			// $qt_remarks = htmlspecialchars(addslashes($remarks), ENT_QUOTES);
-			
-			/* Server side PHP input validation */		
+			if($start_date<= date('Y-m-d',strtotime('-4 day'))){
+				$this->session->set_flashdata('error', 'You can not add leave for past 4 days.');
+				redirect('admin/leave/emp_leave');				
+			}		
 			if($this->input->post('leave_type')==='') {
-	        	$this->session->set_flashdata('error',  $this->lang->line('xin_error_leave_type_field'));
-				redirect('admin/timesheet/leave');
-			} else if($this->input->post('start_date')==='') {
-	        	$this->session->set_flashdata('error',  $this->lang->line('xin_error_start_date'));
-				redirect('admin/timesheet/leave');
-			} else if($this->input->post('end_date')==='') {
-	        	$this->session->set_flashdata('error',  $this->lang->line('xin_error_end_date'));
-				redirect('admin/timesheet/leave');
-			} else if($st_date > $ed_date) {
-				$this->session->set_flashdata('error',  $this->lang->line('xin_error_start_end_date'));
-				redirect('admin/timesheet/leave');
-			} else if($this->input->post('company_id')==='') {
-				$this->session->set_flashdata('error',  $this->lang->line('error_company_field'));
-				redirect('admin/timesheet/leave');
-			} else if($this->input->post('employee_id')==='') {
-				$this->session->set_flashdata('error',  $this->lang->line('xin_error_employee_id'));
-				redirect('admin/timesheet/leave');
-			} else if($this->input->post('reason')==='') {
-				$this->session->set_flashdata('error',  $this->lang->line('xin_error_leave_type_reason'));
-				redirect('admin/timesheet/leave');
+	        	$this->session->set_flashdata('error', 'Please select leave type.');
+				redirect('admin/leave/emp_leave');	
 			}
 			//get leave date of a employee ... 
-			$leave_date = $this->db->select('from_date,to_date')->where('employee_id',$_POST['employee_id'])->get('xin_leave_applications')->result();
+			$leave_date = $this->db->select('*')->where('employee_id',$_POST['employee_id'])->get('xin_leave_applications')->result();
 			
 			//check duplicate leave date 
 			foreach($leave_date as $date){
-				if($date->from_date == $start_date && $date->to_date == $end_date) {
-					$this->session->set_flashdata('error',  'Leave Already Exist');
-					redirect('admin/timesheet/leave');
+				if($date->from_date == $start_date || $date->to_date == $end_date) {
+					$this->session->set_flashdata('error', 'Leave date already exists.');
+					redirect('admin/leave/emp_leave');	
 				}
-			}
+
+				// if ($date->leave_type_id==$this->input->post('leave_type')) {
+				// 		if ($date->from_date == $start_date || $date->to_date == $end_date || $date->to_date == $start_date || $date->from_date == $end_date ) {
+				// 			$this->session->set_flashdata('error', 'Leave date already exists.');
+				// 			redirect('admin/leave/emp_leave');
+				// 		}
+				// 		if (date('Y-m-d',strtotime($start_date)) == date('Y-m-d',strtotime('+1 days',strtotime($date->to_date)))) {
+				// 			$this->session->set_flashdata('error', 'Leave date already exists.');
+				// 			redirect('admin/leave/emp_leave');
+				// 		}
+				// 	}
+				};
 			$datetime1 = new DateTime($this->input->post('start_date'));
 			$datetime2 = new DateTime($this->input->post('end_date'));
 			$interval = $datetime1->diff($datetime2);
 			$no_of_days = $interval->format('%a') + 1;
 
 			if($this->input->post('leave_half_day') == 1 && $no_of_days > 1 ) {
-				$this->session->set_flashdata('error',  $this->lang->line('xin_hr_cant_appply_morethan').' 1 '.$this->lang->line('xin_day'));
-				redirect('admin/timesheet/leave');
+				$this->session->set_flashdata('error', 'Please select only one day for half day leave.');
+				redirect('admin/leave/emp_leave');
 			}
-			dd('hello');
-
-			
-				
 			if($this->input->post('start_date')!=''){	
 				
 				if($this->input->post('leave_half_day') == 1 && $no_of_days == 1 ) {
 					$no_of_days = 0.5;
 				} 
-				
 				$total = get_cal_leave($this->input->post('employee_id'), $this->input->post('leave_type'));
-					
-				if($this->input->post('leave_half_day') != 1){
-					if($no_of_days > $total){
-						$this->session->set_flashdata('error',  $this->lang->line('xin_hr_cant_appply_morethan')." $total ".$this->lang->line('xin_day'));
-						redirect('admin/timesheet/leave');
-					}
-				} else {
-					if(0.5 >  $total){
-						$this->session->set_flashdata('error',  $this->lang->line('xin_hr_cant_appply_morethan')."  $total ".$this->lang->line('xin_hr_contract_days'));
-						redirect('admin/timesheet/leave');
-					}
-				}
-
 				if ($this->input->post('leave_type') == 2) {
 					$type_name = " Sick leave";
 				} else {
 					$type_name = " Earn leave";
 				}
 				
-				if($total < 0.4){
-					$this->session->set_flashdata('error',  $this->lang->line('xin_leave_limit_msg').' '.$this->lang->line('xin_hrsale_leave_quota_completed') .$type_name);
-					redirect('admin/timesheet/leave');
+				if($total <= 0.4){
+					$this->session->set_flashdata('error', 'You have only '.$total.' '.$type_name.' left.');
+					redirect('admin/leave/emp_leave');
 				}
 			}
-
-				
-
 			if($this->input->post('leave_half_day') != 1){
 				$leave_half_day_opt = 0;
 			} else {
@@ -620,9 +591,8 @@ class Timesheet extends MY_Controller {
 			}
 			
 			if($_FILES['attachment']['tmp_name']!='') {
-				
 				$config['upload_path'] = './uploads/leave/'; // Modify this path as needed
-				$config['allowed_types'] = 'gif|jpg|png|pdf'; // Add more allowed file types as needed
+				$config['allowed_types'] = 'gif|jpg|png|pdf';// Add more allowed file types as needed
 				$config['encrypt_name'] = true; // Generate a unique encrypted filename
 				$config['max_size'] = 10048; // Set maximum file size in kilobytes (2MB in this case)
 				$this->upload->initialize($config);
@@ -632,7 +602,25 @@ class Timesheet extends MY_Controller {
 			} else {
 				$fileLocation = '';
 			}
-			
+			if ($leave_half_day_opt== 1) {
+				$get_day_attn=$this->Timesheet_model->attendance_first_in_check($_POST['employee_id'],$start_date)->row();
+				if(!empty($get_day_attn) && $get_day_attn->attendance_status!='HalfDay'){
+					$this->session->set_flashdata('error', 'This day is not Half Day');
+					redirect('admin/leave/emp_leave');
+				}
+			}else{
+				$start_date = $this->input->post('start_date');
+				$end_date = $this->input->post('end_date');
+				$input_date = $start_date;
+				while (strtotime($input_date) <= strtotime($end_date)) {
+					$get_day_attn=$this->Timesheet_model->attendance_first_in_check($_POST['employee_id'],$input_date)->row();
+					if(!empty($get_day_attn) && $get_day_attn->status=='Present'){
+						$this->session->set_flashdata('error', 'This day is not Half Day');
+						redirect('admin/leave/emp_leave');
+					}
+					$input_date = date ("Y-m-d", strtotime("+1 day", strtotime($input_date)));
+				}
+			}
 			$data = array(
 			'employee_id' => $this->input->post('employee_id'),
 			'company_id' => $this->input->post('company_id'),
@@ -652,21 +640,14 @@ class Timesheet extends MY_Controller {
 			'created_at' => date('Y-m-d h:i:s'),
 			'current_year' => date('Y'),
 			);
-			// dd($data);
-
 			$result = $this->Timesheet_model->add_leave_record($data);
 			
 			if ($result == TRUE) {
-				$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave_added'));
-				if($session['role_id'] == 3) {
-					redirect('admin/leave/emp_leave');
-				}
-
-				redirect('admin/timesheet/leave');
-
+				$this->session->set_flashdata('success', 'Successfully Added');
+				redirect('admin/leave/emp_leave');
 			} else {
-				$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
-				redirect('admin/timesheet/leave');
+				$this->session->set_flashdata('error', 'There is an error');
+				redirect('admin/leave/emp_leave');
 				
 			}
 	}
@@ -681,6 +662,9 @@ class Timesheet extends MY_Controller {
 		if($result == TRUE) {
 			$this->db->where('leave_id', $id);
 			$leve_data = $this->db->get('xin_leave_applications', $data)->row();
+
+			$this->Attendance_model->leave_process($id);
+
 			$emp_id =$leve_data->employee_id;
 			$from_date =$leve_data->from_date;
 			$leave_type_id =$leve_data->leave_type_id;
@@ -695,12 +679,10 @@ class Timesheet extends MY_Controller {
 						'sl_balanace' =>$leave_data->sl_balanace - $qty
 					);
 				}
-				$this->db->where('id', $leave_data->id);
+				$this->db->where('emp_id', $emp_id);
+				$this->db->where('year', $y);
 				$this->db->update('leave_balanace', $rdata);
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave_added'));
-			
-			$this->attandence_pro($from_date,$qty,$emp_id);
-
 			redirect('admin/timesheet/leave');
 		} else {
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
@@ -724,6 +706,7 @@ class Timesheet extends MY_Controller {
 	public function leave_reject($id) {
 		$data = array(
 			'status' => 3,
+			'rejected_by' => $this->session->userdata('username')->user_id,
 		);
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
 		if($result == TRUE) {
@@ -776,6 +759,7 @@ class Timesheet extends MY_Controller {
 				'is_half_day' => $hulfday,
 				'team_lead_approved' => $team_lead_approved,
 				'team_lead_comment' => $team_lead_comment,
+				'rejected_by' =>$this->session->userdata('username')['user_id']
 			);
 		}else{
 			$qnty= $total_days;
@@ -811,8 +795,9 @@ class Timesheet extends MY_Controller {
 							'sl_balanace' =>$leave_data->sl_balanace - $qnty
 						);
 					}
-					$this->db->where('id', $leave_data->id);
-					$this->db->update('leave_balanace', $rdata);
+					$this->db->where('emp_id', $emp_id);
+					$this->db->where('year', $y);
+				$this->db->update('leave_balanace', $rdata);
 	
 
 			
@@ -823,7 +808,8 @@ class Timesheet extends MY_Controller {
 
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
 			// automatically leave process start
-			$this->attandence_pro($from_date,$total_days,$emp_id);
+			$this->Attendance_model->leave_process($this->input->post('leave_id'));
+
 		}else{
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
 		}
@@ -892,7 +878,8 @@ class Timesheet extends MY_Controller {
 			'from_date' => $this->input->post('start_date'),
 			'to_date' => $this->input->post('end_date'),
 			'qty' => $qnty,
-			'is_half_day' => $hulfday
+			'is_half_day' => $hulfday,
+			'rejected_by' =>$this->session->userdata('username')['user_id']
 		);
 
 
@@ -912,70 +899,13 @@ class Timesheet extends MY_Controller {
 							'sl_balanace' =>$leave_data->sl_balanace - $qnty
 						);
 					}
-					$this->db->where('id', $leave_data->id);
-					$this->db->update('leave_balanace', $rdata);
+					$this->db->where('emp_id', $emp_id);
+					$this->db->where('year', $y);
+				$this->db->update('leave_balanace', $rdata);
 				}
 			$this->session->set_flashdata('success',  $this->lang->line('xin_success_leave__status_updated'));
-			$this->attandence_pro($this->input->post('start_date'),$qnty,$emp_id);
+			$this->Attendance_model->leave_process($id);
 
-
-			$setting = $this->Xin_model->read_setting_info(1);
-			if($setting[0]->enable_email_notification == 'yes') {
-						
-				if($this->input->post('status') == 2){
-					
-					$this->email->set_mailtype("html");
-					
-					//get leave info
-					$timesheet = $this->Timesheet_model->read_leave_information($id);
-					//get company info
-					$cinfo = $this->Xin_model->read_company_setting_info(1);
-					//get email template
-					$template = $this->Xin_model->read_email_template(6);
-					//get employee info
-					$user_info = $this->Xin_model->read_user_info($timesheet[0]->employee_id);
-					
-					$full_name = $user_info[0]->first_name.' '.$user_info[0]->last_name;
-					
-					$from_date = $this->Xin_model->set_date_format($timesheet[0]->from_date);
-					$to_date = $this->Xin_model->set_date_format($timesheet[0]->to_date);
-				
-					$subject = $template[0]->subject.' - '.$cinfo[0]->company_name;
-					$logo = base_url().'uploads/logo/signin/'.$cinfo[0]->sign_in_logo;
-					
-					$message = '
-				<div style="background:#f6f6f6;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:12px;margin:0;padding:0;padding: 20px;">
-				<img src="'.$logo.'" title="'.$cinfo[0]->company_name.'"><br>'.str_replace(array("{var site_name}","{var site_url}","{var leave_start_date}","{var leave_end_date}"),array($cinfo[0]->company_name,site_url(),$from_date,$to_date),htmlspecialchars_decode(stripslashes($template[0]->message))).'</div>';
-					
-					hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$user_info[0]->email,$subject,$message);
-				} else if($this->input->post('status') == 3){ // rejected
-					
-					$this->email->set_mailtype("html");
-					
-					//get leave info
-					$timesheet = $this->Timesheet_model->read_leave_information($id);
-					//get company info
-					$cinfo = $this->Xin_model->read_company_setting_info(1);
-					//get email template
-					$template = $this->Xin_model->read_email_template(7);
-					//get employee info
-					$user_info = $this->Xin_model->read_user_info($timesheet[0]->employee_id);
-					
-					$full_name = $user_info[0]->first_name.' '.$user_info[0]->last_name;
-					
-					$from_date = $this->Xin_model->set_date_format($timesheet[0]->from_date);
-					$to_date = $this->Xin_model->set_date_format($timesheet[0]->to_date);
-				
-					$subject = $template[0]->subject.' - '.$cinfo[0]->company_name;
-					$logo = base_url().'uploads/logo/signin/'.$cinfo[0]->sign_in_logo;
-					
-					$message = '
-				<div style="background:#f6f6f6;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:12px;margin:0;padding:0;padding: 20px;">
-				<img src="'.$logo.'" title="'.$cinfo[0]->company_name.'"><br>'.str_replace(array("{var site_name}","{var site_url}","{var leave_start_date}","{var leave_end_date}"),array($cinfo[0]->company_name,site_url(),$from_date,$to_date),htmlspecialchars_decode(stripslashes($template[0]->message))).'</div>';
-					
-					hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$user_info[0]->email,$subject,$message);
-				} 
-			}
 			redirect('admin/timesheet/leave');
 		} else {
 			$this->session->set_flashdata('error',  $this->lang->line('xin_error_msg'));
@@ -987,6 +917,11 @@ class Timesheet extends MY_Controller {
 		
 		$id =$this->input->post('leave_id');
 		$stutuss=$this->input->post('status');
+		$reason=$this->input->post('reason');
+		
+		if ($reason==null || $reason=="") {
+			$reason="N/A";
+		}
 
 
 		$leave_info=$this->db->where('leave_id',$id)->get('xin_leave_applications')->row();
@@ -1004,9 +939,13 @@ class Timesheet extends MY_Controller {
 			$notyfi_data=1;
 		};
 
+		//dd($this->session->userdata('username')['user_id']);
+
 		$data = array(
 			'status' => $stutuss,
 			'notify_leave' => $notyfi_data,
+			'remarks' => $reason,
+			'rejected_by' =>$this->session->userdata('username')['user_id'],
 		);
 
 		$result = $this->Timesheet_model->update_leave_record($data,$id);
@@ -1026,10 +965,11 @@ class Timesheet extends MY_Controller {
 							'sl_balanace' =>$leave_data->sl_balanace - $qty
 						);
 					}
-					$this->db->where('id', $leave_data->id);
+					$this->db->where('emp_id', $emp_id);
+					$this->db->where('year', $y);
 					$this->db->update('leave_balanace', $rdata);
 				}
-				$this->attandence_pro($start_date,$qty,$employee_id);
+			$this->Attendance_model->leave_process($this->input->post('leave_id'));
 		} else {
 			echo 'error';
 		}
@@ -1128,6 +1068,8 @@ class Timesheet extends MY_Controller {
 		
 		if(!empty($session)){ 
 			$data['subview'] = $this->load->view("admin/timesheet/leave_details", $data, TRUE);
+			$this->Attendance_model->leave_process($leave_id);
+
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/');
@@ -3958,8 +3900,8 @@ class Timesheet extends MY_Controller {
 	{
 		$data['title'] = $this->Xin_model->site_title();
 		$leave_id = $this->input->get('leave_id');
+		$this->Attendance_model->leave_process($leave_id);
 		$result = $this->Timesheet_model->read_leave_information($leave_id);
-		
 		$data = array(
 				'leave_id' => $result[0]->leave_id,
 				'company_id' => $result[0]->company_id,
@@ -4767,20 +4709,20 @@ public function leave_efectinve_table(){
 	$this->load->view('admin/layout/layout_main', $data);
 
 }
-public function give_efectivefore_leave_add(){
-	exit();
-	$employee_id = $this->input->post('employee_id');
-	$is_leave_on = $this->input->post('is_leave_on');
-	$leave_effective = $this->input->post('leave_effective');
+// public function give_efectivefore_leave_add(){
+// 	exit();
+// 	$employee_id = $this->input->post('employee_id');
+// 	$is_leave_on = $this->input->post('is_leave_on');
+// 	$leave_effective = $this->input->post('leave_effective');
 
-	foreach($employee_id as $key => $value){
-		$data = array(
-			'is_leave_on' => $is_leave_on[$key],
-			'leave_effective' => $leave_effective[$key]
-		);
-		$this->db->where('user_id',$value);
-		$this->db->update('xin_employees',$data);
-	}
-	echo"done";
-}
+// 	foreach($employee_id as $key => $value){
+// 		$data = array(
+// 			'is_leave_on' => $is_leave_on[$key],
+// 			'leave_effective' => $leave_effective[$key]
+// 		);
+// 		$this->db->where('user_id',$value);
+// 		$this->db->update('xin_employees',$data);
+// 	}
+// 	echo"done";
+// }
 }

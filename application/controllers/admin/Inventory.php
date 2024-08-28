@@ -71,6 +71,7 @@ class Inventory extends MY_Controller {
 					'product_id'	   => $_POST['product_id'][$i],
 					'quantity'		   => $_POST['quantity'][$i],
 					'note'		   => $_POST['note'][$i],
+					'priority'		   => $_POST['priority'][$i],
 					'requisition_date' => $_POST['requisition_date'],
 					'status'		   => 1,
 					'created_at'     => date("y-m-d"),
@@ -482,6 +483,107 @@ public function add_daily_package()
 		}
 		$data['subview'] 		= $this->load->view("admin/inventory/purchase", $data, TRUE);
 								  $this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+	public function purchase_full(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		//Dropdown
+		$data['title'] 			= 'Store | Purchase List';
+		$data['breadcrumbs']	= 'Purchase List';
+		$data['products'] 		= $this->Inventory_model->purchase_products_requisition($session['user_id'],$session['role_id']);
+		$data['subview'] 		= $this->load->view("admin/inventory/purchase_full", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data);
+	}
+
+	public function get_products(){
+		$results =     $this->Inventory_model->product_list();
+		$html = '<div class="form-group row">';
+		$html .= '<label style="text-align: left;font-size: larger;" class="col-sm-12 col-form-label">Search Item</label>';
+		$html .= '<div class="col-md-12">';
+		$html .= '<select class="form-control" id="select_item_par" name="select_item" data-plugin="select_hrm"  required>';
+		$html .= '<option><-- Search Item --> </option>';
+		foreach ($results as $key => $row) {
+			$html .= '<option value="'.$row->id.'">'.$row->category_name .' >> '. $row->sub_cate_name .' >> '. $row->product_name.'</option>';
+		}
+		$html .= '</select>';
+		$html .= '</div>';
+		$html .= '</div>';
+		$html .= '<div class="form-group row">';
+		$html .= '<label style="text-align: left;font-size: larger;" class="col-sm-12 col-form-label">Quantity</label>';
+		$html .= '<div class="col-md-12">';
+		$html .= '<input type="number" class="form-control" placeholder="Quantity" id="par_qty"onkeyup="calt()"  required>';
+		$html .= '</div>';
+		$html .= '</div>';
+		$html .= '<div class="form-group row">';
+		$html .= '<label style="text-align: left;font-size: larger;" class="col-sm-12 col-form-label">Price</label>';
+		$html .= '<div class="col-md-12">';
+		$html .= '<input type="number" class="form-control" placeholder="Price" id="par_price"onkeyup="calt()"  required>';
+		$html .= '</div>';
+		$html .= '</div>';
+		$html .= '<div class="form-group row">';
+		$html .= '<label style="text-align: left;font-size: larger;" class="col-sm-12 col-form-label">Total Price</label>';
+		$html .= '<div class="col-md-12">';
+		$html .= '<input type="text" class="form-control" placeholder="Total Price" id="par_total_price" readonly>';
+		$html .= '</div>';
+		$html .= '</div>';
+		echo $html;
+	}
+	public function add_purchase() {
+		$session = $this->session->userdata('username');
+
+        // Get the JSON data from the POST request
+        $input_data = json_decode($this->input->raw_input_stream, true);
+
+        // Check if data is retrieved successfully
+        if (is_array($input_data)) {
+            // Extract data
+            $product_id = $input_data['product_id'];
+            $quantity = $input_data['quantity'];
+            $unit_price = $input_data['unit_price'];
+            $total_price = $input_data['total_price'];
+			
+			$form_data= array( 
+				'user_id'	      => $session['user_id'],
+				'product_id'	  =>  $product_id,
+				'quantity'		  =>  $quantity,
+				'approx_amount'	  =>  $unit_price,
+				'approx_t_amount' =>  $total_price,
+			);
+			if($this->db->insert('products_purches_details', $form_data)){
+				$response = [
+					'status' => 'success',
+					'message' => 'Purchase added successfully',
+				];
+			}else{
+				$response = [
+					'status' => 'error',
+					'message' => 'Failed to add purchase',
+				];
+			}
+            echo json_encode($response);
+        } else {
+            // Handle error
+            $response = [
+                'status' => 'error',
+                'message' => 'Invalid input data'
+            ];
+            echo json_encode($response);
+        }
+    }
+
+	public function get_purchase_data(){
+		$session = $this->session->userdata('username');
+		$status = $this->input->post('status');
+		$data= $this->Inventory_model->purchase_products_requisition_api(0,10000000,$status);
+
+		$data = array(
+			'row' => $data,
+			'roll' => $session['role_id'],
+		);
+		echo json_encode($data);
 	}
 
 	public function purchase_create($id = null){
@@ -1112,26 +1214,26 @@ public function low_inv_all_product_status_report($exc=null){
 	}
 
 	
- public function equipment_list(){
-	$session = $this->session->userdata('username');
-	if(empty($session)){ 
-		redirect('admin/');
+	public function equipment_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['session']    = $session;
+		$data['equipments'] = $this->Inventory_model->equipment_list($session);
+		$this->load->view("admin/inventory/equipment_list", $data);
 	}
-	$data['session']    = $session;
-	$data['equipments'] = $this->Inventory_model->equipment_list($session);
-	$this->load->view("admin/inventory/equipment_list", $data);
-}
 
-function requisition_list(){
-	$session = $this->session->userdata('username');
-	if(empty($session)){ 
-		redirect('admin/');
+	function requisition_list(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['session']    = $session;
+		$data['products'] 	= $this->Inventory_model->requisition_list($session);
+
+		$data['subview']    = $this->load->view("admin/inventory/requisition_list", $data);
 	}
-	$data['session']    = $session;
-	$data['products'] 	= $this->Inventory_model->requisition_list($session);
-
-	$data['subview']    = $this->load->view("admin/inventory/requisition_list", $data);
-}
 
 
 public function delete_category($id){

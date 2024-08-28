@@ -147,7 +147,7 @@ class Attendance extends MY_Controller
                 }
                 $session = $this->session->userdata('username');
 
-                if (!is_null($session) && array_key_exists('role_id', $session) && in_array($session['role_id'], [1], true)) {
+                if (in_array($session['role_id'], [2,3,4,5,6])) {
                     $employee_managment = $this->db->where('user_id', $row)->get('xin_employees')->row();
                     if ($employee_managment->is_management == 1) {
                         echo "You don't have permission to punch this employee $employee_managment->first_name  $employee_managment->last_name";
@@ -575,6 +575,29 @@ class Attendance extends MY_Controller
         $second_date = $this->input->post('second_date');
         $sql = $this->input->post('sql');
         $emp_id = explode(',', trim($sql));
+        
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $data['company_info'] = $this->Xin_model->get_company_info(1);
+        $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+        // dd($data);
+        echo $this->load->view("admin/attendance/job_card", $data, true);
+
+    }
+    public function get_job_card_emp()
+    {
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $session = $this->session->userdata('username');
+        //  dd($session['user_id']);
+        if(empty($session)) {
+            echo 'Session not found';
+        }
+        $session = $this->session->userdata('username');
+        $emp_id  = [$session[ 'user_id' ]];
+        
+
+
         $data['first_date'] = $first_date;
         $data['second_date'] = $second_date;
         $data['company_info'] = $this->Xin_model->get_company_info(1);
@@ -694,6 +717,102 @@ class Attendance extends MY_Controller
 
         
     }
+    public function overall_performance_yearly()
+    {
+        $last_date = $this->input->post('first_date');
+        $f_date = date('Y-01-01',strtotime($last_date));
+        $year=date('Y',strtotime($f_date));
+        $last_month=date('m',strtotime($last_date));
+
+        $sql = $this->input->post('sql');
+        if (empty($sql)) {
+            $emp_id = array();
+        } else {
+            $emp_id = explode(',', trim($sql));
+        }
+        $data=[];
+        foreach($emp_id as $key => $value){
+            $employee_data_month=[];
+            
+        for($i=1;$i<=$last_month;$i++){
+            $first_date = date("Y-m-01", strtotime("{$year}-{$i}-01"));
+            $second_date = date("Y-m-t", strtotime("{$year}-{$i}-01"));
+            $get_total_present = $this->Attendance_model->get_total_present($value, $first_date, $second_date);
+            $get_total_absent = $this->Attendance_model->get_total_absent($value, $first_date, $second_date);
+            $get_total_late = $this->Attendance_model->get_total_late($value, $first_date, $second_date);
+            $get_total_overtime = $this->Attendance_model->get_total_overtime($value, $first_date, $second_date);
+            $get_total_leave = $this->Attendance_model->get_total_leave($value, $first_date, $second_date);
+            $total_day = $get_total_present + $get_total_absent+$get_total_leave;
+            $employee_data_month[$i] = [
+                'month' => date('F', strtotime($first_date)),
+                'total_day' => $total_day,
+                'total_present' => $get_total_present,
+                'total_absent' => $get_total_absent,
+                'total_late' => $get_total_late,
+                'total_overtime' => $get_total_overtime,
+                'total_leave' => $get_total_leave,
+            ];
+        }
+        $get_employee_info= $this->Xin_model->read_user_info($value);
+
+            $data[$key] = [
+                'emp_id' => $value,
+                'first_name' => $get_employee_info[0]->first_name,
+                'last_name' => $get_employee_info[0]->last_name,
+                'employee_data_month' => $employee_data_month
+            ];
+        }
+        $d['data']=$data;
+        $d['year'] = $year;
+        echo $this->load->view("admin/attendance/overall_performance_yearly", $d, true);
+    }
+    // public function overall_performance_yearly()
+    // {
+        
+    //     $last_date = $this->input->post('first_date');
+    //     $f_date = date('Y-01-01',strtotime($last_date));
+    //     $year=date('Y',strtotime($f_date));
+    //     $last_month=date('m',strtotime($last_date));
+
+    //     $sql = $this->input->post('sql');
+    //     if (empty($sql)) {
+    //         $emp_id = array();
+    //     } else {
+    //         $emp_id = explode(',', trim($sql));
+    //     }
+    //     $data=[];
+    //     foreach($emp_id as $key => $value){
+    //         $employee_data_month=[];
+            
+    //     for($i=1;$i<=$last_month;$i++){
+    //         $first_date = $year.'-'.$i.'-01';
+    //         $second_date = $year.'-'.$i.'-31';
+    //         $get_total_present = $this->Attendance_model->get_total_present($value, $first_date, $second_date);
+    //         $get_total_absent = $this->Attendance_model->get_total_absent($value, $first_date, $second_date);
+    //         $get_total_late = $this->Attendance_model->get_total_late($value, $first_date, $second_date);
+    //         $get_total_overtime = $this->Attendance_model->get_total_overtime($value, $first_date, $second_date);
+    //         $get_total_leave = $this->Attendance_model->get_total_leave($value, $first_date, $second_date);
+    //         $total_day = $get_total_present + $get_total_absent+$get_total_leave;
+    //         $employee_data_month[$i] = [
+    //             'month' => date('F', strtotime($first_date)),
+    //             'total_day' => $total_day,
+    //             'total_present' => $get_total_present,
+    //             'total_absent' => $get_total_absent,
+    //             'total_late' => $get_total_late,
+    //             'total_overtime' => $get_total_overtime,
+    //             'total_leave' => $get_total_leave,
+    //         ];
+    //     }
+    //     $get_employee_info= $this->Xin_model->read_user_info($value);
+
+    //         $data[$key] = [
+    //             'emp_id' => $value,
+    //             'first_name' => $get_employee_info[0]->first_name,
+    //             'last_name' => $get_employee_info[0]->last_name,
+    //             'employee_data_month' => $employee_data_month
+    //         ];
+    //     }
+    // }
     public function late_details()
     {
         $first_date = $this->input->post('first_date');
@@ -948,6 +1067,96 @@ class Attendance extends MY_Controller
             $this->load->view('admin/layout/layout_main', $data);
         }
     }
+    public function punch_request(){
+        $punch_type=$this->input->post('punch_type');
+        $p_date=$this->input->post('p_date');
+        $p_time=$this->input->post('p_time');
+        $session = $this->session->userdata('username');
+        $user_id  = $session[ 'user_id' ];
+        $proxi_id = $this->db->where('emp_id', $user_id)->get('xin_proxi')->row()->proxi_id;
+
+        $sql = "CREATE TABLE IF NOT EXISTS `xin_employee_punch_request` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `employee_id` int(11) NOT NULL,
+            `proxi_id` int(11) NOT NULL,
+            `punch_type` varchar(255) NOT NULL,
+            `p_date` date NOT NULL,
+            `p_time` time NOT NULL,
+            `status` tinyint(1) NOT NULL,
+            PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+        $this->db->query($sql);
+
+        $data = array(
+            'employee_id' => $session['user_id'],
+            'proxi_id' => $proxi_id,
+            'punch_type' => $punch_type,
+            'p_date' => $p_date,
+            'p_time' => $p_time,
+            'status' => 0,
+        );
+        $this->db->insert('xin_employee_punch_request', $data);
+        echo 'Success';
+    }
+
+
+    public function punch_request_list(){
+        $session = $this->session->userdata('username');
+        $userid  = $session[ 'user_id' ];
+        $this->db->select("xin_employee_punch_request.*, xin_employees.first_name, xin_employees.last_name");
+        $this->db->from('xin_employee_punch_request');
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_employee_punch_request.employee_id');
+        $this->db->order_by("id", "desc");
+        $data['alldata'] = $this->db->get()->result();
+        $data['breadcrumbs'] = 'Punch Request List';
+        $data['title'] = 'Punch Request List | '.$this->Xin_model->site_title();
+
+        $data['subview'] = $this->load->view("admin/attendance/punch_request_list", $data, TRUE);
+        $this->load->view('admin/layout/layout_main', $data);
+    }
+    public function accept_request(){
+        $id = $this->input->post('id');
+        $data = array(
+            'status' => 1
+        );
+        $this->db->where('id', $id);
+        $this->db->update('xin_employee_punch_request', $data);
+
+        $r_data = $this->db->where('id', $id)->get('xin_employee_punch_request')->row();
+        $date=$r_data->p_date;
+        $in_time=$r_data->p_time;
+        $time= $date .' '. $in_time;
+
+
+        $this->db->where("proxi_id", $r_data->proxi_id);
+        $this->db->where("date_time", $time);
+        $query1 = $this->db->get("xin_att_machine");
+        $num_rows1 = $query1->num_rows();
+        if($num_rows1 == 0) {
+            $data = array(
+                    'proxi_id' 	=>  $r_data->proxi_id,
+                    'date_time'	=> $time,
+                    'device_id' => 0,
+                );
+            $this->db->insert("xin_att_machine", $data);
+        }
+        $this->Attendance_model->attn_process($date, $r_data->employee_id);
+        echo 'Success';
+    }
+
+    public function reject_request(){
+        $id = $this->input->post('id');
+        $data = array(
+            'status' => 2
+        );
+        $this->db->where('id', $id);
+        $this->db->update('xin_employee_punch_request', $data);
+        echo 'Success';
+    }
+
+
+
+
 
     public function employee_movement($type = null)
     {
@@ -1335,5 +1544,52 @@ class Attendance extends MY_Controller
         $this->db->where('time_attendance_id', $time_attendance_id);
         $this->db->update('xin_attendance_time', $data);
         echo 'success';
+    }
+
+    public function firebase_testing(){
+        $firebase_server_key = 'AIzaSyAocs5RyWdSwsPYKMAThQfwOAbyuaYXeVU';
+        // Replace with the device's registration token
+        $token = 'device_token_here';
+        // Notification details
+        $title = 'Test Notification';
+        $body = 'This is a test notification';
+        // Prepare data
+        $data = [
+            'to' => $token,
+            'notification' => [
+                'title' => $title,
+                'body' => $body,
+            ],
+            'data' => [
+                'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                'id' => '1',
+                'status' => 'done'
+            ]
+        ];
+
+        // Set CURL request options
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $headers = [
+            'Authorization: key=' . $firebase_server_key,
+            'Content-Type: application/json'
+        ];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        // Send a request and get the response
+        $result = curl_exec($ch);
+        if ($result === false) {
+            die('Curl failed: ' . curl_error($ch));
+        }
+        curl_close($ch);
+
+        // Print the response
+        echo $result;
     }
 }

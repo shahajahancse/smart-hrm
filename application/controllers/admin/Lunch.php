@@ -53,7 +53,6 @@ class Lunch extends MY_Controller
         } else {
             redirect('admin/');
         }
-
     }
     public function today_lunch($id = null)
     {
@@ -561,6 +560,32 @@ class Lunch extends MY_Controller
         $response ='operation Successfull.';
         echo json_encode($response);
     }
+    public function new_submit_payment()
+    {
+        // Retrieve the form data from the POST request
+        $new_employeeId = $this->input->get('new_employeeId');
+        $new_pay_amt = $this->input->get('new_pay_amt');
+        $last_prement= $this->db->query("SELECT * FROM `lunch_payment` ORDER BY id DESC LIMIT 1")->row();
+        $data = array(
+            'emp_id' => $new_employeeId ,
+            'prev_meal' =>0,
+            'prev_cost' => 0,
+            'prev_pay' => 0,
+            'prev_amount' => 0,
+            'probable_meal' => 0,
+            'pay_amount' => $new_pay_amt,
+            'collection_amount' => $new_pay_amt,
+            'from_date' => $last_prement->from_date,
+            'end_date' => $last_prement->end_date,
+            'next_date' => $last_prement->next_date,
+            'salary_month' => '',
+            'updated_at' => $last_prement->updated_at,
+            'status' => 1,
+        );
+        $this->db->insert('lunch_payment', $data);
+        $response ='Operation Successfull';
+        echo json_encode($response);
+    }
     public function vendor_payment()
     {
         $session = $this->session->userdata('username');
@@ -730,6 +755,27 @@ class Lunch extends MY_Controller
         $second_date = $this->input->post('second_date');
         $sql = $this->input->post('sql');
         $emp_id = explode(',', trim($sql));
+        $data['first_date'] = $first_date;
+        $data['second_date'] = $second_date;
+        $data['company_info'] = $this->Xin_model->get_company_info(1);
+        $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+        echo $this->load->view("admin/lunch/lunch_jobcard", $data, true);
+    }
+    public function get_job_card_emp()
+    {
+        $session = $this->session->userdata('username');
+        //  dd($session['user_id']);
+        if(empty($session)) {
+            echo 'Session not found';
+        }
+        $session = $this->session->userdata('username');
+        $emp_id  = [$session[ 'user_id' ]];
+
+
+
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+      
         $data['first_date'] = $first_date;
         $data['second_date'] = $second_date;
         $data['company_info'] = $this->Xin_model->get_company_info(1);
@@ -1218,4 +1264,27 @@ class Lunch extends MY_Controller
     }
 
 
+    // public function command_delete_dublicate(){
+    //     $emp= $this->db->select('user_id')->where('user_role_id', 3)->get('xin_employees')->result_array();
+    //     $emp_id=array_column($emp, 'user_id');
+    //     //dd($emp_id);
+    //     foreach($emp_id as $g){
+    //         $this->db->where('emp_id', $g);
+    //         $lunch_details = $this->db->get('lunch_details')->result();
+    //         $date='';
+    //         $test_id='';
+    //         foreach($lunch_details as $l){
+    //             if($date!=$l->date && $test_id!=$l->emp_id){
+    //                 $date=$l->date;
+    //                 $test_id=$l->emp_id;
+    //             }else{
+    //                 $this->db->where('date', $l->date);
+    //                 $this->db->where('emp_id', $g);
+    //                 $this->db->delete('lunch_details');
+    //             }
+    //         }
+    //     }
+    // }
+
+    
 }

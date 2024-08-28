@@ -1,5 +1,5 @@
 <?php
-// dd($results)
+ //dd($results)
 
 ?>
 <style>
@@ -38,15 +38,18 @@ td, th {
     echo '<span style="color: #0073cd;font-weight: bold;">'.$results[0]->product_name.'</span>' ;
  }?>, Current Quantity : <?php echo '<span style="color: #0073cd;font-weight: bold;">'.$product_qty->quantity.'</span>'.' <span  style="color: #0073cd;font-weight: bold">'.$product_qty->unit_name.'</span>'?> </h5>
 
-<table id="datatbale" style="width: 46%;margin:0 auto;margin-top:10px" border="1">
+<table id="datatbale" style="width: 96%;margin:0 auto;margin-top:10px" border="1">
     <thead>
         <tr>
             <th>SL</th>
             <th>Date</th>
+            <th>Requested person</th>
             <!-- <th>Days</th> -->
             <th>Quantity</th>
             <th>Approved Qty</th>
+            <th>Remarks</th>
             <th>Status</th>
+            <th>Accepted By</th>
         </tr>
     </thead>
     <tbody>
@@ -65,12 +68,21 @@ td, th {
         <tr>
             <td><?= $key+1 ?></td>
             <td><?= $raw->created_at ?></td>
+            <td><?php
+            $user_id= @$raw->user_id;
+            $user = $this->db->select('first_name,last_name')->from('xin_employees')->where('user_id',$user_id)->get()->row();
+            if(isset($user->first_name)){
+                echo $user->first_name.' '.$user->last_name;
+            }
+            ?></td>
+
             <?php $dateStr = $raw->created_at;
                             $date = strtotime($dateStr);
                             $dayName = date("l", $date); ?>
             <!-- <td>< ?= $dayName ?></td> -->
             <td><?= $raw->quantity ?></td>
             <td><?= $raw->ap_quantity ?></td>
+            <td><?= @$raw->note ?></td>
 
             <td><?php
                 if(isset($raw->purchase_status)){
@@ -106,6 +118,13 @@ td, th {
                 ?>
               <span <?= $class ?> >  <b><?=$type?></b></span>
               <span> <b>(<?= $status ?>)</b></span>
+              <span><td><?php
+            $user_id= @$raw->updated_by;
+            $user = $this->db->select('first_name,last_name')->from('xin_employees')->where('user_id',$user_id)->get()->row();
+            if(isset($user->first_name)){
+                echo $user->first_name.' '.$user->last_name;
+            }
+            ?></td></span>
             </td>
         </tr>
         <?php 

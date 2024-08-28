@@ -1159,179 +1159,113 @@ class Project extends MY_Controller
     }
     public function add_project_n()
     {
-            $is_free_service=0;
-            $free_service_start='';
-            $free_service_end='';
-        if($_POST['free_serviceEnabled']=='on'){
-            $is_free_service=1;
-            $free_service_start=$_POST['free_service_start_date'];
-            $free_service_end=$_POST['free_service_end_date'];
-        };
-        $projecttype = $this->input->post('projecttype');
-        $title = $this->input->post('title');
-        $client_id = $this->input->post('client_id');
-        $company_id = 1;
-        $start_date = $this->input->post('start_date');
-        $end_date = $this->input->post('end_date');
-        $total_days = floor((strtotime($end_date) - strtotime($start_date)) / (60 * 60 * 24));
-        $summary = '';
-        $budget_hours = $total_days * 8;
-        $priority = $this->input->post('priority');
-        $assigned_to = $this->input->post('assigned_to');
-        $description = $this->input->post('description');
-        $project_progress = '0';
-        $added_by = 1;
-        $created_at = date('d-m-Y');
-        $software_Budget = $this->input->post('software_Budget');
-        $instalment = $this->input->post('instalment');
-        $status = 0;
-        $is_notify = 1;
-        if ($software_Budget==0) {
-        $status = 1;
-        $is_notify = 0;
-        $instalment = 0;
-        }
-        $hardware_Budget = $this->input->post('hardware_Budget');
-        $hardware_Summary = $this->input->post('hardware_Summary');
-        $serviceEnabled = $this->input->post('serviceEnabled');
-        $service_status = ($serviceEnabled == 'on') ? 1 : 0;
-        $Service_type = $Service_amount = $Service_Increment_Date = '';
-        if ($service_status) {
-            $Service_type = $this->input->post('Service_type');
-            $Service_amount = $this->input->post('Service_amount');
-            $Service_start_Date = $this->input->post('Service_start_Date');
-            $Service_Increment_Date = $this->input->post('Service_Increment_Date');
-
-        }
-        $newFileName='';
-        if (isset($_FILES['agreement_file']) && !empty($_FILES['agreement_file']['name'])) {
-            $uploadDirectory = 'uploads/project_file/';
-            $allowedExtensions = array('pdf', 'jpg', 'jpeg', 'png');
-        
-            // Generate a unique filename using timestamp and a random string
-            $timestamp = time();
-            $fileExtension = pathinfo($_FILES['agreement_file']['name'], PATHINFO_EXTENSION);
-            $newFileName = $timestamp . '.'. $fileExtension;
-                // Upload the file to the specified directory
-                $uploadPath = $uploadDirectory . $newFileName;
-            move_uploaded_file($_FILES['agreement_file']['tmp_name'], $uploadPath);
-        }
-        
-        $data = array(
-            'title' => $title,
-            'client_id' => $client_id,
-            'project_type' => $projecttype,
-            'company_id' => $company_id,
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'summary' => $summary,
-            'budget_hours' => $budget_hours,
-            'priority' => $priority,
-            'assigned_to' => $assigned_to,
-            'description' => $description,
-            'project_progress' => $project_progress,
-            'status' => $status,
-            'is_notify' => $is_notify,
-            'added_by' => $added_by,
-            'created_at' => $created_at,
-            'software_Budget' => $software_Budget,
-            'instalment' => $instalment,
-            'hardware_Budget' => $hardware_Budget,
-            'hardware_Summary' => $hardware_Summary,
-            'service_status' => $service_status,
-            'Service_type' => $Service_type,
-            'Service_amount' => $Service_amount,
-            'is_free_service' => $is_free_service,
-            'free_service_start' => $free_service_start,
-            'free_service_end' => $free_service_end,
-            'project_note' => '',
-            'agreement_file' => $newFileName,
-            'Service_Increment_Date' => $Service_Increment_Date,
-        );
-        $r = $this->db->insert('xin_projects', $data);
-        if ($r) {
-            $project_id = $this->db->insert_id();
+            $projecttype=$this->input->post('projecttype');
+            $title = $this->input->post('title');
+            $project_no = substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 5)), 0, 5);
+            $client_id = $this->input->post('client_id');
+            $company_id = 1;
+            $start_date = $this->input->post('start_date');
+            $end_date = $this->input->post('end_date');
+            $total_days = floor((strtotime($end_date) - strtotime($start_date)) / (60 * 60 * 24));
+            $summary = '';
+            $budget_hours = $total_days*8;
+            $priority = $this->input->post('priority');
+            $assigned_to = $this->input->post('assigned_to');
+            $description = $this->input->post('description');
+            $project_progress = '0';
+            $status = 0;
+            $is_notify = 1;
+            $added_by = 1;
+            $created_at = date('d-m-Y');
+            $software_Budget = $this->input->post('software_Budget');
+            $instalment = $this->input->post('instalment');
+            $hardware_Budget = $this->input->post('hardware_Budget');
+            $hardware_Summary = $this->input->post('hardware_Summary');
+            $serviceEnabled = $this->input->post('serviceEnabled');
+            
+            $service_status = ($serviceEnabled == 'on') ? 1 : 0;
+            
+            $Service_type = $Service_amount = $Service_Increment_Date = '';
             if ($service_status) {
                 $Service_type = $this->input->post('Service_type');
                 $Service_amount = $this->input->post('Service_amount');
-                $Service_start_Date = $this->input->post('Service_start_Date');
                 $Service_Increment_Date = $this->input->post('Service_Increment_Date');
-                // id    project_id    service_type    start_date    next_payment_date    amount    next_notify_date    next_inc_date    update_at    create_at
-                $service_data = array(
-                    'project_id' => $project_id,
-                    'client_id' => $client_id,
-                    'service_type' => $Service_type,
-                    'start_date' => $Service_start_Date,
-                    'next_payment_date' => $Service_start_Date,
-                    'amount' => $Service_amount,
-                    'next_notify_date' => date('Y-m-d', strtotime('-2 day', strtotime($Service_start_Date))),
-                    'next_inc_date' => $Service_Increment_Date,
-                    'update_at' => date('Y-m-d H:i:s'),
-                    'create_at' => date('Y-m-d H:i:s'),
-                );
-                $addservice = $this->db->insert('xin_project_service', $service_data);
-                if (!$addservice) {
-                    $result = false;
-                    exit();
-                }
             }
-            $soft_intmnt_datesarray=array();
-            $soft_intmnt_prementsarray=array();
-            $soft_intmnt_statusarray=array();
-
-            $soft_intmnt_dates = json_encode($soft_intmnt_datesarray);
-            $soft_intmnt_prements = json_encode($soft_intmnt_prementsarray);
-            $soft_intmnt_status = json_encode($soft_intmnt_statusarray);
-            $soft_prement_status = 0;
-            $if_notify = 1;
-            $intmnt_dates = $this->input->post('first_installment_date');
-            $notify_date_start = date('Y-m-d', strtotime('-3 day', strtotime($intmnt_dates)));
-            if ($software_Budget==0) {
-                $soft_prement_status = 1;
-                $if_notify = 0;
-                $intmnt_dates = null;
-                $notify_date_start = null;
-                }
-            $soft_intmnt_takes = 0;
-            $hardware_prement_status = 0;
-            if ($hardware_Budget==0) {
-                $hardware_prement_status = 1;
-            }
-            $update_at = date('Y-m-d');
+            
             $data = array(
-                'project_id' => $project_id,
-                'clint_id' => $client_id,
-                'software_budget' => $software_Budget,
-                'hardware_budget' => $hardware_Budget,
-                'total_budget' => $hardware_Budget + $software_Budget,
-                'soft_total_installment' => $instalment,
-                'soft_intmnt_dates' => $soft_intmnt_dates,
-                'soft_intmnt_prements' => $soft_intmnt_prements,
-                'soft_intmnt_status' => $soft_intmnt_status,
-                'soft_intmnt_takes' => $soft_intmnt_takes,
-                'soft_prement_status' => $soft_prement_status,
-                'hardware_prement_status' => $hardware_prement_status,
-                'if_notify' => $if_notify,
-                'next_installment_date' => $intmnt_dates,
-                'next_payment_amount' => 0,
-                'installment_deu' => 0,
-                'notify_date_start' => $notify_date_start,
-                'Payment_Received' => 0,
-                'Remaining_Payment' => $software_Budget,
-                'Payment_Received_percent' => 0,
-                'Remaining_Payment_percent' => 100,
-                'update_at' => $update_at,
+                'title' => $title,
+                'project_id' => $project_no,
+                'project_no' => $project_no,
+                'client_id' => $client_id,
+                'company_id' => $company_id,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'summary' => $summary,
+                'budget_hours' => $budget_hours,
+                'priority' => $priority,
+                'assigned_to' => $assigned_to,
+                'description' => $description,
+                'project_progress' => $project_progress,
+                'status' => $status,
+                'is_notify' => $is_notify,
+                'added_by' => $added_by,
+                'created_at' => $created_at,
+                'software_Budget' => $software_Budget,
+                'instalment' => $instalment,
+                'hardware_Budget' => $hardware_Budget,
+                'hardware_Summary' => $hardware_Summary,
+                'service_status' => $service_status,
+                'Service_type' => $Service_type,
+                'Service_amount' => $Service_amount,
+                'project_note' =>'',
+                'Service_Increment_Date' => $Service_Increment_Date
             );
-            $res = $this->db->insert('xin_project_account', $data);
-            if ($res) {
-                $result = true;
+            $r =$this->db->insert('xin_projects', $data);
+            if ($r) {
+                $project_id = $this->db->insert_id();
+                $soft_intmnt_dates=json_encode($this->input->post('soft_intmnt_dates'));
+                $soft_intmnt_prements=json_encode($this->input->post('soft_intmnt_prements'));
+                $soft_intmnt_status=json_encode($this->input->post('soft_intmnt_status'));
+                $soft_intmnt_takes=0;
+                $soft_prement_status=0;
+                $hardware_prement_status=0;
+                $if_notify=1;
+                $intmnt_dates=$this->input->post('soft_intmnt_dates');
+                $notify_date_start = date('Y-m-d', strtotime('-3 day', strtotime($intmnt_dates[0])));
+                $update_at=date('Y-m-d');
+                $data = array(
+                    'project_id' => $project_id,
+                    'clint_id' => $client_id,
+                    'software_budget' => $software_Budget,
+                    'hardware_budget' => $hardware_Budget,
+                    'total_budget' => $hardware_Budget+$software_Budget,
+                    'soft_total_installment' => $instalment,
+                    'soft_intmnt_dates' => $soft_intmnt_dates,
+                    'soft_intmnt_prements' => $soft_intmnt_prements,
+                    'soft_intmnt_status' => $soft_intmnt_status,
+                    'soft_intmnt_takes' => $soft_intmnt_takes,
+                    'soft_prement_status' => $soft_prement_status,
+                    'hardware_prement_status' => $hardware_prement_status,
+                    'if_notify' => $if_notify,
+                    'next_installment_date' => $intmnt_dates[0],
+                    'installment_deu' => 0,
+                    'notify_date_start' => $notify_date_start,
+                    'Payment_Received' => 0,
+                    'Remaining_Payment' => $software_Budget+$hardware_Budget,
+                    'Payment_Received_percent' => 0,
+                    'Remaining_Payment_percent' =>100,
+                    'update_at' => $update_at
+                );
+                $res =$this->db->insert('project_account', $data);
+                if ($res) {
+                    $result=true;
+                }else {
+                    $result=false;
+                }   
             } else {
-                $result = false;
-            }
-        } else {
-            $result = false;
-        }
-        echo json_encode($result);
+                $result=false;
+            }          
+            echo json_encode($result);
     }
 
     // Validate and add info in database

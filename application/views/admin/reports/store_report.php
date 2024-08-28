@@ -60,19 +60,23 @@
     </ul>
     
     <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
-        <button class="btn btn-info btn-sm"  onclick="Inv_Report(1)">Pending</button>
-        <button class="btn btn-info btn-sm"  onclick="Inv_Report(2)">Approved</button>
-        <button class="btn btn-info btn-sm"  onclick="Inv_Report(4)">Reject</button>
-        <button class="btn btn-info btn-sm"  onclick="Inv_Report(3)">Delivered Item</button>
-      </div>
-      <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
+      <div class="tab-pane fade active in" id="monthly" role="tabpanel" aria-labelledby="monthly-tab" style="margin-top: 30px;">
         <button class="btn btn-info btn-sm"  onclick="Per1_Report(1)">Pending</button>
+        
+        <button class="btn btn-info btn-sm"  onclick="Per1_Report(5)">First stage Approved</button>
         <button class="btn btn-info btn-sm"  onclick="Per1_Report(2)">Approved</button>
+
         <button class="btn btn-info btn-sm"  onclick="Per1_Report(4)">Reject</button>
         <button class="btn btn-info btn-sm"  onclick="Per1_Report(3)">Receive</button>
         <button class="btn btn-info btn-sm"  onclick="LP_AlP_Report(7)">Low inventory</button>
         <button class="btn btn-info btn-sm"  onclick="LP_AlP_Report(8)">All Products</button>
+      </div>
+      <div class="tab-pane fade " id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
+        <button class="btn btn-info btn-sm"  onclick="Inv_Report(1)">Pending</button>
+        <button class="btn btn-info btn-sm"  onclick="Inv_Report(5)">First stage Approved</button>
+        <button class="btn btn-info btn-sm"  onclick="Inv_Report(2)">Approved</button>
+        <button class="btn btn-info btn-sm"  onclick="Inv_Report(4)">Reject</button>
+        <button class="btn btn-info btn-sm"  onclick="Inv_Report(3)">Delivered Item</button>
       </div>
       <div class="tab-pane fade" id="item" role="tabpanel" aria-labelledby="item-tab" style="margin-top: 30px;">
         <!-- <button class="btn btn-info btn-sm"  onclick="LP_AlP_Report(7)">Low inventory</button> -->
@@ -113,22 +117,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script>
 function Inv_Report(statusC){
+  // alert('INV');return false;
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest = new XMLHttpRequest();
 
   first_date = document.getElementById('process_date').value;
   second_date = document.getElementById('second_date').value;
   
-  if(second_date !='' && first_date =='' )
-  {
-    alert('Please select first date');
-    return ;
-  }
-  if(second_date =='' && first_date !=='')
-  {
-    alert('Please select second date');
-    return ;
-  }
+  // if(second_date !='' && first_date =='' )
+  // {
+  //   alert('Please select first date');
+  //   return ;
+  // }
+  // if(second_date =='' && first_date !=='')
+  // {
+  //   alert('Please select second date');
+  //   return ;
+  // }
   var data = "first_date="+first_date+"&second_date="+second_date+"&statusC="+statusC;
 
   url = '<?php echo base_url('admin/reports')?>' + "/inventory_status_report";
@@ -150,7 +155,7 @@ function Inv_Report(statusC){
 
 
 function Per1_Report(statusC){
-
+// alert("PER");return false;
   var ajaxRequest;  // The variable that makes Ajax possible!
   ajaxRequest = new XMLHttpRequest();
 
@@ -158,16 +163,16 @@ function Per1_Report(statusC){
   second_date = document.getElementById('second_date').value;
 
   
-  if(first_date =='')
-  {
-    alert('Please select first date');
-    return ;
-  }
-  if(second_date =='')
-  {
-    alert('Please select second date');
-    return ;
-  }
+  // if(first_date =='')
+  // {
+  //   alert('Please select first date');
+  //   return ;
+  // }
+  // if(second_date =='')
+  // {
+  //   alert('Please select second date');
+  //   return ;
+  // }
   
   
   var data = "first_date="+first_date+"&second_date="+second_date+"&statusC="+statusC;

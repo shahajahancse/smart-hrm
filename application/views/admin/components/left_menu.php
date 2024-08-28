@@ -286,7 +286,7 @@ if($theme[0]->sub_menu_icons != ''){
           <li class="sidenav-link <?php if(!empty($arr_mod['leave_active']))echo $arr_mod['leave_active'];?>"> <a href="<?php echo site_url('admin/timesheet/leave');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_manage_leaves');?> </a> </li>
           <?php } ?>
           <?php if(in_array('377',$role_resources_ids)) { ?>
-          <li class="<?php if(!empty($arr_mod['eemp_active']))echo $arr_mod['eemp_active'];?>"><a href="<?php echo site_url('admin/employees/emp_list');?>"><i class="fa <?php echo $submenuicon;?>"></i> Employee List </a></li>
+          <!-- <li class="<?php if(!empty($arr_mod['eemp_active']))echo $arr_mod['eemp_active'];?>"><a href="<?php echo site_url('admin/employees/emp_list');?>"><i class="fa <?php echo $submenuicon;?>"></i> Employee List </a></li> -->
           <?php } ?>
           <?php if(in_array('3770',$role_resources_ids)) { ?>
           <li class="<?php if(!empty($arr_mod['issue_active']))echo $arr_mod['issue_active'];?>"><a href="<?php echo site_url('admin/employees/employee_issue');?>"><i class="fa <?php echo $submenuicon;?>"></i> Add Issues </a></li>
@@ -572,17 +572,17 @@ $employee_ids = array_column($employee_ids, 'user_id');
 
 
 $count_timelog=0;
-if($user_info[0]->is_emp_lead==2){
-  $this->db->select('xin_projects_timelogs.*, xin_employees.first_name, xin_employees.last_name, xin_projects.title');
-$this->db->from('xin_projects_timelogs');
-$this->db->join('xin_employees', 'xin_projects_timelogs.employee_id = xin_employees.user_id');
-$this->db->join('xin_projects', 'xin_projects_timelogs.project_id = xin_projects.project_id');
-$this->db->where_in('xin_projects_timelogs.employee_id', $employee_ids);
-$this->db->order_by('xin_projects_timelogs.timelogs_id', 'DESC');
-$t_log_data=$this->db->get()->result();
+// if($user_info[0]->is_emp_lead==2){
+//   $this->db->select('xin_projects_timelogs.*, xin_employees.first_name, xin_employees.last_name, xin_projects.title');
+// $this->db->from('xin_projects_timelogs');
+// $this->db->join('xin_employees', 'xin_projects_timelogs.employee_id = xin_employees.user_id');
+// $this->db->join('xin_projects', 'xin_projects_timelogs.project_id = xin_projects.project_id');
+// $this->db->where_in('xin_projects_timelogs.employee_id', $employee_ids);
+// $this->db->order_by('xin_projects_timelogs.timelogs_id', 'DESC');
+// $t_log_data=$this->db->get()->result();
 
-$count_timelog=count($t_log_data);
-}
+// $count_timelog=count($t_log_data);
+// }
 
 
 ?>

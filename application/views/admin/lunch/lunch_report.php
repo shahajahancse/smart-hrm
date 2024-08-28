@@ -62,52 +62,7 @@
 <div class="col-lg-8">
     <div class="box mb-4 <?php echo $get_animate;?>">
         <div class="box-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="process_date">First Date</label>
-                                <input class="form-control attendance_date"
-                                    placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date"
-                                    name="process_date" type="text" value="<?php echo date('Y-m-d');?>" required>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="process_date">Second Date</label>
-                                <input class="form-control attendance_date"
-                                    placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="second_date"
-                                    name="second_date" type="text" autocomplete="off">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="upload_file">status</label>
-                                <select class="form-control" name="status" id="status">
-                                    <option value="">Select one</option>
-                                    <option value="1">regular</option>
-                                    <option value="2">left</option>
-                                    <option value="3">resign</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="upload_file">Previous Report</label>
-                                <select class="form-control" name="prever_report" id="prever_report">
-                                    <option value="">Select one</option>
-                                    <?php foreach($prever_report as $prever):?>
-                                    <option value="<?=$prever->end_date?>"><?=$prever->end_date?> >> <?=$prever->next_date?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php   $this->load->view('admin/filter'); ?>
         </div>
     </div>
 
@@ -180,16 +135,7 @@
 </div>
 
 <div class="col-lg-4">
-    <div class="box" style="height: 74vh;overflow-y: scroll;">
-        <table class="table table-striped table-hover" id="fileDiv">
-            <tr style="position: sticky;top: 0;z-index:1">
-                <th class="active" style="width:10%"><input type="checkbox" id="select_all" class="select-all checkbox"
-                        name="select-all" /></th>
-                <th class="" style="width:10%;background:#0177bcc2;color:white">Id</th>
-                <th class=" text-center" style="background:#0177bc;color:white">Name</th>
-            </tr>
-        </table>
-    </div>
+    <?php   $this->load->view('admin/filtered_data'); ?>
 </div>
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 
@@ -210,40 +156,45 @@ $(document).ready(function() {
     });
 
     // on load employee
-    $("#status").change(function() {
-        status = document.getElementById('status').value;
-        var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
-        $.ajax({
-            url: url,
-            type: 'GET',
-            data: {
-                "status": status
-            },
-            contentType: "application/json",
-            dataType: "json",
+    // $("#status").change(function() {
+    //     status = document.getElementById('status').value;
+    //     $('.rr').remove();
+    //     $('#loader2').show();
+    //     var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
+    //     $.ajax({
+    //         url: url,
+    //         type: 'GET',
+    //         data: {
+    //             "status": status
+    //         },
+    //         contentType: "application/json",
+    //         dataType: "json",
 
 
-            success: function(response) {
-                arr = response.employees;
-                if (arr.length != 0) {
-                    var items = '';
-                    $.each(arr, function(index, value) {
-                        items += '<tr id="removeTr">';
-                        items +=
-                            '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' +
-                            value.emp_id + '" ></td>';
-                        items += '<td class="success">' + value.emp_id + '</td>';
-                        items += '<td class="warning ">' + value.first_name + ' ' +
-                            value.last_name + '</td>';
-                        items += '</tr>';
-                    });
-                    // console.log(items);
-                    $('#fileDiv tr:last').after(items);
-                } else {
-                    $('#fileDiv #removeTr').remove();
-                }
-            }
-        });
-    });
+    //         success: function(response) {
+    //             $('#loader2').hide();
+    //             arr = response.employees;
+    //             if (arr.length != 0) {
+    //                 var items = '';
+    //                 $.each(arr, function(index, value) {
+    //                     items += '<tr id="removeTr" class="rr">';
+    //                     items +=
+    //                         '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' +
+    //                         value.emp_id + '" ></td>';
+    //                     items += '<td class="success">' + value.emp_id + '</td>';
+    //                     items += '<td class="warning ">' + value.first_name + ' ' +
+    //                         value.last_name + '</td>';
+    //                     items += '</tr>';
+    //                 });
+    //                 // console.log(items);
+    //                 $('#fileDiv tr:last').after(items);
+    //             } else {
+    //                 $('#fileDiv #removeTr').remove();
+    //             }
+    //         }
+    //     });
+    // });
 });
 </script>
+
+

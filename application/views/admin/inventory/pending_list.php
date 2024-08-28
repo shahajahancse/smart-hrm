@@ -69,7 +69,8 @@
               <th class="text-center" style="width:20px;">App_Qty</th>
               <th class="text-center" style="width:20px;">Status</th>
               <th class="text-center" style="width:20px;">Req_Date</th>
-              <th class="text-center" style="width:20px;">Note</th>
+              <th class="text-center" style="width:20px;">Priority</th>
+              <th class="text-center" style="width:20px;">Remark</th>
               <th class="text-center" style="width:50px;">Action</th>
           </tr>
         </thead>
@@ -98,6 +99,17 @@
               <td class="text-center"><?= $rows->approved_qty?></td>
               <td class="text-center"><?= $status  ?> </td>
               <td class="text-center"><?php echo date('d-m-Y',strtotime($rows->created_at)); ?></td>
+              <td class="text-center">
+                <?php
+                if ($rows->priority == 1) { 
+                    echo "<span class='label label-danger'>High</span>";
+                } elseif ($rows->priority == 2) { 
+                    echo "<span class='label label-warning'>Medium</span>";
+                } else {
+                    echo "<span class='label label-success'>Low</span>";
+                }
+                ?>
+              </td>
               <td style="cursor: pointer; color: #310bff" title="<?= $rows->note ?>" ><?= substr($rows->note, 0,10) ?></td>
               <td class="text-center">
                 <div class="btn-group <?php echo $rows->status == 3?'d-hidden':''?>" >

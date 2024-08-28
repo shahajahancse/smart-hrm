@@ -92,7 +92,7 @@
 				<td class="text-center px-2"><?=$row->extra_pay?></td>
 				<td class="text-center px-2"><?=$row->m_pay_day?></td>
 				<td class="text-center px-2"><?=$row->modify_salary?></td>
-				<td class="text-center px-2"><?=$row->grand_net_salary + ($row->modify_salary)-$row->aba_deduct?></td>
+				<td class="text-center px-2"><?=ceil($row->grand_net_salary + ($row->modify_salary)-$row->aba_deduct)?></td>
 			</tr>
 		<?php } ?>
 		<tr>
@@ -104,7 +104,7 @@
 			<th class="text-center px-2"><?=$etra_pay?></th>
 			<th class="text-center px-2">-</th>
 			<th class="text-center px-2"><?=$modify_total?></th>
-			<th class="text-center px-2"><?=$grand_total?></th>
+			<th class="text-center px-2"><?=ceil($grand_total)?></th>
 		</tr>
 		
 	

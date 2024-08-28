@@ -219,9 +219,9 @@ class Dashboard extends MY_Controller {
 	}
 	public function get_count(){
 		$date=$this->input->post('date');
-		$present=$this->Timesheet_model->get_today_present(0,'Present',$date);
+		$present=$this->Timesheet_model->get_today_present(0,['Present','HalfDay'],$date);
 		$absent=$this->Timesheet_model->get_today_present(0,'Absent',$date);
-		$late=$this->Timesheet_model->get_today_present(1,'Present',$date);
+		$late=$this->Timesheet_model->get_today_present(1,['Present','HalfDay'],$date);
 		$leave=$this->Timesheet_model->get_today_leave($date);
 		if ($leave==null) {
 			$leave=[];
@@ -254,6 +254,7 @@ class Dashboard extends MY_Controller {
             $status = array($status);
         }
         $data["values"] = $this->Attendance_model->daily_report($attendance_date, $emp_id = null, $status,$late_status);
+		// dd($data["values"]);
         $data["attendance_date"] = $attendance_date;
 
         if(is_string($data["values"])) {
@@ -797,7 +798,7 @@ class Dashboard extends MY_Controller {
 		$status = $this->input->post('status');
 		$emp_id = $this->input->post('sql');
     	
-    	$data["values"] = $this->Salary_model->salary_sheet_excel($salary_month, $emp_id);
+    	$data["values"] = $this->Salary_model->salary_sheet_excel($bank=2,$salary_month, $emp_id);
 		// dd($salary_month);
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;

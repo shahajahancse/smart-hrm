@@ -155,6 +155,7 @@
       <!-- < ?php echo $this->lang->line('xin_daily_attendance_report');?> -->
    </h3>
      <button onclick=modify_salary()  class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;">Modify Salary</button>
+     <a href="<?= base_url('admin/payroll/bank_salary_config') ?>" class="btn btn-sm btn-primary pull-right" style="padding: 6px 10px !important;margin: 0 9px;">Bank salary configuration</a>
   </div>
 
   <div class="box-body" id="emp_report">
@@ -176,7 +177,8 @@
 
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel()">Salary Sheet</button>
-          <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel_bank(2)">Bank Salary Sheet</button>
+          <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel_bank(2,1)">Bank Salary Sheet</button>
+          <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel_bank(2,0)">Cash Salary Sheet</button>
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="genarate_payslip()">Genarate Payslip</button>
          <br> 
          <br>

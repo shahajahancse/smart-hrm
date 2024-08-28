@@ -38,19 +38,15 @@ class Auth extends API_Controller
     public function login()
     {
         header("Access-Control-Allow-Origin: *");
-
         // API Configuration
         $this->_apiConfig([
             'methods' => ['POST'],
         ]);
-
         $data = array(
             'email' => $this->input->post('username'),
             'password' => $this->input->post('password'),
         );
         $auth = $this->login_auth($data);
-
-
         if ($auth['status'] == true) {
             // you user authentication code will go here, you can compare the user with the database or whatever
             $payload = [
@@ -59,17 +55,16 @@ class Auth extends API_Controller
             ];
             // generate a token
             $token = $this->authorization_token->generateToken($data);
-
             $row = $this->db->where('user_id', $auth['user_id'])->get('api_keys')->row();
-
             if (empty($row)) {
-                $this->db->insert('api_keys', array('api_key' => $token, 'user_id' => $auth['user_id']));
+                $this->db->insert('api_keys', array('api_key' => $token, 'user_id' => $auth['user_id'],'device_token'=>$this->input->post('device_token')));
             } else {
-                $this->db->where('user_id', $auth['user_id'])->update('api_keys', array('api_key' => $token));
+                $this->db->where('user_id', $auth['user_id'])->update('api_keys', array('api_key' => $token,'device_token'=>$this->input->post('device_token')));
             }
             $user_info = api_auth($token);
             if ($user_info) {
                 $user_info['user_info']->token = $token;
+                $user_info['user_info']->device_token = $this->input->post('device_token');
                 $this->api_return([
                     'status' => true,
                     'message' => 'User login successful.',

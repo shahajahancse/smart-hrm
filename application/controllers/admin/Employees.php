@@ -2283,6 +2283,7 @@ class Employees extends MY_Controller {
 			'sub_department_id' => $this->input->post('subdepartment_id'),
 			'designation_id' => $this->input->post('designation_id'),
 			'salary' => $this->input->post('salary'),
+			'basic_salary' => $this->input->post('salary'),
 			'date_of_joining' => $date_of_joining,
 			'notify_incre_prob' => $probation_end,
 			'contact_no' => $contact_no,
@@ -2581,11 +2582,17 @@ class Employees extends MY_Controller {
 			'is_active' => $this->input->post('is_active'),
 			'status' => $this->input->post('status'),
 			'floor_status' => $this->input->post('floor_status'),
-			'letter_status' => $this->input->post('letter_status'),
-			'is_leave_on' => $this->input->post('leave_start'),
-			'leave_effective' => $this->input->post('leave_effective_date'),
 			'user_password' => $this->input->post('user_password'),
 		);
+		if($this->input->post('letter_status')!=''){
+			$data['letter_status'] = $this->input->post('letter_status');
+		}
+		if ($this->input->post('leave_start')!='') {
+			$data['leave_start'] = $this->input->post('leave_start');
+		}
+		if ($this->input->post('leave_effective_date')!='') {
+			$data['leave_effective'] = $this->input->post('leave_effective_date');
+		}
 		$id = $this->input->post('user_id');
 		$proxi_id= $this->input->post('proxi_id');
 		$result = $this->Employees_model->basic_info($data,$id);
@@ -6805,23 +6812,25 @@ exit();
 
 		$data['employees'] = $this->Xin_model->all_employees();
 		$data['session']  = $this->session->userdata('username');
+		$session = $this->session->userdata('username');
+
         // Check the HTTP request method to determine the action
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($action === 'add') {
                 // Handle adding a new purpose (Create)
-                $emp_id = $this->input->post('emp_id');
+                $emp_id = $session['user_id'];
                 $comment = $this->input->post('comment');
                     $data = array(
                         'emp_id' => $emp_id,
-                        'comment' => $comment
-                      
+                        'comment' => $comment,
+						'create_at' => date('Y-m-d')
                     );
                     $this->db->insert('employee_issue', $data);
                     echo 'success';
                 
             } elseif ($action === 'edit' && $id) {
                 // Handle editing an existing purpose (Update)
-				$emp_id = $this->input->post('emp_id');
+				$emp_id = $session['user_id'];
                 $comment = $this->input->post('comment');
                     $data = array(
 						'emp_id' => $emp_id,
@@ -6842,7 +6851,7 @@ exit();
                 $purpose = $query->row_array();
                 echo json_encode($purpose);
             } else {
-                $data['purposes'] = $this->db->get('employee_issue')->result();
+                $data['purposes'] = $this->db->where('emp_id', $session['user_id'])->get('employee_issue')->result();
                 $data['title'] = 'Employee Isuue';
                 $data['breadcrumbs'] = 'Employee Isuue';
                 $data['subview'] = $this->load->view("admin/employees/employee_issue", $data, true);
@@ -6896,7 +6905,19 @@ exit();
 					'sl_total' => $integerPart,
 					'year' => $year,
 				);
-				$this->db->insert('leave_balanace', $data);
+
+
+
+				$this->db->where('emp_id', $emp_id);
+				$this->db->where('year', $year);
+				$l_b_data=$this->db->get('leave_balanace')->row();
+				if (!empty($l_b_data)) {
+					$this->db->where('emp_id', $emp_id);
+					$this->db->where('year', $year);
+					$this->db->update('leave_balanace', $data);
+				}else{
+					$this->db->insert('leave_balanace', $data);
+				}
 				redirect('/admin/employees/detail/'.$this->input->post('user_id'),'refresh');
 		}
 

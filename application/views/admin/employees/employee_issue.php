@@ -34,10 +34,10 @@
                             </td>
                             <td><?= $purpose->comment ?></td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-info edit-purpose" data-id="<?= $purpose->id ?>"
+                                <!-- <a href="#" class="btn btn-sm btn-info edit-purpose" data-id="<?= $purpose->id ?>"
                                     data-toggle="modal" data-target="#editPurposeModal">
                                     <i class="fa fa-pencil"></i> Edit
-                                </a>
+                                </a> -->
                                 <a href="#" class="btn btn-sm btn-danger delete-purpose" data-id="<?= $purpose->id ?>">
                                     <i class="fa fa-trash"></i> Delete
                                 </a>
@@ -60,21 +60,10 @@
                         <h4 class="modal-title" id="addPurposeModalLabel">Add Issue</h4>
                     </div>
                     <div class="modal-body">
+                       
                         <div class="form-group">
-                            <label for="title">Employee</label>
-                            <select name="emp_id" id="emp_id">
-                                <option>Select employee</option>
-                                <?php foreach ($employees as $employee): ?>
-                                <option value="<?= $employee->user_id ?>"><?= $employee->first_name.' '.$employee->last_name ?></option>
-                                <?php endforeach; ?>
-
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="amount">Comment</label>
-                            <textarea name="comment" id="comment" cols="30" rows="10">
-
-                            </textarea>
+                            <label for="amount">Enter your issue</label>
+                            <textarea name="comment" id="comment" style="height: 77px; width: 100%;"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -97,16 +86,6 @@
                         <h4 class="modal-title" id="editPurposeModalLabel">Edit Issue</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="title">Employee</label>
-                            <select name="emp_id" id="emp_id">
-                                <option>Select employee</option>
-                                <?php foreach ($employees as $employee): ?>
-                                <option value="<?= $employee->user_id ?>"><?= $employee->first_name.' '.$employee->last_name ?></option>
-                                <?php endforeach; ?>
-
-                            </select>
-                        </div>
                         <div class="form-group">
                             <label for="amount">Comment</label>
                             <textarea name="comment" id="comment" cols="30" rows="10">
