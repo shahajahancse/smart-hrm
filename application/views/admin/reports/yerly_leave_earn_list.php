@@ -54,6 +54,14 @@
 							continue;
 						}
 
+						if ($value->date_of_joining > date('Y-01-01', strtotime($date))) {
+							continue;
+						}
+
+						if ($value->user_id == 46) {
+							continue;
+						}
+
 						$total+=!empty($total_leave)?ceil(($salary/30)*$total_leave->el_balanace):0;
 						?>
                 <tr>
@@ -86,7 +94,8 @@
 				</tr>
             </tbody>
         </table>
-		<div class="col-md-12" style="display: flex;flex-direction: row;justify-content: space-evenly;margin-top: 51px;">
+		<br><br>
+		<div class="col-md-12" style="display: flex;flex-direction: row;justify-content: space-evenly;margin-top: 50px;">
 			<div class="col-md-4">Prepared By</div>
 			<div class="col-md-4">Check By</div>
 			<div class="col-md-4">Director</div>
