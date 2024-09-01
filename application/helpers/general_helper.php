@@ -1,16 +1,54 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+if ( ! function_exists('auto_off_day_insert')) {
+	function auto_off_day_insert() {
+		// Start and end dates
+		$CI =&	get_instance();
+		$st = date('Y-06-01');
+		// Iterate over each day in the date range
+		if ($st <= '2024-01-10') {
+			while ($st <= date('Y-12-31')) {
+				// Check if the current day is a Friday (5 corresponds to Friday in PHP's DateTime)
+				if (date('N', strtotime($st)) == 5) {
+					$fridays = date($st, strtotime("+1 day"));
+					$data = array(
+						'date' => $fridays,
+					);
+					$check = $CI->db->where('date', $fridays)->get('xin_holioff_days')->row();
+					if (empty($check)) {
+						$CI->db->insert('xin_holioff_days', $data);
+					}
+				}
+				// Check if the current day is a Saturday (6 corresponds to Saturday in PHP's DateTime)
+				if (date('N', strtotime($st)) == 6) {
+					$saturdays = date($st, strtotime("+1 day"));
+					$data = array(
+						'date' => $saturdays,
+					);
+					$check = $CI->db->where('date', $saturdays)->get('xin_holioff_days')->row();
+					if (empty($check)) {
+						$CI->db->insert('xin_holioff_days', $data);
+					}
+				}
+				// Move to the next day
+				$st = date('Y-m-d', strtotime('+1 days'. $st));
+			}
+		}
+	}
+}
+
 function initialize_elfinder($value=''){
 	$CI =& get_instance();
 	$CI->load->helper('path');
 	$opts = array(
-	    //'debug' => true, 
+	    //'debug' => true,
 	    'roots' => array(
-	      array( 
-	        'driver' => 'LocalFileSystem', 
-	        'path'   => './uploads/files_manager/', 
+	      array(
+	        'driver' => 'LocalFileSystem',
+	        'path'   => './uploads/files_manager/',
 	        'URL'    => site_url('uploads/files_manager').'/'
 	        // more elFinder options here
-	      ) 
+	      )
 	    )
 	);
 	return $opts;
@@ -35,6 +73,7 @@ if ( ! function_exists('get_sub_departments'))
 		return $result;
 	}
 }
+
 if ( ! function_exists('get_main_departments_employees'))
 {
 	function get_main_departments_employees() {
@@ -157,7 +196,7 @@ if ( ! function_exists('count_leaves_info'))
 				} else {
 					$tinc += $interval->format('%a') + 1;
 				}
-				
+
 			}
 			return $tinc;
 		}else{
@@ -345,7 +384,7 @@ if ( ! function_exists('system_currency_sign'))
 {
 	//set currency sign
 	function system_currency_sign($number) {
-		
+
 		// get details
 		$system_setting = system_settings_info(1);
 		// currency code/symbol
@@ -364,7 +403,7 @@ if ( ! function_exists('system_currency_sign'))
 		return $sign_value;
 	}
 }
-//single client 
+//single client
 if ( ! function_exists('clients_invoice_paid_count'))
 {
 	function clients_invoice_paid_count($cid) {
@@ -570,7 +609,7 @@ if ( ! function_exists('last_client_invoice_info'))
 	function last_client_invoice_info() {
 		$CI =&	get_instance();
 		$sql = 'SELECT * FROM xin_hrsale_invoices order by invoice_id desc limit 1';
-		$query = $CI->db->query($sql);		
+		$query = $CI->db->query($sql);
 		if ($query->num_rows() > 0) {
 			$inv = $query->result();
 			if(!is_null($inv)) {

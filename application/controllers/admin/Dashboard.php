@@ -17,7 +17,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends MY_Controller {
-	
+
 	public function __construct()
      {
           parent::__construct();
@@ -48,10 +48,10 @@ class Dashboard extends MY_Controller {
 			$d=$this->db->get('xin_system_setting')->row();
 			if($d->project_proccess_date<=date('Y-m-d')){
 				$this->save_service();
-				
+
 			};
      }
-	
+
 	/*Function to set JSON output*/
 	public function output($Return=array()){
 		/*Set response header*/
@@ -59,7 +59,7 @@ class Dashboard extends MY_Controller {
 		header("Content-Type: application/json; charset=UTF-8");
 		/*Final JSON response*/
 		exit(json_encode($Return));
-	} 
+	}
 	// public function save_service(){
 	// 	$d=$this->db->get('xin_system_setting')->row();
 	// 	if($d->project_proccess_date>=date('Y-m-d')){
@@ -68,7 +68,7 @@ class Dashboard extends MY_Controller {
 	// 		$data=$this->db->get('xin_project_service')->result();
 
 	// 	};
-	// } 
+	// }
 	public function save_service() {
 		$query = $this->db->query("
 			SELECT ps.*
@@ -76,7 +76,7 @@ class Dashboard extends MY_Controller {
 			JOIN xin_project_service ps ON ps.start_date <= CURDATE()
 			WHERE ss.project_proccess_date <= CURDATE() AND ps.active_status = 1
 		");
-		
+
 		$data = $query->result();
 		if(count($data)>0) {
 			foreach($data as $d) {
@@ -113,12 +113,11 @@ class Dashboard extends MY_Controller {
             }
 		}
 	}
-	
 	public function index()
 	{
 		$session = $this->session->userdata('username');
 		// dd($session);
-		if(empty($session) && !is_array($session)){ 
+		if(empty($session) && !is_array($session)){
 			redirect('admin/');
 		}
 		$system = $this->Xin_model->read_setting_info(1);
@@ -133,7 +132,7 @@ class Dashboard extends MY_Controller {
 			} else {
 				$des_emp = '--';
 			}
-			
+
 			// get designation
 			$department = $this->Department_model->read_department_information($user[0]->department_id);
 			if(!is_null($department)){
@@ -281,7 +280,7 @@ class Dashboard extends MY_Controller {
 			$late=[];
 		}
 		$meeting=$this->Attendance_model->get_total_meeting_monthly($first_date,$last_date);
-		
+
 		if ($meeting==null) {
 			$meeting=[];
 		}
@@ -348,11 +347,11 @@ class Dashboard extends MY_Controller {
 	}
 	public function get_leave_monthly()
 	{
-	   
+
 		 $prossecc_date= $this->input->post('first_date');
 		 $first_date = date('Y-m-01',strtotime($prossecc_date));
 		 $second_date = date('Y-m-t',strtotime($prossecc_date));
-	
+
 		 $data['first_date'] = $first_date;
 		 $data['second_date'] = $second_date;
 		 $employee_id=[];
@@ -388,33 +387,33 @@ class Dashboard extends MY_Controller {
 		 xin_attendance_time.late_status,
 		 xin_attendance_time.comment,
 	   ');
- 
+
 		 $this->db->from('xin_employees');
 		 $this->db->from('xin_departments');
 		 $this->db->from('xin_designations');
 		 $this->db->from('xin_attendance_time');
- 
- 
+
+
 		 $this->db->where("xin_employees.is_active", 1);
 		 $this->db->where("xin_attendance_time.attendance_date BETWEEN '$first_date' AND '$second_date'" );
 
 		 $this->db->where('xin_employees.department_id = xin_departments.department_id');
 		 $this->db->where('xin_employees.designation_id = xin_designations.designation_id');
 		 $this->db->where('xin_employees.user_id = xin_attendance_time.employee_id');
- 
+
 		 $this->db->where_in("xin_attendance_time.attendance_status", 'Present');
 		 $this->db->where_in("xin_attendance_time.status", 'Off Day');
- 
- 
+
+
 		 $this->db->order_by('xin_attendance_time.clock_in', "ASC");
 		 $this->db->group_by('xin_attendance_time.employee_id');
-		 
- 
+
+
 		 $data["values"] = $this->db->get()->result();
 		 $data['first_date'] = $first_date;
 		 $data['second_date'] = $second_date;
 		 $this->load->view('admin/attendance/extra_present', $data);
-	
+
 	}
 	public function get_late_monthly()
 	{
@@ -424,7 +423,7 @@ class Dashboard extends MY_Controller {
 		 $type = 1;
 		 $data['first_date'] = $first_date;
 		 $data['second_date'] = $second_date;
-		 
+
 		 $emp_id=[];
 		 $leave=  $this->db->where('is_active', 1)->get('xin_employees')->result();
 		 foreach($leave as $l){
@@ -435,8 +434,8 @@ class Dashboard extends MY_Controller {
 		 $data['late_id'] = $emp_id;
 		 $data['type'] = $type;
 		 echo $this->load->view("admin/attendance/late_details", $data, true);
-		 
-	
+
+
 	}
 
 	public function get_movment_monthly()
@@ -454,8 +453,8 @@ class Dashboard extends MY_Controller {
         } else {
             echo $this->load->view("admin/attendance/movment_status_report", $data, true);
         }
-		 
-	
+
+
 	}
 
 	public function get_mobile_bill(){
@@ -469,7 +468,7 @@ class Dashboard extends MY_Controller {
 				$emp_id[] = $l->user_id;
 			}
 		}
-        $data['first_date']  = $first_date; 
+        $data['first_date']  = $first_date;
         $data['second_date'] = $second_date;
         $data['status'] 	 = 'All';
 		$data['reports']     = $this->Reports_model->show_mobile_bill_report($first_date,$second_date,$status=null,$emp_id);
@@ -488,11 +487,11 @@ class Dashboard extends MY_Controller {
 		}
 
 
-		
+
         $f1_date = date("Y-m-d", strtotime($first_date));
         $f2_date = date("Y-m-d", strtotime($second_date));
         $statusC = 'all';
-        
+
         $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date, $statusC);
 
         $data['statusC']= $statusC;
@@ -522,20 +521,20 @@ class Dashboard extends MY_Controller {
 
 
 
-	
+
 	// get opened and closed tickets for chart
 	public function employee_working_status()
 	{
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('absent'=>'', 'working'=>'');
-		
+
 		$current_month = date('Y-m-d');
-		
+
 		$query = $this->Xin_model->all_employees_status();
 		$total = $query->num_rows();
-		
+
 		$working = $this->Xin_model->current_month_day_attendance($current_month);
-		
+
 		// get actual data
 		$employee_w = $working / $total * 100;
 		// absent
@@ -549,19 +548,19 @@ class Dashboard extends MY_Controller {
 		$this->output($Return);
 		exit;
 	}
-	
+
 	// get department > employee > chart
 	public function employee_department()
 	{
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('chart_data'=>'', 'c_name'=>'', 'd_rows'=>'','c_color'=>'');
 		$c_name = array();
-		$c_am = array();	
+		$c_am = array();
 		$c_color = array('#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC','#00A5A8','#FF4558','#16D39A','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC');
 		$someArray = array();
 		$j=0;
 		foreach($this->Department_model->all_departments() as $department) {
-		
+
 			$condition = "department_id =" . "'" . $department->department_id . "'";
 			$this->db->select('*');
 			$this->db->from('xin_employees');
@@ -572,9 +571,9 @@ class Dashboard extends MY_Controller {
 			// check if department available
 			if ($query->num_rows() > 0) {
 				$row = $query->num_rows();
-				$d_rows [] = $row;	
+				$d_rows [] = $row;
 				$c_name[] = htmlspecialchars_decode($department->department_name);
-		
+
 				$someArray[] = array(
 				  'label'   => htmlspecialchars_decode($department->department_name),
 				  'value' => $row,
@@ -589,19 +588,19 @@ class Dashboard extends MY_Controller {
 		$this->output($Return);
 		exit;
 	}
-	
+
 	// get designation > employee > chart
 	public function employee_designation()
 	{
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('chart_data'=>'', 'c_name'=>'', 'd_rows'=>'','c_color'=>'');
 		$c_name = array();
-		$c_am = array();	
+		$c_am = array();
 		$c_color = array('#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED','#9932CC','#556B2F','#16D39A','#DC143C','#D2691E','#8A2BE2','#FF976A','#FF4558','#00A5A8','#6495ED');
 		$someArray = array();
 		$j=0;
 		foreach($this->Designation_model->all_designations() as $designation) {
-		
+
 			$condition = "designation_id =" . "'" . $designation->designation_id . "'";
 			$this->db->select('*');
 			$this->db->from('xin_employees');
@@ -612,7 +611,7 @@ class Dashboard extends MY_Controller {
 			// check if department available
 			if ($query->num_rows() > 0) {
 				$row = $query->num_rows();
-				$d_rows [] = $row;	
+				$d_rows [] = $row;
 				$c_name[] = htmlspecialchars_decode($designation->designation_name);
 				$someArray[] = array(
 				  'label'   => htmlspecialchars_decode($designation->designation_name),
@@ -628,19 +627,19 @@ class Dashboard extends MY_Controller {
 		$this->output($Return);
 		exit;
 	}
-	
+
 	// get location > employee > chart
 	public function employee_location()
 	{
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('chart_data'=>'', 'c_name'=>'', 'd_rows'=>'','c_color'=>'');
 		$c_name = array();
-		$c_am = array();	
+		$c_am = array();
 		$c_color = array('#00A5A8','#626E82','#FF7D4D','#FF4558','#16D39A','#6495ED','#DC143C','#006400','#556B2F','#9932CC');
 		$someArray = array();
 		$j=0;
 		foreach($this->Xin_model->all_locations() as $location) {
-		
+
 			$condition = "company_id =" . "'" . $location->company_id . "'";
 			$this->db->select('*');
 			$this->db->from('xin_employees');
@@ -650,9 +649,9 @@ class Dashboard extends MY_Controller {
 			// check if department available
 			if ($query->num_rows() > 0) {
 				$row = $query->num_rows();
-				$d_rows [] = $row;	
+				$d_rows [] = $row;
 				$c_name[] = htmlspecialchars_decode($location->location_name);
-		
+
 				$someArray[] = array(
 				  'label'   => htmlspecialchars_decode($location->location_name),
 				  'value' => $row,
@@ -667,7 +666,7 @@ class Dashboard extends MY_Controller {
 		$this->output($Return);
 		exit;
 	}
-	
+
 	// get total employees head count
 	public function employees_head_count()
 	{
@@ -676,51 +675,51 @@ class Dashboard extends MY_Controller {
   	     $query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-01%'");
 		$row1 = $query->num_rows();
 		$Return['january'] = $row1;
-		
+
 		$query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-02%'");
 		$row2 = $query->num_rows();
 		$Return['february'] = $row2;
-		
+
 		$query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-03%'");
 		$row3 = $query->num_rows();
 		$Return['march'] = $row3;
-		
+
 		$query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-04%'");
 		$row4 = $query->num_rows();
 		$Return['april'] = $row4;
-		
+
 		$query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-05%'");
 		$row5 = $query->num_rows();
 		$Return['may'] = $row5;
-		
+
 		$query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-06%'");
 		$row6 = $query->num_rows();
 		$Return['june'] = $row6;
-		
+
 		$query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-07%'");
 		$row7 = $query->num_rows();
 		$Return['july'] = $row7;
-		
+
 		$query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-08%'");
 		$row8 = $query->num_rows();
 		$Return['august'] = $row8;
-		
+
 		$query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-09%'");
 		$row9 = $query->num_rows();
 		$Return['september'] = $row9;
-		
+
 		$query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-10%'");
 		$row10 = $query->num_rows();
 		$Return['october'] = $row10;
-		
+
 		$query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-11%'");
 		$row11 = $query->num_rows();
 		$Return['november'] = $row11;
-		
+
 		$query = $this->db->query("SELECT * from xin_employees WHERE created_at like '%".$date."-12%'");
 		$row12 = $query->num_rows();
 		$Return['december'] = $row12;
-		
+
 		$Return['current_year'] = date('Y');
 		$this->output($Return);
 		exit;
@@ -731,7 +730,7 @@ class Dashboard extends MY_Controller {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('chart_data'=>'', 'c_name'=>'', 'c_am'=>'','c_color'=>'');
 		$c_name = array();
-		$c_am = array();	
+		$c_am = array();
 		$c_color = array('#3e70c9','#f59345','#f44236','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC');
 		$someArray = array();
 		$j=0;
@@ -752,14 +751,14 @@ class Dashboard extends MY_Controller {
 		$this->output($Return);
 		exit;
 	}
-	
+
 	// get designation wise salary
 	public function payroll_designation_wise()
 	{
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('chart_data'=>'', 'c_name'=>'', 'c_am'=>'','c_color'=>'');
 		$c_name = array();
-		$c_am = array();	
+		$c_am = array();
 		$c_color = array('#1AAF5D','#F2C500','#F45B00','#8E0000','#0E948C','#6495ED','#DC143C','#006400','#556B2F','#9932CC');
 		$someArray = array();
 		$j=0;
@@ -780,14 +779,14 @@ class Dashboard extends MY_Controller {
 		$this->output($Return);
 		exit;
 	}
-	
+
 	// set new language
 	public function set_language($language = "") {
-        
+
         $language = ($language != "") ? $language : "english";
         $this->session->set_userdata('site_lang', $language);
         redirect($_SERVER['HTTP_REFERER']);
-        
+
     }
 
 
@@ -797,7 +796,7 @@ class Dashboard extends MY_Controller {
     	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
 		$status = $this->input->post('status');
 		$emp_id = $this->input->post('sql');
-    	
+
     	$data["values"] = $this->Salary_model->salary_sheet_excel($bank=2,$salary_month, $emp_id);
 		// dd($salary_month);
 		$data['status']= $status;
@@ -807,7 +806,7 @@ class Dashboard extends MY_Controller {
         {
             echo $data["values"];
         }
-        else  {	
+        else  {
         	if ($excel == 1) {
 	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
         	} else {

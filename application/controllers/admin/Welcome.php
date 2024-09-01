@@ -24,9 +24,10 @@ class Welcome extends MY_Controller {
 		 $this->load->model('Employees_model');
 		 $this->load->model('Xin_model');
 	}
-	
+
 	public function index()
-	{		
+	{
+		auto_off_day_insert();  // auto insert holiday to the year
 		$data['title'] = $this->Xin_model->site_title().' | Log in';
 		$theme = $this->Xin_model->read_theme_info(1);
 		if($theme[0]->login_page_options == 'login_page_1'):
@@ -38,9 +39,9 @@ class Welcome extends MY_Controller {
 		elseif($theme[0]->login_page_options == 'login_page_4'):
 			$this->load->view('admin/auth/login-4', $data);
 		elseif($theme[0]->login_page_options == 'login_page_5'):
-			$this->load->view('admin/auth/login-5', $data);				
+			$this->load->view('admin/auth/login-5', $data);
 		else:
-			$this->load->view('admin/auth/login-1', $data);	
+			$this->load->view('admin/auth/login-1', $data);
 		endif;
 	}
 }

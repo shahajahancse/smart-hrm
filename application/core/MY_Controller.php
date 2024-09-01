@@ -2,8 +2,8 @@
 class MY_Controller extends CI_Controller
 {
     public function __construct() {
-        
-		parent::__construct();    
+
+		parent::__construct();
 		$ci =& get_instance();
         $ci->load->helper('language');
 		$this->load->library('session');
@@ -27,7 +27,7 @@ class MY_Controller extends CI_Controller
 			 };
 		}
 
-		// set default timezone  
+		// set default timezone
 		$system = $this->read_setting_info(1);
 		date_default_timezone_set($system[0]->system_timezone);
         $siteLang = $ci->session->userdata('site_lang');
@@ -40,19 +40,19 @@ class MY_Controller extends CI_Controller
             $ci->lang->load('hrsale',$siteLang);
         } else {
             $ci->lang->load('hrsale',$default_language);
-        } 
+        }
     }
-	
+
 	// get setting info
 	public function read_setting_info($id) {
-	
+
 		$condition = "setting_id =" . "'" . $id . "'";
 		$this->db->select('*');
 		$this->db->from('xin_system_setting');
 		$this->db->where($condition);
 		$this->db->limit(1);
 		$query = $this->db->get();
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
