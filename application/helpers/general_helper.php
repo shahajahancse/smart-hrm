@@ -4,17 +4,17 @@ if ( ! function_exists('auto_off_day_insert')) {
 	function auto_off_day_insert() {
 		// Start and end dates
 		$CI =&	get_instance();
-		$st = date('Y-06-01');
+		$st = date('Y-01-01');
 		// Iterate over each day in the date range
-		if ($st <= '2024-01-10') {
+		if ($st <= '2024-01-05') {
 			while ($st <= date('Y-12-31')) {
 				// Check if the current day is a Friday (5 corresponds to Friday in PHP's DateTime)
 				if (date('N', strtotime($st)) == 5) {
 					$fridays = date($st, strtotime("+1 day"));
 					$data = array(
-						'date' => $fridays,
+						'start_date' => $fridays,
 					);
-					$check = $CI->db->where('date', $fridays)->get('xin_holioff_days')->row();
+					$check = $CI->db->where('start_date', $fridays)->get('xin_holioff_days')->row();
 					if (empty($check)) {
 						$CI->db->insert('xin_holioff_days', $data);
 					}
@@ -23,9 +23,9 @@ if ( ! function_exists('auto_off_day_insert')) {
 				if (date('N', strtotime($st)) == 6) {
 					$saturdays = date($st, strtotime("+1 day"));
 					$data = array(
-						'date' => $saturdays,
+						'start_date' => $saturdays,
 					);
-					$check = $CI->db->where('date', $saturdays)->get('xin_holioff_days')->row();
+					$check = $CI->db->where('start_date', $saturdays)->get('xin_holioff_days')->row();
 					if (empty($check)) {
 						$CI->db->insert('xin_holioff_days', $data);
 					}

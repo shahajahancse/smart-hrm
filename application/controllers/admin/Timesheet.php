@@ -516,21 +516,21 @@ class Timesheet extends MY_Controller {
 		}
     }
 
-	function check_off_day($date, $type) {
-		$check = $this->db->where('date', $date)->get('xin_holioff_days')->row();
+	function check_off_day_prev($date, $table) {
+		$check = $this->db->where('start_date', $date)->get($table)->row();
 		if(!empty($check)) {
 			$date = date('Y-m-d', strtotime('-1 days'. $date));
-			$check2 = $this->db->where('date', $date)->get('xin_holioff_days')->row();
+			$check2 = $this->db->where('start_date', $date)->get($table)->row();
 			if(empty($check2)) {
 				return array('status' => true, 'date' => $date);
 			} else {
 				$date = date('Y-m-d', strtotime('-1 days'. $date));
-				$check3 = $this->db->where('date', $date)->get('xin_holioff_days')->row();
+				$check3 = $this->db->where('start_date', $date)->get($table)->row();
 				if (empty($check3)) {
 					return array('status' => true, 'date' => $date);
 				} else {
 					$date = date('Y-m-d', strtotime('-1 days'. $date));
-					$check4 = $this->db->where('date', $date)->get('xin_holioff_days')->row();
+					$check4 = $this->db->where('start_date', $date)->get($table)->row();
 					if (empty($check4)) {
 						return array('status' => true, 'date' => $date);
 					} else {
@@ -542,32 +542,91 @@ class Timesheet extends MY_Controller {
 			return array('status' => false, 'date' => $date);
 		}
 	}
-
 	function check_prev_leave_apply($date, $emp) {
-		$leave_date = $this->db->where('date', $date)->where('employee_id',$emp)->get('xin_leave_applications')->result();
+		$this->db->where('applyed_to_date', $date)->where('employee_id',$emp)->where('status !=',3);
+		return $this->db->order_by('applyed_to_date', 'DESC')->get('xin_leave_applications')->row();
 	}
-
+	function check_off_day_next($date, $table) {
+		$check = $this->db->where('start_date', $date)->get($table)->row();
+		if(!empty($check)) {
+			$date = date('Y-m-d', strtotime('+1 days'. $date));
+			$check2 = $this->db->where('start_date', $date)->get($table)->row();
+			if(empty($check2)) {
+				return array('status' => true, 'date' => $date);
+			} else {
+				$date = date('Y-m-d', strtotime('+1 days'. $date));
+				$check3 = $this->db->where('start_date', $date)->get($table)->row();
+				if (empty($check3)) {
+					return array('status' => true, 'date' => $date);
+				} else {
+					$date = date('Y-m-d', strtotime('+1 days'. $date));
+					$check4 = $this->db->where('start_date', $date)->get($table)->row();
+					if (empty($check4)) {
+						return array('status' => true, 'date' => $date);
+					} else {
+						return array('status' => true, 'date' => $date);
+					}
+				}
+			}
+		} else {
+			return array('status' => false, 'date' => $date);
+		}
+	}
+	function check_next_leave_apply($date, $emp) {
+		$this->db->where('applyed_from_date', $date)->where('employee_id',$emp)->where('status !=',3);
+		return $this->db->order_by('applyed_from_date', 'DESC')->get('xin_leave_applications')->row();
+	}
 	// Validate and add info in database
 	public function add_leave() {
-			$start_date = $this->input->post('start_date');
-			$end_date = $this->input->post('end_date');
-			$remarks = $this->input->post('remarks');
+		$start_date = $this->input->post('start_date');
+		$end_date = $this->input->post('end_date');
+		$remarks = $this->input->post('remarks');
 
-			$prev_day = date('Y-m-d', strtotime('-1 days'. $start_date));
-			$next_day = date('Y-m-d', strtotime('+1 days'. $end_date));
-			// check previous day office off or holiday, if true then check last working day leave apply or not
-			$prev_st = $this->check_off_day($prev_day, 1);
-			if ($prev_st['status'] == true) {
-				$prev_st = $this->check_prev_leave_apply($prev_st['date'], $_POST['employee_id']);
+		$prev_day = date('Y-m-d', strtotime('-1 days'. $start_date));
+		$next_day = date('Y-m-d', strtotime('+1 days'. $end_date));
+		// check previous day office off, if true then check last working day leave apply or not
+		$prev_st = $this->check_off_day_prev($prev_day, 'xin_holioff_days');
+		if ($prev_st['status'] == true) {
+			$leave = $this->check_prev_leave_apply($prev_st['date'], $_POST['employee_id']);
+			$prev_day = date('Y-m-d', strtotime('+1 days'. $leave->applyed_to_date));
+			if (!empty($leave)) {
+				$this->session->set_flashdata('error', 'Please select leave start date from '.$prev_day);
+				redirect('admin/leave/emp_leave');
 			}
+		}
+		// check next day office off, if true then check last working day leave apply or not
+		$next_st = $this->check_off_day_next($next_day, 'xin_holioff_days');
+		if ($next_st['status'] == true) {
+			$nxt_day = date('Y-m-d', strtotime('+1 days'. $next_st['date']));
+			$leave = $this->check_next_leave_apply($nxt_day, $_POST['employee_id']);
+			if (!empty($leave)) {
+				$this->session->set_flashdata('error', 'Please select leave end date from '.$next_st['date']);
+				redirect('admin/leave/emp_leave');
+			}
+		}
+		// check previous holiday, if true then check last working day leave apply or not
+		$prev_st = $this->check_off_day_prev($prev_day, 'xin_holidays');
+		if ($prev_st['status'] == true) {
+			$leave = $this->check_prev_leave_apply($prev_st['date'], $_POST['employee_id']);
+			$prev_day = date('Y-m-d', strtotime('+1 days'. $leave->applyed_to_date));
+			if (!empty($leave)) {
+				$this->session->set_flashdata('error', 'Please select leave start date from '.$prev_day);
+				redirect('admin/leave/emp_leave');
+			}
+		}
+		// check next holiday, if true then check last working day leave apply or not
+		$next_st = $this->check_off_day_next($next_day, 'xin_holidays');
+		if ($next_st['status'] == true) {
+			$nxt_day = date('Y-m-d', strtotime('+1 days'. $next_st['date']));
+			$leave = $this->check_next_leave_apply($nxt_day, $_POST['employee_id']);
+			if (!empty($leave)) {
+				$this->session->set_flashdata('error', 'Please select leave end date from '.$next_st['date']);
+				redirect('admin/leave/emp_leave');
+			}
+		}
 
-			dd($prev_st);
-
-
-			// check next day office off or holiday, if true then check last working day leave apply or not
-
-			if($start_date <= date('Y-m-d',strtotime('-4 day'))){
-				$this->session->set_flashdata('error', 'You can not add leave for past 4 days.');
+			if($start_date <= date('Y-m-d',strtotime('-25 day'))){
+				$this->session->set_flashdata('error', 'You cannot apply for leave five days after the intended date.');
 				redirect('admin/leave/emp_leave');
 			}
 			if($this->input->post('leave_type')==='') {
