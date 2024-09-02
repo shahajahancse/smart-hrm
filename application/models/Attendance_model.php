@@ -393,7 +393,7 @@ class Attendance_model extends CI_Model
                 'early_out_status'  => $early_out_status,
             );
 
-            dd($data);
+            // dd($data);
             $query = $this->db->where('employee_id', $emp_id)->where('attendance_date', $process_date)->get('xin_attendance_time');
             if($query->num_rows() > 0) {
                 $this->db->where('attendance_date', $process_date);
