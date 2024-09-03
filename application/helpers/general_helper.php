@@ -6,7 +6,7 @@ if ( ! function_exists('auto_off_day_insert')) {
 		$CI =&	get_instance();
 		$st = date('Y-01-01');
 		// Iterate over each day in the date range
-		if ($st <= '2024-01-05') {
+		if ($st <= date('Y-01-05')) {
 			while ($st <= date('Y-12-31')) {
 				// Check if the current day is a Friday (5 corresponds to Friday in PHP's DateTime)
 				if (date('N', strtotime($st)) == 5) {
