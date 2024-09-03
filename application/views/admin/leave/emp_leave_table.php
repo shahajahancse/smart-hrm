@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th>Sl</th>
+            <th>Application Date</th>
             <th>Leave Type</th>
             <th>From</th>
             <th>To</th>
@@ -29,6 +30,10 @@
         ?>
         <tr>
             <td><?= $key+1 ?></td>
+            <td>
+            <?php echo date('d-F-Y H:i', strtotime($data->applied_on)); ?> -
+            (<?=date('l', strtotime($data->applied_on)) ?>)
+            </td>
             <td><?= ($data->leave_type_id == 1)? 'Casual Leave':'Medical Leave' ?></td>
             <td><?= ($data->from_date=='')? '-----' :date('d-M-Y',strtotime($data->from_date)) ?></td>
             <td><?= ($data->to_date=='')? '-----' :date('d-M-Y',strtotime($data->to_date)) ?></td>

@@ -48,12 +48,15 @@ class Accessories_model extends CI_Model {
                     pam.model_name,
                     pam.image,
                     mobile_numbers.number,
+                    xin_employees.first_name,
+                    xin_employees.last_name
         ');
         $this->db->from('product_accessories as ap');
         $this->db->join('product_accessories_model as pam',  'ap.device_model = pam.id', 'left');
         $this->db->join('product_accessory_categories as pac', 'ap.cat_id = pac.id', 'left');
         $this->db->join('mobile_numbers', 'ap.number = mobile_numbers.id', 'left');    
-        // $this->db->join('xin_employees', 'ap.user_id = xin_employees.user_id', 'left');
+        $this->db->join('employee_using_device', 'ap.id = employee_using_device.device_id', 'left');    
+         $this->db->join('xin_employees', 'employee_using_device.user_id = xin_employees.user_id', 'left');
 
         if($id !=null){
             $this->db->where('ap.id',$id);
