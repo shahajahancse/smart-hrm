@@ -29,7 +29,7 @@ foreach($data as $key => $employee){?>
     <div class="monthly-data">
         <table class="table table-bordered table-striped">
             <thead>
-                <tr class="bg-info text-white">
+                <tr class="text-white" style="background-color: #0999e5 !important;">
                     <th colspan="7"><?= $employee["first_name"]?> <?= $employee["last_name"]?></th>
                 </tr>
                 <tr>
@@ -43,7 +43,24 @@ foreach($data as $key => $employee){?>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($employee["employee_data_month"] as $month_data) : ?>
+                <?php
+
+                $total_day=0;
+                $total_present=0;
+                $total_absent=0;
+                $total_late=0;
+                $total_overtime=0;
+                $total_leave=0;
+
+                foreach ($employee["employee_data_month"] as $month_data) : 
+
+                    $total_day += $month_data["total_day"];
+                    $total_present += $month_data["total_present"];
+                    $total_absent += $month_data["total_absent"];
+                    $total_late += $month_data["total_late"];
+                    $total_overtime += $month_data["total_overtime"];
+                    $total_leave += $month_data["total_leave"];
+                ?>
                     <tr>
                         <td><?= $month_data["month"] ?></td>
                         <td><?= $month_data["total_day"] ?></td>
@@ -55,6 +72,17 @@ foreach($data as $key => $employee){?>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
+            <tfoot>
+                <tr class="text-white" style="background-color: #7f7f7f !important;">
+                    <th>Total</th>
+                    <th><?= $total_day ?></th>
+                    <th><?= $total_present ?></th>
+                    <th><?= $total_absent ?></th>
+                    <th><?= $total_late ?></th>
+                    <th><?= $total_overtime ?></th>
+                    <th><?= $total_leave ?></th>
+                </tr>
+            </tfoot>
         </table>
     </div>
     <?php } ?>

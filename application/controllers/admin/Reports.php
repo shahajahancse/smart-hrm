@@ -2024,10 +2024,45 @@ class Reports extends MY_Controller
 	    $this->load->view("admin/reports/salary_review_report", $data);
 		
 	}
+	public function date_active_inactive_report(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+        $sql = $this->input->post('sql');
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+		$data['first_date']= $first_date;
+		$data['second_date']= $second_date;
+        $emp_id = explode(',', trim($sql));
+		$data['emp_id']= $emp_id;
+	    $this->load->view("admin/reports/date_active_inactive_report", $data);
+		
+	}
 	public function get_designations(){
 		$department_id = $this->input->post('department_id');
 		$data = $this->Designation_model->ajax_is_designation_information($department_id);
 		echo json_encode($data);
+	}
+
+	public function get_employee_summary(){
+		$sql = $this->input->post('sql');
+        $emp_id = explode(',', trim($sql));
+		$data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
+		$this->load->view("admin/reports/employee_summary", $data);
+	}
+	public function holyday_list(){
+		$first_date = $this->input->post('first_date');
+		$year_first_day=date('Y-01-01', strtotime($first_date));
+		$year_last_day=date('Y-12-t', strtotime($first_date));
+		$this->db->select('*');
+		$this->db->from('xin_holidays');
+		$this->db->where('start_date >=', $year_first_day);
+		$this->db->where('end_date <=', $year_last_day);
+		$query = $this->db->get();
+		$data['holyday_list'] = $query->result();
+
+		$this->load->view("admin/reports/holyday_list", $data);
 	}
 } 
 ?>

@@ -17,7 +17,7 @@
             <div class="form-group">
               <br>
               <label>Select Month and Year :</label>
-              <select id='sal_month'>
+              <select id='sal_month' onchange="chenge_s()">
                 <?php 
                   $year = date('Y');
                   for($i=1; $i<=12;$i++)
@@ -37,7 +37,7 @@
                   }
                 ?>
               </select>
-              <select id='sal_year'>
+              <select id='sal_year'  onchange="chenge_s()">
                 <?php
                   $current_year = date('Y');
                   for($i = $current_year-10; $i <= $current_year + 10; $i++)
@@ -63,9 +63,9 @@
               <span ><b>Status:</b></span>
               <select   name="status" id="status">
                 <option value="">Select one</option>
-                <option value="1">regular</option>
-                <option value="2">left</option>
-                <option value="3">resign</option>
+                <option value="1">Active</option>
+                <option value="2">Inactive</option>
+                <!-- <option value="3">resign</option> -->
               </select>
             </div>
           </div>
@@ -179,6 +179,7 @@
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel()">Salary Sheet</button>
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel_bank(2,1)">Bank Salary Sheet</button>
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel_bank(2,0)">Cash Salary Sheet</button>
+          <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="report_salary_sheet()">Salary Report</button>
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="genarate_payslip()">Genarate Payslip</button>
          <br> 
          <br>
@@ -240,11 +241,28 @@
     // on load employee
     $("#status").change(function(){
       status = document.getElementById('status').value;
+      sal_month = document.getElementById('sal_month').value;
+      if(sal_month =='')
+      {
+        alert('Please select salary month');
+        return ;
+      }
+      sal_year = document.getElementById('sal_year').value;
+      if(sal_year =='')
+      {
+        alert('Please select alary year');
+        return ;
+      }
+      $('#fileDiv #removeTr').remove();
+      salary_month = sal_year +'-'+ sal_month
       var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
       $.ajax({
         url: url,
         type: 'GET',
-        data: {"status":status},
+        data: {
+          "status":status,
+          "salary_month":salary_month
+        },
         contentType: "application/json",
         dataType: "json",
 
@@ -323,6 +341,13 @@
       }
     });
   });
+</script>
+
+<script>
+  function chenge_s() {
+    $("#status").trigger('change');
+    
+  }
 </script>
 
 

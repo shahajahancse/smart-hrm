@@ -214,6 +214,21 @@ class Payroll extends MY_Controller {
         	}
         }
     }
+    public function report_salary_sheet()
+    {  
+    	$excel = $this->input->post('excel');
+    	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
+		$status = $this->input->post('status');
+		$sql = $this->input->post('sql');
+    	$emp_id = explode(',', trim($sql));
+		$bank=2;
+    	$data["values"] = $this->Salary_model->salary_sheet_excel($bank,$salary_month, $emp_id);
+		$data['status']= $status;
+        $data["salary_month"] = $salary_month;
+        $data["emp_id"] = $emp_id;
+	    $this->load->view('admin/payroll/report_salary_sheet',$data);
+        
+    }
 	// generate salary excel sheet 
     public function Actual_salary_sheet_excel_bank()
     {  
@@ -3560,27 +3575,18 @@ class Payroll extends MY_Controller {
 	// }
 
 	public function advanced_salary_add(){
-
-		if( isset($_POST['btn_advanced'])){
-			$session = $this->session->userdata('username');
-			// dd($session);
-			if( $session->role_id != 3 ){
-				$data['emp_id']            = $_POST['user_id'];
-				$data['requested_amount']  = $_POST['requested_amount'];
-				$data['approved_amount']   = $_POST['requested_amount'];
-				$data['effective_month']   = $_POST['effective_month'];
-				$data['reason']            = $_POST['reason'];
-				$data['approved_by']       = $session['user_id'];
-				$data['status']            = 2;
-			}else{
-				$data['emp_id']   		   = $_POST['user_id'];
-				$data['requested_amount']  = $_POST['requested_amount'];
-				$data['effective_month']   = $_POST['effective_month'];
-				$data['reason']   		   = $_POST['reason'];
-			}
+		foreach($_POST['sab_amount'] as $key => $value) {
+			$data['emp_id']            = $_POST['user_id'];
+			$data['requested_amount']  = $value;
+			$data['approved_amount']   = $value;
+			$data['effective_month']   = $_POST['sab_date'][$key];
+			$data['reason']            = $_POST['reason'];
+			$data['approved_by']       = $session['user_id'];
+			$data['status']            = 2;
 			$insert = $this->db->insert('xin_advance_salaries',$data);
-			redirect('admin/payroll/advanced_salary');
 		}
+		redirect('admin/payroll/advanced_salary');
+		
 	}
 
 	

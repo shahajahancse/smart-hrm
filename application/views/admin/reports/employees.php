@@ -33,6 +33,8 @@
           <div id="tab1" class="tab-pane fade in active">
             <div class="form-group" style="margin-top:20px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 5px;">
 
+              <button class="btn dbtn btn-sm " onclick="employee_summary()">Employee summary</button>
+              <button class="btn dbtn btn-sm " onclick="date_active_inactive_report()">Employee Active/Inactive List</button>
               <button class="btn dbtn btn-sm " onclick="show_report(1)">Employee Joining List</button>
               <button class="btn dbtn btn-sm " onclick="employee_regular_report()">Regular List</button>
               <button class="btn dbtn btn-sm" onclick="show_report(7,1)">All Increment List</button>
@@ -44,6 +46,7 @@
               <button class="btn dbtn btn-sm" onclick="show_report(5,1)">Intern to Regular</button>
               <button class="btn dbtn btn-sm" onclick="employee_increment()">Single Increment/Promotion List</button>
               <button class="btn btn-success btn-sm" onclick="show_report(5)">Using Device</button>
+              <button class="btn btn-success btn-sm" onclick="holyday_list()">Holidays</button>
             </div>
           </div>
           <div id="tab2" class="tab-pane fade">
@@ -118,6 +121,35 @@
       }
     }
   }
+  function employee_summary(){
+    var ajaxRequest;  // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+    status = document.getElementById('status').value;
+
+    if(status ==''){
+      alert('Please select status');
+      return ;
+    }
+    var checkboxes = document.getElementsByName('select_emp_id[]');
+    var sql = get_checked_value(checkboxes);
+    if(sql ==''){
+      alert('Please select employee Id');
+      return ;
+    }
+    var data = "sql="+sql;
+    url = base_url + "/get_employee_summary";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+        // console.log(ajaxRequest);
+        var resp = ajaxRequest.responseText;
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1400,height=800');
+        a.document.write(resp);
+      }
+    }
+  }
   function employee_regular_report(){
     var ajaxRequest;  // The variable that makes Ajax possible!
     ajaxRequest = new XMLHttpRequest();
@@ -128,6 +160,28 @@
     }
     var data = "first_date="+first_date;
     url = base_url + "/employee_regular_report";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+        // console.log(ajaxRequest);
+        var resp = ajaxRequest.responseText;
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1400,height=800');
+        a.document.write(resp);
+      }
+    }
+  }
+  function holyday_list(){
+    var ajaxRequest;  // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+    first_date = document.getElementById('process_date').value;
+    if(first_date ==''){
+      alert('Please select status');
+      return ;
+    }
+    var data = "first_date="+first_date;
+    url = base_url + "/holyday_list";
     ajaxRequest.open("POST", url, true);
     ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
     ajaxRequest.send(data);
@@ -203,6 +257,48 @@
     }
     var data = "first_date="+first_date+"&second_date="+second_date+'&sql='+sql
     url = base_url + "/salary_review_report";
+    ajaxRequest.open("POST", url, true);
+    ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    ajaxRequest.send(data);
+    ajaxRequest.onreadystatechange = function(){
+      if(ajaxRequest.readyState == 4){
+        // console.log(ajaxRequest);
+        var resp = ajaxRequest.responseText;
+        a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1400,height=800');
+        a.document.write(resp);
+      }
+    }
+  }
+  function date_active_inactive_report(){
+    var ajaxRequest;  // The variable that makes Ajax possible!
+    ajaxRequest = new XMLHttpRequest();
+    status = document.getElementById('status').value;
+    first_date = document.getElementById('process_date').value;
+    second_date = document.getElementById('second_date').value;
+    if(status ==''){
+      alert('Please select status');
+      return ;
+    }
+
+ 
+      if(first_date ==''){
+        alert('Please select first date');
+        return ;
+      }
+      if(second_date ==''){
+        alert('Please select second date');
+        return ;
+      }
+    
+
+    var checkboxes = document.getElementsByName('select_emp_id[]');
+    var sql = get_checked_value(checkboxes);
+    if(sql ==''){
+      alert('Please select employee Id');
+      return ;
+    }
+    var data = "first_date="+first_date+"&second_date="+second_date+'&sql='+sql
+    url = base_url + "/date_active_inactive_report";
     ajaxRequest.open("POST", url, true);
     ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
     ajaxRequest.send(data);

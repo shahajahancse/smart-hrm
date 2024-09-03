@@ -1009,7 +1009,8 @@ class Attendance extends MY_Controller
     public function get_employee_ajax_request()
     {
         $status = $this->input->get('status');
-        $data["employees"] = $this->Attendance_model->get_employee_ajax_request($status);
+        $salary_month= date("Y-m-01", strtotime($this->input->get('salary_month')));
+        $data["employees"] = $this->Attendance_model->get_employee_ajax_request($status, $salary_month);
         echo json_encode($data);
     }
     public function changetada()

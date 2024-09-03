@@ -22,6 +22,7 @@ class Employees extends MY_Controller {
         parent::__construct();
 		//load the models
 		$this->load->model("Employees_model");
+		$this->load->model("Attendance_model");
 		$this->load->model("Xin_model");
 		$this->load->model("Department_model");
 		$this->load->model("Designation_model");
@@ -6874,6 +6875,7 @@ exit();
 	}
 	public function  leave_efected(){
 		$user_id=$this->input->post('user_id');
+		$emp_id=$this->input->post('user_id');
 		$leave_start=$this->input->post('leave_start');
 		$leave_effective_date=$this->input->post('leave_effective_date');
 		if($this->db->where('user_id',$user_id)->update('xin_employees',['leave_effective'=>$leave_effective_date,'is_leave_on'=>$leave_start])){
@@ -6918,6 +6920,8 @@ exit();
 				}else{
 					$this->db->insert('leave_balanace', $data);
 				}
+				$this->Attendance_model->leave_cal_all($emp_id,$leave_effective_date);
+
 				redirect('/admin/employees/detail/'.$this->input->post('user_id'),'refresh');
 		}
 

@@ -393,7 +393,7 @@ class Attendance_model extends CI_Model
                 'early_out_status'  => $early_out_status,
             );
 
-            dd($data);
+            
             $query = $this->db->where('employee_id', $emp_id)->where('attendance_date', $process_date)->get('xin_attendance_time');
             if($query->num_rows() > 0) {
                 $this->db->where('attendance_date', $process_date);
@@ -757,6 +757,8 @@ class Attendance_model extends CI_Model
     {
         $this->db->select('
                 xin_employees.user_id,
+                xin_employees.notify_incre_prob,
+                xin_employees.marital_status,
                 xin_employees.employee_id,
                 xin_employees.leave_effective,
                 xin_employees.office_shift_id as shift_id,
@@ -768,6 +770,7 @@ class Attendance_model extends CI_Model
                 xin_employees.department_id,
                 xin_employees.designation_id,
                 xin_employees.company_id,
+                xin_employees.profile_picture,
                 xin_departments.department_name,
                 xin_designations.designation_name,
             ');
@@ -1382,17 +1385,26 @@ class Attendance_model extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
-    public function get_employee_ajax_request($status)
+    public function get_employee_ajax_request($status, $salary_month=null)
     {
+        $left_employee=[];
+        if ($salary_month != null) {
+            $first_date=date('Y-m-01', strtotime($salary_month));
+            $second_date=date('Y-m-t', strtotime($salary_month));
+            $this->db->select('emp_id');
+            $this->db->from('xin_employee_left_resign');
+            $this->db->where('effective_date >=', $first_date);
+            $this->db->where('effective_date <=', $second_date);
+            $this->db->group_by('emp_id');
+            $left_employee_array = $this->db->get()->result_array();
+            $left_employee=array_column($left_employee_array, 'emp_id');
+        }
         $this->db->select('user_id as emp_id, first_name, last_name');
         if ($status == 1) {
             $this->db->where_in('status', array(1,4,5));
         } else if ($status == 2){
-            $this->db->where('status', $status);
-        } else if($status == 3){
-            $this->db->where_in('status', $status);
-        } elseif($status == 0){
-            $this->db->where_in('status', [1,2,3,4,5]);
+            $this->db->where_in('status', array(2,3));
+            $this->db->where_in('user_id', $left_employee);
         }
         $this->db->where('company_id', 1);
         $this->db->order_by('user_id', 'asc');

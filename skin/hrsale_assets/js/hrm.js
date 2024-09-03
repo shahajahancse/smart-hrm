@@ -506,6 +506,10 @@
         alert('Please select first date');
         return ;
       }
+
+      $('#loading').css({
+        visibility: 'visible'
+    });
      
       var data = "first_date="+first_date+'&sql='+sql;
       url = base_url + "/overall_performance_yearly";
