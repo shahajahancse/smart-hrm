@@ -23,7 +23,7 @@ class Attendance_model extends CI_Model
         //     exit;
         // }
 
-        if (date('2024-03-23') == $process_date || date('2024-08-10') == $process_date) {
+        if (date('2024-03-23') == $process_date || date('2024-08-10') == $process_date  || date('2024-08-31') == $process_date || date('2024-08-24') == $process_date) {
             $off_day = false;
             $holiday_day = false;
         }elseif(date('2024-05-04') == $process_date ) {
