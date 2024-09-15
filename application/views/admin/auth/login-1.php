@@ -82,7 +82,7 @@ endif;
     <div class="login-logo"> 
       <!--<b style="color:#FFF;"><?php echo $company[0]->company_name;?></b>hrm--> 
       <img src="<?php echo base_url();?>uploads/logo/signin/<?php echo $company[0]->sign_in_logo;?>" alt="hrsale logo"> </div>
-    <p class="login-box-msg"><?php echo $this->lang->line('xin_admin_login');?><?php echo $company[0]->company_name;?></p>
+    <p class="login-box-msg" style="color: black;font-size: 18px;font-weight: bold;"><?php echo $company[0]->company_name;?></p>
     <?php $attributes = array('class' => 'form-hrsale', 'name' => 'hrm-form', 'id' => 'hrm-form', 'data-redirect' => 'dashboard', 'data-form-table' => 'login', 'data-is-redirect' => '1', 'autocomplete' => 'off');?>
     <?php $hidden = array('user_id' => 0);?>
     <?php echo form_open('admin/auth/login', $attributes, $hidden);?>
@@ -104,35 +104,10 @@ endif;
     <div class="form-group has-feedback">
       <input type="password" class="form-control" id="ipassword" name="ipassword" placeholder="Enter Password" autocomplete="off">
       <span class="glyphicon glyphicon-lock form-control-feedback"></span> </div>
-    <div class="row">
-      <div class="col-xs-8"> <a href="<?php echo site_url('admin/auth/forgot_password');?>" class="d-block small"><?php echo $this->lang->line('xin_forgot_password_link');?></a> </div>
-      <!-- /.col -->
-      <div class="col-xs-4"> <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => 'btn btn-primary btn-block btn-flat save', 'content' => '<i class="fa fa-lock"></i> '.$this->lang->line('xin_login'))); ?> </div>
-      <!-- /.col --> 
+    <div class="row" >
+      <div class="col-xs-4" style="float: right;"> <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => 'btn btn-primary btn-block btn-flat save', 'content' => '<i class="fa fa-lock"></i> '.$this->lang->line('xin_login'))); ?> </div>
     </div>
     <?php echo form_close(); ?>
-    <hr>
-    <div class="row">
-      <div class="col-md-5">
-        <div class="btn-group">
-          <button type="button" class="btn bg-purple btn-flat btn-sm" data-toggle="dropdown" aria-expanded="false">Login as</button>
-          <button type="button" class="btn bg-purple btn-flat btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <span class="caret"></span> <span class="sr-only">Login as</span> </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a class="dropdown-item login-as" href="javascript:void(0);" data-username="<?php echo $ilogn_info;?>" data-password="fgrace$$##">Super Admin</a></li>
-            <li><a class="dropdown-item login-as" href="javascript:void(0);" data-username="<?php echo $ilogn_info2;?>" data-password="jhonsmith$$##">Employee</a></li>
-          </ul>
-        </div>
-      </div>
-      <!-- /.col -->
-      <div class="col-md-3">
-        <a target="_blank" href="<?php echo site_url('/');?>" class="btn btn-warning btn-block btn-flat btn-sm">Jobs</a>
-      </div>
-      <div class="col-md-4">
-        <a target="_blank" href="<?php echo site_url('client/');?>" class="btn btn-danger btn-block btn-flat btn-sm">Client Panel </a>
-      </div>
-      <!-- /.col --> 
-    </div>
-    <hr>
     <div class="lockscreen-footer text-center">
       <?php if($system[0]->enable_current_year=='yes'):?>
       <?php echo date('Y');?>

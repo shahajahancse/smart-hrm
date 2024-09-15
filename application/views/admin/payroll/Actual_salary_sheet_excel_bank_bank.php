@@ -64,11 +64,11 @@
       }
       if ($number < 10000000) {
         return numToWordsRec(floor($number / 100000)) .
-              ' Lac ' . numToWordsRec($number % 100000);
+              ' lac ' . numToWordsRec($number % 100000);
       }
       
         return numToWordsRec(floor($number / 10000000)) .
-              ' Cor ' . numToWordsRec($number % 10000000);
+              ' cor ' . numToWordsRec($number % 10000000);
       
   }
 
@@ -90,7 +90,7 @@
     <tr height="85px">
       <td colspan="5" style="text-align:left;">
         <div style="margin-top:12.8px;display: flex;justify-content: space-between;">
-          <div>Date : <?=date("Y M d")?></div>
+          <div>Date : <?=date("d M Y")?></div>
           <div>Ref: MHL-D/REF/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
         </div>
         <div style=" font-weight:bold; text-align:left;">To</div>
@@ -98,11 +98,11 @@
         <div style=" text-align:left;">Rupali Bank Ltd</div>
         <div style=" text-align:left;">Adabor, Ring Road, Dhaka</div>
         <div style=" text-align:left; font-weight:bold;">Subject: - Transfer <?php echo $salary_month; ?> salary from company account to employee's salary account.</div>
-        <div style=" text-align:left; font-weight:bold;">Dear concern,</div>
+        <div style=" text-align:left; font-weight:bold;">Dear Sir,</div>
         <div style=" text-align:left;">Greetings from Mysoft Heaven (BD) Ltd.</div>
         <div style=" text-align:left;">We have been maintaining a current account in your bank (Account name: - Mysoft Heaven (BD) Ltd,<br>Account No: - 5991020000012). We would like to transfer =<?=$grand_total_emni?>/- (Taka : <?php echo numToWordsRec($grand_total_emni); ?> Only) from our company account to our employee's salary account. The list of employee's accounts where need to transfer the fund within today. </div>
         <br>
-        <div style="text-align: center;text-decoration: underline;">Salary Of <?php echo $salary_month; ?></div>
+        <div style="text-align: center;text-decoration: underline;">Salary Of <?php echo date("M-Y",strtotime($salary_month)); ?></div>
       </td>
     </tr>
   </table>
@@ -124,14 +124,14 @@
       <td class="text-center"><?= ($key + 1) ?>.</td>
       <td class="text-center"><?= $row->first_name . ' ' . $row->last_name ?></td>
       <td class="text-center"><?= $row->designation_name ?></td>
-      <td class="text-right"><?= ceil($row->grand_net_salary + ($row->modify_salary) - $row->aba_deduct) ?></td>
+      <td class="text-right"><?= number_format(ceil($row->grand_net_salary + ($row->modify_salary) - $row->aba_deduct)) ?></td>
       <td class="text-center"><?= $row->account_number ?></td>
     </tr>
     <?php } ?>
     
     <tr>
       <th colspan="3" class="text-center">Total: Taka : <?php echo numToWordsRec($grand_total); ?> Only</th>
-      <th class="text-right"><?= ceil($grand_total) ?></th>
+      <th class="text-right"><?= number_format(ceil($grand_total)) ?></th>
       <th class="text-center"></th>
     </tr>
   </table>

@@ -23,7 +23,12 @@ class Attendance_model extends CI_Model
         //     exit;
         // }
 
-        if (date('2024-03-23') == $process_date || date('2024-08-10') == $process_date  || date('2024-08-31') == $process_date || date('2024-08-24') == $process_date) {
+        if (date('2024-03-23') == $process_date || 
+        date('2024-08-10') == $process_date  || 
+        date('2024-08-31') == $process_date || 
+        date('2024-08-24') == $process_date ||
+        date('2024-09-14') == $process_date
+        ) {
             $off_day = false;
             $holiday_day = false;
         }elseif(date('2024-05-04') == $process_date ) {
@@ -483,6 +488,8 @@ class Attendance_model extends CI_Model
                 $check_day = date('Y-m-d', strtotime('+2 days'. $check_day));
                 $query = $this->db->where('employee_id', $emp_id)->where('attendance_date', $check_day)->get('xin_attendance_time')->row();
                 $check_day = date('Y-m-d', strtotime('-1 days'. $check_day));
+               if (!empty($query)) {
+              
                 if ($query->status == 'Absent') {
                     $this->db->where('attendance_date', $check_day);
                     $this->db->where('employee_id', $emp_id);
@@ -496,6 +503,7 @@ class Attendance_model extends CI_Model
                     $this->db->where('employee_id', $emp_id);
                     $this->db->update('xin_attendance_time', array('status' => 'Absent', 'attendance_status' => 'Absent'));
                 }
+               }
             }
         }
         return true;

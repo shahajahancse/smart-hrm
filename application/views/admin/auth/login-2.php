@@ -88,8 +88,11 @@ endif;
                 <div class="brand-logo">
                   <img src="<?php echo base_url();?>uploads/logo/signin/<?php echo $company[0]->sign_in_logo;?>" alt="hrsale-logo">
                 </div>
+                <div>
+                 <p style="color: black;font-size: 18px;font-weight: bold;"><?= $company[0]->company_name?></p>
+                </div>
 
-                <p><?php echo $this->lang->line('xin_hrsale_hr_system_login_panel');?></p>
+                <p ><?php echo $this->lang->line('xin_hrsale_hr_system_login_panel');?></p>
               </div>
             </div>
           </div>
@@ -144,11 +147,11 @@ endif;
                         <div class="col-xs-6 col-sm-6">
                           &nbsp;
                         </div>
-                        <div class="col-xs-6 col-sm-6">
+                        <!-- <div class="col-xs-6 col-sm-6">
                           <p class="forgotPwd">
                             <a href="<?php echo site_url('admin/auth/forgot_password');?>" class="lnk-toggler"><?php echo $this->lang->line('xin_forgot_password_link');?></a>
                           </p>
-                        </div>
+                        </div> -->
                       </div> <!-- ./remember-row -->
                       <div class="form-group">
                         <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => 'btn btn-primary btn-block btn-lg save', 'content' => '<i class="fa fa-lock"></i> '.$this->lang->line('xin_login'))); ?>

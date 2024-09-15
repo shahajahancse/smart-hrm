@@ -1765,6 +1765,18 @@ class Xin_model extends CI_Model {
 			return null;
 		}
 	}
+	public function read_department_info($id) {
+	
+		$sql = 'SELECT * FROM xin_departments WHERE department_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
 	// get department designations	
 	public function read_low_designations($id) {
 	

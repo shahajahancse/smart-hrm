@@ -88,16 +88,16 @@
                                     echo '<span class="ekline"> Late Deduct '.$late_deduct .' </span> ';
                                 }
                                 if($data->absent_deduct > 10){
-                                    echo '<span class="ekline">'.$data->absent.' day Absent Deduct '.$data->absent_deduct .'</span> ';
+                                    echo '<span class="ekline">'.$data->absent.' day Absent Deduct '.ceil($data->absent_deduct) .'</span> ';
                                 }
                                 if($data->lunch_deduct > 10){
-                                    echo '<span class="ekline"> Lunch Deduct '.$data->lunch_deduct .'</span> ';
+                                    echo '<span class="ekline"> Lunch Deduct '.ceil($data->lunch_deduct) .'</span> ';
                                 }
                                 if($data->aba_deduct > 10){
-                                    echo '<span class="ekline">Before after absent Deduct '.$data->aba_deduct .'</span> ';
+                                    echo '<span class="ekline">Before after absent Deduct '.ceil($data->aba_deduct) .'</span> ';
                                 }
                                 if($data->extra_pay > 10){
-                                    echo '<span class="ekline">'. $data->extra_p. ' day Extra Pay '.$data->extra_pay .'</span> ';
+                                    echo '<span class="ekline">'. $data->extra_p. ' day Extra Pay '.ceil($data->extra_pay) .'</span> ';
                                 }
                                 ?>
                         </div>

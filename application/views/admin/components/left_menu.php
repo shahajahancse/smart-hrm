@@ -839,6 +839,10 @@ $count_timelog=0;
           <li class="sidenav-link <?php if(!empty($arr_mod['reports_employees_active']))echo $arr_mod['reports_employees_active'];?>"> <a href="<?php echo site_url('admin/reports/employees');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_report_employees');?> </a> </li>
           <?php } ?>
 
+          <?php if(in_array('117',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['reports_employees_active']))echo $arr_mod['reports_employees_active'];?>"> <a href="<?php echo site_url('admin/reports/employees_letter');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Employee Letter </a> </li>
+          <?php } ?>
+
           <?php if(in_array('116',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['reports_roles_active']))echo $arr_mod['reports_roles_active'];?>"> <a href="<?php echo site_url('admin/reports/late_report');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Employee Late Reort</a> </li>
           <?php } ?>

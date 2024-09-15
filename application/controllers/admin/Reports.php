@@ -2064,5 +2064,127 @@ class Reports extends MY_Controller
 
 		$this->load->view("admin/reports/holyday_list", $data);
 	}
+
+
+	public function employees_letter() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['all_employees'] = $this->db->where_in('status', [1,4,5])->get('xin_employees')->result();
+		$data['title'] = $this->lang->line('xin_hr_report_employees').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_report_employees');
+		$data['subview'] = $this->load->view("admin/reports/employees_letter", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+	public function get_employee_inc_pro(){
+		$employee_id = $this->input->post('id');
+		$this->db->where('emp_id', $employee_id);
+		$this->db->where('status', 2);
+		$this->db->order_by('effective_date', 'desc');
+		$increment = $this->db->get('xin_employee_incre_prob')->result();
+
+		$this->db->where('emp_id', $employee_id);
+		$this->db->where('status', 3);
+		$this->db->order_by('effective_date', 'desc');
+		$promotion = $this->db->get('xin_employee_incre_prob')->result();
+		$data['increment'] = $increment;
+		$data['promotion'] = $promotion;
+		echo json_encode($data);
+	}
+	public function joining_letter($employee_id = null) {
+		if ($employee_id == null) {
+			echo "Please select employee";
+		}else{
+			$this->db->select('xin_employees.*, xin_designations.designation_name, xin_departments.department_name');
+			$this->db->from('xin_employees');
+			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
+			$this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id');
+			$this->db->where('user_id', $employee_id);
+			$data['data'] = $this->db->get()->row();
+			$this->load->view("admin/reports/joining_letter", $data);
+		}
+	}
+	public function confirmation_letter($employee_id = null) {
+		if ($employee_id == null) {
+			echo "Please select employee";
+		}else{
+			$this->db->select('xin_employees.*, xin_designations.designation_name, xin_departments.department_name');
+			$this->db->from('xin_employees');
+			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
+			$this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id');
+			$this->db->where('user_id', $employee_id);
+			$data['data'] = $this->db->get()->row();
+
+			$this->db->select('xin_employee_incre_prob.*, xin_designations.designation_name, xin_departments.department_name');
+			$this->db->from('xin_employee_incre_prob');
+			$this->db->join('xin_designations', 'xin_employee_incre_prob.new_desig_id = xin_designations.designation_id');
+			$this->db->join('xin_departments', 'xin_employee_incre_prob.new_dept_id = xin_departments.department_id');
+			$this->db->where('xin_employee_incre_prob.emp_id', $employee_id);
+			$this->db->where('xin_employee_incre_prob.status', 4);
+			$increment = $this->db->get()->row();
+			if ($increment == null) {
+				echo "No data found";
+				exit();
+			}
+			$data['increment'] = $increment;
+
+			$this->load->view("admin/reports/confirmation_letter", $data);
+		}
+	}
+	public function appointment_letter($employee_id = null) {
+		if ($employee_id == null) {
+			echo "Please select employee";
+		}else{
+			$this->db->select('xin_employees.*, xin_designations.designation_name, xin_departments.department_name');
+			$this->db->from('xin_employees');
+			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
+			$this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id');
+			$this->db->where('user_id', $employee_id);
+			$data['data'] = $this->db->get()->row();
+			$this->load->view("admin/reports/appointment_letter", $data);
+		}
+	}
+	public function increment_letter($employee_id = null,$increment_id = null) {
+		if ($employee_id == null) {
+			echo "Please select employee";
+		}else{
+			$this->db->select('xin_employees.*, xin_designations.designation_name, xin_departments.department_name');
+			$this->db->from('xin_employees');
+			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
+			$this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id');
+			$this->db->where('user_id', $employee_id);
+			$data['data'] = $this->db->get()->row();
+
+			$this->db->where('id', $increment_id);
+			$increment = $this->db->get('xin_employee_incre_prob')->row();
+			$data['increment'] = $increment;
+			$this->load->view("admin/reports/increment_letter", $data);
+			
+		}
+	}
+	public function promotion_letter($employee_id = null,$increment_id = null) {
+		if ($employee_id == null) {
+			echo "Please select employee";
+		}else{
+			$this->db->select('xin_employees.*, xin_designations.designation_name, xin_departments.department_name');
+			$this->db->from('xin_employees');
+			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
+			$this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id');
+			$this->db->where('user_id', $employee_id);
+			$data['data'] = $this->db->get()->row();
+
+
+			$this->db->select('xin_employee_incre_prob.*, xin_designations.designation_name, xin_departments.department_name');
+			$this->db->from('xin_employee_incre_prob');
+			$this->db->join('xin_designations', 'xin_employee_incre_prob.new_desig_id = xin_designations.designation_id');
+			$this->db->join('xin_departments', 'xin_employee_incre_prob.new_dept_id = xin_departments.department_id');
+			$this->db->where('id', $increment_id);
+			$increment = $this->db->get()->row();
+			$data['promotion'] = $increment;
+			$this->load->view("admin/reports/promotion_letter", $data);
+			
+		}
+	}
 } 
 ?>
