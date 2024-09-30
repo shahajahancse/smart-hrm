@@ -214,9 +214,7 @@ content: 'zfdsdf';
                     $count = $this->db->get('xin_employee_punch_request')->num_rows();
                     ?>
 
-                <?php if ($session['role_id']==1) {?>
                     <a  class="btn btn-sm btn-primary" href="<?= base_url('admin/attendance/punch_request_list') ?>" style="padding: 6px 10px !important;">Punch Request <span class="badge badge-danger" style="background-color: red !important; color: white !important;"><?= $count ?></span></a>
-                <?php } ?>
                 
                 <button onclick="extra_present_approval()" class="btn btn-sm btn-primary"
                     style="padding: 6px 10px !important;">Extra Present Approval</button>

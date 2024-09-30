@@ -129,6 +129,11 @@ class Attendance extends MY_Controller
 
             $emp_id = explode(',', trim($sql));
 
+            if (count($emp_id)>1) {
+                echo "Required to Punch Id of one employee at a time";
+                exit;
+            }
+
             $in_time = $in_time ? $date .' '. $in_time : '';
             $out_time = $out_time ? $date .' '. $out_time : '';
 

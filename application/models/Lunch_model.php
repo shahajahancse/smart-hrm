@@ -29,7 +29,8 @@ class Lunch_model extends CI_Model {
                 $this->db->select('lunch_id, meal_amount, comment');
                 $this->db->from('lunch_details')->where('date', $date)->where('emp_id', $row->emp_id);
                 $data2 = $this->db->group_by('emp_id')->order_by('p_stutus', 'DESC')->get()->row();
-                @$data[$key]->meal_amount = $data2->meal_amount;
+
+                @$data[$key]->meal_amount = $data2->meal_amount?$data[$key]->meal_amount:0;
                 @$data[$key]->comment = $data2->comment;
                 @$data[$key]->lunch_id = $data2->lunch_id;
             }
@@ -291,7 +292,6 @@ class Lunch_model extends CI_Model {
         $this->db->where("xin_attendance_time.attendance_date", $attendance_date);
         $this->db->where("xin_attendance_time.status", 'Present');
         $data = $this->db->get()->result();
-    
         if ($data) {
             return $data;
         } else {

@@ -33,7 +33,6 @@ class Payroll extends MY_Controller {
 		$this->load->model("Overtime_request_model");
 		$this->load->helper('string');
 	}
-
 	/*Function to set JSON output*/
 	public function output($Return=array()){
 		/*Set response header*/
@@ -49,10 +48,7 @@ class Payroll extends MY_Controller {
 		// $data['all_office_shifts'] = $this->Location_model->all_office_locations();
 		$data['subview'] = $this->load->view("admin/payroll/employee_list_with_salary", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
-
 	}
-
-
 	public function index()
     {
 		$data['title'] = $this->lang->line('left_payroll_templates').' | '.$this->Xin_model->site_title();
@@ -73,7 +69,6 @@ class Payroll extends MY_Controller {
 		$this->load->view('admin/layout/layout_main', $data); //page load
 			  
     }
-
 	public function salary_on_bank(){
 		$user_id = $this->input->post('user_id');
 		$checked = $this->input->post('checked');
@@ -85,7 +80,6 @@ class Payroll extends MY_Controller {
 		$this->db->where('user_id', $user_id);
 		$this->db->update('xin_employees', array('if_salary_bank' => $value));
 	}
-
     // salary process
 	public function salary_process()
     {
@@ -93,8 +87,6 @@ class Payroll extends MY_Controller {
     	$status = $this->input->post('status');
     	$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
-    	// dd($sql);
-
     	$process_month = date("Y-m-d", strtotime($process_month));
 		$this->Salary_model->Salary_process($process_month, $emp_id);
 		$this->db->trans_complete();
@@ -108,22 +100,17 @@ class Payroll extends MY_Controller {
 		{
 			echo "Process completed sucessfully";
 		}
-
     }
-
 	public function modify_salary(){
 			$salary_month= $_POST['salary_month'];
 			$data = $this->Xin_model->modify_salary($salary_month);
 			echo json_encode($data);
 	}
-
 	public function save_modify_salary(){
 
 			$data = $this->Xin_model->update_salary($_POST['id'],$_POST['modify_salary']);
 			echo json_encode($data);
 	}
-
-	
 	// Function to save and modify salary data for all employees
 	public function save_modify_salary_all(){
 		$m_day_data=$this->input->post('modifyday');
@@ -141,8 +128,6 @@ class Payroll extends MY_Controller {
 	        $result = $this->Xin_model->update_salaryall($user_id, $salary, $date, $m_day);
 	    }
 	}
-
-
 	// generate salary excel sheet 
     public function salary_sheet_excel()
     {  
@@ -207,11 +192,11 @@ class Payroll extends MY_Controller {
         }
         else
         {	
-        	if ($excel == 1) {
-	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
-        	} else {
-	            $this->load->view('admin/payroll/Actual_salary_sheet_excel',$data);
-        	}
+			if ($excel == 1) {
+				$this->load->view('admin/payroll/salary_excel_sheet',$data);
+			} else {
+				$this->load->view('admin/payroll/Actual_salary_sheet_excel',$data);
+			}
         }
     }
     public function report_salary_sheet()
@@ -227,6 +212,7 @@ class Payroll extends MY_Controller {
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;
 	    $this->load->view('admin/payroll/report_salary_sheet',$data);
+
         
     }
 	// generate salary excel sheet 
@@ -269,31 +255,29 @@ class Payroll extends MY_Controller {
 			}
         }
     }
-
-	
 	 // payroll templates
-	 public function templates()
-     {
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+	public function templates()
+	{
+	$session = $this->session->userdata('username');
+	if(empty($session)){ 
+		redirect('admin/');
+	}
+	$data['title'] = $this->lang->line('left_payroll_templates').' | '.$this->Xin_model->site_title();
+	$data['all_companies'] = $this->Xin_model->get_companies();
+	$data['breadcrumbs'] = $this->lang->line('left_payroll_templates');
+	$data['path_url'] = 'payroll_templates';
+	$role_resources_ids = $this->Xin_model->user_role_resource();
+	if(in_array('34',$role_resources_ids)) {
+		if(!empty($session)){
+			$data['subview'] = $this->load->view("admin/payroll/templates", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('left_payroll_templates').' | '.$this->Xin_model->site_title();
-		$data['all_companies'] = $this->Xin_model->get_companies();
-		$data['breadcrumbs'] = $this->lang->line('left_payroll_templates');
-		$data['path_url'] = 'payroll_templates';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('34',$role_resources_ids)) {
-			if(!empty($session)){
-				$data['subview'] = $this->load->view("admin/payroll/templates", $data, TRUE);
-				$this->load->view('admin/layout/layout_main', $data); //page load
-			} else {
-				redirect('admin/');
-			}
-		} else {
-			redirect('admin/dashboard');
-		}		  
-     }
+	} else {
+		redirect('admin/dashboard');
+	}		  
+	}
 	 
 	 // generate payslips
 	 public function generate_payslip()
@@ -319,7 +303,6 @@ class Payroll extends MY_Controller {
 			redirect('admin/dashboard');
 		}
      }
-	 	 
 	 // payment history
 	 public function payment_history()
      {
@@ -1944,11 +1927,9 @@ class Payroll extends MY_Controller {
 			exit;
 			} // f
 	}
-	
 	// hourly_list > templates
 	 public function payment_history_list()
      {
-
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
@@ -2073,7 +2054,6 @@ class Payroll extends MY_Controller {
           echo json_encode($output);
           exit();
      }
-	
 	// payment history
 	 public function payslip()
      {
@@ -3265,8 +3245,7 @@ class Payroll extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-	 }  
-	 
+	 }
 	// make payment info by id
 	public function make_payment_view()
 	{
@@ -3380,10 +3359,8 @@ class Payroll extends MY_Controller {
 		$this->Payroll_model->delete_payslip_overtime_items($id);
 		$this->Payroll_model->delete_payslip_loan_items($id);
 	}
-	
 	// get company > locations
 	 public function get_company_plocations() {
-
 		$data['title'] = $this->Xin_model->site_title();
 		$keywords = preg_split("/[\s,]+/", $this->uri->segment(4));
 		if(is_numeric($keywords[0])) {
@@ -3521,13 +3498,6 @@ class Payroll extends MY_Controller {
 		$data['subview'] 		= $this->load->view("admin/payroll/selary_emp", $data, TRUE);
 								  $this->load->view('admin/layout/layout_main', $data); 
     }
-
-
-
-
-
-
-
 	public function advanced_salary(){
 		$data['session'] = $this->session->userdata('username');
 		// dd($data['session']);

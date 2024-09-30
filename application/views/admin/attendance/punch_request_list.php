@@ -1,3 +1,4 @@
+<?php $session = $this->session->userdata('username');?>
 
 <div class="table-responsive" style="padding: 25px;box-shadow: 0px 0px 8px 1px #d0d0d0;border-radius: 7px;">
     <table id="table_data" class="table table-bordered table-striped table-hover">
@@ -14,20 +15,6 @@
         </thead>
         <tbody>
             <?php foreach($alldata as $key => $request) { 
-//                 dd($request);
-//                 stdClass Object
-// (
-//     [id] => 2
-//     [employee_id] => 58
-//     [proxi_id] => 50
-//     [punch_type] => in
-//     [p_date] => 2024-07-08
-//     [p_time] => 09:40:00
-//     [status] => 0
-//     [first_name] => Md.
-//     [last_name] => Ahaduzzaman
-// )
-                
                 ?>
             <tr>
                 <td><?= $key+1 ?></td>
@@ -38,7 +25,9 @@
                 <td><?= $request->punch_type == 'in' ? 'In' : 'Out' ?></td>
                 <td class="status_action">
                     <?php if($request->status == 0) { ?>
-                    <a href="javascript:void(0)" onclick="accept_request('<?= $request->id ?>',this)" class="btn btn-primary btn-sm">Approve</a>
+                        <?php if ($session['role_id']==1) {?>
+                            <a href="javascript:void(0)" onclick="accept_request('<?= $request->id ?>',this)" class="btn btn-primary btn-sm">Approve</a>
+                        <?php } ?>
                     <a href="javascript:void(0)" onclick="reject_request('<?= $request->id ?>',this)" class="btn btn-danger btn-sm">Reject</a>
                     <?php }elseif($request->status == 1){ echo '<span class="badge badge-success">Approved </span>'; }elseif($request->status == 2){ echo '<span class="badge badge-danger">Rejected </span>'; }?>
                 </td>
@@ -46,9 +35,7 @@
             <?php } ?>
         </tbody>
     </table>
-   
 </div>
-
 <script>
     $(document).ready(function() {
         $('#table_data').DataTable();
