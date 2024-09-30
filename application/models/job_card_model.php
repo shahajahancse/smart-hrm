@@ -119,7 +119,7 @@ class Job_card_model extends CI_Model{
 			attendance_date, 
 			attendance_status,
 			status,
-			late_status,
+			late_status, 
 		');
 		$this->db->from('xin_attendance_time');
 		$this->db->where('employee_id', $emp_id);
@@ -130,6 +130,17 @@ class Job_card_model extends CI_Model{
 		$query = $this->db->get()->result();
 		$data['emp_data'] = $query;
 		return $data;
+	}
+
+	function get_meeting_remark($attendance_date,$user_id){
+		$this->db->where('employee_id', $user_id);
+		$this->db->where('date', $attendance_date);
+		$query = $this->db->get('xin_employee_move_register')->row();
+		if(!empty($query)){
+			return 'Reason: '.$query->reason.' <br> Location: '.$query->place_adress;
+		}else{
+			return 'N/A';
+		}
 	}
 
 	function get_join_date($emp_id, $sStartDate, $sEndDate)

@@ -171,6 +171,9 @@ foreach ($all_employees as $key => $value) {
 				$present_count++;
 				if ($row->attendance_status == 'Meeting') {
 					$att_status = 'Meeting';
+					$meeting_comment =$this->Job_card_model->get_meeting_remark($row->attendance_date,$value->user_id);;
+					
+
 				}
 			}
 			elseif($row->clock_in !='' || $row->clock_out !='')
@@ -239,6 +242,9 @@ foreach ($all_employees as $key => $value) {
 				echo "</td>";
 				echo "<td>&nbsp;";
 				echo $row->comment;
+				echo "&nbsp";
+				echo isset($meeting_comment) ? $meeting_comment : '';
+				$meeting_comment='';
 				echo "</td>";
 			echo "</tr>";
 		}
