@@ -42,40 +42,51 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
       </select>
     </div> -->
     <div class="row">
-      <?php $attributes = array('id' => 'manual_attendance', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
-      <?php $hidden = array('user_id' => $session['user_id']);?>
-      <?php echo form_open('admin/attendance/manual_attendance', $attributes, $hidden);?>
-        <p style="padding: 0px 15px;" id="checked_value">Attendance Insert
+     
+        <p style="padding: 0px 15px;" id="checked_value">
           <span style="padding: 0px 20px"><label >Punch Miss</label> <input checked type="radio" name="check_value" value="0"></span>
           <span><label >Meeting</label> <input class="" type="radio" name="check_value" value="1">
           </span>
         </p>
 
-        <div class="form-group col-lg-3">
-          <label>In Time</label>
-          <input type="text" name="in_time" id="in_time" class="form-control timepicker clear-1" placeholder="HH:MM">
-        </div>
-        <div class="form-group col-lg-3">
-          <label>Out Time</label>
-          <input type="text" name="out_time" id="out_time" class="form-control timepicker clear-1" placeholder="HH:MM">
-        </div>
-        <div class="col-lg-6" id="reason">
-          <div class="form-group">
-            <label>Reason</label>
-            <textarea type="text" id="reason_value" class="form-control" name="reason"></textarea>
+        <div class="col-md-12">
+          <div class="form-group col-lg-3">
+            <label>In Time</label>
+            <input type="text" name="in_time" id="in_time" class="form-control timepicker clear-1" placeholder="HH:MM">
+          </div>
+          <div class="form-group col-lg-3">
+            <label>Out Time</label>
+            <input type="text" name="out_time" id="out_time" class="form-control timepicker clear-1" placeholder="HH:MM">
           </div>
         </div>
-        <div class="col-lg-6" id="location">
-          <div class="form-group">
-            <label>Location</label>
-            <textarea type="text" id="location_value" class="form-control" name="location_value"></textarea>
+        <div class="col-md-12" id="extra_field">
+          <div class="form-group col-lg-6">
+            <label>Project/Client name</label>
+            <input type="text" name="project_name" id="project_name" class="form-control  clear-1" placeholder="">
           </div>
-        </div>
+          <div class="form-group col-lg-6">
+            <label>Contact Person</label>
+            <input type="text" name="contact_person" id="contact_person" class="form-control  clear-1" placeholder="">
+          </div>
 
-        <div class="col-lg-12">
-        <button type="submit" class="btn btn-sm btn-success" style="padding: 6px 10px !important;margin-right:16px">Submit</button>
         </div>
-      </form>
+        <div class="col-md-12">
+          <div class="col-lg-6" id="reason">
+            <div class="form-group">
+              <label>Reason</label>
+              <textarea type="text" id="reason_value" class="form-control" name="reason"></textarea>
+            </div>
+          </div>
+          <div class="col-lg-6" id="location">
+            <div class="form-group">
+              <label>Location</label>
+              <textarea type="text" id="location_va" class="form-control" name="location_va"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <span onclick="manual_entry_ajax(event)" class="btn btn-sm btn-success" style="float: right;margin-right: 15px;">Entry</span>
+        </div>
     </div>
   </div>
 
@@ -102,7 +113,7 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
     $(document).ready(function(){
         $('#reason').hide();
         $('#location').hide();
-
+        $('#extra_field').hide();
         $('.clockpicker').clockpicker();
             var input = $('.timepicker').clockpicker({
             placement: 'bottom',
@@ -124,28 +135,30 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
           if (value == 1) {
             $('#reason').show();
             $('#location').show();
+            $('#extra_field').show();
+           
           } else {
             $('#reason').hide();
             $('#location').hide();
+            $('#extra_field').hide();
           }
           // alert(value);
         });
+    });
 
-        // manual attendance
-      $("#manual_attendance").on('submit', function(e) {
-
-        var ajaxRequest;  // The variable that makes Ajax possible!
-        ajaxRequest = new XMLHttpRequest();
-
-        var url = "<?php echo base_url('admin/attendance/manual_attendance'); ?>";
-        e.preventDefault();
-
+</script>
+<script>
+      function manual_entry_ajax(e){
+        var url_b = "<?php echo base_url('admin/attendance/manual_attendance'); ?>";
+        
         status = document.querySelector("input[type='radio'][name=check_value]:checked").value;
         date = document.getElementById('process_date').value;
         in_time = document.getElementById('in_time').value;
         out_time = document.getElementById('out_time').value;
         reason = document.getElementById('reason_value').value;
-        location = document.getElementById('location_value').value;
+        locationa = document.getElementById('location_va').value;
+        project_name = document.getElementById('project_name').value;
+        contact_person = document.getElementById('contact_person').value;
 
         var emp_id = document.getElementsByName('select_emp_id[]');
         var sql = get_checked_value(emp_id);
@@ -158,27 +171,32 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
 
         var okyes;
         okyes=confirm('Are you sure you want to Insert?');
-        if(okyes==false) return;
+        if(okyes==false){
+          return;
+        };
 
-        var data = "date="+date+"&in_time="+in_time+"&out_time="+out_time+"&reason="+reason+"&location="+location+"&sql="+sql+"&status="+status;
-
-
-        ajaxRequest.open("POST", url, true);
-        ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-        ajaxRequest.send(data);
-
-        ajaxRequest.onreadystatechange = function(){
-          if(ajaxRequest.readyState == 4){
-            // console.log(ajaxRequest);
-            var resp = ajaxRequest.responseText;
-            if (resp == 'Successfully') {
+        $.ajax({
+          url: url_b,
+          type: 'POST',
+          data: {
+            "date": date,
+            "in_time": in_time,
+            "out_time": out_time,
+            "reason": reason,
+            "location": locationa,
+            "sql": sql,
+            "status": status,
+            "project_name": project_name,
+            "contact_person": contact_person
+          },
+          success: function(response) {
+            console.log(response);
+            if (response == 'Successfully') {
               showSuccessAlert('Successfully Added Attendance','no');
             }else{
-              showErrorAlert(resp);
-            }
-          }
-        }
-
-      });
-    });
+              showErrorAlert(response);
+            }}
+        });
+      }
+   
 </script>

@@ -137,7 +137,7 @@ class Job_card_model extends CI_Model{
 		$this->db->where('date', $attendance_date);
 		$query = $this->db->get('xin_employee_move_register')->row();
 		if(!empty($query)){
-			return 'Reason: '.$query->reason.' <br> Location: '.$query->place_adress;
+			return 'Reason: '.$query->reason.' <br> Location: '.$query->place_adress.' <br> Project/Client name: '.$query->project_name.' <br> Contact person: '.$query->contact_person;
 		}else{
 			return 'N/A';
 		}

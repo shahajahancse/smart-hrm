@@ -170,7 +170,7 @@ foreach ($all_employees as $key => $value) {
 				$att_status = "P";
 				$present_count++;
 				if ($row->attendance_status == 'Meeting') {
-					$att_status = 'Meeting';
+					$att_status = 'P';
 					$meeting_comment =$this->Job_card_model->get_meeting_remark($row->attendance_date,$value->user_id);;
 					
 

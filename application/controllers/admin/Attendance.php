@@ -124,6 +124,8 @@ class Attendance extends MY_Controller
             $out_time = $this->input->post('out_time');
             $reason = $this->input->post('reason');
             $location = $this->input->post('location');
+            $project_name = $this->input->post('project_name');
+            $contact_person = $this->input->post('contact_person');
             $status = $this->input->post('status');
             $sql = $this->input->post('sql');
 
@@ -230,6 +232,8 @@ class Attendance extends MY_Controller
                             'astatus' 	  => 1,
                             'reason'	  => $reason,
                             'place_adress'	  => $location,
+                            'project_name'	  => $project_name,
+                            'contact_person'	  => $contact_person,
                         );
                         $this->db->insert("xin_employee_move_register", $comData);
 
@@ -240,6 +244,7 @@ class Attendance extends MY_Controller
                                 'in_time'     => $in_time,
                                 'reason'	  => $reason,
                                 'place_adress'	  => $location,
+                                
 
                             );
                         } elseif ($in_time != '' && $out_time != '') {

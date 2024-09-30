@@ -139,7 +139,6 @@ content: 'zfdsdf';
             <form id="lateform">
                 <input type="hidden" id="datein" name="date" value="">
                 <div id="latecommentform"></div>
-
                 <div class="col-md-12" style="margin-top: 10px;text-align-last: right;">
                     <input class="btn btn-primary" type="submit" value="Save">
                 </div>

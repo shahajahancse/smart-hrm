@@ -349,10 +349,10 @@ class Attendance_model extends CI_Model
                 $late_time = round((strtotime($in_time) - strtotime($actual_in_time)) / 60);
             }
 
-            if($astatus=='Meeting'){
-                $late_status = 0;
-                $late_time =0;
-            }
+            // if($astatus=='Meeting'){
+            //     $late_status = 0;
+            //     $late_time =0;
+            // }
 
 
             // total calculation production time & over time (ot)
