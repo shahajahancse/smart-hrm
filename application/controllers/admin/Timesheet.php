@@ -487,24 +487,29 @@ class Timesheet extends MY_Controller {
 	public function leave() {
 
 		$session = $this->session->userdata('username');
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		if(empty($session)){
 			redirect('admin/');
 		}
 
+		$lead=0;
 		if($session['role_id'] == 3) {
-			redirect('admin/leave/emp_leave');
+			if($user_info[0]->is_emp_lead==2){
+				$lead=2;
+			}else{
+				redirect('admin/leave/emp_leave');
+			}
 		}
-
-
 		$data['title'] = $this->lang->line('left_leave').' | '.$this->Xin_model->site_title();
-		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		
 		$data['all_leave_types'] = $this->Timesheet_model->all_leave_types();
 		$data['leaves_info'] = $this->Timesheet_model->get_leaves_with_info();
 		$data['breadcrumbs'] = $this->lang->line('left_leave');
 		$data['path_url'] = 'leave';
+		$data['lead'] = $lead;
 		// dd($user_info);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('46',$role_resources_ids)) {
+		if(in_array('46',$role_resources_ids) || $lead==2) {
 			if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/timesheet/leave", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load

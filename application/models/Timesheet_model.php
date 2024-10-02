@@ -780,7 +780,26 @@
 		return $query->result();
 	}
 	public function get_leaves_with_info($id = null) {
-		$this->db->select("la.*, e.first_name, e.last_name, lt.type_name, d.department_name, des.designation_name");
+
+
+
+		$session = $this->session->userdata('username');
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		
+
+		$lead=0;
+		if($session['role_id'] == 3) {
+			if($user_info[0]->is_emp_lead==2){
+				$lead=2;
+			}
+		}
+
+
+
+
+
+
+		$this->db->select("la.*, e.first_name, e.last_name,e.lead_user_id, lt.type_name, d.department_name, des.designation_name");
 		$this->db->from("xin_leave_applications as la");
 		$this->db->join("xin_employees as e", "e.user_id = la.employee_id", 'left');
 		$this->db->join("xin_leave_type as lt", "lt.leave_type_id = la.leave_type_id", 'left');
@@ -788,6 +807,10 @@
 		$this->db->join("xin_designations as des", "des.designation_id = e.designation_id", 'left');
 		if ($id != null) {
 			$this->db->where("la.employee_id", $id);
+		}
+
+		if($lead==2){
+			$this->db->where("e.lead_user_id", $session['user_id']);
 		}
 		$data = $this->db->order_by("la.leave_id", "DESC")->get();
 		return $data->result();

@@ -64,12 +64,16 @@ table tbody tr td {
                 <?php foreach($employee_id as $key => $employee){
 				$this->load->model('Xin_model');
 				$employee_info=$this->Xin_model->read_user_info($employee);
+                $lead_user_id=$employee_info[0]->lead_user_id;
+                $lead_user=$this->Xin_model->read_user_info($lead_user_id);
+
 				?>
                 <table class="table table-bordered">
                     <tr>
-                        <th colspan="8" style="background: #b0ffb2;">
-                            <?php echo $employee_info[0]->first_name.' '.$employee_info[0]->last_name; ?></th>
-                        <?php 
+                        <th colspan="10" style="background: #b0ffb2;">
+                            <?php echo $employee_info[0]->first_name.' '.$employee_info[0]->last_name; ?>
+                        </th>
+                            <?php 
 								$this->load->model('Attendance_model');
 								$leave_report=$this->Attendance_model->leavesm_singale($employee, $first_date, $second_date);
 								?>
@@ -115,6 +119,13 @@ table tbody tr td {
                         <th>Days</th>
                         <th>Leave Type</th>
                         <th>Reason</th>
+                        <th>
+                            Team leader Approval <br>
+                            <?php if(!empty($lead_user)): ?>
+                            <span style="white-space: nowrap;color: #0b24e7"> <?php echo $lead_user[0]->first_name.' '.$lead_user[0]->last_name; ?> </span>
+                            <?php endif; ?>
+                        </th>
+                        <th>Team leader comment</th>
                         <th>Status</th>
                     </tr>
                     <?php $tqty=0; foreach($leave_report as $key => $value){ 							
@@ -160,6 +171,8 @@ table tbody tr td {
                         <td><?php echo ($value->leave_type_id==1)? '<span>Earn Leave</span>' : '<span>Sick Leave</span>';?>
                         </td>
                         <td><?php echo $value->reason; ?></td>
+                        <td><?php echo ($value->team_lead_approved==1)? '<span class="text-success">Approved</span>' : '<span class="text-danger">Pending</span>'; ?></td>
+                        <td><?php echo $value->team_lead_comment; ?></td>
                         <!-- 1=pending, 2=Approved, 3=Rejected, 4=First Level Approval, 5=team lead approved -->
                         <td>
                             <?php 

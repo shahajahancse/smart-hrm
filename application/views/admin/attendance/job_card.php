@@ -111,6 +111,7 @@ foreach ($all_employees as $key => $value) {
 		  ";
 
 		foreach ($emp_data['emp_data'] as $key => $row) {
+			$meeting_comment =$this->Job_card_model->get_meeting_remark($row->attendance_date,$value->user_id);
 
 			// if(in_array($row->attendance_date,$emp_data['leave']))
 			if($row->status == 'Leave')
@@ -171,9 +172,6 @@ foreach ($all_employees as $key => $value) {
 				$present_count++;
 				if ($row->attendance_status == 'Meeting') {
 					$att_status = 'P';
-					$meeting_comment =$this->Job_card_model->get_meeting_remark($row->attendance_date,$value->user_id);;
-					
-
 				}
 			}
 			elseif($row->clock_in !='' || $row->clock_out !='')

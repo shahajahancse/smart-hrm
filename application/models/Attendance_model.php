@@ -77,6 +77,7 @@ class Attendance_model extends CI_Model
             }
             // hard code
 
+
             $shift_id = $row->shift_id;
             $in_time  = '';
             $out_time = '';
@@ -300,15 +301,18 @@ class Attendance_model extends CI_Model
                         if (strtotime($in_time) > strtotime($half_morning)) {
                             $astatus = 'HalfDay';
                             $status = 'HalfDay';
+                            $late_status= 0;
+
                         }
                         if (strtotime($out_time) < strtotime($half_evening)) {
                             $astatus = 'HalfDay';
                             $status = 'HalfDay';
+                            $late_status= 0;
+
                         }
                     }
                     // half day calculation end
                 }
-
             }
 
            // dd($astatus);
@@ -332,9 +336,9 @@ class Attendance_model extends CI_Model
             $num_rows = $num_row->num_rows();
 
 
-            if($num_rows != 0 && $num_rows != '') {
-                $astatus = 'Meeting';
-            }
+            // if($num_rows != 0 && $num_rows != '') {
+            //     $astatus = 'Meeting';
+            // }
 
 
             // get extra present of off day
@@ -381,6 +385,7 @@ class Attendance_model extends CI_Model
             //     $late_status = 0;
             // }
 
+
             $data = array(
                 'employee_id'       => $emp_id,
                 'office_shift_id'   => 1,
@@ -399,14 +404,37 @@ class Attendance_model extends CI_Model
                 'early_out_status'  => $early_out_status,
             );
 
-            // dd($data);
+
+            $left_resign=$this->db->where('emp_id', $emp_id)->get('xin_employee_left_resign')->row();
+            if (!empty($left_resign)) {
+                $left_date=$left_resign->effective_date;
+            }
+
+
             $query = $this->db->where('employee_id', $emp_id)->where('attendance_date', $process_date)->get('xin_attendance_time');
             if($query->num_rows() > 0) {
-                $this->db->where('attendance_date', $process_date);
-                $this->db->where('employee_id', $emp_id);
-                $this->db->update('xin_attendance_time', $data);
+
+                if (isset($left_date)) {
+                    if ($left_date >= $process_date) {
+                        $this->db->where('attendance_date', $process_date);
+                        $this->db->where('employee_id', $emp_id);
+                        $this->db->update('xin_attendance_time', $data);
+                    }else{
+                        $this->db->where('attendance_date', $process_date);
+                        $this->db->where('employee_id', $emp_id);
+                        $this->db->delete('xin_attendance_time');
+                    }
+                }else{
+                    $this->db->where('attendance_date', $process_date);
+                    $this->db->where('employee_id', $emp_id);
+                    $this->db->delete('xin_attendance_time');
+                }
             } else {
-                $this->db->insert('xin_attendance_time', $data);
+                if (isset($left_date)) {
+                    if ($left_date >= $process_date) {
+                        $this->db->insert('xin_attendance_time', $data);
+                    }
+                }
             }
 
             // checking before after absent of holiday or off day
@@ -417,6 +445,7 @@ class Attendance_model extends CI_Model
             } elseif ($status == 'Leave') {
                 $this->checking_absent_after_offday_holiday($emp_id, $check_day);
             } elseif ($astatus == 'Holiday') {
+
                 $this->checking_absent_after_offday_holiday($emp_id, $check_day);
                 $this->checking_absent_after_before_holiday($emp_id, $check_day);
             }
@@ -437,21 +466,18 @@ class Attendance_model extends CI_Model
             $cd = date("Y-m-d", strtotime("+2 day", strtotime($check_day)));
             $this->db->where('employee_id', $emp_id)->where('attendance_date', $cd);
             $qs = $this->db->where('employee_id', $emp_id)->get('xin_attendance_time')->row();
-
             if ($qs->status == 'Absent') {
                 $dd = date("Y-m-d", strtotime("+1 day", strtotime($check_day)));
                 $this->db->where('attendance_date', $dd);
                 $this->db->where('employee_id', $emp_id);
                 $this->db->update('xin_attendance_time', array('status' => 'Absent', 'attendance_status' => 'Absent'));
             }
-
-
-        } elseif ($q->status != 'Leave' && $q->attendance_status != 'Leave') {
+        } elseif ($q->status == 'Leave' && $q->attendance_status == 'Leave') {
             $cd = date("Y-m-d", strtotime("+2 day", strtotime($check_day)));
             $this->db->where('employee_id', $emp_id)->where('attendance_date', $cd);
             $qs = $this->db->where('employee_id', $emp_id)->get('xin_attendance_time')->row();
 
-            if ($qs->status != 'Leave' && $qs->attendance_status != 'Leave') {
+            if ($qs->status == 'Leave' && $qs->attendance_status == 'Leave') {
                 $dd = date("Y-m-d", strtotime("+1 day", strtotime($check_day)));
                 $this->db->where('attendance_date', $dd);
                 $this->db->where('employee_id', $emp_id);
@@ -473,12 +499,13 @@ class Attendance_model extends CI_Model
 
         }
         return true;
-    }
+}
 
 
     public function checking_absent_after_offday_holiday($emp_id, $check_day)
     {
 		$prev_st = $this->check_off_day_prev($check_day, 'xin_holioff_days');
+       
 		if ($prev_st['status'] == true) {
             $query = $this->db->where('employee_id', $emp_id)->where('attendance_date', $prev_st['date'])->get('xin_attendance_time')->row();
             if($query->status == 'Absent') {
@@ -516,7 +543,6 @@ class Attendance_model extends CI_Model
 
                 for ($i=0; $i < $interval; $i++) {
                     $check_day = date("Y-m-d", strtotime("-1 day", strtotime($check_day)));
-
                     if ($qqs->status != 'Leave' && $qqs->attendance_status != 'Leave') {
                         $this->db->where('attendance_date', $check_day);
                         $this->db->where('employee_id', $emp_id);

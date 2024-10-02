@@ -66,6 +66,94 @@
         }
       }
     }
+    function date_between_attn_process()
+    {
+      // alert(csrf_token); return;
+      var ajaxRequest;  // The variable that makes Ajax possible!
+      ajaxRequest = new XMLHttpRequest();
+
+
+      process_date = document.getElementById('process_date').value;
+      second_date = document.getElementById('second_date').value;
+
+      
+      if(second_date =='')
+      {
+        alert('Please select second date');
+        return ;
+      }
+
+      if(process_date =='')
+      {
+        alert('Please select process date');
+        return ;
+      }
+
+      status = document.getElementById('status').value;
+      
+      if(status =='')
+      {
+        alert('Please select status');
+        return ;
+      }
+
+      var checkboxes = document.getElementsByName('select_emp_id[]');
+      var sql = get_checked_value(checkboxes);
+      if(sql =='')
+      {
+        alert('Please select employee Id');
+        return ;
+      }
+ 
+      var okyes;
+      okyes=confirm('Are you sure you want to start process?');
+      if(okyes==false) return;
+
+
+      var process_date = new Date(document.getElementById('process_date').value);
+      var second_date = new Date(document.getElementById('second_date').value);
+      $("#loader").show();
+      var html='<div id="date_show_on"></div>';
+      $("#loader").append(html);
+      start_proccess(process_date,status,sql,second_date)
+
+    }
+
+
+    function start_proccess(process_date,status,sql,second_date){
+
+      var p_date=process_date.toISOString().split('T')[0]
+      console.log(p_date);
+      
+
+      $.ajax({
+        type: "POST",
+        url: base_url + "/attendance_process",
+        data: {
+            process_date: p_date, 
+            status: status,
+            sql: sql
+        },
+        success: function (data) {
+            
+        },
+        error: function (data) {
+           
+        },
+        complete: function (data) {
+          var h='<span> Process Complete of '+p_date+' </span> <br>';
+          $("#date_show_on").append(h);
+          process_date.setDate(process_date.getDate() + 1);
+           if(process_date.toISOString().split('T')[0] > second_date.toISOString().split('T')[0]){
+            $("#loader").hide();
+            $("#date_show_on").remove();
+            alert('Processing successfull');
+           }else{
+            start_proccess(process_date,status,sql,second_date)
+           }
+        }
+    });
+    }
 
     // daily presnt/absent/late report
     function daily_report(status,late_status=null)

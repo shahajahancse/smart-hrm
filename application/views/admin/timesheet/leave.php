@@ -260,6 +260,8 @@ if (isset($success)) {
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" role="menu">
+
+                                <?php if($lead !=2){ ?>
                                     <li>
                                         <a onclick="modal_leave_data_ajax('<?= $leave->leave_id ?>')" style="border-radius: 6px;" data-toggle="modal"
                                             data-target="#edit-leave-modal-data">
@@ -291,10 +293,24 @@ if (isset($success)) {
                                     </li>
                                     <li class="divider"></li>
                                     <li>
-                                        <a style="border-radius: 6px;" onclick=print_leave(<?= $leave->leave_id ?>) >
+                                        <a style="border-radius: 6px;" onclick="print_leave(<?= $leave->leave_id ?>)" >
                                             <i class="fa fa-print"></i> Print
                                         </a>
                                     </li>
+                                    <?php }else{ ?> 
+                                        <li>
+                                        <a onclick="modal_leave_data_ajax('<?= $leave->leave_id ?>')" style="border-radius: 6px;" data-toggle="modal"
+                                            data-target="#edit-leave-modal-data">
+                                            <i class="fa fa-eye"></i> View
+                                        </a>
+                                    </li>
+                                        <li>
+                                            <a style="border-radius: 6px;"
+                                                href="<?= site_url('admin/timesheet/leave_reject/'.$leave->leave_id) ?>">
+                                                <i class="fa fa-times"></i> Reject
+                                            </a>
+                                        </li>
+                                    <?php } ?>
                                 </ul>
                             </div>
 

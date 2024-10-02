@@ -193,6 +193,7 @@ content: 'zfdsdf';
             <div class="col-md-12 text-right">
                 <div class="form-group"> &nbsp;
                     <button class="btn btn-success" onclick="attn_process()">Process</button>
+                    <button class="btn btn-success" onclick="date_between_attn_process()">Date between Process</button>
                 </div>
             </div>
         </div>

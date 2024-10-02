@@ -83,6 +83,8 @@ class Leave extends API_Controller
             $d= $this->input->post();
             $start_date=$d['start_date'];
             $end_date=$d['end_date'];
+
+
             if (empty($d['leave_type']) || empty($d['start_date']) || empty($d['end_date']) || empty($d['reason'])) {
                 $this->api_return([
                     'status'  =>   false,
@@ -265,8 +267,10 @@ class Leave extends API_Controller
 			'company_id' => 1,
 			'leave_type_id' => $this->input->post('leave_type'),
 			'leave_type' => ($this->input->post('leave_type') == 1)? 'el':'sl',
-			'from_date' => $this->input->post('start_date'),
-			'to_date' => $this->input->post('end_date'),
+			'applyed_from_date' => date('Y-m-d', strtotime($this->input->post('start_date'))),
+			'applyed_to_date' => date('Y-m-d', strtotime($this->input->post('end_date'))),
+			'from_date' => date('Y-m-d', strtotime($this->input->post('start_date'))),
+			'to_date' => date('Y-m-d', strtotime($this->input->post('end_date'))),
 			'applied_on' => date('Y-m-d h:i:s'),
 			'reason' => $this->input->post('reason'),
 			'qty' => $no_of_days,
