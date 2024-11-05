@@ -218,7 +218,7 @@ foreach ($all_employees as $key => $value) {
 				echo "</td>";
 				if($row->late_status == 1)
 				{
-					$remark = "Late";
+					$remark = "Late (" . $row->late_time. "m)";
 					$late_count++;
 				}
 				else
