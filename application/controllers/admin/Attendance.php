@@ -1064,7 +1064,8 @@ class Attendance extends MY_Controller
             $data['tablebody'] = $this->load->view("admin/attendance/employee_at_tbale_body", $data, true);
             echo $data['tablebody'] ;
         } else {
-            $this->db->order_by("time_attendance_id", "desc");
+            
+            $this->db->order_by("attendance_date", "desc");
             $data['alldata'] = $this->db->get('xin_attendance_time')->result();
             $data["todaylog"]    = $this->Attendance_model->gettodaylog(date("Y-m-d"), $session['user_id']);
             $data['shift']       = $this->db->where('office_shift_id', 1)->get('xin_office_shift')->row();

@@ -320,13 +320,15 @@ class Attendance_model extends CI_Model
 
             // get extra present of off day
             $extra_p_day = date('Y-m-d H:i:s', strtotime($early_out_time. ' -1 hours'));
-            if (($off_day == true) && ($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>=strtotime($extra_p_day))) {
-                $astatus = 'Present';
-                $status = 'Off Day';
-                $late_status= 0;
-                // hard code this line
-                if (in_array($emp_id, array(46, 82))) {
-                    $astatus = 'Off Day';
+            if ($off_day == true || $holiday_day == true) {
+                if (($off_day == true) && ($in_time != '' && strtotime($in_time)<strtotime($out_start_time)) && ($out_time !='' && strtotime($out_time)>=strtotime($extra_p_day))) {
+                    $astatus = 'Present';
+                    $status = 'Off Day';
+                    $late_status= 0;
+                    // hard code this line
+                    if (in_array($emp_id, array(46, 82))) {
+                        $astatus = 'Off Day';
+                    }
                 }
             }
 
@@ -405,36 +407,38 @@ class Attendance_model extends CI_Model
             );
 
 
-            $left_resign=$this->db->where('emp_id', $emp_id)->get('xin_employee_left_resign')->row();
-            if (!empty($left_resign)) {
-                $left_date=$left_resign->effective_date;
-            }
+            // $left_resign=$this->db->where('emp_id', $emp_id)->get('xin_employee_left_resign')->row();
+            // if (!empty($left_resign)) {
+            //     $left_date=$left_resign->effective_date;
+            // }
 
 
             $query = $this->db->where('employee_id', $emp_id)->where('attendance_date', $process_date)->get('xin_attendance_time');
             if($query->num_rows() > 0) {
 
-                if (isset($left_date)) {
-                    if ($left_date >= $process_date) {
+                // if (isset($left_date)) {
+                //     if ($left_date >= $process_date) {
                         $this->db->where('attendance_date', $process_date);
                         $this->db->where('employee_id', $emp_id);
                         $this->db->update('xin_attendance_time', $data);
-                    }else{
-                        $this->db->where('attendance_date', $process_date);
-                        $this->db->where('employee_id', $emp_id);
-                        $this->db->delete('xin_attendance_time');
-                    }
-                }else{
-                    $this->db->where('attendance_date', $process_date);
-                    $this->db->where('employee_id', $emp_id);
-                    $this->db->delete('xin_attendance_time');
-                }
+                    // }else{
+                    //     $this->db->where('attendance_date', $process_date);
+                    //     $this->db->where('employee_id', $emp_id);
+                    //     $this->db->delete('xin_attendance_time');
+                    // }
+                // }else{
+                //     $this->db->where('attendance_date', $process_date);
+                //     $this->db->where('employee_id', $emp_id);
+                //     $this->db->update('xin_attendance_time', $data);
+                // }
             } else {
-                if (isset($left_date)) {
-                    if ($left_date >= $process_date) {
-                        $this->db->insert('xin_attendance_time', $data);
-                    }
-                }
+                // if (isset($left_date)) {
+                //     if ($left_date >= $process_date) {
+                //         $this->db->insert('xin_attendance_time', $data);
+                //     }
+                // }else{
+                    $this->db->insert('xin_attendance_time', $data);
+               // }
             }
 
             // checking before after absent of holiday or off day
