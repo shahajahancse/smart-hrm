@@ -4,8 +4,12 @@ class Xin_model extends CI_Model {
  
     public function __construct()
     {
-		parent::__construct();
+        parent::__construct();
         $this->load->database();
+		if (isset($_SESSION['username']) && $_SESSION['username']['user_id'] != 1) {
+			$html = '<p style="text-align: center;color: red;font-size: 20px;font-weight: bold;" > You do not have access to the software at this time. The software is currently undergoing maintenance </p>';
+			// exit($html);
+		}
     }
  
 	// get single location
@@ -1347,8 +1351,6 @@ class Xin_model extends CI_Model {
 	
 	// get title
 	public function site_title() {
-		//dd('Xin_model');
-
 		$system = $this->read_setting_info(1);
 		return $system[0]->application_name;
 	}
@@ -1756,18 +1758,6 @@ class Xin_model extends CI_Model {
 	public function read_designation_info($id) {
 	
 		$sql = 'SELECT * FROM xin_designations WHERE designation_id = ?';
-		$binds = array($id);
-		$query = $this->db->query($sql, $binds);
-		
-		if ($query->num_rows() > 0) {
-			return $query->result();
-		} else {
-			return null;
-		}
-	}
-	public function read_department_info($id) {
-	
-		$sql = 'SELECT * FROM xin_departments WHERE department_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		

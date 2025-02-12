@@ -96,19 +96,14 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
                 <p style="font-size: 18px; color: black; background-color: aquamarine;">Absent</p>
             </td>
         </tr>
-        <?php $st = false; } 
-
-
-        
-        
-        
-        ?>
+        <?php $st = false; }  ?>
+        <?php $ss=$this->db->where('employee_id',$raw->emp_id)->where('date',$date)->get('xin_employee_move_register')->row();?>
         <tr>
             <input type="hidden" name="empid[]" value="<?= $raw->emp_id ?>">
             <input type="hidden" name="p_status[]" value="<?= $raw->p_stutus ?>">
             <th scope="row"><?= $key + 1 ?></th>
             <td><?=  $raw->first_name .' '. $raw->last_name; ?></td>
-            <td><?= $raw->p_stutus ?></td>
+            <td><?= $raw->p_stutus ?> <?= !empty($ss)?'<span style="color:red;">(Meeting)</span>':'' ?></td>
 
                 <?php 
                  $pay_status=''; 
