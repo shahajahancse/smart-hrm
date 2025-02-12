@@ -45,7 +45,7 @@ class Client_attendance extends API_Controller
         } else {
             $this->api_return([
                 'status'  =>   false,
-                'message'  =>   'Unsuccessful',
+                'message'  =>   'Unauthorized User',
                 'data'     =>   [],
             ], 404);
         }
@@ -125,7 +125,87 @@ class Client_attendance extends API_Controller
         } else {
             $this->api_return([
                 'status'  =>   false,
-                'message'  =>   'Unsuccessful',
+                'message'  =>   'Unauthorized User',
+                'data'     =>   [],
+            ], 404);
+        }
+    }
+    public function get_division()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+
+            $emp_divisions=$this->db->select('*')->from('emp_divisions')->get()->result();
+            $data['emp_divisions']=$emp_divisions;
+
+
+            $this->api_return([
+                'status'    =>  true,
+                'message'    =>  'successful',
+                'data'       =>  $data,
+            ], 200);
+        } else {
+            $this->api_return([
+                'status'  =>   false,
+                'message'  =>   'Unauthorized User',
+                'data'     =>   [],
+            ], 404);
+        }
+    }
+    public function get_district()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+
+            $emp_districts=$this->db->select('*')
+                            ->from('emp_districts')
+                            ->where('div_id', $this->input->post('division_id'))
+                            ->get()->result();
+            $data['emp_districts']=$emp_districts;
+
+
+
+
+
+
+            $this->api_return([
+                'status'    =>  true,
+                'message'    =>  'successful',
+                'data'       =>  $data,
+            ], 200);
+
+        } else {
+            $this->api_return([
+                'status'  =>   false,
+                'message'  =>   'Unauthorized User',
+                'data'     =>   [],
+            ], 404);
+        }
+    }
+    public function get_upazila()
+    {
+        $authorization = $this->input->get_request_header('Authorization');
+        $user_info = api_auth($authorization);
+        if ($user_info['status'] == true) {
+
+            $emp_upazilas=$this->db->select('*')
+            ->from('emp_upazilas')
+            ->where('dis_id', $this->input->post('district_id'))
+            ->where('div_id', $this->input->post('division_id'))
+            ->get()->result();
+
+            $data['emp_upazilas']=$emp_upazilas;
+            $this->api_return([
+                'status'    =>  true,
+                'message'    =>  'successful',
+                'data'       =>  $data,
+            ], 200);
+        } else {
+            $this->api_return([
+                'status'  =>   false,
+                'message'  =>   'Unauthorized User',
                 'data'     =>   [],
             ], 404);
         }

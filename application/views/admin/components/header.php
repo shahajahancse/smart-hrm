@@ -70,235 +70,77 @@ if($theme[0]->animation_style == '') {
 }
 </style>
 
-
-<!-- loader -->
-
 <style>
-    .pencil {
-    display: block;
-    width: 10em;
-    height: 10em;
+.loaderss {
+    --c1: #673b14;
+    --c2: #0177bc;
+    width: 40px;
+    height: 80px;
+    border-top: 4px solid var(--c1);
+    border-bottom: 4px solid var(--c1);
+    background: linear-gradient(90deg, var(--c1) 2px, var(--c2) 0 5px, var(--c1) 0) 50%/7px 8px no-repeat;
+    display: grid;
+    overflow: hidden;
+    animation: l5-0 2s infinite linear;
+}
+
+.loaderss::before,
+.loaderss::after {
+    content: "";
+    grid-area: 1/1;
+    width: 75%;
+    height: calc(50% - 4px);
+    margin: 0 auto;
+    border: 2px solid var(--c1);
+    border-top: 0;
+    box-sizing: content-box;
+    border-radius: 0 0 40% 40%;
+    -webkit-mask: linear-gradient(#000 0 0) bottom/4px 2px no-repeat,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    background: linear-gradient(var(--d, 0deg), var(--c2) 50%, #0000 0) bottom /100% 205%,
+        linear-gradient(var(--c2) 0 0) center/0 100%;
+    background-repeat: no-repeat;
+    animation: inherit;
+    animation-name: l5-1;
+}
+
+.loaderss::after {
+    transform-origin: 50% calc(100% + 2px);
+    transform: scaleY(-1);
+    --s: 3px;
+    --d: 180deg;
+}
+
+@keyframes l5-0 {
+    80% {
+        transform: rotate(0)
     }
 
-    .pencil__body1,
-    .pencil__body2,
-    .pencil__body3,
-    .pencil__eraser,
-    .pencil__eraser-skew,
-    .pencil__point,
-    .pencil__rotate,
-    .pencil__stroke {
-    animation-duration: 3s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
+    100% {
+        transform: rotate(0.5turn)
+    }
+}
+
+@keyframes l5-1 {
+
+    10%,
+    70% {
+        background-size: 100% 205%, var(--s, 0) 100%
     }
 
-    .pencil__body1,
-    .pencil__body2,
-    .pencil__body3 {
-    transform: rotate(-90deg);
+    70%,
+    100% {
+        background-position: top, center
     }
-
-    .pencil__body1 {
-    animation-name: pencilBody1;
-    }
-
-    .pencil__body2 {
-    animation-name: pencilBody2;
-    }
-
-    .pencil__body3 {
-    animation-name: pencilBody3;
-    }
-
-    .pencil__eraser {
-    animation-name: pencilEraser;
-    transform: rotate(-90deg) translate(49px,0);
-    }
-
-    .pencil__eraser-skew {
-    animation-name: pencilEraserSkew;
-    animation-timing-function: ease-in-out;
-    }
-
-    .pencil__point {
-    animation-name: pencilPoint;
-    transform: rotate(-90deg) translate(49px,-30px);
-    }
-
-    .pencil__rotate {
-    animation-name: pencilRotate;
-    }
-
-    .pencil__stroke {
-    animation-name: pencilStroke;
-    transform: translate(100px,100px) rotate(-113deg);
-    }
-
-    /* Animations */
-    @keyframes pencilBody1 {
-    from,
-        to {
-        stroke-dashoffset: 351.86;
-        transform: rotate(-90deg);
-    }
-
-    50% {
-        stroke-dashoffset: 150.8;
-    /* 3/8 of diameter */
-        transform: rotate(-225deg);
-    }
-    }
-
-    @keyframes pencilBody2 {
-    from,
-        to {
-        stroke-dashoffset: 406.84;
-        transform: rotate(-90deg);
-    }
-
-    50% {
-        stroke-dashoffset: 174.36;
-        transform: rotate(-225deg);
-    }
-    }
-
-    @keyframes pencilBody3 {
-    from,
-        to {
-        stroke-dashoffset: 296.88;
-        transform: rotate(-90deg);
-    }
-
-    50% {
-        stroke-dashoffset: 127.23;
-        transform: rotate(-225deg);
-    }
-    }
-
-    @keyframes pencilEraser {
-    from,
-        to {
-        transform: rotate(-45deg) translate(49px,0);
-    }
-
-    50% {
-        transform: rotate(0deg) translate(49px,0);
-    }
-    }
-
-    @keyframes pencilEraserSkew {
-    from,
-        32.5%,
-        67.5%,
-        to {
-        transform: skewX(0);
-    }
-
-    35%,
-        65% {
-        transform: skewX(-4deg);
-    }
-
-    37.5%,
-        62.5% {
-        transform: skewX(8deg);
-    }
-
-    40%,
-        45%,
-        50%,
-        55%,
-        60% {
-        transform: skewX(-15deg);
-    }
-
-    42.5%,
-        47.5%,
-        52.5%,
-        57.5% {
-        transform: skewX(15deg);
-    }
-    }
-
-    @keyframes pencilPoint {
-    from,
-        to {
-        transform: rotate(-90deg) translate(49px,-30px);
-    }
-
-    50% {
-        transform: rotate(-225deg) translate(49px,-30px);
-    }
-    }
-
-    @keyframes pencilRotate {
-    from {
-        transform: translate(100px,100px) rotate(0);
-    }
-
-    to {
-        transform: translate(100px,100px) rotate(720deg);
-    }
-    }
-
-    @keyframes pencilStroke {
-    from {
-        stroke-dashoffset: 439.82;
-        transform: translate(100px,100px) rotate(-113deg);
-    }
-
-    50% {
-        stroke-dashoffset: 164.93;
-        transform: translate(100px,100px) rotate(-113deg);
-    }
-
-    75%,
-        to {
-        stroke-dashoffset: 439.82;
-        transform: translate(100px,100px) rotate(112deg);
-    }
-    }
+}
 </style>
-<div id="inn_loader" style="display: block;position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: 99999999999999999999900000000000000000000;background: #ffffffcf;">
-  <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
-    <!-- <svg xmlns="http://www.w3.org/2000/svg" height="200px" width="200px" viewBox="0 0 200 200" class="pencil">
-      <defs>
-        <clipPath id="pencil-eraser">
-          <rect height="30" width="30" ry="5" rx="5"></rect>
-        </clipPath>
-      </defs>
-      <circle transform="rotate(-113,100,100)" stroke-linecap="round" stroke-dashoffset="439.82" stroke-dasharray="439.82 439.82" stroke-width="2" stroke="currentColor" fill="none" r="70" class="pencil__stroke"></circle>
-      <g transform="translate(100,100)" class="pencil__rotate">
-        <g fill="none">
-          <circle transform="rotate(-90)" stroke-dashoffset="402" stroke-dasharray="402.12 402.12" stroke-width="30" stroke="hsl(223,90%,50%)" r="64" class="pencil__body1"></circle>
-          <circle transform="rotate(-90)" stroke-dashoffset="465" stroke-dasharray="464.96 464.96" stroke-width="10" stroke="hsl(223,90%,60%)" r="74" class="pencil__body2"></circle>
-          <circle transform="rotate(-90)" stroke-dashoffset="339" stroke-dasharray="339.29 339.29" stroke-width="10" stroke="hsl(223,90%,40%)" r="54" class="pencil__body3"></circle>
-        </g>
-        <g transform="rotate(-90) translate(49,0)" class="pencil__eraser">
-          <g class="pencil__eraser-skew">
-            <rect height="30" width="30" ry="5" rx="5" fill="hsl(223,90%,70%)"></rect>
-            <rect clip-path="url(#pencil-eraser)" height="30" width="5" fill="hsl(223,90%,60%)"></rect>
-            <rect height="20" width="30" fill="hsl(223,10%,90%)"></rect>
-            <rect height="20" width="15" fill="hsl(223,10%,70%)"></rect>
-            <rect height="20" width="5" fill="hsl(223,10%,80%)"></rect>
-            <rect height="2" width="30" y="6" fill="hsla(223,10%,10%,0.2)"></rect>
-            <rect height="2" width="30" y="13" fill="hsla(223,10%,10%,0.2)"></rect>
-          </g>
-        </g>
-        <g transform="rotate(-90) translate(49,-30)" class="pencil__point">
-          <polygon points="15 0,30 30,0 30" fill="hsl(33,90%,70%)"></polygon>
-          <polygon points="15 0,6 30,0 30" fill="hsl(33,90%,50%)"></polygon>
-          <polygon points="15 0,20 10,10 10" fill="hsl(223,10%,10%)"></polygon>
-        </g>
-      </g>
-    </svg> -->
-    <img src="<?php echo base_url('innlode.gif') ?>" alt="">
-  </div>
+
+<div id="loader_div"
+    style="position: fixed;top: 0;left: 0;height: 100vh;width: 100vw;background-color: #ffffffa8;z-index: 99999999999;display: flex;overflow: hidden;align-items: center;justify-content: center;">
+    <div class="loaderss" style="margin: auto;"></div>
 </div>
-
-
-<!-- loader -->
 
 
 
@@ -455,7 +297,7 @@ input:checked+.slider:after {
                         <div class="col-md-12">
                             <div class="form-group col-md-6">
                                 <label for=""> Old Salary</label>
-                                <input  class="form-control"  type="number" id="salary_review_old_amount"  readonly>
+                                <input class="form-control" type="number" id="salary_review_old_amount" readonly>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for=""> New Salary</label>
@@ -464,7 +306,8 @@ input:checked+.slider:after {
                         </div>
                         <div class="col-md-12">
                             <label for="">Remarks</label>
-                            <textarea name="salary_review_remark" style="width:-webkit-fill-available; height: 64px;" id="salary_review_remark" ></textarea>
+                            <textarea name="salary_review_remark" style="width:-webkit-fill-available; height: 64px;"
+                                id="salary_review_remark"></textarea>
                         </div>
                         <div class="float-right mr-3">
                             <button class="btn btn-primary" type="submit">Submit</button>
@@ -769,7 +612,8 @@ p {
                                         <h4 class="">
                                             <?php echo $row->first_name. ' '.$row->last_name;?> </h4>
                                         <p class="">
-                                            Review on <?php echo date("d-M-Y", strtotime($row->salary_review_date));?> </p>
+                                            Review on <?php echo date("d-M-Y", strtotime($row->salary_review_date));?>
+                                        </p>
                                     </a>
                                 </li>
                                 <?php }
@@ -1187,12 +1031,11 @@ th {
                                             <th style="padding: 3px 8px!important;">Status</th>
                                             <td style="padding: 3px 8px!important;">
                                                 <select class="form-control" id="status_m" name="status"
-                                                    <?=$user[0]->user_role_id==3 ? $user[0]->is_emp_lead != 2 ? 'disabled' : '' : ''?>
-                                                     >
+                                                    <?=$user[0]->user_role_id==3 ? $user[0]->is_emp_lead != 2 ? 'disabled' : '' : ''?>>
                                                     <option value="1">Pending</option>
                                                     <option value="4">First Level Approval</option>
                                                     <?php if (in_array($user[0]->user_role_id, array(1,2))) { ?>
-                                                        <option value="2">Approved</option>
+                                                    <option value="2">Approved</option>
                                                     <?php } ?>
                                                     <option value="3">Rejected</option>
                                                 </select>
@@ -1360,7 +1203,7 @@ th {
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Current Salary</label>
-                        <input class="form-control" id="old_salary" name="old_salary" value=""  />
+                        <input class="form-control" id="old_salary" name="old_salary" value="" />
                     </div>
                 </div>
 
@@ -1758,7 +1601,7 @@ function salary_review_modal_a(id) {
             id: id
         },
         success: function(response) {
-            var data=JSON.parse(response);
+            var data = JSON.parse(response);
             $('#salary_review_emp_name').text(data.first_name + ' ' + data.last_name);
             $('#salary_review_old_amount').val(data.salary);
         }
