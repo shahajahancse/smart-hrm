@@ -35,8 +35,10 @@ class Client_attendance extends API_Controller
                                         ->from("client_attendance ca")
                                         ->join('xin_employees xe', 'ca.emp_id = xe.user_id')
                                         ->where("ca.emp_id", $userid)
+                                        ->order_by('ca.id', 'desc')
                                         ->get()
                                         ->result();
+            
             $this->api_return([
                 'status'    =>  true,
                 'message'    =>  'successful',
@@ -88,7 +90,11 @@ class Client_attendance extends API_Controller
                 file_put_contents($imagePath, $imageData);
                 $live_image = 'uploads/live_image/' . $filename;
             } else {
-                $live_image = '';
+                $this->api_return([
+                    'status'  =>   false,
+                    'message'  =>   'Image not found',
+                    'data'     =>   [],
+                ], 404);
             }
             $data = array(
                 'emp_id' => $emp_id,
