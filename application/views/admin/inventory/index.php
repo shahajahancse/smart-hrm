@@ -71,7 +71,7 @@
 
         <div class="divstats-info col-md-3" style="background-color: #F1CFEE;">
             <div class="h5">Total Requisition</div>
-            <div class="h5"><?= 0 //$requisition_list->using_list  ?></div>
+            <div class="h5"><?= $requisition_list->using_list  ?></div>
         </div>
         <div class="divstats-info col-md-3" style="background-color: #E5E5E5;">
             <div class="h5">Return Items</div>
@@ -79,7 +79,7 @@
         </div>
         <div class="divstats-info col-md-3" style="background-color: #D2F9EE;">
             <div class="h5">Pending Items</div>
-            <div class="h5"><?= 0 //$requisition_list->status ?></div>
+            <div class="h5"><?= $requisition_list->status ?></div>
         </div>
     </div>
 </div>

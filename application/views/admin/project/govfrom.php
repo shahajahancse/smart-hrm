@@ -102,22 +102,11 @@ input:checked+.slider:after {
                 <strong>End Date<span style="color: red;">*</span></strong>
             </div>
         </div>
-        <!-- <div class="col-md-2">
+        <div class="col-md-2">
             <div class="inputBox">
                 <input required="required" type="date" value="<?= date('Y-m-d') ?>" name="first_installment_date" id="first_installment_date">
                 <strong>First Installment Date<span style="color: red;">*</span></strong>
             </div>
-        </div> -->
-    </div>
-    <div class="row">
-        <h5>Installment Section</h5>
-        <div id="installmentform" style="padding: 1px 22px;">
-            <!-- <div class="col-md-6">
-                <div class="inputBox">
-                    <input required type="number" name="software_Budget">
-                    <strong>Software Budget<span style="color: red;">*</span></strong>
-                </div>
-            </div> -->
         </div>
     </div>
     <div class="row">

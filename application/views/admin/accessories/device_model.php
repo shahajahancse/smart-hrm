@@ -19,7 +19,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
           <div class="row">
             <div class="col-md-3">
               <label for="Status">Category Name</label>
-              <select name="cat_id" class="form-control" required>  
+              <select id="cat_iddd" name="cat_id" class="form-control" required>  
                 <option value="">Select</option>
                 <?php foreach ($categories as $key => $category) {?>
                 <option value="<?php echo $category->id ?>" <?php echo (!empty($row->cat_id) && $row->cat_id == $category->id)? 'selected':''; ?> ><?php echo $category->cat_name ?></option>
@@ -124,6 +124,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
   $(document).ready(function() {
     $('#example').DataTable();
+      $('#cat_iddd').select2();
   });
 
 </script>

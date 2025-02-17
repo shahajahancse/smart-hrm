@@ -25,7 +25,7 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($requests as $key => $row) { ?>
+        <?php foreach ($requests as $key => $row) {  ?>
           <tr>
             <td class="text-center"><?= $key + 1 ?></td>
             <td class="text-center"><?= $row->cat_name ?></td>

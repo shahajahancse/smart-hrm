@@ -1,5 +1,4 @@
 <?php
-
 $session = $this->session->userdata('username');
 $system = $this->Xin_model->read_setting_info(1);
 $company_info = $this->Xin_model->read_company_setting_info(1);

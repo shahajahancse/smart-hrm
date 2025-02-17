@@ -105,8 +105,8 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
           </div>
 
           <div class="form-group" id="user_idd">
-            <label for="user_id">Select User Name</label>
-            <select class="form-control" id="user_id" name="user_id">
+            <label for="user_id">Select User Name</label></br>
+            <select class="" id="user_id" name="user_id" style="    width: 570px !important;">
               <option value="">Select</option>
               <?php 
                 $rows = $this->db->select('user_id, first_name, last_name')->where_in('status', [1, 4, 5])->get('xin_employees')->result();
@@ -134,7 +134,7 @@ $role_resources_ids = $this->Xin_model->user_role_resource();
 
 <script>
 $(document).ready(function() {
-  $('user_id').select2();
+    $('#user_id').select2();
   loadTableData();
   $('#ex_desk_noo').hide();
    $('#modal_title').text('Add Desk');

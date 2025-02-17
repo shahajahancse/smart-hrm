@@ -11,6 +11,8 @@
     <div class="container" align="center">
 
         <?php
+// dd($all_employees);
+
 $active_meal = 0;
 $inactive_meal  = 0;
 $total_emp_cost  = 0;

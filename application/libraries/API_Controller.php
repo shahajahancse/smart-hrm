@@ -95,7 +95,6 @@ class API_Controller extends CI_Controller
 
     public function _APIConfig($config = [])
     {
-       // dd($config);
         // return other data
         if(isset($config['data']))
             $this->return_other_data = $config['data'];
@@ -133,7 +132,6 @@ class API_Controller extends CI_Controller
      */
     public function _allow_methods(array $methods)
     {
-        //dd($methods);
         $REQUEST_METHOD = $this->CI->input->server('REQUEST_METHOD', TRUE);
 
         // check request method in `$allowed_http_methods` array()

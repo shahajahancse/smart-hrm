@@ -28,10 +28,7 @@ class Salary_model extends CI_Model {
             $department_id   = $row->department_id;
             $designation_id  = $row->designation_id;
             $salary          = $row->salary;
-            if ($salary < 1) {
-                $salary= $row->basic_salary;
-            }
-
+            
             $first_date  = date("Y-m-d", strtotime($process_month));
             // skip salary proccess
             // if($salary < 1) {

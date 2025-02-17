@@ -175,9 +175,8 @@ exit();
 				
 				<td>
 					<?php 
-						
 						echo "Earn Leave = ".(12-$total_leave->earn_leave) . ", Sick Leave = ".(4-$total_leave->sick_leave);
-					?>
+					 ?>
 				</td>
                 <?php
                 if ($row->status==1) {

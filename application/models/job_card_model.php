@@ -61,6 +61,7 @@ class Job_card_model extends CI_Model{
 				xin_attendance_time.comment,
 				xin_attendance_time.late_status,
 				xin_attendance_time.late_time,
+
 			');
 		$this->db->from('xin_attendance_time');
 		$this->db->where('xin_attendance_time.employee_id', $emp_id);

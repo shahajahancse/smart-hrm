@@ -389,7 +389,6 @@ $('#add_project_form').submit(function(event) {
 });
 </script>
 
-
 <script>
 function setinstallmentdate() {
     var instalment = parseInt($('#instalment').val()); // Convert to a number
@@ -400,82 +399,6 @@ function setinstallmentdate() {
         startDateObj.setDate(startDateObj.getDate() + instalment);
         var formattedEndDate = formatDate(startDateObj);
         $('#end_date').val(formattedEndDate);
-    }
-    getinstallmentfrom()
-}
-
-// Function to convert a number to its corresponding word representation
-function numberToWords(number) {
-    const units = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
-    const teens = ['Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen',
-        'Nineteen'];
-    const tens = ['Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-
-    function convertBelowHundred(num) {
-        if (num < 10) {
-            return units[num];
-        } else if (num < 20) {
-            return teens[num - 11];
-        } else {
-            const tenDigit = Math.floor(num / 10);
-            const unitDigit = num % 10;
-            return `${tens[tenDigit - 1]}${unitDigit !== 0 ? `-${units[unitDigit]}` : ''}`;
-        }
-    }
-
-    if (number < 10) {
-        return units[number];
-    } else if (number < 100) {
-        return convertBelowHundred(number);
-    } else if (number < 1000) {
-        const hundredDigit = Math.floor(number / 100);
-        const remainingDigits = number % 100;
-        return `${units[hundredDigit]} Hundred${remainingDigits !== 0 ? ` and ${convertBelowHundred(remainingDigits)}` : ''}`;
-    } else if (number < 10000) {
-        const thousandDigit = Math.floor(number / 1000);
-        const remainingDigits = number % 1000;
-        return `${units[thousandDigit]} Thousand${remainingDigits !== 0 ? ` ${convertBelowHundred(remainingDigits)}` : ''}`;
-    } else {
-        return 'Number out of range';
-    }
-}
-function formatDate(date) {
-            var year = date.getFullYear();
-            var month = String(date.getMonth() + 1).padStart(2, '0');
-            var day = String(date.getDate()).padStart(2, '0');
-            return year + '-' + month + '-' + day;
-        }
-function getinstallmentfrom() {
-    var instalment = parseInt($('#instalment').val());
-    var software_Budget = parseInt($('#software_Budget').val());
-    var start_date = new Date($('#start_date').val());
-    var end_date = new Date($('#end_date').val());
-    if (!isNaN(instalment) && start_date && end_date) {
-        var fee_per_installment = parseInt(software_Budget / instalment);
-
-        var totalDays = Math.ceil((end_date - start_date) / (1000 * 60 * 60 * 24));
-        var daysPerInstallment = Math.ceil(totalDays / instalment);
-
-        var installmentDates = [];
-        for (var i = 1; i <= instalment; i++) {
-            var installmentDate = new Date(start_date);
-            installmentDate.setDate(installmentDate.getDate() + (i - 1) * daysPerInstallment);
-            installmentDates.push(formatDate(installmentDate));
-        }
-
-        console.log(installmentDates);
-        $('#installmentform').empty();
-        // Append installment input elements to the div with id "installmentform"
-        for (var i = 0; i < installmentDates.length; i++) {
-            var sequenceWord = numberToWords(i + 1); // Using the numberToWords function
-            var inputElement = $(
-                '<div class="row" style="box-shadow: 0px 0px 2px 3px #b0b0b0;padding: 11px;margin: 7px;"><h5>' + sequenceWord +
-                ' installment</h5><div class="col-md-6"><div class="inputBox"><input required type="date" name="soft_intmnt_dates[]" value="' +
-                installmentDates[i] + '"><strong>Installment Date<span style="color: red;">*</span></strong></div></div><div class="col-md-6"><div class="inputBox"><input required type="number" name="soft_intmnt_prements[]" value="' +
-                fee_per_installment +
-                '"><strong>installment fee<span style="color: red;">*</span></strong></div><input type="hidden" name="soft_intmnt_status[]" value=0></div></div>');
-            $('#installmentform').append(inputElement);
-        }
     }
 }
 </script>

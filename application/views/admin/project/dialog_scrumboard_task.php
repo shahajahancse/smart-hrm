@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 if(isset($_GET['jd']) && isset($_GET['is_ajax']) && $_GET['data']=='scrum_board'){
 $session = $this->session->userdata('username');
-
 ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <div class="modal-header">
@@ -45,13 +44,13 @@ $session = $this->session->userdata('username');
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="start_date"><?php echo $this->lang->line('xin_start_date');?></label>
-                  <input class="form-control " placeholder="<?php echo $this->lang->line('xin_start_date');?>"  name="start_date" type="date" value="" id="start_date">
+                  <input class="form-control edate" placeholder="<?php echo $this->lang->line('xin_start_date');?>" readonly name="start_date" type="text" value="" id="start_date">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="end_date"><?php echo $this->lang->line('xin_end_date');?></label>
-                  <input class="form-control " placeholder="<?php echo $this->lang->line('xin_end_date');?>"  name="end_date" type="date" value="" id="end_date">
+                  <input class="form-control edate" placeholder="<?php echo $this->lang->line('xin_end_date');?>" readonly name="end_date" type="text" value="" id="end_date">
                 </div>
               </div>
             </div>

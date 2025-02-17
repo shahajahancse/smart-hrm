@@ -482,26 +482,28 @@ class inventory_model extends CI_Model
 			pa.description,
 			pa.status,
 			pa.remark,
+			pa.use_number,
 			pa.number,
 			pa.image,
-			
+			pa.user_id,
+			paw.provide_date,
+			MAX(e.first_name) AS first_name,
+			MAX(e.last_name) AS last_name,
+
 			pac.cat_name,
 			pac.cat_short_name,
 			MAX(pam.model_name) AS model_name,
 			MAX(mobile_numbers.number) AS mobile_number,
-			');
-			// paw.provide_date,
-			// MAX(e.first_name) AS first_name,
-			// MAX(e.last_name) AS last_name,
-			// paw.provide_date
+			paw.provide_date
+		');
 		$this->db->from('product_accessories as pa');
-		// $this->db->join('product_accessories_working as paw', 'pa.user_id = paw.user_id', 'left');
-		// $this->db->join('xin_employees as e', 'paw.user_id = e.user_id', 'left');
+		$this->db->join('product_accessories_working as paw', 'pa.user_id = paw.user_id', 'left');
+		$this->db->join('xin_employees as e', 'paw.user_id = e.user_id', 'left');
 		$this->db->join('product_accessories_model as pam', 'pa.device_model = pam.id', 'left');
 		$this->db->join('product_accessory_categories as pac', 'pa.cat_id = pac.id', 'left');
 		$this->db->join('mobile_numbers', 'pa.number = mobile_numbers.id', 'left');
 		if ($session['role_id'] == 3 && $session != null) {
-			// $this->db->where('paw.user_id', $session['user_id']);
+			$this->db->where('paw.user_id', $session['user_id']);
 		}
 		$this->db->group_by('pa.id');
 		$data = $this->db->get()->result();
@@ -556,14 +558,15 @@ class inventory_model extends CI_Model
 					xin_employees.last_name,
 					move_list.*
 		')
-		->from('product_accessories')
-		->join("move_list", "move_list.user_id = product_accessories.user_id")
-		->join("xin_employees", "xin_employees.user_id = product_accessories.user_id")
+		->from('move_list')
+		->join("product_accessories", "move_list.device_id = product_accessories.device_model")
+		->join("xin_employees", "xin_employees.user_id = move_list.user_id")
 		->join("product_accessories_model", "product_accessories.device_model = product_accessories_model.id")
 		->join("product_accessory_categories", "product_accessory_categories.id = product_accessories.cat_id")
 		->where('product_accessories.status',5)
 		->where('product_accessories.move_status',2)
 		->where('move_list.status',2);
+		// dd($this->db->get()->result());
 		return $this->db->get()->result();
 	} 
 
