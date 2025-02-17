@@ -629,7 +629,7 @@ class Timesheet extends MY_Controller {
 			}
 		}
 
-			if($start_date <= date('Y-m-d',strtotime('-4 day'))){
+			if($end_date <= date('Y-m-d',strtotime('-4 day'))){
 				$this->session->set_flashdata('error', 'You cannot apply for leave three days after the intended date.');
 				redirect('admin/leave/emp_leave');
 			}

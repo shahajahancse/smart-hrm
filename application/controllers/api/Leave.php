@@ -95,7 +95,7 @@ class Leave extends API_Controller
             }
 
 
-            if($start_date<= date('Y-m-d',strtotime('-4 day'))){
+            if($end_date<= date('Y-m-d',strtotime('-4 day'))){
 				$this->api_return([
                     'status'  =>   false,
                     'message'  =>   'Leave start date must be greater than 3 days',
