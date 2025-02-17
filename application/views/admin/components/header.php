@@ -136,10 +136,10 @@ if($theme[0]->animation_style == '') {
     }
 }
 </style>
-
-<div id="loader_div"
-    style="position: fixed;top: 0;left: 0;height: 100vh;width: 100vw;background-color: #ffffffa8;z-index: 99999999999;display: flex;overflow: hidden;align-items: center;justify-content: center;">
-    <div class="loaderss" style="margin: auto;"></div>
+<div id="inn_loader" style="display: block;position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: 99999999999999999999900000000000000000000;background: #ffffffcf;">
+  <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+    <img src="<?php echo base_url('innlode.gif') ?>" alt="">
+  </div>
 </div>
 
 
@@ -409,7 +409,7 @@ p {
                 $fcount = 0;
                 if(in_array($user[0]->user_role_id, array(1,2,4))) {
                     $leaveapp = $this->Xin_model->get_notify_leave_applications();
-                    $start_date = date('Y-m-d', strtotime('-4 month', strtotime(date("Y-m-01"))));
+                    $start_date = date('Y-m-d', strtotime('-6 month', strtotime(date("Y-m-01"))));
                     $end_date = date('Y-m-d', strtotime('+3 month', strtotime(date("Y-m-t"))));
                     $incrementapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 1);
                     $probationapp = $this->Xin_model->get_notify_incr_prob_applications($start_date, $end_date, 5);
@@ -557,7 +557,7 @@ p {
                                 <?php foreach($incrementapp as $row) {?>
                                 <?php
                                         $ipdate = $row->notify_incre_prob;
-                                    $red_zone = date('Y-m-d', strtotime('-20 days', strtotime(date($ipdate))));
+                                        $red_zone = date('Y-m-d', strtotime('-20 days', strtotime(date($ipdate))));
                                     ?>
                                 <li class="lir notli">
                                     <!-- start message -->

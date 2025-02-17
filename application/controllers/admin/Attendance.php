@@ -245,7 +245,6 @@ class Attendance extends MY_Controller
                                 'reason'	  => $reason,
                                 'place_adress'	  => $location,
                                 
-
                             );
                         } elseif ($in_time != '' && $out_time != '') {
                             $comData = array(
@@ -1218,6 +1217,16 @@ class Attendance extends MY_Controller
             $data['subview'] 	 = $this->load->view("admin/attendance/employee_movement_flor", $data, true);
             return $data;
         }
+    }
+    public function change_group($id){
+        $session = $this->session->userdata('username');
+        $userid  = $session[ 'user_id' ];
+        $data = array(
+            'user_role_id' => $id
+        );
+        $this->db->where('user_id',  $userid);
+        $this->db->update('xin_employees', $data);
+        echo 'Success';
     }
     public function employee_movement_outside_office()
     {

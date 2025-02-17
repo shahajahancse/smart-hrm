@@ -43,7 +43,7 @@
                 <?= $row->status== 2?"<i class='fa fa-dot-circle-o' style='color:green'></i> Used": ""?>
               </span>
             </td>
-            <td class="text-center"><?= $row->floor == 3 ? "3rd Floor" : "5th Floor"?></td>
+            <td class="text-center"><?= $row->floor == 3 ? "3rd Floor" : ($row->floor == 5 ? "5th Floor" : "Out Side")?></td>
             <td class="text-center"><?= $row->purpose?></td>
 
             <td class="text-center">

@@ -4,7 +4,7 @@
 	$theme = $this->Xin_model->read_theme_info(1);
 ?>
 <?php
-	if(in_array($user_info[0]->user_role_id, array(1,2,4,5,6))):
+	if(in_array($user_info[0]->user_role_id, array(1,2,4,5,6,99))):
 
 $dd='dashboard_3';
 

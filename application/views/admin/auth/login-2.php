@@ -1,6 +1,3 @@
-
-
-
 <?php $system = $this->Xin_model->read_setting_info(1);?>
 <?php $company = $this->Xin_model->read_company_setting_info(1);?>
 <?php $site_lang = $this->load->helper('language');?>
@@ -25,8 +22,8 @@ else:
 	$flg_icn = $lang_code[0]->language_flag;
 	$flg_icn = '<img src="'.base_url().'uploads/languages_flag/'.$flg_icn.'">';
 endif;
-if($system[0]->enable_auth_background!='yes'):
-	$auth_bg = 'style="background-image: none;"';
+if($system[0]->enable_auth_background=='yes'):
+	$auth_bg = 'style="background-position: center center; background-size: cover; background-image: url('.base_url().'skin/hrsale_assets/img/bg/bg-4.jpg");"';
 else:
 	$auth_bg = '';	
 endif;
@@ -52,7 +49,6 @@ endif;
 <link rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/vendor/toastr/toastr.min.css">
 <!-- animate -->
 <link media="all" type="text/css" rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/animate.css">
-<link media="all" type="text/css" rel="stylesheet" href="<?php echo base_url();?>skin/hrsale_assets/css/hrsale/xin_login_2.css">
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -63,7 +59,7 @@ endif;
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body <?php echo $auth_bg;?>>
+<body class="hold-transition login-page" <?php echo $auth_bg;?>>
 <img id="hrload-img" src="<?php echo base_url()?>skin/img/loading.gif" style="">
 <style type="text/css">
 #hrload-img {
@@ -74,98 +70,63 @@ endif;
     margin-top: 0px;
 }
 </style>
-    <!-- Start Preloader -->
-    
-    <!-- Preloader End -->
-    
-    <div class="container-fluid">
-      <div class="row">
-        <div class="authfy-container col-xs-12 col-sm-10 col-md-8 col-lg-6 col-sm-offset-1 col-md-offset-2 col-lg-offset-3">
-          <div class="col-sm-5 authfy-panel-left">
-            <div class="brand-col">
-              <div class="headline">
-                <!-- brand-logo start -->
-                <div class="brand-logo">
-                  <img src="<?php echo base_url();?>uploads/logo/signin/<?php echo $company[0]->sign_in_logo;?>" alt="hrsale-logo">
-                </div>
-                <div>
-                 <p style="color: black;font-size: 18px;font-weight: bold;"><?= $company[0]->company_name?></p>
-                </div>
-
-                <p ><?php echo $this->lang->line('xin_hrsale_hr_system_login_panel');?></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-7 authfy-panel-right">
-            <!-- authfy-login start -->
-            <div class="authfy-login">
-              <!-- panel-login start -->
-              <?php if($this->session->flashdata('reset_password_success')):?>
-              <div class="alert alert-success alert-dismissible">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                  <?php echo $this->lang->line('xin_reset_password_success_sent_email');?> </div>
-              <?php endif;?>
-              <div class="authfy-panel panel-login text-center active">
-                <div class="authfy-heading">
-                  <h3 class="auth-title"><?php echo $this->lang->line('xin_hrsale_login_to_your_account');?></h3>
-                </div>
-                <div class="row">
-                  <div class="col-xs-12 col-sm-12">
-                    <?php $attributes = array('class' => 'form-hrsale', 'name' => 'hrm-form', 'id' => 'hrm-form', 'data-redirect' => 'dashboard',
-					'data-form-table' => 'login', 'data-is-redirect' => '1', 'autocomplete' => 'off');?>
-					<?php $hidden = array('user_id' => 0);?>
-                    <?php echo form_open('admin/auth/login', $attributes, $hidden);?>
-                      <?php
-						if($system[0]->employee_login_id=='username'):
-							$login_txt = $this->lang->line('xin_login_username');
-							$login_title = $this->lang->line('dashboard_username');
-							$ilogn_info = 'fionagrace';
-							$ilogn_info2 = 'jhonsmith';
-						else:
-							$login_txt = $this->lang->line('xin_login_email');
-							$login_title = $this->lang->line('dashboard_email');
-							$ilogn_info = 'administrator@hrsale.com';
-							$ilogn_info2 = 'jsmt12@hrsale.com';
-						endif;?>
-						<div class="form-group">
-                        <input type="text" id="iusername" name="iusername" class="form-control" placeholder="<?php echo $login_txt;?>" autocomplete="off">
-                      </div>
-                      <div class="form-group">
-                        <div class="pwdMask">
-                          <input type="password" class="form-control" id="ipassword" name="ipassword" placeholder="Enter Password" autocomplete="off">
-                        </div>
-                      </div>
-
-
-
-
-
-
-
-                      <!-- start remember-row -->
-                      <div class="row remember-row">
-                        <div class="col-xs-6 col-sm-6">
-                          &nbsp;
-                        </div>
-                        <!-- <div class="col-xs-6 col-sm-6">
-                          <p class="forgotPwd">
-                            <a href="<?php echo site_url('admin/auth/forgot_password');?>" class="lnk-toggler"><?php echo $this->lang->line('xin_forgot_password_link');?></a>
-                          </p>
-                        </div> -->
-                      </div> <!-- ./remember-row -->
-                      <div class="form-group">
-                        <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => 'btn btn-primary btn-block btn-lg save', 'content' => '<i class="fa fa-lock"></i> '.$this->lang->line('xin_login'))); ?>
-                      </div>
-                    <?php echo form_close(); ?>
-                  </div>
-                </div>
-              </div> <!-- ./panel-login -->
-            </div>
-          </div>
-        </div>
-      </div> <!-- ./row -->
-    </div> <!-- ./container -->	
+<div class="login-box animated fadeInDownBig"> 
+  
+  <!-- /.login-logo -->
+  <?php if($this->session->flashdata('reset_password_success')):?>
+  <div class="alert alert-success alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <?php echo $this->lang->line('xin_reset_password_success_sent_email');?> </div>
+  <?php endif;?>
+  <div class="login-box-body">
+    <div class="login-logo"> 
+      <!--<b style="color:#FFF;"><?php echo $company[0]->company_name;?></b>hrm--> 
+      <img src="<?php echo base_url();?>uploads/logo/signin/<?php echo $company[0]->sign_in_logo;?>" alt="hrsale logo"> </div>
+    <p class="login-box-msg"><?php echo $this->lang->line('xin_admin_login');?><?php echo $company[0]->company_name;?></p>
+    <?php $attributes = array('class' => 'form-hrsale', 'name' => 'hrm-form', 'id' => 'hrm-form', 'data-redirect' => 'dashboard', 'data-form-table' => 'login', 'data-is-redirect' => '1', 'autocomplete' => 'off');?>
+    <?php $hidden = array('user_id' => 0);?>
+    <?php echo form_open('admin/auth/login', $attributes, $hidden);?>
+    <?php
+	if($system[0]->employee_login_id=='username'):
+		$login_txt = $this->lang->line('xin_login_username');
+		$login_title = $this->lang->line('dashboard_username');
+		$ilogn_info = 'fionagrace';
+	    $ilogn_info2 = 'jhonsmith';
+	else:
+		$login_txt = $this->lang->line('xin_login_email');
+		$login_title = $this->lang->line('dashboard_email');
+		$ilogn_info = 'administrator@hrsale.com';
+		$ilogn_info2 = 'jsmt12@hrsale.com';
+	endif;?>
+    <div class="form-group has-feedback">
+      <input type="text" id="iusername" name="iusername" class="form-control" placeholder="<?php echo $login_txt;?>" autocomplete="off">
+      <span class="glyphicon glyphicon-envelope form-control-feedback"></span> </div>
+    <div class="form-group has-feedback">
+      <input type="password" class="form-control" id="ipassword" name="ipassword" placeholder="Enter Password" autocomplete="off">
+      <span class="glyphicon glyphicon-lock form-control-feedback"></span> </div>
+    <div class="row">
+      <!-- /.col -->
+      <div class="col-xs-4 pull-right"> <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => 'btn btn-primary btn-block btn-flat save', 'content' => '<i class="fa fa-lock"></i> '.$this->lang->line('xin_login'))); ?> </div>
+      <!-- /.col --> 
+    </div>
+    <?php echo form_close(); ?>
+    <hr>
    
+    <hr>
+    <div class="lockscreen-footer text-center">
+      <?php if($system[0]->enable_current_year=='yes'):?>
+      <?php echo date('Y');?>
+      <?php endif;?>
+      © <?php echo $system[0]->footer_text;?>
+      <?php if($system[0]->enable_page_rendered=='yes'):?>
+      - <?php echo $this->lang->line('xin_page_rendered_text');?> <strong>{elapsed_time}</strong> seconds.
+      <?php endif; ?>
+    </div>
+  </div>
+  <!-- /.login-box-body --> 
+</div>
+<!-- /.login-box --> 
+
 <!-- jQuery 3 --> 
 <script src="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/jquery/dist/jquery.min.js"></script> 
 <!-- Bootstrap 3.3.7 --> 
@@ -181,11 +142,13 @@ $(document).ready(function(){
 	toastr.options.preventDuplicates = true;
 	toastr.options.positionClass = "<?php echo $system[0]->notification_position;?>";
 	var site_url = '<?php echo site_url(); ?>';
+	
 });
 </script> 
 <script type="text/javascript">
 var site_url = '<?php echo base_url(); ?>';
-var processing_request = '<?php echo $this->lang->line('xin_processing_request');?>';</script> 
+var processing_request = '<?php echo $this->lang->line('xin_processing_request');?>';
+</script> 
 <script type="text/javascript" src="<?php echo base_url();?>skin/hrsale_assets/hrsale_scripts/xin_login.js"></script> 
 <script type="text/javascript">
 $(document).ready(function(){

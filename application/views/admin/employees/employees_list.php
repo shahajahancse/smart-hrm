@@ -638,7 +638,9 @@
         
 
         <h3 class="box-title">Employee List</h3>
-        <!-- <?php if($user_info[0]->user_role_id==1) { ?> -->
+        <!-- <?php 
+        //if($user_info[0]->user_role_id==1) {
+             ?> -->
         <div class="box-tools pull-right">
             <button class="btn btn-sm btn-info" id="inactive">Left Or Resign List</button>
             <a class="text-dark collapsed" data-toggle="collapse" href="#filter_hrsale" aria-expanded="false">
@@ -652,7 +654,7 @@
                         target="_blank"><?php echo $this->lang->line('xin_filter_employement_report');?></a></li>
             </ul>
         </div>
-        <!-- //<?php } ?> -->
+        <!-- //<?php //} ?> -->
     </div>
 
     <div class="box-body">

@@ -50,7 +50,7 @@
 					<td><?php echo $report->cat_name?></td>
 					<td><?php echo $report->model_name?></td>
 					<td style=" text-transform: uppercase;"><?php echo 'MHL'.' '.$report->cat_short_name.'-'.$report->device_name_id?></td>
-                    <td><?php echo $report->floor== 3 ? $report->floor.'rd' : $report->floor.'th'?></td>
+                    <td><?php echo $report->floor== 3 ? $report->floor.'rd' :($report->floor== 5? $report->floor.'th': "Out Side")?></td>
 					<td><?php echo $report->status=='2'?"<span class='label label-success'>On Movement</span>" : "<span class='label label-info'>out of Movement</span>";?></td>
 				</tr>
 				<?php }?>

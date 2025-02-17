@@ -120,15 +120,19 @@ table tbody tr td {
                         <th>Leave Type</th>
                         <th>Reason</th>
                         <th>
-                            Team leader Approval <br>
+                            <span style="white-space: nowrap">Team leader comment</span> <br>
                             <?php if(!empty($lead_user)): ?>
                             <span style="white-space: nowrap;color: #0b24e7"> <?php echo $lead_user[0]->first_name.' '.$lead_user[0]->last_name; ?> </span>
                             <?php endif; ?>
                         </th>
-                        <th>Team leader comment</th>
+                        <th>Hr comment</th>
                         <th>Status</th>
                     </tr>
-                    <?php $tqty=0; foreach($leave_report as $key => $value){ 							
+                    <?php
+
+                    //dd($leave_report);
+                    
+                    $tqty=0; foreach($leave_report as $key => $value){ 	
 							// 		[leave_id] => 364
 							// 		[company_id] => 1
 							// 		[employee_id] => 11
@@ -171,8 +175,8 @@ table tbody tr td {
                         <td><?php echo ($value->leave_type_id==1)? '<span>Earn Leave</span>' : '<span>Sick Leave</span>';?>
                         </td>
                         <td><?php echo $value->reason; ?></td>
-                        <td><?php echo ($value->team_lead_approved==1)? '<span class="text-success">Approved</span>' : '<span class="text-danger">Pending</span>'; ?></td>
                         <td><?php echo $value->team_lead_comment; ?></td>
+                        <td><?php echo $value->remarks; ?></td>
                         <!-- 1=pending, 2=Approved, 3=Rejected, 4=First Level Approval, 5=team lead approved -->
                         <td>
                             <?php 

@@ -15,6 +15,20 @@
         </thead>
         <tbody>
             <?php foreach($alldata as $key => $request) { 
+//                 dd($request);
+//                 stdClass Object
+// (
+//     [id] => 2
+//     [employee_id] => 58
+//     [proxi_id] => 50
+//     [punch_type] => in
+//     [p_date] => 2024-07-08
+//     [p_time] => 09:40:00
+//     [status] => 0
+//     [first_name] => Md.
+//     [last_name] => Ahaduzzaman
+// )
+                
                 ?>
             <tr>
                 <td><?= $key+1 ?></td>
@@ -35,7 +49,9 @@
             <?php } ?>
         </tbody>
     </table>
+   
 </div>
+
 <script>
     $(document).ready(function() {
         $('#table_data').DataTable();

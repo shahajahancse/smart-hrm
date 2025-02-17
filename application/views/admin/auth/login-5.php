@@ -108,28 +108,11 @@ endif;
       
       <!-- /.col -->
       <div class="col-xs-12"> <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => 'btn btn-primary btn-block btn-flat save', 'content' => '<i class="fa fa-lock"></i> '.$this->lang->line('xin_login'))); ?> </div>
-      <div class="col-xs-8 m-t-20"> <a href="<?php echo site_url('admin/auth/forgot_password');?>" class="d-block small"><?php echo $this->lang->line('xin_forgot_password_link');?></a> </div>
       <!-- /.col --> 
     </div>
     <?php echo form_close(); ?>
     <hr>
-    <div class="row">
-      <div class="col-xs-8">
-        <div class="btn-group">
-          <button type="button" class="btn btn-default btn-sm" data-toggle="dropdown" aria-expanded="false">Login With</button>
-          <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <span class="caret"></span> <span class="sr-only">Login With</span> </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a class="dropdown-item login-as" href="javascript:void(0);" data-username="<?php echo $ilogn_info;?>" data-password="fgrace$$##">Super Admin</a></li>
-            <li><a class="dropdown-item login-as" href="javascript:void(0);" data-username="<?php echo $ilogn_info2;?>" data-password="jhonsmith$$##">Employee</a></li>
-          </ul>
-        </div>
-      </div>
-      <!-- /.col -->
-      <div class="col-xs-4">
-        <button type="button" class="btn btn-success btn-block btn-flat btn-sm" onClick="window.location='<?php echo site_url('client/');?>'">Client Panel </button>
-      </div>
-      <!-- /.col --> 
-    </div>
+   
     <hr>
     <div class="lockscreen-footer text-center">
       <?php if($system[0]->enable_current_year=='yes'):?>

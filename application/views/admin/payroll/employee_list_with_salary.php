@@ -28,6 +28,9 @@
                 </td>
                 <td>
                     <img style="height: 100px;width: 100px;" src="<?php echo base_url().'uploads/profile/'.$employee->profile_picture; ?>" alt=""> 
+                    <a href="<?php echo base_url().'uploads/profile/'.$employee->profile_picture; ?>" download="<?php echo $employee->first_name.' '.$employee->last_name; ?>.png">
+                        <button class="btn btn-primary">Download</button>
+                    </a>
                 </td>
             </tr>
         <?php } ?>

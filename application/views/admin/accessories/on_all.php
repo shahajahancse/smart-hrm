@@ -7,6 +7,7 @@ $get_animate = $this->Xin_model->get_content_animate();
         <thead c>
           <tr>
             <th class="text-center" style="width:60px;">No.</th>
+            <th class="text-center">User</th>
             <th class="text-center">Category</th>
             <th class="text-center">Device</th>
             <th class="text-center">Model</th>
@@ -20,7 +21,7 @@ $get_animate = $this->Xin_model->get_content_animate();
           <?php foreach ($rows as $key => $row) { ?>
             <tr class="text-center">
               <td><?= $key + 1; ?></td>
-              <!-- <td>< ?= $row->first_name.' '.$row->last_name; ?></td> -->
+              <td><?= $row->first_name.' '.$row->last_name; ?></td>
               <td><?= $row->cat_name; ?></td>
               <td><?= "MHL ".$row->cat_short_name.'-'.$row->device_name_id; ?></td>
               <td><?= $row->model_name?></td>

@@ -234,7 +234,10 @@ if($theme[0]->sub_menu_icons != ''){
           <?php } ?> 
 
           <?php if(in_array('124',$role_resources_ids)) { ?>
-            <li class="sidenav-link <?php if(!empty($arr_mod['emp_leave']))echo $arr_mod['emp_emp_leaveleave'];?>"> <a href="<?php echo site_url("admin/leave/emp_leave");?>"><i class="fa <?php echo $submenuicon;?>"></i>Leave</a></li>
+            <li class="sidenav-link">
+            <a href="<?php echo site_url("admin/leave/emp_leave");?>">
+            <i class="fa <?php echo $submenuicon;?>"></i>Leave</a>
+          </li>
            <?php 
               $session = $this->session->userdata('username');
               $user_info = $this->Xin_model->read_user_info($session['user_id']);
@@ -246,7 +249,7 @@ if($theme[0]->sub_menu_icons != ''){
               };
                 if ($lead==2) {
                   ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['emp_leave']))echo $arr_mod['emp_emp_leaveleave'];?>"> <a href="<?php echo site_url('admin/timesheet/leave');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Manage Team Leave  </a> </li>
+              <li class="sidenav-link"> <a href="<?php echo site_url('admin/timesheet/leave');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Manage Team Leave  </a> </li>
 
                 <?php } ?> 
             <?php } ?> 
@@ -851,10 +854,6 @@ $count_timelog=0;
           
           <?php if(in_array('117',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['reports_employees_active']))echo $arr_mod['reports_employees_active'];?>"> <a href="<?php echo site_url('admin/reports/employees');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_report_employees');?> </a> </li>
-          <?php } ?>
-
-          <?php if(in_array('117',$role_resources_ids)) { ?>
-          <li class="sidenav-link <?php if(!empty($arr_mod['reports_employees_active']))echo $arr_mod['reports_employees_active'];?>"> <a href="<?php echo site_url('admin/reports/employees_letter');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Employee Letter </a> </li>
           <?php } ?>
 
           <?php if(in_array('116',$role_resources_ids)) { ?>
