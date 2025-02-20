@@ -58,10 +58,10 @@ class Attendance_request extends API_Controller
             $userid=$user_data->user_id;
             $this->load->library('form_validation');
             $this->form_validation->set_rules('type', 'Type', 'trim|required');
-            $this->form_validation->set_rules('division', 'Division', 'trim|required');
-            $this->form_validation->set_rules('district', 'District', 'trim|required');
-            $this->form_validation->set_rules('upazila', 'Upazila', 'trim|required');
-            $this->form_validation->set_rules('address', 'Address', 'trim|required');
+            // $this->form_validation->set_rules('division', 'Division', 'trim|required');
+            // $this->form_validation->set_rules('district', 'District', 'trim|required');
+            // $this->form_validation->set_rules('upazila', 'Upazila', 'trim|required');
+            // $this->form_validation->set_rules('address', 'Address', 'trim|required');
             $this->form_validation->set_rules('location_latitude', 'Location Latitude', 'trim|required');
             $this->form_validation->set_rules('location_longitude', 'Location Longitude', 'trim|required');
             $this->form_validation->set_rules('remarks', 'Remarks', 'trim|required');
@@ -69,10 +69,10 @@ class Attendance_request extends API_Controller
             if ($this->form_validation->run() == true) {
                 $emp_id = $userid;
                 $type = $this->input->post('type');
-                $division = $this->input->post('division');
-                $district = $this->input->post('district');
-                $upazila = $this->input->post('upazila');
-                $address = $this->input->post('address');
+                // $division = $this->input->post('division');
+                // $district = $this->input->post('district');
+                // $upazila = $this->input->post('upazila');
+                // $address = $this->input->post('address');
                 $location_latitude = $this->input->post('location_latitude');
                 $location_longitude = $this->input->post('location_longitude');
                 $remarks = $this->input->post('remarks');
@@ -108,10 +108,6 @@ class Attendance_request extends API_Controller
                 $data = array(
                     'emp_id' => $emp_id,
                     'type' => $type,
-                    'division' => $division,
-                    'district' => $district,
-                    'upazila' => $upazila,
-                    'address' => $address,
                     'location_latitude' => $location_latitude,
                     'location_longitude' => $location_longitude,
                     'live_image' => $live_image,
