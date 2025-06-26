@@ -136,11 +136,11 @@ if($theme[0]->animation_style == '') {
     }
 }
 </style>
-<!-- <div id="inn_loader" style="display: block;position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: 99999999999999999999900000000000000000000;background: #ffffffcf;">
+<div id="inn_loader" style="display: block;position: fixed;top: 0;left: 0;right: 0;bottom: 0;z-index: 99999999999999999999900000000000000000000;background: #ffffffcf;">
   <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);">
     <img src="<?php echo base_url('innlode.gif') ?>" alt="">
   </div>
-</div> -->
+</div>
 
 
 
