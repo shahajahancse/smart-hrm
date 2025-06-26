@@ -25,13 +25,18 @@ class inventory_model extends CI_Model
 			p.id, 
 			p.product_name, 
 			pp.id as purchase_id,
+			pp.user_id, 
+			pp.updated_by, 
 			pp.quantity, 
 			pp.ap_quantity, 
 			pp.status as purchase_status,
+			pp.prev_quantity, 
+			pp.current_quantity, 
 			SUBSTR(pp.created_at, 1, 10) as created_at,
 		');
 		$this->db->from('products as p');
 		$this->db->join('products_purches_details as pp', 'pp.product_id = p.id');
+		// $this->db->join('products_requisition_details as pr', 'pr.product_id = p.id');
 		$this->db->where('p.id',  $id);
 		if($from_date != '' && $to_date !=''){
 			$this->db->where('pp.created_at between "' . $from_date . '" AND "' . $to_date . '"');
@@ -47,6 +52,8 @@ class inventory_model extends CI_Model
 			pr.quantity, 
 			pr.user_id, 
 			pr.updated_by, 
+			pr.prev_quantity, 
+			pr.current_quantity, 
 			pr.approved_qty as ap_quantity, 
 			pr.status as requisition_status,
 			SUBSTR(pr.created_at, 1, 10) as created_at,

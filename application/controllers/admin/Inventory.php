@@ -413,6 +413,7 @@ public function add_daily_package()
 					if ($item1->id == $item2->product_id) {
 						$mergedItem = (object)array_merge((array)$item1, (array)$item2);
 						$mergedItem->total_quantity = $item1->quantity - $item2->approved_qty;
+						$mergedItem->quantity = $item1->quantity;
 						$result[] = $mergedItem;
 						break;
 					}
@@ -424,13 +425,16 @@ public function add_daily_package()
 					'id' => $row->product_id,
 					'quantity' => $row->total_quantity,
 				); 
+				$data2 = [
+					'prev_quantity'   => $row->quantity,
+					'current_quantity'=> $row->total_quantity
+				];
 				$this->db->where('id',$row->product_id)->update('products', $data);
+				$this->db->where('id',$id)->update('products_requisition_details', $data2);
 			}		
-
 			$deliver=$this->db->where('id',$id)->update('products_requisition_details',['status'=>3]);
 			if($deliver){
-				$this->db->where('id',$id)->update('products_requisition_details',['status'=>3]);
-
+				// $this->db->where('id',$id)->update('products_requisition_details',['status'=>3]);
 				$this->session->set_flashdata('success', 'Handover Successfully.');
 				redirect("admin/inventory/index","refresh");
 			}
@@ -766,13 +770,17 @@ public function add_daily_package()
         $results = $this->db->where('id',$id)->get('products_purches_details')->result();
         foreach ($results as $key => $row) {
         	$product = $this->db->where('id', $row->product_id)->get('products')->row();
-        	$quantity = $product->quantity + $row->ap_quantity;	
+			$quantity = $product->quantity + $row->ap_quantity;	
+        	$this->db->where('id', $row->id)->update('products_purches_details', array('prev_quantity' => $product->quantity,
+			'current_quantity' => $quantity));
         	$this->db->where('id', $row->product_id)->update('products', array('quantity' => $quantity));
-        	$this->db->where('id', $row->id)->update('products_purches_details', array('status' => 3));
         }
-		$deliver = $this->db->where('id',$id)->update('products_purches_details',['status'=>3]);
+		$data = [
+			'status'=>3,
+		];
+		$deliver = $this->db->where('id',$id)->update('products_purches_details',$data);
 		if($deliver){
-			 $this->session->set_flashdata('success', 'Delivered Successfully.');
+			 $this->session->set_flashdata('success', 'Product Recived Successfully.');
 			 redirect("admin/inventory/purchase","refresh");
 		}
 	}
