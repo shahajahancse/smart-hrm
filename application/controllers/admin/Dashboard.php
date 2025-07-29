@@ -356,8 +356,6 @@ class Dashboard extends MY_Controller {
 		 $data['second_date'] = $second_date;
 		 $employee_id=[];
 		 $leave=  $this->Attendance_model->leavesm($emp_id = null, $first_date, $second_date);
-		 //dd($leave);
-
 		 foreach($leave as $l){
 			 if (!in_array($l->employee_id, $employee_id)) {
 				 $employee_id[] = $l->employee_id;

@@ -98,19 +98,11 @@ if ($statusC == 1) {
   <?php  $this->load->view('admin/head_bangla'); ?>
 	  <!-- <h5 class="box-title ti1">Daily Unpaid Report</h4> -->
       <h4 class="box-title  ti1"><?php echo $statusText; ?> Purchase Report</h4>
-      <?php 
-            if($first_date !=null && $second_date !=null){
-             echo "Report date: " .date("d M Y",strtotime($first_date))." to ".date("d M Y",strtotime($second_date)); 
-            }
-        ?>
         <!-- < ?php echo $this->lang->line('xin_employees_monthly_timesheet');?> -->
-        <!-- < ?php 
-            dd();
-            $convertedDate1 = date('d-m-Y', strtotime($first_date));
-            $convertedDate2 = date('d-m-Y', strtotime($second_date)); 
-        ?>
-	  <p>Report date: < ?php echo $convertedDate1; ?> To <?php echo $convertedDate2; ?> </p> -->
-  </div><br>
+        <?php $convertedDate1 = date('d-m-Y', strtotime($first_date));
+               $convertedDate2 = date('d-m-Y', strtotime($second_date)); ?>
+	  <p>Report date: <?php echo $convertedDate1; ?> To <?php echo $convertedDate2; ?> </p>
+  </div>
   
 
   <div class="container">

@@ -485,6 +485,7 @@ class Timesheet extends MY_Controller {
 
 	// leave > timesheet
 	public function leave() {
+
 		$session = $this->session->userdata('username');
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		if(empty($session)){

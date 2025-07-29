@@ -29,7 +29,14 @@ class Requisition extends API_Controller
         $user_info = api_auth($authorization);
         if($user_info['status']==TRUE){
             $user_info = $user_info['user_info'];
-            $data['using_items'] = $this->db->select('COUNT(user_id) as using_items')->where('user_id',$user_info->user_id)->where('status',1)->get('product_accessories')->row()->using_items;
+            $data['using_items'] = $this->db->select('COUNT(user_id) as using_items')
+            ->from('product_accessories')
+            ->join('employee_using_device','product_accessories.id = employee_using_device.device_id')
+            ->where('employee_using_device.user_id',$user_info->user_id)
+            ->where('status',1)
+            ->get()
+            ->row()
+            ->using_items;
             $data['requisition_list'] = $this->db->select('COUNT(user_id) as total_requisition_request, COUNT(status) as total_requisition_pending')->where('user_id',$user_info->user_id)->get('products_requisition_details')->row();
             $this->api_return([
                 'status' => true,
@@ -349,7 +356,8 @@ class Requisition extends API_Controller
             $get_user_number = $this->db->select('mobile_numbers.number')
                         ->from('mobile_numbers')
                         ->join('product_accessories','product_accessories.number = mobile_numbers.id')
-                        ->where('product_accessories.user_id',$user_info->user_id)
+                        ->join('employee_using_device','product_accessories.id = employee_using_device.device_id')
+                        ->where('employee_using_device.user_id',$user_info->user_id)
                         ->get()->row();
             $this->api_return([
                 'status' => true,

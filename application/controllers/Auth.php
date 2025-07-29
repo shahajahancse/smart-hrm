@@ -79,9 +79,6 @@ class Auth extends MY_Controller {
 				$this->session->set_userdata('c_email', $session_data);
 				$this->session->set_userdata('c_user_id', $session_data);
 				$this->session->set_userdata('user_type', $session_data);
-				$this->session->set_userdata('base_url', $session_data);
-				// dd($session_data);
-
 				$Return['result'] = $this->lang->line('xin_success_logged_in');
 				/*if($result[0]->user_type == 1){
 					$Return['user_type'] = 'employer/account';

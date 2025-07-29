@@ -154,6 +154,7 @@ input[type="email"] {
           if ($last_prement->end_date=='2023-06-15'){ } else{
             ?>
             <a style="padding: 2px;margin: 0;width: 80px;" class="btn btn-info" onclick='updateprocess()'>Update</a>
+            <a style="padding: 2px;margin: 0;width: 80px;" class="btn btn-info" onclick='deleteprocess()'>Delete process</a>
 
             <?php } ?>
             <input type="hidden"
@@ -501,6 +502,42 @@ function updateprocess() {
         document.getElementById("loading").style.visibility = "visible";
         $.ajax({
             url: '<?= base_url('admin/lunch/process') ?>', // Replace with the URL to send the request
+            method: 'GET', // Replace with the desired HTTP method (POST, GET, etc.)
+            data: {
+                firstDate: from_date,
+                secondDate: end_date,
+                probable_date: next_date,
+                status: 1
+            },
+            success: function(res) {
+                var response = JSON.parse(res);
+                if (response.error !== undefined) {
+                    showErrorAlert(response.error);
+                }else{
+                    showSuccessAlert(response.success);
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle the error response from the server
+                console.log(error);
+                document.getElementById("loading").style.visibility = "hidden";
+
+            }
+        });
+
+
+    }
+}
+function deleteprocess() {
+    var from_date = $('#from_dateu').val();
+    var end_date = $('#end_dateu').val();
+    var next_date = $('#next_dateu').val();
+    if (from_date == '' || end_date == '') {
+        alert('First Process');
+    } else {
+        document.getElementById("loading").style.visibility = "visible";
+        $.ajax({
+            url: '<?= base_url('admin/lunch/deleteprocess') ?>', // Replace with the URL to send the request
             method: 'GET', // Replace with the desired HTTP method (POST, GET, etc.)
             data: {
                 firstDate: from_date,

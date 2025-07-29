@@ -109,7 +109,7 @@
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(0)">Unpaid Employees</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="paymentreport(2)">Employees Collection
                         Sheets</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="prever_report()">Previous Report</button>
+                    <button class="btn btn-sm mr-5 sbtn mt-2" onclick="emp_lunch_payment_report()">Employee Lunch payment report</button>
                 </div>
                 <div class="tab-pane fade" id="continue" role="tabpanel" aria-labelledby="continue-tab"
                     style="margin-top: 30px;">
@@ -155,44 +155,7 @@ $(document).ready(function() {
         $('input:checkbox').not(this).prop('checked', this.checked);
     });
 
-    // on load employee
-    // $("#status").change(function() {
-    //     status = document.getElementById('status').value;
-    //     $('.rr').remove();
-    //     $('#loader2').show();
-    //     var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
-    //     $.ajax({
-    //         url: url,
-    //         type: 'GET',
-    //         data: {
-    //             "status": status
-    //         },
-    //         contentType: "application/json",
-    //         dataType: "json",
-
-
-    //         success: function(response) {
-    //             $('#loader2').hide();
-    //             arr = response.employees;
-    //             if (arr.length != 0) {
-    //                 var items = '';
-    //                 $.each(arr, function(index, value) {
-    //                     items += '<tr id="removeTr" class="rr">';
-    //                     items +=
-    //                         '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' +
-    //                         value.emp_id + '" ></td>';
-    //                     items += '<td class="success">' + value.emp_id + '</td>';
-    //                     items += '<td class="warning ">' + value.first_name + ' ' +
-    //                         value.last_name + '</td>';
-    //                     items += '</tr>';
-    //                 });
-    //                 // console.log(items);
-    //                 $('#fileDiv tr:last').after(items);
-    //             } else {
-    //                 $('#fileDiv #removeTr').remove();
-    //             }
-    //         }
-    //     });
-    // });
 });
 </script>
+
+

@@ -64,7 +64,7 @@ td {
 if($session['role_id']==1 || $session['role_id']==2 ){?>
 <div style="float: left;margin-left: 29px;margin-top: 22px;">
     <label for="date"> Enter Date</label>
-    <input type="date" id="dateoff" onchange="submitForm()" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>" style="border-radius: 5px;" max="<?php echo date('Y-m-d');?>" >
+    <input type="date" id="dateoff" onchange="submitForm()" name="date" value="<?= isset($date) ? $date : date('Y-m-d'); ?>" style="border-radius: 5px;"  >
     <input type='hidden' id="ischange" name="change" value=0>
 </div>
 <?php }else{?>
@@ -115,11 +115,13 @@ if($session['role_id']==1 || $session['role_id']==2 ){?>
                         $pay_status='<span style="color:red;">Not Paid</span>';
                     }
                 } else {
-                    if ($raw->p_stutus == 'Present' && !isset($raw->meal_amount)) {
+                    if (!isset($raw->meal_amount)) {
                         $set = 1;
                     } else {
                         $set = 0;
                     }
+
+                    
                     $this->load->model("Lunch_model");
                     $emp_data = $this->Lunch_model->get_payment_status($raw->emp_id, $date);
                     if ($emp_data == 0) {

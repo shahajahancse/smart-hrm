@@ -1,7 +1,3 @@
-<!-- < ?php
-$dept_names = $this->db->select('department_name')->from('xin_departments')->get()->result();
-$desig_names = $this->db->select('designation_name')->from('xin_designations')->get()->result();
-?> -->
 <?php $session = $this->session->userdata('username');?>
 <span class="h4" id="manu_form">Manually Entry Form</span>
 <button id="back_report" class="btn btn-sm btn-primary col-6"  style="float:right;padding: 6px 10px !important;">Back Report</button>
@@ -14,7 +10,7 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
     <a class="nav-link active" id="insert-tab" data-toggle="tab" href="#insert" role="tab" aria-controls="insert" aria-selected="true">Insert</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="delete-tab" data-toggle="tab" href="#delete" role="tab" aria-controls="delete" aria-selected="false">Delete</a>
+    <a style="color:red" class="nav-link" id="delete-tab" data-toggle="tab" href="#delete" role="tab" aria-controls="delete" aria-selected="false">Delete</a>
   </li>
 
 </ul>
@@ -23,26 +19,7 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
 
 <div class="tab-content" id="myTabContent" style="margin-top:20px">
   <div class="tab-pane fade active in" id="insert" role="tabpanel" aria-labelledby="insert-tab">
-    <!-- <div class="form-group col-lg-6">
-      <label>Department</label>
-      <select class="form-control" >
-          <option value="">Select Department</option>
-          < ?php foreach($dept_names as $dept_name){?>
-          <option value="">< ?php echo $dept_name->department_name?></option>
-          < ?php }?>
-      </select>
-    </div> -->
-    <!-- <div class="form-group col-lg-6">
-      <label>Designation</label>
-      <select class="form-control" >
-          <option value="">Select Designation</option>
-          < ?php foreach($desig_names as $desig_name){?>
-          <option value="">< ?php echo $desig_name->designation_name?></option>
-          < ?php }?>
-      </select>
-    </div> -->
     <div class="row">
-     
         <p style="padding: 0px 15px;" id="checked_value">
           <span style="padding: 0px 20px"><label >Punch Miss</label> <input checked type="radio" name="check_value" value="0"></span>
           <span><label >Meeting</label> <input class="" type="radio" name="check_value" value="1">
@@ -92,14 +69,13 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
 
 
   <div class="tab-pane fade" id="delete" role="tabpanel" aria-labelledby="delete-tab">
-
     <div class="form-group col-lg-6">
-      <button type="submit" class="btn btn-sm btn-success" style="padding: 6px 10px !important;margin-right:16px;margin-top:5px">Weekend Delete</button>
+      <button onclick="present_to_absent()" type="submit" class="btn btn-sm btn-danger" style="padding: 6px 10px !important;margin-right:16px;margin-top:5px"> Present to Absent </button>
   </div>
 
-  <div class="form-group col-lg-6">
+  <!-- <div class="form-group col-lg-6">
       <button type="submit" class="btn btn-sm btn-success" style="padding: 6px 10px !important;margin-right:16px;margin-top:5px">Holiday Delete</button>
-  </div>
+  </div> -->
 
   </div>
 </div>
@@ -109,94 +85,128 @@ $desig_names = $this->db->select('designation_name')->from('xin_designations')->
 
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 <script>
+  $(document).ready(function(){
+      $('#reason').hide();
+      $('#location').hide();
+      $('#extra_field').hide();
+      $('.clockpicker').clockpicker();
+          var input = $('.timepicker').clockpicker({
+          placement: 'bottom',
+          align: 'left',
+          autoclose: true,
+          'default': 'now'
+      });
 
-    $(document).ready(function(){
-        $('#reason').hide();
-        $('#location').hide();
-        $('#extra_field').hide();
-        $('.clockpicker').clockpicker();
-            var input = $('.timepicker').clockpicker({
-            placement: 'bottom',
-            align: 'left',
-            autoclose: true,
-            'default': 'now'
-        });
+      $("#back_report").click(function(){
+          $('#emp_report').show();
+          $('#report_title').show();
+          $("#back_report").hide();
+          $('#manu_form').hide();
+          $("#form_manually").hide();
+      });
 
-        $("#back_report").click(function(){
-            $('#emp_report').show();
-            $('#report_title').show();
-            $("#back_report").hide();   
-            $('#manu_form').hide();
-            $("#form_manually").hide();
-        });
+      $("#checked_value").click(function(){
+        var value = document.querySelector("input[type='radio'][name=check_value]:checked").value;
+        if (value == 1) {
+          $('#reason').show();
+          $('#location').show();
+          $('#extra_field').show();
 
-        $("#checked_value").click(function(){
-          var value = document.querySelector("input[type='radio'][name=check_value]:checked").value;
-          if (value == 1) {
-            $('#reason').show();
-            $('#location').show();
-            $('#extra_field').show();
-           
-          } else {
-            $('#reason').hide();
-            $('#location').hide();
-            $('#extra_field').hide();
-          }
-          // alert(value);
-        });
-    });
-
+        } else {
+          $('#reason').hide();
+          $('#location').hide();
+          $('#extra_field').hide();
+        }
+        // alert(value);
+      });
+  });
 </script>
 <script>
-      function manual_entry_ajax(e){
-        var url_b = "<?php echo base_url('admin/attendance/manual_attendance'); ?>";
-        
-        status = document.querySelector("input[type='radio'][name=check_value]:checked").value;
-        date = document.getElementById('process_date').value;
-        in_time = document.getElementById('in_time').value;
-        out_time = document.getElementById('out_time').value;
-        reason = document.getElementById('reason_value').value;
-        locationa = document.getElementById('location_va').value;
-        project_name = document.getElementById('project_name').value;
-        contact_person = document.getElementById('contact_person').value;
+  function present_to_absent(){
+    var url_ab = "<?php echo base_url('admin/attendance/present_to_absent'); ?>";
+    date = document.getElementById('process_date').value;
+    var emp_id = document.getElementsByName('select_emp_id[]');
+    var sql = get_checked_value(emp_id);
 
-        var emp_id = document.getElementsByName('select_emp_id[]');
-        var sql = get_checked_value(emp_id);
-        // alert(sql); return;
-         
-        if(sql == ''){
-          alert('Please select employee Id');
-          return ;
-        }
+    if(sql == ''){
+      alert('Please select employee Id');
+      return ;
+    }
 
-        var okyes;
-        okyes=confirm('Are you sure you want to Insert?');
-        if(okyes==false){
-          return;
-        };
+    if(date == ''){
+      alert('Please select date');
+      return ;
+    }
 
-        $.ajax({
-          url: url_b,
-          type: 'POST',
-          data: {
-            "date": date,
-            "in_time": in_time,
-            "out_time": out_time,
-            "reason": reason,
-            "location": locationa,
-            "sql": sql,
-            "status": status,
-            "project_name": project_name,
-            "contact_person": contact_person
-          },
-          success: function(response) {
-            console.log(response);
-            if (response == 'Successfully') {
-              showSuccessAlert('Successfully Added Attendance','no');
-            }else{
-              showErrorAlert(response);
-            }}
-        });
-      }
-   
+    var okyes;
+    okyes=confirm('Are you sure you want to Delete?');
+    if(okyes==false){
+      return;
+    };
+
+    $.ajax({
+      url: url_ab,
+      type: 'POST',
+      data: {
+        "date": date,
+        "sql": sql,
+      },
+      success: function(response) {
+        if (response == 'Successfully') {
+          showSuccessAlert('Record Successfully Updated','no');
+        }else{
+          showErrorAlert(response);
+        }}
+    });
+  }
+
+  function manual_entry_ajax(e){
+    var url_b = "<?php echo base_url('admin/attendance/manual_attendance'); ?>";
+
+    status = document.querySelector("input[type='radio'][name=check_value]:checked").value;
+    date = document.getElementById('process_date').value;
+    in_time = document.getElementById('in_time').value;
+    out_time = document.getElementById('out_time').value;
+    reason = document.getElementById('reason_value').value;
+    locationa = document.getElementById('location_va').value;
+    project_name = document.getElementById('project_name').value;
+    contact_person = document.getElementById('contact_person').value;
+
+    var emp_id = document.getElementsByName('select_emp_id[]');
+    var sql = get_checked_value(emp_id);
+    // alert(sql); return;
+
+    if(sql == ''){
+      alert('Please select employee Id');
+      return ;
+    }
+
+    var okyes;
+    okyes=confirm('Are you sure you want to Insert?');
+    if(okyes==false){
+      return;
+    };
+
+    $.ajax({
+      url: url_b,
+      type: 'POST',
+      data: {
+        "date": date,
+        "in_time": in_time,
+        "out_time": out_time,
+        "reason": reason,
+        "location": locationa,
+        "sql": sql,
+        "status": status,
+        "project_name": project_name,
+        "contact_person": contact_person
+      },
+      success: function(response) {
+        if (response == 'Successfully') {
+          showSuccessAlert('Successfully Added Attendance','no');
+        }else{
+          showErrorAlert(response);
+        }}
+    });
+  }
 </script>

@@ -1,3 +1,10 @@
+
+<?php
+dd('jhjfdg');
+
+?>
+
+
 <?php $system = $this->Xin_model->read_setting_info(1);?>
 <?php $company = $this->Xin_model->read_company_setting_info(1);?>
 <?php $site_lang = $this->load->helper('language');?>

@@ -9,7 +9,7 @@ class Job_card_model extends CI_Model{
 	function emp_job_card($grid_firstdate, $grid_seconddate, $emp_id)
 	{
 		$data = array();
-		$grid_firstdate = date("Y-m-d", strtotime($grid_firstdate)); 
+		$grid_firstdate = date("Y-m-d", strtotime($grid_firstdate));
 		$grid_seconddate = date("Y-m-d", strtotime($grid_seconddate));
 
 		$joining_check = $this->get_join_date($emp_id, $grid_firstdate, $grid_seconddate);
@@ -21,7 +21,7 @@ class Job_card_model extends CI_Model{
 		{
 			$start_date = $grid_firstdate;
 		}
-			
+
 		$resign_check  = $this->get_resign_date($emp_id, $grid_firstdate, $grid_seconddate);
 		if($resign_check != false)
 		{
@@ -31,7 +31,7 @@ class Job_card_model extends CI_Model{
 		{
 			$end_date = $grid_seconddate;
 		}
-			
+
 		$left_check  = $this->get_left_date($emp_id, $grid_firstdate, $grid_seconddate);
 		if($left_check != false)
 		{
@@ -41,33 +41,32 @@ class Job_card_model extends CI_Model{
 		{
 			$end_date = $grid_seconddate;
 		}
-			
+
 
 		$data['dayoff'] = $this->check_dayoff($start_date, $end_date, $emp_id);
 		// $data['holiday'] = $this->check_holiday($start_date, $end_date, $emp_id);
 
 		$data['leave'] = $this->leave_per_emp($start_date, $end_date, $emp_id);
 		// echo "<pre>"; print_r($data['leave']); exit();
-		
-			
+
+
 		$this->db->select('
-				xin_attendance_time.clock_in , 
-				xin_attendance_time.clock_out, 
-				xin_attendance_time.lunch_in, 
-				xin_attendance_time.lunch_out, 
-				xin_attendance_time.attendance_date, 
+				xin_attendance_time.clock_in ,
+				xin_attendance_time.clock_out,
+				xin_attendance_time.lunch_in,
+				xin_attendance_time.lunch_out,
+				xin_attendance_time.attendance_date,
 				xin_attendance_time.attendance_status,
 				xin_attendance_time.status,
 				xin_attendance_time.comment,
 				xin_attendance_time.late_status,
 				xin_attendance_time.late_time,
-
 			');
 		$this->db->from('xin_attendance_time');
 		$this->db->where('xin_attendance_time.employee_id', $emp_id);
 		$this->db->where("xin_attendance_time.attendance_date >=", $start_date);
 		$this->db->where("xin_attendance_time.attendance_date <=", $end_date);
-		$this->db->order_by("xin_attendance_time.attendance_date");				
+		$this->db->order_by("xin_attendance_time.attendance_date");
 		$query = $this->db->get()->result();
 
 		$data['emp_data'] = $query;
@@ -79,7 +78,7 @@ class Job_card_model extends CI_Model{
 
 	function absent_report($grid_firstdate, $grid_seconddate, $emp_id){
 		$data = array();
-		$grid_firstdate = date("Y-m-d", strtotime($grid_firstdate)); 
+		$grid_firstdate = date("Y-m-d", strtotime($grid_firstdate));
 		$grid_seconddate = date("Y-m-d", strtotime($grid_seconddate));
 
 		$joining_check = $this->get_join_date($emp_id, $grid_firstdate, $grid_seconddate);
@@ -91,7 +90,7 @@ class Job_card_model extends CI_Model{
 		{
 			$start_date = $grid_firstdate;
 		}
-			
+
 		$resign_check  = $this->get_resign_date($emp_id, $grid_firstdate, $grid_seconddate);
 		if($resign_check != false)
 		{
@@ -101,7 +100,7 @@ class Job_card_model extends CI_Model{
 		{
 			$end_date = $grid_seconddate;
 		}
-			
+
 		$left_check  = $this->get_left_date($emp_id, $grid_firstdate, $grid_seconddate);
 		if($left_check != false)
 		{
@@ -111,24 +110,24 @@ class Job_card_model extends CI_Model{
 		{
 			$end_date = $grid_seconddate;
 		}
-			
-			
+
+
 		$this->db->select('
-			clock_in , 
-			clock_out, 
-			lunch_in, 
-			lunch_out, 
-			attendance_date, 
+			clock_in ,
+			clock_out,
+			lunch_in,
+			lunch_out,
+			attendance_date,
 			attendance_status,
 			status,
-			late_status, 
+			late_status,
 		');
 		$this->db->from('xin_attendance_time');
 		$this->db->where('employee_id', $emp_id);
 		$this->db->where("attendance_date >=", $start_date);
 		$this->db->where("attendance_date <=", $end_date);
 		$this->db->where_in("status", ["Absent","HalfDay"]);
-		$this->db->order_by("attendance_date");				
+		$this->db->order_by("attendance_date");
 		$query = $this->db->get()->result();
 		$data['emp_data'] = $query;
 		return $data;
@@ -197,7 +196,7 @@ class Job_card_model extends CI_Model{
 	}
 
 	function check_dayoff($sStartDate, $sEndDate, $emp_id)
-	{	
+	{
 		$days = GetDayDate($sStartDate, $sEndDate);
 		$off_day = array('Friday','Saturday');
 		$dayoff = array();
@@ -230,7 +229,7 @@ class Job_card_model extends CI_Model{
 		return $holiday;
 	}
 
-	
+
 
 
 
@@ -243,7 +242,7 @@ class Job_card_model extends CI_Model{
 	// old
 
 	function leave_per_emp($sStartDate, $sEndDate, $emp_id){
- 		$this->db->select("*");		
+ 		$this->db->select("*");
  		$this->db->where("((from_date <= '$sStartDate' AND to_date >='$sEndDate') OR (from_date <= '$sStartDate' AND to_date >= '$sStartDate') OR (from_date >= '$sStartDate' AND to_date <= '$sEndDate') OR (from_date <= '$sEndDate' AND to_date >= '$sEndDate')) AND (employee_id = '$emp_id')");
 		$query = $this->db->get("xin_leave_applications");
 		$leave = array();
@@ -252,7 +251,7 @@ class Job_card_model extends CI_Model{
 			$diff=$row->qty;
 			$start_date = $row->from_date;
 			for($i=0; $i<$diff; $i++){
-				if($sEndDate >= $start_date && $sStartDate <= $start_date)		$leave[] = $start_date;	
+				if($sEndDate >= $start_date && $sStartDate <= $start_date)		$leave[] = $start_date;
 					$start_date = date("Y-m-d", strtotime("+1 day", strtotime($start_date)));
 		    }
 		}
@@ -328,7 +327,11 @@ class Job_card_model extends CI_Model{
 		$this->db->where("from_date <=", $attendance_date);
 		$this->db->where("to_date >=", $attendance_date);
 		$query = $this->db->get('xin_leave_applications');
-		return $query->row()->leave_type; 
+		if (!empty($query->row())) {
+			return $query->row()->leave_type;
+		} else {
+			return false;
+		}
    }
 
 

@@ -25,18 +25,13 @@ class inventory_model extends CI_Model
 			p.id, 
 			p.product_name, 
 			pp.id as purchase_id,
-			pp.user_id, 
-			pp.updated_by, 
 			pp.quantity, 
 			pp.ap_quantity, 
 			pp.status as purchase_status,
-			pp.prev_quantity, 
-			pp.current_quantity, 
 			SUBSTR(pp.created_at, 1, 10) as created_at,
 		');
 		$this->db->from('products as p');
 		$this->db->join('products_purches_details as pp', 'pp.product_id = p.id');
-		// $this->db->join('products_requisition_details as pr', 'pr.product_id = p.id');
 		$this->db->where('p.id',  $id);
 		if($from_date != '' && $to_date !=''){
 			$this->db->where('pp.created_at between "' . $from_date . '" AND "' . $to_date . '"');
@@ -52,8 +47,6 @@ class inventory_model extends CI_Model
 			pr.quantity, 
 			pr.user_id, 
 			pr.updated_by, 
-			pr.prev_quantity, 
-			pr.current_quantity, 
 			pr.approved_qty as ap_quantity, 
 			pr.status as requisition_status,
 			SUBSTR(pr.created_at, 1, 10) as created_at,
@@ -482,6 +475,8 @@ class inventory_model extends CI_Model
 
 	public function equipment_list($session = null){
 		$this->db->select('
+			e.first_name,
+			e.last_name,
 			pa.id AS a_id,
 			pa.cat_id,
 			pa.device_model,
@@ -489,28 +484,27 @@ class inventory_model extends CI_Model
 			pa.description,
 			pa.status,
 			pa.remark,
-			pa.use_number,
 			pa.number,
 			pa.image,
-			pa.user_id,
-			paw.provide_date,
-			MAX(e.first_name) AS first_name,
-			MAX(e.last_name) AS last_name,
-
+			
 			pac.cat_name,
 			pac.cat_short_name,
 			MAX(pam.model_name) AS model_name,
 			MAX(mobile_numbers.number) AS mobile_number,
-			paw.provide_date
-		');
+			');
+			// paw.provide_date,
+			// MAX(e.first_name) AS first_name,
+			// MAX(e.last_name) AS last_name,
+			// paw.provide_date
 		$this->db->from('product_accessories as pa');
-		$this->db->join('product_accessories_working as paw', 'pa.user_id = paw.user_id', 'left');
-		$this->db->join('xin_employees as e', 'paw.user_id = e.user_id', 'left');
+		// $this->db->join('product_accessories_working as paw', 'pa.user_id = paw.user_id', 'left');
+		$this->db->join('employee_using_device','pa.id = employee_using_device.device_id');
+		$this->db->join('xin_employees as e', 'employee_using_device.user_id = e.user_id', 'left');
 		$this->db->join('product_accessories_model as pam', 'pa.device_model = pam.id', 'left');
 		$this->db->join('product_accessory_categories as pac', 'pa.cat_id = pac.id', 'left');
 		$this->db->join('mobile_numbers', 'pa.number = mobile_numbers.id', 'left');
 		if ($session['role_id'] == 3 && $session != null) {
-			$this->db->where('paw.user_id', $session['user_id']);
+			$this->db->where('employee_using_device.user_id',$session['user_id']);
 		}
 		$this->db->group_by('pa.id');
 		$data = $this->db->get()->result();
@@ -565,15 +559,14 @@ class inventory_model extends CI_Model
 					xin_employees.last_name,
 					move_list.*
 		')
-		->from('move_list')
-		->join("product_accessories", "move_list.device_id = product_accessories.device_model")
-		->join("xin_employees", "xin_employees.user_id = move_list.user_id")
+		->from('product_accessories')
+		->join("move_list", "move_list.user_id = product_accessories.user_id")
+		->join("xin_employees", "xin_employees.user_id = product_accessories.user_id")
 		->join("product_accessories_model", "product_accessories.device_model = product_accessories_model.id")
 		->join("product_accessory_categories", "product_accessory_categories.id = product_accessories.cat_id")
 		->where('product_accessories.status',5)
 		->where('product_accessories.move_status',2)
 		->where('move_list.status',2);
-		// dd($this->db->get()->result());
 		return $this->db->get()->result();
 	} 
 

@@ -6,6 +6,7 @@
             <th>Punch In</th>
             <th>Punch Out</th>
             <th>Late</th>
+            <th>Office Hour</th>
         </tr>
     </thead>
     <tbody>
@@ -22,6 +23,7 @@
             <td><?= ($data->clock_in=='')? $s :date('h:i A',strtotime($data->clock_in)) ?></td>
             <td><?= ($data->clock_out=='')? $s :date('h:i A',strtotime($data->clock_out)) ?></td>
             <td><?= $data->late_time ?></td>
+            <td><?= floor($data->production / 60) .":". round($data->production % 60, 2) ?></td>
         </tr>
         <?php  }?>
 

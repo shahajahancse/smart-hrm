@@ -98,8 +98,7 @@ if ($statusC == 1) {
                 <th>Product Name</th>
                 <th>Request Quantity</th>
                 <th>Approved Quantity</th>
-                <th>Remark</th>
-                <th>Date </th>
+                <!-- <th>Date </th> -->
             </thead>
             <?php if (!empty($values)): ?>
                     <?php $i = 1; foreach ($values as $row): ?>
@@ -114,8 +113,7 @@ if ($statusC == 1) {
                                 <td><?php echo $row->product_name ?></td>
                                 <td><?php echo $row->quantity ?></td>
                                 <td><?php echo $row->approved_qty ?></td>
-                                <td><?php echo $row->note ?></td>
-                                <td><?php echo !empty($row->created_at) ? date('d-m-Y', strtotime($row->created_at)) : ''; ?></td>
+                                <!-- <td>< ?php echo !empty($row->created_at) ? date('d-m-Y', strtotime($row->created_at)) : ''; ?></td> -->
                             </tr>
                         </tbody>
                     <?php endforeach; ?>

@@ -44,7 +44,6 @@ class Attendance extends MY_Controller
 
     public function index()
     {
-
         $data['title'] = $this->lang->line('dashboard_attendance').' | '.$this->Xin_model->site_title();
         $data['breadcrumbs'] = $this->lang->line('dashboard_attendance');
         $data['path_url'] = 'attendance';
@@ -53,15 +52,7 @@ class Attendance extends MY_Controller
         $this->load->view('admin/layout/layout_main', $data); //page load
 
     }
-    // public function leave_all_cal()
-    // {
-    //     $this->Attendance_model->leave_cal_all();
 
-    // }
-
-    // public function attendance_process($process_date, $status)
-    
-    
     public function attendance_process()
     {
         // dd($sql);
@@ -115,6 +106,44 @@ class Attendance extends MY_Controller
     }
 
     // manual entry system
+    public function present_to_absent()
+    {
+        if (!empty($_POST)) {
+            $date = $this->input->post('date');
+            $sql = $this->input->post('sql');
+            $emp_id = explode(',', trim($sql));
+
+            if (count($emp_id) > 1) {
+                echo "Required to one employee Id at a time";
+                exit;
+            }
+
+            $in_time = date('Y-m-d 00:00:00', strtotime($date));
+            $out_time = date('Y-m-d 23:59:59', strtotime($date));
+            $proxi_id = $this->db->where('emp_id', $sql)->get('xin_proxi')->row()->proxi_id;
+
+            if (is_null($proxi_id)) {
+                echo "Proxi Id not found for this employee";
+                exit;
+            }
+
+            $this->db->trans_start();
+            $this->db->where('proxi_id', $proxi_id)->where('date_time BETWEEN "' . $in_time . '" and "' . $out_time . '"')->delete('xin_att_machine');
+
+            // attendance process
+            $this->Attendance_model->attn_process($date, $emp_id);
+            $this->db->trans_complete();
+            if ($this->db->trans_status() === false) {
+                $this->db->trans_rollback();
+                echo "failed";
+                exit;
+            } else {
+                echo "Successfully";
+                exit;
+            }
+        }
+    }
+
     public function manual_attendance()
     {
         if (!empty($_POST)) {
@@ -181,7 +210,7 @@ class Attendance extends MY_Controller
                         }
                     }
                 }
-                
+
 
                 // insert in time
                 if ($in_time != '') {
@@ -244,7 +273,6 @@ class Attendance extends MY_Controller
                                 'in_time'     => $in_time,
                                 'reason'	  => $reason,
                                 'place_adress'	  => $location,
-                                
                             );
                         } elseif ($in_time != '' && $out_time != '') {
                             $comData = array(
@@ -584,7 +612,7 @@ class Attendance extends MY_Controller
         $second_date = $this->input->post('second_date');
         $sql = $this->input->post('sql');
         $emp_id = explode(',', trim($sql));
-        
+
         $data['first_date'] = $first_date;
         $data['second_date'] = $second_date;
         $data['company_info'] = $this->Xin_model->get_company_info(1);
@@ -604,7 +632,7 @@ class Attendance extends MY_Controller
         }
         $session = $this->session->userdata('username');
         $emp_id  = [$session[ 'user_id' ]];
-        
+
 
 
         $data['first_date'] = $first_date;
@@ -666,17 +694,17 @@ class Attendance extends MY_Controller
 
 
         $this->db->order_by('xin_attendance_time.employee_id', "ASC");
-        
+
 
         $data["values"] = $this->db->get()->result();
         $data['first_date'] = $first_date;
         $data['second_date'] = $second_date;
         $this->load->view('admin/attendance/extra_present', $data);
-        
+
     }
     public function overall_performance()
     {
-        
+
         $first_date = $this->input->post('first_date');
         $second_date = $this->input->post('second_date');
 
@@ -693,7 +721,7 @@ class Attendance extends MY_Controller
           $get_total_late = $this->Attendance_model->get_total_late($value, $first_date, $second_date);
           $get_total_overtime = $this->Attendance_model->get_total_overtime($value, $first_date, $second_date);
           $get_total_leave = $this->Attendance_model->get_total_leave($value, $first_date, $second_date);
-        
+
 
           $total_day = $get_total_present + $get_total_absent+$get_total_leave;
           $get_percent_present = ($total_day != 0) ? ($get_total_present / $total_day) * 100 : 0;
@@ -724,7 +752,7 @@ class Attendance extends MY_Controller
         $d['second_date'] = $second_date;
         echo $this->load->view("admin/attendance/overall_performance", $d, true);
 
-        
+
     }
     public function overall_performance_yearly()
     {
@@ -742,7 +770,7 @@ class Attendance extends MY_Controller
         $data=[];
         foreach($emp_id as $key => $value){
             $employee_data_month=[];
-            
+
         for($i=1;$i<=$last_month;$i++){
             $first_date = date("Y-m-01", strtotime("{$year}-{$i}-01"));
             $second_date = date("Y-m-t", strtotime("{$year}-{$i}-01"));
@@ -777,7 +805,7 @@ class Attendance extends MY_Controller
     }
     // public function overall_performance_yearly()
     // {
-        
+
     //     $last_date = $this->input->post('first_date');
     //     $f_date = date('Y-01-01',strtotime($last_date));
     //     $year=date('Y',strtotime($f_date));
@@ -792,7 +820,7 @@ class Attendance extends MY_Controller
     //     $data=[];
     //     foreach($emp_id as $key => $value){
     //         $employee_data_month=[];
-            
+
     //     for($i=1;$i<=$last_month;$i++){
     //         $first_date = $year.'-'.$i.'-01';
     //         $second_date = $year.'-'.$i.'-31';
@@ -881,7 +909,7 @@ class Attendance extends MY_Controller
         $f1_date = date("Y-m-d", strtotime($first_date));
         $f2_date = date("Y-m-d", strtotime($second_date));
         $statusC = $this->input->post('statusC');
-        
+
         $data["values"] = $this->Attendance_model->movment_status_report($f1_date, $f2_date, $statusC);
 
         $data['statusC']= $statusC;
@@ -946,7 +974,7 @@ class Attendance extends MY_Controller
     }
     public function leave_report()
     {
-      
+
         $first_date = $this->input->post('first_date');
         $second_date = $this->input->post('second_date');
         $sql = $this->input->post('sql');
@@ -1063,7 +1091,7 @@ class Attendance extends MY_Controller
             $data['tablebody'] = $this->load->view("admin/attendance/employee_at_tbale_body", $data, true);
             echo $data['tablebody'] ;
         } else {
-            
+
             $this->db->order_by("attendance_date", "desc");
             $data['alldata'] = $this->db->get('xin_attendance_time')->result();
             $data["todaylog"]    = $this->Attendance_model->gettodaylog(date("Y-m-d"), $session['user_id']);
@@ -1217,16 +1245,6 @@ class Attendance extends MY_Controller
             $data['subview'] 	 = $this->load->view("admin/attendance/employee_movement_flor", $data, true);
             return $data;
         }
-    }
-    public function change_group($id){
-        $session = $this->session->userdata('username');
-        $userid  = $session[ 'user_id' ];
-        $data = array(
-            'user_role_id' => $id
-        );
-        $this->db->where('user_id',  $userid);
-        $this->db->update('xin_employees', $data);
-        echo 'Success';
     }
     public function employee_movement_outside_office()
     {
@@ -1392,7 +1410,7 @@ class Attendance extends MY_Controller
         $this->db->where("id", $id);
         $move  = $this->db->get('xin_employee_move_register')->row();
         $data['move'] = $move;
-        
+
         $data['title'] 		 = 'Outside Office Movements Form';
         $data['breadcrumbs'] = 'Outside Office Movements Form';
         $data['subview'] 	 = $this->load->view("admin/attendance/ta_da_form", $data, true);

@@ -198,6 +198,7 @@ content: 'zfdsdf';
             </div>
         </div>
     </div>
+
     <div id="loader" align="center" style="margin:0 auto; width:600px; overflow:hidden; display:none; margin-top:10px;">
         <img src="<?php echo base_url();?>/uploads/ajax-loader.gif" />
     </div>
@@ -210,12 +211,12 @@ content: 'zfdsdf';
                 <button id="manually_entry" class="btn btn-sm btn-primary"
                     style="padding: 6px 10px !important;">Manually Entry</button>
                     <?php
-                    $this->db->where('status', 0);
-                    $count = $this->db->get('xin_employee_punch_request')->num_rows();
+                        $this->db->where('status', 0);
+                        $count = $this->db->get('xin_employee_punch_request')->num_rows();
                     ?>
 
                     <a  class="btn btn-sm btn-primary" href="<?= base_url('admin/attendance/punch_request_list') ?>" style="padding: 6px 10px !important;">Punch Request <span class="badge badge-danger" style="background-color: red !important; color: white !important;"><?= $count ?></span></a>
-                
+
                 <button onclick="extra_present_approval()" class="btn btn-sm btn-primary"
                     style="padding: 6px 10px !important;">Extra Present Approval</button>
             </div>
@@ -433,7 +434,7 @@ function extra_present_approval() {
         alert('Please select second date');
         return;
     }
-    console.log(sql);
+
     var url = "<?php echo base_url('admin/attendance/extra_present_approval'); ?>";
     $.ajax({
         url: url,
@@ -479,7 +480,7 @@ function extra_present_approval_press(data, time_attendance_id) {
         data=1
     } else {
         data=0
-    } 
+    }
     var url = "<?php echo base_url('admin/attendance/extra_present_approval_press'); ?>";
     $.ajax({
         url: url,
@@ -498,4 +499,3 @@ function extra_present_approval_press(data, time_attendance_id) {
 }
 </script>
 
-    

@@ -1,5 +1,22 @@
 <?php $session = $this->session->userdata('username');?>
-<?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
+<?php $user_info = $this->Xin_model->read_user_info($session['user_id']);
+
+?>
+<style>
+	.button {
+    padding: 5px;
+    background: #f4f5f7;
+	}
+.margin-top-10 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+</style>
+<div class="col-md-12" style="box-shadow: 0px 0px 7px 1px #8d8d8d;border-radius: 6px;padding: 9px;display: flex;justify-content: space-between;align-items: center;">
+	<h3 style="padding: 0;margin: 0;">Task Board</h3>
+	<a id="create-task-button" class="btn btn-primary btn-sm" href="javascript:void(0);">Add task</a>
+</div>
 <?php
 if($user_info[0]->user_role_id == '1'){
 	$completed_task = $this->Project_model->calendar_complete_tasks();
@@ -379,3 +396,113 @@ if($task->num_rows() > 0) {
     </div>
 </div>
 <?php } ?>
+<script>
+
+	//Init
+init();
+
+//Button Functions------------------------------------------
+function init() {
+  $(".button-notstarted").on("click", function() {
+    if (!($(this).closest(".notstarted").length > 0)) {
+      $(this).parents(".input-group").appendTo(".notstarted").css({
+        "background-color": "",
+        "border": ""
+      });
+		var task_id = $(this).data('task-id');
+		var task_status = $(this).data('task-status');
+		jQuery.get(site_url+"project/update_task_scrum_board_status/"+task_id+"/"+task_status, function(data, status){
+		});
+    }
+  });
+  $(".button-progress").on("click", function() {
+    if (!($(this).closest(".in-progress").length > 0)) {
+      $(this).parents(".input-group").appendTo(".in-progress").css({
+        "background-color": "#bbe9ff",
+        "border": "none"
+      });
+		var task_id = $(this).data('task-id');
+		var task_status = $(this).data('task-status');
+		jQuery.get(site_url+"project/update_task_scrum_board_status/"+task_id+"/"+task_status, function(data, status){
+		});
+    }
+  });
+  $(".button-complete").on("click", function() {
+    if (!($(this).closest(".complete").length > 0)) {
+      $(this).parents(".input-group").appendTo(".complete").css({
+        "background-color": "#cfffd0",
+        "border": "none"
+      });
+	  	var task_id = $(this).data('task-id');
+		var task_status = $(this).data('task-status');
+		jQuery.get(site_url+"project/update_task_scrum_board_status/"+task_id+"/"+task_status, function(data, status){
+		});
+    }
+  });
+  $(".button-cancelled").on("click", function() {
+    if (!($(this).closest(".cancelled").length > 0)) {
+      $(this).parents(".input-group").appendTo(".cancelled").css({
+        "background-color": "#ffd8d8",
+        "border": "none"
+      });
+	  	var task_id = $(this).data('task-id');
+		var task_status = $(this).data('task-status');
+		jQuery.get(site_url+"project/update_task_scrum_board_status/"+task_id+"/"+task_status, function(data, status){
+		});
+    }
+  });
+  $(".button-hold").on("click", function() {
+    if (!($(this).closest(".hold").length > 0)) {
+      $(this).parents(".input-group").appendTo(".hold").css({
+        "background-color": "#fbffa2",
+        "border": "none"
+      });
+	  	var task_id = $(this).data('task-id');
+		var task_status = $(this).data('task-status');
+		jQuery.get(site_url+"project/update_task_scrum_board_status/"+task_id+"/"+task_status, function(data, status){
+		});
+    }
+  });
+  
+  $(".button-delete").on("click", function() {
+    $(this).parents(".input-group").remove();
+  });
+
+  var placeholderDiv = document.createElement("div");
+  var placeholderAtt = document.createAttribute("class");
+  var taskDivAttVal = placeholderAtt.value = "placeholder";
+  placeholderDiv.setAttributeNode(placeholderAtt);
+
+}
+$(document).ready(function() {
+	// create
+	$('#create-task-button').on('click', function (event) {
+		console.log("create");
+		var modal = '<div class="modal fade" id="ajax" role="basic" aria-hidden="true">' +
+			'<div class="modal-dialog modal-lg">' +
+			'<div class="modal-content">' +
+			'<div class="modal-body">' +
+			'</div>' +
+			'</div>' +
+			'</div>' +
+			'</div>';
+		$('body').append(modal);
+		$.ajax({
+			url : site_url+"project/get_scrumboard_task/",
+			type: "GET",
+			data: 'jd=1&is_ajax=1&mode=modal&data=scrum_board&task_status=0',
+			success: function (response) {
+				console.log(response);
+				if(response) {
+					$("#ajax").find('.modal-body').html(response);
+					$("#ajax").modal('show');
+				}
+			},
+			error: function (xhr, status, error) {
+				console.log(xhr.responseText);
+			}
+		});
+	});
+});
+
+</script>
