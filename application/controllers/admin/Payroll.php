@@ -3507,26 +3507,24 @@ class Payroll extends MY_Controller {
 		$data['title'] 		 = 'Advanced Salary | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Advanced Salary ';
         $this->db->select('xin_advance_salaries.*,xin_employees.first_name,xin_employees.last_name,xin_departments.department_name,xin_designations.designation_name')
-							->from('xin_employees,xin_advance_salaries,xin_departments,xin_designations')
-							->where('xin_employees.user_id = xin_advance_salaries.emp_id')
-							->where('xin_employees.designation_id = xin_designations.designation_id')
-							->where('xin_employees.department_id = xin_departments.department_id')
-							->order_by('xin_advance_salaries.id','desc');
-
+			->from('xin_employees,xin_advance_salaries,xin_departments,xin_designations')
+			->where('xin_employees.user_id = xin_advance_salaries.emp_id')
+			->where('xin_employees.designation_id = xin_designations.designation_id')
+			->where('xin_employees.department_id = xin_departments.department_id')
+			->order_by('xin_advance_salaries.id','desc');
 		if($data['session']['role_id'] == 3){
 			$this->db->where('xin_advance_salaries.emp_id',$data['session']['user_id']);
 			$data['results'] =	$this->db->get()->result();
 			$data['admin_name']= $this->db->select('first_name,last_name')
-									  ->from('xin_employees,xin_advance_salaries')
-								      ->where('xin_employees.user_id = xin_advance_salaries.approved_by')
-									  ->get()->row();
-
+				->from('xin_employees,xin_advance_salaries')
+				->where('xin_employees.user_id = xin_advance_salaries.approved_by')
+				->get()->row();
 			$data['subview'] = $this->load->view("admin/payroll/emp_advanced_salary", $data, TRUE);
 		}else{
 			$data['results'] =	$this->db->get()->result();
 			$data['subview'] = $this->load->view("admin/payroll/advanced_salary", $data, TRUE);
 		}
-						   $this->load->view('admin/layout/layout_main', $data); 
+			$this->load->view('admin/layout/layout_main', $data); 
 	}
 
 	// public function advanced_menu(){
@@ -3545,17 +3543,22 @@ class Payroll extends MY_Controller {
 	// }
 
 	public function advanced_salary_add(){
-		foreach($_POST['sab_amount'] as $key => $value) {
-			$data['emp_id']            = $_POST['user_id'];
-			$data['requested_amount']  = $value;
-			$data['approved_amount']   = $value;
-			$data['effective_month']   = $_POST['sab_date'][$key];
+			// dd($_SESSION);
+			$emp_id = $_SESSION['user_id']['user_id'];
+			$this->db->where('emp_id',$emp_id)->get('xin_advance_salaries')->row();
+			$data['emp_id']            = $emp_id;
+			$data['requested_amount']  = $_POST['requested_amount'];
+			$data['effective_month']   = $_POST['effective_month'];
 			$data['reason']            = $_POST['reason'];
-			$data['approved_by']       = $session['user_id'];
-			$data['status']            = 2;
+			$data['status']            = 1;
+			$data['created_at']        = date('Y-m-d H:i:s');
 			$insert = $this->db->insert('xin_advance_salaries',$data);
-		}
-		redirect('admin/payroll/advanced_salary');
+			if($insert){
+				$this->session->set_flashdata('success', 'Successfully Insert Done');
+			}
+			redirect('admin/payroll/advanced_salary');
+		
+		
 		
 	}
 

@@ -2826,8 +2826,6 @@ class Employees extends MY_Controller {
 		'linkdedin_link' => $this->input->post('linkdedin_link'),
 		'google_plus_link' => $this->input->post('google_plus_link'),
 		'instagram_link' => $this->input->post('instagram_link'),
-		'pinterest_link' => $this->input->post('pinterest_link'),
-		'youtube_link' => $this->input->post('youtube_link')
 		);
 		$id = $this->input->post('user_id');
 		$result = $this->Employees_model->social_info($data,$id);

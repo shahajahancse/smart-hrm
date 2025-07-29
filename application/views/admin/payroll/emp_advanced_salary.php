@@ -71,8 +71,6 @@
                 <tr>
                 <th scope="col" class="text-center">Sl. No.</th>
                 <th scope="col" class="text-center">Approved By</th>
-                <!-- <th scope="col" class="text-center">Dept</th> -->
-                <!-- <th scope="col" class="text-center">Desig</th> -->
                 <th scope="col" class="text-center">Req. Amount</th>
                 <th scope="col" class="text-center">App. Amount</th>
                 <th scope="col" class="text-center">Effective Month</th>
@@ -85,7 +83,7 @@
                 <?php $i=1; foreach($results as $row){ ?>
                     <tr class="text-center">
                         <td><?php echo $i++?></td>
-                        <td><?= $admin_name->first_name .' '.$admin_name->last_name?></td>
+                        <td><?= ' '?></td>
                         <td><?= $row->requested_amount?></td>
                         <td><?= $row->approved_amount?></td>
                         <td><?= date("d M Y",strtotime($row->effective_month))?></td>
