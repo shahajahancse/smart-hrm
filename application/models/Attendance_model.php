@@ -7,7 +7,6 @@ class Attendance_model extends CI_Model
     public function __construct()
     {
         parent::__construct();
-        $this->load->library('Zklibrary');
     }
 
     public function attn_process($process_date, $emp_ids, $status = null){
