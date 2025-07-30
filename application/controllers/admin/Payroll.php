@@ -3543,25 +3543,32 @@ class Payroll extends MY_Controller {
 	// }
 
 	public function advanced_salary_add(){
-			// dd($_SESSION);
-			$emp_id = $_SESSION['user_id']['user_id'];
-			$this->db->where('emp_id',$emp_id)->get('xin_advance_salaries')->row();
+		foreach($_POST['sab_amount'] as $key => $value) {
+			$emp_id = $_POST['user_id'];
+			$effective_month = $_POST['sab_date'][$key];
+			$check = $this->db->select('id')
+				->where('emp_id', $emp_id)
+				->where('effective_month', $effective_month)
+				->get('xin_advance_salaries')->row();
+			if(isset($check->id)){
+				$this->session->set_flashdata('error', 'Already requested for advance salary for this month');
+				redirect('admin/payroll/advanced_salary');
+				exit;
+			}
 			$data['emp_id']            = $emp_id;
-			$data['requested_amount']  = $_POST['requested_amount'];
-			$data['effective_month']   = $_POST['effective_month'];
+			$data['requested_amount']  = $value;
+			$data['approved_amount']   = $value;
+			$data['effective_month']   = $effective_month;
 			$data['reason']            = $_POST['reason'];
-			$data['status']            = 1;
-			$data['created_at']        = date('Y-m-d H:i:s');
+			$data['approved_by']       = $session['user_id'];
+			$data['status']            = $_SESSION['user_id']['role_id'] == 3 ? 1 : 2; // if user is employee then status will be 1 else 2
 			$insert = $this->db->insert('xin_advance_salaries',$data);
 			if($insert){
 				$this->session->set_flashdata('success', 'Successfully Insert Done');
 			}
-			redirect('admin/payroll/advanced_salary');
-		
-		
-		
+		}
+		redirect('admin/payroll/advanced_salary');
 	}
-
 	
 	public function update_salary(){
 		// dd($_POST);
