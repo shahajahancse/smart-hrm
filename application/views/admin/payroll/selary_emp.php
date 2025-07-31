@@ -4,10 +4,7 @@ $userid  = $session[ 'user_id' ];
 $lastmonthsalarys  = $this->Salary_model->getpassedmonthsalary($userid);
 //dd($lastmonthsalarys);
 if(count($lastmonthsalarys)>0) {
-
-
     $lastmonthsalaryy =$lastmonthsalarys[0];
-
     $lastmont=$lastmonthsalarys[0]->salary_month;
     $date_object = DateTime::createFromFormat('Y-m', $lastmont);
     $monthName = $date_object->format('M-Y');

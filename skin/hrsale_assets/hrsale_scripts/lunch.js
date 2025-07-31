@@ -4,12 +4,12 @@ var lastUri = parts[parts.length - 1];
 var firstUri = parts[2];
 // alert(firstUri);
 if (lastUri == 'reports') {
-  if (firstUri == 'localhost') { 
+  if (firstUri == 'localhost') {
     base_url = 'http://localhost/smart-hrm/admin/lunch/';
   } else {
     base_url = 'http://173.212.223.213/smarthr/admin/lunch/';
   }
-  
+
   // alert(base_url);
 }
 function perday(status) {
@@ -147,7 +147,7 @@ function conempmeal(r) {
 }
 
 function paymentreport(status, r = null) {
-  
+
     var ajaxRequest;  // The variable that makes Ajax possible!
     ajaxRequest = new XMLHttpRequest();
     var data = '&status=' + status;
@@ -167,7 +167,33 @@ function paymentreport(status, r = null) {
         // a.close();
       }
     }
-  
+}
+function emp_lunch_payment_report() {
+  var ajaxRequest;  // The variable that makes Ajax possible!
+  ajaxRequest = new XMLHttpRequest();
+  var checkboxes = document.getElementsByName('select_emp_id[]');
+  var sql = get_checked_value(checkboxes);
+  if (sql == '') {
+    alert('Please select employee Id');
+    return;
+  }
+  var data = '&sql=' + sql;
+  url = base_url + "/emp_lunch_payment_report/";
+  ajaxRequest.open("POST", url, true);
+  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+  ajaxRequest.send(data);
+  ajaxRequest.onreadystatechange = function () {
+    if (ajaxRequest.readyState == 4) {
+      document.getElementById("loading").style.visibility = "hidden";
+
+      // console.log(ajaxRequest.responseText); return;
+      var resp = ajaxRequest.responseText;
+      a = window.open('', '_blank', 'menubar=1,resizable=1,scrollbars=1,width=1600,height=800');
+      a.document.write(resp);
+      // a.close();
+    }
+  }
+
 }
 function tempdata() {
     var ajaxRequest;  // The variable that makes Ajax possible!
@@ -194,7 +220,7 @@ function tempdata() {
         // a.close();
       }
     }
-  
+
 }
 function prever_report() {
   {
