@@ -42,9 +42,7 @@ class Travel extends MY_Controller {
 			redirect('admin/');
 		}
 		$system = $this->Xin_model->read_setting_info(1);
-		if($system[0]->module_travel!='true'){
-			redirect('admin/dashboard');
-		}
+		
 		$data['title'] = $this->lang->line('left_travels').' | '.$this->Xin_model->site_title();
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		$data['travel_arrangement_types'] = $this->Travel_model->travel_arrangement_types();
