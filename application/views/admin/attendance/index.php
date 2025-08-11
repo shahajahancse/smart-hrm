@@ -198,6 +198,7 @@ content: 'zfdsdf';
             </div>
         </div>
     </div>
+
     <div id="loader" align="center" style="margin:0 auto; width:600px; overflow:hidden; display:none; margin-top:10px;">
         <img src="<?php echo base_url();?>/uploads/ajax-loader.gif" />
     </div>
@@ -210,12 +211,12 @@ content: 'zfdsdf';
                 <button id="manually_entry" class="btn btn-sm btn-primary"
                     style="padding: 6px 10px !important;">Manually Entry</button>
                     <?php
-                    $this->db->where('status', 0);
-                    $count = $this->db->get('xin_employee_punch_request')->num_rows();
+                        $this->db->where('status', 0);
+                        $count = $this->db->get('xin_employee_punch_request')->num_rows();
                     ?>
 
                     <a  class="btn btn-sm btn-primary" href="<?= base_url('admin/attendance/punch_request_list') ?>" style="padding: 6px 10px !important;">Punch Request <span class="badge badge-danger" style="background-color: red !important; color: white !important;"><?= $count ?></span></a>
-                
+
                 <button onclick="extra_present_approval()" class="btn btn-sm btn-primary"
                     style="padding: 6px 10px !important;">Extra Present Approval</button>
             </div>
@@ -321,181 +322,180 @@ content: 'zfdsdf';
 
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
 
-    // $('#manu_form').hide();
-    $("#manually_entry").click(function() {
-        $('#emp_report').hide();
-        $('#report_title').hide();
-        $("#entry_form").load("<?php echo base_url()?>" + "admin/attendance/manually");
-    });
-
-    // select all item or deselect all item
-    $("#select_all").click(function() {
-        $('input:checkbox').not(this).prop('checked', this.checked);
-    });
-
-    // on load employee
-    // $("#status").change(function() {
-    //     status = document.getElementById('status').value;
-    //     var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
-    //     $.ajax({
-    //         url: url,
-    //         type: 'GET',
-    //         data: {
-    //             "status": status
-    //         },
-    //         contentType: "application/json",
-    //         dataType: "json",
-
-
-    //         success: function(response) {
-    //             arr = response.employees;
-    //             if (arr.length != 0) {
-    //                 var items = '';
-    //                 $.each(arr, function(index, value) {
-    //                     items += '<tr id="removeTr">';
-    //                     items +=
-    //                         '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' +
-    //                         value.emp_id + '" ></td>';
-    //                     items += '<td class="success">' + value.emp_id + '</td>';
-    //                     items += '<td class="warning ">' + value.first_name + ' ' +
-    //                         value.last_name + '</td>';
-    //                     items += '</tr>';
-    //                 });
-    //                 // console.log(items);
-    //                 $('#fileDiv tr:last').after(items);
-    //             } else {
-    //                 $('#fileDiv #removeTr').remove();
-    //             }
-    //         }
-    //     });
-    // });
-});
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
-<script>
-$(document).ready(function() {
-    // Bind submit event of the form
-    $('#lateform').submit(function(e) {
-        e.preventDefault();
-        $('#latecommentm').modal('hide');
-        $('#loading').css({
-            visibility: 'visible'
+        // $('#manu_form').hide();
+        $("#manually_entry").click(function() {
+            $('#emp_report').hide();
+            $('#report_title').hide();
+            $("#entry_form").load("<?php echo base_url()?>" + "admin/attendance/manually");
         });
-        // Prevent form submission
+
+        // select all item or deselect all item
+        $("#select_all").click(function() {
+            $('input:checkbox').not(this).prop('checked', this.checked);
+        });
+
+        // on load employee
+        // $("#status").change(function() {
+        //     status = document.getElementById('status').value;
+        //     var url = "<?php echo base_url('admin/attendance/get_employee_ajax_request'); ?>";
+        //     $.ajax({
+        //         url: url,
+        //         type: 'GET',
+        //         data: {
+        //             "status": status
+        //         },
+        //         contentType: "application/json",
+        //         dataType: "json",
 
 
-        // Get the form data
-        var formData = $(this).serialize();
+        //         success: function(response) {
+        //             arr = response.employees;
+        //             if (arr.length != 0) {
+        //                 var items = '';
+        //                 $.each(arr, function(index, value) {
+        //                     items += '<tr id="removeTr">';
+        //                     items +=
+        //                         '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' +
+        //                         value.emp_id + '" ></td>';
+        //                     items += '<td class="success">' + value.emp_id + '</td>';
+        //                     items += '<td class="warning ">' + value.first_name + ' ' +
+        //                         value.last_name + '</td>';
+        //                     items += '</tr>';
+        //                 });
+        //                 // console.log(items);
+        //                 $('#fileDiv tr:last').after(items);
+        //             } else {
+        //                 $('#fileDiv #removeTr').remove();
+        //             }
+        //         }
+        //     });
+        // });
+    });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Bind submit event of the form
+        $('#lateform').submit(function(e) {
+            e.preventDefault();
+            $('#latecommentm').modal('hide');
+            $('#loading').css({
+                visibility: 'visible'
+            });
+            // Prevent form submission
 
-        // Send AJAX request
+
+            // Get the form data
+            var formData = $(this).serialize();
+
+            // Send AJAX request
+            $.ajax({
+                url: '<?php echo site_url("admin/attendance/add_latecomment"); ?>',
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    $('#loading').css({
+                        visibility: 'hidden'
+                    });
+                    // Handle the response from the server
+                    Swal.fire({
+                        title: 'Success!',
+                        text: response,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    });
+    </script>
+    <script>
+    function extra_present_approval() {
+        first_date = document.getElementById('process_date').value;
+        second_date = document.getElementById('second_date').value;
+        var checkboxes = document.getElementsByName('select_emp_id[]');
+        var sql = get_checked_value(checkboxes);
+        if (sql == '') {
+            alert('Please select employee Id');
+            return;
+        }
+
+        if (first_date == '') {
+            alert('Please select first date');
+            return;
+        }
+        if (second_date == '') {
+            alert('Please select second date');
+            return;
+        }
+
+        var url = "<?php echo base_url('admin/attendance/extra_present_approval'); ?>";
         $.ajax({
-            url: '<?php echo site_url("admin/attendance/add_latecomment"); ?>',
+            url: url,
             type: 'POST',
-            data: formData,
-            dataType: 'json',
+            data: {
+                "sql": sql,
+                "first_date": first_date,
+                "second_date": second_date
+            },
             success: function(response) {
-                $('#loading').css({
-                    visibility: 'hidden'
-                });
-                // Handle the response from the server
-                Swal.fire({
-                    title: 'Success!',
-                    text: response,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
+                $('#extra_present_approval_modal').modal('show');
+                var item = ''
+                arr = JSON.parse(response);
+                if (arr.length != 0) {
+                    $.each(arr, function(index, value) {
+                        item += '<tr>';
+                        item += '<td class="">' + value.first_name + ' ' + value.last_name +'</td>';
+                        item += '<td class="">' + value.attendance_date+'</td>';
+                        item += '<td class="">' + value.clock_in+'</td>';
+                        item += '<td class="">' + value.clock_out+'</td>';
+                        item += '<td class="">Extra Present</td>';
+                        item += `<td class="">
+                            <label class="checkbox-btn">
+                                    <label for="checkbox"></label>
+                                    <input id="checkbox"  onchange="extra_present_approval_press(this,${value.time_attendance_id})" type="checkbox" ${value.extra_ap == 1 ? 'checked' : ''}>
+                                    <span class="checkmark"></span>
+                            </label>
+                            </td>`;
+                        item += '</tr>';
+                    });
+                }
+                $('#extra_present_approval_data').html(item);
             },
             error: function(xhr, status, error) {
                 console.log(xhr.responseText);
             }
-        });
-    });
-});
-</script>
-<script>
-function extra_present_approval() {
-    first_date = document.getElementById('process_date').value;
-    second_date = document.getElementById('second_date').value;
-    var checkboxes = document.getElementsByName('select_emp_id[]');
-    var sql = get_checked_value(checkboxes);
-    if (sql == '') {
-        alert('Please select employee Id');
-        return;
+        })
     }
-
-    if (first_date == '') {
-        alert('Please select first date');
-        return;
-    }
-    if (second_date == '') {
-        alert('Please select second date');
-        return;
-    }
-    console.log(sql);
-    var url = "<?php echo base_url('admin/attendance/extra_present_approval'); ?>";
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: {
-            "sql": sql,
-            "first_date": first_date,
-            "second_date": second_date
-        },
-        success: function(response) {
-            $('#extra_present_approval_modal').modal('show');
-            var item = ''
-            arr = JSON.parse(response);
-            if (arr.length != 0) {
-                $.each(arr, function(index, value) {
-                    item += '<tr>';
-                    item += '<td class="">' + value.first_name + ' ' + value.last_name +'</td>';
-                    item += '<td class="">' + value.attendance_date+'</td>';
-                    item += '<td class="">' + value.clock_in+'</td>';
-                    item += '<td class="">' + value.clock_out+'</td>';
-                    item += '<td class="">Extra Present</td>';
-                    item += `<td class="">
-                        <label class="checkbox-btn">
-                                <label for="checkbox"></label>
-                                <input id="checkbox"  onchange="extra_present_approval_press(this,${value.time_attendance_id})" type="checkbox" ${value.extra_ap == 1 ? 'checked' : ''}>
-                                <span class="checkmark"></span>
-                        </label>
-                        </td>`;
-                    item += '</tr>';
-                });
+    </script>
+    <script>
+    function extra_present_approval_press(data, time_attendance_id) {
+        if (data.checked) {
+            data=1
+        } else {
+            data=0
+        }
+        var url = "<?php echo base_url('admin/attendance/extra_present_approval_press'); ?>";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                "data": data,
+                "time_attendance_id": time_attendance_id
+            },
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr.responseText);
             }
-            $('#extra_present_approval_data').html(item);
-        },
-        error: function(xhr, status, error) {
-            console.log(xhr.responseText);
-        }
-    })
-}
-</script>
-<script>
-function extra_present_approval_press(data, time_attendance_id) {
-    if (data.checked) {
-        data=1
-    } else {
-        data=0
-    } 
-    var url = "<?php echo base_url('admin/attendance/extra_present_approval_press'); ?>";
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: {
-            "data": data,
-            "time_attendance_id": time_attendance_id
-        },
-        success: function(response) {
-            console.log(response);
-        },
-        error: function(xhr, status, error) {
-            console.log(xhr.responseText);
-        }
-    })
-}
+        })
+    }
 </script>
 
-    

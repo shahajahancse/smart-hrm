@@ -6,6 +6,8 @@
 <?php $system = $this->Xin_model->read_setting_info(1); ?>
 <?php $lefts = $this->Xin_model->left_resign_list(1); ?>
 <?php $resigns = $this->Xin_model->left_resign_list(2); ?>
+
+
 <div class="row <?php echo $get_animate;?>">
     <div class="col-sm-6 col-lg-3">
         <div class="card p-3">
@@ -152,12 +154,15 @@
     <div id="accordion">
         <div class="box-header  with-border">
             <h3 class="box-title"><?php echo $this->lang->line('xin_add_new');?>
-                <?php echo $this->lang->line('xin_employee');?></h3>
-            <div class="box-tools pull-right"> <a class="text-dark collapsed" data-toggle="collapse" href="#add_form"
-                    aria-expanded="false">
+                <?php echo $this->lang->line('xin_employee');?>
+            </h3>
+            <div class="box-tools pull-right">
+                <a class="text-dark collapsed" data-toggle="collapse" href="#add_form" aria-expanded="false">
                     <button type="button" class="btn btn-xs btn-primary"> <span class="ion ion-md-add"></span>
-                        <?php echo $this->lang->line('xin_add_new');?></button>
-                </a> </div>
+                        <?php echo $this->lang->line('xin_add_new');?>
+                    </button>
+                </a>
+            </div>
         </div>
 
         <div id="add_form" class="collapse add-form <?php echo $get_animate;?>" data-parent="#accordion" style="">
@@ -169,13 +174,25 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="first_name"><?php echo $this->lang->line('xin_employee_first_name');?><i
-                                        class="hrsale-asterisk"><span style="color:red">*</span></i></label>
-                                <input class="form-control"
-                                    placeholder="<?php echo $this->lang->line('xin_employee_first_name');?>"
-                                    name="first_name" type="text" value="">
+                                <label for="first_name">Select Company<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                <select class="form-control" name="company_id" id="filter_company" data-plugin="select_hrm"
+                                    data-placeholder="<?php echo $this->lang->line('left_company');?>">
+                                    <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
+                                    <?php foreach($get_all_companies as $company) {?>
+                                    <option value="<?php echo $company->company_id?>"><?php echo $company->name?>
+                                    </option>
+                                    <?php } ?>
+                                </select>
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="first_name"><?php echo $this->lang->line('xin_employee_first_name');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_first_name');?>" name="first_name" type="text" value="">
+                            </div>
+                        </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="last_name"
@@ -187,6 +204,10 @@
                             </div>
                         </div>
 
+                        <input type="hidden" name="location_id" value="1">
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="employee_id"
@@ -197,7 +218,6 @@
                                     name="employee_id" type="text" value="">
                             </div>
                         </div>
-
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="proxi_id" class="control-label">Punch id<i class="hrsale-asterisk"><span
@@ -206,12 +226,6 @@
                                     value="" required>
                             </div>
                         </div>
-
-                        <input type="hidden" name="company_id" value="1">
-                        <input type="hidden" name="location_id" value="1">
-                    </div>
-
-                    <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="proxi_id" class="control-label">Set Salary<i class="hrsale-asterisk"><span
@@ -220,10 +234,10 @@
                                     required>
                             </div>
                         </div>
+
                         <div class="col-md-3">
                             <div class="form-group" id="ajx_department">
-                                <label for="designation"><?php echo $this->lang->line('xin_hr_main_department');?><i
-                                        class="hrsale-asterisk">*</i></label>
+                                <label for="designation">Department<i class="hrsale-asterisk">*</i></label>
                                 <select class="select2" data-plugin="select_hrm"
                                     data-placeholder="<?php echo $this->lang->line('xin_select_department');?>"
                                     name="department_id" id="aj_subdepartments">
@@ -246,6 +260,9 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="email"
@@ -258,9 +275,6 @@
                                     type="text" value="">
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
 
                         <div class="col-md-3">
                             <div class="form-group">
@@ -294,7 +308,11 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
 
+                    <input type="hidden" name="subdepartment_id" value="YES" />
+
+                    <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="floor_status">Floor Set<i class="hrsale-asterisk"><span
@@ -317,11 +335,6 @@
                             </div>
                         </div>
 
-                    </div>
-
-                    <input type="hidden" name="subdepartment_id" value="YES" />
-
-                    <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="gender"
@@ -375,13 +388,15 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="xin_hr_leave_cat">Team Leader</label>
                                 <select class="form-control" name="is_emp_lead">
                                     <?php
-                                        $team_leads = $this->db->select('user_id,first_name,last_name')->where('is_emp_lead',2)->get('xin_employees')->result(); 
+                                        $team_leads = $this->db->select('user_id,first_name,last_name')->where('is_emp_lead',2)->get('xin_employees')->result();
                                         foreach($team_leads as $row){
                                     ?>
                                     <option value="<?php echo $row->user_id?>"><?php echo $row->first_name." ".$row->last_name?></option>
@@ -390,25 +405,6 @@
                             </div>
                         </div>
 
-
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label
-                                    for="xin_hr_leave_cat"><?php echo $this->lang->line('xin_hr_leave_cat');?></label>
-                                <input type="hidden" name="leave_categories[]" value="0" />
-                                <select multiple="multiple" class="form-control" name="leave_categories[]"
-                                    data-plugin="select_hrm"
-                                    data-placeholder="<?php echo $this->lang->line('xin_hr_leave_cat');?>">
-                                    <?php foreach($all_leave_types as $leave_type) {?>
-                                    <option value="<?php echo $leave_type->leave_type_id?>">
-                                        <?php echo $leave_type->type_name?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="contact_no"
@@ -426,7 +422,7 @@
                                 <input class="form-control" placeholder="Username" name="username" type="text" value="">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label
                                     for="xin_employee_password"><?php echo $this->lang->line('xin_employee_password');?><i
@@ -436,7 +432,7 @@
                                     name="password" type="text" value="">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label for="confirm_password"
                                     class="control-label"><?php echo $this->lang->line('xin_employee_cpassword');?><i
@@ -448,104 +444,345 @@
                         </div>
                     </div>
 
+                    <!-- Present and Permanent Address -->
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="address"><?php echo $this->lang->line('xin_employee_address');?></label>
-                                <input type="text" class="form-control"
-                                    placeholder="<?php echo $this->lang->line('xin_employee_address');?>"
-                                    name="address">
+                            <h4>Present Address</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="address">Division</label>
+                                        <select name="div_id_pre" id="div_id_pre" class="form-control">
+                                            <?php
+                                            $emp_divisions=$this->db->select('*')->from('emp_divisions')->get()->result();
+                                            foreach($emp_divisions as $division) {
+                                                ?>
+                                            <option value="<?php echo $division->id?>"><?php echo $division->name_en?>
+                                            </option>
+                                            <?php }?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name_en">Select District</label>
+                                        <select name="dis_id_pre" id="dis_id_pre" class="form-control" required>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name_en">Select Upazila</label>
+                                        <select name="up_id_pre" id="up_id_pre" class="form-control" required>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name_en">Select Post Office</label>
+                                        <select name="po_id_pre" id="po_id_pre" class="form-control">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="name_en">Village</label>
+                                        <input type="text" name="village_pre" id="village_pre" class="form-control">
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="address">Permanent Address</label>
-                                <input type="text" class="form-control" placeholder="Enter Permanent Address"name="per_address">
+                            <h4>Permanent Address</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="address">Division</label>
+                                        <select name="div_id_per" id="div_id_per" class="form-control">
+                                            <?php
+                                            $emp_divisions=$this->db->select('*')->from('emp_divisions')->get()->result();
+                                            foreach($emp_divisions as $division) {
+                                                ?>
+                                            <option value="<?php echo $division->id?>"><?php echo $division->name_en?>
+                                            </option>
+                                            <?php }?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name_en">Select District</label>
+                                        <select name="dis_id_per" id="dis_id_per" class="form-control" required>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name_en">Select Upazila</label>
+                                        <select name="up_id_per" id="up_id_per" class="form-control" required>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name_en">Select Post Office</label>
+                                        <select name="po_id_per" id="po_id_per" class="form-control">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="name_en">Village</label>
+                                        <input type="text" name="village_per" id="village_per" class="form-control">
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+                        <script>
+                            $(document).ready(function() {
+                                $('#div_id_pre').on('change', function() {
+                                    var div_id = $(this).val();
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '<?php echo site_url('api/client_attendance/get_district') ?>',
+                                        data: {
+                                            division_id: div_id
+                                        },
+                                        success: function(data) {
+                                            emp_districts = data.data.emp_districts
+                                            $('#dis_id_pre').html(
+                                                '<option value="">Select</option>');
+                                            $.each(emp_districts, function(index, value) {
+                                                $('#dis_id_pre').append('<option value="' +
+                                                    value.id + '">' + value
+                                                    .name_en + '</option>');
+                                            });
+                                        }
+                                    });
+                                });
+                                $('#dis_id_pre').on('change', function() {
+                                    var dis_id = $('#dis_id_pre').val();
+                                    var div_id = $('#div_id_pre').val();
+
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '<?php echo site_url('api/Client_attendance/get_upazila') ?>',
+                                        data: {
+                                            district_id: dis_id,
+                                            division_id: div_id
+                                        },
+                                        success: function(data) {
+                                            emp_districts = data.data.emp_upazilas
+                                            $('#up_id_pre').html(
+                                            '<option value="">Select</option>');
+                                            $.each(emp_districts, function(index, value) {
+                                                $('#up_id_pre').append('<option value="' +
+                                                    value.id + '">' + value
+                                                    .name_en + '</option>');
+                                            });
+                                        }
+                                    });
+                                });
+                                $('#up_id_pre').on('change', function() {
+                                    var dis_id = $('#dis_id_pre').val();
+                                    var div_id = $('#div_id_pre').val();
+                                    var up_id = $('#up_id_pre').val();
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '<?php echo site_url('api/Client_attendance/get_post_office') ?>',
+                                        data: {
+                                            district_id: dis_id,
+                                            division_id: div_id,
+                                            upazila_id: up_id
+                                        },
+                                        success: function(data) {
+                                            emp_districts = data.data.emp_post_offices
+                                            $('#po_id_pre').html(
+                                            '<option value="">Select</option>');
+                                            $.each(emp_districts, function(index, value) {
+                                                $('#po_id_pre').append('<option value="' +
+                                                    value.id + '">' + value
+                                                    .name_en + '</option>');
+                                            });
+                                        }
+                                    });
+                                });
+                            })
+                        </script>
+                         <script>
+                            $(document).ready(function() {
+                                $('#div_id_per').on('change', function() {
+                                    var div_id = $(this).val();
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '<?php echo site_url('api/Client_attendance/get_district') ?>',
+                                        data: {
+                                            division_id: div_id
+                                        },
+                                        success: function(data) {
+                                            emp_districts = data.data.emp_districts
+                                            $('#dis_id_per').html(
+                                                '<option value="">Select</option>');
+                                            $.each(emp_districts, function(index, value) {
+                                                $('#dis_id_per').append('<option value="' +
+                                                    value.id + '">' + value
+                                                    .name_en + '</option>');
+                                            });
+                                        }
+                                    });
+                                });
+                                $('#dis_id_per').on('change', function() {
+                                    var dis_id = $('#dis_id_per').val();
+                                    var div_id = $('#div_id_per').val();
+
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '<?php echo site_url('api/Client_attendance/get_upazila') ?>',
+                                        data: {
+                                            district_id: dis_id,
+                                            division_id: div_id
+                                        },
+                                        success: function(data) {
+                                            emp_districts = data.data.emp_upazilas
+                                            $('#up_id_per').html(
+                                            '<option value="">Select</option>');
+                                            $.each(emp_districts, function(index, value) {
+                                                $('#up_id_per').append('<option value="' +
+                                                    value.id + '">' + value
+                                                    .name_en + '</option>');
+                                            });
+                                        }
+                                    });
+                                });
+                                $('#up_id_per').on('change', function() {
+                                    var dis_id = $('#dis_id_per').val();
+                                    var div_id = $('#div_id_per').val();
+                                    var up_id = $('#up_id_per').val();
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '<?php echo site_url('api/Client_attendance/get_post_office') ?>',
+                                        data: {
+                                            district_id: dis_id,
+                                            division_id: div_id,
+                                            upazila_id: up_id
+                                        },
+                                        success: function(data) {
+                                            emp_districts = data.data.emp_post_offices
+                                            $('#po_id_per').html(
+                                            '<option value="">Select</option>');
+                                            $.each(emp_districts, function(index, value) {
+                                                $('#po_id_per').append('<option value="' +
+                                                    value.id + '">' + value
+                                                    .name_en + '</option>');
+                                            });
+                                        }
+                                    });
+                                });
+                            })
+                        </script>
                     </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <h4>Emergency Contact</h4>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="relation"><?php echo $this->lang->line('xin_e_details_relation');?><i
-                                            class="hrsale-asterisk"><span style="color:red">*</span></i></label>
-                                    <select class="form-control" name="relation" data-plugin="select_hrm"
-                                        data-placeholder="<?php echo $this->lang->line('xin_select_one');?>" required>
-                                        <option value=""><?php echo $this->lang->line('xin_select_one');?></option>
-                                        <option value="Self"><?php echo $this->lang->line('xin_self');?></option>
-                                        <option value="Parent"><?php echo $this->lang->line('xin_parent');?></option>
-                                        <option value="Spouse"><?php echo $this->lang->line('xin_spouse');?></option>
-                                        <option value="Child"><?php echo $this->lang->line('xin_child');?></option>
-                                        <option value="Sibling"><?php echo $this->lang->line('xin_sibling');?></option>
-                                        <option value="In Laws"><?php echo $this->lang->line('xin_in_laws');?></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="name"
-                                        class="control-label"><?php echo $this->lang->line('xin_name');?><i
-                                            class="hrsale-asterisk"><span style="color:red">*</span></i></label>
-                                    <input class="form-control"
-                                        placeholder="<?php echo $this->lang->line('xin_name');?>" name="contact_name"
-                                        type="text" required>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group" id="designation_ajax">
-                                    <label for="address_1"
-                                        class="control-label"><?php echo $this->lang->line('xin_address');?></label>
-                                    <input class="form-control"
-                                        placeholder="<?php echo $this->lang->line('xin_address');?>" name="address_1"
-                                        type="text" required>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="work_phone"><?php echo $this->lang->line('xin_phone');?><i
-                                            class="hrsale-asterisk"><span style="color:red">*</span></i></label>
-                                    <input class="form-control"
-                                        placeholder="<?php echo $this->lang->line('xin_phone');?>" name="e_phone_number"
-                                        type="text" required>
-                                </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="relation"><?php echo $this->lang->line('xin_e_details_relation');?><i
+                                        class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                <select class="form-control" name="relation" data-plugin="select_hrm"
+                                    data-placeholder="<?php echo $this->lang->line('xin_select_one');?>" required>
+                                    <option value=""><?php echo $this->lang->line('xin_select_one');?></option>
+                                    <option value="Self"><?php echo $this->lang->line('xin_self');?></option>
+                                    <option value="Parent"><?php echo $this->lang->line('xin_parent');?></option>
+                                    <option value="Spouse"><?php echo $this->lang->line('xin_spouse');?></option>
+                                    <option value="Child"><?php echo $this->lang->line('xin_child');?></option>
+                                    <option value="Sibling"><?php echo $this->lang->line('xin_sibling');?></option>
+                                    <option value="In Laws"><?php echo $this->lang->line('xin_in_laws');?></option>
+                                </select>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="col-md-12" style="display:flex;flex-direction:row">
-                                    <div class='form-group'>
-                                        <fieldset class="form-group">
-                                            <label for="logo">Profile Picture<i class="hrsale-asterisk"><span
-                                                        style="color:red">*</span></i></label>
-                                            <input type="file" class="form-control-file" id="p_file" name="p_file"
-                                                accept=".gif, .png, .jpg, .jpeg">
-                                            <small><?php echo $this->lang->line('xin_e_details_picture_type');?></small>
-                                        </fieldset>
-                                    </div>
-                                    <div class='form-group'>
-                                        <fieldset class="form-group">
-                                            <label for="logo">Note</label>
-                                            <input type="file" class="form-control-file" id="n_file" name="n_file"
-                                                accept=".gif, .png, .jpg, .jpeg">
-                                            <small><?php echo $this->lang->line('xin_e_details_picture_type');?></small>
-                                        </fieldset>
-                                    </div>
-                                    <div class='form-group'>
-                                        <fieldset class="form-group">
-                                            <label for="logo">Remark</label>
-                                            <textarea class="form-control" id="remark" name="remark" rows="3"></textarea>
-                                        </fieldset>
-                                    </div>
-                                </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="name"
+                                    class="control-label"><?php echo $this->lang->line('xin_name');?><i
+                                        class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                <input class="form-control"
+                                    placeholder="<?php echo $this->lang->line('xin_name');?>" name="contact_name"
+                                    type="text" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group" id="designation_ajax">
+                                <label for="address_1"
+                                    class="control-label"><?php echo $this->lang->line('xin_address');?></label>
+                                <input class="form-control"
+                                    placeholder="<?php echo $this->lang->line('xin_address');?>" name="address_1"
+                                    type="text" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="work_phone"><?php echo $this->lang->line('xin_phone');?><i
+                                        class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                <input class="form-control"
+                                    placeholder="<?php echo $this->lang->line('xin_phone');?>" name="e_phone_number"
+                                    type="text" required>
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <!-- <div class="col-md-12" style="display:flex;flex-direction:row"> -->
+                            <div class='form-group'>
+                                <fieldset class="form-group">
+                                    <label for="logo">Profile Picture<i class="hrsale-asterisk"><span
+                                                style="color:red">*</span></i></label>
+                                    <input type="file" class="form-control-file" id="p_file" name="p_file"
+                                        accept=".gif, .png, .jpg, .jpeg">
+                                    <small><?php echo $this->lang->line('xin_e_details_picture_type');?></small>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class='form-group'>
+                                <fieldset class="form-group">
+                                    <label for="logo">Note</label>
+                                    <input type="file" class="form-control-file" id="n_file" name="n_file"
+                                        accept=".gif, .png, .jpg, .jpeg">
+                                    <small><?php echo $this->lang->line('xin_e_details_picture_type');?></small>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class='form-group'>
+                                <fieldset class="form-group">
+                                    <label for="logo">Remark</label>
+                                    <textarea class="form-control" id="remark" name="remark" rows="3"></textarea>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="form-actions box-footer">
                         <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_save'))); ?>
                     </div>
                 </div>
+
                 <?php $count_module_attributes = $this->Custom_fields_model->count_module_attributes();?>
                 <?php $module_attributes = $this->Custom_fields_model->all_hrsale_module_attributes();?>
                 <?php if($count_module_attributes > 0):?>
@@ -635,7 +872,7 @@
 
 <div class="box <?php echo $get_animate;?>">
     <div class="box-header with-border">
-        
+
 
         <h3 class="box-title">Employee List</h3>
         <!-- <?php if($user_info[0]->user_role_id==1) { ?> -->
@@ -871,7 +1108,7 @@ $(document).ready(function() {
         } else {
             $("#lr_effective_date").attr('style', 'border: 1px solid #ccd6e6 !important');
         }
-        // end validation 
+        // end validation
 
         // ajax request on form submit
         var emp_id = $('#hidden_id_emp').val();

@@ -56,20 +56,6 @@
               </select>
             </div>
           </div>
-
-          <div class="col-md-4">
-            <div class="form-group">
-              <br/>
-              <span ><b>Status:</b></span>
-              <select   name="status" id="status">
-                <option value="">Select one</option>
-                <option value="1">Active</option>
-                <option value="2">Inactive</option>
-                <!-- <option value="3">resign</option> -->
-              </select>
-            </div>
-          </div>
-
           <div class="col-md-1">
             <div class="form-group"> 
               <button style="margin-top:15px;margin-left: -70px;" class="btn btn-success" onclick="salary_process()">Process</button>
@@ -149,6 +135,81 @@
 
 <div id="loader"  align="center" style="margin:0 auto; width:600px; overflow:hidden; display:none; margin-top:10px;"><img src="<?php echo base_url();?>/uploads/ajax-loader.gif" /></div>
 
+
+<div class="box mb-4 <?php echo $get_animate;?>">
+  <div class="box-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12">
+              <div class="row">
+                  <div class="col-md-4">
+                      <div class="form-group">
+                          <label for="process_date">First Date</label>
+                          <input class="form-control attendance_date"
+                              placeholder="<?php echo $this->lang->line('xin_select_date');?>" id="process_date"
+                              name="process_date" type="text" value="<?php echo date('Y-m-d');?>">
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="form-group">
+                          <label for="process_date">Second Date</label>
+                          <input class="form-control attendance_date" placeholder="Second Date" id="second_date"
+                              name="second_date" type="text" autocomplete="off">
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="form-group">
+                          <label for="upload_file">Status</label>
+                          <select class="form-control select22" name="status" id="status" onchange="get_user()">
+                              <option value="">Select Status</option>
+                              <option value="0" selected>Active</option>
+                              <option value="1">Inactive</option>
+                              <option value="All">All</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-4">
+                      <div class="form-group">
+                          <label for="upload_file">Floor</label>
+                          <select class="form-control select22" name="floor" id="floor" onchange="get_user()">
+                              <option value="" selected>All</option>
+                              <option value="3">3rd Floor</option>
+                              <option value="5">5th Floor</option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="form-group">
+                          <label>Department</label>
+                          <select class="form-control select22" name="department" id="department" onchange="get_user()">
+                              <option value="" selected>All</option>
+                              <?php
+                              $all_department =$this->db->query("SELECT * from xin_departments")->result();
+                              foreach ($all_department as $key => $value) { ?>
+                              <option value="<?= $value->department_id ?>"><?= $value->department_name ?></option>
+                              <?php } ?>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="form-group">
+                          <label for="">Designation</label>
+                          <select class="form-control select22" name="designation" id="designation" onchange="get_user()">
+                              <option value="" selected>All</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="box <?php echo $get_animate;?>">
   <div class="box-header with-border" id="report_title">
     <h3 class="box-title" id="report"> Salary Report
@@ -173,8 +234,6 @@
     <!-- hh -->
     
     <div class="tab-content" id="myTabContent">
-      
-
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel()">Salary Sheet</button>
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel_bank(2,1)">Bank Salary Sheet</button>
@@ -226,8 +285,6 @@
 </div>
 </div>
 
-
-
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/hrm.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>skin/hrsale_assets/js/salary.js"></script>
 <script>
@@ -270,14 +327,14 @@
         success: function(response){
       
           arr = response.employees;
-          console.log(arr);
+          // console.log(arr);
           if (arr.length != 0) {
             var items = '';
             $.each(arr, function(index,value) {
               items += '<tr id="removeTr">';
               items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="'+value.emp_id+'" ></td>';
               items += '<td class="success">'+value.emp_id+'</td>';
-              items += '<td class="warning ">'+value.first_name +' '+ value.last_name +'</td>';
+              items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + " (" +value.emp_id + ")" + '</td>';
               items += '</tr>';
             });
             // console.log(items);
@@ -288,43 +345,32 @@
         }
       });
     });
-   });
+    });
 
    $("#emp_name option").filter(function() {
-        return $id= $(this).val() == $("#gross_salary").val();
-     }).attr('selected', true);
+    return $id= $(this).val() == $("#gross_salary").val();
+  }).attr('selected', true);
 
-   
-   
-   
- function save_modify_salary() {
-  
-            // retrieve form data
-            var formData = $('#salaryForm').serializeArray();
-
-            // define the URL for the server-side PHP script that will handle the AJAX request
-            var url = "<?php echo base_url('admin/payroll/save_modify_salary_all');?>";
-
-            // send an AJAX request to the server-side PHP script
-            $.ajax({
-              url: url, // specify the URL of the PHP script
-              type: 'POST', // specify the HTTP method (POST in this case)
-              data: formData, // include the form data in the request
-              success: function(response) {
-              
-                 $('#total').empty();
-                $('#empfrom').empty();
-                 modify_salary()
-                 $('#my_modal').modal('show');
-                 // Create alert
-                alert("Operation successful!");
-               }
-            });
-
+  function save_modify_salary() {
+    var formData = $('#salaryForm').serializeArray();
+    var url = "<?php echo base_url('admin/payroll/save_modify_salary_all');?>";
+    $.ajax({
+      url: url, 
+      type: 'POST', 
+      data: formData, 
+      success: function(response) {
+        $('#total').empty();
+        $('#empfrom').empty();
+        modify_salary()
+        $('#my_modal').modal('show');
+        // Create alert
+        alert("Operation successful!");
+      }
+    });
   }
 
 
- $(document).ready(function(){
+  $(document).ready(function(){
     $("#modify_salary").on('input',function(){
       $("#modify_salary").attr('style', 'border: 1px solid #ccd6e6 !important');
       if($("#modify_salary").val() ==''){
@@ -346,8 +392,127 @@
 <script>
   function chenge_s() {
     $("#status").trigger('change');
-    
   }
+</script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        
+        $("#department").change(function () {
+            var department_id = $(this).val();
+            $("#designation").empty();
+            if (department_id == "") {
+                return false;
+            }
+            $.ajax({
+                url: "<?php echo site_url("admin/reports/get_designations") ?>",
+                type: "POST",
+                data: {
+                    department_id: department_id
+                },
+                success: function (data) {
+                    $("#designation").append('<option value="" selected>All</option>');
+                    data=JSON.parse(data);
+                    for (var i = 0; i < data.length; i++) {
+                        $("#designation").append('<option value="' + data[i].designation_id + '">' + data[i].designation_name + '</option>');
+                    }
+                },
+                error: function () {
+                    alert("Error");
+                },
+                complete: function () {
+                    $("#designation").select2();
+                } 
+            });
+        });
+    });
+</script>
+
+<script>
+    function get_user(){
+        $('.removeTr').remove();
+        $("#select_all").prop("checked", false);
+        $('#fileDiv .removeTr').remove();
+
+        var status = document.getElementById('status').value;
+        var floor = document.getElementById('floor').value;
+        var department = document.getElementById('department').value;
+        var designation = document.getElementById('designation').value;
+
+
+
+        var url = "<?php echo base_url('admin/reports/get_employeess_v2'); ?>";
+        $.ajax({
+        url: url,
+        type: 'GET',
+        data: { 
+            "status": status,
+            "floor": floor,
+            "department": department,
+            "designation": designation
+        },
+        contentType: "application/json",
+        dataType: "json",
+        success: function (response) {
+          arr = response.employees;
+          if (arr.length != 0) {
+            var i = 1;
+            var items = '';
+            $.each(arr, function (index, value) {
+              items += '<tr class="removeTr">';
+              items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' + value.emp_id + '" ></td>';
+              items += '<td class="success">' + (i++) + '</td>';
+              items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + " (" +value.emp_id + ")" + '</td>';
+              items += '</tr>';
+            });
+            $('.removeTr').remove();
+            // $('#fileDiv').html(items);
+          }else{
+            $('.removeTr').remove();
+            // $('#fileDiv').html('<tr class="removeTr"><td colspan="3">No Employee Found</td></tr>');
+          }
+        }
+      });
+
+    }
+
+    get_user(); 
+
+
+
+    // $("#status").change(function () {
+    //   status = document.getElementById('status').value;
+    //   var url = "<?php echo base_url('admin/reports/get_employeess'); ?>";
+    //   $("#select_all").prop("checked", false);
+    //   $('#fileDiv .removeTr').remove();
+
+    //   $.ajax({
+    //     url: url,
+    //     type: 'GET',
+    //     data: { "status": status },
+    //     contentType: "application/json",
+    //     dataType: "json",
+    //     success: function (response) {
+    //       arr = response.employees;
+    //       if (arr.length != 0) {
+    //         var i = 1;
+    //         var items = '';
+    //         $.each(arr, function (index, value) {
+    //           items += '<tr class="removeTr">';
+    //           items += '<td><input type="checkbox" class="checkbox" id="select_emp_id" name="select_emp_id[]" value="' + value.emp_id + '" ></td>';
+    //           items += '<td class="success">' + (i++) + '</td>';
+    //           items += '<td class="warning ">' + value.first_name + ' ' + value.last_name + " (" +value.emp_id + ")" + '</td>';
+    //           items += '</tr>';
+    //         });
+    //         // Append the new rows
+    //         $('#fileDiv tr:last').after(items);
+    //       }
+    //     }
+    //   });
+    // });
 </script>
 
 

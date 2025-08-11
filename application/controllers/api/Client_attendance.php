@@ -24,13 +24,13 @@ class Client_attendance extends API_Controller
      * @method POST
      * @return Response|void
      */
-    
+
     public function index()
     {
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
         if ($user_info['status'] == true) {
-            $user_data=$user_info['user_info'];    
+            $user_data=$user_info['user_info'];
             $from_date=date('Y-m-d',strtotime($this->input->post('from_date')));//$$this->input->post('from_date');
             $to_date=date('Y-m-d',strtotime($this->input->post('to_date')));//$this->input->post('to_date');
             $userid=$user_data->user_id;
@@ -42,7 +42,7 @@ class Client_attendance extends API_Controller
                                         ->order_by('ca.id', 'desc')
                                         ->get()
                                         ->result();
-            
+
             $this->api_return([
                 'status'    =>  true,
                 'message'    =>  'successful',
@@ -61,7 +61,7 @@ class Client_attendance extends API_Controller
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
         if ($user_info['status'] == true) {
-            $user_data=$user_info['user_info'];                 
+            $user_data=$user_info['user_info'];
             $userid=$user_data->user_id;
             $this->load->library('form_validation');
             $this->form_validation->set_rules('client_name', 'Client Name', 'trim|required');
@@ -96,10 +96,10 @@ class Client_attendance extends API_Controller
                 $location_longitude = $this->input->post('location_longitude');
                 $remarks = $this->input->post('remarks');
                 $date = date('Y-m-d');
-                
+
                 if ($_POST['live_image']) {
                     $base64String = $_POST['live_image'];
-                    preg_match('/^data:image\/(.*);base64,/', $base64String, $output_array);      
+                    preg_match('/^data:image\/(.*);base64,/', $base64String, $output_array);
                     if(isset($output_array[1])){
                         $fileExtension = $output_array[1];
                         $base64String = preg_replace('/^data:image\/(.*);base64,/', '', $base64String);
@@ -172,7 +172,7 @@ class Client_attendance extends API_Controller
             ], 404);
         }
     }
-    public function get_division()
+    public function get_divisions()
     {
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
@@ -195,10 +195,10 @@ class Client_attendance extends API_Controller
             ], 404);
         }
     }
-    public function get_district()
+    public function get_districts()
     {
-        $authorization = $this->input->get_request_header('Authorization');
-        $user_info = api_auth($authorization);
+        // $authorization = $this->input->get_request_header('Authorization');
+        // $user_info = api_auth($authorization);
         if ($user_info['status'] == true) {
 
             $emp_districts=$this->db->select('*')
@@ -226,7 +226,7 @@ class Client_attendance extends API_Controller
             ], 404);
         }
     }
-    public function get_upazila()
+    public function get_upazilas()
     {
         $authorization = $this->input->get_request_header('Authorization');
         $user_info = api_auth($authorization);
@@ -252,5 +252,58 @@ class Client_attendance extends API_Controller
             ], 404);
         }
     }
-   
+
+    public function get_division()
+    {
+        $emp_divisions=$this->db->select('*')->from('emp_divisions')->get()->result();
+        $data['emp_divisions']=$emp_divisions;
+        $this->api_return([
+            'status'    =>  true,
+            'message'    =>  'successful',
+            'data'       =>  $data,
+        ], 200);
+    }
+    public function get_district()
+    {
+            $emp_districts=$this->db->select('*')
+                            ->from('emp_districts')
+                            ->where('div_id', $_REQUEST['division_id'])
+                            ->get()->result();
+            $data['emp_districts']=$emp_districts;
+            $this->api_return([
+                'status'    =>  true,
+                'message'    =>  'successful',
+                'data'       =>  $data,
+            ], 200);
+    }
+    public function get_upazila()
+    {
+            $emp_upazilas=$this->db->select('*')
+            ->from('emp_upazilas')
+            ->where('dis_id', $_REQUEST['district_id'])
+            ->where('div_id', $_REQUEST['division_id'])
+            ->get()->result();
+            $data['emp_upazilas']=$emp_upazilas;
+            $this->api_return([
+                'status'    =>  true,
+                'message'    =>  'successful',
+                'data'       =>  $data,
+            ], 200);
+    }
+    public function get_post_office()
+    {
+            $emp_post_offices=$this->db->select('*')
+            ->from('emp_post_offices')
+            ->where('dis_id', $_REQUEST['district_id'])
+            ->where('div_id', $_REQUEST['division_id'])
+            ->where('upa_id', $_REQUEST['upazila_id'])
+            ->get()->result();
+            $data['emp_post_offices']=$emp_post_offices;
+            $this->api_return([
+                'status'    =>  true,
+                'message'    =>  'successful',
+                'data'       =>  $data,
+            ], 200);
+    }
+
 }

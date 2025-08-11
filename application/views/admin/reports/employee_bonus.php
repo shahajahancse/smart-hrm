@@ -63,7 +63,7 @@
         <table class="col-md-12" border="1" cellspacing="0">
             <thead>
                 <tr>
-                    <th colspan="6">
+                    <th colspan="7">
                         <h3> 1 Year complete Employee</h3>
                     </th>
                 </tr>
@@ -75,6 +75,7 @@
                     <th>Date of Joining</th>
                     <th>Job Duration</th>
                     <th>Salary</th>
+                    <th>Bonus</th>
                 </tr>
             </thead>
             <tbody>
@@ -105,6 +106,7 @@
                     ?>
                     <td><?= $duration ?></td>
                     <td><?= $value->salary ?></td>
+                    <td><?= $value->salary/2 ?></td>
                 </tr>
                 <?php }
           ?>
@@ -113,7 +115,7 @@
         <table class="col-md-12" border="1" cellspacing="0">
             <thead>
                 <tr>
-                    <th colspan="6">
+                    <th colspan="7">
                         <h3>With Intern 1 Year Employee</h3>
                     </th>
                 </tr>
@@ -125,10 +127,12 @@
                     <th>Date of Joining</th>
                     <th>Job Duration</th>
                     <th>Salary</th>
+                    <th>Bonus</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
+                if(!empty($joining_one_year)){
                     $this->db->select('
                     xin_employees.*,
                     xin_departments.department_name,
@@ -139,6 +143,9 @@
                     $this->db->join('xin_departments','xin_departments.department_id = xin_employees.department_id','left');
                     $this->db->where_in('user_id',$joining_one_year);
                     $employee=$this->db->get()->result();
+                }else{
+                    $employee = array();
+                }
     
                     foreach ($employee as $key => $value) {
                     ?>
@@ -156,6 +163,7 @@
                     ?>
                     <td><?= $duration ?></td>
                     <td><?= $value->salary ?></td>
+                    <td><?= $value->salary/2 ?></td>
                 </tr>
                 <?php }?>
             </tbody>
@@ -163,7 +171,7 @@
         <table class="col-md-12" border="1" cellspacing="0">
             <thead>
                 <tr>
-                    <th colspan="6">
+                    <th colspan="7">
                         <h3>Non 1 Year Employee</h3>
                     </th>
                 </tr>
@@ -175,21 +183,26 @@
                     <th>Date of Joining</th>
                     <th>Job Duration</th>
                     <th>Salary</th>
+                    <th>Bonus</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-    
-                    $this->db->select('
-                    xin_employees.*,
-                    xin_departments.department_name,
-                    xin_designations.designation_name,
-                    ');
-                    $this->db->from('xin_employees');
-                    $this->db->join('xin_designations','xin_designations.designation_id = xin_employees.designation_id','left');
-                    $this->db->join('xin_departments','xin_departments.department_id = xin_employees.department_id','left');
-                    $this->db->where_in('user_id',$no_year);
-                    $employee=$this->db->get()->result();
+    if(!empty($no_year)){
+        
+        $this->db->select('
+        xin_employees.*,
+        xin_departments.department_name,
+        xin_designations.designation_name,
+        ');
+        $this->db->from('xin_employees');
+        $this->db->join('xin_designations','xin_designations.designation_id = xin_employees.designation_id','left');
+        $this->db->join('xin_departments','xin_departments.department_id = xin_employees.department_id','left');
+        $this->db->where_in('user_id',$no_year);
+        $employee=$this->db->get()->result();
+    }else{
+        $employee = array();
+    }
     
                     foreach ($employee as $key => $value) {
                         ?>
@@ -200,13 +213,14 @@
                     <td><?= $value->designation_name ?></td>
                     <td><?= $value->date_of_joining ?></td>
                     <?php
-                    $date1 = date('Y-06-17');
+                    $date1 = $first_date;
                     $date2 = $value->date_of_joining;
                     $diff = date_diff(date_create($date2), date_create($date1));
                     $duration = $diff->format("%y years %m months %d days");
                     ?>
                     <td><?= $duration ?></td>
                     <td><?= $value->salary ?></td>
+                    <td><?= $value->salary/2 ?></td>
                 </tr>
                 <?php }  ?>
             </tbody>

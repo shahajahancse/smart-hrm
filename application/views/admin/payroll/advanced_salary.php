@@ -15,12 +15,29 @@
 }
 </style>
 
+
+<?php if($this->session->flashdata('success')):?>
+    <div class="alert alert-success" style="padding: 10px;">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>  
+        <?php echo $this->session->flashdata('success');?>
+    </div>
+<?php endif; ?> 
+
+<?php if($this->session->flashdata('error')):?>
+    <div class="alert alert-warning" style="padding: 10px;">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>  
+        <?php echo $this->session->flashdata('error');?>
+    </div>
+<?php endif; ?> 
+<script>
+    setTimeout(function() {
+        $('.alert').fadeOut('slow');
+    }, 3000);
+</script>
 <div class="card">
     <div class="card-body">
         <h4>Manual Advanced Salary Add</h4>
-        <!-- <form class="form-inline" id="myForm"> -->
         <?php $attributes = array('id' => 'unit_insert', 'autocomplete' => 'off', 'class' => 'add form-hrm ');?>
-        <!-- < ?php $hidden = array('user_id' => $session['user_id'],'user_id' => $session['user_id']);?> -->
         <?php echo form_open_multipart('admin/payroll/advanced_salary_add', $attributes);?>
         <div class="row">
             <div class="form-group mb-2 col-md-4">
@@ -65,10 +82,12 @@
         <button type="submit" class="btn btn-primary mb-2" style="float:right" name="btn_advanced">Save</button>
         <?php echo form_close(); ?>
 
+    </div>
+</div>
+<br><br>
+<div class="card">
 
-
-
-        <br><br>
+    <div class="card-body">
         <p class="h4">Requested List</p>
         <table class="table table-striped table-bordered" id="table_id">
             <thead>
@@ -104,6 +123,7 @@
                         <a href="#" class="btn btn-sm btn-info edit-data-btn" data-id="<?=  $row->id ?>"
                             data-amount="<?= $row->requested_amount?>" data-effect-month="<?=$row->effective_month?>"
                             data-details="<?=$row->reason?>" data-toggle="modal" data-target="#myModalsss">Edit</a>
+                            
                         <a href="#" class="btn btn-sm btn-info approved_data" data-idd="<?=  $row->id ?>"
                             data-amountt="<?= $row->requested_amount?>" data-effect_month="<?=$row->effective_month?>"
                             data-detailss="<?=$row->reason?>" data-toggle="modal" data-target="#myModalss">Approved</a>

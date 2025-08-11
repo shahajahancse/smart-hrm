@@ -234,22 +234,8 @@ if($theme[0]->sub_menu_icons != ''){
           <?php } ?> 
 
           <?php if(in_array('124',$role_resources_ids)) { ?>
-            <li class="sidenav-link <?php if(!empty($arr_mod['emp_leave']))echo $arr_mod['emp_emp_leaveleave'];?>"> <a href="<?php echo site_url("admin/leave/emp_leave");?>"><i class="fa <?php echo $submenuicon;?>"></i>Leave</a></li>
-           <?php 
-              $session = $this->session->userdata('username');
-              $user_info = $this->Xin_model->read_user_info($session['user_id']);
-              $lead=0;
-              if($session['role_id'] == 3) {
-                if($user_info[0]->is_emp_lead==2){
-                  $lead=2;
-                }
-              };
-                if ($lead==2) {
-                  ?>
-              <li class="sidenav-link <?php if(!empty($arr_mod['emp_leave']))echo $arr_mod['emp_emp_leaveleave'];?>"> <a href="<?php echo site_url('admin/timesheet/leave');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Manage Team Leave  </a> </li>
-
-                <?php } ?> 
-            <?php } ?> 
+            <li class="sidenav-link <?php if(!empty($arr_mod['emp_leave']))echo $arr_mod['emp_leave'];?>"> <a href="<?php echo site_url("admin/leave/emp_leave");?>"><i class="fa <?php echo $submenuicon;?>"></i>Leave</a></li>
+          <?php } ?> 
 
           <?php if(in_array('130',$role_resources_ids)) { ?>
             <li class="sidenav-link <?php if(!empty($arr_mod['emp_holyday']))echo $arr_mod['emp_holyday'];?>"> <a href="<?php echo site_url("admin/leave/emp_holyday");?>"><i class="fa <?php echo $submenuicon;?>"></i>Holiday</a></li>
@@ -853,10 +839,6 @@ $count_timelog=0;
           <li class="sidenav-link <?php if(!empty($arr_mod['reports_employees_active']))echo $arr_mod['reports_employees_active'];?>"> <a href="<?php echo site_url('admin/reports/employees');?>"> <i class="fa <?php echo $submenuicon;?>"></i> <?php echo $this->lang->line('xin_hr_report_employees');?> </a> </li>
           <?php } ?>
 
-          <?php if(in_array('117',$role_resources_ids)) { ?>
-          <li class="sidenav-link <?php if(!empty($arr_mod['reports_employees_active']))echo $arr_mod['reports_employees_active'];?>"> <a href="<?php echo site_url('admin/reports/employees_letter');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Employee Letter </a> </li>
-          <?php } ?>
-
           <?php if(in_array('116',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['reports_roles_active']))echo $arr_mod['reports_roles_active'];?>"> <a href="<?php echo site_url('admin/reports/late_report');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Employee Late Reort</a> </li>
           <?php } ?>
@@ -875,7 +857,7 @@ $count_timelog=0;
           <li class="sidenav-link <?php if(!empty($arr_mod['reports_leave_active']))echo $arr_mod['reports_leave_active'];?>"> <a href="<?php echo site_url('admin/reports/employee_leave_report');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Leave</a> </li>
           <?php } ?>
 
-          <?php if(in_array('409',$role_resources_ids)) { ?>
+          <?php if(in_array('409333333',$role_resources_ids)) { ?>
           <li class="sidenav-link <?php if(!empty($arr_mod['reports_lunch_active']))echo $arr_mod['reports_lunch_active'];?>"> <a href="<?php echo site_url('admin/reports/lunch_report_all');?>"> <i class="fa <?php echo $submenuicon;?>"></i>Lunch</a> </li>
           <?php } ?>
 

@@ -201,7 +201,10 @@ class Lunch_model extends CI_Model {
             }
         }
 
-        return $count - $total_day;
+        
+
+        // return $count - $total_day;
+        return 5;
     }
     
     public function employees($id)

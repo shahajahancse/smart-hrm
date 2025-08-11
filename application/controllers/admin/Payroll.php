@@ -3484,7 +3484,7 @@ class Payroll extends MY_Controller {
     }	
 
     public function employee_bonus(){
-    	exit("coming soon");
+    	// exit("coming soon");
         $session = $this->session->userdata('username');
 		//  dd($session);
 		if(empty($session)){ 
@@ -3507,26 +3507,24 @@ class Payroll extends MY_Controller {
 		$data['title'] 		 = 'Advanced Salary | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Advanced Salary ';
         $this->db->select('xin_advance_salaries.*,xin_employees.first_name,xin_employees.last_name,xin_departments.department_name,xin_designations.designation_name')
-							->from('xin_employees,xin_advance_salaries,xin_departments,xin_designations')
-							->where('xin_employees.user_id = xin_advance_salaries.emp_id')
-							->where('xin_employees.designation_id = xin_designations.designation_id')
-							->where('xin_employees.department_id = xin_departments.department_id')
-							->order_by('xin_advance_salaries.id','desc');
-
+			->from('xin_employees,xin_advance_salaries,xin_departments,xin_designations')
+			->where('xin_employees.user_id = xin_advance_salaries.emp_id')
+			->where('xin_employees.designation_id = xin_designations.designation_id')
+			->where('xin_employees.department_id = xin_departments.department_id')
+			->order_by('xin_advance_salaries.id','desc');
 		if($data['session']['role_id'] == 3){
 			$this->db->where('xin_advance_salaries.emp_id',$data['session']['user_id']);
 			$data['results'] =	$this->db->get()->result();
 			$data['admin_name']= $this->db->select('first_name,last_name')
-									  ->from('xin_employees,xin_advance_salaries')
-								      ->where('xin_employees.user_id = xin_advance_salaries.approved_by')
-									  ->get()->row();
-
+				->from('xin_employees,xin_advance_salaries')
+				->where('xin_employees.user_id = xin_advance_salaries.approved_by')
+				->get()->row();
 			$data['subview'] = $this->load->view("admin/payroll/emp_advanced_salary", $data, TRUE);
 		}else{
 			$data['results'] =	$this->db->get()->result();
 			$data['subview'] = $this->load->view("admin/payroll/advanced_salary", $data, TRUE);
 		}
-						   $this->load->view('admin/layout/layout_main', $data); 
+			$this->load->view('admin/layout/layout_main', $data); 
 	}
 
 	// public function advanced_menu(){
@@ -3546,19 +3544,31 @@ class Payroll extends MY_Controller {
 
 	public function advanced_salary_add(){
 		foreach($_POST['sab_amount'] as $key => $value) {
-			$data['emp_id']            = $_POST['user_id'];
+			$emp_id = $_POST['user_id'];
+			$effective_month = $_POST['sab_date'][$key];
+			$check = $this->db->select('id')
+				->where('emp_id', $emp_id)
+				->where('effective_month', $effective_month)
+				->get('xin_advance_salaries')->row();
+			if(isset($check->id)){
+				$this->session->set_flashdata('error', 'Already requested for advance salary for this month');
+				redirect('admin/payroll/advanced_salary');
+				exit;
+			}
+			$data['emp_id']            = $emp_id;
 			$data['requested_amount']  = $value;
 			$data['approved_amount']   = $value;
-			$data['effective_month']   = $_POST['sab_date'][$key];
+			$data['effective_month']   = $effective_month;
 			$data['reason']            = $_POST['reason'];
 			$data['approved_by']       = $session['user_id'];
-			$data['status']            = 2;
+			$data['status']            = $_SESSION['user_id']['role_id'] == 3 ? 1 : 2; // if user is employee then status will be 1 else 2
 			$insert = $this->db->insert('xin_advance_salaries',$data);
+			if($insert){
+				$this->session->set_flashdata('success', 'Successfully Insert Done');
+			}
 		}
 		redirect('admin/payroll/advanced_salary');
-		
 	}
-
 	
 	public function update_salary(){
 		// dd($_POST);

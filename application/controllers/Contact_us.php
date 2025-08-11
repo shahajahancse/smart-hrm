@@ -17,7 +17,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Contact_us extends MY_Controller {
-	
+
 	 public function __construct() {
         parent::__construct();
 		//load the model
@@ -28,7 +28,7 @@ class Contact_us extends MY_Controller {
 		$this->load->model("Recruitment_model");
 		$this->load->library('email');
 	}
-	
+
 	/*Function to set JSON output*/
 	public function output($Return=array()){
 		/*Set response header*/
@@ -37,7 +37,7 @@ class Contact_us extends MY_Controller {
 		/*Final JSON response*/
 		exit(json_encode($Return));
 	}
-	
+
 	 public function index()
      {
 		$system = $this->Xin_model->read_setting_info(1);
@@ -49,9 +49,9 @@ class Contact_us extends MY_Controller {
 		$data['subview'] = $this->load->view("frontend/hrsale/contact", $data, TRUE);
 		$this->load->view('frontend/hrsale/job_layout/job_layout', $data); //page load
      }
-	 
+
 	 public function send_mail() {
-				
+
 		if($this->input->post('type')=='contact') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -66,43 +66,43 @@ class Contact_us extends MY_Controller {
 			} else if($this->input->post('message')==='') {
 				$Return['error'] = "Message field is required.";
 			}
-			$fd_message = $this->input->post('message');	
+			$fd_message = $this->input->post('message');
 			$qfd_message = htmlspecialchars(addslashes($fd_message), ENT_QUOTES);
-			
+
 			if($Return['error']!=''){
 				$this->output($Return);
 			}
-			
+
 			if($this->input->post('email')) {
-		
+
 				//$this->email->set_mailtype("html");
-				//get setting info 
+				//get setting info
 				$setting = $this->Xin_model->read_setting_info(1);
 				$company = $this->Xin_model->read_company_setting_info(1);
 				if($setting[0]->enable_email_notification == 'yes') {
 					$this->email->set_mailtype("html");
-					
+
 					//get company info
 					$cinfo = $this->Xin_model->read_company_setting_info(1);
 					//get email template
 					$template = $this->Xin_model->read_email_template(8);
-							
+
 					$subject = 'Contact - '.$cinfo[0]->company_name;
 					$logo = base_url().'uploads/logo/signin/'.$company[0]->sign_in_logo;
-					
+
 					// get user full name
 					$full_name = $this->input->post('name');
 					//
 					$message = '
 				<div style="background:#f6f6f6;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:12px;margin:0;padding:0;padding: 20px;">
 				<img src="'.$logo.'" title="'.$cinfo[0]->company_name.'"><br>Full Name: '.$this->input->post('name').'<br>Email: '.$this->input->post('email').'<br>Message: '.htmlspecialchars_decode(stripslashes($qfd_message)).'</div>';
-					
+
 					$this->email->from($this->input->post('email'));
 					$this->email->to($cinfo[0]->email);
-					
+
 					$this->email->subject($subject);
 					$this->email->message($message);
-					
+
 					$this->email->send();
 					$Return['result'] ='Message has been sent.';
 					$this->session->set_flashdata('sent_message', 'Message has been sent.');

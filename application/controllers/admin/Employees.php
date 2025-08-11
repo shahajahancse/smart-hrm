@@ -17,7 +17,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Employees extends MY_Controller {
-	
+
 	 public function __construct() {
         parent::__construct();
 		//load the models
@@ -49,7 +49,7 @@ class Employees extends MY_Controller {
 		$this->load->library('Pdf');
 		$this->load->helper('string');
 	}
-	
+
 	/*Function to set JSON output*/
 	public function output($Return=array()){
 		/*Set response header*/
@@ -84,11 +84,11 @@ class Employees extends MY_Controller {
 			dd($el .'=='. $sl);
 	}
 
-	
+
 	 public function index()
      {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
@@ -102,7 +102,7 @@ class Employees extends MY_Controller {
 		$data['path_url'] = 'employees';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('13',$role_resources_ids)) {
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/employees/employees_list", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -115,9 +115,9 @@ class Employees extends MY_Controller {
 
 
 	 public function emp_list() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 
@@ -125,14 +125,14 @@ class Employees extends MY_Controller {
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		$data['breadcrumbs'] = $this->lang->line('xin_employees');
 		$data['path_url'] = 'employees';
-		
-			if(!empty($session)){ 
+
+			if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/employees/emp_list", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
 				redirect('admin/');
 			}
-		
+
      }
 
 	 public function emp_list_read() {
@@ -143,10 +143,10 @@ class Employees extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$data = array();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$user_info = $this->Xin_model->read_user_info($session['user_id']);	
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		$employee = $this->Timesheet_model->get_emplistforemp();
 		foreach($employee->result() as $r) {
 			// get start date and end date
@@ -156,22 +156,22 @@ class Employees extends MY_Controller {
 				$email = $user[0]->email;
 				$contact_no = $user[0]->contact_no;
 				$contact_no = $user[0]->contact_no;
-			
+
 				// department
 				$department = $this->Department_model->read_department_information($user[0]->department_id);
 				$designation = $this->Designation_model->read_designation_information($user[0]->designation_id);
 				if(!is_null($department)){
 					$department_name = $department[0]->department_name;
 				} else {
-					$department_name = '--';	
+					$department_name = '--';
 				}
 				if(!is_null($designation)){
 					$designation_name = $designation[0]->designation_name;
 				} else {
-					$designation_name = '--';	
+					$designation_name = '--';
 				}
 			} else {
-				$full_name = '--';	
+				$full_name = '--';
 				$department_name = '--';
 				$designation_name = '--';
 				$contact_no = '--';
@@ -192,11 +192,11 @@ class Employees extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	
+
     public function employees_list(){
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employees_list", $data);
 		} else {
 			redirect('admin/');
@@ -205,21 +205,21 @@ class Employees extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		$role_resources_ids = $this->Xin_model->user_role_resource();		
+		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$system = $this->Xin_model->read_setting_info(1);
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		if($this->input->get("ihr")=='true'){
 			if($this->input->get("company_id")==0 && $this->input->get("location_id")==0 && $this->input->get("department_id")==0 && $this->input->get("designation_id")==0){
 				$employee = $this->Employees_model->get_employees();
-				
+
 			} else if($this->input->get("company_id")!=0 && $this->input->get("location_id")==0 && $this->input->get("department_id")==0 && $this->input->get("designation_id")==0){
 				$employee = $this->Employees_model->get_company_employees_flt($this->input->get("company_id"));
 			} else if($this->input->get("company_id")!=0 && $this->input->get("location_id")!=0 && $this->input->get("department_id")==0 && $this->input->get("designation_id")==0){
 				$employee = $this->Employees_model->get_company_location_employees_flt($this->input->get("company_id"),$this->input->get("location_id"));
-				
+
 			} else if($this->input->get("company_id")!=0 && $this->input->get("location_id")!=0 && $this->input->get("department_id")!=0 && $this->input->get("designation_id")==0){
 				$employee = $this->Employees_model->get_company_location_department_employees_flt($this->input->get("company_id"),$this->input->get("location_id"),$this->input->get("department_id"));
-				
+
 			} else if($this->input->get("company_id")!=0 && $this->input->get("location_id")!=0 && $this->input->get("department_id")!=0 && $this->input->get("designation_id")!=0){
 				$employee = $this->Employees_model->get_company_location_department_designation_employees_flt($this->input->get("company_id"),$this->input->get("location_id"),$this->input->get("department_id"),$this->input->get("designation_id"));
 			}
@@ -236,53 +236,53 @@ class Employees extends MY_Controller {
 				}
 			}
 		}
-		
+
 		$data = array();
-        foreach($employee->result() as $key => $r) {	
+        foreach($employee->result() as $key => $r) {
 			// get company
 			$company = $this->Xin_model->read_company_info($r->company_id);
 			if(!is_null($company)){
 				$comp_name = $company[0]->name;
 			} else {
-				$comp_name = '--';	
+				$comp_name = '--';
 			}
-			// user full name 
+			// user full name
 			$full_name = $r->first_name.' '.$r->last_name;
 			// user role
 			$role = $this->Xin_model->read_user_role_info($r->user_role_id);
 			if(!is_null($role)){
 				$role_name = $role[0]->role_name;
 			} else {
-				$role_name = '--';	
+				$role_name = '--';
 			}
 			// get designation
 			$designation = $this->Designation_model->read_designation_information($r->designation_id);
 			if(!is_null($designation)){
 				$designation_name = $designation[0]->designation_name;
 			} else {
-				$designation_name = '--';	
+				$designation_name = '--';
 			}
 			// department
 			$department = $this->Department_model->read_department_information($r->department_id);
 			if(!is_null($department)){
 			$department_name = $department[0]->department_name;
 			} else {
-			$department_name = '--';	
+			$department_name = '--';
 			}
 			// location
 			$location = $this->Location_model->read_location_information($r->location_id);
 			if(!is_null($location)){
 			$location_name = $location[0]->location_name;
 			} else {
-			$location_name = '--';	
+			$location_name = '--';
 			}
-			
-			
+
+
 			$department_designation = $designation_name.' ('.$department_name.')';
 			// get status
 			if($r->is_active==0): $status = '<span class="badge bg-red">'.$this->lang->line('xin_employees_inactive').'</span>';
 			elseif($r->is_active==1): $status = '<span class="badge bg-green">'.$this->lang->line('xin_employees_active').'</span>';endif;
-			
+
 			// if($r->user_id != '1') { delete section
 			if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==4) {
 				if(in_array('203',$role_resources_ids)) {
@@ -305,10 +305,10 @@ class Employees extends MY_Controller {
 								<span data-toggle="tooltip" data-placement="top" title="Increment/Promotion">
 									<button type="button" class="btn btn-xs btn-success" onclick="incrementFun('. $r->user_id . ')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
 								</span><hr>';
-							
+
 				} else {
 					$lr_opt = '';
-				}			
+				}
 			} else {
 				$lr_opt = '';
 			}
@@ -323,11 +323,11 @@ class Employees extends MY_Controller {
 			// $function = $view_opt.$lr_opt.$del_opt.'';
 
 			if($r->status == 1 || $r->status == 4 || $r->status == 5) {
-				$lrip = '<a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign"> 
+				$lrip = '<a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" onclick="left_resign('.$r->user_id.')" data-toggle="tooltip" title="Left/Resign">
                         <button type="button" class="btn btn-xs btn-info"><span class="fa fa-arrow-circle-right"> </span></button> Left / Resign </a>
-						
+
                         <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Increment"><button type="button" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Increment</a>
-					
+
                         <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" onclick="incrementFun('. $r->user_id . ')" data-toggle="tooltip" data-placement="top" title="Promotion"> <button type="button" class="btn btn-xs btn-info"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> Promotion</a>';
 			} else {
 				$lrip = '';
@@ -340,8 +340,8 @@ class Employees extends MY_Controller {
                         Action
                     </button>
                     <div class="dropdown-menu  pull-left" style="min-width: 123px !important;border-radius: 5px;left: -64px;box-shadow: 0px 0px 5px 1px #8e8e8e;top: 27px;" aria-labelledby="dropdownMenuButton">
-						
-							
+
+
                         <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a>
                         '. $lrip .'
                         <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;"> <button type="button" class="btn icon-btn btn-xs btn-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"> <span class="fa fa-trash"></span>  </button>   Delete </a>
@@ -355,7 +355,7 @@ class Employees extends MY_Controller {
                         Action
                     </button>
                     <div class="dropdown-menu  pull-left" style="min-width: 123px !important;border-radius: 5px;left: -64px;box-shadow: 0px 0px 5px 1px #8e8e8e;top: 27px;" aria-labelledby="dropdownMenuButton">
-						
+
                         <a style="height: 38px;display: inherit;padding: 4px;margin: 3px;border: 1px solid darkgrey;border-radius: 6px;cursor: pointer;" href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button> View Details </a>
 
                         '. $lrip .'
@@ -369,12 +369,12 @@ class Employees extends MY_Controller {
 			} else {
 				$bsalary = $this->Xin_model->currency_sign($r->daily_wages);
 			}
-			
-			
+
+
 			if($r->profile_picture!='' && $r->profile_picture!='no file') {
 				$ol = '<a href="javascript:void(0);"><span class="avatar box-32"><img src="'.base_url().'uploads/profile/'.$r->profile_picture.'" class="user-image-hr" alt=""></span></a>';
 			} else {
-				if($r->gender=='Male') { 
+				if($r->gender=='Male') {
 					$de_file = base_url().'uploads/profile/default_male.jpg';
 				 } else {
 					$de_file = base_url().'uploads/profile/default_female.jpg';
@@ -386,14 +386,14 @@ class Employees extends MY_Controller {
 			if(!is_null($office_shift)){
 				$shift = $office_shift[0]->shift_name;
 			} else {
-				$shift = '--';	
+				$shift = '--';
 			}
 			$employee_name = $ol.$full_name.'<br><small class="text-muted hrsale-text-info-margin"><i>'.$this->lang->line('xin_employees_id').': '.$r->employee_id.'<i></i></i></small><br><small class="text-muted hrsale-text-info-margin"><i>'.$this->lang->line('xin_e_details_shift').': '.$shift.'<i></i></i></small><br><small class="text-muted hrsale-text-info-margin"><i><a target="_blank" href="'.site_url('admin/employees/download_profile/').$r->user_id.'">'.$this->lang->line('xin_download_profile_title').' <i class="fa fa-arrow-circle-right"></i></a><i></i></i></small>';
-			
+
 			$comp_name = $comp_name.'<br><small class="text-muted"><i>'.$this->lang->line('xin_location').': '.$location_name.'<i></i></i></small><br><small class="text-muted"><i>'.$this->lang->line('left_department').': '.$department_name.'<i></i></i></small><br><small class="text-muted"><i>'.$this->lang->line('left_designation').': '.$designation_name.'<i></i></i></small>';
-			
+
 			$contact_info = '<i class="fa fa-user" data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('dashboard_username').'"></i> '.$r->username.'<br><i class="fa fa-envelope" data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('dashboard_email').'"></i> '.$r->email.'<br><i class="fa fa-phone" data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_contact_number').'"></i> '.$r->contact_no;
-			
+
 			$role_status = $role_name.'<br>'.$status;
 			$data[] = array(
 				$sl = $key + 1,
@@ -418,7 +418,7 @@ class Employees extends MY_Controller {
     public function incre_prob_prom_add($id)
     {
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
     	$user_info = $this->db->where('user_id', $id)->get('xin_employees')->row();
@@ -501,7 +501,7 @@ class Employees extends MY_Controller {
 		}
 		exit;
     }
-	
+
 	// public function re_entry_data(){
 	// 	$data=$this->db->get('xin_employee_incre_prob')->result();
 	// 	foreach($data as $row){
@@ -510,16 +510,16 @@ class Employees extends MY_Controller {
 	// 				$this->db->where('id', $row->id);
 	// 				$this->db->update('xin_employee_incre_prob', array('end_date' => date('Y-m-d', strtotime($next_date. ' - 1 day'))));
 	// 			}
-	// 		}	
+	// 		}
 	// }
 	public function remarks(){
 		if($_FILES['n_file']['size']!=0){
 			$allowed =  array('png','jpg','jpeg','pdf','gif');
 			$filename = $_FILES['n_file']['name'];
 			$ext = pathinfo($filename, PATHINFO_EXTENSION);
-			
+
 				if(in_array($ext,$allowed)){
-					
+
 					$tmp_name = $_FILES["n_file"]["tmp_name"];
 					$profile = "uploads/profile/";
 					$set_img = base_url()."uploads/profile/";
@@ -564,7 +564,7 @@ class Employees extends MY_Controller {
     {
 
 		$status = $this->input->post('status');
-		
+
     	$data['results'] = $this->Employees_model->print_inc($status);
     	$data['status'] = $status;
         $this->load->view('admin/employees/print_inc', $data);
@@ -575,13 +575,13 @@ class Employees extends MY_Controller {
 		$status = $this->input->post('status');
 
     	$data['results'] = $this->Employees_model->print_inc($status);
-	
-    	
+
+
         $this->load->view('admin/employees/excel_in', $data);
     }
-	 
+
 	 public function download_profile(){
-		$system = $this->Xin_model->read_setting_info(1);		
+		$system = $this->Xin_model->read_setting_info(1);
 		 // create new PDF document
    		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$key = $this->uri->segment(4);
@@ -589,7 +589,7 @@ class Employees extends MY_Controller {
 		if(is_null($user)){
 			redirect('admin/employees');
 		}
-		
+
 		$_des_name = $this->Designation_model->read_designation_information($user[0]->designation_id);
 		if(!is_null($_des_name)){
 			$_designation_name = $_des_name[0]->designation_name;
@@ -647,10 +647,10 @@ class Employees extends MY_Controller {
 		//$c_info_address = $address_1.' '.$address_2.', '.$city.' - '.$zipcode.', '.$country_name;
 		$c_info_address = $address_1.' '.$address_2.', '.$city.' - '.$zipcode;
 		//$email_phone_address = "$c_info_address \n".$this->lang->line('xin_phone')." : $c_info_phone | ".$this->lang->line('dashboard_email')." : $c_info_email ";
-		
+
 		$company_info = $this->lang->line('left_company').": $company_name | ".$this->lang->line('left_location').": $location_name \n";
 		$designation_info = $this->lang->line('left_department').": $_department_name | ".$this->lang->line('left_designation').": $_designation_name \n";
-		
+
 		$header_string = "$company_info"."$designation_info";
 		// set document information
 		$pdf->SetCreator('HRSALE');
@@ -661,34 +661,34 @@ class Employees extends MY_Controller {
 		if($user[0]->profile_picture!='' && $user[0]->profile_picture!='no file') {
 			$ol = 'uploads/profile/'.$user[0]->profile_picture;
 		} else {
-			if($user[0]->gender=='Male') { 
+			if($user[0]->gender=='Male') {
 				$de_file = 'uploads/profile/default_male.jpg';
 			 } else {
 				$de_file = 'uploads/profile/default_female.jpg';
 			 }
 			$ol = $de_file;
 		}
-		
+
 		$header_namae = $fname.' '.$this->lang->line('xin_profile');
 		$pdf->SetHeaderData('../../../'.$ol, 15, $header_namae, $header_string);
-			
+
 		$pdf->setFooterData(array(0,64,0), array(0,64,128));
-		
+
 		// set header and footer fonts
 		$pdf->setHeaderFont(Array('helvetica', '', 11.5));
 		$pdf->setFooterFont(Array('helvetica', '', 9));
-		
+
 		// set default monospaced font
 		$pdf->SetDefaultMonospacedFont('courier');
-		
+
 		// set margins
 		$pdf->SetMargins(15, 27, 15);
 		$pdf->SetHeaderMargin(5);
 		$pdf->SetFooterMargin(10);
-		
+
 		// set auto page breaks
 		$pdf->SetAutoPageBreak(TRUE, 25);
-		
+
 		// set image scale factor
 		$pdf->setImageScale(1.25);
 		$pdf->SetAuthor('HRSALE');
@@ -697,36 +697,36 @@ class Employees extends MY_Controller {
 		$pdf->SetKeywords($this->lang->line('xin_download_profile_title'));
 		// set font
 		$pdf->SetFont('helvetica', 'B', 10);
-				
+
 		// set header and footer fonts
 		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-		
+
 		// set default monospaced font
 		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-		
+
 		// set margins
 		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-		
+
 		// set auto page breaks
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-		
+
 		// set image scale factor
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-		
+
 		// ---------------------------------------------------------
-		
+
 		// set default font subsetting mode
 		$pdf->setFontSubsetting(true);
-		
+
 		// Set font
 		// dejavusans is a UTF-8 Unicode font, if you only need to
 		// print standard ASCII chars, you can use core fonts like
 		// helvetica or times to reduce file size.
 		$pdf->SetFont('dejavusans', '', 10, '', true);
-		
+
 		// Add a page
 		// This method has several options, check the source code documentation for more information.
 		$pdf->AddPage();
@@ -740,13 +740,13 @@ class Employees extends MY_Controller {
 		$pdf->writeHTML($tbl, true, false, false, false, '');*/
 		// -----------------------------------------------------------------------------
 		$date_of_joining = $this->Xin_model->set_date_format($user[0]->date_of_joining);
-		
+
 		// set cell padding
 		$pdf->setCellPaddings(1, 1, 1, 1);
-		
+
 		// set cell margins
 		$pdf->setCellMargins(0, 0, 0, 0);
-		
+
 		// set color for background
 		$pdf->SetFillColor(255, 255, 127);
 		/////////////////////////////////////////////////////////////////////////////////
@@ -853,7 +853,7 @@ class Employees extends MY_Controller {
 				if(!is_null($award_type)){
 					$award_type = $award_type[0]->award_type;
 				} else {
-					$award_type = '--';	
+					$award_type = '--';
 				}
 				$d = explode('-',$r->award_month_year);
 				$get_month = date('F', mktime(0, 0, 0, $d[1], 10));
@@ -895,7 +895,7 @@ class Employees extends MY_Controller {
 				if(!is_null($type)){
 					$itype = $type[0]->type;
 				} else {
-					$itype = '--';	
+					$itype = '--';
 				}
 				// get trainer
 				$trainer = $this->Xin_model->read_user_info($tr_in->trainer_id);
@@ -903,7 +903,7 @@ class Employees extends MY_Controller {
 				if(!is_null($trainer)){
 					$trainer_name = $trainer[0]->first_name.' '.$trainer[0]->last_name;
 				} else {
-					$trainer_name = '--';	
+					$trainer_name = '--';
 				}
 				// get end date
 				$finish_date = $this->Xin_model->set_date_format($tr_in->finish_date);
@@ -950,7 +950,7 @@ class Employees extends MY_Controller {
 				if(!is_null($warning_type)){
 					$wtype = $warning_type[0]->type;
 				} else {
-					$wtype = '--';	
+					$wtype = '--';
 				}
 				// get user > warning by
 				$user_by = $this->Xin_model->read_user_info($wr->warning_by);
@@ -958,7 +958,7 @@ class Employees extends MY_Controller {
 				if(!is_null($user_by)){
 					$warning_by = $user_by[0]->first_name.' '.$user_by[0]->last_name;
 				} else {
-					$warning_by = '--';	
+					$warning_by = '--';
 				}
 			$tbl_5 .= '
 			<tr>
@@ -997,7 +997,7 @@ class Employees extends MY_Controller {
 					$status = $this->lang->line('xin_rejected');
 				endif;
 			$expected_budget = $this->Xin_model->currency_sign($trv->expected_budget);
-			$actual_budget = $this->Xin_model->currency_sign($trv->actual_budget);	
+			$actual_budget = $this->Xin_model->currency_sign($trv->actual_budget);
 			$t_budget= $this->lang->line('xin_expected_travel_budget').': '.$expected_budget.'<br>'.$this->lang->line('xin_actual_travel_budget').': '.$expected_budget;
 			// get end date
 			$end_date = $this->Xin_model->set_date_format($trv->end_date);
@@ -1012,7 +1012,7 @@ class Employees extends MY_Controller {
 			$tbl_6 .= '</table>';
 			$pdf->writeHTML($tbl_6, true, false, false, false, '');
 		}
-		
+
 		// tickets
 		$tickets_count = $this->Xin_model->get_employee_tickets_count($user[0]->user_id);
 		if($tickets_count > 0) {
@@ -1029,7 +1029,7 @@ class Employees extends MY_Controller {
 			</tr>';
 			$ticket = $this->Tickets_model->get_employee_tickets($user[0]->user_id);
 			foreach($ticket->result() as $tkts) {
-				
+
 				if($tkts->ticket_priority==0):
 					$ticket_priority = $this->lang->line('xin_low');
 				elseif($tkts->ticket_priority==2):
@@ -1037,7 +1037,7 @@ class Employees extends MY_Controller {
 				elseif($tkts->ticket_priority==3):
 					$ticket_priority = $this->lang->line('xin_high');
 				elseif($tkts->ticket_priority==4):
-					$ticket_priority = $this->lang->line('xin_critical');	
+					$ticket_priority = $this->lang->line('xin_critical');
 				else:
 					$ticket_priority = $this->lang->line('xin_low');
 				endif;
@@ -1045,15 +1045,15 @@ class Employees extends MY_Controller {
 				$status = $this->lang->line('xin_open');
 			else:
 				$status = $this->lang->line('xin_closed');
-			endif;			
-			
+			endif;
+
 			// ticket_code
 			$iticket_code = $tkts->ticket_code.'<br>'.$status;
 			$created_at = date('h:i A', strtotime($tkts->created_at));
 			$_date = explode(' ',$tkts->created_at);
 			$edate = $this->Xin_model->set_date_format($_date[0]);
 			$_created_at = $edate. ' '. $created_at;
-							 
+
 			$tbl_7 .= '
 			<tr>
 				<td>'.$iticket_code.'</td>
@@ -1065,7 +1065,7 @@ class Employees extends MY_Controller {
 			$tbl_7 .= '</table>';
 			$pdf->writeHTML($tbl_7, true, false, false, false, '');
 		}
-		
+
 		// projects
 		$projects_count = $this->Xin_model->get_employee_projects_count($user[0]->user_id);
 		if($projects_count > 0) {
@@ -1082,7 +1082,7 @@ class Employees extends MY_Controller {
 			</tr>';
 			$project = $this->Project_model->get_employee_projects($user[0]->user_id);
 			foreach($project->result() as $prj) {
-					
+
 			if($prj->status == 0) {
 					$status = $this->lang->line('xin_not_started');
 				} else if($prj->status ==1){
@@ -1091,10 +1091,10 @@ class Employees extends MY_Controller {
 					$status = $this->lang->line('xin_completed');
 				} else {
 					$status = $this->lang->line('xin_deffered');
-				}	
-				
+				}
+
 				$pdate = $this->Xin_model->set_date_format($prj->end_date);
-								 
+
 				$tbl_8 .= '
 				<tr>
 					<td>'.$prj->title.'</td>
@@ -1122,9 +1122,9 @@ class Employees extends MY_Controller {
 			</tr>';
 			$task = $this->Timesheet_model->get_employee_tasks($user[0]->user_id);
 			foreach($task->result() as $tsk) {
-					
+
 				// task end date
-				$tdate = $this->Xin_model->set_date_format($tsk->end_date);							
+				$tdate = $this->Xin_model->set_date_format($tsk->end_date);
 				// task status
 				if($tsk->task_status == 0) {
 					$status = $this->lang->line('xin_not_started');
@@ -1135,7 +1135,7 @@ class Employees extends MY_Controller {
 				} else {
 					$status = $this->lang->line('xin_deffered');
 				}
-								 
+
 				$tbl_9 .= '
 				<tr>
 					<td>'.$tsk->task_name.'</td>
@@ -1168,15 +1168,15 @@ class Employees extends MY_Controller {
 				if(!is_null($assets_category)){
 					$category = $assets_category[0]->category_name;
 				} else {
-					$category = '--';	
-				}		
+					$category = '--';
+				}
 				//working?
 				if($asts->is_working==1){
 					$working = $this->lang->line('xin_yes');
 				} else {
 					$working = $this->lang->line('xin_no');
 				}
-								 
+
 				$tbl_10 .= '
 				<tr>
 					<td>'.$asts->name.'</td>
@@ -1203,12 +1203,12 @@ class Employees extends MY_Controller {
 			</tr>';
 			$meetings = $this->Meetings_model->get_employee_meetings($user[0]->user_id);
 			foreach($meetings->result() as $meetings_hr) {
-					
+
 				// get start date and end date
-				 $meeting_date = $this->Xin_model->set_date_format($meetings_hr->meeting_date);	
+				 $meeting_date = $this->Xin_model->set_date_format($meetings_hr->meeting_date);
 				 $meeting_time = new DateTime($meetings_hr->meeting_time);
 				 $metime = $meeting_time->format('h:i a');
-								 
+
 				$tbl_11 .= '
 				<tr>
 					<td>'.$meetings_hr->meeting_title.'</td>
@@ -1234,13 +1234,13 @@ class Employees extends MY_Controller {
 			</tr>';
 			$events = $this->Events_model->get_employee_events($user[0]->user_id);
 			foreach($events->result() as $events_hr) {
-					
+
 				// get start date and end date
 				 $sdate = $this->Xin_model->set_date_format($events_hr->event_date);
 				 // get time am/pm
 			 	$event_time = new DateTime($events_hr->event_time);
 				$etime = $event_time->format('h:i a');
-								 
+
 				$tbl_12 .= '
 				<tr>
 					<td>'.$events_hr->event_title.'</td>
@@ -1251,23 +1251,23 @@ class Employees extends MY_Controller {
 			$tbl_12 .= '</table>';
 			$pdf->writeHTML($tbl_12, true, false, false, false, '');
 		}
-		
-		
+
+
 		$fname = strtolower($fname);
 		$pay_month = strtolower(date("F Y"));
 		//Close and output PDF document
 		ob_start();
 		$pdf->Output('payslip_'.$fname.'_'.$pay_month.'.pdf', 'I');
 		ob_end_flush();
-		 
+
 	 }
-	 
+
 	 public function employees_cards_list()
      {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employees_list", $data);
 		} else {
 			redirect('admin/');
@@ -1276,14 +1276,14 @@ class Employees extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
-		
+
+
 		$employee = $this->Employees_model->get_employees();
 		$countries = $this->Xin_model->get_countries();
-		
+
 		$data = array();
 		$function = '<table>';
-        foreach (array_chunk($countries, 4) as $row) {		  
+        foreach (array_chunk($countries, 4) as $row) {
 			$function .= '<tr>';
 			foreach ($row as $value) {
 				$function .='<td>
@@ -1305,13 +1305,13 @@ class Employees extends MY_Controller {
                         </div>
                     </div>
                 </div>
-                </td>';	
+                </td>';
 				$function .='</tr>';
-			}	
+			}
 				$data[] = array(
 					$function
 				);
-			
+
 	  }
 	  $output = array(
 		   "draw" => $draw,
@@ -1322,18 +1322,18 @@ class Employees extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	  public function detail() {
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$id = $this->uri->segment(4);
-		
+
 		$result = $this->Employees_model->read_employee_information($id);
 		// dd($result);
 		if(is_null($result)){
@@ -1426,28 +1426,28 @@ class Employees extends MY_Controller {
 				$data['nda_id'] = $r->id;
 			}
 
-		// dd($data);	
+		// dd($data);
 
 		$data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
-		
+
 		// Datatables Variables
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	 }
-	
+
 	// get company > departments
 	 public function get_departments() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'company_id' => $id
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/get_departments", $data);
 		} else {
 			redirect('admin/');
@@ -1456,13 +1456,13 @@ class Employees extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-	 } 
+	 }
 
 	// employees directory/hr
 	public function hr() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_employees_directory').' | '.$this->Xin_model->site_title();
@@ -1473,7 +1473,7 @@ class Employees extends MY_Controller {
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
 		$data['breadcrumbs'] = $this->lang->line('xin_employees_directory');
 		$data['path_url'] = 'employees_directory';
-		
+
 		// init params
         $config = array();
         $limit_per_page = 18;
@@ -1509,22 +1509,22 @@ class Employees extends MY_Controller {
 		$config['total_rows'] = $total_records;
 		$config['per_page'] = $limit_per_page;
 		$config["uri_segment"] = 4;
-		 
+
 		// custom paging configuration
 	   // $config['num_links'] = 2;
 		$config['use_page_numbers'] = TRUE;
 		$config['reuse_query_string'] = FALSE;
 		//$config['page_query_string'] = TRUE;
-		 
+
 		//$config['use_page_numbers'] = TRUE;
 		$config['num_links'] = $total_records;
 		$config['cur_tag_open'] = '&nbsp;<a>';
 		$config['cur_tag_close'] = '</a>';
 		$config['next_link'] = '»';
 		$config['prev_link'] = '«';
-		 
+
 		$this->pagination->initialize($config);
-			 
+
 		// build paging links
 		//$data["links"] = $this->pagination->create_links();
 		$str_links = $this->pagination->create_links();
@@ -1537,21 +1537,21 @@ class Employees extends MY_Controller {
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
-		}	  
-    } 
- 
+		}
+    }
+
 
 	/* // get location > departments
 	 public function get_company_elocations() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'location_id' => $id
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/get_company_elocations", $data);
 		} else {
 			redirect('admin/');
@@ -1561,11 +1561,11 @@ class Employees extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	 } */
-	 
+
 	public function dialog_contact() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1592,7 +1592,7 @@ class Employees extends MY_Controller {
 			'icountry' => $result[0]->country,
 			'all_countries' => $this->Xin_model->get_countries()
 		);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
@@ -1605,12 +1605,12 @@ class Employees extends MY_Controller {
 		$keywords = preg_split("/[\s,]+/", $this->uri->segment(4));
 		if(is_numeric($keywords[0])) {
 			$id = $keywords[0];
-		
+
 			$data = array(
 				'company_id' => $id
 				);
 			$session = $this->session->userdata('username');
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data = $this->security->xss_clean($data);
 				$this->load->view("admin/employees/get_company_elocations", $data);
 			} else {
@@ -1629,12 +1629,12 @@ class Employees extends MY_Controller {
 		$keywords = preg_split("/[\s,]+/", $this->uri->segment(4));
 		if(is_numeric($keywords[0])) {
 			$id = $keywords[0];
-		
+
 			$data = array(
 				'location_id' => $id
 				);
 			$session = $this->session->userdata('username');
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data = $this->security->xss_clean($data);
 				$this->load->view("admin/employees/get_location_departments", $data);
 			} else {
@@ -1647,9 +1647,9 @@ class Employees extends MY_Controller {
 		$length = intval($this->input->get("length"));
 	 }
 	public function dialog_document() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1667,17 +1667,17 @@ class Employees extends MY_Controller {
 				'notification_email' => $document[0]->notification_email,
 				'document_file' => $document[0]->document_file
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	public function dialog_imgdocument() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1696,17 +1696,17 @@ class Employees extends MY_Controller {
 				'country_id' => $document[0]->country_id,
 				'eligible_review_date' => $document[0]->eligible_review_date,
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	public function dialog_qualification() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1726,16 +1726,16 @@ class Employees extends MY_Controller {
 				'all_qualification_language' => $this->Employees_model->all_qualification_language(),
 				'all_qualification_skill' => $this->Employees_model->all_qualification_skill()
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
 	public function dialog_work_experience() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1750,17 +1750,17 @@ class Employees extends MY_Controller {
 				'post' => $result[0]->post,
 				'description' => $result[0]->description
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	public function dialog_bank_account() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1776,17 +1776,17 @@ class Employees extends MY_Controller {
 				'bank_code' => $result[0]->bank_code,
 				'bank_branch' => $result[0]->bank_branch
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	public function dialog_contract() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1804,17 +1804,17 @@ class Employees extends MY_Controller {
 				'all_contract_types' => $this->Employees_model->all_contract_types(),
 				'all_designations' => $this->Designation_model->all_designations(),
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	public function dialog_leave() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1827,17 +1827,17 @@ class Employees extends MY_Controller {
 				'casual_leave' => $result[0]->casual_leave,
 				'medical_leave' => $result[0]->medical_leave
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	public function dialog_shift() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1850,17 +1850,17 @@ class Employees extends MY_Controller {
 				'from_date' => $result[0]->from_date,
 				'to_date' => $result[0]->to_date
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	public function dialog_location() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1873,17 +1873,17 @@ class Employees extends MY_Controller {
 				'from_date' => $result[0]->from_date,
 				'to_date' => $result[0]->to_date
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	public function dialog_salary_allowance() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1896,16 +1896,16 @@ class Employees extends MY_Controller {
 				'allowance_title' => $result[0]->allowance_title,
 				'allowance_amount' => $result[0]->allowance_amount
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
 	public function dialog_salary_commissions() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1917,16 +1917,16 @@ class Employees extends MY_Controller {
 				'commission_title' => $result[0]->commission_title,
 				'commission_amount' => $result[0]->commission_amount
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
 	public function dialog_salary_statutory_deductions() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1939,16 +1939,16 @@ class Employees extends MY_Controller {
 			'deduction_amount' => $result[0]->deduction_amount,
 			'statutory_options' => $result[0]->statutory_options
 			);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
 	public function dialog_salary_other_payments() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1960,17 +1960,17 @@ class Employees extends MY_Controller {
 			'payments_title' => $result[0]->payments_title,
 			'payments_amount' => $result[0]->payments_amount
 			);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	public function dialog_salary_loan() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -1987,16 +1987,16 @@ class Employees extends MY_Controller {
 				'reason' => $result[0]->reason,
 				'created_at' => $result[0]->created_at
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
 	public function dialog_emp_overtime() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -2010,25 +2010,25 @@ class Employees extends MY_Controller {
 				'overtime_hours' => $result[0]->overtime_hours,
 				'overtime_rate' => $result[0]->overtime_rate
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	 // get departmens > designations
 	 public function designation() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'subdepartment_id' => $id,
 			'all_designations' => $this->Designation_model->all_designations(),
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/get_designations", $data);
 		} else {
 			redirect('admin/');
@@ -2038,18 +2038,18 @@ class Employees extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	 }
-	 
+
 	  public function is_designation() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'department_id' => $id,
 			'all_designations' => $this->Designation_model->all_designations(),
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/get_designations", $data);
 		} else {
 			redirect('admin/');
@@ -2064,12 +2064,12 @@ class Employees extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'department_id' => $id
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/get_sub_departments", $data);
 		} else {
 			redirect('admin/');
@@ -2079,11 +2079,11 @@ class Employees extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	 }
-	 
+
 	 public function read()
 	{
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -2101,27 +2101,27 @@ class Employees extends MY_Controller {
 				'all_employees' => $this->Xin_model->all_employees(),
 				'all_warning_types' => $this->Warning_model->all_warning_types(),
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/warning/dialog_warning', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	// Validate and add info in database
 	public function add_employee() {
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
 
-		if($this->input->post('add_type')=='employee') {		
+		if($this->input->post('add_type')=='employee') {
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();		
-		
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
 		//$office_shift_id = $this->input->post('office_shift_id');
 		$system = $this->Xin_model->read_setting_info(1);
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('first_name')==='') {
         	$Return['error'] = $this->lang->line('xin_employee_error_first_name');
 		} /*else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('first_name'))!=1) {
@@ -2175,39 +2175,34 @@ class Employees extends MY_Controller {
 			 $Return['error'] = $this->lang->line('xin_employee_error_user_role');
 		} else if($this->input->post('proxi_id')==='') {
 			 $Return['error'] = 'Proxi id is required';
-		} 
-		
+		}
+
 
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		/*if($system[0]->multi_shifts == '1'){
-			if(empty($office_shift_id)) {
-				$Return['error'] = $this->lang->line('xin_office_shift_field_error');
-			}
-		}*/
-		
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		$module_attributes = $this->Custom_fields_model->all_hrsale_module_attributes();
-		$count_module_attributes = $this->Custom_fields_model->count_module_attributes();	
+		$count_module_attributes = $this->Custom_fields_model->count_module_attributes();
 		$i=1;
 		if($count_module_attributes > 0){
-			 foreach($module_attributes as $mattribute) {
-				if($mattribute->validation == 1){
-					if($i!=1) {
-					} else if($this->input->post($mattribute->attribute)=='') {
-					$Return['error'] = $this->lang->line('xin_hrsale_custom_field_the').' '.$mattribute->attribute_label.' '.$this->lang->line('xin_hrsale_custom_field_is_required');
+			foreach($module_attributes as $mattribute) {
+					if($mattribute->validation == 1){
+						if($i!=1) {
+						} else if($this->input->post($mattribute->attribute)=='') {
+						$Return['error'] = $this->lang->line('xin_hrsale_custom_field_the').' '.$mattribute->attribute_label.' '.$this->lang->line('xin_hrsale_custom_field_is_required');
+					}
 				}
-				}
-			 }		
-			 if($Return['error']!=''){
+			}
+			if($Return['error']!=''){
 				$this->output($Return);
-			}	
+			}
 		}
-		
+
 		$first_name = $this->Xin_model->clean_post($this->input->post('first_name'));
 		$last_name = $this->Xin_model->clean_post($this->input->post('last_name'));
 		$employee_id = $this->Xin_model->clean_post($this->input->post('employee_id'));
@@ -2215,12 +2210,14 @@ class Employees extends MY_Controller {
 		$username = $this->Xin_model->clean_post($this->input->post('username'));
 		$date_of_birth = $this->Xin_model->clean_date_post($this->input->post('date_of_birth'));
 		$contact_no = $this->Xin_model->clean_post($this->input->post('contact_no'));
-		$address = $this->Xin_model->clean_posts($this->input->post('address'));
-		$per_address = $this->Xin_model->clean_posts($this->input->post('per_address'));
+		$address = $this->Xin_model->clean_posts($this->input->post('village_pre'));
+		$per_address = $this->Xin_model->clean_posts($this->input->post('village_per'));
 		$options = array('cost' => 12);
 		$password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
-		$leave_categories = array($this->input->post('leave_categories'));
-		$cat_ids = implode(',',$this->input->post('leave_categories'));
+
+		// $leave_categories = array($this->input->post('leave_categories'));
+		// $cat_ids = implode(',',$this->input->post('leave_categories'));
+
 		$probation = $this->input->post('probation');
 		$probation_end = date("Y-m-d",strtotime("+ $probation months",strtotime($date_of_joining)));
 		$probation_end = ($date_of_joining > $probation_end) ? $date_of_joining:$probation_end;
@@ -2229,17 +2226,15 @@ class Employees extends MY_Controller {
 			$allowed =  array('png','jpg','jpeg','pdf','gif');
 			$filename = $_FILES['p_file']['name'];
 			$ext = pathinfo($filename, PATHINFO_EXTENSION);
-			
-				if(in_array($ext,$allowed)){
-					
-					$tmp_name = $_FILES["p_file"]["tmp_name"];
-					$profile = "uploads/profile/";
-					$set_img = base_url()."uploads/profile/";
-					$name = basename($_FILES["p_file"]["name"]);
-					$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
-					move_uploaded_file($tmp_name, $profile.$newfilename);
-					$fname = $newfilename;
-				}
+			if(in_array($ext,$allowed)){
+				$tmp_name = $_FILES["p_file"]["tmp_name"];
+				$profile = "uploads/profile/";
+				$set_img = base_url()."uploads/profile/";
+				$name = basename($_FILES["p_file"]["name"]);
+				$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
+				move_uploaded_file($tmp_name, $profile.$newfilename);
+				$fname = $newfilename;
+			}
 		}else{
 			$fname = '';
 		}
@@ -2249,69 +2244,81 @@ class Employees extends MY_Controller {
 			$allowed =  array('png','jpg','jpeg','pdf','gif');
 			$filename = $_FILES['n_file']['name'];
 			$ext = pathinfo($filename, PATHINFO_EXTENSION);
-			
-				if(in_array($ext,$allowed)){
-					
-					$tmp_name = $_FILES["n_file"]["tmp_name"];
-					$profile = "uploads/profile/";
-					$set_img = base_url()."uploads/profile/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
-					$name = basename($_FILES["n_file"]["name"]);
-					$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
-					move_uploaded_file($tmp_name, $profile.$newfilename);
-					$nname = $newfilename;
+			if(in_array($ext,$allowed)){
+				$tmp_name = $_FILES["n_file"]["tmp_name"];
+				$profile = "uploads/profile/";
+				$set_img = base_url()."uploads/profile/";
+				// basename() may prevent filesystem traversal attacks;
+				// further validation/sanitation of the filename may be appropriate
+				$name = basename($_FILES["n_file"]["name"]);
+				$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
+				move_uploaded_file($tmp_name, $profile.$newfilename);
+				$nname = $newfilename;
 			}
 		}else{
 			$nname = '';
 		}
 		$data = array(
-			'employee_id' => $employee_id,
-			'office_shift_id' => $this->input->post('office_shift_id'),
+			'company_id' => $this->input->post('company_id'),
 			'first_name' => $first_name,
 			'last_name' => $last_name,
-			'username' => $username,
-			'company_id' => $this->input->post('company_id'),
 			'location_id' => $this->input->post('location_id'),
-			'email' => $this->input->post('email'),
-			'status' => $this->input->post('status'),
-			'floor_status' => $this->input->post('floor_status'),
-			'password' => $password_hash,
-			'date_of_birth' => $date_of_birth,
-			'gender' => $this->input->post('gender'),
-			'user_role_id' => $this->input->post('role'),
-			'department_id' => $this->input->post('department_id'),
-			'sub_department_id' => $this->input->post('subdepartment_id'),
-			'designation_id' => $this->input->post('designation_id'),
+			'employee_id' => $employee_id,
+			'proxi_id' => $this->input->post('proxi_id'),
+
 			'salary' => $this->input->post('salary'),
 			'basic_salary' => $this->input->post('salary'),
+			'department_id' => $this->input->post('department_id'),
+			'designation_id' => $this->input->post('designation_id'),
+			'sub_department_id' => null,
+			'email' => $this->input->post('email'),
 			'date_of_joining' => $date_of_joining,
 			'notify_incre_prob' => $probation_end,
+			'status' => $this->input->post('status'),
+			'floor_status' => $this->input->post('floor_status'),
+			'date_of_birth' => $date_of_birth,
+			'gender' => $this->input->post('gender'),
+			'office_shift_id' => $this->input->post('office_shift_id'),
+			'user_role_id' => $this->input->post('role'),
+			'is_emp_lead' => $this->input->post('is_emp_lead'),
 			'contact_no' => $contact_no,
-			'address' => $address,
-			'per_address' => $per_address,
+			'username' => $username,
+			'password' => $password_hash,
+
+			'div_id_pre' => $this->input->post('div_id_pre'),
+			'dis_id_pre' => $this->input->post('dis_id_pre'),
+			'up_id_pre' => $this->input->post('up_id_pre'),
+			'po_id_pre' => $this->input->post('po_id_pre'),
+			'address' => $this->input->post('village_pre'),
+			'div_id_per' => $this->input->post('div_id_per'),
+			'dis_id_per' => $this->input->post('dis_id_per'),
+			'up_id_per' => $this->input->post('up_id_per'),
+			'po_id_per' => $this->input->post('po_id_per'),
+			'per_address' => $this->input->post('village_per'),
+
 			'is_active' => 1,
-			'leave_categories' => $cat_ids,
+			'leave_categories' => null,
 			'profile_picture' => $fname,
 			'note_file' => $nname,
 			'remark' => $this->input->post('remark'),
 			'created_at' => date('Y-m-d h:i:s')
 		);
+
 		$iresult = $this->Employees_model->add($data);
-	
+
 			$emdata = array(
 				'employee_id' => $iresult,
 				'relation' => $this->input->post('relation'),
+				'contact_name' => $this->input->post('contact_name'),
+				'address_1' => $this->input->post('address_1'),
+				'mobile_phone' => $this->input->post('e_phone_number'),
 				'is_primary' => '',
 				'is_dependent' => '',
-				'contact_name' => $this->input->post('contact_name'),
 				'work_phone' => '',
 				'work_phone_extension' =>'',
-				'mobile_phone' => $this->input->post('e_phone_number'),
 				'home_phone' => '',
 				'work_email' => '',
 				'personal_email' =>'',
-				'address_1' => $this->input->post('address_1'),
 				'address_2' =>'',
 				'city' => '',
 				'state' => '',
@@ -2321,20 +2328,13 @@ class Employees extends MY_Controller {
 			);
 			$this->db->insert('xin_employee_contacts',$emdata);
 		if ($iresult) {
-			
+
 			$id = $iresult;
 			$proxi = array('emp_id' =>$id , 'proxi_id' => $this->input->post('proxi_id'), 'status' => 1);
 			$this->db->insert('xin_proxi', $proxi);
-			
+
 			if($count_module_attributes > 0){
 				foreach($module_attributes as $mattribute) {
-				 	/*$attr_data = array(
-						'user_id' => $iresult,
-						'module_attributes_id' => $mattribute->custom_field_id,
-						'attribute_value' => $this->input->post($mattribute->attribute),
-						'created_at' => date('Y-m-d h:i:s')
-					);
-					$this->Custom_fields_model->add_values($attr_data);*/
 					if($mattribute->attribute_type == 'fileupload'){
 						if($_FILES[$mattribute->attribute]['size'] != 0) {
 							if(is_uploaded_file($_FILES[$mattribute->attribute]['tmp_name'])) {
@@ -2342,7 +2342,7 @@ class Employees extends MY_Controller {
 								$allowed =  array('png','jpg','jpeg','pdf','gif','xls','doc','xlsx','docx');
 								$filename = $_FILES[$mattribute->attribute]['name'];
 								$ext = pathinfo($filename, PATHINFO_EXTENSION);
-								
+
 								if(in_array($ext,$allowed)){
 									$tmp_name = $_FILES[$mattribute->attribute]["tmp_name"];
 									$profile = "uploads/custom_files/";
@@ -2352,7 +2352,7 @@ class Employees extends MY_Controller {
 									$name = basename($_FILES[$mattribute->attribute]["name"]);
 									$newfilename = 'custom_file_'.round(microtime(true)).'.'.$ext;
 									move_uploaded_file($tmp_name, $profile.$newfilename);
-									$fname = $newfilename;	
+									$fname = $newfilename;
 								}
 								$iattr_data = array(
 									'user_id' => $id,
@@ -2397,36 +2397,32 @@ class Employees extends MY_Controller {
 							);
 						$this->Custom_fields_model->add_values($iattr_data);
 					}
-					/*$attr_orig_value = $this->Custom_fields_model->read_hrsale_module_attributes_values($result,$mattribute->custom_field_id);
-					if($attr_orig_value->module_attributes_id != $mattribute->custom_field_id) {
-						$this->Custom_fields_model->add_values($attr_data);
-					}*/
 				 }
 			}
-			//get setting info 
+			//get setting info
 			$setting = $this->Xin_model->read_setting_info(1);
 			$company = $this->Xin_model->read_company_setting_info(1);
 			if($setting[0]->enable_email_notification == 'yes') {
 				// load email library
 				$this->load->library('email');
 				$this->email->set_mailtype("html");
-				
+
 				//get company info
 				$cinfo = $this->Xin_model->read_company_setting_info(1);
 				//get email template
 				$template = $this->Xin_model->read_email_template(8);
-						
+
 				$subject = $template[0]->subject.' - '.$cinfo[0]->company_name;
 				$logo = base_url().'uploads/logo/signin/'.$company[0]->sign_in_logo;
-				
+
 				// get user full name
 				$full_name = $this->input->post('first_name').' '.$this->input->post('last_name');
-				
+
 				$message = '
 			<div style="background:#f6f6f6;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:12px;margin:0;padding:0;padding: 20px;">
 			<img src="'.$logo.'" title="'.$cinfo[0]->company_name.'"><br>'.str_replace(array("{var site_name}","{var site_url}","{var username}","{var employee_id}","{var employee_name}","{var email}","{var password}"),array($cinfo[0]->company_name,site_url(),$this->input->post('username'),$this->input->post('employee_id'),$full_name,$this->input->post('email'),$this->input->post('password')),htmlspecialchars_decode(stripslashes($template[0]->message))).'</div>';
-				
-				hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$this->input->post('email'),$subject,$message);				
+
+				hrsale_mail($cinfo[0]->email,$cinfo[0]->company_name,$this->input->post('email'),$subject,$message);
 			}
 			$Return['result'] = $this->lang->line('xin_success_add_employee');
 
@@ -2439,27 +2435,27 @@ class Employees extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	/*  add and update employee details info */
-	
+
 	// Validate and update info in database // basic info
 	public function basic_info() {
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
-	
 
-		if($this->input->post('type')=='basic_info') {		
+
+		if($this->input->post('type')=='basic_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		// dd($Return['csrf_hash']);
-		
+
 		//$office_shift_id = $this->input->post('office_shift_id');
 		$system = $this->Xin_model->read_setting_info(1);
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('first_name')==='') {
         	$Return['error'] = $this->lang->line('xin_employee_error_first_name');
 		}/* else if(preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('first_name'))!=1) {
@@ -2520,7 +2516,7 @@ class Employees extends MY_Controller {
 			$column_shift = $this->input->post('office_shift_id');
 		}*/
 
-		
+
 		$first_name = $this->Xin_model->clean_post($this->input->post('first_name'));
 		$last_name = $this->Xin_model->clean_post($this->input->post('last_name'));
 		$employee_id = $this->input->post('employee_id');
@@ -2535,9 +2531,9 @@ class Employees extends MY_Controller {
 		$leave_categories = array($this->input->post('leave_categories'));
 		$cat_ids = implode(',',$this->input->post('leave_categories'));
 		// $view_companies_id = implode(',',$this->input->post('view_companies_id'));
-		
+
 		$module_attributes = $this->Custom_fields_model->all_hrsale_module_attributes();
-		$count_module_attributes = $this->Custom_fields_model->count_module_attributes();	
+		$count_module_attributes = $this->Custom_fields_model->count_module_attributes();
 		$i=1;
 		if($count_module_attributes > 0){
 			 foreach($module_attributes as $mattribute) {
@@ -2547,10 +2543,10 @@ class Employees extends MY_Controller {
 						$Return['error'] = $this->lang->line('xin_hrsale_custom_field_the').' '.$mattribute->attribute_label.' '.$this->lang->line('xin_hrsale_custom_field_is_required');
 					}
 				 }
-			 }		
+			 }
 			 if($Return['error']!=''){
 				$this->output($Return);
-			}	
+			}
 		}
 		$data = array(
 			'employee_id' => $employee_id,
@@ -2609,7 +2605,7 @@ class Employees extends MY_Controller {
 
 		if($count_module_attributes > 0){
 			foreach($module_attributes as $mattribute) {
-				
+
 				//
 				$count_exist_values = $this->Custom_fields_model->count_module_attributes_values($id,$mattribute->custom_field_id);
 				if($count_exist_values > 0){
@@ -2620,7 +2616,7 @@ class Employees extends MY_Controller {
 								$allowed =  array('png','jpg','jpeg','pdf','gif','xls','doc','xlsx','docx');
 								$filename = $_FILES[$mattribute->attribute]['name'];
 								$ext = pathinfo($filename, PATHINFO_EXTENSION);
-								
+
 								if(in_array($ext,$allowed)){
 									$tmp_name = $_FILES[$mattribute->attribute]["tmp_name"];
 									$profile = "uploads/custom_files/";
@@ -2630,14 +2626,14 @@ class Employees extends MY_Controller {
 									$name = basename($_FILES[$mattribute->attribute]["name"]);
 									$newfilename = 'custom_file_'.round(microtime(true)).'.'.$ext;
 									move_uploaded_file($tmp_name, $profile.$newfilename);
-									$fname = $newfilename;	
+									$fname = $newfilename;
 								}
 								$iattr_data = array(
 									'attribute_value' => $fname
 								);
 								$this->Custom_fields_model->update_att_record($iattr_data, $id,$mattribute->custom_field_id);
 							}
-							
+
 						} else {
 						}
 					} else if($mattribute->attribute_type == 'multiselect') {
@@ -2655,7 +2651,7 @@ class Employees extends MY_Controller {
 						);
 						$this->Custom_fields_model->update_att_record($attr_data, $id,$mattribute->custom_field_id);
 					}
-					
+
 				} else {
 					if($mattribute->attribute_type == 'fileupload'){
 						if($_FILES[$mattribute->attribute]['size'] != 0) {
@@ -2664,7 +2660,7 @@ class Employees extends MY_Controller {
 								$allowed =  array('png','jpg','jpeg','pdf','gif','xls','doc','xlsx','docx');
 								$filename = $_FILES[$mattribute->attribute]['name'];
 								$ext = pathinfo($filename, PATHINFO_EXTENSION);
-								
+
 								if(in_array($ext,$allowed)){
 									$tmp_name = $_FILES[$mattribute->attribute]["tmp_name"];
 									$profile = "uploads/custom_files/";
@@ -2674,7 +2670,7 @@ class Employees extends MY_Controller {
 									$name = basename($_FILES[$mattribute->attribute]["name"]);
 									$newfilename = 'custom_file_'.round(microtime(true)).'.'.$ext;
 									move_uploaded_file($tmp_name, $profile.$newfilename);
-									$fname = $newfilename;	
+									$fname = $newfilename;
 								}
 								$iattr_data = array(
 									'user_id' => $id,
@@ -2728,7 +2724,7 @@ class Employees extends MY_Controller {
 		}
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_employee_basic_info_updated');
-		
+
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
 		}
@@ -2736,16 +2732,16 @@ class Employees extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// Validate and update info in database // social info
 	public function profile_picture() {
-	
-		if($this->input->post('type')=='profile_picture') {		
+
+		if($this->input->post('type')=='profile_picture') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		$id = $this->input->post('user_id');
-			
+
 		/* Check if file uploaded..*/
 		if($_FILES['p_file']['size'] == 0 && null ==$this->input->post('remove_profile_picture')) {
 			$Return['error'] = $this->lang->line('xin_employee_select_picture');
@@ -2755,7 +2751,7 @@ class Employees extends MY_Controller {
 				$allowed =  array('png','jpg','jpeg','pdf','gif');
 				$filename = $_FILES['p_file']['name'];
 				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				
+
 				if(in_array($ext,$allowed)){
 					$tmp_name = $_FILES["p_file"]["tmp_name"];
 					$profile = "uploads/profile/";
@@ -2766,7 +2762,7 @@ class Employees extends MY_Controller {
 					$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
 					move_uploaded_file($tmp_name, $profile.$newfilename);
 					$fname = $newfilename;
-					
+
 					//UPDATE Employee info in DB
 					$data = array('profile_picture' => $fname);
 					$result = $this->Employees_model->profile_picture($data,$id);
@@ -2778,16 +2774,16 @@ class Employees extends MY_Controller {
 					}
 					$this->output($Return);
 					exit;
-					
+
 				} else {
 					$Return['error'] = $this->lang->line('xin_employee_picture_type');
 				}
 				}
 			}
-			
+
 			if(null!=$this->input->post('remove_profile_picture')) {
 				//UPDATE Employee info in DB
-				$data = array('profile_picture' => 'no file');				
+				$data = array('profile_picture' => 'no file');
 				$row = $this->Employees_model->read_employee_information($id);
 				$profile = base_url()."uploads/profile/";
 				$result = $this->Employees_model->profile_picture($data,$id);
@@ -2803,22 +2799,22 @@ class Employees extends MY_Controller {
 				}
 				$this->output($Return);
 				exit;
-				
+
 			}
-				
+
 			if($Return['error']!=''){
 				$this->output($Return);
 			}
 		}
 	}
-	
+
 	// Validate and update info in database // basic info
 	public function social_info() {
-	
-		if($this->input->post('type')=='social_info') {		
+
+		if($this->input->post('type')=='social_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		$data = array(
 		'facebook_link' => $this->input->post('facebook_link'),
 		'twitter_link' => $this->input->post('twitter_link'),
@@ -2826,8 +2822,6 @@ class Employees extends MY_Controller {
 		'linkdedin_link' => $this->input->post('linkdedin_link'),
 		'google_plus_link' => $this->input->post('google_plus_link'),
 		'instagram_link' => $this->input->post('instagram_link'),
-		'pinterest_link' => $this->input->post('pinterest_link'),
-		'youtube_link' => $this->input->post('youtube_link')
 		);
 		$id = $this->input->post('user_id');
 		$result = $this->Employees_model->social_info($data,$id);
@@ -2839,8 +2833,8 @@ class Employees extends MY_Controller {
 		$this->output($Return);
 		exit;
 		}
-	}	
-	
+	}
+
 public function nda() {
 	$session = $this->session->userdata('username');
 	$userid = $_POST['user_id'];
@@ -2883,23 +2877,23 @@ public function nda() {
 		}else{
 			dd("KO");
 		}
-		
+
 	}
 	// Validate and update info in database // contact info
 	public function update_contacts_info() {
-	
+
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
-	
-		if($this->input->post('type')=='contact_info') {		
+
+		if($this->input->post('type')=='contact_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
+		/* Server side PHP input validation */
 		if($this->input->post('salutation')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_salutation');
 		} else if($this->input->post('contact_name')==='') {
@@ -2915,11 +2909,11 @@ public function nda() {
 		} else if($this->input->post('country')==='') {
 			 $Return['error'] = $this->lang->line('xin_error_country_field');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'salutation' => $this->input->post('salutation'),
 		'contact_name' => $this->input->post('contact_name'),
@@ -2936,7 +2930,7 @@ public function nda() {
 		'employee_id' => $this->input->post('user_id'),
 		'contact_type' => 'permanent'
 		);
-		
+
 		$query = $this->Employees_model->check_employee_contact_permanent($this->input->post('user_id'));
 		if ($query->num_rows() > 0 ) {
 			$res = $query->result();
@@ -2955,22 +2949,22 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and update info in database //  econtact info
 	public function update_contact_info() {
-	
+
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
-	
-		if($this->input->post('type')=='contact_info') {		
+
+		if($this->input->post('type')=='contact_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
+		/* Server side PHP input validation */
 		if($this->input->post('salutation')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_salutation');
 		} else if($this->input->post('contact_name')==='') {
@@ -2986,11 +2980,11 @@ public function nda() {
 		} else if($this->input->post('country')==='') {
 			 $Return['error'] = $this->lang->line('xin_error_country_field');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'salutation' => $this->input->post('salutation'),
 		'contact_name' => $this->input->post('contact_name'),
@@ -3007,7 +3001,7 @@ public function nda() {
 		'employee_id' => $this->input->post('user_id'),
 		'contact_type' => 'current'
 		);
-		
+
 		$query = $this->Employees_model->check_employee_contact_current($this->input->post('user_id'));
 		if ($query->num_rows() > 0 ) {
 			$res = $query->result();
@@ -3017,7 +3011,7 @@ public function nda() {
 			$result = $this->Employees_model->contact_info_add($data);
 		}
 		//$e_field_id = 1;
-		
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_employee_contact_info_updated');
 		} else {
@@ -3027,27 +3021,27 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and update info in database // contact info
 	public function contact_info() {
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
-	
-		if($this->input->post('type')=='contact_info') {		
+
+		if($this->input->post('type')=='contact_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('relation')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_relation');
 		} else if($this->input->post('contact_name')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_contact_name');
 		} else if($this->input->post('mobile_phone')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_mobile');
-		} 
+		}
 		if(null!=$this->input->post('is_primary')) {
 			$is_primary = $this->input->post('is_primary');
 		} else {
@@ -3066,8 +3060,8 @@ public function nda() {
 		$address_1 = $this->Xin_model->clean_posts($this->input->post('address_1'));
 		$address_2 = $this->Xin_model->clean_posts($this->input->post('address_2'));
 		$city = $this->Xin_model->clean_post($this->input->post('city'));
-		$state = $this->Xin_model->clean_post($this->input->post('state'));		
-	
+		$state = $this->Xin_model->clean_post($this->input->post('state'));
+
 		$data = array(
 		'relation' => $this->input->post('relation'),
 		'work_email' => $this->input->post('work_email'),
@@ -3098,20 +3092,20 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and update info in database //  econtact info
 	public function e_contact_info() {
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
-	
-		if($this->input->post('type')=='e_contact_info') {		
+
+		if($this->input->post('type')=='e_contact_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('relation')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_relation');
 		} else if($this->input->post('contact_name')==='') {
@@ -3119,7 +3113,7 @@ public function nda() {
 		} else if($this->input->post('mobile_phone')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_mobile');
 		}
-		
+
 		if(null!=$this->input->post('is_primary')) {
 			$is_primary = $this->input->post('is_primary');
 		} else {
@@ -3130,11 +3124,11 @@ public function nda() {
 		} else {
 			$is_dependent = '';
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'relation' => $this->input->post('relation'),
 		'work_email' => $this->input->post('work_email'),
@@ -3153,7 +3147,7 @@ public function nda() {
 		'home_phone' => $this->input->post('home_phone'),
 		'country' => $this->input->post('country')
 		);
-		
+
 		$e_field_id = $this->input->post('e_field_id');
 		$result = $this->Employees_model->contact_info_update($data,$e_field_id);
 		if ($result == TRUE) {
@@ -3165,20 +3159,20 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database // document info
 	public function document_info() {
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
-	
-		if($this->input->post('type')=='document_info' && $this->input->post('data')=='document_info') {		
+
+		if($this->input->post('type')=='document_info' && $this->input->post('data')=='document_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('document_type_id')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_d_type');
 		} else if($this->input->post('title')==='') {
@@ -3190,7 +3184,7 @@ public function nda() {
 		} else if(!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
 			$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
 		} */
-		
+
 		/* Check if file uploaded..*/
 		else if($_FILES['document_file']['size'] == 0) {
 			$fname = '';
@@ -3200,7 +3194,7 @@ public function nda() {
 				$allowed =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
 				$filename = $_FILES['document_file']['name'];
 				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				
+
 				if(in_array($ext,$allowed)){
 					$tmp_name = $_FILES["document_file"]["tmp_name"];
 					$documentd = "uploads/document/";
@@ -3215,21 +3209,21 @@ public function nda() {
 				}
 			}
 		}
-					
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		//clean simple fields
 		$title = $this->Xin_model->clean_post($this->input->post('title'));
 		$description = $this->Xin_model->clean_post($this->input->post('description'));
 		// clean date fields
-		if($this->input->post('date_of_expiry')!='') {	
+		if($this->input->post('date_of_expiry')!='') {
 			$date_of_expiry = $this->Xin_model->clean_date_post($this->input->post('date_of_expiry'));
 		}else{
 			$date_of_expiry='';
 		}
-	
+
 		$data = array(
 		'document_type_id' => $this->input->post('document_type_id'),
 		'date_of_expiry' => $date_of_expiry,
@@ -3251,17 +3245,17 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database // document info
 	public function immigration_info() {
-	
-		if($this->input->post('type')=='immigration_info' && $this->input->post('data')=='immigration_info') {		
+
+		if($this->input->post('type')=='immigration_info' && $this->input->post('data')=='immigration_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
+
 		//preg_match("/^(\pL{1,}[ ]?)+$/u",
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('document_type_id')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_d_type');
 		} else if($this->input->post('document_number')==='') {
@@ -3275,7 +3269,7 @@ public function nda() {
 		} else if($this->Xin_model->validate_date($this->input->post('expiry_date'),'Y-m-d') == false) {
 			 $Return['error'] = $this->lang->line('xin_hr_date_format_error');
 		}
-		
+
 		/* Check if file uploaded..*/
 		else if($_FILES['document_file']['size'] == 0) {
 			$Return['error'] = $this->lang->line('xin_employee_select_d_file');
@@ -3285,7 +3279,7 @@ public function nda() {
 				$allowed =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
 				$filename = $_FILES['document_file']['name'];
 				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				
+
 				if(in_array($ext,$allowed)){
 					$tmp_name = $_FILES["document_file"]["tmp_name"];
 					$documentd = "uploads/document/immigration/";
@@ -3300,11 +3294,11 @@ public function nda() {
 				}
 			}
 		}
-					
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		$document_number = $this->Xin_model->clean_post($this->input->post('document_number'));	
+		$document_number = $this->Xin_model->clean_post($this->input->post('document_number'));
 		$issue_date = $this->Xin_model->clean_date_post($this->input->post('issue_date'));
 		$expiry_date = $this->Xin_model->clean_date_post($this->input->post('expiry_date'));
 		$eligible_review_date = $this->Xin_model->clean_date_post($this->input->post('eligible_review_date'));
@@ -3320,7 +3314,7 @@ public function nda() {
 		'created_at' => date('d-m-Y h:i:s'),
 		);
 		$result = $this->Employees_model->immigration_info_add($data);
-		
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_employee_img_info_added');
 		} else {
@@ -3330,16 +3324,16 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database // document info
 	public function e_immigration_info() {
-	
-		if($this->input->post('type')=='e_immigration_info' && $this->input->post('data')=='e_immigration_info') {		
+
+		if($this->input->post('type')=='e_immigration_info' && $this->input->post('data')=='e_immigration_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('document_type_id')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_d_type');
 		} else if($this->input->post('document_number')==='') {
@@ -3349,7 +3343,7 @@ public function nda() {
 		} else if($this->input->post('expiry_date')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_expiry_date');
 		}
-		
+
 		/* Check if file uploaded..*/
 		else if($_FILES['document_file']['size'] == 0) {
 			$data = array(
@@ -3375,7 +3369,7 @@ public function nda() {
 				$allowed =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
 				$filename = $_FILES['document_file']['name'];
 				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				
+
 				if(in_array($ext,$allowed)){
 					$tmp_name = $_FILES["document_file"]["tmp_name"];
 					$documentd = "uploads/document/immigration/";
@@ -3408,11 +3402,11 @@ public function nda() {
 				}
 			}
 		}
-							
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_employee_img_info_added');
 		} else {
@@ -3422,16 +3416,16 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database // e_document info
 	public function e_document_info() {
-	 
-		if($this->input->post('type')=='e_document_info') {		
+
+		if($this->input->post('type')=='e_document_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('document_type_id')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_d_type');
 		} else if($this->input->post('title')==='') {
@@ -3439,7 +3433,7 @@ public function nda() {
 		} else if($this->input->post('email')==='') {
 			 $Return['error'] = $this->lang->line('xin_error_notify_email_field');
 		}
-		
+
 		/* Check if file uploaded..*/
 		else if($_FILES['document_file']['size'] == 0) {
 			$data = array(
@@ -3465,7 +3459,7 @@ public function nda() {
 				$allowed =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
 				$filename = $_FILES['document_file']['name'];
 				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				
+
 				if(in_array($ext,$allowed)){
 					$tmp_name = $_FILES["document_file"]["tmp_name"];
 					$documentd = "uploads/document/";
@@ -3498,40 +3492,40 @@ public function nda() {
 				}
 			}
 		}
-					
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
-		
+
+
 		}
 	}
-	
+
 	// Validate and add info in database // qualification info
 	public function qualification_info() {
-	
-		if($this->input->post('type')=='qualification_info') {		
+
+		if($this->input->post('type')=='qualification_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */	
+
+		/* Server side PHP input validation */
 		$from_year = $this->input->post('from_year');
 		$to_year = $this->input->post('to_year');
 		$st_date = strtotime($from_year);
 		$ed_date = strtotime($to_year);
-			
+
 		// if($this->input->post('name')==='') {
        	// 	 $Return['error'] = $this->lang->line('xin_employee_error_sch_uni');
 		// } else if(preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('name'))!=1) {
 		// // } else if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('name'))!=1) {
 		// 	$Return['error'] = $this->lang->line('xin_hr_string_error');
-		// } 
-				
+		// }
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		$name = $this->Xin_model->clean_post($this->input->post('name'));
 		// $from_year = $this->Xin_model->clean_date_post($this->input->post('from_year'));
 		// $to_year = $this->Xin_model->clean_date_post($this->input->post('to_year'));
@@ -3559,21 +3553,21 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database // qualification info
 	public function e_qualification_info() {
-	
-		if($this->input->post('type')=='e_qualification_info') {		
+
+		if($this->input->post('type')=='e_qualification_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		$from_year = $this->input->post('from_year');
 		$to_year = $this->input->post('to_year');
 		$st_date = strtotime($from_year);
 		$ed_date = strtotime($to_year);
-			
+
 		if($this->input->post('name')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_sch_uni');
 		} else if($this->input->post('from_year')==='') {
@@ -3583,11 +3577,11 @@ public function nda() {
 		} else if($st_date > $ed_date) {
 			$Return['error'] = $this->lang->line('xin_employee_error_date_shouldbe');
 		}
-			
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'name' => $this->input->post('name'),
 		'education_level_id' => $this->input->post('education_level'),
@@ -3608,18 +3602,18 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database // work experience info
 	public function work_experience_info() {
-	
-		if($this->input->post('type')=='work_experience_info') {		
+
+		if($this->input->post('type')=='work_experience_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
-		$frm_date = strtotime($this->input->post('from_date'));	
+
+		$frm_date = strtotime($this->input->post('from_date'));
 		$to_date = strtotime($this->input->post('to_date'));
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('company_name')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_company_name');
 		} else if($this->input->post('post')==='') {
@@ -3630,12 +3624,12 @@ public function nda() {
 			 $Return['error'] = $this->lang->line('xin_employee_error_to_date');
 		} else if($frm_date > $to_date) {
 			 $Return['error'] = $this->lang->line('xin_employee_error_date_shouldbe');
-		} 
-				
+		}
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'company_name' => $this->input->post('company_name'),
 		'from_date' => $this->input->post('from_date'),
@@ -3655,17 +3649,17 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	public function e_work_experience_info() {
-	
-		if($this->input->post('type')=='e_work_experience_info') {		
+
+		if($this->input->post('type')=='e_work_experience_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
-		$frm_date = strtotime($this->input->post('from_date'));	
+
+		$frm_date = strtotime($this->input->post('from_date'));
 		$to_date = strtotime($this->input->post('to_date'));
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('company_name')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_company_name');
 		} else if($this->input->post('from_date')==='') {
@@ -3677,11 +3671,11 @@ public function nda() {
 		} else if($this->input->post('post')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_post');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'company_name' => $this->input->post('company_name'),
 		'from_date' => $this->input->post('from_date'),
@@ -3700,16 +3694,16 @@ public function nda() {
 		exit;
 		}
 	}
-	
-	
+
+
 	// Validate and add info in database // bank account info
 	public function bank_account_info() {
-	
-		if($this->input->post('type')=='bank_account_info') {		
+
+		if($this->input->post('type')=='bank_account_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('account_title')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_acc_title');
 		// } else if(preg_match("/^[a-zA-Z ]+\.[a-zA-Z ]*$/",$this->input->post('account_title'))!=1) {
@@ -3722,11 +3716,11 @@ public function nda() {
 		} else if($this->input->post('bank_code')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_bank_code');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'account_title' => $this->input->post('account_title'),
 		'account_number' => $this->input->post('account_number'),
@@ -3748,20 +3742,20 @@ public function nda() {
 	}
 	// Validate and add info in database // bank account info
 	public function add_security_level() {
-	
-		if($this->input->post('type')=='security_level_info') {		
+
+		if($this->input->post('type')=='security_level_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('security_level')==='') {
        		 $Return['error'] = $this->lang->line('xin_error_security_level_field');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'security_type' => $this->input->post('security_level'),
 		'expiry_date' => $this->input->post('expiry_date'),
@@ -3781,20 +3775,20 @@ public function nda() {
 	}
 	// Validate and add info in database // ebank account info
 	public function e_security_level_info() {
-	
-		if($this->input->post('type')=='e_security_level_info') {		
+
+		if($this->input->post('type')=='e_security_level_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('security_level')==='') {
        		 $Return['error'] = $this->lang->line('xin_error_security_level_field');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 			'security_type' => $this->input->post('security_level'),
 			'expiry_date' => $this->input->post('expiry_date'),
@@ -3813,7 +3807,7 @@ public function nda() {
 	}
 	// delete security level record
 	public function delete_security_level() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -3830,12 +3824,12 @@ public function nda() {
 	}
 	// Validate and add info in database // ebank account info
 	public function e_bank_account_info() {
-	
-		if($this->input->post('type')=='e_bank_account_info') {		
+
+		if($this->input->post('type')=='e_bank_account_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('account_title')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_acc_title');
 		} else if($this->input->post('account_number')==='') {
@@ -3845,11 +3839,11 @@ public function nda() {
 		} else if($this->input->post('bank_code')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_bank_code');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'account_title' => $this->input->post('account_title'),
 		'account_number' => $this->input->post('account_number'),
@@ -3868,18 +3862,18 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database //contract info
 	public function contract_info() {
-	
-		if($this->input->post('type')=='contract_info') {		
+
+		if($this->input->post('type')=='contract_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
-		$frm_date = strtotime($this->input->post('from_date'));	
+
+		$frm_date = strtotime($this->input->post('from_date'));
 		$to_date = strtotime($this->input->post('to_date'));
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('contract_type_id')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_contract_type');
 		} else if($this->input->post('title')==='') {
@@ -3893,11 +3887,11 @@ public function nda() {
 		} else if($this->input->post('designation_id')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_designation');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'contract_type_id' => $this->input->post('contract_type_id'),
 		'title' => $this->input->post('title'),
@@ -3918,18 +3912,18 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database //e contract info
 	public function e_contract_info() {
-	
-		if($this->input->post('type')=='e_contract_info') {		
+
+		if($this->input->post('type')=='e_contract_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
-		$frm_date = strtotime($this->input->post('from_date'));	
+
+		$frm_date = strtotime($this->input->post('from_date'));
 		$to_date = strtotime($this->input->post('to_date'));
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('contract_type_id')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_contract_type');
 		} else if($this->input->post('title')==='') {
@@ -3943,11 +3937,11 @@ public function nda() {
 		} else if($this->input->post('designation_id')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_designation');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'contract_type_id' => $this->input->post('contract_type_id'),
 		'title' => $this->input->post('title'),
@@ -3967,23 +3961,23 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database //leave_info
 	public function leave_info() {
-	
-		if($this->input->post('type')=='leave_info') {		
+
+		if($this->input->post('type')=='leave_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('contract_id')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_contract_f');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'contract_id' => $this->input->post('contract_id'),
 		'casual_leave' => $this->input->post('casual_leave'),
@@ -4001,19 +3995,19 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database //Eleave_info
 	public function e_leave_info() {
-	
-		if($this->input->post('type')=='e_leave_info') {		
+
+		if($this->input->post('type')=='e_leave_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-							
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'casual_leave' => $this->input->post('casual_leave'),
 		'medical_leave' => $this->input->post('medical_leave')
@@ -4029,26 +4023,26 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database // shift info
 	public function shift_info() {
-	
-		if($this->input->post('type')=='shift_info') {		
+
+		if($this->input->post('type')=='shift_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('from_date')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_frm_date');
 		} else if($this->input->post('shift_id')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_shift_field');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'from_date' => $this->input->post('from_date'),
 		'to_date' => $this->input->post('to_date'),
@@ -4066,19 +4060,19 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database // eshift info
 	public function e_shift_info() {
-	
-		if($this->input->post('type')=='e_shift_info') {		
+
+		if($this->input->post('type')=='e_shift_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		
+
 		if($this->input->post('from_date')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_frm_date');
 		}
-					
+
 		$data = array(
 		'from_date' => $this->input->post('from_date'),
 		'to_date' => $this->input->post('to_date')
@@ -4094,26 +4088,26 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database // location info
 	public function location_info() {
-	
-		if($this->input->post('type')=='location_info') {		
+
+		if($this->input->post('type')=='location_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('from_date')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_frm_date');
 		} else if($this->input->post('location_id')==='') {
 			 $Return['error'] = $this->lang->line('error_location_dept_field');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'from_date' => $this->input->post('from_date'),
 		'to_date' => $this->input->post('to_date'),
@@ -4131,26 +4125,26 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database // elocation info
 	public function e_location_info() {
-	
-		if($this->input->post('type')=='e_location_info') {		
+
+		if($this->input->post('type')=='e_location_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('from_date')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_frm_date');
 		} else if($this->input->post('location_id')==='') {
 			 $Return['error'] = $this->lang->line('error_location_dept_field');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'from_date' => $this->input->post('from_date'),
 		'to_date' => $this->input->post('to_date')
@@ -4166,26 +4160,26 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database // update_allowance_info
 	public function update_allowance_info() {
-	
-		if($this->input->post('type')=='e_allowance_info') {		
+
+		if($this->input->post('type')=='e_allowance_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('allowance_title')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_set_allowance_title_error');
 		} else if($this->input->post('allowance_amount')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_set_allowance_amount_error');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'allowance_title' => $this->input->post('allowance_title'),
 		'allowance_amount' => $this->input->post('allowance_amount'),
@@ -4204,23 +4198,23 @@ public function nda() {
 	}
 	// Validate and add info in database //
 	public function update_commissions_info() {
-	
-		if($this->input->post('type')=='e_salary_commissions_info') {		
+
+		if($this->input->post('type')=='e_salary_commissions_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('title')==='') {
 			$Return['error'] = $this->lang->line('xin_error_title');
 		} else if($this->input->post('amount')==='') {
 			$Return['error'] = $this->lang->line('xin_error_amount_field');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'commission_title' => $this->input->post('title'),
 		'commission_amount' => $this->input->post('amount')
@@ -4238,23 +4232,23 @@ public function nda() {
 	}
 	// Validate and add info in database //
 	public function update_statutory_deductions_info() {
-	
-		if($this->input->post('type')=='e_salary_statutory_deductions_info') {		
+
+		if($this->input->post('type')=='e_salary_statutory_deductions_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('title')==='') {
 			$Return['error'] = $this->lang->line('xin_error_title');
 		} else if($this->input->post('amount')==='') {
 			$Return['error'] = $this->lang->line('xin_error_amount_field');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'deduction_title' => $this->input->post('title'),
 		'deduction_amount' => $this->input->post('amount'),
@@ -4273,23 +4267,23 @@ public function nda() {
 	}
 	// Validate and add info in database //
 	public function update_other_payment_info() {
-	
-		if($this->input->post('type')=='e_salary_other_payments_info') {		
+
+		if($this->input->post('type')=='e_salary_other_payments_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-		/* Server side PHP input validation */		
+		/* Server side PHP input validation */
 		if($this->input->post('title')==='') {
 			$Return['error'] = $this->lang->line('xin_error_title');
 		} else if($this->input->post('amount')==='') {
 			$Return['error'] = $this->lang->line('xin_error_amount_field');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'payments_title' => $this->input->post('title'),
 		'payments_amount' => $this->input->post('amount')
@@ -4305,21 +4299,21 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and update info in database // change password
 	public function change_password() {
-	
+
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
 
-		if($this->input->post('type')=='change_password') {		
+		if($this->input->post('type')=='change_password') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */						
+
+		/* Server side PHP input validation */
 		if(trim($this->input->post('new_password'))==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_newpassword');
 		} else if(strlen($this->input->post('new_password')) < 6) {
@@ -4329,13 +4323,13 @@ public function nda() {
 		} else if($this->input->post('new_password')!=$this->input->post('new_password_confirm')) {
 			 $Return['error'] = $this->lang->line('xin_employee_error_old_new_cpassword');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
 		$options = array('cost' => 12);
 		$password_hash = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT, $options);
-	
+
 		$data = array(
 		'password' => $password_hash
 		);
@@ -4350,14 +4344,14 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	 /*  get all employee details lisitng *//////////////////
-	 
+
 	public function security_level_list() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -4366,13 +4360,13 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$security_level = $this->Employees_model->set_employee_security_level($id);
-		
+
 		$data = array();
 
-        foreach($security_level->result() as $r) {			
+        foreach($security_level->result() as $r) {
 		$security_type = $this->Xin_model->read_security_level($r->security_type);
 		if(!is_null($security_type)){
 			$sc_type = $security_type[0]->name;
@@ -4396,14 +4390,14 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // employee contacts - listing
 	public function contacts()
      {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -4412,14 +4406,14 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$contacts = $this->Employees_model->set_employee_contacts($id);
-		
+
 		$data = array();
 
         foreach($contacts->result() as $r) {
-			
+
 			if($r->is_primary==1){
 				$primary = '<span class="tag tag-success">'.$this->lang->line('xin_employee_primary').'</span>';
 			 } else {
@@ -4430,7 +4424,7 @@ public function nda() {
 			 } else {
 				 $dependent = '';
 			 }
-		
+
 		$data[] = array(
 			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->contact_id . '" data-field_type="contact"><i class="fa fa-pencil-square-o"></i></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn btn-danger btn-sm m-b-0-0 waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->contact_id . '" data-token_type="contact"><i class="fa fa-trash-o"></i></button></span>',
 			$r->contact_name . ' ' .$primary . ' '.$dependent,
@@ -4449,13 +4443,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	// employee documents - listing
 	public function documents() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -4464,14 +4458,14 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$documents = $this->Employees_model->set_employee_documents($id);
-		
+
 		$data = array();
 
         foreach($documents->result() as $r) {
-			
+
 			$d_type = $this->Employees_model->read_document_type_information($r->document_type_id);
 			if(!is_null($d_type)){
 				$document_d = $d_type[0]->document_type;
@@ -4484,13 +4478,13 @@ public function nda() {
 			 } else {
 				 $functions ='';
 			 }
-			 
+
 			 if($r->is_alert==1){
 			 	$alert = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_e_details_alert_notifyemail').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light"><i class="fa fa-bell"></i></button></span>';
 			 } else {
 				 $alert = '';
 			 }
-		
+
 		$data[] = array(
 			$alert.$functions.'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->document_id . '" data-field_type="document"><i class="fa fa-pencil-square-o"></i></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn btn-danger btn-sm m-b-0-0 waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->document_id . '" data-token_type="document"><i class="fa fa-trash-o"></i></button></span>',
 			$document_d,
@@ -4509,13 +4503,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // employee immigration - listing
 	public function immigration() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -4524,14 +4518,14 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$immigration = $this->Employees_model->set_employee_immigration($id);
-		
+
 		$data = array();
 
         foreach($immigration->result() as $r) {
-			
+
 		$issue_date = $this->Xin_model->set_date_format($r->issue_date);
 		$expiry_date = $this->Xin_model->set_date_format($r->expiry_date);
 		$eligible_review_date = $this->Xin_model->set_date_format($r->eligible_review_date);
@@ -4545,9 +4539,9 @@ public function nda() {
 		if(!is_null($country)){
 			$c_name = $country[0]->country_name;
 		} else {
-			$c_name = '--';	
+			$c_name = '--';
 		}
-				
+
 		$data[] = array(
 			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->immigration_id . '" data-field_type="imgdocument"><i class="fa fa-pencil-square-o"></i></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn btn-danger btn-sm m-b-0-0 waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->immigration_id . '" data-token_type="imgdocument"><i class="fa fa-trash-o"></i></button></span>',
 			$document_d,
@@ -4567,13 +4561,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	// employee qualification - listing
 	public function qualification() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -4582,14 +4576,14 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$qualification = $this->Employees_model->set_employee_qualification($id);
-		
+
 		$data = array();
 
         foreach($qualification->result() as $r) {
-			
+
 			$education = $this->Employees_model->read_education_information($r->education_level_id);
 			if(!is_null($education)){
 				$edu_name = $education[0]->name;
@@ -4597,7 +4591,7 @@ public function nda() {
 				$edu_name = '--';
 			}
 		//	$language = $this->Employees_model->read_qualification_language_information($r->language_id);
-			
+
 			/*if($r->skill_id == 'no course') {
 				$ol = 'No Course';
 			} else {
@@ -4609,8 +4603,8 @@ public function nda() {
 				 $ol .= '</ol>';
 			}*/
 			// $sdate = $this->Xin_model->set_date_format($r->from_year);
-			// $edate = $this->Xin_model->set_date_format($r->to_year);	
-			
+			// $edate = $this->Xin_model->set_date_format($r->to_year);
+
 			$time_period = $r->passing_year;
 			// get date
 			$pdate = $time_period;
@@ -4631,13 +4625,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	// employee work experience - listing
 	public function experience() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -4646,18 +4640,18 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$experience = $this->Employees_model->set_employee_experience($id);
-		
+
 		$data = array();
 
         foreach($experience->result() as $r) {
-			
+
 			$from_date = $this->Xin_model->set_date_format($r->from_date);
 			$to_date = $this->Xin_model->set_date_format($r->to_date);
-			
-		
+
+
 		$data[] = array(
 			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->work_experience_id . '" data-field_type="work_experience"><i class="fa fa-pencil-square-o"></i></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn btn-danger btn-sm m-b-0-0 waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->work_experience_id . '" data-token_type="work_experience"><i class="fa fa-trash-o"></i></button></span>',
 			$r->company_name,
@@ -4677,13 +4671,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	// employee bank account - listing
 	public function bank_account() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -4692,14 +4686,14 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$bank_account = $this->Employees_model->set_employee_bank_account($id);
-		
+
 		$data = array();
 
-        foreach($bank_account->result() as $r) {			
-		
+        foreach($bank_account->result() as $r) {
+
 		$data[] = array(
 			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->bankaccount_id . '" data-field_type="bank_account"><i class="fa fa-pencil-square-o"></i></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn btn-danger btn-sm m-b-0-0 waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->bankaccount_id . '" data-token_type="bank_account"><i class="fa fa-trash-o"></i></button></span>',
 			$r->account_title,
@@ -4719,13 +4713,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	// employee contract - listing
 	public function contract() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -4734,13 +4728,13 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$contract = $this->Employees_model->set_employee_contract($id);
-		
+
 		$data = array();
 
-        foreach($contract->result() as $r) {			
+        foreach($contract->result() as $r) {
 			// designation
 			$designation = $this->Designation_model->read_designation_information($r->designation_id);
 			if(!is_null($designation)){
@@ -4757,7 +4751,7 @@ public function nda() {
 			}
 			// date
 			$duration = $this->Xin_model->set_date_format($r->from_date).' '.$this->lang->line('dashboard_to').' '.$this->Xin_model->set_date_format($r->to_date);
-		
+
 		$data[] = array(
 			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->contract_id . '" data-field_type="contract"><i class="fa fa-pencil-square-o"></i></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn btn-danger btn-sm m-b-0-0 waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->contract_id . '" data-token_type="contract"><i class="fa fa-trash-o"></i></button></span>',
 			$duration,
@@ -4776,13 +4770,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	// employee leave - listing
 	public function leave() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -4791,16 +4785,16 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$leave = $this->Employees_model->set_employee_leave($id);
-		
+
 		$data = array();
 
-        foreach($leave->result() as $r) {			
-			
-			
-			
+        foreach($leave->result() as $r) {
+
+
+
 			// contract
 			$contract = $this->Employees_model->read_contract_information($r->contract_id);
 			if(!is_null($contract)){
@@ -4810,9 +4804,9 @@ public function nda() {
 			} else {
 				$ctitle = '--';
 			}
-			
+
 			$contracti = $ctitle;
-		
+
 		$data[] = array(
 			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->leave_id . '" data-field_type="leave"><i class="fa fa-pencil-square-o"></i></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn btn-danger btn-sm m-b-0-0 waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->leave_id . '" data-token_type="leave"><i class="fa fa-trash-o"></i></button></span>',
 			$contracti,
@@ -4830,13 +4824,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	// employee office shift - listing
 	public function shift() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -4845,24 +4839,24 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$shift = $this->Employees_model->set_employee_shift($id);
-		
+
 		$data = array();
 
-        foreach($shift->result() as $r) {			
+        foreach($shift->result() as $r) {
 			// contract
 			$shift_info = $this->Employees_model->read_shift_information($r->shift_id);
 			// contract duration
 			$duration = $this->Xin_model->set_date_format($r->from_date).' '.$this->lang->line('dashboard_to').' '.$this->Xin_model->set_date_format($r->to_date);
-			
+
 			if(!is_null($shift_info)){
 				$shift_name = $shift_info[0]->shift_name;
 			} else {
 				$shift_name = '--';
 			}
-		
+
 		$data[] = array(
 			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->emp_shift_id . '" data-field_type="shift"><i class="fa fa-pencil-square-o"></i></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn btn-danger btn-sm m-b-0-0 waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->emp_shift_id . '" data-token_type="shift"><i class="fa fa-trash-o"></i></button></span>',
 			$duration,
@@ -4879,13 +4873,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	// employee location - listing
 	public function location() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -4894,13 +4888,13 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$location = $this->Employees_model->set_employee_location($id);
-		
+
 		$data = array();
 
-        foreach($location->result() as $r) {			
+        foreach($location->result() as $r) {
 			// contract
 			$of_location = $this->Location_model->read_location_information($r->location_id);
 			// contract duration
@@ -4910,7 +4904,7 @@ public function nda() {
 			} else {
 				$location_name = '--';
 			}
-		
+
 		$data[] = array(
 			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->office_location_id . '" data-field_type="location"><i class="fa fa-pencil-square-o"></i></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn btn-danger btn-sm m-b-0-0 waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->office_location_id . '" data-token_type="location"><i class="fa fa-trash-o"></i></button></span>',
 			$duration,
@@ -4927,22 +4921,22 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	
+
 	// Validate and update info in database
 	public function update() {
-	
+
 		if($this->input->post('edit_type')=='warning') {
-			
+
 		$id = $this->uri->segment(4);
-		
+
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
+
 		/* Server side PHP input validation */
 		$description = $this->input->post('description');
 		$qt_description = htmlspecialchars(addslashes($description), ENT_QUOTES);
-		
+
 		if($this->input->post('warning_to')==='') {
        		 $Return['error'] = $this->lang->line('xin_employee_error_warning');
 		} else if($this->input->post('type')==='') {
@@ -4954,11 +4948,11 @@ public function nda() {
 		} else if($this->input->post('warning_date')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_warning_date');
 		}
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'warning_to' => $this->input->post('warning_to'),
 		'warning_type_id' => $this->input->post('type'),
@@ -4968,9 +4962,9 @@ public function nda() {
 		'warning_date' => $this->input->post('warning_date'),
 		'status' => $this->input->post('status'),
 		);
-		
-		$result = $this->Warning_model->update_record($data,$id);		
-		
+
+		$result = $this->Warning_model->update_record($data,$id);
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_employee_warning_updated');
 		} else {
@@ -4980,17 +4974,17 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// import > timesheet
 	 public function import()
      {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_import_employees').' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_import_employees');
-		$data['path_url'] = 'import_employees';		
+		$data['path_url'] = 'import_employees';
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		$data['all_departments'] = $this->Department_model->all_departments();
 		$data['all_designations'] = $this->Designation_model->all_designations();
@@ -4999,7 +4993,7 @@ public function nda() {
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('92',$role_resources_ids)) {
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/employees/employes_import", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -5007,44 +5001,44 @@ public function nda() {
 			}
 		} else {
 			redirect('admin/dashboard');
-		}		  
+		}
      }
-	 
+
 	// Validate and add info in database
 	public function import_employees() {
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
-	
-		if($this->input->post('is_ajax')=='3') {		
+
+		if($this->input->post('is_ajax')=='3') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
+
 		//validate whether uploaded file is a csv file
    		$csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
-		
+
 		if($_FILES['file']['name']==='') {
 			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
 		} else {
 			if(in_array($_FILES['file']['type'],$csvMimes)){
 				if(is_uploaded_file($_FILES['file']['tmp_name'])){
-					
+
 					// check file size
 					if(filesize($_FILES['file']['tmp_name']) > 2000000) {
 						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
 					} else {
-					
+
 					//open uploaded csv file with read only mode
 					$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-					
+
 					//skip first line
 					fgetcsv($csvFile);
-					
+
 					//parse data from csv file line by line
 					while(($line = fgetcsv($csvFile)) !== FALSE){
-					
+
 						$data = array(
 						'first_name' => $line[0],
 						'last_name' => $line[1],
@@ -5147,10 +5141,10 @@ public function nda() {
 					'created_at' => date('d-m-Y'),
 					);
 					$ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
-				}					
+				}
 				//close opened csv file
 				fclose($csvFile);
-	
+
 				$Return['result'] = $this->lang->line('xin_success_attendance_import');
 				}
 			}else{
@@ -5160,24 +5154,24 @@ public function nda() {
 			$Return['error'] = $this->lang->line('xin_error_invalid_file');
 		}
 		} // file empty
-				
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
-		
+
+
 		$this->output($Return);
 		exit;
 		}
 	}
-	
+
 	// delete contact record
 	public function delete_contact() {
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
-	
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5192,10 +5186,10 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete document record
 	public function delete_document() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5210,14 +5204,14 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete document record
 	public function delete_imgdocument() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-			
+
 			$id = $this->uri->segment(4);
 			$result = $this->Employees_model->delete_imgdocument_record($id);
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -5229,10 +5223,10 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete qualification record
 	public function delete_qualification() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5247,10 +5241,10 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete work_experience record
 	public function delete_work_experience() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5265,14 +5259,14 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete bank_account record
 	public function delete_bank_account() {
 		$session = $this->session->userdata('username');
-		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) { 
+		if(empty($session) || $session['role_id'] == 3 || $session['role_id'] == null) {
 			redirect('admin/');
 		}
-	
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5287,10 +5281,10 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete contract record
 	public function delete_contract() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5305,10 +5299,10 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete leave record
 	public function delete_leave() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5323,10 +5317,10 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete shift record
 	public function delete_shift() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5341,10 +5335,10 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete location record
 	public function delete_location() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5359,10 +5353,10 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete employee record
 	public function delete() {
-		
+
 		if($this->input->post('is_ajax')=='2') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5377,18 +5371,18 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// Validate and update info in database // basic info
 	public function update_salary_option() {
-	
-		if($this->input->post('type')=='employee_update_salary') {		
+
+		if($this->input->post('type')=='employee_update_salary') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		if($this->input->post('basic_salary')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_salary_error_basic');
 		}
-		
+
 		if($Return['error']!=''){
 			$this->output($Return);
 		}
@@ -5408,14 +5402,14 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and update info in database // basic info
 	public function set_overtime() {
-	
-		if($this->input->post('type')=='emp_overtime') {		
+
+		if($this->input->post('type')=='emp_overtime') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		if($this->input->post('overtime_type')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_set_overtime_title_error');
 		} else if($this->input->post('no_of_days')==='') {
@@ -5425,7 +5419,7 @@ public function nda() {
 		} else if($this->input->post('overtime_rate')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_set_overtime_rate_error');
 		}
-		
+
 		if($Return['error']!=''){
 			$this->output($Return);
 		}
@@ -5447,14 +5441,14 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and update info in database // basic info
 	public function update_overtime_info() {
-	
-		if($this->input->post('type')=='e_overtime_info') {		
+
+		if($this->input->post('type')=='e_overtime_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		if($this->input->post('overtime_type')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_set_overtime_title_error');
 		} else if($this->input->post('no_of_days')==='') {
@@ -5464,7 +5458,7 @@ public function nda() {
 		} else if($this->input->post('overtime_rate')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_set_overtime_rate_error');
 		}
-		
+
 		if($Return['error']!=''){
 			$this->output($Return);
 		}
@@ -5486,20 +5480,20 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// Validate and update info in database // basic info
 	public function employee_allowance_option() {
-	
-		if($this->input->post('type')=='employee_update_allowance') {		
+
+		if($this->input->post('type')=='employee_update_allowance') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		if($this->input->post('allowance_title')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_set_allowance_title_error');
 		} else if($this->input->post('allowance_amount')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_set_allowance_amount_error');
 		}
-		
+
 		if($Return['error']!=''){
 			$this->output($Return);
 		}
@@ -5521,17 +5515,17 @@ public function nda() {
 	}
 	// Validate and update info in database // basic info
 	public function employee_commissions_option() {
-	
-		if($this->input->post('type')=='employee_update_commissions') {		
+
+		if($this->input->post('type')=='employee_update_commissions') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		if($this->input->post('title')==='') {
 			$Return['error'] = $this->lang->line('xin_error_title');
 		} else if($this->input->post('amount')==='') {
 			$Return['error'] = $this->lang->line('xin_error_amount_field');
 		}
-		
+
 		if($Return['error']!=''){
 			$this->output($Return);
 		}
@@ -5552,17 +5546,17 @@ public function nda() {
 	}
 	// Validate and update info in database // basic info
 	public function set_statutory_deductions() {
-	
-		if($this->input->post('type')=='statutory_deductions_info') {		
+
+		if($this->input->post('type')=='statutory_deductions_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		if($this->input->post('title')==='') {
 			$Return['error'] = $this->lang->line('xin_error_title');
 		} else if($this->input->post('amount')==='') {
 			$Return['error'] = $this->lang->line('xin_error_amount_field');
 		}
-		
+
 		if($Return['error']!=''){
 			$this->output($Return);
 		}
@@ -5584,17 +5578,17 @@ public function nda() {
 	}
 	// Validate and update info in database // basic info
 	public function set_other_payments() {
-	
-		if($this->input->post('type')=='other_payments_info') {		
+
+		if($this->input->post('type')=='other_payments_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		if($this->input->post('title')==='') {
 			$Return['error'] = $this->lang->line('xin_error_title');
 		} else if($this->input->post('amount')==='') {
 			$Return['error'] = $this->lang->line('xin_error_amount_field');
 		}
-		
+
 		if($Return['error']!=''){
 			$this->output($Return);
 		}
@@ -5613,10 +5607,10 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// delete allowances record
 	public function delete_all_allowances() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5633,7 +5627,7 @@ public function nda() {
 	}
 	// delete commissions record
 	public function delete_all_commissions() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5650,7 +5644,7 @@ public function nda() {
 	}
 	// delete statutory_deductions record
 	public function delete_all_statutory_deductions() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5667,7 +5661,7 @@ public function nda() {
 	}
 	// delete other payments record
 	public function delete_all_other_payments() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5682,10 +5676,10 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// delete deductions record
 	public function delete_all_deductions() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5702,7 +5696,7 @@ public function nda() {
 	}
 	// delete overtime record
 	public function delete_emp_overtime() {
-		
+
 		if($this->input->post('data')=='delete_record') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -5717,13 +5711,13 @@ public function nda() {
 			$this->output($Return);
 		}
 	}
-	
+
 	// employee all_allowances
 	public function salary_all_allowances() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -5732,10 +5726,10 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$allowances = $this->Employees_model->set_employee_allowances($id);
-		
+
 		$data = array();
 		/*$system = $this->Xin_model->read_setting_info(1);
 		$default_currency = $this->Xin_model->read_currency_con_info($system[0]->default_currency_id);
@@ -5747,7 +5741,7 @@ public function nda() {
 			$current_title = 'USD';
 		}*/
 
-        foreach($allowances->result() as $r) {			
+        foreach($allowances->result() as $r) {
 		//$current_amount = $r->allowance_amount * $current_rate;
 		if($r->is_allowance_taxable==0){
 			$allowance_opt = $this->lang->line('xin_salary_allowance_non_taxable');
@@ -5776,7 +5770,7 @@ public function nda() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -5785,14 +5779,14 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$commissions = $this->Employees_model->set_employee_commissions($id);
-		
+
 		$data = array();
 
-        foreach($commissions->result() as $r) {			
-		
+        foreach($commissions->result() as $r) {
+
 		$data[] = array(
 			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->salary_commissions_id . '" data-field_type="salary_commissions"><span class="fa fa-pencil"></span></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->salary_commissions_id . '" data-token_type="all_commissions"><span class="fa fa-trash"></span></button></span>',
 			$r->commission_title,
@@ -5814,7 +5808,7 @@ public function nda() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -5823,13 +5817,13 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$statutory_deductions = $this->Employees_model->set_employee_statutory_deductions($id);
-		
+
 		$data = array();
 
-        foreach($statutory_deductions->result() as $r) {			
+        foreach($statutory_deductions->result() as $r) {
 		if($r->statutory_options==1){
 			$sd_opt = $this->lang->line('xin_sd_ssc_title');
 		} else if($r->statutory_options==2){
@@ -5863,7 +5857,7 @@ public function nda() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -5872,14 +5866,14 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$other_payment = $this->Employees_model->set_employee_other_payments($id);
-		
+
 		$data = array();
 
-        foreach($other_payment->result() as $r) {			
-		
+        foreach($other_payment->result() as $r) {
+
 		$data[] = array(
 			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->other_payments_id . '" data-field_type="salary_other_payments"><span class="fa fa-pencil"></span></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->other_payments_id . '" data-token_type="all_other_payments"><span class="fa fa-trash"></span></button></span>',
 			$r->payments_title,
@@ -5896,13 +5890,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // employee overtime
 	public function salary_overtime() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -5911,13 +5905,13 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$overtime = $this->Employees_model->set_employee_overtime($id);
 		$system = $this->Xin_model->read_setting_info(1);
 		$data = array();
 
-        foreach($overtime->result() as $r) {			
+        foreach($overtime->result() as $r) {
 		$current_amount = $r->overtime_rate;
 		$data[] = array(
 			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->salary_overtime_id . '" data-field_type="emp_overtime"><span class="fa fa-pencil"></span></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-xs btn-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->salary_overtime_id . '" data-token_type="emp_overtime"><span class="fa fa-trash"></span></button></span>',
@@ -5937,13 +5931,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // employee salary_all_deductions
 	public function salary_all_deductions() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/employee_detail", $data);
 		} else {
 			redirect('admin/');
@@ -5952,7 +5946,7 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$deductions = $this->Employees_model->set_employee_deductions($id);
 		/*$system = $this->Xin_model->read_setting_info(1);
@@ -5966,10 +5960,10 @@ public function nda() {
 		}*/
 		$data = array();
 
-        foreach($deductions->result() as $r) {		
-		
+        foreach($deductions->result() as $r) {
+
 		$sdate = $this->Xin_model->set_date_format($r->start_date);
-		$edate = $this->Xin_model->set_date_format($r->end_date);	
+		$edate = $this->Xin_model->set_date_format($r->end_date);
 		// loan time
 		if($r->loan_time < 2) {
 			$loan_time = $r->loan_time. ' '.$this->lang->line('xin_employee_loan_time_single_month');
@@ -6003,11 +5997,11 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	 // Validate and add info in database
 	public function update_loan_info() {
-	
-		if($this->input->post('type')=='loan_info') {		
+
+		if($this->input->post('type')=='loan_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -6017,10 +6011,10 @@ public function nda() {
 		$end_date = $this->input->post('end_date');
 		$st_date = strtotime($start_date);
 		$ed_date = strtotime($end_date);
-		
+
 		$id = $this->input->post('e_field_id');
-		
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('loan_deduction_title')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_set_loan_title_error');
 		} else if($this->input->post('monthly_installment')==='') {
@@ -6032,11 +6026,11 @@ public function nda() {
 		} else if($st_date > $ed_date) {
 			$Return['error'] = $this->lang->line('xin_error_start_end_date');
 		}
-						
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-	
+
 		$data = array(
 		'loan_deduction_title' => $this->input->post('loan_deduction_title'),
 		'reason' => $qt_reason,
@@ -6045,9 +6039,9 @@ public function nda() {
 		'end_date' => $this->input->post('end_date'),
 		'loan_options' => $this->input->post('loan_options')
 		);
-		
+
 		$result = $this->Employees_model->salary_loan_update_record($data,$id);
-		
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_employee_update_loan_success');
 		} else {
@@ -6057,11 +6051,11 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	 // Validate and add info in database
 	public function employee_loan_info() {
-	
-		if($this->input->post('type')=='loan_info') {		
+
+		if($this->input->post('type')=='loan_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -6071,10 +6065,10 @@ public function nda() {
 		$end_date = $this->input->post('end_date');
 		$st_date = strtotime($start_date);
 		$ed_date = strtotime($end_date);
-		
+
 		$user_id = $this->input->post('user_id');
-		
-		/* Server side PHP input validation */		
+
+		/* Server side PHP input validation */
 		if($this->input->post('loan_deduction_title')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_set_loan_title_error');
 		} else if($this->input->post('monthly_installment')==='') {
@@ -6086,18 +6080,18 @@ public function nda() {
 		} else if($st_date > $ed_date) {
 			$Return['error'] = $this->lang->line('xin_error_start_end_date');
 		}
-						
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
-		
+
 		$tm = $this->Employees_model->get_month_diff($this->input->post('start_date'),$this->input->post('end_date'));
 		if($tm < 1) {
 			$m_ins = $this->input->post('monthly_installment');
 		} else {
 			$m_ins = $this->input->post('monthly_installment')/$tm;
 		}
-	
+
 		$data = array(
 		'loan_deduction_title' => $this->input->post('loan_deduction_title'),
 		'reason' => $qt_reason,
@@ -6109,9 +6103,9 @@ public function nda() {
 		'loan_deduction_amount' => $m_ins,
 		'employee_id' => $user_id
 		);
-		
+
 		$result = $this->Employees_model->add_salary_loan($data);
-		
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_employee_add_loan_success');
 		} else {
@@ -6121,7 +6115,7 @@ public function nda() {
 		exit;
 		}
 	}
-	
+
 	// get company > locations
 	 public function filter_company_flocations() {
 
@@ -6129,12 +6123,12 @@ public function nda() {
 		$keywords = preg_split("/[\s,]+/", $this->uri->segment(4));
 		if(is_numeric($keywords[0])) {
 			$id = $keywords[0];
-		
+
 			$data = array(
 				'company_id' => $id
 				);
 			$session = $this->session->userdata('username');
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data = $this->security->xss_clean($data);
 				$this->load->view("admin/filter/filter_company_flocations", $data);
 			} else {
@@ -6153,12 +6147,12 @@ public function nda() {
 		$keywords = preg_split("/[\s,]+/", $this->uri->segment(4));
 		if(is_numeric($keywords[0])) {
 			$id = $keywords[0];
-		
+
 			$data = array(
 				'location_id' => $id
 				);
 			$session = $this->session->userdata('username');
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data = $this->security->xss_clean($data);
 				$this->load->view("admin/filter/filter_location_fdepartments", $data);
 			} else {
@@ -6174,13 +6168,13 @@ public function nda() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'department_id' => $id,
 			'all_designations' => $this->Designation_model->all_designations(),
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/filter/filter_location_fdesignation", $data);
 		} else {
 			redirect('admin/');
@@ -6190,10 +6184,10 @@ public function nda() {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	 }
-	 
+
 	  public function set_team_leads() {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = 'Set Team Lead | '.$this->Xin_model->site_title();
@@ -6201,21 +6195,21 @@ public function nda() {
 		$data['leads'] = $this->db->select('user_id, first_name, last_name')
 									->where('status', 1)
 									->where('lead_user_id', 0)
-									->where('is_emp_lead !=', 2) 
+									->where('is_emp_lead !=', 2)
 									->order_by('user_id')
 									->get('xin_employees')
 									->result();
 		$data['subview'] = $this->load->view("admin/employees/set_team_leads", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
-		
+
      }
-	 
+
 	 // employee documents - listing
 	public function expired_documents_list() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/expired_documents_list", $data);
 		} else {
 			redirect('admin/');
@@ -6230,12 +6224,12 @@ public function nda() {
 		} else {
 			$documents = $this->Employees_model->get_user_documents_expired_all($session['user_id']);
 		}
-		
-		
+
+
 		$data = array();
 
         foreach($documents->result() as $r) {
-			
+
 			$d_type = $this->Employees_model->read_document_type_information($r->document_type_id);
 			if(!is_null($d_type)){
 				$document_d = $d_type[0]->document_type;
@@ -6249,7 +6243,7 @@ public function nda() {
 				 $functions ='';
 			 }
 			 //userinfo
-			$xuser_info = $this->Xin_model->read_user_info($r->employee_id);	
+			$xuser_info = $this->Xin_model->read_user_info($r->employee_id);
 			if(!is_null($xuser_info)){
 				if($user_info[0]->user_role_id==1){
 					$fc_name = '<a target="_blank" href="'.site_url('admin/employees/detail/').$r->employee_id.'">'.$xuser_info[0]->first_name.' '.$xuser_info[0]->last_name.'</a>';
@@ -6257,7 +6251,7 @@ public function nda() {
 					$fc_name = $xuser_info[0]->first_name.' '.$xuser_info[0]->last_name;
 				}
 			} else {
-				$fc_name = '--';	
+				$fc_name = '--';
 			}
 			$data[] = array(
 				$functions.'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->document_id . '" data-field_type="document"><i class="fa fa-pencil-square-o"></i></button></span>',
@@ -6277,13 +6271,13 @@ public function nda() {
 	  echo json_encode($output);
 	  exit();
      }
-	 
+
 	  // employee immigration - listing
 	public function expired_immigration_list() {
 		//set data
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/expired_documents_list", $data);
 		} else {
 			redirect('admin/');
@@ -6292,7 +6286,7 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 	//	$id = $this->uri->segment(4);
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		if($user_info[0]->user_role_id==1){
@@ -6300,12 +6294,12 @@ public function nda() {
 		} else {
 			$immigration = $this->Employees_model->get_user_img_documents_expired_all($session['user_id']);
 		}
-		
-		
+
+
 		$data = array();
 
         foreach($immigration->result() as $r) {
-			
+
 		$issue_date = $this->Xin_model->set_date_format($r->issue_date);
 		$expiry_date = $this->Xin_model->set_date_format($r->expiry_date);
 		$eligible_review_date = $this->Xin_model->set_date_format($r->eligible_review_date);
@@ -6319,10 +6313,10 @@ public function nda() {
 		if(!is_null($country)){
 			$c_name = $country[0]->country_name;
 		} else {
-			$c_name = '--';	
+			$c_name = '--';
 		}
 		//userinfo
-		$xuser_info = $this->Xin_model->read_user_info($r->employee_id);	
+		$xuser_info = $this->Xin_model->read_user_info($r->employee_id);
 		if(!is_null($xuser_info)){
 			if($user_info[0]->user_role_id==1){
 				$fc_name = '<a target="_blank" href="'.site_url('admin/employees/detail/').$r->employee_id.'">'.$xuser_info[0]->first_name.' '.$xuser_info[0]->last_name.'</a>';
@@ -6330,7 +6324,7 @@ public function nda() {
 				$fc_name = $xuser_info[0]->first_name.' '.$xuser_info[0]->last_name;
 			}
 		} else {
-			$fc_name = '--';	
+			$fc_name = '--';
 		}
 		if($r->document_file!='' && $r->document_file!='no file') {
 		 	$functions = '<span data-toggle="tooltip" data-placement="top" title="Download"><a href="'.site_url().'admin/download?type=document/immigration&filename='.$r->document_file.'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" title="'.$this->lang->line('xin_download').'"><i class="fa fa-download"></i></button></a></span>';
@@ -6361,7 +6355,7 @@ public function nda() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/expired_documents_list", $data);
 		} else {
 			redirect('admin/');
@@ -6370,7 +6364,7 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-				
+
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		if($user_info[0]->user_role_id==1){
@@ -6381,7 +6375,7 @@ public function nda() {
 		$data = array();
 
           foreach($company->result() as $r) {
-			  			  
+
 			  if(in_array('247',$role_resources_ids)) { //edit
 				$edit = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"  data-toggle="modal" data-target=".edit-modal-data"  data-field_id="'. $r->document_id . '" data-field_type="company_license_expired"><i class="fa fa-pencil-square-o"></i></button></span>';
 			} else {
@@ -6391,9 +6385,9 @@ public function nda() {
 			if(!is_null($company_id)){
 				$company_name = $company_id[0]->name;
 			} else {
-				$company_name = '--';	
+				$company_name = '--';
 			}
-			
+
 			if($r->document!='' && $r->document!='no file') {
 				 $doc_view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_download').'"><a href="'.base_url().'admin/download?type=company/official_documents&filename='.$r->document.'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" title="'.$this->lang->line('xin_download').'"><i class="fa fa-download"></i></button></a></span>';
 			 } else {
@@ -6422,11 +6416,11 @@ public function nda() {
      {
 
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/expired_documents_list", $data);
 		} else {
 			redirect('admin/');
@@ -6435,7 +6429,7 @@ public function nda() {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		if($user_info[0]->user_role_id==1){
@@ -6448,15 +6442,15 @@ public function nda() {
 			}
 		}
 		$data = array();
-		
-          foreach($assets->result() as $r) {						
-			
+
+          foreach($assets->result() as $r) {
+
 			// get category
 			$assets_category = $this->Assets_model->read_assets_category_info($r->assets_category_id);
 			if(!is_null($assets_category)){
 				$category = $assets_category[0]->category_name;
 			} else {
-			 	$category = '--';	
+			 	$category = '--';
 			}
 			//working?
 			if($r->is_working==1){
@@ -6470,15 +6464,15 @@ public function nda() {
 			if(!is_null($user)){
 				$full_name = $user[0]->first_name.' '.$user[0]->last_name;
 			} else {
-				$full_name = '--';	
+				$full_name = '--';
 			}
-			
+
 			if(in_array('263',$role_resources_ids)) { //edit
 				$edit = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->assets_id . '" data-field_type="assets_warranty_expired"><i class="fa fa-pencil-square-o"></i></button></span>';
 			} else {
 				$edit = '';
 			}
-			
+
 			if(in_array('265',$role_resources_ids)) { //view
 				$view = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light" data-toggle="modal" data-target=".view-modal-data" data-asset_id="'. $r->assets_id . '"><span class="fa fa-eye"></span></button></span>';
 			} else {
@@ -6486,7 +6480,7 @@ public function nda() {
 			}
 			$combhr = $edit;
 			$created_at = $this->Xin_model->set_date_format($r->created_at);
-			$iname = $r->name.'<br><small class="text-muted"><i>'.$this->lang->line('xin_created_at').': '.$created_at.'<i></i></i></small>';					 			  				
+			$iname = $r->name.'<br><small class="text-muted"><i>'.$this->lang->line('xin_created_at').': '.$created_at.'<i></i></i></small>';
 			$data[] = array($combhr,
 				$iname,
 				$category,
@@ -6505,9 +6499,9 @@ public function nda() {
           exit();
      }
 	 public function dialog_exp_document() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -6525,17 +6519,17 @@ public function nda() {
 				'notification_email' => $document[0]->notification_email,
 				'document_file' => $document[0]->document_file
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_exp_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	public function dialog_exp_imgdocument() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -6554,16 +6548,16 @@ public function nda() {
 				'country_id' => $document[0]->country_id,
 				'eligible_review_date' => $document[0]->eligible_review_date,
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_exp_details', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	public function dialog_exp_company_license_expired() {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -6586,7 +6580,7 @@ public function nda() {
 	}
 	public function dialog_exp_assets_warranty_expired() {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -6615,9 +6609,9 @@ public function nda() {
 		$this->load->view('admin/employees/dialog_employee_exp_details', $data);
 	}
 	public function dialog_security_level() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -6630,7 +6624,7 @@ public function nda() {
 				'date_of_clearance' => $result[0]->date_of_clearance,
 				'expiry_date' => $result[0]->expiry_date
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/employees/dialog_employee_details', $data);
 		} else {
 			redirect('admin/');
@@ -6643,12 +6637,12 @@ public function nda() {
 		$session = $this->session->userdata('username');
 
 		$data = array(
-			'emp_id'=> $id,		
-			'department_id'=> $user_info->department_id,		
-			'designation_id'=> $user_info->designation_id,		
-			'effective_date'=> $this->input->post('effective_date'),		
-			'status'=> $this->input->post('left_resign_status'),		
-			'created_by	'=> $session['user_id'],		
+			'emp_id'=> $id,
+			'department_id'=> $user_info->department_id,
+			'designation_id'=> $user_info->designation_id,
+			'effective_date'=> $this->input->post('effective_date'),
+			'status'=> $this->input->post('left_resign_status'),
+			'created_by	'=> $session['user_id'],
 		);
 
 		if($this->db->insert('xin_employee_left_resign',$data)){
@@ -6667,10 +6661,10 @@ public function nda() {
 	}
 
 	public function inactive_employee(){
-		
+
 		$data['title'] = $this->lang->line('xin_employees').' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = "Left or Resign";
-	
+
 		$data['subview'] = $this->load->view("admin/employees/left_resign", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data,$id); //page load
 	}
@@ -6721,13 +6715,13 @@ public function nda() {
 				$divicearray[]=12;
 			}
 	$device=json_encode($divicearray);
-		
+
 
 
 		 $data = array(
             'device' => $device,
         );
-    
+
         $this->db->where('user_id', $divicein['emp_id']);
        if( $this->db->update('xin_employees', $data)){
 		echo ( json_encode("Success"));
@@ -6738,8 +6732,8 @@ exit();
 	}
 	public function device(){
 		$session = $this->session->userdata('username');
-		
-		if(empty($session) && !is_array($session)){ 
+
+		if(empty($session) && !is_array($session)){
 			redirect('admin/');
 		}
 		$data = array(
@@ -6800,13 +6794,13 @@ exit();
 			$this->session->set_flashdata('success', 'Successfully Added');
 			echo "<script>window.location.replace('set_team_leads')</script>";
 		}
-		
+
 	}
 	public function delete_leader($id){
 		$sql = $this->db->where('user_id',$id)->update('xin_employees',['is_emp_lead'=>0, 'lead_user_id'=>0]);
 		if($sql){
 			$this->session->set_flashdata('success', 'Delete Successfully');
-			redirect('admin/employees/set_team_leads','refresh');	
+			redirect('admin/employees/set_team_leads','refresh');
 		}
 	}
 	public function employee_issue($action = '', $id = null) {
@@ -6828,7 +6822,7 @@ exit();
                     );
                     $this->db->insert('employee_issue', $data);
                     echo 'success';
-                
+
             } elseif ($action === 'edit' && $id) {
                 // Handle editing an existing purpose (Update)
 				$emp_id = $session['user_id'];
@@ -6879,15 +6873,15 @@ exit();
 		$leave_start=$this->input->post('leave_start');
 		$leave_effective_date=$this->input->post('leave_effective_date');
 		if($this->db->where('user_id',$user_id)->update('xin_employees',['leave_effective'=>$leave_effective_date,'is_leave_on'=>$leave_start])){
-				
+
 				$year=date('Y',strtotime($leave_effective_date));
-			    $d1 = new DateTime("$year-12-31" ); 
-            	$d2 = new DateTime($leave_effective_date);   
-            	$Months = $d2->diff($d1); 
+			    $d1 = new DateTime("$year-12-31" );
+            	$d2 = new DateTime($leave_effective_date);
+            	$Months = $d2->diff($d1);
             	$month = $Months->m;
             	$qty = round(($month / 3), 2);
 
-            	
+
             	$numberString = (string) $qty;
 				$parts = explode('.', $numberString);
 				$integerPart = $parts[0];
@@ -6972,7 +6966,7 @@ exit();
 	}
 	public function get_imployee_info(){
 		$user_id=$this->input->post('id');
-		$user_info = $this->Xin_model->read_user_info($user_id)[0];	
+		$user_info = $this->Xin_model->read_user_info($user_id)[0];
 		echo json_encode($user_info);
 	}
 }

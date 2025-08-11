@@ -475,6 +475,8 @@ class inventory_model extends CI_Model
 
 	public function equipment_list($session = null){
 		$this->db->select('
+			e.first_name,
+			e.last_name,
 			pa.id AS a_id,
 			pa.cat_id,
 			pa.device_model,
@@ -496,12 +498,13 @@ class inventory_model extends CI_Model
 			// paw.provide_date
 		$this->db->from('product_accessories as pa');
 		// $this->db->join('product_accessories_working as paw', 'pa.user_id = paw.user_id', 'left');
-		// $this->db->join('xin_employees as e', 'paw.user_id = e.user_id', 'left');
+		$this->db->join('employee_using_device','pa.id = employee_using_device.device_id');
+		$this->db->join('xin_employees as e', 'employee_using_device.user_id = e.user_id', 'left');
 		$this->db->join('product_accessories_model as pam', 'pa.device_model = pam.id', 'left');
 		$this->db->join('product_accessory_categories as pac', 'pa.cat_id = pac.id', 'left');
 		$this->db->join('mobile_numbers', 'pa.number = mobile_numbers.id', 'left');
 		if ($session['role_id'] == 3 && $session != null) {
-			// $this->db->where('paw.user_id', $session['user_id']);
+			$this->db->where('employee_using_device.user_id',$session['user_id']);
 		}
 		$this->db->group_by('pa.id');
 		$data = $this->db->get()->result();
