@@ -831,6 +831,23 @@ $count_timelog=0;
     <?php } ?>
     <?php } ?>
 
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-video-camera"></i>
+            <span>Meetings</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="<?php echo site_url('admin/meeting_rooms');?>"><i class="fa fa-circle-o"></i> Meeting Rooms</a></li>
+            <li><a href="<?php echo site_url('admin/meetings');?>"><i class="fa fa-circle-o"></i> Meetings</a></li>
+            <li><a href="<?php echo site_url('admin/meeting_reports');?>"><i class="fa fa-circle-o"></i> Meeting Reports</a></li>
+        </ul>
+    </li>
+
+  
+
     <?php  if(in_array('111',$role_resources_ids) || in_array('112',$role_resources_ids) || in_array('113',$role_resources_ids) || in_array('114',$role_resources_ids) || in_array('115',$role_resources_ids) || in_array('116',$role_resources_ids) || in_array('117',$role_resources_ids)) {?>
       <li class="<?php if(!empty($arr_mod['reports_open']))echo $arr_mod['reports_open'];?> treeview"> <a href="#"> <i class="fa fa-bar-chart"></i> <span><?php echo $this->lang->line('xin_hr_report_title');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
