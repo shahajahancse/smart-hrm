@@ -398,6 +398,20 @@ if($theme[0]->sub_menu_icons != ''){
     <?php //} ?>
     <!-- Payroll -->
 
+    <!-- Provident Fund -->
+      <li class="<?php if(!empty($arr_mod['provident_fund_open']))echo $arr_mod['provident_fund_open'];?> treeview"> <a href="#"> <i class="fa fa-money"></i> <span>Provident Fund</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+        <ul class="treeview-menu">
+          <li class="<?php if(!empty($arr_mod['pf_settings_active']))echo $arr_mod['pf_settings_active'];?>"> <a href="<?php echo site_url('admin/provident_fund');?>"> <i class="fa <?php echo $submenuicon;?>"></i> PF Settings </a> </li>
+          <li class="<?php if(!empty($arr_mod['employee_list_active']))echo $arr_mod['employee_list_active'];?>"> <a href="<?php echo site_url('admin/provident_fund/employee_list');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Employee List </a> </li>
+          <li class="<?php if(!empty($arr_mod['monthly_contributions_active']))echo $arr_mod['monthly_contributions_active'];?>"> <a href="<?php echo site_url('admin/provident_fund/monthly_contributions');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Monthly Contributions </a> </li>
+          <li class="<?php if(!empty($arr_mod['yearly_reports_active']))echo $arr_mod['yearly_reports_active'];?>"> <a href="<?php echo site_url('admin/provident_fund/yearly_reports');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Yearly Reports </a> </li>
+          <li class="<?php if(!empty($arr_mod['withdrawal_requests_active']))echo $arr_mod['withdrawal_requests_active'];?>"> <a href="<?php echo site_url('admin/provident_fund/withdrawal_requests');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Withdrawal Requests </a> </li>
+          <li class="<?php if(!empty($arr_mod['loan_applications_active']))echo $arr_mod['loan_applications_active'];?>"> <a href="<?php echo site_url('admin/provident_fund/loan_applications');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Loan Applications </a> </li>
+          <li class="<?php if(!empty($arr_mod['pf_reports_active']))echo $arr_mod['pf_reports_active'];?>"> <a href="<?php echo site_url('admin/provident_fund/reports');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Reports & Analytics </a> </li>
+        </ul>
+      </li>
+    <!-- End Provident Fund -->
+
     <!-- Store -->
     <?php  if(in_array('1030',$role_resources_ids) || in_array('1031',$role_resources_ids) || in_array('1033',$role_resources_ids) || in_array('1070',$role_resources_ids) || in_array('1071',$role_resources_ids) || in_array('1072',$role_resources_ids) || in_array('1073',$role_resources_ids) || in_array('1074',$role_resources_ids) || in_array('1075',$role_resources_ids) || in_array('1076',$role_resources_ids) || in_array('1080',$role_resources_ids) || in_array('1081',$role_resources_ids) || in_array('1082',$role_resources_ids) || in_array('1083',$role_resources_ids) || in_array('1084',$role_resources_ids) || in_array('1085',$role_resources_ids) || in_array('1041',$role_resources_ids)) {?>
       <li class="<?php if(!empty($arr_mod['invtry_open']))echo $arr_mod['invtry_open'];?> treeview"> <a href="#"> <i class="fa fa-cart-arrow-down"></i> Store <span class="badge badge-pill " style="margin-top: 0px;margin-left: 56px; background:#0bbd22"><?php  $a = $this->db->select('COUNT(id) as id')->where_in('status', array(1, 2))->get('products_requisition_details')->row()->id ;  $b = $this->db->select('COUNT(id) as id')->where_in('status', array(1, 2))->get('products_purches_details')->row()->id ; $session = $this->session->userdata('username');  echo $session['role_id'] ==3 ? '' : ($session['role_id'] ==4 ? $a : ($a + $b))  ;?></span> <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>

@@ -25,6 +25,29 @@ class Xin_model extends CI_Model {
 			return null;
 		}
 	}
+	 public function get_company_id_of_current_user($id) {
+	
+		$sql = 'SELECT company_id FROM xin_employees WHERE user_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->row()->company_id;
+		} else {
+			return null;
+		}
+	}
+
+	public function get_employees() {
+		$sql = 'SELECT * FROM xin_employees WHERE user_role_id = 3';
+		$query = $this->db->query($sql);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
 
 	public function modify_salary($salary_month){
 		$first_date=$salary_month;
