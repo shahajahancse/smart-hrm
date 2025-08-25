@@ -1416,16 +1416,15 @@ class Employees extends MY_Controller {
 			// 'is_emp_lead' => $result[0]->is_emp_lead,
 			'lead_user_id' => $result[0]->lead_user_id,
 			'user_password' => $result[0]->user_password,
-			);
+		);
 		// dd($data);
-			if($result[0]->nda_status!=0) {
-				$this->db->where('emp_id', $id)->limit(1);
-				$r = $this->db->get('xin_employees_nda')->row();
-				$data['nda_start_date'] = $r->from_date;
-				$data['nda_end_date'] = $r->to_date;
-				$data['nda_id'] = $r->id;
-			}
-
+		if($result[0]->nda_status!=0) {
+			$this->db->where('emp_id', $id)->limit(1);
+			$r = $this->db->get('xin_employees_nda')->row();
+			$data['nda_start_date'] = $r->from_date;
+			$data['nda_end_date'] = $r->to_date;
+			$data['nda_id'] = $r->id;
+		}
 		// dd($data);
 
 		$data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
@@ -5376,30 +5375,52 @@ public function nda() {
 	public function update_salary_option() {
 
 		if($this->input->post('type')=='employee_update_salary') {
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		if($this->input->post('basic_salary')==='') {
-			$Return['error'] = $this->lang->line('xin_employee_salary_error_basic');
-		}
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
+			if($this->input->post('basic_salary')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_salary_error_basic');
+			}
 
-		if($Return['error']!=''){
+			if($Return['error']!=''){
+				$this->output($Return);
+			}
+			$data = array(
+				'wages_type' => $this->input->post('wages_type'),
+				'basic_salary' => $this->input->post('basic_salary'),
+				'salary' => $this->input->post('gross_salary')
+			);
+
+			$id = $this->input->post('user_id');
+			$result = $this->Employees_model->basic_info($data,$id);
+			if ($result == TRUE) {
+				$data2 = array(
+					'company_id' => 1,
+					'emp_id' => $this->input->post('user_id'),
+					'salary_grades' => $this->input->post('wages_type') == 1 ? 'Monthly' : 'Hourly',
+					'basic_salary' => $this->input->post('basic_salary'),
+					'overtime_rate' => $this->input->post('overtime_rate'),
+					'house_rent_allowance' => $this->input->post('house_rent_allowance'),
+					'medical_allowance' => $this->input->post('medical_allowance'),
+					'travelling_allowance' => $this->input->post('travelling_allowance'),
+					'dearness_allowance' => $this->input->post('dearness_allowance'),
+					'gross_salary' => $this->input->post('gross_salary'),
+					'total_allowance' => $this->input->post('total_allowance'),
+					'added_by' => $this->session->userdata('user_id')['user_id'],
+				);
+				$check = $this->db->where('emp_id', $id)->get('xin_salary_templates')->num_rows();
+				if ($check > 0) {
+					$this->db->where('emp_id', $id)->update('xin_salary_templates', $data2);
+				} else {
+					$this->db->insert('xin_salary_templates', $data2);
+				}
+
+				$Return['result'] = $this->lang->line('xin_employee_updated_salary_success');
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_msg');
+			}
 			$this->output($Return);
-		}
-		$data = array(
-			'wages_type' => $this->input->post('wages_type'),
-			'basic_salary' => $this->input->post('basic_salary'),
-			'salary' => $this->input->post('basic_salary')
-		);
-		$id = $this->input->post('user_id');
-		$result = $this->Employees_model->basic_info($data,$id);
-		if ($result == TRUE) {
-			$Return['result'] = $this->lang->line('xin_employee_updated_salary_success');
-		} else {
-			$Return['error'] = $this->lang->line('xin_error_msg');
-		}
-		$this->output($Return);
-		exit;
+			exit;
 		}
 	}
 

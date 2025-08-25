@@ -13,6 +13,14 @@ class Provident_fund extends MY_Controller {
         $this->load->helper('form');
     }
 
+	public function output($Return=array()){
+		/*Set response header*/
+		header("Access-Control-Allow-Origin: *");
+		header("Content-Type: application/json; charset=UTF-8");
+		/*Final JSON response*/
+		exit(json_encode($Return));
+	}
+
     public function index() {
         $session = $this->session->userdata('username');
         if(empty($session)){
@@ -24,60 +32,61 @@ class Provident_fund extends MY_Controller {
         $data['arr_mod'] = array('provident_fund_open' => 'active', 'pf_settings_active' => 'active');
         $role_resources_ids = $this->Xin_model->user_role_resource();
 
-      
-            if(!empty($session)){
-                $this->load->library('form_validation');
-                $company_id = $this->Xin_model->get_company_id_of_current_user($session['user_id']); // Assuming this function exists
+        if(!empty($session)){
+			$return = array('success'=>'', 'error'=>'', 'csrf_hash'=>'');
+			$return['csrf_hash'] = $this->security->get_csrf_hash();
 
-                if ($this->input->post('type') === 'add_edit_settings') {
-                    $this->form_validation->set_rules('employee_contribution_rate', 'Employee Contribution Rate', 'required|numeric');
-                    $this->form_validation->set_rules('employer_contribution_rate', 'Company Contribution Rate', 'required|numeric');
-                    $this->form_validation->set_rules('bank_interest_rate', 'Bank Interest Rate', 'required|numeric');
-                    $this->form_validation->set_rules('min_service_period_withdrawal', 'Min Service Period for Withdrawal', 'required|integer');
-                    $this->form_validation->set_rules('min_service_period_loan', 'Min Service Period for Loan', 'required|integer');
+            $this->load->library('form_validation');
+            $company_id = $this->Xin_model->get_company_id_of_current_user($session['user_id']); // Assuming this function exists
 
-                    if ($this->form_validation->run() == FALSE) {
-                        $return['error'] = $this->form_validation->error_array();
-                        $this->output->set_content_type('application/json')->set_output(json_encode($return));
-                        exit();
-                    }
+            if ($this->input->post('type') === 'add_edit_settings') {
+                $this->form_validation->set_rules('employee_contribution_rate', 'Employee Contribution Rate', 'required|numeric');
+                $this->form_validation->set_rules('employer_contribution_rate', 'Company Contribution Rate', 'required|numeric');
+                $this->form_validation->set_rules('bank_interest_rate', 'Bank Interest Rate', 'required|numeric');
+                $this->form_validation->set_rules('min_service_period_withdrawal', 'Min Service Period for Withdrawal', 'required|integer');
+                $this->form_validation->set_rules('min_service_period_loan', 'Min Service Period for Loan', 'required|integer');
 
-                    $data_settings = array(
-                        'employee_contribution_rate' => $this->input->post('employee_contribution_rate'),
-                        'employer_contribution_rate' => $this->input->post('employer_contribution_rate'),
-                        'bank_interest_rate' => $this->input->post('bank_interest_rate'),
-                        'min_service_period_withdrawal' => $this->input->post('min_service_period_withdrawal'),
-                        'min_service_period_loan' => $this->input->post('min_service_period_loan')
-                    );
-
-                    $existing_settings = $this->Provident_fund_model->get_pf_settings($company_id);
-
-                    if ($existing_settings) {
-                        $result = $this->Provident_fund_model->update_pf_settings($company_id, $data_settings);
-                        if ($result) {
-                            $return['success'] = 'Provident Fund Settings updated successfully.';
-                        } else {
-                            $return['error'] = 'Failed to update Provident Fund Settings.';
-                        }
-                    } else {
-                        $data_settings['company_id'] = $company_id;
-                        $result = $this->Provident_fund_model->add_pf_settings($data_settings);
-                        if ($result) {
-                            $return['success'] = 'Provident Fund Settings added successfully.';
-                        } else {
-                            $return['error'] = 'Failed to add Provident Fund Settings.';
-                        }
-                    }
-                    $this->output->set_content_type('application/json')->set_output(json_encode($return));
-                    exit();
+                if ($this->form_validation->run() == FALSE) {
+                    $return['error'] = $this->form_validation->error_array();
+                    $this->output($return);
+                    exit;
                 }
 
-                $data['pf_settings'] = $this->Provident_fund_model->get_pf_settings($company_id);
-                $data['subview'] = $this->load->view("admin/provident_fund/pf_settings", $data, TRUE);
-                $this->load->view('admin/layout/layout_main', $data); //page load
-            } else {
-                redirect('admin/');
+                $data_settings = array(
+                    'employee_contribution_rate' => $this->input->post('employee_contribution_rate'),
+                    'employer_contribution_rate' => $this->input->post('employer_contribution_rate'),
+                    'bank_interest_rate' => $this->input->post('bank_interest_rate'),
+                    'min_service_period_withdrawal' => $this->input->post('min_service_period_withdrawal'),
+                    'min_service_period_loan' => $this->input->post('min_service_period_loan')
+                );
+
+                $existing_settings = $this->Provident_fund_model->get_pf_settings($company_id);
+                if ($existing_settings) {
+                    $result = $this->Provident_fund_model->update_pf_settings($company_id, $data_settings);
+                    if ($result) {
+                        $return['success'] = 'Provident Fund Settings updated successfully.';
+                    } else {
+                        $return['error'] = 'Failed to update Provident Fund Settings.';
+                    }
+                } else {
+                    $data_settings['company_id'] = $company_id;
+                    $result = $this->Provident_fund_model->add_pf_settings($data_settings);
+                    if ($result) {
+                        $return['success'] = 'Provident Fund Settings added successfully.';
+                    } else {
+                        $return['error'] = 'Failed to add Provident Fund Settings.';
+                    }
+                }
+                $this->output($return);
+                exit;
             }
+
+            $data['pf_settings'] = $this->Provident_fund_model->get_pf_settings($company_id);
+            $data['subview'] = $this->load->view("admin/provident_fund/pf_settings", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
     }
 
     // Add other functions for PF Settings, Employees, Contributions, etc. here
@@ -92,15 +101,14 @@ class Provident_fund extends MY_Controller {
         $data['arr_mod'] = array('provident_fund_open' => 'active', 'employee_list_active' => 'active');
         $role_resources_ids = $this->Xin_model->user_role_resource();
 
-            if(!empty($session)){
-                $data['all_employees'] = $this->Xin_model->get_employees(); // Assuming this function exists and returns all employees
-                $data['pf_accounts'] = $this->Provident_fund_model->get_all_employee_pf_accounts();
-                $data['subview'] = $this->load->view("admin/provident_fund/employee_list", $data, TRUE);
-                $this->load->view('admin/layout/layout_main', $data); //page load
-            } else {
-                redirect('admin/');
-            }
-        
+        if(!empty($session)){
+            $data['all_employees'] = $this->Xin_model->get_employees(); // Assuming this function exists and returns all employees
+            $data['pf_accounts'] = $this->Provident_fund_model->get_all_employee_pf_accounts();
+            $data['subview'] = $this->load->view("admin/provident_fund/employee_list", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
     }
 
     public function monthly_contributions() {
@@ -113,7 +121,7 @@ class Provident_fund extends MY_Controller {
         $data['path_url'] = 'provident_fund/monthly_contributions';
         $data['arr_mod'] = array('provident_fund_open' => 'active', 'monthly_contributions_active' => 'active');
         $role_resources_ids = $this->Xin_model->user_role_resource();
-      
+
             if(!empty($session)){
                 $data['all_employees'] = $this->Xin_model->get_employees(); // Assuming this function exists
                 $data['pf_accounts'] = $this->Provident_fund_model->get_all_employee_pf_accounts();
@@ -123,7 +131,7 @@ class Provident_fund extends MY_Controller {
             } else {
                 redirect('admin/');
             }
-       
+
     }
 
     public function yearly_reports() {
@@ -136,7 +144,7 @@ class Provident_fund extends MY_Controller {
         $data['path_url'] = 'provident_fund/yearly_reports';
         $data['arr_mod'] = array('provident_fund_open' => 'active', 'yearly_reports_active' => 'active');
         $role_resources_ids = $this->Xin_model->user_role_resource();
-      
+
             if(!empty($session)){
                 $this->load->library('form_validation');
 
@@ -163,7 +171,7 @@ class Provident_fund extends MY_Controller {
             } else {
                 redirect('admin/');
             }
-        
+
     }
 
     public function withdrawal_requests() {
@@ -176,7 +184,7 @@ class Provident_fund extends MY_Controller {
         $data['path_url'] = 'provident_fund/withdrawal_requests';
         $data['arr_mod'] = array('provident_fund_open' => 'active', 'withdrawal_requests_active' => 'active');
         $role_resources_ids = $this->Xin_model->user_role_resource();
-        
+
             if(!empty($session)){
                 $data['all_employees'] = $this->Xin_model->get_employees(); // Assuming this function exists
                 $data['withdrawals'] = $this->Provident_fund_model->get_all_withdrawals();
@@ -185,7 +193,7 @@ class Provident_fund extends MY_Controller {
             } else {
                 redirect('admin/');
             }
-       
+
     }
 
     public function loan_applications() {
@@ -198,7 +206,7 @@ class Provident_fund extends MY_Controller {
         $data['path_url'] = 'provident_fund/loan_applications';
         $data['arr_mod'] = array('provident_fund_open' => 'active', 'loan_applications_active' => 'active');
         $role_resources_ids = $this->Xin_model->user_role_resource();
-      
+
             if(!empty($session)){
                 $data['all_employees'] = $this->Xin_model->get_employees(); // Assuming this function exists
                 $data['loans'] = $this->Provident_fund_model->get_all_loans();
@@ -207,7 +215,7 @@ class Provident_fund extends MY_Controller {
             } else {
                 redirect('admin/');
             }
-       
+
     }
 
     public function reports() {
@@ -220,7 +228,7 @@ class Provident_fund extends MY_Controller {
         $data['path_url'] = 'provident_fund/reports';
         $data['arr_mod'] = array('provident_fund_open' => 'active', 'pf_reports_active' => 'active');
         $role_resources_ids = $this->Xin_model->user_role_resource();
-      
+
             if(!empty($session)){
                 $data['all_employees'] = $this->Xin_model->get_employees(); // Assuming this function exists
                 $data['pf_accounts'] = $this->Provident_fund_model->get_all_employee_pf_accounts();
@@ -233,7 +241,7 @@ class Provident_fund extends MY_Controller {
             } else {
                 redirect('admin/');
             }
-      
+
     }
 
     public function generate_pf_statement() {
@@ -246,7 +254,7 @@ class Provident_fund extends MY_Controller {
         $data['path_url'] = 'provident_fund/generate_pf_statement';
         $data['arr_mod'] = array('provident_fund_open' => 'active', 'pf_statement_active' => 'active');
         $role_resources_ids = $this->Xin_model->user_role_resource();
-      
+
             if(!empty($session)){
                 // You might need to pass specific employee ID or date range for the statement
                 // For now, let's assume it fetches all necessary data for a general statement
@@ -260,7 +268,7 @@ class Provident_fund extends MY_Controller {
             } else {
                 redirect('admin/');
             }
-      
+
     }
 
     public function add_edit_pf_account() {
@@ -374,7 +382,7 @@ class Provident_fund extends MY_Controller {
 
     public function get_employee_pf_balance() {
 
-        
+
         $session = $this->session->userdata('username');
         if (empty($session)) {
             redirect('admin/');

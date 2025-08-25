@@ -1,7 +1,7 @@
 <?php
-	
+
 class Xin_model extends CI_Model {
- 
+
     public function __construct()
     {
         parent::__construct();
@@ -11,14 +11,14 @@ class Xin_model extends CI_Model {
 			// exit($html);
 		}
     }
- 
+
 	// get single location
 	 public function read_location_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_office_location WHERE location_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
@@ -26,11 +26,11 @@ class Xin_model extends CI_Model {
 		}
 	}
 	 public function get_company_id_of_current_user($id) {
-	
+
 		$sql = 'SELECT company_id FROM xin_employees WHERE user_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->row()->company_id;
 		} else {
@@ -39,9 +39,12 @@ class Xin_model extends CI_Model {
 	}
 
 	public function get_employees() {
-		$sql = 'SELECT * FROM xin_employees WHERE user_role_id = 3';
-		$query = $this->db->query($sql);
-		
+		$this->db->select('*');
+		$this->db->from('xin_employees');
+		$this->db->where('user_role_id', 3);
+		$this->db->where_not_in('status', array(2, 3));
+		$query = $this->db->get();
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
@@ -62,7 +65,7 @@ class Xin_model extends CI_Model {
 		$this->db->where('s.salary_month =', $first_date );
 		$this->db->order_by('s.basic_salary', 'desc');
 		$result = $this->db->get()->result();
-		
+
 		return $result;
 	}
 	public function update_salary($id=NULL,$modify_salary){
@@ -70,7 +73,7 @@ class Xin_model extends CI_Model {
 		if($id==''){
 			return "null";
 		}
-		$this->db->query("UPDATE `xin_salary_payslips` SET `modify_salary`=".$modify_salary." WHERE `employee_id`=".$id);	
+		$this->db->query("UPDATE `xin_salary_payslips` SET `modify_salary`=".$modify_salary." WHERE `employee_id`=".$id);
 	}
 	public function update_salaryall($employee_id, $new_salary, $month, $pay_day=0) {
 		$this->db->set('modify_salary', $new_salary);
@@ -81,23 +84,23 @@ class Xin_model extends CI_Model {
 			}
 			$this->db->where('employee_id', $employee_id);
 			$this->db->where('salary_month', $month);
-			
+
 			if($this->db->update('xin_salary_payslips')){
 				return true;
 			}else{
 				return false;
 			}
 	}
-	
-		
+
+
 	// is logged in to system
 	public function is_logged_in($id)
 	{
 		$CI =& get_instance();
 		$is_logged_in = $CI->session->userdata($id);
-		return $is_logged_in;       
+		return $is_logged_in;
 	}
-	
+
 	// generate random strings
 	public function generate_random_string($length = 7) {
 		$characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -108,35 +111,35 @@ class Xin_model extends CI_Model {
 		}
 		return $randomString;
 	}
-	
+
 	public function get_countries()
 	{
 	  $query = $this->db->query("SELECT * from xin_countries");
   	  return $query->result();
 	}
-	
+
 	public function clean_post($post_name) {
 	   $name = trim($post_name);
 	   $Evalue = array('-','alert','<script>','</script>','</php>','<php>','<p>','\r\n','\n','\r','=',"'",'/','cmd','!',"('","')", '|');
-	   $post_name = str_replace($Evalue, '', $name); 
+	   $post_name = str_replace($Evalue, '', $name);
 	   $post_name = preg_replace('/^(\d{1,2}[^0-9])/m', '', $post_name);
 	  // $post_name = htmlspecialchars(trim($post_name), ENT_QUOTES, "UTF-8");
 	   return $post_name;
 	}
-	
-	
+
+
 	public function clean_posts($post_name) {
 	   $name = trim($post_name);
 	   $Evalue = array('alert','<script>','</script>','</php>','<php>','<p>','\r\n','\n','\r','=','cmd','!',);
-	   $post_name = str_replace($Evalue, '', $name); 
+	   $post_name = str_replace($Evalue, '', $name);
 	   // $post_name = preg_replace('/^(\d{1,2}[^0-9])/m', '', $post_name);
 	   return $post_name;
 	}
-	
+
 	public function clean_date_post($post_name) {
 	   $name = trim($post_name);
 	   $Evalue = array('alert','<script>','</script>','</php>','<php>','<p>','\r\n','\n','\r','=',"'",'/','cmd','!',"('","')", '|');
-	   $post_name = str_replace($Evalue, '', $name); 
+	   $post_name = str_replace($Evalue, '', $name);
 	   $post_name = preg_replace('/^(\d{1,2}[^0-9])/m', '', $post_name);
 	   $post_name = htmlspecialchars(trim($post_name), ENT_QUOTES, "UTF-8");
 	   return $post_name;
@@ -238,7 +241,7 @@ class Xin_model extends CI_Model {
 			$arr['issue_active'] = 'active';
 			$arr['attnd_open'] = 'active';
 			return $arr;
-		} 
+		}
 		 else if($mClass=='employees') {
 			$arr['emp_active'] = 'active';
 			$arr['stff_open'] = 'active';
@@ -372,8 +375,8 @@ class Xin_model extends CI_Model {
 			$arr['moveplace'] = 'active';
 			$arr['system_open'] = 'active';
 			return $arr;
-			
-		// attendance	 
+
+		// attendance
 		// lunch
 		} else if($mClass=='lunch' && $mMethod=='lunch_emp_bill') {
 			$arr['emp_lunch_active'] = 'active';
@@ -482,7 +485,7 @@ class Xin_model extends CI_Model {
 			$arr['emp_festival_bonus'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
-		}  
+		}
 		else if($mMethod=='advance_salary_report') {
 			$arr['pay_advn_rpt_active'] = 'active';
 			$arr['payrl_open'] = 'active';
@@ -498,7 +501,7 @@ class Xin_model extends CI_Model {
 			$arr['requi_active'] = 'active';
 			$arr['iqlist_open'] = 'active';
 			return $arr;
-		}   
+		}
 		else if($mClass=='inventory' && $mMethod=='report') {
 			$arr['invtry_open'] = 'active';
 			$arr['inreport_active'] = 'active';
@@ -567,7 +570,7 @@ class Xin_model extends CI_Model {
 			$arr['puiqu_active'] = 'active';
 			$arr['pusreject_open'] = 'active';
 			return $arr;
-			
+
 		} else if($mClass=='inventory' && $mMethod=='supplier') {
 			$arr['invtry_open'] = 'active';
 			$arr['insetting_open'] = 'active';
@@ -588,8 +591,8 @@ class Xin_model extends CI_Model {
 			$arr['insetting_open'] = 'active';
 			$arr['subcat_open'] = 'active';
 			return $arr;
-		} 	// Store 
- 
+		} 	// Store
+
 		// inventory
 		else if($mClass=='accessories' && $mMethod=='index') {
 			$arr['access_open'] = 'active';
@@ -605,10 +608,10 @@ class Xin_model extends CI_Model {
 			return $arr;
 		}  else if($mClass=='accessories' && $mMethod=='reports') {
 			$arr['access_open'] = 'active';
-			$arr['acc_repo_active'] = 'active'; 
+			$arr['acc_repo_active'] = 'active';
 			return $arr;
 
-		} else if($mClass=='accessories' && $mMethod=='category') { 
+		} else if($mClass=='accessories' && $mMethod=='category') {
 			$arr['access_open'] = 'active';
 			$arr['accsetting_open'] = 'active';
 			$arr['category_open'] = 'active';
@@ -628,8 +631,8 @@ class Xin_model extends CI_Model {
 			$arr['accsetting_open'] = 'active';
 			$arr['desk_open'] = 'active';
 			return $arr;
-		} 
-		
+		}
+
 		// inventory
 
 		else if($mClass=='performance_indicator') {
@@ -690,12 +693,12 @@ class Xin_model extends CI_Model {
 			$arr['payment_active'] 	= 'active';
 			$arr['project_open'] 	= 'active';
 			return $arr;
-		} 
+		}
 		else if($mClass=='project') {
 			$arr['project_active'] = 'active';
 			$arr['project_open'] = 'active';
 			return $arr;
-		} 
+		}
 
 		else if($mClass=='projects') {
 			$arr['projects_active'] = 'active';
@@ -705,7 +708,7 @@ class Xin_model extends CI_Model {
 			$arr['task_active'] = 'active';
 			$arr['project_open'] = 'active';
 			return $arr;
-		} 
+		}
 		// x// }
 		 else if($mClass=='clients') {
 			$arr['hr_clients_active'] = 'active';
@@ -1051,18 +1054,18 @@ class Xin_model extends CI_Model {
 
 	 // get single country
 	 public function read_country_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_countries WHERE country_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// Function to update record in table
 	public function login_update_record($data, $id){
 		$this->db->where('user_id', $id);
@@ -1070,117 +1073,117 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 
 	public function read_user_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_employees WHERE user_id = ? ORDER BY basic_salary DESC';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
-		
+
 	}
 	public function redeuser($id) {
-	
+
 		$query = $this->db->select('*')->where('user_id', $id)->order_by('basic_salary','DESC')->get('xin_employees');
     if ($query->num_rows() > 0) {
       return $query->result();
     }else{
       return null;
 	}
-		
+
 	}
 
 	// get single user
 	public function read_user_xuinfo($id) {
-	
+
 		$sql = 'SELECT * FROM xin_users WHERE user_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
-		
+
 	}
-	
+
 	// get single user
 	public function read_user_attendance_info() {
-		
+
 		$sql = 'SELECT * FROM xin_employees WHERE user_id = ?';
 		$binds = array('000');
 		$query = $this->db->query($sql, $binds);
-		
-		return $query;	
+
+		return $query;
 	}
-	
+
 	// get single user
 	public function read_user_by_employee_id($id) {
-	
+
 		$sql = 'SELECT * FROM xin_employees WHERE employee_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
-		
+
 	}
-	
+
 	// get single user > by email
 	public function read_user_info_byemail($email) {
-	
-		$sql = 'SELECT * FROM xin_employees WHERE email = ?';
-		$binds = array($email);
-		$query = $this->db->query($sql, $binds);
-		
-		return $query;
-	}
-	// get single user > by email >>> jobs listing module
-	public function read_user_jobs_byemail($email) {
-	
-		$sql = 'SELECT * FROM xin_users WHERE email = ?';
-		$binds = array($email);
-		$query = $this->db->query($sql, $binds);
-		
-		return $query;
-	}
-	
-	// get single employee
-	public function read_employee_info($id) {
-	
-		$sql = 'SELECT * FROM xin_employees WHERE user_id = ?';
-		$binds = array($id);
-		$query = $this->db->query($sql, $binds);
-		
-		if ($query->num_rows() > 0) {
-			return $query->result();
-		} else {
-			return null;
-		}
-		
-	}	
-	// get single employee > by email
-	public function read_employee_info_byemail($email) {
-	
+
 		$sql = 'SELECT * FROM xin_employees WHERE email = ?';
 		$binds = array($email);
 		$query = $this->db->query($sql, $binds);
 
 		return $query;
 	}
-	
+	// get single user > by email >>> jobs listing module
+	public function read_user_jobs_byemail($email) {
+
+		$sql = 'SELECT * FROM xin_users WHERE email = ?';
+		$binds = array($email);
+		$query = $this->db->query($sql, $binds);
+
+		return $query;
+	}
+
+	// get single employee
+	public function read_employee_info($id) {
+
+		$sql = 'SELECT * FROM xin_employees WHERE user_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+
+	}
+	// get single employee > by email
+	public function read_employee_info_byemail($email) {
+
+		$sql = 'SELECT * FROM xin_employees WHERE email = ?';
+		$binds = array($email);
+		$query = $this->db->query($sql, $binds);
+
+		return $query;
+	}
+
 	// get last user attendance > check if loged in-
 	public function attendance_time_checks($id) {
 
@@ -1190,24 +1193,24 @@ class Xin_model extends CI_Model {
 		$query = $this->db->query($sql, $binds);
 		return $query;
 	}
-	
+
 	// get single user > by designation
 	public function read_user_info_bydesignation($email) {
-	
+
 		$sql = 'SELECT * FROM xin_employees WHERE designation_id = ?';
 		$binds = array($email);
 		$query = $this->db->query($sql, $binds);
-		
+
 		return $query->result();
 	}
-	
+
 	// get theme info
 	public function read_theme_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_theme_settings WHERE theme_settings_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
@@ -1216,115 +1219,115 @@ class Xin_model extends CI_Model {
 	}
 	// get single company
 	public function read_company_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_companies WHERE company_id = ?';
 		$binds = array($id);
-		$query = $this->db->query($sql, $binds);		
-		
+		$query = $this->db->query($sql, $binds);
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	public function get_employee_officeshift($id) {
-	 	
+
 		$sql = 'SELECT * FROM xin_employee_shift WHERE employee_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		return $query;
 	}
-	
+
 	public function get_employee_row($id) {
-	 	
+
 		$sql = 'SELECT * FROM xin_employees WHERE user_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	public function get_employee_shift_office($id) {
-	 	
+
 		$sql = 'SELECT * FROM xin_office_shift WHERE office_shift_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query;
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single user role info
 	public function read_user_role_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_user_roles WHERE role_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get setting info
 	public function read_setting_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_system_setting WHERE setting_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get setting info
 	public function read_currency_con_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_currency_converter WHERE currency_converter_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get file setting info
 	public function read_file_setting_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_file_manager_settings WHERE setting_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get setting layout
 	public function system_layout() {
-	
+
 		// get details of layout
 		$system = $this->read_setting_info(1);
-		
+
 		if($system[0]->compact_sidebar!=''){
 			// if compact sidebar
 			$compact_sidebar = 'compact-sidebar';
@@ -1357,34 +1360,34 @@ class Xin_model extends CI_Model {
 		}
 		return $layout = $compact_sidebar.' '.$fixed_header.' '.$fixed_sidebar.' '.$boxed_wrapper.' '.$static;
 	}
-	
+
 	// get company setting info
 	public function read_company_setting_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_company_info WHERE company_info_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get title
 	public function site_title() {
 		$system = $this->read_setting_info(1);
 		return $system[0]->application_name;
 	}
-	
+
 	// get all companies
 	public function get_companies()
 	{
 	  $query = $this->db->query("SELECT * from xin_companies");
   	  return $query->result();
 	}
-	
+
 	// get company info by id
 	public function get_company_info($company_id)
 	{
@@ -1393,7 +1396,7 @@ class Xin_model extends CI_Model {
 		$query = $this->db->query($sql, $binds);
   	  	return $query->row();
 	}
-	
+
 	// get all leave applications
 	public function get_leave_applications()
 	{
@@ -1410,10 +1413,10 @@ class Xin_model extends CI_Model {
 		$this->db->where("notify_incre_prob BETWEEN '$start_date' and '$end_date'");
 		$this->db->order_by('notify_incre_prob', 'ASC');
 		$query = $this->db->get('xin_employees');
-		return $query->result();	
+		return $query->result();
 	}
 
-	
+
 	// 1
 	public function get_notify_leave_applications() {
 
@@ -1430,7 +1433,7 @@ class Xin_model extends CI_Model {
 		$query = $this->db->query("SELECT * from xin_leave_applications where notify_leave = '3' and employee_id = $user_id  order by leave_id desc")->result();
 		$emp_data = $this->read_employee_info_att($user_id)->row();
 		$extra = array();
-		$data = array(); 
+		$data = array();
 		if ($emp_data->is_emp_lead == 2) {
 			$extra_result = $this->db->query("SELECT user_id from xin_employees where lead_user_id = $user_id")->result();
 			foreach ($extra_result as $row) {
@@ -1506,7 +1509,7 @@ class Xin_model extends CI_Model {
 	  $query = $this->db->query("SELECT st.*, ste.* FROM xin_support_tickets as st, xin_support_tickets_employees as ste WHERE st.ticket_id=ste.ticket_id and ste.employee_id = $employee_id group by st.ticket_id");
   	  return $query->num_rows();
 	}
-	
+
 	public function get_notify_user_tickets($employee_id) {
 	  $query = $this->db->query("SELECT st.*, ste.* FROM xin_support_tickets as st, xin_support_tickets_employees as ste WHERE st.ticket_id=ste.ticket_id and ste.employee_id = $employee_id group by st.ticket_id");
   	  return $query->result();
@@ -1515,8 +1518,8 @@ class Xin_model extends CI_Model {
 	  $query = $this->db->query("SELECT * from xin_companies");
   	  return $query->num_rows();
 	}
-	
-	
+
+
 	// notifications
 	public function count_user_notify_leave_applications($user_id)
 	{
@@ -1576,98 +1579,98 @@ class Xin_model extends CI_Model {
 	  $query = $this->db->query("SELECT * from xin_support_tickets where is_notify = '1' and company_id = '".$company_id."' order by ticket_id desc");
   	  return $query->num_rows();
 	}
-	
+
 	//
 	public function update_announcements_record($data){
 		$sql = 'UPDATE xin_announcements SET is_notify = ?';
 		$binds = array(0);
-		$query = $this->db->query($sql, $binds);		
+		$query = $this->db->query($sql, $binds);
 	}
-	public function money_format($format, $number) 
-	{ 
-		$regex  = '/%((?:[\^!\-]|\+|\(|\=.)*)([0-9]+)?'. 
-				  '(?:#([0-9]+))?(?:\.([0-9]+))?([in%])/'; 
-		if (setlocale(LC_MONETARY, 0) == 'C') { 
-			setlocale(LC_MONETARY, ''); 
-		} 
-		$locale = localeconv(); 
-		preg_match_all($regex, $format, $matches, PREG_SET_ORDER); 
-		foreach ($matches as $fmatch) { 
-			$value = floatval($number); 
-			$flags = array( 
-				'fillchar'  => preg_match('/\=(.)/', $fmatch[1], $match) ? 
-							   $match[1] : ' ', 
-				'nogroup'   => preg_match('/\^/', $fmatch[1]) > 0, 
-				'usesignal' => preg_match('/\+|\(/', $fmatch[1], $match) ? 
-							   $match[0] : '+', 
-				'nosimbol'  => preg_match('/\!/', $fmatch[1]) > 0, 
-				'isleft'    => preg_match('/\-/', $fmatch[1]) > 0 
-			); 
-			$width      = trim($fmatch[2]) ? (int)$fmatch[2] : 0; 
-			$left       = trim($fmatch[3]) ? (int)$fmatch[3] : 0; 
-			$right      = trim($fmatch[4]) ? (int)$fmatch[4] : $locale['int_frac_digits']; 
-			$conversion = $fmatch[5]; 
-	
-			$positive = true; 
-			if ($value < 0) { 
-				$positive = false; 
-				$value  *= -1; 
-			} 
-			$letter = $positive ? 'p' : 'n'; 
-	
-			$prefix = $suffix = $cprefix = $csuffix = $signal = ''; 
-	
-			$signal = $positive ? $locale['positive_sign'] : $locale['negative_sign']; 
-			switch (true) { 
-				case $locale["{$letter}_sign_posn"] == 1 && $flags['usesignal'] == '+': 
-					$prefix = $signal; 
-					break; 
-				case $locale["{$letter}_sign_posn"] == 2 && $flags['usesignal'] == '+': 
-					$suffix = $signal; 
-					break; 
-				case $locale["{$letter}_sign_posn"] == 3 && $flags['usesignal'] == '+': 
-					$cprefix = $signal; 
-					break; 
-				case $locale["{$letter}_sign_posn"] == 4 && $flags['usesignal'] == '+': 
-					$csuffix = $signal; 
-					break; 
-				case $flags['usesignal'] == '(': 
-				case $locale["{$letter}_sign_posn"] == 0: 
-					$prefix = '('; 
-					$suffix = ')'; 
-					break; 
-			} 
-			if (!$flags['nosimbol']) { 
-				$currency = $cprefix . 
-							($conversion == 'i' ? $locale['int_curr_symbol'] : $locale['currency_symbol']) . 
-							$csuffix; 
-			} else { 
-				$currency = ''; 
-			} 
-			$space  = $locale["{$letter}_sep_by_space"] ? ' ' : ''; 
-	
-			$value = number_format($value, $right, $locale['mon_decimal_point'], 
-					 $flags['nogroup'] ? '' : $locale['mon_thousands_sep']); 
-			$value = @explode($locale['mon_decimal_point'], $value); 
-	
-			$n = strlen($prefix) + strlen($currency) + strlen($value[0]); 
-			if ($left > 0 && $left > $n) { 
-				$value[0] = str_repeat($flags['fillchar'], $left - $n) . $value[0]; 
-			} 
-			$value = @implode($locale['mon_decimal_point'], $value); 
-			if ($locale["{$letter}_cs_precedes"]) { 
-				$value = $value; 
-			} else { 
-				$value = $value; 
-			} 
-			if ($width > 0) { 
-				$value = str_pad($value, $width, $flags['fillchar'], $flags['isleft'] ? 
-						 STR_PAD_RIGHT : STR_PAD_LEFT); 
-			} 
-	
-			$format = str_replace($fmatch[0], $value, $format); 
-		} 
-		return $format; 
+	public function money_format($format, $number)
+	{
+		$regex  = '/%((?:[\^!\-]|\+|\(|\=.)*)([0-9]+)?'.
+				  '(?:#([0-9]+))?(?:\.([0-9]+))?([in%])/';
+		if (setlocale(LC_MONETARY, 0) == 'C') {
+			setlocale(LC_MONETARY, '');
+		}
+		$locale = localeconv();
+		preg_match_all($regex, $format, $matches, PREG_SET_ORDER);
+		foreach ($matches as $fmatch) {
+			$value = floatval($number);
+			$flags = array(
+				'fillchar'  => preg_match('/\=(.)/', $fmatch[1], $match) ?
+							   $match[1] : ' ',
+				'nogroup'   => preg_match('/\^/', $fmatch[1]) > 0,
+				'usesignal' => preg_match('/\+|\(/', $fmatch[1], $match) ?
+							   $match[0] : '+',
+				'nosimbol'  => preg_match('/\!/', $fmatch[1]) > 0,
+				'isleft'    => preg_match('/\-/', $fmatch[1]) > 0
+			);
+			$width      = trim($fmatch[2]) ? (int)$fmatch[2] : 0;
+			$left       = trim($fmatch[3]) ? (int)$fmatch[3] : 0;
+			$right      = trim($fmatch[4]) ? (int)$fmatch[4] : $locale['int_frac_digits'];
+			$conversion = $fmatch[5];
+
+			$positive = true;
+			if ($value < 0) {
+				$positive = false;
+				$value  *= -1;
+			}
+			$letter = $positive ? 'p' : 'n';
+
+			$prefix = $suffix = $cprefix = $csuffix = $signal = '';
+
+			$signal = $positive ? $locale['positive_sign'] : $locale['negative_sign'];
+			switch (true) {
+				case $locale["{$letter}_sign_posn"] == 1 && $flags['usesignal'] == '+':
+					$prefix = $signal;
+					break;
+				case $locale["{$letter}_sign_posn"] == 2 && $flags['usesignal'] == '+':
+					$suffix = $signal;
+					break;
+				case $locale["{$letter}_sign_posn"] == 3 && $flags['usesignal'] == '+':
+					$cprefix = $signal;
+					break;
+				case $locale["{$letter}_sign_posn"] == 4 && $flags['usesignal'] == '+':
+					$csuffix = $signal;
+					break;
+				case $flags['usesignal'] == '(':
+				case $locale["{$letter}_sign_posn"] == 0:
+					$prefix = '(';
+					$suffix = ')';
+					break;
+			}
+			if (!$flags['nosimbol']) {
+				$currency = $cprefix .
+							($conversion == 'i' ? $locale['int_curr_symbol'] : $locale['currency_symbol']) .
+							$csuffix;
+			} else {
+				$currency = '';
+			}
+			$space  = $locale["{$letter}_sep_by_space"] ? ' ' : '';
+
+			$value = number_format($value, $right, $locale['mon_decimal_point'],
+					 $flags['nogroup'] ? '' : $locale['mon_thousands_sep']);
+			$value = @explode($locale['mon_decimal_point'], $value);
+
+			$n = strlen($prefix) + strlen($currency) + strlen($value[0]);
+			if ($left > 0 && $left > $n) {
+				$value[0] = str_repeat($flags['fillchar'], $left - $n) . $value[0];
+			}
+			$value = @implode($locale['mon_decimal_point'], $value);
+			if ($locale["{$letter}_cs_precedes"]) {
+				$value = $value;
+			} else {
+				$value = $value;
+			}
+			if ($width > 0) {
+				$value = str_pad($value, $width, $flags['fillchar'], $flags['isleft'] ?
+						 STR_PAD_RIGHT : STR_PAD_LEFT);
+			}
+
+			$format = str_replace($fmatch[0], $value, $format);
+		}
+		return $format;
 	}
 	public function convertNumberToWord($num = false) {
 		$num = str_replace(array(',', ' '), '' , trim($num));
@@ -1713,8 +1716,8 @@ class Xin_model extends CI_Model {
 	}
 	//set currency sign
 	public function currency_sign($number) {
-		
-		
+
+
 		// get details
 		$system_setting = $this->read_setting_info(1);
 		$default_locale = 'en_US';
@@ -1739,7 +1742,7 @@ class Xin_model extends CI_Model {
 			$number = $this->money_format('%i', $number);
 			$sign_value = $number.''.$sc_show;
 		}
-		
+
 		return $sign_value;
 	}
 	// set percentage value
@@ -1750,7 +1753,7 @@ class Xin_model extends CI_Model {
 			$inumber = number_format((float)$number, 2, '.', '');
 		}
 		return $inumber;
-		
+
 	}
 	// get all locations
 	public function all_locations()
@@ -1758,10 +1761,10 @@ class Xin_model extends CI_Model {
 	  $query = $this->db->query("SELECT * from xin_office_location");
   	  return $query->result();
 	}
-	
+
 	//set currency sign
 	public function set_date_format_js() {
-		
+
 		// get details
 		$system_setting = $this->read_setting_info(1);
 		// date format
@@ -1774,108 +1777,108 @@ class Xin_model extends CI_Model {
 		} else if($system_setting[0]->date_format_xi=='M-d-Y'){
 			$d_format = 'M-dd-yy';;
 		}
-		
+
 		return $d_format;
 	}
-	
+
 	public function read_designation_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_designations WHERE designation_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	// get department designations	
+	// get department designations
 	public function read_low_designations($id) {
-	
+
 		$sql = 'SELECT * FROM xin_designations WHERE designation_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
   	 	return $query->result();
 	}
-	// get department designations	
+	// get department designations
 	public function read_top_designations($id) {
-	
+
 		$sql = 'SELECT * FROM xin_designations WHERE top_designation_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
   	 	return $query->result();
 	}
-	
-	// get department designations	
+
+	// get department designations
 	public function read_dep_designations($id) {
-	
+
 		$sql = 'SELECT * FROM xin_designations WHERE department_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
   	 	return $query->result();
 	}
-	
-	// get designation employees	
+
+	// get designation employees
 	public function read_designation_employees($id) {
-	
+
 		$sql = 'SELECT * FROM xin_employees WHERE designation_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
   	 	return $query->result();
 	}
-	
+
 	// get all employees status
 	public function all_employees_status()
 	{
 	  $query = $this->db->query("SELECT * from xin_employees");
   	  return $query;
 	}
-	
+
 	// get all employees attendance calendar
 	public function all_employees_attendance_calendar()
 	{
 	  $query = $this->db->query("SELECT * from xin_employees");
   	  return $query;
 	}
-	
-	// get current day attendance 
+
+	// get current day attendance
 	public function current_month_day_attendance($date) {
 
 		$sql = $this->db->where('attendance_date',$date)->where('status','Present')->get('xin_attendance_time');
 		return $sql->num_rows();
 	}
-	
+
 	// get current day attendance > calendar
 	public function current_employee_absent_calendar($current_month) {
-		
-		$session = $this->session->userdata('username');		
+
+		$session = $this->session->userdata('username');
 		$sql = "SELECT at.*,e.*,la.* from xin_attendance_time as at, xin_employees as e, xin_leave_applications as la where at.attendance_date = ? and e.user_id!=at.employee_id and e.user_id!=la.employee_id";
 		$binds = array($current_month);
 		$query = $this->db->query($sql, $binds);
-		
-		
+
+
 		return $query->result();
 	}
 	public function current_employee_absent_calendar_count($current_month) {
-		
+
 		$session = $this->session->userdata('username');
 		$sql = "SELECT at.*,e.*,la.* from xin_attendance_time as at, xin_employees as e, xin_leave_applications as la where at.attendance_date = ? and e.user_id!=at.employee_id and e.user_id!=la.employee_id";
 		$binds = array($current_month);
 		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
 	}
-	
+
 	// check if leave available
 	public function employee_leave_date_calendar($current_date) {
-	
+
 		$sql = "SELECT la.*,e.user_id,e.first_name,e.last_name from xin_leave_applications as la, xin_employees as e where (la.from_date between la.from_date and la.to_date) or la.from_date = ? and la.to_date = ? and e.user_id=la.employee_id and la.status=2 group by la.employee_id";
 		$binds = array($current_date,$current_date);
 		$query = $this->db->query($sql, $binds);
 		return $query->result();
 	}
 	public function employee_leave_date_calendar_count($current_date) {
-	
+
 		$sql = "SELECT la.*,e.user_id,e.first_name,e.last_name from xin_leave_applications as la, xin_employees as e where (la.from_date between la.from_date and la.to_date) or la.from_date = ? and la.to_date = ? and e.user_id=la.employee_id and la.status=2 group by la.employee_id";
 		$binds = array($current_date,$current_date);
 		$query = $this->db->query($sql, $binds);
@@ -1884,35 +1887,35 @@ class Xin_model extends CI_Model {
 	//
 	// get current day attendance > calendar
 	public function current_employee_leave_calendar() {
-		
+
 		$session = $this->session->userdata('username');
 		$query = $this->db->query("SELECT la.*,e.* from xin_leave_applications as la, xin_employees as e where e.user_id=la.employee_id");
 		return $query->result();
 	}
-	
+
 	public function current_employee_working_calendar($current_date) {
-		
+
 		$sql = 'SELECT * FROM xin_attendance_time WHERE attendance_date = ? group by employee_id';
 		$binds = array($current_date);
 		$query = $this->db->query($sql, $binds);
 		return $query->result();
 	}
-			
+
 	// get all employees
 	public function all_employees()
 	{
 	  $query = $this->db->query("SELECT * from xin_employees where user_role_id!=1");
   	  return $query->result();
-	}	
+	}
 
 	public function login_employees($id)
 	{
 	  $query = $this->db->query("SELECT * from xin_employees where user_role_id=3 and user_id=$id");
   	  return $query->result();
-	}	
+	}
 
 	// get employees by company waise
-	// shahajahan ali 
+	// shahajahan ali
 	public function get_employee($company_id = null, $user_id = null, $status = null)
 	{
 		// vardump($user_id);
@@ -1931,9 +1934,9 @@ class Xin_model extends CI_Model {
 	  }
 
 	  $query->where('status !=', 0);
-  	  return $query->get('xin_employees')->result(); 
+  	  return $query->get('xin_employees')->result();
 	}
-	
+
 	// get all employees
 	public function all_active_employees()
 	{
@@ -1942,14 +1945,14 @@ class Xin_model extends CI_Model {
 		$query = $this->db->query($sql, $binds);
   	  	return $query->result();
 	}
-	
+
 	// get male
 	public function male_employees()
 	{
 		$sql = 'SELECT * FROM xin_employees WHERE gender = ?';
 		$binds = array('Male');
 		$query = $this->db->query($sql, $binds);
-		
+
 		$male_emp = $query->num_rows();
 		$stquery = $this->all_employees_status();
 		$st_total = $stquery->num_rows();
@@ -1979,31 +1982,31 @@ class Xin_model extends CI_Model {
 			return $rd_emp;
 		}
 	}
-	
+
 	// get all customers
 	public function all_customers()
 	{
 	  $query = $this->db->query("SELECT * from xin_customers");
   	  return $query->result();
 	}
-	
+
 	// get all suppliers
 	public function all_suppliers()
 	{
 	  $query = $this->db->query("SELECT * from xin_suppliers");
   	  return $query->result();
 	}
-	
+
 	// get all agents
 	public function all_agents()
 	{
 	  $query = $this->db->query("SELECT * from xin_agents");
   	  return $query->result();
 	}
-		
+
 	//set currency sign
 	public function set_date_format($date) {
-		
+
 		// get details
 		$system_setting = $this->read_setting_info(1);
 		// date formate
@@ -2026,13 +2029,13 @@ class Xin_model extends CI_Model {
 		} else {
 			$d_format = $system_setting[0]->date_format_xi;
 		}
-		
+
 		return $d_format;
 	}
-	
+
 	//set currency sign
 	public function set_date_time_format($date) {
-		
+
 		// get details
 		$system_setting = $this->read_setting_info(1);
 		// date formate
@@ -2055,16 +2058,16 @@ class Xin_model extends CI_Model {
 		} else {
 			$d_format = $system_setting[0]->date_format_xi;
 		}
-		
+
 		return $d_format;
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function all_policies() {
 	 	$query = $this->db->query("SELECT * from xin_company_policy");
 		return $query->result();
 	}
-	
+
 	// Function to update record in table > company information
 	public function update_company_info_record($data, $id){
 		$this->db->where('company_info_id', $id);
@@ -2072,9 +2075,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table > company information
 	public function update_setting_info_record($data, $id){
 		$this->db->where('setting_id', $id);
@@ -2082,9 +2085,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table > company information
 	public function update_email_config_record($data, $id){
 		$this->db->where('email_config_id', $id);
@@ -2092,9 +2095,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table > theme information
 	public function update_theme_info_record($data, $id){
 		$this->db->where('theme_settings_id', $id);
@@ -2102,9 +2105,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-		
+
 	// Function to add record in table
 	public function add_backup($data){
 		$this->db->insert('xin_database_backup', $data);
@@ -2114,43 +2117,43 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
-	// get all db backup/s 
+
+	// get all db backup/s
 	public function all_db_backup() {
 	 	return  $query = $this->db->query("SELECT * from xin_database_backup");
 	}
-	
+
 	// Function to Delete selected record from table
 	public function delete_single_backup_record($id){
 		$this->db->where('backup_id', $id);
 		$this->db->delete('xin_database_backup');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_all_backup_record(){
 		$this->db->empty_table('xin_database_backup');
-		
+
 	}
-	
-	// get all email templates 
+
+	// get all email templates
 	public function get_email_templates() {
 	 	return  $query = $this->db->query("SELECT * from xin_email_template");
 	}
-	
+
 	// get email template info
 	public function read_email_template_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_email_template WHERE template_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// Function to update record in table > email template
 	public function update_email_template_record($data, $id){
 		$this->db->where('template_id', $id);
@@ -2158,96 +2161,96 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	/*  ALL CONSTATNS */
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_contract_types() {
 	 	return  $query = $this->db->query("SELECT * from xin_contract_type");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_qualification_education() {
 	 	return  $query = $this->db->query("SELECT * from xin_qualification_education_level");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_qualification_language() {
 	 	return  $query = $this->db->query("SELECT * from xin_qualification_language");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_qualification_skill() {
 	 	return  $query = $this->db->query("SELECT * from xin_qualification_skill");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_document_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_document_type");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_award_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_award_type");
 	}
-	
+
 	public function get_company_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_company_type");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_leave_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_leave_type");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_warning_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_warning_type");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_termination_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_termination_type");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_expense_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_expense_type");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_job_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_job_type");
 	}
-	// get all table rows 
+	// get all table rows
 	public function get_job_categories() {
 	 	return  $query = $this->db->query("SELECT * from xin_job_categories");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_exit_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_employee_exit_type");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_travel_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_travel_arrangement_type");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_payment_method() {
 	 	return  $query = $this->db->query("SELECT * from xin_payment_method");
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_currency_types() {
 	 	return  $query = $this->db->query("SELECT * from xin_currencies");
 	}
-	
+
 	/*  ADD CONSTANTS */
-	
+
 	// Function to add record in table
 	public function add_contract_type($data){
 		$this->db->insert('xin_contract_type', $data);
@@ -2257,7 +2260,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_document_type($data){
 		$this->db->insert('xin_document_type', $data);
@@ -2267,7 +2270,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_edu_level($data){
 		$this->db->insert('xin_qualification_education_level', $data);
@@ -2277,7 +2280,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_edu_language($data){
 		$this->db->insert('xin_qualification_language', $data);
@@ -2287,7 +2290,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_edu_skill($data){
 		$this->db->insert('xin_qualification_skill', $data);
@@ -2297,7 +2300,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_payment_method($data){
 		$this->db->insert('xin_payment_method', $data);
@@ -2307,7 +2310,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_award_type($data){
 		$this->db->insert('xin_award_type', $data);
@@ -2317,7 +2320,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_leave_type($data){
 		$this->db->insert('xin_leave_type', $data);
@@ -2327,7 +2330,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_warning_type($data){
 		$this->db->insert('xin_warning_type', $data);
@@ -2337,7 +2340,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_termination_type($data){
 		$this->db->insert('xin_termination_type', $data);
@@ -2347,7 +2350,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_expense_type($data){
 		$this->db->insert('xin_expense_type', $data);
@@ -2357,7 +2360,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_job_type($data){
 		$this->db->insert('xin_job_type', $data);
@@ -2376,7 +2379,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_exit_type($data){
 		$this->db->insert('xin_employee_exit_type', $data);
@@ -2386,7 +2389,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_company_type($data){
 		$this->db->insert('xin_company_type', $data);
@@ -2396,7 +2399,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_travel_arr_type($data){
 		$this->db->insert('xin_travel_arrangement_type', $data);
@@ -2406,7 +2409,7 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	// Function to add record in table
 	public function add_currency_type($data){
 		$this->db->insert('xin_currencies', $data);
@@ -2416,417 +2419,417 @@ class Xin_model extends CI_Model {
 			return false;
 		}
 	}
-	
+
 	/*  DELETE CONSTANTS */
 	// Function to Delete selected record from table
 	public function delete_contract_type_record($id){
 		$this->db->where('contract_type_id', $id);
 		$this->db->delete('xin_contract_type');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_document_type_record($id){
 		$this->db->where('document_type_id', $id);
 		$this->db->delete('xin_document_type');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_payment_method_record($id){
 		$this->db->where('payment_method_id', $id);
 		$this->db->delete('xin_payment_method');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_education_level_record($id){
 		$this->db->where('education_level_id', $id);
 		$this->db->delete('xin_qualification_education_level');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_qualification_language_record($id){
 		$this->db->where('language_id', $id);
 		$this->db->delete('xin_qualification_language');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_qualification_skill_record($id){
 		$this->db->where('skill_id', $id);
 		$this->db->delete('xin_qualification_skill');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_award_type_record($id){
 		$this->db->where('award_type_id', $id);
 		$this->db->delete('xin_award_type');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_leave_type_record($id){
 		$this->db->where('leave_type_id', $id);
 		$this->db->delete('xin_leave_type');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_warning_type_record($id){
 		$this->db->where('warning_type_id', $id);
 		$this->db->delete('xin_warning_type');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_termination_type_record($id){
 		$this->db->where('termination_type_id', $id);
 		$this->db->delete('xin_termination_type');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_expense_type_record($id){
 		$this->db->where('expense_type_id', $id);
 		$this->db->delete('xin_expense_type');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_job_type_record($id){
 		$this->db->where('job_type_id', $id);
 		$this->db->delete('xin_job_type');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_job_category_record($id){
 		$this->db->where('category_id', $id);
 		$this->db->delete('xin_job_categories');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_exit_type_record($id){
 		$this->db->where('exit_type_id', $id);
 		$this->db->delete('xin_employee_exit_type');
-		
+
 	}
 	// Function to Delete selected record from table
 	public function delete_travel_arr_type_record($id){
 		$this->db->where('arrangement_type_id', $id);
 		$this->db->delete('xin_travel_arrangement_type');
-		
+
 	}
-	
+
 	// Function to Delete selected record from table
 	public function delete_currency_type_record($id){
 		$this->db->where('currency_id', $id);
 		$this->db->delete('xin_currencies');
-		
+
 	}
-	
+
 	// Function to Delete selected record from table
 	public function delete_company_type_record($id){
 		$this->db->where('type_id', $id);
 		$this->db->delete('xin_company_type');
-		
+
 	}
-	
+
 	// get all last 5 employees
 	public function last_four_employees()
 	{
 	  $query = $this->db->query("SELECT * from xin_employees order by user_id desc limit 4");
   	  return $query->result();
 	}
-	
+
 	// get all last jobs
 	public function last_jobs()
 	{
 	  $query = $this->db->query("SELECT * FROM xin_job_applications order by application_id desc limit 4");
   	  return $query->result();
 	}
-	
+
 	// get total number of salaries paid
 	public function get_total_salaries_paid() {
 	  $query = $this->db->query("SELECT SUM(payment_amount) as paid_amount FROM xin_make_payment");
   	  return $query->result();
 	}
-	
+
 	// get company wise salary > chart
 	public function all_companies_chart()
 	{
 	  $query = $this->db->query("SELECT m.*, c.* FROM xin_make_payment as m, xin_companies as c where m.company_id = c.company_id group by m.company_id");
   	  return $query->result();
 	}
-	
+
 	// get company wise salary > chart > make payment
 	public function get_company_make_payment($id) {
-	
+
 		$sql = 'SELECT SUM(payment_amount) as paidAmount FROM xin_make_payment where company_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		return $query->result();
 	}
-	
+
 	// get all currencies
 	public function get_currencies() {
-	
+
 		$query = $this->db->query("SELECT * from xin_currencies");
-		
+
 		return $query->result();
 	}
-	
+
 	// get location wise salary > chart
 	public function all_location_chart()
 	{
 	  $query = $this->db->query("SELECT m.*, l.* FROM xin_make_payment as m, xin_office_location as l where m.location_id = l.location_id group by m.location_id");
   	  return $query->result();
 	}
-	
+
 	// get location wise salary > chart > make payment
 	public function get_location_make_payment($id) {
-	
+
 		$sql = 'SELECT SUM(payment_amount) as paidAmount FROM xin_make_payment where location_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		return $query->result();
 	}
-	
+
 	// get location wise salary > chart
 	public function all_departments_chart()
 	{
 	  $query = $this->db->query("SELECT m.*, d.* FROM xin_salary_payslips as m, xin_departments as d where m.department_id = d.department_id group by m.department_id");
   	  return $query->result();
 	}
-	
+
 	// get department wise salary > chart > make payment
 	public function get_department_make_payment($id) {
-	
+
 		$query = $this->db->query("SELECT SUM(net_salary) as paidAmount FROM xin_salary_payslips where department_id='".$id."'");
 		return $query->result();
 	}
-	
+
 	// get designation wise salary > chart
 	public function all_designations_chart()
 	{
 	  $query = $this->db->query("SELECT m.*, d.* FROM xin_salary_payslips as m, xin_designations as d where m.designation_id = d.designation_id group by m.designation_id");
   	  return $query->result();
 	}
-	
+
 	// get designation wise salary > chart > make payment
 	public function get_designation_make_payment($id) {
-	
+
 		$query = $this->db->query("SELECT SUM(net_salary) as paidAmount FROM xin_salary_payslips where designation_id='".$id."'");
 		return $query->result();
 	}
-	
+
 	// get all jobs
 	public function get_all_jobs() {
 	  $query = $this->db->get("xin_jobs");
 	  return $query->num_rows();
 	}
-	
+
 	// get all departments
 	public function get_all_departments() {
 	  $query = $this->db->get("xin_departments");
 	  return $query->num_rows();
 	}
-	
+
 	// get all users
 	public function get_all_users() {
 	  $query = $this->db->get("xin_users");
 	  return $query->num_rows();
 	}
-	
+
 	// get all tasks
 	public function get_all_tasks() {
 	  $query = $this->db->get("xin_tasks");
 	  return $query->num_rows();
 	}
-	
+
 	// get all tickets
 	public function get_all_tickets() {
 	  $query = $this->db->get("xin_support_tickets");
 	  return $query->num_rows();
 	}
-	
+
 	// get all projects
 	public function get_all_projects() {
 	  $query = $this->db->get("xin_projects");
 	  return $query->num_rows();
 	}
-	
+
 	// get all locations
 	public function get_all_locations() {
 	  $query = $this->db->get("xin_office_location");
 	  return $query->num_rows();
 	}
-	
+
 	// get all companies
 	public function get_all_companies() {
 	  $query = $this->db->get("xin_companies");
 	  return $query->num_rows();
 	}
-	
+
 	// get payment history > recently payslips
 	public function get_last_payment_history() {
 	  $query = $this->db->query("SELECT * from xin_salary_payslips order by payslip_id desc limit 7");
   	  return $query->result();
 	}
-	
+
 	// get single record > db table > constant
 	public function read_contract_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_contract_type where contract_type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_document_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_document_type where document_type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_payment_method($id) {
-	
+
 		$sql = 'SELECT * FROM xin_payment_method where payment_method_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_education_level($id) {
-	
+
 		$sql = 'SELECT * FROM xin_qualification_education_level where education_level_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-			
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_qualification_language($id) {
-	
+
 		$sql = 'SELECT * FROM xin_qualification_language where language_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-				
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_qualification_skill($id) {
-	
+
 		$sql = 'SELECT * FROM xin_qualification_skill where skill_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_award_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_award_type where award_type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-				
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-		
+
 	// get single record > db table > constant
 	public function read_leave_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_leave_type where leave_type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_warning_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_warning_type where warning_type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_termination_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_termination_type where termination_type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_expense_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_expense_type where expense_type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_job_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_job_type where job_type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
@@ -2835,74 +2838,74 @@ class Xin_model extends CI_Model {
 	}
 	// get single record > db table > constant
 	public function read_job_category($id) {
-	
+
 		$sql = 'SELECT * FROM xin_job_categories where category_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_exit_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_employee_exit_type where exit_type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_travel_arr_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_travel_arrangement_type where arrangement_type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_company_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_company_type where type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get single record > db table > constant
 	public function read_currency_types($id) {
-	
+
 		$sql = 'SELECT * FROM xin_currencies where currency_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	/* UPDATE CONSTANTS */
 	// Function to update record in table
 	public function update_document_type_record($data, $id){
@@ -2911,9 +2914,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_contract_type_record($data, $id){
 		$this->db->where('contract_type_id', $id);
@@ -2921,9 +2924,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_payment_method_record($data, $id){
 		$this->db->where('payment_method_id', $id);
@@ -2931,9 +2934,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_education_level_record($data, $id){
 		$this->db->where('education_level_id', $id);
@@ -2941,9 +2944,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_qualification_language_record($data, $id){
 		$this->db->where('language_id', $id);
@@ -2951,9 +2954,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_qualification_skill_record($data, $id){
 		$this->db->where('skill_id', $id);
@@ -2961,9 +2964,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_award_type_record($data, $id){
 		$this->db->where('award_type_id', $id);
@@ -2971,9 +2974,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_leave_type_record($data, $id){
 		$this->db->where('leave_type_id', $id);
@@ -2981,9 +2984,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_warning_type_record($data, $id){
 		$this->db->where('warning_type_id', $id);
@@ -2991,9 +2994,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_termination_type_record($data, $id){
 		$this->db->where('termination_type_id', $id);
@@ -3001,9 +3004,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_expense_type_record($data, $id){
 		$this->db->where('expense_type_id', $id);
@@ -3011,9 +3014,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_currency_type_record($data, $id){
 		$this->db->where('currency_id', $id);
@@ -3021,18 +3024,18 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// get email template
 	public function single_email_template($id){
-		
+
 		$sql = 'SELECT * FROM xin_email_template where template_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		return $query->result();
 	}
-	
+
 	// Function to update record in table
 	public function update_job_type_record($data, $id){
 		$this->db->where('job_type_id', $id);
@@ -3040,7 +3043,7 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
 	// Function to update record in table
 	public function update_job_category_record($data, $id){
@@ -3049,23 +3052,23 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// get single record > db table > email template
 	public function read_email_template($id) {
-	
+
 		$sql = 'SELECT * FROM xin_email_template where template_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// Function to update record in table
 	public function update_exit_type_record($data, $id){
 		$this->db->where('exit_type_id', $id);
@@ -3073,9 +3076,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_travel_arr_record($data, $id){
 		$this->db->where('arrangement_type_id', $id);
@@ -3083,9 +3086,9 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to update record in table
 	public function update_company_type_record($data, $id){
 		$this->db->where('type_id', $id);
@@ -3093,10 +3096,10 @@ class Xin_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
-	// get current month attendance 
+
+	// get current month attendance
 	public function current_month_attendance() {
 		$current_month = date('Y-m');
 		$session = $this->session->userdata('username');
@@ -3105,26 +3108,26 @@ class Xin_model extends CI_Model {
 		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
 	}
-	
-	// get total employee awards 
+
+	// get total employee awards
 	public function total_employee_awards() {
 		$session = $this->session->userdata('username');
 		$id = $session['user_id'];
 		$query = $this->db->query("SELECT * FROM xin_awards where employee_id IN($id) order by award_id desc");
 		return $query->num_rows();
 	}
-	
-	// get current employee awards 
+
+	// get current employee awards
 	public function get_employee_awards() {
 		$session = $this->session->userdata('username');
 		$id = $session['user_id'];
 		$query = $this->db->query("SELECT * FROM xin_awards where employee_id IN($id) order by award_id desc");
 		 return $query->result();
 	}
-	
+
 	// get user role > links > all
 	public function user_role_resource(){
-		
+
 		// get session
 		$session = $this->session->userdata('username');
 		// get userinfo and role
@@ -3133,25 +3136,25 @@ class Xin_model extends CI_Model {
 		$role_resources_ids = explode(',',$role_user[0]->role_resources);
 		return $role_resources_ids;
 	}
-	
+
 	// get all opened tickets
 	public function all_open_tickets() {
-		
+
 		$sql = 'SELECT * FROM xin_support_tickets WHERE ticket_status = ?';
 		$binds = array(1);
 		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
 	}
-	
+
 	// get all closed tickets
 	public function all_closed_tickets() {
-		 
+
 		 $sql = 'SELECT * FROM xin_support_tickets WHERE ticket_status = ?';
 		 $binds = array(2);
-		 $query = $this->db->query($sql, $binds); 
+		 $query = $this->db->query($sql, $binds);
 		 return $query->num_rows();
 	}
-	
+
 	// get selected language
 	public function get_selected_language_name($site_lang) {
 		//english
@@ -3192,7 +3195,7 @@ class Xin_model extends CI_Model {
 		}
 		return $name;
 	}
-	
+
 	// get selected language
 	public function get_selected_language_flag($site_lang) {
 		//english
@@ -3233,79 +3236,79 @@ class Xin_model extends CI_Model {
 		}
 		return $flag;
 	}
-	
+
 	// get all languages
 	public function all_languages()
 	{
 	     $sql = 'SELECT * FROM xin_languages WHERE is_active = ? order by language_name asc';
 		 $binds = array(1);
-		 $query = $this->db->query($sql, $binds); 
-		 
+		 $query = $this->db->query($sql, $binds);
+
   	  	  return $query->result();
 	}
-	
+
 	// last 4 projects
 	public function last_four_projects()
 	{
 	     $sql = 'SELECT * FROM xin_projects order by project_id desc limit ?';
 		 $binds = array(4);
-		 $query = $this->db->query($sql, $binds); 
-		 
+		 $query = $this->db->query($sql, $binds);
+
   	  	  return $query->result();
 	}
-	
+
 	// last 4 projects
 	public function last_five_client_projects($id)
 	{
 	     $sql = 'SELECT * FROM xin_projects where client_id = ? order by project_id desc limit ?';
 		 $binds = array($id,5);
-		 $query = $this->db->query($sql, $binds); 
-		 
+		 $query = $this->db->query($sql, $binds);
+
   	  	  return $query->result();
 	}
-	
+
 	// get employees head count > chart
 	public function all_head_count_chart()
 	{
 	  $query = $this->db->query("SELECT * from xin_employees group by created_at");
   	  return $query->result();
 	}
-	
+
 	// get language info
 	public function get_language_info($code) {
-	
+
 		$sql = 'SELECT * FROM xin_languages WHERE language_code = ?';
 		$binds = array($code);
-		$query = $this->db->query($sql, $binds); 
-		
+		$query = $this->db->query($sql, $binds);
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get employees upcoming birthday
 	public function employees_upcoming_birthday() {
-	
+
 		//$query = $this->db->query("SELECT * FROM xin_employees WHERE date_of_birth BETWEEN DATE_ADD(NOW(), INTERVAL 1 DAY) AND DATE_ADD( NOW() , INTERVAL 1 MONTH)");
 		$query = $this->db->query("SELECT `user_id`, `first_name`, `last_name`, `date_of_birth`,
     DATE_ADD(
-        date_of_birth, 
+        date_of_birth,
         INTERVAL IF(DAYOFYEAR(date_of_birth) >= DAYOFYEAR(CURDATE()),
             YEAR(CURDATE())-YEAR(date_of_birth),
             YEAR(CURDATE())-YEAR(date_of_birth)+1
         ) YEAR
     ) AS `next_birthday`
-FROM `xin_employees` 
-WHERE 
+FROM `xin_employees`
+WHERE
     `date_of_birth` IS NOT NULL
-HAVING 
+HAVING
     `next_birthday` BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
 ORDER BY `next_birthday`");
   	  	return $query->result();
 	}
-	
+
 	// get timezone
 	public function all_timezones()
 	{
@@ -3425,55 +3428,55 @@ ORDER BY `next_birthday`");
 		);
 		return $timezones;
 	}
-	
+
 	// get all messages
 	public function get_single_unread_message($to_id) {
-		
+
 		$sql = 'SELECT * FROM xin_chat_messages WHERE to_id = ? and is_read = ?';
 		$binds = array($to_id,0);
-		$query = $this->db->query($sql, $binds); 
+		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
 	}
-	
+
 	// check client email
 	public function check_client_email($client_email) {
-		
+
 		$sql = 'SELECT * FROM xin_clients WHERE email = ?';
 		$binds = array($client_email);
-		$query = $this->db->query($sql, $binds); 
+		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
-	}	
-	
+	}
+
 	///// department values
 	// get department>employees
 	public function get_department_employees($to_id) {
-		
+
 		$sql = 'SELECT * FROM xin_employees WHERE department_id = ? and user_role_id!=1';
 		$binds = array($to_id);
-		$query = $this->db->query($sql, $binds); 
+		$query = $this->db->query($sql, $binds);
 		return $query->result();
 	}
-	
+
 	// get department>employees>leaves
 	public function get_department_employees_leaves($employee_id) {
-		
+
 		$sql = 'SELECT * FROM xin_leave_applications WHERE employee_id = ?';
 		$binds = array($employee_id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get company>department>employees
 	public function get_company_department_employees($to_id) {
-		
+
 		$sql = 'SELECT * FROM xin_departments WHERE company_id = ?';
 		$binds = array($to_id);
-		$query = $this->db->query($sql, $binds); 
+		$query = $this->db->query($sql, $binds);
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
@@ -3482,12 +3485,12 @@ ORDER BY `next_birthday`");
 	}
 	// get year to date income tax
 	public function year_to_date_income_tax($salary_month,$user_id) {
-		
+
 		$st_date = date('Y').'-01-01';
 		$salary_month = $salary_month.'-01';
 		$sql = "SELECT * FROM xin_salary_payslips WHERE (salary_month BETWEEN ? AND ?) and employee_id = ?";
 		$binds = array($st_date,$salary_month,$user_id);
-		$query = $this->db->query($sql, $binds); 
+		$query = $this->db->query($sql, $binds);
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
@@ -3501,7 +3504,7 @@ ORDER BY `next_birthday`");
 		$salary_month = $salary_month.'-01';
 		$sql = "SELECT * FROM xin_salary_payslips WHERE (salary_month BETWEEN ? AND ?) and employee_id = ?";
 		$binds = array($st_date,$salary_month,$user_id);
-		$query = $this->db->query($sql, $binds); 
+		$query = $this->db->query($sql, $binds);
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
@@ -3510,87 +3513,87 @@ ORDER BY `next_birthday`");
 	}
 	// get year to date salary_ssempeer
 	public function year_to_date_ssempeer($salary_month,$user_id) {
-		
+
 		$st_date = date('Y').'-01-01';
 		$salary_month = $salary_month.'-01';
 		$sql = "SELECT * FROM xin_salary_payslips WHERE (salary_month BETWEEN ? AND ?) and employee_id = ?";
 		$binds = array($st_date,$salary_month,$user_id);
-		$query = $this->db->query($sql, $binds); 
+		$query = $this->db->query($sql, $binds);
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// get company>department>employees
 	public function get_employee_attendance_location($employee_id,$attendance_date) {
-		
+
 		$sql = 'SELECT * FROM xin_attendance_time WHERE employee_id = ? and attendance_date = ? order by time_attendance_id desc limit 1';
 		$binds = array($employee_id,$attendance_date);
-		$query = $this->db->query($sql, $binds); 
+		$query = $this->db->query($sql, $binds);
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	//get animation
 	public function get_content_animate(){
 		$val = 'animated fadeInRight';
 		return $val;
 	}
-	
+
 	public function hrsale_version() {
 		$current_version = 'v1.1.8';
 		return $current_version;
 	}
-	
+
 	// company license expiry
 	public function company_license_expiry() {
 		$query = $this->db->query("SELECT `document_id`, `expiry_date`, `license_name`, `license_number`,
     DATE_ADD(
-        expiry_date, 
+        expiry_date,
         INTERVAL IF(DAYOFYEAR(expiry_date) >= DAYOFYEAR(CURDATE()),
             YEAR(CURDATE())-YEAR(expiry_date),
             YEAR(CURDATE())-YEAR(expiry_date)+1
         ) YEAR
     ) AS `eexpiry_date`
-FROM `xin_company_documents` 
-WHERE 
+FROM `xin_company_documents`
+WHERE
     `expiry_date` IS NOT NULL
-HAVING 
+HAVING
     `expiry_date` BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
 ORDER BY `expiry_date`");
   	  	return $query->result();
 	}
-	
+
 	public function company_license_expired() {
 		$curr_date = date('Y-m-d');
 		$query = $this->db->query("SELECT * from xin_company_documents where expiry_date < '".$curr_date."' ORDER BY `expiry_date` asc");
   	  	return $query->result();
 	}
-	
+
 	//v1.1.2
 	// get single employee>>>result!!
 	public function read_employee_info_att($id) {
-	
+
 		$sql = 'SELECT * FROM xin_employees WHERE user_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		return $query;
 	}
-	
+
 	// get company>employees
 	public function get_company_employees($company_id) {
-		
+
 		$sql = 'SELECT * FROM xin_employees WHERE company_id = ?';
 		$binds = array($company_id);
-		$query = $this->db->query($sql, $binds); 
+		$query = $this->db->query($sql, $binds);
 		return $query;
 	}
-	
+
 	public function count_company_license_expired_all() {
 		$curr_date = date('Y-m-d');
 		$query = $this->db->query("SELECT * from xin_company_documents where expiry_date < '".$curr_date."' ORDER BY `expiry_date` asc");
@@ -3599,29 +3602,29 @@ ORDER BY `expiry_date`");
 	// expired documents > count
 	// get documents
 	public function count_get_documents_expired_all() {
-			
+
 		$curr_date = date('Y-m-d');
 		$query = $this->db->query("SELECT * from xin_employee_documents where date_of_expiry < '".$curr_date."' ORDER BY `date_of_expiry` asc");
   	  	return $query->num_rows();
 	}
 	// user/
 	public function count_get_user_documents_expired_all($employee_id) {
-			
+
 		$curr_date = date('Y-m-d');
 		$query = $this->db->query("SELECT * from xin_employee_documents where employee_id = '".$employee_id."' and date_of_expiry < '".$curr_date."' ORDER BY `date_of_expiry` asc");
   	  	return $query->num_rows();
 	}
-	
+
 	// get immigration documents
 	public function count_get_img_documents_expired_all() {
-			
+
 		$curr_date = date('Y-m-d');
 		$query = $this->db->query("SELECT * from xin_employee_immigration where expiry_date < '".$curr_date."' ORDER BY `expiry_date` asc");
   	  	return $query->num_rows();
 	}
 	//user // get immigration documents
 	public function count_get_user_img_documents_expired_all($employee_id) {
-			
+
 		$curr_date = date('Y-m-d');
 		$query = $this->db->query("SELECT * from xin_employee_immigration where employee_id = '".$employee_id."' and expiry_date < '".$curr_date."' ORDER BY `expiry_date` asc");
   	  	return $query->num_rows();
@@ -3632,7 +3635,7 @@ ORDER BY `expiry_date`");
   	  	return $query->num_rows();
 	}
 	public function count_get_company_license_expired($company_id) {
-	
+
 		$curr_date = date('Y-m-d');
 		$sql = "SELECT * FROM xin_company_documents WHERE expiry_date < '".$curr_date."' and company_id = ?";
 		$binds = array($company_id);
@@ -3660,28 +3663,28 @@ ORDER BY `expiry_date`");
 	}
 	// get client projects
 	public function get_client_projects_panel($client_id) {
-		
+
 		$sql = 'SELECT * FROM xin_projects WHERE client_id = ?';
 		$binds = array($client_id);
-		$query = $this->db->query($sql, $binds); 
+		$query = $this->db->query($sql, $binds);
 		return $query->result();
 	}
 	// get project/tasks
 	public function get_client_project_tasks_panel($project_id) {
-		
+
 		$sql = 'SELECT * FROM xin_tasks WHERE project_id = ?';
 		$binds = array($project_id);
-		$query = $this->db->query($sql, $binds); 
+		$query = $this->db->query($sql, $binds);
 		return $query;
 	}
-	
+
 	// get email setting info
 	public function read_email_config_info($id) {
-	
+
 		$sql = 'SELECT * FROM xin_email_configuration WHERE email_config_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
@@ -3702,11 +3705,11 @@ ORDER BY `expiry_date`");
 	}
 	// get single record > db table > constant
 	public function read_security_level($id) {
-	
+
 		$sql = 'SELECT * FROM xin_security_level where type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
@@ -3720,16 +3723,16 @@ ORDER BY `expiry_date`");
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
 	// Function to Delete selected record from table
 	public function delete_security_level_record($id){
 		$this->db->where('type_id', $id);
 		$this->db->delete('xin_security_level');
-		
+
 	}
 	// v1.1.7
-	// get all table rows 
+	// get all table rows
 	public function get_ethnicity_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_ethnicity_type");
 	}
@@ -3749,11 +3752,11 @@ ORDER BY `expiry_date`");
 	}
 	// get single record > db table > constant
 	public function read_ethnicity_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_ethnicity_type where ethnicity_type_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
@@ -3767,10 +3770,10 @@ ORDER BY `expiry_date`");
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
-	// get all table rows 
+
+	// get all table rows
 	public function get_income_categories() {
 	 	return  $query = $this->db->query("SELECT * from xin_income_categories");
 	}
@@ -3785,18 +3788,18 @@ ORDER BY `expiry_date`");
 	}
 	// get single record > db table > constant
 	public function read_income_type($id) {
-	
+
 		$sql = 'SELECT * FROM xin_income_categories where category_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
 	}
-	
+
 	// Function to update record in table
 	public function update_income_type_record($data, $id){
 		$this->db->where('category_id', $id);
@@ -3804,18 +3807,18 @@ ORDER BY `expiry_date`");
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	// Function to Delete selected record from table
 	public function delete_income_type_record($id){
 		$this->db->where('category_id', $id);
 		$this->db->delete('xin_income_categories');
 	}
-	
+
 	// awards count
 	public function get_employee_awards_count($id) {
-		
+
 		$sql = 'SELECT * FROM xin_awards WHERE employee_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
@@ -3823,28 +3826,28 @@ ORDER BY `expiry_date`");
 	}
 	// get employee training count
 	public function get_employee_training_count($id) {
-	
+
 		$sql = "SELECT * FROM `xin_training` where employee_id like '%$id,%' or employee_id like '%,$id%' or employee_id = '$id'";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
 	}
 	public function get_employee_warning_count($id) {
-	 	
+
 		$sql = 'SELECT * FROM xin_employee_warnings WHERE warning_to = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
 	}
 	public function get_employee_travel_count($id) {
-	 	
+
 		$sql = 'SELECT * FROM xin_employee_travels WHERE employee_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
 	}
 	public function get_employee_tickets_count($id) {
-	 	
+
 		$sql = 'SELECT st.*, ste.* FROM xin_support_tickets as st, xin_support_tickets_employees as ste WHERE st.ticket_id=ste.ticket_id and (ste.employee_id = ? || st.created_by = ?) group by st.ticket_id';
 		$binds = array($id,$id);
 		$query = $this->db->query($sql, $binds);
@@ -3852,7 +3855,7 @@ ORDER BY `expiry_date`");
 	}
 	// get employee projects
 	public function get_employee_projects_count($id) {
-	
+
 		$sql = "SELECT * FROM `xin_projects` where assigned_to like '%$id,%' or assigned_to like '%,$id%' or assigned_to = '$id'";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
@@ -3860,30 +3863,30 @@ ORDER BY `expiry_date`");
 	}
 	// get employee tasks
 	public function get_employee_tasks_count($id) {
-	
+
 		$sql = "SELECT * FROM `xin_tasks` where assigned_to like '%$id,%' or assigned_to like '%,$id%' or assigned_to = '$id'";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
 	}
 	public function get_employee_assets_count($id) {
-		
+
 		//$id = $this->db->escape($id);
 		$sql = 'SELECT * FROM xin_assets WHERE employee_id = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
-		
+
 	 	return $query->num_rows();
 	}
 	public function get_employee_meetings_count($id) {
-		
+
 		$sql = "SELECT * FROM xin_meetings WHERE employee_id like '%$id,%' or employee_id like '%,$id%' or employee_id = '$id'";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 	 	return $query->num_rows();
 	}
 	public function get_employee_events_count($id) {
-		
+
 		$sql = "SELECT * FROM xin_events WHERE employee_id like '%$id,%' or employee_id like '%,$id%' or employee_id = '$id'";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
@@ -3943,22 +3946,22 @@ ORDER BY `expiry_date`");
 		$hrs_old_int1 = 0;
 		$Total = 0;
 		foreach($qry_ac as $r){
-			// total work			
+			// total work
 			$timee = $r->total_hours.':00';
 			$str_time =$timee;
 
 			$str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
-			
+
 			sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
-			
+
 			$hrs_old_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-			
+
 			$hrs_old_int1 += $hrs_old_seconds;
-			
+
 			$Total = gmdate("H:i", $hrs_old_int1);
 		}
 		return $Total;
-	}	
+	}
 
 	// actual hours for timelog > project
 	public function left_resign_list($status) {

@@ -188,14 +188,14 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                     </div>
 
                                                     <?php $colmd=4;
-                              if($system[0]->is_active_sub_departments=='yes'){
-                                $colmd=4;
-                                $is_id= 'aj_subdepartments';
-                              } else {
-                                $colmd=4;
-                                $is_id= 'is_aj_subdepartments';
-                              }
-                            ?>
+                                                        if($system[0]->is_active_sub_departments=='yes'){
+                                                            $colmd=4;
+                                                            $is_id= 'aj_subdepartments';
+                                                        } else {
+                                                            $colmd=4;
+                                                            $is_id= 'is_aj_subdepartments';
+                                                        }
+                                                        ?>
 
                                                     <?php $el_result = $this->Department_model->ajax_company_location_information($company_id);?>
                                                     <?php $eall_departments = $this->Department_model->ajax_location_departments_information($location_id);?>
@@ -554,52 +554,52 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                         </div>
                                                     </div>
                                                     <!-- <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                               <input type="hidden" value="0" name="view_companies_id[]" />
-                                <label for="first_name"><?php echo $this->lang->line('xin_view_companies_data');?></label>
-                                <select multiple="multiple" class="form-control" name="view_companies_id[]" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_view_companies_data');?>">
-                                  <option value=""></option>
-                                  <?php foreach($get_all_companies as $company) {?>
-                                  <option value="<?php echo $company->company_id?>" <?php if(isset($_GET)) { if(in_array($company->company_id,$view_companies_ids)):?> selected <?php endif; }?>><?php echo $company->name?></option>
-                                  <?php } ?>
-                                </select>
-                              </div>
-                            </div>
-                          </div>   -->
-                                                    <!-- <div class="row">
-                            <div class="col-md-4">
-                              <div class="form-group">
-                                <label for="estate"><?php echo $this->lang->line('xin_state');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_state');?>" name="estate" type="text" value="<?php echo $state;?>">
-                              </div>
-                            </div>
-                            <div class="col-md-4">
-                              <div class="form-group">
-                                <label for="ecity"><?php echo $this->lang->line('xin_city');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_city');?>" name="ecity" type="text" value="<?php echo $city;?>">
-                              </div>
-                            </div>
-                            <div class="col-md-4">
-                              <div class="form-group">
-                                <label for="ezipcode" class="control-label"><?php echo $this->lang->line('xin_zipcode');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_zipcode');?>" name="ezipcode" type="text" value="<?php echo $zipcode;?>">
-                              </div>
-                            </div>
-                          </div> -->
-                                                    <div class="row">
-                                                        <?php $ethnicity_type = $this->Xin_model->get_ethnicity_type();?>
-                                                        <!-- <div class="col-md-4">
-                              <div class="form-group">
-                                <label for="email" class="control-label"><?php echo $this->lang->line('xin_ethnicity_type_title');?></label>
-                                <select class="form-control" name="ethnicity_type" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_ethnicity_type_title');?>">
-                                  <option value=""></option>
-                                  <?php foreach($ethnicity_type->result() as $itype) {?>
-                                      <option value="<?php echo $itype->ethnicity_type_id?>" <?php if($itype->ethnicity_type_id==$iethnicity_type):?> selected="selected"<?php endif;?>><?php echo $itype->type?></option>
-                                  <?php } ?>
-                                </select>
-                              </div>
-                            </div> -->
+                                                            <div class="col-md-12">
+                                                            <div class="form-group">
+                                                            <input type="hidden" value="0" name="view_companies_id[]" />
+                                                                <label for="first_name"><?php echo $this->lang->line('xin_view_companies_data');?></label>
+                                                                <select multiple="multiple" class="form-control" name="view_companies_id[]" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_view_companies_data');?>">
+                                                                <option value=""></option>
+                                                                <?php foreach($get_all_companies as $company) {?>
+                                                                <option value="<?php echo $company->company_id?>" <?php if(isset($_GET)) { if(in_array($company->company_id,$view_companies_ids)):?> selected <?php endif; }?>><?php echo $company->name?></option>
+                                                                <?php } ?>
+                                                                </select>
+                                                            </div>
+                                                            </div>
+                                                        </div>   -->
+                                                                                    <!-- <div class="row">
+                                                            <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="estate"><?php echo $this->lang->line('xin_state');?></label>
+                                                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_state');?>" name="estate" type="text" value="<?php echo $state;?>">
+                                                            </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="ecity"><?php echo $this->lang->line('xin_city');?></label>
+                                                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_city');?>" name="ecity" type="text" value="<?php echo $city;?>">
+                                                            </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="ezipcode" class="control-label"><?php echo $this->lang->line('xin_zipcode');?></label>
+                                                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_zipcode');?>" name="ezipcode" type="text" value="<?php echo $zipcode;?>">
+                                                            </div>
+                                                            </div>
+                                                        </div> -->
+                                                                                    <div class="row">
+                                                                                        <?php $ethnicity_type = $this->Xin_model->get_ethnicity_type();?>
+                                                                                        <!-- <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="email" class="control-label"><?php echo $this->lang->line('xin_ethnicity_type_title');?></label>
+                                                                <select class="form-control" name="ethnicity_type" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_ethnicity_type_title');?>">
+                                                                <option value=""></option>
+                                                                <?php foreach($ethnicity_type->result() as $itype) {?>
+                                                                    <option value="<?php echo $itype->ethnicity_type_id?>" <?php if($itype->ethnicity_type_id==$iethnicity_type):?> selected="selected"<?php endif;?>><?php echo $itype->type?></option>
+                                                                <?php } ?>
+                                                                </select>
+                                                            </div>
+                                                            </div> -->
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="address">Present Address</label>
@@ -2058,6 +2058,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                         </div>
                     </div>
                 </div>
+
                 <div class="tab-pane" id="xin_profile_picture">
                     <div class="box-body">
                         <div class="row no-gutters row-bordered row-border-light">
@@ -2144,17 +2145,17 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                         </div>
                     </div>
                 </div>
-                <?php if(in_array('351',$role_resources_ids)) {?>
+
                 <div class="tab-pane <?php echo $get_animate;?>" id="xin_employee_set_salary">
                     <div class="card-body">
                         <div class="card overflow-hidden">
                             <div class="row no-gutters row-bordered row-border-light">
                                 <div class="col-md-3 pt-0">
-                                    <div class="list-group list-group-flush account-settings-links"> <a
-                                            class="salary-tab-list list-group-item list-group-item-action active salary-tab"
+                                    <div class="list-group list-group-flush account-settings-links">
+                                        <a class="salary-tab-list list-group-item list-group-item-action active salary-tab"
                                             data-toggle="list" href="javascript:void(0);" data-profile="1"
                                             data-profile-block="salary" aria-expanded="true"
-                                            id="suser_profile_1"><?php echo $this->lang->line('xin_employee_update_salary');?></a>
+                                            id="suser_profile_1">Update Salary</a>
                                         <a class="salary-tab-list list-group-item list-group-item-action salary-tab"
                                             data-toggle="list" href="javascript:void(0);" data-profile="2"
                                             data-profile-block="set_allowances" aria-expanded="true"
@@ -2183,24 +2184,22 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                 </div>
                                 <div class="col-md-9">
                                     <div class="tab-content active">
-                                        <div class="tab-pane <?php echo $get_animate;?> salary-current-tab active"
-                                            id="salary">
+                                        <div class="tab-pane <?= $get_animate;?> salary-current-tab active"  id="salary">
                                             <div class="box-header with-border">
-                                                <h3 class="box-title">
-                                                    <?php echo $this->lang->line('xin_employee_update_salary');?> </h3>
+                                                <h3 class="box-title"> Update Salary </h3>
                                             </div>
                                             <div class="box-body pb-2">
                                                 <?php $attributes = array('name' => 'employee_update_salary', 'id' => 'employee_update_salary', 'autocomplete' => 'off');?>
                                                 <?php $hidden = array('user_id' => $user_id, 'u_basic_info' => 'UPDATE');?>
                                                 <?php echo form_open('admin/employees/update_salary_option', $attributes, $hidden);?>
+
+                                                <?php $sal_infos = $this->db->where('emp_id', $user_id)->get('xin_salary_templates')->row(); ?>
+
                                                 <div class="bg-white">
                                                     <div class="row">
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label
-                                                                    for="wages_type"><?php echo $this->lang->line('xin_employee_type_wages');?><i
-                                                                        class="hrsale-asterisk"><span
-                                                                            style="color:red">*</span></i></label>
+                                                                <label for="wages_type"><?php echo $this->lang->line('xin_employee_type_wages');?><i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
                                                                 <select name="wages_type" id="wages_type"
                                                                     class="form-control" data-plugin="select_hrm">
                                                                     <option value="1" <?php if($wages_type==1):?>
@@ -2216,17 +2215,52 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label
-                                                                    for="basic_salary"><?php echo $this->lang->line('xin_salary_title');?><i
-                                                                        class="hrsale-asterisk"><span
-                                                                            style="color:red">*</span></i></label>
-                                                                <input class="form-control basic_salary"
-                                                                    placeholder="<?php echo $this->lang->line('xin_salary_title');?>"
-                                                                    name="basic_salary" type="text"
-                                                                    value="<?php echo $basic_salary;?>">
+                                                                <label>Basic Salary<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                                                <input class="form-control" type="number" name="basic_salary" id='basic_salary' value="<?= isset($sal_infos) ? $sal_infos->basic_salary : ''; ?>" onchange="get_gross_salary()">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label>Overtime Rate<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                                                <input class="form-control" type="number" id='overtime_rate' name="overtime_rate" value="<?= isset($sal_infos) ? $sal_infos->overtime_rate : ''; ?>" onchange="get_gross_salary()">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label>House Rent<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                                                <input class="form-control" type="number" id='house_rent_allowance'  name="house_rent_allowance"  value="<?= isset($sal_infos) ? $sal_infos->house_rent_allowance : ''; ?>" onchange="get_gross_salary()">
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label>Medical Allowance<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                                                <input class="form-control" type="number" id='medical_allowance' name="medical_allowance" value="<?= isset($sal_infos) ? $sal_infos->medical_allowance : ''; ?>" onchange="get_gross_salary()">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label>Travelling Allowance<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                                                <input class="form-control" type="number" id='travelling_allowance' name="travelling_allowance" value="<?= isset($sal_infos) ? $sal_infos->travelling_allowance : ''; ?>" onchange="get_gross_salary()">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label>Dearness Allowance<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                                                <input class="form-control" type="number" id='dearness_allowance' name="dearness_allowance" value="<?= isset($sal_infos) ? $sal_infos->dearness_allowance : ''; ?>" onchange="get_gross_salary()">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label>Gross Salary<i class="hrsale-asterisk"><span style="color:red">*</span></i></label>
+                                                                <input class="form-control" type="number" id='gross_salary' name="gross_salary" value="<?= isset($sal_infos) ? $sal_infos->gross_salary : ''; ?>" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" name="total_allowance" id="total_allowance" value="<?= isset($sal_infos->total_allowance) ? $sal_infos->total_allowance : ''; ?>">
+                                                    </div>
+
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
@@ -2240,6 +2274,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                                                 <?php echo form_close(); ?>
                                             </div>
                                         </div>
+
+
                                         <div class="tab-pane <?php echo $get_animate;?> salary-current-tab"
                                             id="set_allowances">
                                             <div class="box">
@@ -2889,7 +2925,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                         </div>
                     </div>
                 </div>
-                <?php } ?>
+
                 <div class="tab-pane <?php echo $get_animate;?>" id="xin_leaves">
                     <div class="box-body">
                         <div class="row no-gutters row-bordered row-border-light">
@@ -4188,79 +4224,94 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 <!-- Include SweetAlert library -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 
-
 <script>
-$(document).ready(function() {
-    // Bind submit event of the form
-    $('#devicein').submit(function(e) {
-        e.preventDefault(); // Prevent form submission
+    function get_gross_salary() {
+        var basic_salary = parseFloat(document.getElementById('basic_salary').value) || 0;
+        var house_rent_allowance = parseFloat(document.getElementById('house_rent_allowance').value) || 0;
+        var medical_allowance = parseFloat(document.getElementById('medical_allowance').value) || 0;
+        var travelling_allowance = parseFloat(document.getElementById('travelling_allowance').value) || 0;
+        var dearness_allowance = parseFloat(document.getElementById('dearness_allowance').value) || 0;
 
-        // Get the form data
-        var formData = $(this).serialize();
+        var gross_salary = basic_salary + house_rent_allowance + medical_allowance + travelling_allowance + dearness_allowance;
+        total_allowance = house_rent_allowance + medical_allowance + travelling_allowance + dearness_allowance;
 
-        // Send AJAX request
-        $.ajax({
-            url: '<?php echo site_url("admin/Employees/add_device"); ?>',
-            type: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: function(response) {
-                // Handle the response from the server
-                console.log(response);
-                Swal.fire({
-                    title: 'Success!',
-                    text: response,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
-            },
-            error: function(xhr, status, error) {
-                console.log(xhr.responseText);
-            }
-        });
-    });
-});
-</script>
-
-<script>
-$(document).ready(function() {
-    // Bind submit event of the form
-    $('#nda_info').submit(function(e) {
-        e.preventDefault(); // Prevent form submission
-        // Get the form data
-        var formData = $(this).serialize();
-        // Send AJAX request
-        $.ajax({
-            url: '<?php echo site_url("admin/Employees/nda"); ?>',
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                // Handle the response from the server
-                console.log(response);
-                Swal.fire({
-                    title: 'Success!',
-                    text: response,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
-            },
-            // error: function(xhr, status, error) {
-            //     console.log(xhr.responseText);
-            // }
-        });
-    });
-});
-</script>
-<script>
-function nda_update_click() {
-    var active = $('#nda_status').val();
-    if (active == 1) {
-        $('#nda_start').fadeIn(500);
-        $('#nda_end').fadeIn(500);
-    } else {
-        $('#nda_start').fadeOut(500);
-        $('#nda_end').fadeOut(500);
+        document.getElementById('gross_salary').value = gross_salary;
+        document.getElementById('total_allowance').value = total_allowance;
     }
-}
-nda_update_click()
+</script>
+
+<script>
+    $(document).ready(function() {
+        // Bind submit event of the form
+        $('#devicein').submit(function(e) {
+            e.preventDefault(); // Prevent form submission
+
+            // Get the form data
+            var formData = $(this).serialize();
+
+            // Send AJAX request
+            $.ajax({
+                url: '<?php echo site_url("admin/Employees/add_device"); ?>',
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    // Handle the response from the server
+                    console.log(response);
+                    Swal.fire({
+                        title: 'Success!',
+                        text: response,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        // Bind submit event of the form
+        $('#nda_info').submit(function(e) {
+            e.preventDefault(); // Prevent form submission
+            // Get the form data
+            var formData = $(this).serialize();
+            // Send AJAX request
+            $.ajax({
+                url: '<?php echo site_url("admin/Employees/nda"); ?>',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    // Handle the response from the server
+                    console.log(response);
+                    Swal.fire({
+                        title: 'Success!',
+                        text: response,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                },
+                // error: function(xhr, status, error) {
+                //     console.log(xhr.responseText);
+                // }
+            });
+        });
+    });
+</script>
+<script>
+    function nda_update_click() {
+        var active = $('#nda_status').val();
+        if (active == 1) {
+            $('#nda_start').fadeIn(500);
+            $('#nda_end').fadeIn(500);
+        } else {
+            $('#nda_start').fadeOut(500);
+            $('#nda_end').fadeOut(500);
+        }
+    }
+    nda_update_click()
 </script>

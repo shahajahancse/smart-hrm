@@ -84,6 +84,7 @@ $(document).ready(function(){
 					toastr.success(JSON.success);
 					$('input[name="csrf_hrsale"]').val(JSON.csrf_hash);
 				}
+
 			}
 		});
 	});

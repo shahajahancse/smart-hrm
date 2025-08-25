@@ -4,7 +4,7 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title" id="basic-layout-tooltip">Employee Provident Fund Accounts</h4>
-        
+
       </div>
       <div class="card-body collapse in">
         <div class="card-block">
@@ -68,6 +68,8 @@
   </div>
 </div>
 
+  <?php $pf_setting = $this->db->where('company_id', 1)->get('hrsale_provident_fund_settings')->row(); ?>
+
 <!-- Add/Edit PF Account Modal -->
 <div class="modal fade text-left" id="add_edit_pf_account_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -93,15 +95,15 @@
           </div>
           <div class="form-group">
             <label for="current_balance">Current Balance</label>
-            <input type="number" step="0.01" class="form-control" name="current_balance" id="current_balance" required>
+            <input type="number" step="0.01" class="form-control" name="current_balance" id="current_balance">
           </div>
           <div class="form-group">
             <label for="total_employee_contribution">Total Employee Contribution</label>
-            <input type="number" step="0.01" class="form-control" name="total_employee_contribution" id="total_employee_contribution" required>
+            <input type="number" value="<?= $pf_setting->employee_contribution_rate ?>" class="form-control" name="total_employee_contribution" id="total_employee_contribution" required>
           </div>
           <div class="form-group">
             <label for="total_employer_contribution">Total Company Contribution</label>
-            <input type="number" step="0.01" class="form-control" name="total_employer_contribution" id="total_employer_contribution" required>
+            <input type="number" value="<?= $pf_setting->employer_contribution_rate ?>" class="form-control" value="1.00" name="total_employer_contribution" id="total_employer_contribution" required>
           </div>
           <div class="form-group">
             <label for="total_interest_earned">Total Interest Earned</label>
