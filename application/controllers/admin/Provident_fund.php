@@ -299,12 +299,25 @@ class Provident_fund extends MY_Controller {
         }
 
         $employee_id = $this->input->post('employee_id');
-        $start_date = $this->input->post('start_date');
-        $end_date = $this->input->post('end_date');
+        $report_type = $this->input->post('report_type');
 
-        if(empty($employee_id) || empty($start_date) || empty($end_date)){
-            echo "<div class='alert alert-danger'>Please select an employee and a date range.</div>";
+        if(empty($employee_id)){
+            echo "<div class='alert alert-danger'>Please select an employee.</div>";
             return;
+        }
+
+        if ($report_type == 'monthly') {
+            $month = $this->input->post('month');
+            $year = $this->input->post('year');
+            if(empty($month) || empty($year)){
+                echo "<div class='alert alert-danger'>Please select a month and year for the monthly statement.</div>";
+                return;
+            }
+            $start_date = date('Y-m-d', strtotime($year . '-' . $month . '-01'));
+            $end_date = date('Y-m-t', strtotime($start_date));
+        } else { // Full report
+            $start_date = '1970-01-01';
+            $end_date = date('Y-m-d', strtotime('+5 years')); // Far future date
         }
 
         // 1. Get Employee Details & PF Account

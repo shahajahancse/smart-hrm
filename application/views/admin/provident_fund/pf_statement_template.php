@@ -13,7 +13,6 @@ foreach($transactions as $trans) {
 <div class="card">
     <div class="card-header">
         <h4 class="card-title">Provident Fund Statement</h4>
-        <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
         <div class="heading-elements">
             <ul class="list-inline mb-0">
                 <li><button type="button" class="btn btn-secondary btn-sm" onclick="window.print();"><i class="fa fa-print"></i> Print</button></li>
@@ -27,9 +26,7 @@ foreach($transactions as $trans) {
                     <p><strong>Employee:</strong> <?php echo $employee->first_name . ' ' . $employee->last_name; ?></p>
                     <p><strong>PF Account No:</strong> <?php echo $pf_account->account_number; ?></p>
                 </div>
-                <div class="col-md-6 text-right">
-                    <p><strong>Statement Period:</strong> <?php echo date("d M Y", strtotime($start_date)); ?> to <?php echo date("d M Y", strtotime($end_date)); ?></p>
-                </div>
+               
             </div>
 
             <hr>
@@ -92,7 +89,7 @@ foreach($transactions as $trans) {
                             </tr>
                         <?php endif; ?>
                         <tr>
-                            <th colspan="4" class="text-right">Closing Balance as of <?php echo date("d M Y", strtotime($end_date)); ?></th>
+                            <th colspan="4" class="text-right">Closing Balance </th>
                             <th class="text-right"><?php echo number_format($closing_balance, 2); ?></th>
                         </tr>
                     </tbody>
