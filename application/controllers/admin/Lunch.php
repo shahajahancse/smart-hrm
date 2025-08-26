@@ -245,17 +245,8 @@ class Lunch extends MY_Controller
         } else {
             redirect('admin/');
         }
-        $data['query'] = $this->db->get_where('lunch_package', array('id' => 1))->result();
-        $data['title'] = $this->lang->line('xin_employees') . ' | ' . $this->Xin_model->site_title();
-        $data['breadcrumbs'] = 'Lunch Package';
-        $data['path_url'] = 'lunch';
-        if (!empty($session)) {
-            $data['subview'] = $this->load->view("admin/lunch/lunch_package", $data, true);
-            $this->load->view('admin/layout/layout_main', $data); //page load
-        } else {
-            redirect('admin/');
-        }
     }
+    
     public function details($lunchid, $date)
     {
         $session = $this->session->userdata('username');
@@ -351,9 +342,9 @@ class Lunch extends MY_Controller
         $sql = $this->input->post('sql');
         $status = $this->input->post('status');
         $emp_id = explode(',', trim($sql));
-      
+
         $data['all_employees'] = $this->Attendance_model->get_emp_info($emp_id);
-      
+
         $data['first_date'] = $first_date;
         $data['second_date'] = $second_date;
         $data['emp_id'] = $emp_id;
@@ -504,7 +495,7 @@ class Lunch extends MY_Controller
             ->set_content_type('application/json')
             ->set_output(json_encode($lunch_payment));
     }
-    
+
     public function process()
     {
         $session = $this->session->userdata('username');
@@ -786,7 +777,7 @@ class Lunch extends MY_Controller
 
         $first_date = $this->input->post('first_date');
         $second_date = $this->input->post('second_date');
-      
+
         $data['first_date'] = $first_date;
         $data['second_date'] = $second_date;
         $data['company_info'] = $this->Xin_model->get_company_info(1);
@@ -939,17 +930,17 @@ class Lunch extends MY_Controller
         $this->db->select('user_id, first_name, last_name, active_lunch');
         $this->db->where_in('status', [1, 4, 5]);
         $result = $this->db->order_by('active_lunch', 'desc')->get('xin_employees')->result();
-    
+
         // Return the data as JSON
         header('Content-Type: application/json');
         echo json_encode($result);
     }
-    
+
     public function change_lunch_status(){
         $menu_data = array(
             'active_lunch'		 => $_POST['replace_status'],
         );
-      
+
         $this->db->where('user_id', $_POST['id'])->update('xin_employees', $menu_data);
     }
     public function pay_vend_ajax_request()
@@ -1240,14 +1231,14 @@ class Lunch extends MY_Controller
             $employee_id[] = $g->emp_id;
             }
         };
-        
+
             $data['employee_id'] = $employee_id;
             $data['first_date'] = $first_date;
             $data['second_date'] = $second_date;
             $data['madal_date_f'] = $madal_date_1;
             $data['madal_date_s'] = $madal_date_2;
-        
-        
+
+
             $this->load->view('admin/lunch/temp_data', $data);
     }
     public function emp_lunch_payment_report(){
@@ -1283,14 +1274,14 @@ class Lunch extends MY_Controller
             $employee_id[] = $g->emp_id;
             }
         };
-        
+
             $data['employee_id'] = $employee_id;
             $data['first_date'] = $first_date;
             $data['second_date'] = $second_date;
             $data['madal_date_f'] = $madal_date_1;
             $data['madal_date_s'] = $madal_date_2;
-        
-        
+
+
             $this->load->view('admin/lunch/temp_data_ex', $data);
     }
 
@@ -1317,5 +1308,5 @@ class Lunch extends MY_Controller
     //     }
     // }
 
-    
+
 }

@@ -485,24 +485,44 @@ class Xin_model extends CI_Model {
 			$arr['emp_festival_bonus'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
-		}
-		else if($mMethod=='advance_salary_report') {
+		} else if($mMethod=='advance_salary_report') {
 			$arr['pay_advn_rpt_active'] = 'active';
 			$arr['payrl_open'] = 'active';
 			return $arr;
 
+			// provident fund
+		} else if($mClass=='provident_fund' && $mMethod=='reports') {
+			$arr['pf_reports_active'] = 'active';
+			$arr['provident_fund_open'] = 'active';
+			return $arr;
+		} else if($mClass=='provident_fund' && $mMethod=='loan_applications') {
+			$arr['loan_applications_active'] = 'active';
+			$arr['provident_fund_open'] = 'active';
+			return $arr;
+		} else if($mClass=='provident_fund' && $mMethod=='withdrawal_requests') {
+			$arr['withdrawal_requests_active'] = 'active';
+			$arr['provident_fund_open'] = 'active';
+			return $arr;
+		} else if($mClass=='provident_fund' && $mMethod=='yearly_reports') {
+			$arr['yearly_reports_active'] = 'active';
+			$arr['provident_fund_open'] = 'active';
+			return $arr;
+		} else if($mClass=='provident_fund' && $mMethod=='monthly_contributions') {
+			$arr['monthly_contributions_active'] = 'active';
+			$arr['provident_fund_open'] = 'active';
+			return $arr;
+		} else if($mClass=='provident_fund' && $mMethod=='employee_list') {
+			$arr['employee_list_active'] = 'active';
+			$arr['provident_fund_open'] = 'active';
+			return $arr;
+		} else if($mClass=='provident_fund') {
+			$arr['pf_settings_active'] = 'active';
+			$arr['provident_fund_open'] = 'active';
+			return $arr;
+			// provident fund
+
 			// Store
-		} else if($mClass=='inventory' && $mMethod=='index') {
-			$arr['invtry_open'] = 'active';
-			$arr['my_requi_active'] = 'active';
-			return $arr;
-		} else if($mClass=='inventory' && $mMethod=='index') {
-			$arr['invtry_open'] = 'active';
-			$arr['requi_active'] = 'active';
-			$arr['iqlist_open'] = 'active';
-			return $arr;
-		}
-		else if($mClass=='inventory' && $mMethod=='report') {
+		} else if($mClass=='inventory' && $mMethod=='report') {
 			$arr['invtry_open'] = 'active';
 			$arr['inreport_active'] = 'active';
 			return $arr;
@@ -544,7 +564,6 @@ class Xin_model extends CI_Model {
 			$arr['requi_active'] = 'active';
 			$arr['reject_open'] = 'active';
 			return $arr;
-
 		} else if($mClass=='inventory' && $mMethod=='purchase') {
 			$arr['invtry_open'] = 'active';
 			$arr['puiqu_active'] = 'active';
@@ -570,13 +589,17 @@ class Xin_model extends CI_Model {
 			$arr['puiqu_active'] = 'active';
 			$arr['pusreject_open'] = 'active';
 			return $arr;
-
+		} else if($mClass=='inventory' && $mMethod=='daily_pkg') {
+			$arr['invtry_open'] = 'active';
+			$arr['insetting_open'] = 'active';
+			$arr['daily_pkg_open'] = 'active';
+			return $arr;
 		} else if($mClass=='inventory' && $mMethod=='supplier') {
 			$arr['invtry_open'] = 'active';
 			$arr['insetting_open'] = 'active';
 			$arr['supplier_open'] = 'active';
 			return $arr;
-		}  else if($mClass=='inventory' && $mMethod=='unit') {
+		} else if($mClass=='inventory' && $mMethod=='unit') {
 			$arr['invtry_open'] = 'active';
 			$arr['insetting_open'] = 'active';
 			$arr['unit_open'] = 'active';
@@ -590,6 +613,12 @@ class Xin_model extends CI_Model {
 			$arr['invtry_open'] = 'active';
 			$arr['insetting_open'] = 'active';
 			$arr['subcat_open'] = 'active';
+			return $arr;
+		} else if($mClass=='inventory') {
+			$arr['invtry_open'] = 'active';
+			$arr['my_requi_active'] = 'active';
+			$arr['requi_active'] = 'active';
+			$arr['iqlist_open'] = 'active';
 			return $arr;
 		} 	// Store
 
@@ -683,6 +712,14 @@ class Xin_model extends CI_Model {
 			return $arr;
 		} else if($mMethod=='timelogs' && $mClass=='project') {
 			$arr['timelogs_active'] = 'active';
+			$arr['project_open'] = 'active';
+			return $arr;
+		} else if($mMethod=='emp_timelogs' && $mClass=='project') {
+			$arr['emp_timelogs'] = 'active';
+			$arr['project_open'] = 'active';
+			return $arr;
+		} else if($mMethod=='timelogs_report' && $mClass=='project') {
+			$arr['timelogs_report'] = 'active';
 			$arr['project_open'] = 'active';
 			return $arr;
 		} else if($mMethod=='task_categories' && $mClass=='project') {
@@ -787,10 +824,14 @@ class Xin_model extends CI_Model {
 			$arr['system_open'] = 'active';
 			return $arr;
 		} else if($mClass=='roles') {
-			$arr['roles_active'] = 'active';
-			$arr['stff_open'] = 'active';
+			$arr['role_active'] = 'active';
+			$arr['system_open'] = 'active';
 			return $arr;
-		} else if($mMethod=='constants' && $mClass=='settings') {
+		} else if($mClass=='settings' && $mMethod=='payment_gateway') {
+			$arr['payment_gateway_active'] = 'active';
+			$arr['system_open'] = 'active';
+			return $arr;
+		} else if($mClass=='settings' && $mMethod=='constants') {
 			$arr['constants_active'] = 'active';
 			$arr['system_open'] = 'active';
 			return $arr;
@@ -814,25 +855,21 @@ class Xin_model extends CI_Model {
 			$arr['settings_active'] = 'active';
 			$arr['system_open'] = 'active';
 			return $arr;
-		} else if($mMethod=='changelog') {
-			$arr['changelog_active'] = 'active';
-			return $arr;
 		} else if($mClass=='languages') {
 			$arr['languages_active'] = 'active';
 			$arr['system_open'] = 'active';
+			return $arr;
+		} else if($mMethod=='changelog') {
+			$arr['changelog_active'] = 'active';
 			return $arr;
 		} else if($mClass=='events' && $mMethod=='calendar') {
 			$arr['hr_ecalendar_active'] = 'active';
 			$arr['hr_events_open'] = 'active';
 			return $arr;
-		} else if($mClass=='meetings') {
-			$arr['hr_meetings_active'] = 'active';
-			$arr['hr_events_open'] = 'active';
-			return $arr;
-		} else if($mClass=='events') {
-			$arr['hr_events_active'] = 'active';
-			$arr['hr_events_open'] = 'active';
-			return $arr;
+		// } else if($mClass=='meetings') {
+		// 	$arr['hr_meetings_active'] = 'active';
+		// 	$arr['hr_events_open'] = 'active';
+		// 	return $arr;
 		} else if($mClass=='events' && $mMethod=='epm_event') {
 			$arr['epm_event'] = 'active';
 			$arr['hr_events_open'] = 'active';
@@ -840,6 +877,22 @@ class Xin_model extends CI_Model {
 		} else if($mClass=='events' && $mMethod=='notice') {
 			$arr['notice_active'] = 'active';
 			$arr['hr_events_open'] = 'active';
+			return $arr;
+		} else if($mClass=='events') {
+			$arr['hr_events_active'] = 'active';
+			$arr['hr_events_open'] = 'active';
+			return $arr;
+		} else if($mClass=='meeting_rooms') {
+			$arr['meeting_open'] = 'active';
+			$arr['meeting_rooms'] = 'active';
+			return $arr;
+		} else if($mClass=='meetings') {
+			$arr['meeting_open'] = 'active';
+			$arr['meetings'] = 'active';
+			return $arr;
+		} else if($mClass=='meeting_reports') {
+			$arr['meeting_open'] = 'active';
+			$arr['meeting_reports'] = 'active';
 			return $arr;
 		} else if($mClass=='goal_tracking' && $mMethod=='calendar') {
 			$arr['goal_tracking_cal_active'] = 'active';
