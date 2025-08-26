@@ -99,11 +99,11 @@
           </div>
           <div class="form-group">
             <label for="total_employee_contribution">Total Employee Contribution</label>
-            <input type="number" value="<?= $pf_setting->employee_contribution_rate ?>" class="form-control" name="total_employee_contribution" id="total_employee_contribution" required>
+            <input type="number" value="<?php echo isset($pf_setting->employee_contribution_rate) ? $pf_setting->employee_contribution_rate : '';?>" class="form-control" name="total_employee_contribution" id="total_employee_contribution" required>
           </div>
           <div class="form-group">
             <label for="total_employer_contribution">Total Company Contribution</label>
-            <input type="number" value="<?= $pf_setting->employer_contribution_rate ?>" class="form-control" value="1.00" name="total_employer_contribution" id="total_employer_contribution" required>
+            <input type="number" value="<?php echo isset($pf_setting->employer_contribution_rate) ? $pf_setting->employer_contribution_rate : '';?>" class="form-control" name="total_employer_contribution" id="total_employer_contribution" required>
           </div>
           <div class="form-group">
             <label for="total_interest_earned">Total Interest Earned</label>

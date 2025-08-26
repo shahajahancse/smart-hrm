@@ -2,15 +2,16 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Salary_model extends CI_Model {
- 
+
     public function __construct()
     {
         parent::__construct();
+        $this->load->model("Provident_fund_model");
     }
 
     public function salary_process($process_month, $grid_emp_id)
     {
-        
+
         set_time_limit(0);
         ini_set('memory_limit', -1);
         ini_set('max_execution_time', 0);
@@ -33,10 +34,6 @@ class Salary_model extends CI_Model {
             }
 
             $first_date  = date("Y-m-d", strtotime($process_month));
-            // skip salary proccess
-            // if($salary < 1) {
-            //     continue;
-            // }
             $salary_month = trim(substr($end_date,0,7));
             $join_month = trim(substr($doj,0,7));
             if (strtotime($join_month) > strtotime($salary_month)) {
@@ -92,36 +89,24 @@ class Salary_model extends CI_Model {
             }
 
             //=======PRESENT STATUS ======
-            /*$late_count = $this->attendance_count_status($emp_id,1,$first_date,$end_date,"late_status");
-            $extra_p = $this->attendance_count_status($emp_id,"Present",$first_date,$end_date,'attendance_status');
-            $meeting = $this->attendance_count_status($emp_id,"Meeting",$first_date,$end_date,'attendance_status');*/
             $rows = $this->count_attendance_status_wise($emp_id,$first_date,$end_date);
             //dd($rows);
             $leave = $this->leave_count_status($emp_id, $first_date,$end_date, 2);
 
             $present = ($rows->attend + $rows->HalfDay) - ($rows->present_error2 + $rows->present_error1);
-
-
-
             $leaves = $leave->el + $leave->sl;
             $extra_attend = $rows->extra_p;
-            // $extra_attend = ($rows->extra_p + $rows->meeting) - $rows->attend;
             $absent = $num_of_days - ($leaves + $rows->weekend + $rows->holiday + $present + $ba_absent);
 
-
-
-
-            // dd($rows);
             //=======PRESENT STATUS END======
-
             //======= salary calculation here ==========//
             $perday_salary = round(($salary / $num_of_days), 2);
 
             // before after absent deduction
             $aba_deduct = 0;
-            $aba_deduct = round(($ba_absent * $perday_salary), 2); 
+            $aba_deduct = round(($ba_absent * $perday_salary), 2);
             // absent deduction
-            $absent_deduct = 0; 
+            $absent_deduct = 0;
             $absent_deduct = round(($perday_salary * $absent), 2);
 
             // late deduction
@@ -132,19 +117,22 @@ class Salary_model extends CI_Model {
                 $late_deduct = round(($perday_salary * $late_day), 2);
             }
 
-            // extra pay salary 
+            // provident fund
+            $pf_deduct = 0;
+            $pf_deduct = $this->cal_provident_fund($emp_id, $salary, $salary_month);
+
+            // extra pay salary
             $extra_pay = 0;
             $extra_pay = round(($perday_salary * $extra_attend), 2);
 
 
-            // pay salary 
+            // pay salary
             $pay_salary = round(($salary - ($late_deduct + $absent_deduct)), 2);
             $advanced_salary = $this->db->select('approved_amount')->where('emp_id',$emp_id )->where('effective_month',$process_month)->get('xin_advance_salaries');
             if($advanced_salary->num_rows() > 0){
                 $a = $advanced_salary->row()->approved_amount;
                 $advanced = $a;
-            }
-            else{
+            }else{
                     $advanced = 0;
             }
             // dd($advanced);
@@ -169,6 +157,7 @@ class Salary_model extends CI_Model {
                 'late_deduct' => $late_deduct,
                 'aba_deduct' => $aba_deduct,
                 'absent_deduct' => $absent_deduct,
+                'pf_deduct' => $pf_deduct,
                 'm_pay_day'    => 0,
                 'modify_salary' => 0,
                 'other_payment' => $extra_pay,
@@ -225,6 +214,34 @@ class Salary_model extends CI_Model {
         return 'Successfully Insert Done';
     }
 
+    function cal_provident_fund($emp_id, $basic_salary, $salary_month) {
+        $check = $this->db->where('user_id', $emp_id)->get('hrsale_provident_fund_accounts')->row();
+        if (empty($check)) {
+            return 0;
+        } else {
+            $setting = $this->db->where('company_id', 1)->get('hrsale_provident_fund_settings')->row();
+            $emp_con_amt = round(($basic_salary / 100) * $setting->employee_contribution_rate,2);
+            $off_con_amt = round(($basic_salary / 100) * $setting->employer_contribution_rate,2);
+
+            $data = array(
+                'user_id' => $emp_id,
+                'account_id' => $check->account_id, // Add account_id user here
+                'contribution_month' => $salary_month .'-01', // Append -01 for valid date
+                'employee_contribution' => $emp_con_amt,
+                'employer_contribution' => $off_con_amt,
+                'total_contribution' => $emp_con_amt + $off_con_amt
+            );
+
+            $haves = $this->db->where('user_id', $emp_id)->where('contribution_month', $salary_month .'-01')->get('hrsale_provident_fund_contributions')->row();
+            if (!empty($haves)) {
+                $result = $this->Provident_fund_model->update_contribution($haves->contribution_id, $data);
+            } else {
+                $this->Provident_fund_model->add_contribution($data);
+            }
+            return $emp_con_amt;
+        }
+    }
+
 
     function leave_count_status($emp_id,$start_date,$end_date, $status)
     {
@@ -258,18 +275,18 @@ class Salary_model extends CI_Model {
                 SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END ) AS attend,
                 SUM(CASE WHEN status = 'Absent'   THEN 1 ELSE 0 END ) AS absent,
                 SUM(CASE WHEN status = 'Off Day'  THEN 1 ELSE 0 END ) AS weekend,
-                SUM(CASE WHEN status = 'Holiday'  THEN 1 ELSE 0 END ) AS holiday,  
-                SUM(CASE WHEN attendance_status = 'HalfDay'  THEN 0.5 ELSE 0 END ) AS HalfDay, 
-                SUM(CASE WHEN status = 'Present' AND clock_in = '' AND clock_out != '' THEN 0.5 ELSE 0 END ) AS present_error1, 
-                SUM(CASE WHEN status = 'Present' AND clock_in != '' AND clock_out = '' THEN 0.5 ELSE 0 END ) AS present_error2,                 
-                SUM(CASE WHEN extra_ap = 1 THEN 1 ELSE 0 END) AS extra_p, 
-                SUM(CASE WHEN late_status = '1' THEN 1 ELSE 0 END ) AS late_status, 
+                SUM(CASE WHEN status = 'Holiday'  THEN 1 ELSE 0 END ) AS holiday,
+                SUM(CASE WHEN attendance_status = 'HalfDay'  THEN 0.5 ELSE 0 END ) AS HalfDay,
+                SUM(CASE WHEN status = 'Present' AND clock_in = '' AND clock_out != '' THEN 0.5 ELSE 0 END ) AS present_error1,
+                SUM(CASE WHEN status = 'Present' AND clock_in != '' AND clock_out = '' THEN 0.5 ELSE 0 END ) AS present_error2,
+                SUM(CASE WHEN extra_ap = 1 THEN 1 ELSE 0 END) AS extra_p,
+                SUM(CASE WHEN late_status = '1' THEN 1 ELSE 0 END ) AS late_status,
             ");
         $this->db->where('employee_id',$emp_id);
         $this->db->where("attendance_date BETWEEN '$FS_on_date' AND '$FS_off_date'");
         $query = $this->db->get('xin_attendance_time');
 
-        
+
         return $query->row();
 
     }
@@ -335,12 +352,12 @@ class Salary_model extends CI_Model {
     public function get_employee_info($emp_ids = null)
     {
         $this->db->select('
-                xin_employees.user_id, 
-                xin_employees.employee_id, 
-                xin_employees.first_name, 
-                xin_employees.last_name, 
-                xin_employees.date_of_joining, 
-                xin_employees.department_id,  
+                xin_employees.user_id,
+                xin_employees.employee_id,
+                xin_employees.first_name,
+                xin_employees.last_name,
+                xin_employees.date_of_joining,
+                xin_employees.department_id,
                 xin_employees.designation_id,
                 xin_employees.basic_salary as salary,
             ');
@@ -417,7 +434,7 @@ class Salary_model extends CI_Model {
         $this->db->group_by('sp.employee_id');
         $this->db->order_by('sp.basic_salary', "DESC");
         $data = $this->db->get()->result();
-    
+
         if($data)
         {
             return $data;
@@ -453,8 +470,8 @@ class Salary_model extends CI_Model {
 
         $data = $this->db->get()->result();
          return $data;
-    
-        
+
+
     }
     public function getall_salary_with_idap($emp_id)
     {
@@ -471,9 +488,9 @@ class Salary_model extends CI_Model {
         $data = $this->db->get()->result();
         return $data;
     }
-    
-    
-    
+
+
+
     public function getall_salary_with_idap_this_y($emp_id)
     {
 
