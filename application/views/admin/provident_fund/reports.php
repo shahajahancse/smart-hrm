@@ -26,19 +26,21 @@
                       <select class="form-control" name="employee_id" id="employee_id_statement" required>
                         <option value="">Select Employee</option>
                         <?php foreach($all_employees as $employee):?>
-                          <option value="<?php echo $employee->employee_id;?>"><?php echo $employee->first_name . ' ' . $employee->last_name;?></option>
+                          <option value="<?php echo $employee->user_id;?>"><?php echo $employee->first_name . ' ' . $employee->last_name;?></option>
                         <?php endforeach;?>
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                     <div class="form-group">
-                      <label for="year_statement">Select Year</label>
-                      <select class="form-control" name="year" id="year_statement" required>
-                        <?php for($i = date('Y'); $i >= 2000; $i--):?>
-                          <option value="<?php echo $i;?>"><?php echo $i;?></option>
-                        <?php endfor;?>
-                      </select>
+                      <label for="start_date_statement">Start Date</label>
+                      <input type="text" class="form-control date" name="start_date" id="start_date_statement" required>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="end_date_statement">End Date</label>
+                      <input type="text" class="form-control date" name="end_date" id="end_date_statement" required>
                     </div>
                   </div>
                 </div>
