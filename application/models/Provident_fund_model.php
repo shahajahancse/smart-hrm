@@ -76,13 +76,52 @@ class Provident_fund_model extends CI_Model {
 
     public function add_contribution($data) {
         $this->db->insert('hrsale_provident_fund_contributions', $data);
-        return $this->db->insert_id();
+        $contribution_id = $this->db->insert_id();
+
+        if ($contribution_id) {
+            $account = $this->get_employee_pf_account($data['user_id']);
+            if ($account) {
+                $new_balance = $account->current_balance + $data['total_contribution'];
+                $new_employee_contribution = $account->total_employee_contribution + $data['employee_contribution'];
+                $new_employer_contribution = $account->total_employer_contribution + $data['employer_contribution'];
+
+                $update_data = array(
+                    'current_balance' => $new_balance,
+                    'total_employee_contribution' => $new_employee_contribution,
+                    'total_employer_contribution' => $new_employer_contribution
+                );
+                $this->update_employee_pf_account($account->account_id, $update_data);
+            }
+        }
+        return $contribution_id;
     }
 
     public function update_contribution($contribution_id, $data) {
+        $old_contribution = $this->get_contribution_by_id($contribution_id);
+        if (!$old_contribution) {
+            return 0;
+        }
+
         $this->db->where('contribution_id', $contribution_id);
         $this->db->update('hrsale_provident_fund_contributions', $data);
-        return $this->db->affected_rows();
+        $affected_rows = $this->db->affected_rows();
+
+        if ($affected_rows > 0) {
+            $account = $this->get_employee_pf_account($data['user_id']);
+            if ($account) {
+                $balance_adjustment = $data['total_contribution'] - $old_contribution->total_contribution;
+                $employee_adjustment = $data['employee_contribution'] - $old_contribution->employee_contribution;
+                $employer_adjustment = $data['employer_contribution'] - $old_contribution->employer_contribution;
+
+                $update_data = array(
+                    'current_balance' => $account->current_balance + $balance_adjustment,
+                    'total_employee_contribution' => $account->total_employee_contribution + $employee_adjustment,
+                    'total_employer_contribution' => $account->total_employer_contribution + $employer_adjustment
+                );
+                $this->update_employee_pf_account($account->account_id, $update_data);
+            }
+        }
+        return $affected_rows;
     }
 
     public function delete_contribution($contribution_id) {
@@ -140,53 +179,72 @@ class Provident_fund_model extends CI_Model {
     }
 
     public function calculate_and_post_interest($year) {
-        // Get all PF accounts
         $pf_accounts = $this->get_all_employee_pf_accounts();
-        // Get PF settings (specifically bank interest rate)
-        $company_id = $this->Xin_model->get_company_id_of_current_user($this->session->userdata('username')['user_id']); // Assuming this function exists
+        $company_id = $this->Xin_model->get_company_id_of_current_user($this->session->userdata('username')['user_id']);
         $pf_settings = $this->get_pf_settings($company_id);
 
         if (!$pf_settings) {
-            return false; // No settings found, cannot calculate interest
+            return false; // No settings found
         }
 
         $bank_interest_rate = $pf_settings->bank_interest_rate / 100;
         $success_count = 0;
 
         foreach ($pf_accounts as $account) {
-            // Check if interest has already been calculated for this year and account
             $this->db->where('account_id', $account->account_id);
             $this->db->where('interest_year', $year);
             $existing_interest = $this->db->get('hrsale_provident_fund_interest')->row();
 
+            $balance_for_interest_calculation = $account->current_balance;
+
             if ($existing_interest) {
-                continue; // Skip if already calculated
+                // Reverse the old interest from the current balance to get the correct base for recalculation
+                $balance_for_interest_calculation -= $existing_interest->interest_amount;
             }
 
-            // Calculate interest based on current balance
-            $interest_amount = $account->current_balance * $bank_interest_rate;
-            $balance_before_interest = $account->current_balance;
-            $balance_after_interest = $account->current_balance + $interest_amount;
+            $interest_amount = $balance_for_interest_calculation * $bank_interest_rate;
+            $balance_after_interest = $balance_for_interest_calculation + $interest_amount;
 
-            // Add interest record
-            $interest_data = array(
-                'account_id' => $account->account_id,
-                'user_id' => $account->user_id,
-                'interest_year' => $year,
-                'interest_amount' => $interest_amount,
-                'balance_before_interest' => $balance_before_interest,
-                'balance_after_interest' => $balance_after_interest
-            );
-            $this->add_interest($interest_data);
+            if ($existing_interest) {
+                // Update existing interest record
+                $interest_data = array(
+                    'interest_amount' => $interest_amount,
+                    'balance_before_interest' => $balance_for_interest_calculation,
+                    'balance_after_interest' => $balance_after_interest
+                );
+                $this->db->where('interest_id', $existing_interest->interest_id);
+                $this->db->update('hrsale_provident_fund_interest', $interest_data);
 
-            // Update PF account current balance and total interest earned
-            $this->update_employee_pf_account(
-                $account->account_id,
-                array(
-                    'current_balance' => $balance_after_interest,
-                    'total_interest_earned' => $account->total_interest_earned + $interest_amount
-                )
-            );
+                // Update PF account balance
+                $interest_adjustment = $interest_amount - $existing_interest->interest_amount;
+                $this->update_employee_pf_account(
+                    $account->account_id,
+                    array(
+                        'current_balance' => $account->current_balance + $interest_adjustment,
+                        'total_interest_earned' => $account->total_interest_earned + $interest_adjustment
+                    )
+                );
+            } else {
+                // Add new interest record
+                $interest_data = array(
+                    'account_id' => $account->account_id,
+                    'user_id' => $account->user_id,
+                    'interest_year' => $year,
+                    'interest_amount' => $interest_amount,
+                    'balance_before_interest' => $balance_for_interest_calculation,
+                    'balance_after_interest' => $balance_after_interest
+                );
+                $this->add_interest($interest_data);
+
+                // Update PF account balance
+                $this->update_employee_pf_account(
+                    $account->account_id,
+                    array(
+                        'current_balance' => $balance_after_interest,
+                        'total_interest_earned' => $account->total_interest_earned + $interest_amount
+                    )
+                );
+            }
             $success_count++;
         }
         return $success_count;

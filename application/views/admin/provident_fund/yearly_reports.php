@@ -21,11 +21,13 @@
                   </select>
                 </div>
               </div>
-              <div class="col-md-4 d-flex align-items-end">
-                <div class="form-group">
+              <div class="col-md-4">
+                <div class="form-group" style="display: flex;flex-direction: column;align-items: flex-start;">
+                  <label for="year">&nbsp;</label>
                   <button type="submit" class="btn btn-primary">Calculate & Post Interest</button>
                 </div>
               </div>
+              
             </div>
           </form>
           <hr>
