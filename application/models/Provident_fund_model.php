@@ -178,8 +178,13 @@ class Provident_fund_model extends CI_Model {
         return $query->result();
     }
 
-    public function calculate_and_post_interest($year) {
-        $pf_accounts = $this->get_all_employee_pf_accounts();
+    public function calculate_and_post_interest($year, $user_id = null) {
+        if ($user_id) {
+            $pf_account = $this->get_employee_pf_account($user_id);
+            $pf_accounts = $pf_account ? array($pf_account) : array();
+        } else {
+            $pf_accounts = $this->get_all_employee_pf_accounts();
+        }
         $company_id = $this->Xin_model->get_company_id_of_current_user($this->session->userdata('username')['user_id']);
         $pf_settings = $this->get_pf_settings($company_id);
 
@@ -334,9 +339,55 @@ class Provident_fund_model extends CI_Model {
     }
 
     public function get_yearly_interest_report_by_employee_id_and_year($user_id, $year) {
+        $this->db->select('t1.*, t2.first_name, t2.last_name');
+        $this->db->from('hrsale_provident_fund_interest as t1');
+        $this->db->join('xin_employees as t2', 't1.user_id = t2.user_id', 'left');
+        $this->db->where('t1.user_id', $user_id);
+        $this->db->where('t1.interest_year', $year);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function get_opening_balance($user_id, $start_date) {
         $this->db->where('user_id', $user_id);
-        $this->db->where('interest_year', $year);
-        $query = $this->db->get('hrsale_provident_fund_interest');
+        $account = $this->db->get('hrsale_provident_fund_accounts')->row();
+        if(!$account) return 0;
+
+        $opening_balance = $account->opening_balance;
+
+        // Contributions
+        $this->db->select_sum('total_contribution');
+        $this->db->where('user_id', $user_id);
+        $this->db->where('contribution_month <', $start_date);
+        $contributions = $this->db->get('hrsale_provident_fund_contributions')->row()->total_contribution;
+
+        // Interest
+        $this->db->select_sum('interest_amount');
+        $this->db->where('user_id', $user_id);
+        $this->db->where('calculated_at <', $start_date);
+        $interest = $this->db->get('hrsale_provident_fund_interest')->row()->interest_amount;
+
+        // Withdrawals
+        $this->db->select_sum('approved_amount');
+        $this->db->where('user_id', $user_id);
+        $this->db->where('status', 'disbursed');
+        $this->db->where('disbursed_date <', $start_date);
+        $withdrawals = $this->db->get('hrsale_provident_fund_withdrawals')->row()->approved_amount;
+
+        return $opening_balance + $contributions + $interest - $withdrawals;
+    }
+
+    public function get_transactions($user_id, $start_date, $end_date) {
+        $sql = "
+            SELECT contribution_month as date, 'Contribution' as description, total_contribution as amount, 'credit' as type FROM hrsale_provident_fund_contributions WHERE user_id = ? AND contribution_month BETWEEN ? AND ?
+            UNION ALL
+            SELECT disbursed_date as date, CONCAT('Withdrawal: ', purpose) as description, approved_amount as amount, 'debit' as type FROM hrsale_provident_fund_withdrawals WHERE user_id = ? AND status = 'disbursed' AND disbursed_date BETWEEN ? AND ?
+            UNION ALL
+            SELECT calculated_at as date, CONCAT('Interest for year ', interest_year) as description, interest_amount as amount, 'credit' as type FROM hrsale_provident_fund_interest WHERE user_id = ? AND calculated_at BETWEEN ? AND ?
+            ORDER BY date ASC
+        ";
+
+        $query = $this->db->query($sql, array($user_id, $start_date, $end_date, $user_id, $start_date, $end_date, $user_id, $start_date, $end_date));
         return $query->result();
     }
 

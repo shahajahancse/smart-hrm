@@ -145,33 +145,81 @@ class Provident_fund extends MY_Controller {
         $data['arr_mod'] = array('provident_fund_open' => 'active', 'yearly_reports_active' => 'active');
         $role_resources_ids = $this->Xin_model->user_role_resource();
 
-            if(!empty($session)){
-                $this->load->library('form_validation');
+        if(!empty($session)){
+            $this->load->library('form_validation');
 
-                if ($this->input->post('type') === 'calculate_interest') {
-                    $year = $this->input->post('year');
-                    if (empty($year)) {
-                        $return['error'] = 'Please select a year.';
-                        $this->output->set_content_type('application/json')->set_output(json_encode($return));
-                        exit();
-                    }
-                    $result = $this->Provident_fund_model->calculate_and_post_interest($year);
-                    if ($result !== false) {
-                        $return['success'] = 'Interest calculated and posted for ' . $result . ' accounts.';
-                    } else {
-                        $return['error'] = 'Failed to calculate and post interest. Check PF settings.';
-                    }
+            if ($this->input->post('type') === 'calculate_interest') {
+                $year = $this->input->post('year');
+                $employee_id = $this->input->post('employee_id');
+                if (empty($year)) {
+                    $return['error'] = 'Please select a year.';
                     $this->output->set_content_type('application/json')->set_output(json_encode($return));
                     exit();
                 }
-
-                $data['yearly_interests'] = $this->Provident_fund_model->get_yearly_interest_report(date('Y')); // Default to current year
-                $data['subview'] = $this->load->view("admin/provident_fund/yearly_reports", $data, TRUE);
-                $this->load->view('admin/layout/layout_main', $data); //page load
-            } else {
-                redirect('admin/');
+                $result = $this->Provident_fund_model->calculate_and_post_interest($year, $employee_id);
+                if ($result !== false) {
+                    $return['success'] = 'Interest calculated and posted for ' . $result . ' accounts.';
+                } else {
+                    $return['error'] = 'Failed to calculate and post interest. Check PF settings.';
+                }
+                $this->output->set_content_type('application/json')->set_output(json_encode($return));
+                exit();
             }
 
+            $year = $this->input->get('year') ? $this->input->get('year') : date('Y');
+            $employee_id = $this->input->get('employee_id');
+
+            if ($employee_id) {
+                $data['yearly_interests'] = $this->Provident_fund_model->get_yearly_interest_report_by_employee_id_and_year($employee_id, $year);
+            } else {
+                $data['yearly_interests'] = $this->Provident_fund_model->get_yearly_interest_report($year);
+            }
+
+            $data['all_employees'] = $this->Xin_model->get_employees();
+            $data['selected_year'] = $year;
+            $data['selected_employee_id'] = $employee_id;
+
+            $data['subview'] = $this->load->view("admin/provident_fund/yearly_reports", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/');
+        }
+    }
+
+    public function export_yearly_report() {
+        $year = $this->input->get('year') ? $this->input->get('year') : date('Y');
+        $employee_id = $this->input->get('employee_id');
+
+        if ($employee_id) {
+            $data = $this->Provident_fund_model->get_yearly_interest_report_by_employee_id_and_year($employee_id, $year);
+        } else {
+            $data = $this->Provident_fund_model->get_yearly_interest_report($year);
+        }
+
+        $filename = "provident_fund_report_" . $year . ".csv";
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+        $output = fopen('php://output', 'w');
+
+        // Add header row
+        fputcsv($output, array('Employee Name', 'Interest Year', 'Balance Before Interest', 'Interest Amount', 'Balance After Interest'));
+
+        // Add data rows
+        if (!empty($data)) {
+            foreach ($data as $row) {
+                fputcsv($output, array(
+                    $row->first_name . ' ' . $row->last_name,
+                    $row->interest_year,
+                    $row->balance_before_interest,
+                    $row->interest_amount,
+                    $row->balance_after_interest
+                ));
+            }
+        }
+
+        fclose($output);
+        exit();
     }
 
     public function withdrawal_requests() {
@@ -249,26 +297,65 @@ class Provident_fund extends MY_Controller {
         if(empty($session)){
             redirect('admin/');
         }
-        $data['title'] = 'Generate Provident Fund Statement';
-        $data['breadcrumbs'] = 'Generate Provident Fund Statement';
-        $data['path_url'] = 'provident_fund/generate_pf_statement';
-        $data['arr_mod'] = array('provident_fund_open' => 'active', 'pf_statement_active' => 'active');
-        $role_resources_ids = $this->Xin_model->user_role_resource();
 
-            if(!empty($session)){
-                // You might need to pass specific employee ID or date range for the statement
-                // For now, let's assume it fetches all necessary data for a general statement
-                $data['all_employees'] = $this->Xin_model->get_employees();
-                $data['pf_accounts'] = $this->Provident_fund_model->get_all_employee_pf_accounts();
-                $data['contributions'] = $this->Provident_fund_model->get_all_contributions();
-                $data['withdrawals'] = $this->Provident_fund_model->get_all_withdrawals();
-                $data['loans'] = $this->Provident_fund_model->get_all_loans();
-                $data['subview'] = $this->load->view("admin/provident_fund/pf_statement_report", $data, TRUE);
-                echo $data['subview']; //page load
-            } else {
-                redirect('admin/');
+        $employee_id = $this->input->post('employee_id');
+        $report_type = $this->input->post('report_type');
+
+        if(empty($employee_id)){
+            echo "<div class='alert alert-danger'>Please select an employee.</div>";
+            return;
+        }
+
+        if ($report_type == 'monthly') {
+            $month = $this->input->post('month');
+            $year = $this->input->post('year');
+            if(empty($month) || empty($year)){
+                echo "<div class='alert alert-danger'>Please select a month and year for the monthly statement.</div>";
+                return;
             }
+            $start_date = date('Y-m-d', strtotime($year . '-' . $month . '-01'));
+            $end_date = date('Y-m-t', strtotime($start_date));
+        } else { // Full report
+            $start_date = '1970-01-01';
+            $end_date = date('Y-m-d', strtotime('+5 years')); // Far future date
+        }
 
+        // 1. Get Employee Details & PF Account
+        $employee_result = $this->Xin_model->read_user_info($employee_id);
+        $data['employee'] = isset($employee_result[0]) ? $employee_result[0] : null;
+        $data['pf_account'] = $this->Provident_fund_model->get_employee_pf_account($employee_id);
+
+        if(!$data['employee'] || !$data['pf_account']){
+            echo "<div class='alert alert-danger'>Provident Fund account not found for the selected employee.</div>";
+            return;
+        }
+
+        // 2. Get Opening Balance
+        $data['opening_balance'] = $this->Provident_fund_model->get_opening_balance($employee_id, $start_date);
+
+        // 3. Get Transactions
+        $transactions = $this->Provident_fund_model->get_transactions($employee_id, $start_date, $end_date);
+        
+        // 4. Process transactions and calculate running balance
+        $running_balance = $data['opening_balance'];
+        $processed_transactions = array();
+        foreach($transactions as $trans) {
+            if($trans->type == 'credit') {
+                $running_balance += $trans->amount;
+            } else { // debit
+                $running_balance -= $trans->amount;
+            }
+            $trans->running_balance = $running_balance;
+            $processed_transactions[] = $trans;
+        }
+
+        $data['transactions'] = $processed_transactions;
+        $data['start_date'] = $start_date;
+        $data['end_date'] = $end_date;
+        $data['closing_balance'] = $running_balance;
+
+        // 5. Load the statement view
+        $this->load->view('admin/provident_fund/pf_statement_template', $data);
     }
 
     public function add_edit_pf_account() {

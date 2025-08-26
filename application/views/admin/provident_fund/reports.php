@@ -26,24 +26,35 @@
                       <select class="form-control" name="employee_id" id="employee_id_statement" required>
                         <option value="">Select Employee</option>
                         <?php foreach($all_employees as $employee):?>
-                          <option value="<?php echo $employee->employee_id;?>"><?php echo $employee->first_name . ' ' . $employee->last_name;?></option>
+                          <option value="<?php echo $employee->user_id;?>"><?php echo $employee->first_name . ' ' . $employee->last_name;?></option>
                         <?php endforeach;?>
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <!-- <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="month_statement">Select Month</label>
+                      <select class="form-control" name="month" id="month_statement" required>
+                        <?php for($m=1; $m<=12; $m++): ?>
+                          <option value="<?php echo $m; ?>" <?php echo ($m == date('m')) ? 'selected' : ''; ?>><?php echo date('F', mktime(0,0,0,$m, 1, date('Y'))); ?></option>
+                        <?php endfor; ?>
+                      </select>
+                    </div>
+                  </div> -->
+                  <!-- <div class="col-md-3">
                     <div class="form-group">
                       <label for="year_statement">Select Year</label>
                       <select class="form-control" name="year" id="year_statement" required>
                         <?php for($i = date('Y'); $i >= 2000; $i--):?>
-                          <option value="<?php echo $i;?>"><?php echo $i;?></option>
+                          <option value="<?php echo $i;?>" <?php echo ($i == date('Y')) ? 'selected' : '';?>><?php echo $i;?></option>
                         <?php endfor;?>
                       </select>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="form-actions">
-                  <button type="submit" class="btn btn-primary">Generate Statement</button>
+                  <!-- <button type="submit" id="monthly_statement_btn" class="btn btn-primary">Generate Statement</button> -->
+                  <button type="button" id="full_report_btn" class="btn btn-info">Generate Full Report</button>
                 </div>
               </form>
               <div id="pf_statement_result" class="mt-2">
@@ -134,16 +145,38 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#pf_statement_form").submit(function(e){
+    // Handler for both buttons
+    $("#monthly_statement_btn, #full_report_btn").click(function(e){
         e.preventDefault();
-        var obj = $(this), action = obj.attr('action');
+        
+        var employee_id = $('#employee_id_statement').val();
+        if (!employee_id) {
+            toastr.error('Please select an employee.');
+            return;
+        }
+
+        var obj = $('#pf_statement_form');
+        var action = obj.attr('action');
+        var form_data = obj.serialize();
+
+        // Add report type based on button clicked
+        if ($(this).attr('id') == 'full_report_btn') {
+            form_data += "&report_type=full";
+        } else {
+            form_data += "&report_type=monthly";
+        }
+
         $.ajax({
             type: "POST",
             url: action,
-            data: obj.serialize(),
+            data: form_data,
             cache: false,
             success: function (response) {
                 $('#pf_statement_result').html(response);
+            },
+            error: function (xhr, status, error) {
+                toastr.error('An error occurred while generating the report.');
+                console.log(xhr.responseText);
             }
         });
     });

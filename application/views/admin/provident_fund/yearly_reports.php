@@ -1,4 +1,8 @@
-<?php $session = $this->session->userdata('username');?>
+<?php 
+$session = $this->session->userdata('username');
+$selected_year = isset($selected_year) ? $selected_year : date('Y');
+$selected_employee_id = isset($selected_employee_id) ? $selected_employee_id : '';
+?>
 <div class="row match-height">
   <div class="col-md-12">
     <div class="card">
@@ -16,15 +20,29 @@
                   <label for="year">Select Year</label>
                   <select class="form-control" name="year" id="year" required>
                     <?php for($i = date('Y'); $i >= 2000; $i--):?>
-                      <option value="<?php echo $i;?>" <?php echo ($i == date('Y')) ? 'selected' : '';?>><?php echo $i;?></option>
+                      <option value="<?php echo $i;?>" <?php echo ($i == $selected_year) ? 'selected' : '';?>><?php echo $i;?></option>
                     <?php endfor;?>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="employee_id">Select Employee</label>
+                  <select class="form-control" name="employee_id" id="employee_id">
+                    <option value="">All Employees</option>
+                    <?php foreach($all_employees as $employee):?>
+                      <option value="<?php echo $employee->user_id;?>" <?php echo ($employee->user_id == $selected_employee_id) ? 'selected' : '';?>><?php echo $employee->first_name . ' ' . $employee->last_name;?></option>
+                    <?php endforeach;?>
                   </select>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group" style="display: flex;flex-direction: column;align-items: flex-start;">
                   <label for="year">&nbsp;</label>
-                  <button type="submit" class="btn btn-primary">Calculate & Post Interest</button>
+                  <div>
+                    <button type="submit" class="btn btn-primary">Calculate & Post Interest</button>
+                    <a href="#" id="export_csv_link" class="btn btn-secondary" onclick="reload_table();">Export to Excel</a>
+                  </div>
                 </div>
               </div>
               
@@ -44,8 +62,8 @@
                 </tr>
               </thead>
               <tbody>
-                <?php if(!empty($yearly_interests)):?>
-                <?php foreach($yearly_interests as $interest):?>
+                <?php if(!empty($yearly_interests)):
+                foreach($yearly_interests as $interest):?>
                 <tr>
                   <td><?php echo $interest->first_name . ' ' . $interest->last_name;?></td>
                   <td><?php echo $interest->interest_year;?></td>
@@ -69,11 +87,39 @@
 </div>
 
 <script type="text/javascript">
+  function reload_table(){
+      console.log('ndsfjhjf');
+      
+      setTimeout(function(){
+          window.location.reload();
+      }, 1000);
+    }
 $(document).ready(function(){
+    function updateExportLink() {
+        var year = $('#year').val();
+        var employee_id = $('#employee_id').val();
+        var export_url = "<?php echo site_url('admin/provident_fund/export_yearly_report');?>?year=" + year + "&employee_id=" + employee_id;
+        $('#export_csv_link').attr('href', export_url);
+      
+    }
+
+    
+
+    // Initial setup
+    updateExportLink();
+
+    // Update on change
+    $('#year, #employee_id').change(function() {
+        updateExportLink();
+    });
+
     // Form submission for Calculate Interest
     $("#calculate_interest_form").submit(function(e){
         e.preventDefault();
         var obj = $(this), action = obj.attr('action');
+        var year = $('#year').val();
+        var employee_id = $('#employee_id').val();
+
         $.ajax({
             type: "POST",
             url: action,
@@ -81,20 +127,18 @@ $(document).ready(function(){
             cache: false,
             dataType: 'json',
             success: function (JSON) {
-              console.log('JSON');
-              
                 if (JSON.error != '') {
                     toastr.error(JSON.error);
-                    $('input[name="csrf_hrsale"]').val(JSON.csrf_hash);
                 } else {
                     toastr.success(JSON.success);
-                    $('input[name="csrf_hrsale"]').val(JSON.csrf_hash);
                 }
-              location.reload(); 
+                // Reload the page with query parameters
+                var new_url = "<?php echo site_url('admin/provident_fund/yearly_reports');?>?year=" + year + "&employee_id=" + employee_id;
+                window.location.href = new_url;
             },
             error: function (xhr, status, error) {
-               location.reload(); // Reload page on error
-              
+               var new_url = "<?php echo site_url('admin/provident_fund/yearly_reports');?>?year=" + year + "&employee_id=" + employee_id;
+               window.location.href = new_url;
             }
         });
     });
