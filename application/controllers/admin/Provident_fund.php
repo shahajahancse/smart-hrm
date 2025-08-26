@@ -304,6 +304,12 @@ class Provident_fund extends MY_Controller {
             );
 
             $account_id = $this->input->post('account_id');
+            $check_acc = $this->check_bank_account($account_id, $this->input->post('account_number'));
+            if (!empty($check_acc)) {
+                $return['error'] = 'Provident Fund Bank Account Number already exists.';
+                $this->output($return);
+                exit;
+            }
 
             if ($account_id) { // Edit operation
                 $result = $this->Provident_fund_model->update_employee_pf_account($account_id, $data);
@@ -323,6 +329,15 @@ class Provident_fund extends MY_Controller {
         }
 
         $this->output->set_content_type('application/json')->set_output(json_encode($return));
+    }
+    function check_bank_account($account_id = null, $acc = null) {
+        if (!empty($account_id)) {
+            $this->db->where('account_id !=', $account_id)->where('account_number', $acc);
+        } else {
+            $this->db->where('account_number', $acc);
+        }
+        $result = $this->db->get('hrsale_provident_fund_accounts')->row();
+        return $result;
     }
 
     public function add_edit_contribution() {
