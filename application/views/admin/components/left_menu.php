@@ -414,6 +414,8 @@ if($theme[0]->sub_menu_icons != ''){
           <li class="<?php if(!empty($arr_mod['loan_applications_active']))echo $arr_mod['loan_applications_active'];?>"> <a href="<?php echo site_url('admin/provident_fund/loan_applications');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Loan Applications </a> </li>
 
           <li class="<?php if(!empty($arr_mod['pf_reports_active']))echo $arr_mod['pf_reports_active'];?>"> <a href="<?php echo site_url('admin/provident_fund/reports');?>"> <i class="fa <?php echo $submenuicon;?>"></i> Reports & Analytics </a> </li>
+
+          <li class="<?php if(!empty($arr_mod['my_fund_details_active']))echo $arr_mod['my_fund_details_active'];?>"> <a href="<?php echo site_url('admin/provident_fund/my_fund_details');?>"> <i class="fa <?php echo $submenuicon;?>"></i> My Fund Details </a> </li>
         </ul>
       </li>
     <!-- End Provident Fund -->

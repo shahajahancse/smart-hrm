@@ -379,11 +379,11 @@ class Provident_fund_model extends CI_Model {
 
     public function get_transactions($user_id, $start_date, $end_date) {
         $sql = "
-            SELECT contribution_month as date, 'Contribution' as description, total_contribution as amount, 'credit' as type FROM hrsale_provident_fund_contributions WHERE user_id = ? AND contribution_month BETWEEN ? AND ?
+            SELECT contribution_month as date, 'Contribution' as description, 'fa fa-plus-circle text-success' as icon_class, total_contribution as amount, 'credit' as type, employee_contribution as employee_contrib_amount, employer_contribution as employer_contrib_amount FROM hrsale_provident_fund_contributions WHERE user_id = ? AND contribution_month BETWEEN ? AND ?
             UNION ALL
-            SELECT disbursed_date as date, CONCAT('Withdrawal: ', purpose) as description, approved_amount as amount, 'debit' as type FROM hrsale_provident_fund_withdrawals WHERE user_id = ? AND status = 'disbursed' AND disbursed_date BETWEEN ? AND ?
+            SELECT disbursed_date as date, CONCAT('Withdrawal: ', purpose) as description, 'fa fa-minus-circle text-danger' as icon_class, approved_amount as amount, 'debit' as type, NULL as employee_contrib_amount, NULL as employer_contrib_amount FROM hrsale_provident_fund_withdrawals WHERE user_id = ? AND status = 'disbursed' AND disbursed_date BETWEEN ? AND ?
             UNION ALL
-            SELECT calculated_at as date, CONCAT('Interest for year ', interest_year) as description, interest_amount as amount, 'credit' as type FROM hrsale_provident_fund_interest WHERE user_id = ? AND calculated_at BETWEEN ? AND ?
+            SELECT calculated_at as date, CONCAT('Interest for year ', interest_year) as description, 'fa fa-percent text-info' as icon_class, interest_amount as amount, 'credit' as type, NULL as employee_contrib_amount, NULL as employer_contrib_amount FROM hrsale_provident_fund_interest WHERE user_id = ? AND calculated_at BETWEEN ? AND ?
             ORDER BY date ASC
         ";
 
