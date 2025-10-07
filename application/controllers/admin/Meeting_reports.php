@@ -24,8 +24,8 @@ class Meeting_reports extends MY_Controller {
     public function generate_report() {
         $room_id = $this->input->post('room_id');
         $employee_id = $this->input->post('employee_id');
-        $start_date = $this->input->post('start_date');
-        $end_date = $this->input->post('end_date');
+        $start_date = date('Y-m-d', strtotime($this->input->post('start_date')));
+        $end_date = date('Y-m-d', strtotime($this->input->post('end_date')));
 
         $data['meetings'] = $this->Meetings_model->get_meetings_report($room_id, $employee_id, $start_date, $end_date);
 

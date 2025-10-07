@@ -31,13 +31,13 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Start Date:</label>
-                        <input type="text" name="start_date" class="form-control datepicker">
+                        <input type="text" name="start_date" class="form-control date">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>End Date:</label>
-                        <input type="text" name="end_date" class="form-control datepicker">
+                        <input type="text" name="end_date" class="form-control date">
                     </div>
                 </div>
             </div>
