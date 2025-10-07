@@ -330,6 +330,13 @@ class Provident_fund extends MY_Controller {
             return;
         }
 
+        // DEBUG START
+        // echo "<pre>";
+        // var_dump($data['employee']);
+        // echo "</pre>";
+        // exit();
+        // DEBUG END
+
         // 2. Get Opening Balance
         $data['opening_balance'] = $this->Provident_fund_model->get_opening_balance($employee_id, $start_date);
 
@@ -585,6 +592,70 @@ class Provident_fund extends MY_Controller {
 
         $this->output->set_content_type('application/json')->set_output(json_encode($return));
     }
+
+    public function my_fund_details() {
+        $session = $this->session->userdata('username');
+        if(empty($session)){
+            redirect('admin/'); // Redirect to admin login
+        }
+
+        $user_id = $session['user_id'];
+
+        $data['title'] = 'My Provident Fund Details';
+        $data['breadcrumbs'] = 'My Provident Fund';
+        $data['path_url'] = 'provident_fund/my_fund_details'; // Add path_url
+        $data['arr_mod'] = array('provident_fund_open' => 'active', 'my_fund_details_active' => 'active'); // Add arr_mod
+
+        $data['employee'] = $this->Xin_model->read_user_info($user_id);
+        $data['employee'] = isset($data['employee'][0]) ? $data['employee'][0] : null; // Ensure single object
+
+        $data['pf_account'] = $this->Provident_fund_model->get_employee_pf_account($user_id);
+
+        if(!$data['employee'] || !$data['pf_account']){
+            // Employee data not found or PF account not found
+            $data['has_pf_account'] = false;
+            $data['subview'] = $this->load->view('admin/provident_fund/my_fund_details', $data, TRUE); // Load as subview
+            $this->load->view('admin/layout/layout_main', $data); // Load admin layout
+            return;
+        }
+
+        $data['has_pf_account'] = true;
+
+        // For employee's own view, show all historical transactions
+        $start_date = '1900-01-01'; // Start from a very early date to get all history
+        $end_date = date('Y-m-d'); // Up to today
+
+        $data['opening_balance'] = $this->Provident_fund_model->get_opening_balance($user_id, $start_date);
+        $transactions = $this->Provident_fund_model->get_transactions($user_id, $start_date, $end_date);
+
+        $running_balance = $data['opening_balance'];
+        $processed_transactions = array();
+        $total_credits = 0;
+        $total_debits = 0;
+
+        foreach($transactions as $trans) {
+            if($trans->type == 'credit') {
+                $running_balance += $trans->amount;
+                $total_credits += $trans->amount;
+            } else { // debit
+                $running_balance -= $trans->amount;
+                $total_debits += $trans->amount;
+            }
+            $trans->running_balance = $running_balance;
+            $processed_transactions[] = $trans;
+        }
+
+        $data['transactions'] = $processed_transactions;
+        $data['start_date'] = $start_date;
+        $data['end_date'] = $end_date;
+        $data['closing_balance'] = $running_balance;
+        $data['total_credits'] = $total_credits;
+        $data['total_debits'] = $total_debits;
+
+        $data['subview'] = $this->load->view('admin/provident_fund/my_fund_details', $data, TRUE); // Load as subview
+        $this->load->view('admin/layout/layout_main', $data); // Load admin layout
+    }
+
 
 
 }
