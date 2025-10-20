@@ -370,9 +370,9 @@ if($theme[0]->sub_menu_icons != ''){
             <li class="sidenav-link <?php if(!empty($arr_mod['emp_advanced_sal']))echo $arr_mod['emp_advanced_sal'];?>"> <a href="<?php echo site_url('admin/payroll/advanced_salary');?>"><i class="fa <?php echo $submenuicon;?>"></i>Advanced Salary </a> </li>
           <?php } ?>
 
-          <?php if(in_array('128',$role_resources_ids)) { ?>
+          <!-- <?php if(in_array('128',$role_resources_ids)) { ?>
             <li class="sidenav-link <?php if(!empty($arr_mod['emp_festival_bonus']))echo $arr_mod['emp_festival_bonus'];?>"> <a href="<?php echo site_url('admin/payroll/emp_festival_bonus');?>"><i class="fa <?php echo $submenuicon;?>"></i>Festival Bonus</a> </li>
-          <?php } ?>
+          <?php } ?> -->
 
           <?php if(in_array('390',$role_resources_ids)) { ?>
             <li class="sidenav-link <?php if(!empty($arr_mod['emp_lunch_active']))echo $arr_mod['emp_lunch_active'];?>"> <a href="<?php echo site_url('admin/lunch/lunch_emp_bill');?>"><i class="fa <?php echo $submenuicon;?>"></i>Lunch Bill</a> </li>

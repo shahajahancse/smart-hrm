@@ -27,21 +27,29 @@ class Welcome extends MY_Controller {
 
 	public function index()
 	{
+		// dd('test demo');
 		auto_off_day_insert();  // auto insert holiday to the year
 		$data['title'] = $this->Xin_model->site_title().' | Log in';
 		$theme = $this->Xin_model->read_theme_info(1);
-		if($theme[0]->login_page_options == 'login_page_1'):
+		if ($theme[0]->login_page_options == 'login_page_1') {
+			// dd('page test 1');
 			$this->load->view('admin/auth/login-1', $data);
-		elseif($theme[0]->login_page_options == 'login_page_2'):
+		} elseif ($theme[0]->login_page_options == 'login_page_2') {
+			// dd('page test 2');
 			$this->load->view('admin/auth/login-2', $data);
-		elseif($theme[0]->login_page_options == 'login_page_3'):
+		} elseif ($theme[0]->login_page_options == 'login_page_3') {
+			// dd('page test 3');
 			$this->load->view('admin/auth/login-3', $data);
-		elseif($theme[0]->login_page_options == 'login_page_4'):
+		} elseif ($theme[0]->login_page_options == 'login_page_4') {
+			// dd('page test 4');
 			$this->load->view('admin/auth/login-4', $data);
-		elseif($theme[0]->login_page_options == 'login_page_5'):
+		} elseif ($theme[0]->login_page_options == 'login_page_5') {
+			// dd('page test 5');
 			$this->load->view('admin/auth/login-5', $data);
-		else:
+		} else {
+			// dd('page test 11');
 			$this->load->view('admin/auth/login-1', $data);
-		endif;
+		}
 	}
 }
+?>

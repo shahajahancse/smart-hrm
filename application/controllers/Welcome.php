@@ -17,7 +17,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Welcome extends MY_Controller {
-	
+
 	 public function __construct() {
         parent::__construct();
 		//load the model
@@ -28,7 +28,7 @@ class Welcome extends MY_Controller {
 		$this->load->model("Recruitment_model");
 		$this->load->model('Employees_model');
 	}
-	
+
 	/*Function to set JSON output*/
 	public function output($Return=array()){
 		/*Set response header*/
@@ -37,9 +37,10 @@ class Welcome extends MY_Controller {
 		/*Final JSON response*/
 		exit(json_encode($Return));
 	}
-	
+
 	 public function index()
      {
+		redirect('/admin/welcome');
 		$system = $this->Xin_model->read_setting_info(1);
 		if($system[0]->module_recruitment=='true'){
 			$data['title'] = 'HOME';
@@ -61,11 +62,11 @@ class Welcome extends MY_Controller {
 			elseif($theme[0]->login_page_options == 'login_page_4'):
 				$this->load->view('admin/auth/login-4', $data);
 			elseif($theme[0]->login_page_options == 'login_page_5'):
-				$this->load->view('admin/auth/login-5', $data);				
+				$this->load->view('admin/auth/login-5', $data);
 			else:
-				$this->load->view('admin/auth/login-1', $data);	
+				$this->load->view('admin/auth/login-1', $data);
 			endif;
-			
+
 		}
      }
 }
