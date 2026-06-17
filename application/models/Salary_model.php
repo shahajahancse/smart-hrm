@@ -429,7 +429,7 @@ class Salary_model extends CI_Model {
         $this->db->where('sp.employee_id = em.user_id');
         $this->db->where('sp.department_id = xin_departments.department_id');
         $this->db->where('sp.designation_id = xin_designations.designation_id');
-        // $this->db->where('sp.employee_id = xin_employee_bankaccount.employee_id');
+        $this->db->where('sp.grand_net_salary > 0');
 
         $this->db->group_by('sp.employee_id');
         $this->db->order_by('sp.basic_salary', "DESC");

@@ -18,7 +18,7 @@
               <br>
               <label>Select Month and Year :</label>
               <select id='sal_month' onchange="chenge_s()">
-                <?php 
+                <?php
                   $year = date('Y');
                   for($i=1; $i<=12;$i++)
                   {
@@ -57,7 +57,7 @@
             </div>
           </div>
           <div class="col-md-1">
-            <div class="form-group"> 
+            <div class="form-group">
               <button style="margin-top:15px;margin-left: -70px;" class="btn btn-success" onclick="salary_process()">Process</button>
             </div>
           </div>
@@ -72,28 +72,28 @@
 <!-- modal -->
 <div class="modal fade bd-example-modal-lg" id="my_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-lg">
-  
+
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button  type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Modify Employee Salary</h4>
       </div>
-  
+
 
 
       <div class="modal-body">
-      
+
 
             <form  id="salaryForm">
-                <div id="total" class="col-md-12" style="display: inline-flex;"> 
+                <div id="total" class="col-md-12" style="display: inline-flex;">
               </div>
-              <div class="col-md-12" style="display: inline-flex;margin-bottom: -16px;"> 
+              <div class="col-md-12" style="display: inline-flex;margin-bottom: -16px;">
                         <div class="form-group col-md-3">
                           <label style="margin-left: -22px;">Employee name</label>
                         </div>
-                        
-                        
+
+
                         <!-- hh -->
                         <div class="form-group col-md-2">
                           <label>Basic Salary</label>
@@ -104,7 +104,7 @@
                         <div class="form-group col-md-1" style="padding: 0;text-align-last: center;">
                           <label >d day</label>
                           </div>
-                        
+
                         <div class="form-group col-md-2" style="padding: 0;text-align-last: center;">
                           <label>L Deduct</label>
                         </div>
@@ -112,8 +112,8 @@
                           <label style="margin-left: 16px;">m day</label>
                         </div>
                         <!-- hh -->
-                        
-                        
+
+
                         <div class="form-group col-md-2">
                           <label style="margin-left: 27px;">Modify</label>
                         </div>
@@ -127,7 +127,7 @@
       </div>
 
     </div>
-    
+
   </div>
 </div>
 <!-- modal close -->
@@ -227,12 +227,12 @@
         <li class="nav-item">
           <a class="nav-link" id="monthly-tab" data-toggle="tab" href="#monthly" role="tab" aria-controls="monthly" aria-selected="false">Excel</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" id="continuously-tab" data-toggle="tab" href="#continuously" role="tab" aria-controls="continuously" aria-selected="false">Continuously</a>
-        </li>
+        </li> -->
     </ul>
     <!-- hh -->
-    
+
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade active in" id="daily" role="tabpanel" aria-labelledby="daily-tab" style="margin-top: 30px;">
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel()">Salary Sheet</button>
@@ -240,12 +240,12 @@
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel_bank(2,0)">Cash Salary Sheet</button>
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="report_salary_sheet()">Salary Report</button>
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="genarate_payslip()">Genarate Payslip</button>
-         <br> 
          <br>
-        <button  class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px  !important;"  onclick="movReport(2)">Unpaid Movement</button>
+         <br>
+        <!-- <button  class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px  !important;"  onclick="movReport(2)">Unpaid Movement</button>
         <button  class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="movReport(1)">Process Movement</button>
         <button  class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="movReport(3)">Reject Movement</button>
-        <button  class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;"  onclick="movReport(4)">Paid Movement</button>
+        <button  class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;"  onclick="movReport(4)">Paid Movement</button> -->
 
       </div>
 
@@ -254,10 +254,9 @@
 
       </div>
 
-      <div class="tab-pane fade" id="continuously" role="tabpanel" aria-labelledby="continuously-tab" style="margin-top: 30px;">
+      <!-- <div class="tab-pane fade" id="continuously" role="tabpanel" aria-labelledby="continuously-tab" style="margin-top: 30px;">
         <button class="btn btn-sm btn-success rounded" style="padding:6px 10px !important;" onclick="jobCard()">Job Card</button>
-
-      </div>
+      </div> -->
 <!-- h -->
     </div>
 
@@ -325,7 +324,7 @@
 
 
         success: function(response){
-      
+
           arr = response.employees;
           // console.log(arr);
           if (arr.length != 0) {
@@ -340,7 +339,7 @@
             // console.log(items);
             $('#fileDiv tr:last').after(items);
           } else {
-            $('#fileDiv #removeTr').remove(); 
+            $('#fileDiv #removeTr').remove();
           }
         }
       });
@@ -355,9 +354,9 @@
     var formData = $('#salaryForm').serializeArray();
     var url = "<?php echo base_url('admin/payroll/save_modify_salary_all');?>";
     $.ajax({
-      url: url, 
-      type: 'POST', 
-      data: formData, 
+      url: url,
+      type: 'POST',
+      data: formData,
       success: function(response) {
         $('#total').empty();
         $('#empfrom').empty();
@@ -400,7 +399,7 @@
 
 <script>
     $(document).ready(function () {
-        
+
         $("#department").change(function () {
             var department_id = $(this).val();
             $("#designation").empty();
@@ -425,7 +424,7 @@
                 },
                 complete: function () {
                     $("#designation").select2();
-                } 
+                }
             });
         });
     });
@@ -448,7 +447,7 @@
         $.ajax({
         url: url,
         type: 'GET',
-        data: { 
+        data: {
             "status": status,
             "floor": floor,
             "department": department,
@@ -479,7 +478,7 @@
 
     }
 
-    get_user(); 
+    get_user();
 
 
 
