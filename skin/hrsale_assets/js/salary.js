@@ -1,9 +1,9 @@
         // get check box select value
     function get_checked_value(checkboxes) {
       var vals = "";
-      for (var i=0, n=checkboxes.length;i<n;i++) 
+      for (var i=0, n=checkboxes.length;i<n;i++)
       {
-          if (checkboxes[i].checked) 
+          if (checkboxes[i].checked)
           {
               vals += ","+checkboxes[i].value;
           }
@@ -51,14 +51,14 @@
         alert('Please select employee Id');
         return ;
       }
- 
+
       var okyes;
       okyes=confirm('Are you sure you want to start process?');
       if(okyes==false) return;
 
       $("#loader").show();
        var data = "process_month="+process_month+"&status="+status+'&sql='+sql;
-  
+
       // console.log(data); return;
       url = base_url + "/salary_process";
       ajaxRequest.open("POST", url, true);
@@ -113,13 +113,13 @@
         alert('Please select employee Id');
         return ;
       }
- 
+
       /*var okyes;
       okyes=confirm('Are you sure you want to generate excel sheet?');
       if(okyes==false) return;*/
 
        var data = "salary_month="+salary_month+"&status="+status+'&sql='+sql+"&excel="+0;
-  
+
       // console.log(data); return;
       url = base_url + "/salary_sheet_excel";
       ajaxRequest.open("POST", url, true);
@@ -137,7 +137,6 @@
     }
 
     // Actual_salary_sheet_excel
-
     function Actual_salary_sheet_excel()
     {
       // alert(csrf_token); return;
@@ -155,7 +154,7 @@
       sal_year = document.getElementById('sal_year').value;
       if(sal_year =='')
       {
-        alert('Please select alary year');
+        alert('Please select salary year');
         return ;
       }
 
@@ -177,13 +176,8 @@
       }
       document.getElementById('loader').style.display = 'block';
 
- 
-      /*var okyes;
-      okyes=confirm('Are you sure you want to generate excel sheet?');
-      if(okyes==false) return;*/
+      var data = "salary_month="+salary_month+"&status="+status+'&sql='+sql+"&excel="+0;
 
-       var data = "salary_month="+salary_month+"&status="+status+'&sql='+sql+"&excel="+0;
-  
       // console.log(data); return;
       url = base_url + "/Actual_salary_sheet_excel";
       ajaxRequest.open("POST", url, true);
@@ -191,7 +185,7 @@
       ajaxRequest.send(data);
 
       ajaxRequest.onreadystatechange = function(){
-        document.getElementById('loader').style.display = 'none'; 
+        document.getElementById('loader').style.display = 'none';
         if(ajaxRequest.readyState == 4){
           // console.log(ajaxRequest);
           var resp = ajaxRequest.responseText;
@@ -242,7 +236,7 @@
       ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
       ajaxRequest.send(data);
       ajaxRequest.onreadystatechange = function(){
-        document.getElementById('loader').style.display = 'none'; 
+        document.getElementById('loader').style.display = 'none';
         if(ajaxRequest.readyState == 4){
           // console.log(ajaxRequest);
           var resp = ajaxRequest.responseText;
@@ -262,7 +256,7 @@ function Actual_salary_sheet_excel_bank(s,bank)
       if(sal_month =='')
       {
         alert('Please select salary month');
-        return 
+        return
       }
 
       sal_year = document.getElementById('sal_year').value;
@@ -288,13 +282,13 @@ function Actual_salary_sheet_excel_bank(s,bank)
         alert('Please select employee Id');
         return ;
       }
- 
+
       /*var okyes;
       okyes=confirm('Are you sure you want to generate excel sheet?');
       if(okyes==false) return;*/
 
        var data = "salary_month="+salary_month+"&status="+status+'&sql='+sql+"&excel="+s+"&bank="+bank;
-  
+
       // console.log(data); return;
       url = base_url + "/Actual_salary_sheet_excel_bank";
       ajaxRequest.open("POST", url, true);
@@ -316,7 +310,7 @@ function Actual_salary_sheet_excel_bank(s,bank)
       const mdayid = $(this).data('id'); // Retrieve 'data-id'
       const bsid = $(this).data('bsid'); // Retrieve 'data-bsid'
       const inputchangeid = $(this).attr('id'); // Retrieve 'id'
-    
+
       // Get the values from input elements
       const inputchange = $(`#${inputchangeid}`).val(); // Retrieve value based on 'inputchangeid'
       const bs = $(`#${bsid}`).val(); // Retrieve value based on 'bsid'
@@ -324,24 +318,24 @@ function Actual_salary_sheet_excel_bank(s,bank)
 
       // Extract year and month from the date
       const [year, month] = date.split('-').map(Number);
-    
+
       // Get the last day of the current month
       const nextMonth = new Date(year, month, 1);
       const lastDayOfMonth = new Date(nextMonth.getTime() - 1);
-    
+
       // Get the total number of days in the current month
       const totalDays = lastDayOfMonth.getDate();
-    
+
       // Calculate and log the value of l_inputdata
       const l_inputdata = parseInt(((bs / totalDays) * inputchange).toFixed(2));
       console.log(l_inputdata);
-      
-    
+
+
       // Set the value of the element with 'mdayid' to l_inputdata
       $(`#${mdayid}`).val(l_inputdata);
     });
-    
-    
+
+
     // Define a function named "modify_salary"
   function modify_salary() {
     // Retrieve the values of two HTML input elements with IDs 'sal_month' and 'sal_year'
@@ -366,8 +360,8 @@ function Actual_salary_sheet_excel_bank(s,bank)
 
         // Parse the response from the server, which is expected to be a JSON array
         const response = JSON.parse(jsonArray);
-      
-      
+
+
 
         // Create an empty array named "sql" and a variable named "count"
         const sql = [];
@@ -381,12 +375,12 @@ function Actual_salary_sheet_excel_bank(s,bank)
         let item = '';
 
         // Loop through each element in the JSON array and create HTML code for each row in the employee table
-     
+
 
         $.each(response, function(index, employee) {
           const row = '<div class="row" style="margin-top: 10px;"><div class="col-md-3"><input type="text" readonly class="form-control" value="' + employee.first_name + ' ' + employee.last_name + '" disabled><input type="hidden" name="modifydataid[]" class="form-control" value="' + employee.user_id+ '" ></div><div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.basic_salary + '" id="bs' + employee.user_id+ '" ></div><div class="col-md-1"><input type="number" readonly class="form-control" style="padding: 0;text-align-last: center;" value="' + employee.late_count + '"></div><div class="col-md-1"><input type="number"readonly class="form-control" style="padding: 0;text-align-last: center;" value="' + employee.d_day + '" id="deductday"></div><div class="col-md-2"><input type="text" readonly class="form-control" value="' + employee.late_deduct + '"></div><div class="col-md-1"><input type="number"  class="form-control commonclass" id="mid' + employee.user_id+ '" data-bsid="bs' + employee.user_id+ '" data-id="' + employee.user_id+ '" name="modifyday[]" value="' + employee.m_pay_day + '"  style="padding: 0;text-align-last: center;"></div><div class="col-md-2"><input type="number"  class="form-control" id="' + employee.user_id+ '" name="modifydata[]"   value="' + employee.modify_salary + '"></div></div>';
           item += row;
-       
+
         });
 
         // Add the HTML code for each row to an HTML element with ID 'empfrom'
@@ -403,7 +397,7 @@ function Actual_salary_sheet_excel_bank(s,bank)
     });
 
   }
-    
+
 
 
 

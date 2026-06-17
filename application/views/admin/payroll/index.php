@@ -239,7 +239,7 @@
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel_bank(2,1)">Bank Salary Sheet</button>
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="Actual_salary_sheet_excel_bank(2,0)">Cash Salary Sheet</button>
           <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="report_salary_sheet()">Salary Report</button>
-          <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="genarate_payslip()">Genarate Payslip</button>
+          <!-- <button class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px !important;" onclick="genarate_payslip()">Genarate Payslip</button> -->
          <br>
          <br>
         <!-- <button  class="btn btn-sm mr-5 rounded" style="background: #2393e3eb; color: white;margin-right: 10px;padding:6px 10px  !important;"  onclick="movReport(2)">Unpaid Movement</button>
