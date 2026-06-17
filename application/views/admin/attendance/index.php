@@ -267,8 +267,8 @@ content: 'zfdsdf';
                     <!-- <button class="btn btn-sm btn-danger"> Button one</button>-->
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="monthly_report()">Monthly Register
                         Report</button>
-                    <button class="btn btn-sm mr-5 sbtn mt-2" data-toggle="modal" data-target="#requisitionModal">Open
-                        Requisition Modal</button>
+                    <!-- <button class="btn btn-sm mr-5 sbtn mt-2" data-toggle="modal" data-target="#requisitionModal">Open
+                        Requisition Modal</button> -->
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="leavecal(2,[1,4])">Leave Panding</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="leavecal(2,[2])">Leave Approved</button>
                     <button class="btn btn-sm mr-5 sbtn mt-2" onclick="leavecal(2,[3])">Leave Rejected</button>

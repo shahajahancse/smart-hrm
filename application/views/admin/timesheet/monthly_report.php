@@ -80,7 +80,7 @@
 
 
 
-  
+
 <?php
 
 $month_year=$first_date;
@@ -94,7 +94,8 @@ $imonth_year = explode('-',$month_year);
 
 
 // total days in month
-$daysInMonth = cal_days_in_month(0, $month, $year);
+// $daysInMonth = cal_days_in_month(0, $month, $year);
+$daysInMonth = date('t', strtotime("$year-$month-01"));
 $imonth = date('F', $date);
 ?>
 
@@ -130,13 +131,13 @@ $imonth = date('F', $date);
 				<h5 style="margin-top: 4px;font-size: 14px;margin-bottom: 4px;line-height:15px;font-weight:bold;/* justify-content: center; *//* margin: unset; */text-align:center;">For the month of
       <?php if(isset($month_year)): echo date('F Y', strtotime($month_year)); else: echo date('F Y'); endif;?>
     </h5>				<div style="font-size:12px; font-weight:bold; text-align:center;"></div>
-		
+
 	<div style="font-size:12px; font-weight:bold; text-align:center;"></div>
 	<div class="box-tools pull-right" style=" text-align:center; margin-bottom:5px;"> A: Absent, P: Present, H: Holiday, L: Leave, W=Weekend</div>
-	</tr> 
+	</tr>
         <thead>
 
-		
+
           <tr class="tdb">
             <th class="mastering"><?php echo $this->lang->line('xin_employee');?></th>
             <th class="mastering">Designation</th>
@@ -156,12 +157,12 @@ $imonth = date('F', $date);
             <th class="im" >H</th>
             <th class="im" >L</th>
             <th class="im" >T.D</th>
-            
+
           </tr>
         </thead>
         <tbody>
           <?php $j=0;foreach($xin_employees as $r):?>
-          <?php 
+          <?php
            $holiday=0;
            $weekend=0;
            $leave=0;
@@ -174,14 +175,14 @@ $imonth = date('F', $date);
 						if(!is_null($designation)){
 							$designation_name = $designation[0]->designation_name;
 						} else {
-							$designation_name = '--';	
+							$designation_name = '--';
 						}
 						// department
 						$department = $this->Department_model->read_department_information($r->department_id);
 						if(!is_null($department)){
 						$department_name = $department[0]->department_name;
 						} else {
-						$department_name = '--';	
+						$department_name = '--';
 						}
 						$department_designation = $designation_name.' ('.$department_name.')';$pcount=0;
 					?>
@@ -190,7 +191,7 @@ $imonth = date('F', $date);
           <tr>
             <td><?php echo $employee_name;?></td>
             <td><?php echo $designation_name;?></td>
-            
+
             <?php for($i = 1; $i <= $daysInMonth; $i++):
 							$i = str_pad($i, 2, 0, STR_PAD_LEFT);
 							// get date <
@@ -207,11 +208,11 @@ $imonth = date('F', $date);
 								$h_date = $this->Timesheet_model->holiday_date($attendance_date);
 								$begin = new DateTime( $h_date[0]->start_date );
 								$end = new DateTime( $h_date[0]->end_date);
-								$end = $end->modify( '+1 day' ); 
-								
+								$end = $end->modify( '+1 day' );
+
 								$interval = new DateInterval('P1D');
 								$daterange = new DatePeriod($begin, $interval ,$end);
-								
+
 								foreach($daterange as $date){
 									$holiday_arr[] =  $date->format("Y-m-d");
 								}
@@ -226,14 +227,14 @@ $imonth = date('F', $date);
 								$leave_date = $this->Timesheet_model->leave_date($r->user_id,$attendance_date);
 								$begin1 = new DateTime( $leave_date[0]->from_date );
 								$end1 = new DateTime( $leave_date[0]->to_date);
-								$end1 = $end1->modify( '+1 day' ); 
-								
+								$end1 = $end1->modify( '+1 day' );
+
 								$interval1 = new DateInterval('P1D');
 								$daterange1 = new DatePeriod($begin1, $interval1 ,$end1);
-								
+
 								foreach($daterange1 as $date1){
 									$leave_arr[] =  $date1->format("Y-m-d");
-								}	
+								}
 							} else {
 								$leave_arr[] = '99-99-99';
 							}
@@ -275,15 +276,15 @@ $imonth = date('F', $date);
 							$attendance = $this->Timesheet_model->attendance_first_in($r->user_id,$attendance_date);
 							$status = 'P';//$attendance[0]->attendance_status;
                             $present++;
-								
+
 							} else {
-								
-								 
+
+
 								$status = 'A';
                                 $absent++;
 								//$pcount += 0;
 							}
-                            
+
 							$pcount += $check->num_rows();
 							// set to present date
 							$iattendance_date = strtotime($attendance_date);
@@ -345,7 +346,7 @@ $imonth = date('F', $date);
 		{
 			var ajaxRequest;  // The variable that makes Ajax possible!
 	    ajaxRequest = new XMLHttpRequest();
-			
+
 		  url = "<?php echo base_url() ?>admin/timesheet/monthly_attn_sheet_print";
 		  ajaxRequest.open("GET", url, true);
 		  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -361,7 +362,7 @@ $imonth = date('F', $date);
 		      a.document.write(resp);
 		      // a.document.write('</body></html>');
 		      a.print();
-		      a.close();	
+		      a.close();
 				}
 			}
 		}
@@ -380,7 +381,7 @@ $imonth = date('F', $date);
                     td { font-size: 15px; text-align: center; border: 2px solid #ddd; width: 19px; } \
                     tr:hover { background-color: #f5f5f5; } \
                     .tdb { background-color: cadetblue; }</style>';
-    
+
     document.body.innerHTML = printCSS + '<div id="print-content">' + printContents + '</div>';
 
     window.print();
@@ -392,7 +393,7 @@ $imonth = date('F', $date);
 </script>
 
 
-      
+
 
 
 
