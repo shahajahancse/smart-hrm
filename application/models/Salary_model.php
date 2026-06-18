@@ -157,7 +157,7 @@ class Salary_model extends CI_Model {
                 'late_deduct' => $late_deduct,
                 'aba_deduct' => $aba_deduct,
                 'absent_deduct' => $absent_deduct,
-                'pf_deduct' => $pf_deduct,
+                //'pf_deduct' => $pf_deduct,
                 'm_pay_day'    => 0,
                 'modify_salary' => 0,
                 'other_payment' => $extra_pay,
