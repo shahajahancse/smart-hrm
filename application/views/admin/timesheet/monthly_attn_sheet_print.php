@@ -51,7 +51,8 @@
 		$year = date('Y', $date);
 		$month_year = date('Y-m');
 		// total days in month
-		$daysInMonth = cal_days_in_month(0, $month, $year);
+		// $daysInMonth = cal_days_in_month(0, $month, $year);
+		$daysInMonth = date('t', strtotime("$year-$month-01"));
 		$xin_employees = $this->Timesheet_model->get_xin_employees();
   ?>
 
@@ -81,21 +82,21 @@
 
         <tbody>
           <?php $j=0;foreach($xin_employees as $r):?>
-          <?php 
+          <?php
           	$full_name = $r->first_name.' '.$r->last_name;
 						// get designation
 						$designation = $this->Designation_model->read_designation_information($r->designation_id);
 						if(!is_null($designation)){
 							$designation_name = $designation[0]->designation_name;
 						} else {
-							$designation_name = '--';	
+							$designation_name = '--';
 						}
 						// department
 						$department = $this->Department_model->read_department_information($r->department_id);
 						if(!is_null($department)){
 						$department_name = $department[0]->department_name;
 						} else {
-						$department_name = '--';	
+						$department_name = '--';
 						}
 						$department_designation = $designation_name.' ('.$department_name.')';$pcount=0;
 					?>
@@ -120,11 +121,11 @@
 								$h_date = $this->Timesheet_model->holiday_date($attendance_date);
 								$begin = new DateTime( $h_date[0]->start_date );
 								$end = new DateTime( $h_date[0]->end_date);
-								$end = $end->modify( '+1 day' ); 
-								
+								$end = $end->modify( '+1 day' );
+
 								$interval = new DateInterval('P1D');
 								$daterange = new DatePeriod($begin, $interval ,$end);
-								
+
 								foreach($daterange as $date){
 									$holiday_arr[] =  $date->format("Y-m-d");
 								}
@@ -139,21 +140,21 @@
 								$leave_date = $this->Timesheet_model->leave_date($r->user_id,$attendance_date);
 								$begin1 = new DateTime( $leave_date[0]->from_date );
 								$end1 = new DateTime( $leave_date[0]->to_date);
-								$end1 = $end1->modify( '+1 day' ); 
-								
+								$end1 = $end1->modify( '+1 day' );
+
 								$interval1 = new DateInterval('P1D');
 								$daterange1 = new DatePeriod($begin1, $interval1 ,$end1);
-								
+
 								foreach($daterange1 as $date1){
 									$leave_arr[] =  $date1->format("Y-m-d");
-								}	
+								}
 							} else {
 								$leave_arr[] = '99-99-99';
 							}
 							$attendance_status = '';
 							$check = $this->Timesheet_model->attendance_first_in_check($r->user_id,$attendance_date);
 							if($office_shift[0]->monday_in_time == '' && $day == 'Monday') {
-								$status = 'H';	
+								$status = 'H';
 							} else if($office_shift[0]->tuesday_in_time == '' && $day == 'Tuesday') {
 								$status = 'H';
 							} else if($office_shift[0]->wednesday_in_time == '' && $day == 'Wednesday') {
@@ -173,10 +174,10 @@
 							} else if($check->num_rows() > 0){
 							$attendance = $this->Timesheet_model->attendance_first_in($r->user_id,$attendance_date);
 							$status = 'P';//$attendance[0]->attendance_status;
-								
+
 							} else {
-								
-								 
+
+
 								$status = 'A';
 								//$pcount += 0;
 							}
@@ -208,7 +209,7 @@
 </div>
 
 <!-- jQuery 3 -->
-<script type="text/javascript" src="<?php echo base_url();?>skin/hrsale_assets/vendor/jquery/jquery-3.2.1.min.js"></script> 
+<script type="text/javascript" src="<?php echo base_url();?>skin/hrsale_assets/vendor/jquery/jquery-3.2.1.min.js"></script>
 <script src="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/jquery/dist/jquery.min.js"></script>
 
 <script src="<?php echo base_url();?>skin/hrsale_assets/theme_assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

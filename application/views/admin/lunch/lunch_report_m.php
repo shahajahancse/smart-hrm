@@ -10,11 +10,12 @@
     $year = date($imonth_year[0], $date);
 
     // Total days in month
-    $daysInMonth = cal_days_in_month(0, $month, $year);
+    // $daysInMonth = cal_days_in_month(0, $month, $year);
+    $daysInMonth = date('t', strtotime("$year-$month-01"));
 
     $monthName = date('F', mktime(0, 0, 0, $month, 1));
     exit();
-   
+
 ?>
 
 <!DOCTYPE html>

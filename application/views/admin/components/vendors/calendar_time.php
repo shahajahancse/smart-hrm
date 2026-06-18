@@ -16,7 +16,7 @@
 			$date = strtotime($month_year);
 			$day = date("d", $date);
 			$month = date("m", $date);
-			$year = date("Y", $date);		
+			$year = date("Y", $date);
 		} else {
 			$date = strtotime(date("Y-m-d"));
 			$day = date('d', $date);
@@ -30,14 +30,14 @@
 		} else {
 			$r = $this->Xin_model->read_user_info($employee_id);
 		}
-		
+
 	} else {
 
 		if (isset($month_year)) {
 			$date = strtotime($month_year);
 			$day = date("d", $date);
 			$month = date("m", $date);
-			$year = date("Y", $date);		
+			$year = date("Y", $date);
 		} else {
 			$date = strtotime(date("Y-m-d"));
 			$day = date('d', $date);
@@ -51,7 +51,8 @@
 	$fdate = $month_year;
 
 	// total days in month
-	$daysInMonth = cal_days_in_month(0, $month, $year);
+	// $daysInMonth = cal_days_in_month(0, $month, $year);
+	$daysInMonth = date('t', strtotime("$year-$month-01"));
 ?>
 
 <script type="text/javascript">
@@ -59,11 +60,11 @@
 	var editEvent;
 
 	$(document).ready(function() {
-	    
+
 	    var calendar = $('#calendar_hr').fullCalendar({
-	       
+
 	        eventRender: function(event, element, view) {
-	        	var displayEventDate;    
+	        	var displayEventDate;
 		        if(event.etitle == 'Present'){
 			        element.popover({
 			            title:'<div class="popoverTitleCalendar" style="background-color:'+ event.backgroundColor +'; color:'+ event.textColor +'">'+ event.title +'</div>',
@@ -72,19 +73,19 @@
 			                      '<p><strong>Clock Out:</strong> ' + event.clock_out + '</p>' +
 			                      '<p><strong>Total Work:</strong> ' + event.total_work + '</p>' +
 			                      '</div>',
-			            delay: { 
-			               show: "400", 
+			            delay: {
+			               show: "400",
 			               hide: "50"
 			            },
 			            trigger: 'hover',
 			            placement: 'top',
 			            html: true,
 			            container: 'body'
-			        }); 
+			        });
 
 				} else if(event.etitle == 'Holiday'){
 	        		element.popover({
-				  
+
 			            title: '<div class="popoverTitleCalendar" style="background-color:'+ event.backgroundColor +'; color:'+ event.textColor +'">'+ event.title +'</div>',
 			            content:  '<div class="popoverInfoCalendar">' +
 									'<p><strong>Event Name:</strong> ' + event.event_name + '</p>' +
@@ -92,19 +93,19 @@
 									'<p><strong>End Date:</strong> ' + event.eend + '</p>' +
 			                        '<div class="popoverDescCalendar"><strong>Description:</strong> '+ event.description +'</div>' +
 			                      '</div>',
-			            delay: { 
-			               show: "400", 
+			            delay: {
+			               show: "400",
 			               hide: "50"
 			            },
 			            trigger: 'hover',
 			            placement: 'top',
 			            html: true,
 			            container: 'body'
-			        }); 
+			        });
 
 			  	} else if(event.etitle == 'Leave'){
 			        element.popover({
-						  
+
 			            title:    '<div class="popoverTitleCalendar" style="background-color:'+ event.backgroundColor +'; color:'+ event.textColor +'">'+ event.title +'</div>',
 			            content:  '<div class="popoverInfoCalendar">' +
 									'<p><strong>Type:</strong> ' + event.leave_type + '</p>' +
@@ -112,16 +113,16 @@
 									'<p><strong>End Date:</strong> ' + event.to_date + '</p>' +
 			                        '<div class="popoverDescCalendar"><strong>Description:</strong> '+ event.reason +'</div>' +
 			                      '</div>',
-			            delay: { 
-			               show: "400", 
+			            delay: {
+			               show: "400",
 			               hide: "50"
 			            },
 			            trigger: 'hover',
 			            placement: 'top',
 			            html: true,
 			            container: 'body'
-			        }); 
-			    }      
+			        });
+			    }
 	       },
 
 	        header: {
@@ -157,13 +158,13 @@
 	        editable: false,
 	        weekends: true,
 	        nowIndicator: true,
-	        dayPopoverFormat: 'dddd DD/MM', 
+	        dayPopoverFormat: 'dddd DD/MM',
 	        longPressDelay : 0,
 	        eventLongPressDelay : 0,
 	        selectLongPressDelay : 0,
 	        eventBackgroundColor: "#156b7c",
 	        contentHeight: 600,
-	       
+
 	        events: [ <?php
 				for($i = 1; $i <= $daysInMonth; $i++):
 					$i = str_pad($i, 2, 0, STR_PAD_LEFT);
@@ -194,7 +195,7 @@
 							} else if($leave_date[0]->leave_type_id == 2){
 								$type_name = "Sick Leave";
 							} else {
-								$type_name = '--';	
+								$type_name = '--';
 							}
 
 							$_type_name = $type_name;
@@ -202,7 +203,7 @@
 							$to_date = $leave_date[0]->to_date;
 							$reason = $leave_date[0]->reason;
 							$applied_on = $leave_date[0]->applied_on;
-							
+
 
 						}
 						elseif($row['emp_data'][0]->status == 'Hleave')
@@ -232,8 +233,8 @@
 									$event_name = $hevent->event_name;
 									$description = $hevent->description;
 								}
-							}	
-						} 
+							}
+						}
 						elseif($row['emp_data'][0]->status == 'Off Day')
 						{
 							$event_name = '';
@@ -243,12 +244,12 @@
 							$clockin = '';
 							$clockout = '';
 							$total_work = '';
-						} 
-						else if ($row['emp_data'][0]->status == 'HalfDay') 
+						}
+						else if ($row['emp_data'][0]->status == 'HalfDay')
 						{
 							$attendance_date = $attendance_date;
 							$fclockin = date('h:i', strtotime($row['emp_data'][0]->clock_in));
-							$fclockout = date('h:i', strtotime($row['emp_data'][0]->clock_out)); 
+							$fclockout = date('h:i', strtotime($row['emp_data'][0]->clock_out));
 
 							$event_name = '';
 							$status = 'HalfDay';
@@ -256,8 +257,8 @@
 							$bgcolor = '#00a98a';
 							$clockin = '<i class="fa fa-clock-o"></i>'.$fclockin;
 							$clockout = '<i class="fa fa-clock-o"></i>'.$fclockout;
-							$fclockinP = "In : ".$fclockin; 
-							$fclockinO = "Out : ".$fclockout; 
+							$fclockinP = "In : ".$fclockin;
+							$fclockinO = "Out : ".$fclockout;
 							$total_work = '';
 						}
 						elseif($row['emp_data'][0]->clock_in !='' && $row['emp_data'][0]->clock_out !='')
@@ -274,8 +275,8 @@
 							$bgcolor = '#00a65a';
 							$clockin = '<i class="fa fa-clock-o"></i>'.$fclockin;
 							$clockout = '<i class="fa fa-clock-o"></i>'.$fclockout;
-							$fclockinP = "In : ".$fclockin; 
-							$fclockinO = "Out : ".$fclockout; 
+							$fclockinP = "In : ".$fclockin;
+							$fclockinO = "Out : ".$fclockout;
 							$total_work = '';
 						}
 						elseif($row['emp_data'][0]->clock_in !='' || $row['emp_data'][0]->clock_out !='')
@@ -292,13 +293,13 @@
 							$bgcolor = '#e34242';
 							$clockin = '<i class="fa fa-clock-o"></i>'.$fclockin;
 							$clockout = '<i class="fa fa-clock-o"></i>'.$fclockout;
-							$fclockinP = "In : ".$fclockin; 
+							$fclockinP = "In : ".$fclockin;
 							$fclockinO = "Out : ".$fclockout;
-							$total_work = ''; 
+							$total_work = '';
 						}
 						else
 						{
-							$event_name = '';	
+							$event_name = '';
 							$status = $this->lang->line('xin_absent');
 							$estatus = 'Absent';
 							$bgcolor = '#dd4b39';
@@ -307,7 +308,7 @@
 							$total_work = '';
 						}
 					} else {
-						$event_name = '';	
+						$event_name = '';
 						$status = ' Not Found';
 						$estatus = ' Not Found';
 						$bgcolor = '';
@@ -412,9 +413,9 @@
 						   backgroundColor: "<?php echo $bgcolor;?>",
 						   textColor: "#ffffff",
 					   },
-					<?php }	?> 
+					<?php }	?>
 				<?php endfor;?>
 			]
-	    }); 
+	    });
 	});
 </script>

@@ -17,7 +17,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Payroll extends MY_Controller {
-	
+
 	 public function __construct() {
         parent::__construct();
 		$this->load->library('Pdf');
@@ -61,7 +61,7 @@ class Payroll extends MY_Controller {
 		// $data['all_office_shifts'] = $this->Location_model->all_office_locations();
 		$data['subview'] = $this->load->view("admin/payroll/index", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
-			  
+
     }
 	public function bank_salary_config()
     {
@@ -71,7 +71,7 @@ class Payroll extends MY_Controller {
 		// $data['all_office_shifts'] = $this->Location_model->all_office_locations();
 		$data['subview'] = $this->load->view("admin/payroll/bank_salary_config", $data, TRUE);
 		$this->load->view('admin/layout/layout_main', $data); //page load
-			  
+
     }
 
 	public function salary_on_bank(){
@@ -98,7 +98,7 @@ class Payroll extends MY_Controller {
     	$process_month = date("Y-m-d", strtotime($process_month));
 		$this->Salary_model->Salary_process($process_month, $emp_id);
 		$this->db->trans_complete();
-			
+
 		if ($this->db->trans_status() === FALSE)
 		{
 			$this->db->trans_rollback();
@@ -123,7 +123,7 @@ class Payroll extends MY_Controller {
 			echo json_encode($data);
 	}
 
-	
+
 	// Function to save and modify salary data for all employees
 	public function save_modify_salary_all(){
 		$m_day_data=$this->input->post('modifyday');
@@ -136,29 +136,29 @@ class Payroll extends MY_Controller {
 	    for ($i = 0; $i < count($modifydata); $i++) {
 	        $user_id = $modifydataid[$i]; // Get the ID of the employee
 	        $salary = $modifydata[$i]; // Get the new salary for the employee
-	        $m_day = $m_day_data[$i]; 
+	        $m_day = $m_day_data[$i];
 	        // Call the model function to update the salary data for the employee
 	        $result = $this->Xin_model->update_salaryall($user_id, $salary, $date, $m_day);
 	    }
 	}
 
 
-	// generate salary excel sheet 
+	// generate salary excel sheet
     public function salary_sheet_excel()
-    {  
-		
+    {
+
     	$excel = $this->input->post('excel');
     	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
 		$status = $this->input->post('status');
 		$sql = $this->input->post('sql');
     	$emp_id = explode(',', trim($sql));
 		$bank=2;
-	
+
     	$data["values"] = $this->Salary_model->salary_sheet_excel($bank,$salary_month, $emp_id);
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;
-		
+
 		// dd($data["values"]);
         if(is_string($data["values"]))
         {
@@ -167,12 +167,12 @@ class Payroll extends MY_Controller {
             echo $data["values"];
         }
         else
-        {	
+        {
 
         	if ($excel == 1) {
 				// dd($data["values"]);
 
-				
+
 	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
         	} else {
 
@@ -181,9 +181,9 @@ class Payroll extends MY_Controller {
         	}
         }
     }
-	// generate salary excel sheet 
+	// generate salary excel sheet
     public function Actual_salary_sheet_excel()
-    {  
+    {
     	$excel = $this->input->post('excel');
     	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
 		$status = $this->input->post('status');
@@ -196,7 +196,7 @@ class Payroll extends MY_Controller {
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;
 
-		
+
 		// dd($data["values"]);
         if(is_string($data["values"]))
         {
@@ -206,7 +206,7 @@ class Payroll extends MY_Controller {
 
         }
         else
-        {	
+        {
         	if ($excel == 1) {
 	            $this->load->view('admin/payroll/salary_excel_sheet',$data);
         	} else {
@@ -215,7 +215,7 @@ class Payroll extends MY_Controller {
         }
     }
     public function report_salary_sheet()
-    {  
+    {
     	$excel = $this->input->post('excel');
     	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
 		$status = $this->input->post('status');
@@ -227,12 +227,12 @@ class Payroll extends MY_Controller {
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;
 	    $this->load->view('admin/payroll/report_salary_sheet',$data);
-        
+
     }
-	// generate salary excel sheet 
+	// generate salary excel sheet
     public function Actual_salary_sheet_excel_bank()
-    {  
-		
+    {
+
     	$excel = $this->input->post('excel');
     	$bank = $this->input->post('bank');
     	$salary_month = date("Y-m", strtotime($this->input->post('salary_month')));
@@ -243,7 +243,7 @@ class Payroll extends MY_Controller {
 		$data['status']= $status;
         $data["salary_month"] = $salary_month;
         $data["emp_id"] = $emp_id;
-		
+
 		// dd($data["values"]);
         if(is_string($data["values"]))
         {
@@ -259,7 +259,7 @@ class Payroll extends MY_Controller {
 				} else {
 					$this->load->view('admin/payroll/Actual_salary_sheet_excel_bank_bank',$data);
 				}
-				
+
 			}else{
 				if ($excel == 1) {
 					$this->load->view('admin/payroll/Actual_salary_sheet_excel_bank_e',$data);
@@ -270,12 +270,12 @@ class Payroll extends MY_Controller {
         }
     }
 
-	
+
 	 // payroll templates
 	 public function templates()
      {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('left_payroll_templates').' | '.$this->Xin_model->site_title();
@@ -292,14 +292,14 @@ class Payroll extends MY_Controller {
 			}
 		} else {
 			redirect('admin/dashboard');
-		}		  
+		}
      }
-	 
+
 	 // generate payslips
 	 public function generate_payslip()
      {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('left_generate_payslip').' | '.$this->Xin_model->site_title();
@@ -309,7 +309,7 @@ class Payroll extends MY_Controller {
 		$data['path_url'] = 'generate_payslip';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('36',$role_resources_ids)) {
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data['subview'] = $this->load->view("admin/payroll/generate_payslip", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load
 			} else {
@@ -319,12 +319,12 @@ class Payroll extends MY_Controller {
 			redirect('admin/dashboard');
 		}
      }
-	 	 
+
 	 // payment history
 	 public function payment_history()
      {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_payroll_history_title');
@@ -340,15 +340,15 @@ class Payroll extends MY_Controller {
 			} else {
 				redirect('admin/');
 			}
-			  
+
      }
-	 	 
+
 	 // payslip > employees
 	 public function payslip_list() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/payroll/generate_payslip", $data);
 		} else {
 			redirect('admin/');
@@ -357,7 +357,7 @@ class Payroll extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		// date and employee id/company id
 		$p_date = $this->input->get("month_year");
 		$role_resources_ids = $this->Xin_model->user_role_resource();
@@ -375,14 +375,14 @@ class Payroll extends MY_Controller {
 		} else {
 			$payslip = $this->Payroll_model->get_employee_comp_template($user_info[0]->company_id,$session['user_id']);
 		}
-		$system = $this->Xin_model->read_setting_info(1);		
+		$system = $this->Xin_model->read_setting_info(1);
 		$data = array();
 
         foreach($payslip->result() as $r) {
 			  // user full name
 			$emp_name = $r->first_name.' '.$r->last_name;
 			$full_name = '<a target="_blank" class="text-primary" href="'.site_url().'admin/employees/detail/'.$r->user_id.'">'.$emp_name.'</a>';
-			
+
 			// get total hours > worked > employee
 			$pay_date = $this->input->get('month_year');
 			//overtime request
@@ -391,26 +391,26 @@ class Payroll extends MY_Controller {
 			$re_hrs_old_seconds =0;
 			$re_pcount = 0;
 			foreach ($overtime_count as $overtime_hr){
-				// total work			
+				// total work
 				$request_clock_in =  new DateTime($overtime_hr->request_clock_in);
 				$request_clock_out =  new DateTime($overtime_hr->request_clock_out);
 				$re_interval_late = $request_clock_in->diff($request_clock_out);
 				$re_hours_r  = $re_interval_late->format('%h');
-				$re_minutes_r = $re_interval_late->format('%i');			
+				$re_minutes_r = $re_interval_late->format('%i');
 				$re_total_time = $re_hours_r .":".$re_minutes_r.":".'00';
-				
+
 				$re_str_time = $re_total_time;
-			
+
 				$re_str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $re_str_time);
-				
+
 				sscanf($re_str_time, "%d:%d:%d", $hours, $minutes, $seconds);
-				
+
 				$re_hrs_old_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-				
+
 				$re_hrs_old_int1 += $re_hrs_old_seconds;
-				
-				$re_pcount = gmdate("H", $re_hrs_old_int1);			
-			}	
+
+				$re_pcount = gmdate("H", $re_hrs_old_int1);
+			}
 			$result = $this->Payroll_model->total_hours_worked($r->user_id,$pay_date);
 			$hrs_old_int1 = 0;
 			$pcount = 0;
@@ -418,25 +418,25 @@ class Payroll extends MY_Controller {
 			$total_time_rs = 0;
 			$hrs_old_int_res1 = 0;
 			foreach ($result->result() as $hour_work){
-				// total work			
+				// total work
 				$clock_in =  new DateTime($hour_work->clock_in);
 				$clock_out =  new DateTime($hour_work->clock_out);
 				$interval_late = $clock_in->diff($clock_out);
 				$hours_r  = $interval_late->format('%h');
-				$minutes_r = $interval_late->format('%i');			
+				$minutes_r = $interval_late->format('%i');
 				$total_time = $hours_r .":".$minutes_r.":".'00';
-				
+
 				$str_time = $total_time;
-			
+
 				$str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
-				
+
 				sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
-				
+
 				$hrs_old_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-				
+
 				$hrs_old_int1 += $hrs_old_seconds;
-				
-				$pcount = gmdate("H", $hrs_old_int1);			
+
+				$pcount = gmdate("H", $hrs_old_int1);
 			}
 			$pcount = $pcount + $re_pcount;
 				// get company
@@ -444,9 +444,9 @@ class Payroll extends MY_Controller {
 				if(!is_null($company)){
 					$comp_name = $company[0]->name;
 				} else {
-					$comp_name = '--';	
+					$comp_name = '--';
 				}
-				
+
 				// 1: salary type
 				if($r->wages_type==1){
 					$wages_type = $this->lang->line('xin_payroll_basic_salary');
@@ -475,8 +475,8 @@ class Payroll extends MY_Controller {
 					}
 					$p_class = 'emo_monthly_pay';
 					$view_p_class = 'payroll_template_modal';
-					
-				}				
+
+				}
 				// 2: all allowances
 				$salary_allowances = $this->Employees_model->read_salary_allowances($r->user_id);
 				$count_allowances = $this->Employees_model->count_employee_allowances($r->user_id);
@@ -497,7 +497,7 @@ class Payroll extends MY_Controller {
 				} else {
 					$allowance_amount = 0;
 				}
-				
+
 				// 3: all loan/deductions
 				$salary_loan_deduction = $this->Employees_model->read_salary_loan_deductions($r->user_id);
 				$count_loan_deduction = $this->Employees_model->count_employee_deductions($r->user_id);
@@ -518,7 +518,7 @@ class Payroll extends MY_Controller {
 				} else {
 					$loan_de_amount = 0;
 				}
-				
+
 				// commissions
 				$count_commissions = $this->Employees_model->count_employee_commissions($r->user_id);
 				$commissions = $this->Employees_model->set_employee_commissions($r->user_id);
@@ -593,8 +593,8 @@ class Payroll extends MY_Controller {
 					}
 				} else {
 					$statutory_deductions_amount = 0;
-				}				
-				
+				}
+
 				// 5: overtime
 				$salary_overtime = $this->Employees_model->read_salary_overtime($r->user_id);
 				$count_overtime = $this->Employees_model->count_employee_overtime($r->user_id);
@@ -620,9 +620,9 @@ class Payroll extends MY_Controller {
 				} else {
 					$overtime_amount = 0;
 				}
-				
-				
-				
+
+
+
 				//$allinfo = $basic_salary  .' - '.  $allowance_amount  .' - '.  $all_other_payment  .' - '.  $loan_de_amount  .' - '.  $overtime_amount  .' - '.  $statutory_deductions; // for testing purpose
 				// make payment
 				if($system[0]->is_half_monthly==1){
@@ -632,7 +632,7 @@ class Payroll extends MY_Controller {
 						//foreach($payment_last as $payment_half_last){
 							$make_payment = $this->Payroll_model->read_make_payment_payslip($r->user_id,$p_date);
 							$view_url = site_url().'admin/payroll/payslip/id/'.$make_payment[0]->payslip_key;
-							
+
 							$status = '<span class="label label-success">'.$this->lang->line('xin_payroll_paid').'</span>';
 							//$mpay = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_payroll_make_payment').'"><button type="button" class="btn icon-btn btn-xs btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target=".'.$p_class.'" data-employee_id="'. $r->user_id . '" data-payment_date="'. $p_date . '" data-company_id="'.$this->input->get("company_id").'"><span class="fa fas fa-money"></span></button></span>';
 							$mpay = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_payroll_view_payslip').'"><a href="'.$view_url.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_download').'"><a href="'.site_url().'admin/payroll/pdf_create/p/'.$make_payment[0]->payslip_key.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-download"></span></button></a></span>';
@@ -648,7 +648,7 @@ class Payroll extends MY_Controller {
 					} else if($payment_check->num_rows() > 0){
 						$make_payment = $this->Payroll_model->read_make_payment_payslip($r->user_id,$p_date);
 						$view_url = site_url().'admin/payroll/payslip/id/'.$make_payment[0]->payslip_key;
-						
+
 						$status = '<span class="label label-success">'.$this->lang->line('xin_payroll_paid').'</span>';
 						$mpay = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_payroll_make_payment').'"><button type="button" class="btn icon-btn btn-xs btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target=".'.$p_class.'" data-employee_id="'. $r->user_id . '" data-payment_date="'. $p_date . '" data-company_id="'.$this->input->get("company_id").'"><span class="fa fas fa-money"></span></button></span>';
 						$mpay .= '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_payroll_view_payslip').'"><a href="'.$view_url.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_download').'"><a href="'.site_url().'admin/payroll/pdf_create/p/'.$make_payment[0]->payslip_key.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-download"></span></button></a></span>';
@@ -673,7 +673,7 @@ class Payroll extends MY_Controller {
 					if($payment_check->num_rows() > 0){
 						$make_payment = $this->Payroll_model->read_make_payment_payslip($r->user_id,$p_date);
 						$view_url = site_url().'admin/payroll/payslip/id/'.$make_payment[0]->payslip_key;
-						
+
 						$status = '<span class="label label-success">'.$this->lang->line('xin_payroll_paid').'</span>';
 						$mpay = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_payroll_view_payslip').'"><a href="'.$view_url.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_download').'"><a href="'.site_url().'admin/payroll/pdf_create/p/'.$make_payment[0]->payslip_key.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-download"></span></button></a></span>';
 						if(in_array('313',$role_resources_ids)){
@@ -689,7 +689,7 @@ class Payroll extends MY_Controller {
 					//detail link
 				$detail = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-xs btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target=".'.$view_p_class.'" data-employee_id="'. $r->user_id . '"><span class="fa fa-eye"></span></button></span>';
 				}
-				// add amount				
+				// add amount
 				$total_earning = $basic_salary + $allowance_amount + $overtime_amount + $commissions_amount + $other_payments_amount;
 				$total_deduction = $loan_de_amount + $statutory_deductions_amount;
 				$total_net_salary = $total_earning - $total_deduction;
@@ -698,22 +698,22 @@ class Payroll extends MY_Controller {
 				//$fnet_salary = $net_salary_default + $statutory_deductions;
 			//	$net_salary = $fnet_salary - $loan_de_amount;
 				$net_salary = number_format((float)$total_net_salary, 2, '.', '');
-				//$basic_salary_cal = $basic_salary * $current_rate; 
-				
+				//$basic_salary_cal = $basic_salary * $current_rate;
+
 				$basic_salary = number_format((float)$basic_salary, 2, '.', '');
 				//}
-				
+
 				if($basic_salary == 0 || $basic_salary == '') {
 					$fmpay = '';
 				} else {
 					$fmpay = $mpay;
 				}
 				$basic_salary = $this->Xin_model->currency_sign($basic_salary);
-					
+
 				$net_salary = $this->Xin_model->currency_sign($net_salary);
-				
+
 				$iemp_name = $emp_name.'<small class="text-muted"><i> ('.$comp_name.')<i></i></i></small><br><small class="text-muted"><i>'.$this->lang->line('xin_employees_id').': '.$r->employee_id.'<i></i></i></small>';
-				
+
 				//action link
 				$act = $detail.$fmpay.$delete;
 				if($r->wages_type==1){
@@ -725,7 +725,7 @@ class Payroll extends MY_Controller {
 				}else {
 					$emp_payroll_wage = $wages_type;
 				}
-				
+
 				$data[] = array(
 					$act,
 					$iemp_name,
@@ -745,12 +745,12 @@ class Payroll extends MY_Controller {
           echo json_encode($output);
           exit();
      }
-	 
+
 	 // get payroll template info by id
 	public function payroll_template_read()
 	{
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -764,14 +764,14 @@ class Payroll extends MY_Controller {
 		if(!is_null($designation)){
 			$designation_name = $designation[0]->designation_name;
 		} else {
-			$designation_name = '--';	
+			$designation_name = '--';
 		}
 		// department
 		$department = $this->Department_model->read_department_information($user[0]->department_id);
 		if(!is_null($department)){
 			$department_name = $department[0]->department_name;
 		} else {
-			$department_name = '--';	
+			$department_name = '--';
 		}
 		$data = array(
 				'first_name' => $user[0]->first_name,
@@ -787,7 +787,7 @@ class Payroll extends MY_Controller {
 				'basic_salary' => $user[0]->basic_salary,
 				'daily_wages' => $user[0]->daily_wages,
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/payroll/dialog_templates', $data);
 		} else {
 			redirect('admin/');
@@ -797,7 +797,7 @@ class Payroll extends MY_Controller {
 	public function hourlywage_template_read()
 	{
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -811,14 +811,14 @@ class Payroll extends MY_Controller {
 		if(!is_null($designation)){
 			$designation_name = $designation[0]->designation_name;
 		} else {
-			$designation_name = '--';	
+			$designation_name = '--';
 		}
 		// department
 		$department = $this->Department_model->read_department_information($user[0]->department_id);
 		if(!is_null($department)){
 			$department_name = $department[0]->department_name;
 		} else {
-			$department_name = '--';	
+			$department_name = '--';
 		}
 		$data = array(
 			'first_name' => $user[0]->first_name,
@@ -835,18 +835,18 @@ class Payroll extends MY_Controller {
 			'basic_salary' => $user[0]->basic_salary,
 			'daily_wages' => $user[0]->daily_wages
 		);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/payroll/dialog_templates', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
-	
+
 	// pay monthly > create payslip
 	public function pay_salary()
 	{
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -860,14 +860,14 @@ class Payroll extends MY_Controller {
 		if(!is_null($designation)){
 			$designation_id = $designation[0]->designation_id;
 		} else {
-			$designation_id = 1;	
+			$designation_id = 1;
 		}
 		// department
 		$department = $this->Department_model->read_department_information($user[0]->department_id);
 		if(!is_null($department)){
 			$department_id = $department[0]->department_id;
 		} else {
-			$department_id = 1;	
+			$department_id = 1;
 		}
 		//$location = $this->Location_model->read_location_information($department[0]->location_id);
 		$data = array(
@@ -880,7 +880,7 @@ class Payroll extends MY_Controller {
 				'basic_salary' => $user[0]->basic_salary,
 				'daily_wages' => $user[0]->daily_wages
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/payroll/dialog_make_payment', $data);
 		} else {
 			redirect('admin/');
@@ -890,7 +890,7 @@ class Payroll extends MY_Controller {
 	public function pay_hourly()
 	{
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -904,14 +904,14 @@ class Payroll extends MY_Controller {
 		if(!is_null($designation)){
 			$designation_id = $designation[0]->designation_id;
 		} else {
-			$designation_id = 1;	
+			$designation_id = 1;
 		}
 		// department
 		$department = $this->Department_model->read_department_information($user[0]->department_id);
 		if(!is_null($department)){
 			$department_id = $department[0]->department_id;
 		} else {
-			$department_id = 1;	
+			$department_id = 1;
 		}
 		//$location = $this->Location_model->read_location_information($department[0]->location_id);
 		$data = array(
@@ -925,7 +925,7 @@ class Payroll extends MY_Controller {
 				'basic_salary' => $user[0]->basic_salary,
 				'daily_wages' => $user[0]->daily_wages,
 				);
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/payroll/dialog_make_payment', $data);
 		} else {
 			redirect('admin/');
@@ -933,14 +933,14 @@ class Payroll extends MY_Controller {
 	}
 	// Validate and add info in database > add monthly payment
 	public function add_pay_monthly() {
-	
-		if($this->input->post('add_type')=='add_monthly_payment') {		
+
+		if($this->input->post('add_type')=='add_monthly_payment') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
-				
+
 			/* Server side PHP input validation */
-					
+
 			/*if($Return['error']!=''){
 	       		$this->output($Return
 				);
@@ -953,8 +953,8 @@ class Payroll extends MY_Controller {
 			} else {
 				$is_half_monthly_payroll = 0;
 			}
-			
-			$jurl = random_string('alnum', 40);	
+
+			$jurl = random_string('alnum', 40);
 			$data = array(
 				'employee_id' => $this->input->post('emp_id'),
 				'department_id' => $this->input->post('department_id'),
@@ -979,8 +979,8 @@ class Payroll extends MY_Controller {
 				'year_to_date' => date('d-m-Y'),
 				'created_at' => date('d-m-Y h:i:s')
 			);
-			$result = $this->Payroll_model->add_salary_payslip($data);	
-			
+			$result = $this->Payroll_model->add_salary_payslip($data);
+
 			if ($result) {
 				// set allowance
 				$salary_allowances = $this->Employees_model->read_salary_allowances($this->input->post('emp_id'));
@@ -1150,7 +1150,7 @@ class Payroll extends MY_Controller {
 						$_overtime_data = $this->Payroll_model->add_salary_payslip_overtime($overtime_data);
 					}
 				}
-				
+
 			$Return['result'] = $this->lang->line('xin_success_payment_paid');
 			} else {
 				$Return['error'] = $this->lang->line('xin_error_msg');
@@ -1161,19 +1161,19 @@ class Payroll extends MY_Controller {
 	}
 	// Validate and add info in database > add monthly payment
 	public function add_pay_hourly() {
-	
-		if($this->input->post('add_type')=='add_pay_hourly') {		
+
+		if($this->input->post('add_type')=='add_pay_hourly') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
+
 		/* Server side PHP input validation */
-				
+
 		/*if($Return['error']!=''){
        		$this->output($Return);
     	}*/
 		$basic_salary = $this->input->post('basic_salary');
-		$jurl = random_string('alnum', 40);	
+		$jurl = random_string('alnum', 40);
 		$data = array(
 		'employee_id' => $this->input->post('emp_id'),
 		'department_id' => $this->input->post('department_id'),
@@ -1199,8 +1199,8 @@ class Payroll extends MY_Controller {
 		'year_to_date' => date('d-m-Y'),
 		'created_at' => date('d-m-Y h:i:s')
 		);
-		$result = $this->Payroll_model->add_salary_payslip($data);	
-		
+		$result = $this->Payroll_model->add_salary_payslip($data);
+
 		if ($result) {
 			// set allowance
 			$salary_allowances = $this->Employees_model->read_salary_allowances($this->input->post('emp_id'));
@@ -1307,7 +1307,7 @@ class Payroll extends MY_Controller {
 					$_overtime_data = $this->Payroll_model->add_salary_payslip_overtime($overtime_data);
 				}
 			}
-			
+
 		$Return['result'] = $this->lang->line('xin_success_payment_paid');
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
@@ -1316,24 +1316,24 @@ class Payroll extends MY_Controller {
 		exit;
 		}
 	}
-	
+
 	// Validate and add info in database > add monthly payment
 	public function add_half_pay_to_all() {
-	
+
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		if($this->input->post('add_type')=='payroll') {	
-			if($this->input->post('company_id')==0 && $this->input->post('location_id')==0 && $this->input->post('department_id')==0) {	
+
+		if($this->input->post('add_type')=='payroll') {
+			if($this->input->post('company_id')==0 && $this->input->post('location_id')==0 && $this->input->post('department_id')==0) {
 				$result = $this->Xin_model->all_employees();
-			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')==0 && $this->input->post('department_id')==0) {	
+			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')==0 && $this->input->post('department_id')==0) {
 				$eresult = $this->Payroll_model->get_company_payroll_employees($this->input->post('company_id'));
 				$result = $eresult->result();
-			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')!=0 && $this->input->post('department_id')==0) {	
+			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')!=0 && $this->input->post('department_id')==0) {
 				$eresult = $this->Payroll_model->get_company_location_payroll_employees($this->input->post('company_id'),$this->input->post('location_id'));
 				$result = $eresult->result();
-			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')!=0 && $this->input->post('department_id')!=0) {	
+			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')!=0 && $this->input->post('department_id')!=0) {
 				$eresult = $this->Payroll_model->get_company_location_dep_payroll_employees($this->input->post('company_id'),$this->input->post('location_id'),$this->input->post('department_id'));
 				$result = $eresult->result();
 			} else {
@@ -1343,7 +1343,7 @@ class Payroll extends MY_Controller {
 			foreach($result as $empid) {
 				$user_id = $empid->user_id;
 				$user = $this->Xin_model->read_user_info($user_id);
-			
+
 			if($system[0]->is_half_monthly==1){
 				$is_half_monthly_payroll = 1;
 			} else {
@@ -1365,16 +1365,16 @@ class Payroll extends MY_Controller {
 			if(!is_null($designation)){
 				$designation_id = $designation[0]->designation_id;
 			} else {
-				$designation_id = 1;	
+				$designation_id = 1;
 			}
 			// department
 			$department = $this->Department_model->read_department_information($user[0]->department_id);
 			if(!is_null($department)){
 				$department_id = $department[0]->department_id;
 			} else {
-				$department_id = 1;	
+				$department_id = 1;
 			}
-			
+
 			$salary_allowances = $this->Employees_model->read_salary_allowances($user_id);
 			$count_allowances = $this->Employees_model->count_employee_allowances($user_id);
 			$allowance_amount = 0;
@@ -1416,8 +1416,8 @@ class Payroll extends MY_Controller {
 			} else {
 				$loan_de_amount = 0;
 			}
-			
-			
+
+
 			// 5: overtime
 			$salary_overtime = $this->Employees_model->read_salary_overtime($user_id);
 			$count_overtime = $this->Employees_model->count_employee_overtime($user_id);
@@ -1443,9 +1443,9 @@ class Payroll extends MY_Controller {
 			} else {
 				$overtime_amount = 0;
 			}
-			
-			
-			
+
+
+
 			// 6: statutory deductions
 			// 4: other payment
 			$other_payments = $this->Employees_model->set_employee_other_payments($user_id);
@@ -1518,14 +1518,14 @@ class Payroll extends MY_Controller {
 					endif;
 				}
 			endif;
-			
+
 			// add amount
 			$add_salary = $allowance_amount + $basic_salary + $overtime_amount + $other_payments_amount + $commissions_amount;
 			// add amount
 			$net_salary_default = $add_salary - $loan_de_amount - $statutory_deductions_amount;
 			$net_salary = $net_salary_default;
 			$net_salary = number_format((float)$net_salary, 2, '.', '');
-			$jurl = random_string('alnum', 40);		
+			$jurl = random_string('alnum', 40);
 			$data = array(
 			'employee_id' => $user_id,
 			'department_id' => $department_id,
@@ -1548,8 +1548,8 @@ class Payroll extends MY_Controller {
 			'year_to_date' => date('d-m-Y'),
 			'created_at' => date('d-m-Y h:i:s')
 			);
-			$result = $this->Payroll_model->add_salary_payslip($data);	
-			
+			$result = $this->Payroll_model->add_salary_payslip($data);
+
 			if ($result) {
 				$salary_allowances = $this->Employees_model->read_salary_allowances($user_id);
 				$count_allowances = $this->Employees_model->count_employee_allowances($user_id);
@@ -1653,12 +1653,12 @@ class Payroll extends MY_Controller {
 						$_overtime_data = $this->Payroll_model->add_salary_payslip_overtime($overtime_data);
 					}
 				}
-				
+
 				$Return['result'] = $this->lang->line('xin_success_payment_paid');
 			} else {
 				$Return['error'] = $this->lang->line('xin_error_msg');
 			}
-			
+
 			} // if basic salary
 			}
 			$Return['result'] = $this->lang->line('xin_success_payment_paid');
@@ -1666,25 +1666,25 @@ class Payroll extends MY_Controller {
 			exit;
 			} // f
 	}
-	
+
 	// Validate and add info in database > add monthly payment
 	public function add_pay_to_all() {
-	
+
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		if($this->input->post('add_type')=='payroll') {	
-			if($this->input->post('company_id')==0 && $this->input->post('location_id')==0 && $this->input->post('department_id')==0) {	
+
+		if($this->input->post('add_type')=='payroll') {
+			if($this->input->post('company_id')==0 && $this->input->post('location_id')==0 && $this->input->post('department_id')==0) {
 				$eresult = $this->Payroll_model->get_all_employees();
 				$result = $eresult->result();
-			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')==0 && $this->input->post('department_id')==0) {	
+			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')==0 && $this->input->post('department_id')==0) {
 				$eresult = $this->Payroll_model->get_company_payroll_employees($this->input->post('company_id'));
 				$result = $eresult->result();
-			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')!=0 && $this->input->post('department_id')==0) {	
+			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')!=0 && $this->input->post('department_id')==0) {
 				$eresult = $this->Payroll_model->get_company_location_payroll_employees($this->input->post('company_id'),$this->input->post('location_id'));
 				$result = $eresult->result();
-			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')!=0 && $this->input->post('department_id')!=0) {	
+			} else if($this->input->post('company_id')!=0 && $this->input->post('location_id')!=0 && $this->input->post('department_id')!=0) {
 				$eresult = $this->Payroll_model->get_company_location_dep_payroll_employees($this->input->post('company_id'),$this->input->post('location_id'),$this->input->post('department_id'));
 				$result = $eresult->result();
 			} else {
@@ -1693,7 +1693,7 @@ class Payroll extends MY_Controller {
 			$system = $this->Xin_model->read_setting_info(1);
 			foreach($result as $empid) {
 				$user_id = $empid->user_id;
-				$user = $this->Xin_model->read_user_info($user_id);			
+				$user = $this->Xin_model->read_user_info($user_id);
 				/* Server side PHP input validation */
 				if($empid->wages_type==1){
 					$basic_salary = $empid->basic_salary;
@@ -1706,22 +1706,22 @@ class Payroll extends MY_Controller {
 					$this->payslip_delete_all($pay_val[0]->payslip_id);
 				}
 				if($basic_salary > 0) {
-					
+
 					// get designation
 					$designation = $this->Designation_model->read_designation_information($user[0]->designation_id);
 					if(!is_null($designation)){
 						$designation_id = $designation[0]->designation_id;
 					} else {
-						$designation_id = 1;	
+						$designation_id = 1;
 					}
 					// department
 					$department = $this->Department_model->read_department_information($user[0]->department_id);
 					if(!is_null($department)){
 						$department_id = $department[0]->department_id;
 					} else {
-						$department_id = 1;	
+						$department_id = 1;
 					}
-					
+
 					$salary_allowances = $this->Employees_model->read_salary_allowances($user_id);
 					$count_allowances = $this->Employees_model->count_employee_allowances($user_id);
 					$allowance_amount = 0;
@@ -1743,8 +1743,8 @@ class Payroll extends MY_Controller {
 					} else {
 						$loan_de_amount = 0;
 					}
-					
-					
+
+
 					// 5: overtime
 					$salary_overtime = $this->Employees_model->read_salary_overtime($user_id);
 					$count_overtime = $this->Employees_model->count_employee_overtime($user_id);
@@ -1757,9 +1757,9 @@ class Payroll extends MY_Controller {
 					} else {
 						$overtime_amount = 0;
 					}
-					
-					
-					
+
+
+
 					// 6: statutory deductions
 					// 4: other payment
 					$other_payments = $this->Employees_model->set_employee_other_payments($user_id);
@@ -1793,14 +1793,14 @@ class Payroll extends MY_Controller {
 							endif;
 						}
 					endif;
-					
+
 					// add amount
 					$add_salary = $allowance_amount + $basic_salary + $overtime_amount + $other_payments_amount + $commissions_amount;
 					// add amount
 					$net_salary_default = $add_salary - $loan_de_amount - $statutory_deductions_amount;
 					$net_salary = $net_salary_default;
 					$net_salary = number_format((float)$net_salary, 2, '.', '');
-					$jurl = random_string('alnum', 40);		
+					$jurl = random_string('alnum', 40);
 					$data = array(
 					'employee_id' => $user_id,
 					'department_id' => $department_id,
@@ -1822,8 +1822,8 @@ class Payroll extends MY_Controller {
 					'year_to_date' => date('d-m-Y'),
 					'created_at' => date('d-m-Y h:i:s')
 					);
-					$result = $this->Payroll_model->add_salary_payslip($data);	
-					
+					$result = $this->Payroll_model->add_salary_payslip($data);
+
 					if ($result) {
 						$salary_allowances = $this->Employees_model->read_salary_allowances($user_id);
 						$count_allowances = $this->Employees_model->count_employee_allowances($user_id);
@@ -1927,29 +1927,29 @@ class Payroll extends MY_Controller {
 								$_overtime_data = $this->Payroll_model->add_salary_payslip_overtime($overtime_data);
 							}
 						}
-						
+
 						$Return['result'] = $this->lang->line('xin_success_payment_paid');
 					} else {
 						$Return['error'] = $this->lang->line('xin_error_msg');
 					}
-					
-				
+
+
 				} // if basic salary
-				
+
 			}
 			$Return['result'] = $this->lang->line('xin_success_payment_paid');
 			$this->output($Return);
 			exit;
 			} // f
 	}
-	
+
 	// hourly_list > templates
 	 public function payment_history_list()
      {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/payroll/payment_history", $data);
 		} else {
 			redirect('admin/');
@@ -1958,7 +1958,7 @@ class Payroll extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		if($this->input->get("ihr")=='true'){
@@ -1980,14 +1980,14 @@ class Payroll extends MY_Controller {
 				} else {
 					$history = $this->Payroll_model->get_company_location_payslips_month($this->input->get("company_id"),$this->input->get("location_id"),$this->input->get("salary_month"));
 				}
-				
+
 			} else if($this->input->get("company_id")!=0 && $this->input->get("location_id")!=0 && $this->input->get("department_id")!=0){
 				if($this->input->get("salary_month") == ''){
 					$history = $this->Payroll_model->get_company_location_department_payslips($this->input->get("company_id"),$this->input->get("location_id"),$this->input->get("department_id"));
 				} else {
 					$history = $this->Payroll_model->get_company_location_department_payslips_month($this->input->get("company_id"),$this->input->get("location_id"),$this->input->get("department_id"),$this->input->get("salary_month"));
 				}
-				
+
 			}/**/ /*else if($this->input->get("company_id")!=0 && $this->input->get("location_id")!=0 && $this->input->get("department_id")!=0 && $this->input->get("designation_id")!=0){
 				$history = $this->Payroll_model->get_company_location_department_designation_payslips($this->input->get("company_id"),$this->input->get("location_id"),$this->input->get("department_id"),$this->input->get("designation_id"));
 			}*/
@@ -2011,11 +2011,11 @@ class Payroll extends MY_Controller {
 			// user full name
 			if(!is_null($user)){
 			$full_name = $user[0]->first_name.' '.$user[0]->last_name;
-			$emp_link = $user[0]->employee_id;			  		  
+			$emp_link = $user[0]->employee_id;
 			$month_payment = date("F, Y", strtotime($r->salary_month));
-			
+
 			$p_amount = $this->Xin_model->currency_sign($r->net_salary);
-			
+
 			// get date > created at > and format
 			$created_at = $this->Xin_model->set_date_format($r->created_at);
 			// get designation
@@ -2023,14 +2023,14 @@ class Payroll extends MY_Controller {
 			if(!is_null($designation)){
 				$designation_name = $designation[0]->designation_name;
 			} else {
-				$designation_name = '--';	
+				$designation_name = '--';
 			}
 			// department
 			$department = $this->Department_model->read_department_information($user[0]->department_id);
 			if(!is_null($department)){
 			$department_name = $department[0]->department_name;
 			} else {
-			$department_name = '--';	
+			$department_name = '--';
 			}
 			$department_designation = $designation_name.' ('.$department_name.')';
 			// get company
@@ -2038,17 +2038,17 @@ class Payroll extends MY_Controller {
 			if(!is_null($company)){
 				$comp_name = $company[0]->name;
 			} else {
-				$comp_name = '--';	
+				$comp_name = '--';
 			}
 			// bank account
 			$bank_account = $this->Employees_model->get_employee_bank_account_last($user[0]->user_id);
 			if(!is_null($bank_account)){
 				$account_number = $bank_account[0]->account_number;
 			} else {
-				$account_number = '--';	
+				$account_number = '--';
 			}
 			$payslip = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_view').'"><a href="'.site_url().'admin/payroll/payslip/id/'.$r->payslip_key.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_download').'"><a href="'.site_url().'admin/payroll/pdf_create/p/'.$r->payslip_key.'"><button type="button" class="btn icon-btn btn-xs btn-default waves-effect waves-light"><span class="fa fa-download"></span></button></a></span>';
-			
+
 		$ifull_name = nl2br ($full_name."\r\n <small class='text-muted'><i>".$this->lang->line('xin_employees_id').': '.$emp_link."<i></i></i></small>\r\n <small class='text-muted'><i>".$department_designation.'<i></i></i></small>');
                $data[] = array(
 					$payslip,
@@ -2071,17 +2071,17 @@ class Payroll extends MY_Controller {
           echo json_encode($output);
           exit();
      }
-	
+
 	// payment history
 	 public function payslip()
      {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		//$data['title'] = $this->Xin_model->site_title();
 		$key = $this->uri->segment(5);
-		
+
 		$result = $this->Payroll_model->read_salary_payslip_info_key($key);
 		if(is_null($result)){
 			redirect('admin/payroll/generate_payslip');
@@ -2108,15 +2108,15 @@ class Payroll extends MY_Controller {
 		if(!is_null($designation)){
 			$designation_name = $designation[0]->designation_name;
 		} else {
-			$designation_name = '--';	
+			$designation_name = '--';
 		}
-		
+
 		// department
 		$department = $this->Department_model->read_department_information($user[0]->department_id);
 		if(!is_null($department)){
 			$department_name = $department[0]->department_name;
 		} else {
-			$department_name = '--';	
+			$department_name = '--';
 		}
 		//$department_designation = $designation[0]->designation_name.'('.$department[0]->department_name.')';
 		$data['all_employees'] = $this->Xin_model->all_employees();
@@ -2139,7 +2139,7 @@ class Payroll extends MY_Controller {
 				'year_to_date' => $result[0]->year_to_date,
 				'basic_salary' => $result[0]->basic_salary,
 				'daily_wages' => $result[0]->daily_wages,
-				'payment_method' => $p_method,				
+				'payment_method' => $p_method,
 				'total_allowances' => $result[0]->total_allowances,
 				'total_loan' => $result[0]->total_loan,
 				'total_overtime' => $result[0]->total_overtime,
@@ -2158,7 +2158,7 @@ class Payroll extends MY_Controller {
 		$data['breadcrumbs'] = $this->lang->line('xin_payroll_employee_payslip');
 		$data['path_url'] = 'payslip';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(!empty($session)){ 
+		if(!empty($session)){
 		if($result[0]->payslip_type=='hourly'){
 			$data['subview'] = $this->load->view("admin/payroll/hourly_payslip", $data, TRUE);
 		} else {
@@ -2168,21 +2168,21 @@ class Payroll extends MY_Controller {
 		} else {
 			redirect('admin/');
 		}
-     }	
+     }
 	 public function pdf_create(){
-		 	
+
 		//$this->load->library('Pdf');
-		$system = $this->Xin_model->read_setting_info(1);		
+		$system = $this->Xin_model->read_setting_info(1);
 		 // create new PDF document
    		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		
+
 		$key = $this->uri->segment(5);
 		$payment = $this->Payroll_model->read_salary_payslip_info_key($key);
 		if(is_null($payment)){
 			redirect('admin/payroll/generate_payslip');
 		}
 		$user = $this->Xin_model->read_user_info($payment[0]->employee_id);
-		
+
 		// if password generate option enable
 		if($system[0]->is_payslip_password_generate==1) {
 			/**
@@ -2213,8 +2213,8 @@ class Payroll extends MY_Controller {
 			}
 			$pdf->SetProtection(array('print', 'copy','modify'), $password_val, $password_val, 0, null);
 		}
-		
-		
+
+
 		$_des_name = $this->Designation_model->read_designation_information($user[0]->designation_id);
 		if(!is_null($_des_name)){
 			$_designation_name = $_des_name[0]->designation_name;
@@ -2230,8 +2230,8 @@ class Payroll extends MY_Controller {
 		//$location = $this->Xin_model->read_location_info($department[0]->location_id);
 		// company info
 		$company = $this->Xin_model->read_company_info($user[0]->company_id);
-		
-		
+
+
 		$p_method = '';
 		if(!is_null($company)){
 		  $company_name = $company[0]->name;
@@ -2264,10 +2264,10 @@ class Payroll extends MY_Controller {
 		//$c_info_address = $address_1.' '.$address_2.', '.$city.' - '.$zipcode.', '.$country_name;
 		$c_info_address = $address_1.' '.$address_2.', '.$city.' - '.$zipcode;
 		//$email_phone_address = "$c_info_address \n".$this->lang->line('xin_phone')." : $c_info_phone | ".$this->lang->line('dashboard_email')." : $c_info_email ";
-		
+
 		$email_phone_address = "$c_info_address \n".$this->lang->line('xin_phone')." : $c_info_phone | ".$this->lang->line('dashboard_email')." : $c_info_email \n";
-		
-		$header_string = $email_phone_address;		
+
+		$header_string = $email_phone_address;
 		// set document information
 		$pdf->SetCreator('HRSALE');
 		$pdf->SetAuthor('HRSALE');
@@ -2275,24 +2275,24 @@ class Payroll extends MY_Controller {
 		//$pdf->SetSubject('TCPDF Tutorial');
 		//$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 		$pdf->SetHeaderData('../../../uploads/logo/payroll/'.$system[0]->payroll_logo, 15, $company_name, $header_string);
-			
+
 		$pdf->setFooterData(array(0,64,0), array(0,64,128));
-		
+
 		// set header and footer fonts
 		$pdf->setHeaderFont(Array('helvetica', '', 11.5));
 		$pdf->setFooterFont(Array('helvetica', '', 9));
-		
+
 		// set default monospaced font
 		$pdf->SetDefaultMonospacedFont('courier');
-		
+
 		// set margins
 		$pdf->SetMargins(15, 27, 15);
 		$pdf->SetHeaderMargin(5);
 		$pdf->SetFooterMargin(10);
-		
+
 		// set auto page breaks
 		$pdf->SetAutoPageBreak(TRUE, 25);
-		
+
 		// set image scale factor
 		$pdf->setImageScale(1.25);
 		$pdf->SetAuthor('HRSALE');
@@ -2301,39 +2301,39 @@ class Payroll extends MY_Controller {
 		$pdf->SetKeywords($this->lang->line('xin_payslip'));
 		// set font
 		$pdf->SetFont('helvetica', 'B', 10);
-				
+
 		// set header and footer fonts
 		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-		
+
 		// set default monospaced font
 		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-		
+
 		// set margins
 		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-		
+
 		// set auto page breaks
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-		
+
 		// set image scale factor
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-		
+
 		// ---------------------------------------------------------
-		
+
 		// set default font subsetting mode
 		$pdf->setFontSubsetting(true);
-		
+
 		// Set font
 		// dejavusans is a UTF-8 Unicode font, if you only need to
 		// print standard ASCII chars, you can use core fonts like
 		// helvetica or times to reduce file size.
 		$pdf->SetFont('dejavusans', '', 10, '', true);
-		
+
 		// Add a page
 		// This method has several options, check the source code documentation for more information.
-		$pdf->AddPage();		
+		$pdf->AddPage();
 		// -----------------------------------------------------------------------------
 		$fname = $user[0]->first_name.' '.$user[0]->last_name;
 		$created_at = $this->Xin_model->set_date_format($payment[0]->created_at);
@@ -2384,12 +2384,12 @@ class Payroll extends MY_Controller {
 		$loan = $this->Employees_model->set_employee_deductions_payslip($payment[0]->payslip_id);
 		//
 		$statutory_deduction_amount = 0; $loan_de_amount = 0; $allowances_amount = 0;
-		$commissions_amount = 0; $other_payments_amount = 0; $overtime_amount = 0;		
+		$commissions_amount = 0; $other_payments_amount = 0; $overtime_amount = 0;
 		// laon
 		if($count_loan > 0):
 			foreach($loan->result() as $r_loan) {
 				$loan_de_amount += $r_loan->loan_amount;
-			}	
+			}
 			$loan_de_amount = $loan_de_amount;
 		else:
 			$loan_de_amount = 0;
@@ -2436,10 +2436,10 @@ class Payroll extends MY_Controller {
 		// -----------------------------------------------------------------------------
 		// set cell padding
 		$pdf->setCellPaddings(1, 1, 1, 1);
-		
+
 		// set cell margins
 		$pdf->setCellMargins(0, 0, 0, 0);
-		
+
 		// set color for background
 		$pdf->SetFillColor(255, 255, 127);
 		// set some text for example
@@ -2478,7 +2478,8 @@ class Payroll extends MY_Controller {
 				$month = date('m', $date);
 				$year = date('Y', $date);
 				// total days in month
-				$daysInMonth = cal_days_in_month(0, $month, $year);
+				// $daysInMonth = cal_days_in_month(0, $month, $year);
+				$daysInMonth = date('t', strtotime("$year-$month-01"));
 				$imonth = date('F', $date);
 				$r = $this->Xin_model->read_user_info($user[0]->user_id);
 				$pcount = 0;
@@ -2500,11 +2501,11 @@ class Payroll extends MY_Controller {
 						$h_date = $this->Timesheet_model->holiday_date($attendance_date);
 						$begin = new DateTime( $h_date[0]->start_date );
 						$end = new DateTime( $h_date[0]->end_date);
-						$end = $end->modify( '+1 day' ); 
-						
+						$end = $end->modify( '+1 day' );
+
 						$interval = new DateInterval('P1D');
 						$daterange = new DatePeriod($begin, $interval ,$end);
-						
+
 						foreach($daterange as $date){
 							$holiday_arr[] =  $date->format("Y-m-d");
 						}
@@ -2518,14 +2519,14 @@ class Payroll extends MY_Controller {
 						$leave_date = $this->Timesheet_model->leave_date($user_id,$attendance_date);
 						$begin1 = new DateTime( $leave_date[0]->from_date );
 						$end1 = new DateTime( $leave_date[0]->to_date);
-						$end1 = $end1->modify( '+1 day' ); 
-						
+						$end1 = $end1->modify( '+1 day' );
+
 						$interval1 = new DateInterval('P1D');
 						$daterange1 = new DatePeriod($begin1, $interval1 ,$end1);
-						
+
 						foreach($daterange1 as $date1){
 							$leave_arr[] =  $date1->format("Y-m-d");
-						}	
+						}
 					} else {
 						$leave_arr[] = '99-99-99';
 					}
@@ -2533,7 +2534,7 @@ class Payroll extends MY_Controller {
 					$check = $this->Timesheet_model->attendance_first_in_check($user_id,$attendance_date);
 					// get holiday>events
 					if($office_shift[0]->monday_in_time == '' && $day == 'Monday') {
-						$status = 'H';	
+						$status = 'H';
 						$pcount += 0;
 						//$acount += 0;
 					} else if($office_shift[0]->tuesday_in_time == '' && $day == 'Tuesday') {
@@ -2594,48 +2595,48 @@ class Payroll extends MY_Controller {
 			</tr>';
 			}
 		$tbl1 .= '</table>';
-		
+
 		$pdf->writeHTML($tbl1, true, false, true, false, '');
 		if($payment[0]->payslip_type=='hourly'){
-			$total_earning = $allowances_amount + $commissions_amount + $other_payments_amount + $overtime_amount;	
+			$total_earning = $allowances_amount + $commissions_amount + $other_payments_amount + $overtime_amount;
 			$total_deductions = $loan_de_amount + $statutory_deduction_amount;
 			$total_count = $hcount * $bs;
 		} else {
-			$total_earning = $bs + $allowances_amount + $commissions_amount + $other_payments_amount + $overtime_amount;	
+			$total_earning = $bs + $allowances_amount + $commissions_amount + $other_payments_amount + $overtime_amount;
 			$total_deductions = $loan_de_amount + $statutory_deduction_amount;
 		}
 		/*<tr>
 				<td colspan="2">'.$this->lang->line('xin_payroll_hourly_rate').'</td>
-				<td align="center">'.$this->Xin_model->currency_sign($payment[0]->basic_salary).'</td>	
-				<td>&nbsp;</td>				
+				<td align="center">'.$this->Xin_model->currency_sign($payment[0]->basic_salary).'</td>
+				<td>&nbsp;</td>
 			</tr>*/
 		//// break..
 		$pdf->Ln(7);
 		$tblbrk = '<table cellpadding="3" cellspacing="0" border="1"><tr bgcolor="#69e48a">
 				<td colspan="2" align="center"><strong>'.$this->lang->line('xin_description').'</strong></td>
-				<td align="center"><strong>'.$this->lang->line('xin_payslip_earning').'</strong></td>	
-				<td align="center"><strong>'.$this->lang->line('xin_deductions').'</strong></td>			
+				<td align="center"><strong>'.$this->lang->line('xin_payslip_earning').'</strong></td>
+				<td align="center"><strong>'.$this->lang->line('xin_deductions').'</strong></td>
 			</tr>';
 			if($payment[0]->payslip_type!='hourly'){
 				$tblbrk .= '<tr>
 					<td colspan="2">'.$this->lang->line('xin_payroll_basic_salary').'</td>
-					<td align="center"  valign="bottom">'.$this->Xin_model->currency_sign($bs).'</td>	
-					<td>&nbsp;</td>				
+					<td align="center"  valign="bottom">'.$this->Xin_model->currency_sign($bs).'</td>
+					<td>&nbsp;</td>
 				</tr>';
 			} else {
 				$tblbrk .= '<tr>
 					<td colspan="2">'.$this->lang->line('xin_payroll_hourly_rate').' x '.$this->lang->line('xin_payroll_hours_worked_total').'<br> '.$this->Xin_model->currency_sign($bs).' x '.$hcount.'</td>
-					<td align="center"  valign="bottom">'.$this->Xin_model->currency_sign($total_count).'</td>	
-					<td>&nbsp;</td>				
+					<td align="center"  valign="bottom">'.$this->Xin_model->currency_sign($total_count).'</td>
+					<td>&nbsp;</td>
 				</tr>';
-			}			
+			}
 			//allowances
 			if($count_allowances > 0) {
 				foreach($allowances->result() as $sl_allowances) {
 				$tblbrk .= '<tr>
 					<td colspan="2">'.$sl_allowances->allowance_title.'</td>
-					<td align="center">'.$this->Xin_model->currency_sign($sl_allowances->allowance_amount).'</td>	
-					<td>&nbsp;</td>				
+					<td align="center">'.$this->Xin_model->currency_sign($sl_allowances->allowance_amount).'</td>
+					<td>&nbsp;</td>
 					</tr>';
 				}
 			}
@@ -2644,8 +2645,8 @@ class Payroll extends MY_Controller {
 				foreach($commissions->result() as $sl_commissions) {
 				$tblbrk .= '<tr>
 					<td colspan="2">'.$sl_commissions->commission_title.'</td>
-					<td align="center">'.$this->Xin_model->currency_sign($sl_commissions->commission_amount).'</td>	
-					<td>&nbsp;</td>				
+					<td align="center">'.$this->Xin_model->currency_sign($sl_commissions->commission_amount).'</td>
+					<td>&nbsp;</td>
 					</tr>';
 				}
 			}
@@ -2654,8 +2655,8 @@ class Payroll extends MY_Controller {
 				foreach($other_payments->result() as $sl_other_payments) {
 				$tblbrk .= '<tr>
 					<td colspan="2">'.$sl_other_payments->payments_title.'</td>
-					<td align="center">'.$this->Xin_model->currency_sign($sl_other_payments->payments_amount).'</td>	
-					<td>&nbsp;</td>				
+					<td align="center">'.$this->Xin_model->currency_sign($sl_other_payments->payments_amount).'</td>
+					<td>&nbsp;</td>
 					</tr>';
 				}
 			}
@@ -2665,8 +2666,8 @@ class Payroll extends MY_Controller {
 					$overtime_total = $r_overtime->overtime_hours * $r_overtime->overtime_rate;
 				$tblbrk .= '<tr>
 					<td colspan="2">'.$r_overtime->overtime_title.'</td>
-					<td align="center">'.$this->Xin_model->currency_sign($overtime_total).'</td>	
-					<td>&nbsp;</td>				
+					<td align="center">'.$this->Xin_model->currency_sign($overtime_total).'</td>
+					<td>&nbsp;</td>
 					</tr>';
 				}
 			}
@@ -2683,7 +2684,7 @@ class Payroll extends MY_Controller {
 				$tblbrk .= '<tr>
 					<td colspan="2">'.$sl_statutory_deductions->deduction_title.'</td>
 					<td>&nbsp;</td>
-					<td align="center">'.$this->Xin_model->currency_sign($xstatutory_deduction_amount).'</td>			
+					<td align="center">'.$this->Xin_model->currency_sign($xstatutory_deduction_amount).'</td>
 					</tr>';
 				}
 			}
@@ -2692,8 +2693,8 @@ class Payroll extends MY_Controller {
 				foreach($loan->result() as $r_loan) {
 				$tblbrk .= '<tr>
 					<td colspan="2">'.$r_loan->loan_title.'</td>
-					<td>&nbsp;</td>	
-					<td align="center">'.$this->Xin_model->currency_sign($r_loan->loan_amount).'</td>	
+					<td>&nbsp;</td>
+					<td align="center">'.$this->Xin_model->currency_sign($r_loan->loan_amount).'</td>
 					</tr>';
 				}
 			}
@@ -2704,11 +2705,11 @@ class Payroll extends MY_Controller {
 				$etotal_count = $hcount * $bs;
 				$fsalary = $etotal_count + $total_net_salary;
 				$etotal_earning = $total_earning + $etotal_count;
-			
+
 			$tblbrk .= '
 			<tr><td colspan="2" align="center"><strong>Total</strong></td>
 					<td align="center"><strong>'.$this->Xin_model->currency_sign($etotal_earning).'</strong></td>
-					<td align="center"><strong>'.$this->Xin_model->currency_sign($total_deductions).'</strong></td>	
+					<td align="center"><strong>'.$this->Xin_model->currency_sign($total_deductions).'</strong></td>
 					</tr></table>
 					<table cellpadding="3" cellspacing="0" border="1">
 					<tr><td colspan="2" align="center">&nbsp;</td>
@@ -2723,7 +2724,7 @@ class Payroll extends MY_Controller {
 				$tblbrk .= '
 			<tr><td colspan="2" align="center"><strong>Total</strong></td>
 					<td align="center"><strong>'.$this->Xin_model->currency_sign($total_earning).'</strong></td>
-					<td align="center"><strong>'.$this->Xin_model->currency_sign($total_deductions).'</strong></td>	
+					<td align="center"><strong>'.$this->Xin_model->currency_sign($total_deductions).'</strong></td>
 					</tr></table>
 					<table cellpadding="3" cellspacing="0" border="1">
 					<tr><td colspan="2" align="center">&nbsp;</td>
@@ -2733,22 +2734,22 @@ class Payroll extends MY_Controller {
 					</tr></table>';
 			}
 		$pdf->writeHTML($tblbrk, true, false, true, false, '');
-		
+
 		////////////////// end break salary..
 		/*$pdf->Ln(7);
 		$tblc = '<table cellpadding="3" cellspacing="0" border="1"><tr>
 				<td colspan="2">'.$this->lang->line('xin_payroll_total_earning').'</td>
-				<td colspan="2">'.$this->lang->line('xin_payroll_total_deductions').'</td>				
+				<td colspan="2">'.$this->lang->line('xin_payroll_total_deductions').'</td>
 			</tr>
 			<tr>
 				<td colspan="2">'.$this->Xin_model->currency_sign($total_earning).'</td>
-				<td colspan="2">'.$this->Xin_model->currency_sign($total_deductions).'</td>				
+				<td colspan="2">'.$this->Xin_model->currency_sign($total_deductions).'</td>
 			</tr>
 			</table>';
 		$pdf->writeHTML($tblc, true, false, true, false, '');*/
-			
+
 		/*if(null!=$this->uri->segment(4) && $this->uri->segment(4)=='p') {
-		// -----------------------------------------------------------------------------		
+		// -----------------------------------------------------------------------------
 		$tbl2 = '';
 		// -----------------------------------------------------------------------------
 		$txt = 'Payslip Details';
@@ -2813,7 +2814,7 @@ class Payroll extends MY_Controller {
 				<td align="right">'.$this->Xin_model->currency_sign($payment[0]->total_other_payments).'</td>
 			</tr>';
 			endif;
-			
+
 			$total_earning = $bs + $allowances_amount + $overtime_amount + $commissions_amount + $other_payments_amount;
 			$total_deduction = $loan_de_amount + $statutory_deduction_amount;
 			$total_net_salary = $total_earning - $total_deduction;
@@ -2824,9 +2825,9 @@ class Payroll extends MY_Controller {
 			</tr>
 		</table>
 		';
-		
+
 		$pdf->writeHTML($tbl2, true, false, false, false, '');
-		}*/		
+		}*/
 		$tbl = '
 		<table cellpadding="5" cellspacing="0" border="0">
 			<tr>
@@ -2834,9 +2835,9 @@ class Payroll extends MY_Controller {
 			</tr>
 		</table>';
 		$pdf->writeHTML($tbl, true, false, false, false, '');
-				
+
 		// ---------------------------------------------------------
-		
+
 		// Close and output PDF document
 		// This method has several options, check the source code documentation for more information.
 		$fname = strtolower($fname);
@@ -2845,18 +2846,18 @@ class Payroll extends MY_Controller {
 		ob_start();
 		$pdf->Output('payslip_'.$fname.'_'.$pay_month.'.pdf', 'I');
 		ob_end_flush();
-	 }	 
+	 }
 	 public function pdf_createv2(){
-		 	
+
 			//$this->load->library('Pdf');
-		$system = $this->Xin_model->read_setting_info(1);		
+		$system = $this->Xin_model->read_setting_info(1);
 		 // create new PDF document
    		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		
+
 		$id = $this->uri->segment(5);
 		$payment = $this->Payroll_model->read_salary_payslip_info($id);
 		$user = $this->Xin_model->read_user_info($payment[0]->employee_id);
-		
+
 		// if password generate option enable
 		if($system[0]->is_payslip_password_generate==1) {
 			/**
@@ -2887,8 +2888,8 @@ class Payroll extends MY_Controller {
 			}
 			$pdf->SetProtection(array('print', 'copy','modify'), $password_val, $password_val, 0, null);
 		}
-		
-		
+
+
 		$_des_name = $this->Designation_model->read_designation_information($user[0]->designation_id);
 		if(!is_null($_des_name)){
 			$_designation_name = $_des_name[0]->designation_name;
@@ -2904,8 +2905,8 @@ class Payroll extends MY_Controller {
 		//$location = $this->Xin_model->read_location_info($department[0]->location_id);
 		// company info
 		$company = $this->Xin_model->read_company_info($user[0]->company_id);
-		
-		
+
+
 		$p_method = '';
 		if(!is_null($company)){
 		  $company_name = $company[0]->name;
@@ -2937,7 +2938,7 @@ class Payroll extends MY_Controller {
 		// set default header data
 		$c_info_address = $address_1.' '.$address_2.', '.$city.' - '.$zipcode.', '.$country_name;
 		$email_phone_address = "".$this->lang->line('dashboard_email')." : $c_info_email | ".$this->lang->line('xin_phone')." : $c_info_phone \n".$this->lang->line('xin_address').": $c_info_address";
-		$header_string = $email_phone_address;		
+		$header_string = $email_phone_address;
 		// set document information
 		$pdf->SetCreator('HRSALE');
 		$pdf->SetAuthor('HRSALE');
@@ -2945,24 +2946,24 @@ class Payroll extends MY_Controller {
 		//$pdf->SetSubject('TCPDF Tutorial');
 		//$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 		$pdf->SetHeaderData('../../../uploads/logo/payroll/'.$system[0]->payroll_logo, 40, $company_name, $header_string);
-			
+
 		$pdf->setFooterData(array(0,64,0), array(0,64,128));
-		
+
 		// set header and footer fonts
 		$pdf->setHeaderFont(Array('helvetica', '', 11.5));
 		$pdf->setFooterFont(Array('helvetica', '', 9));
-		
+
 		// set default monospaced font
 		$pdf->SetDefaultMonospacedFont('courier');
-		
+
 		// set margins
 		$pdf->SetMargins(15, 27, 15);
 		$pdf->SetHeaderMargin(5);
 		$pdf->SetFooterMargin(10);
-		
+
 		// set auto page breaks
 		$pdf->SetAutoPageBreak(TRUE, 25);
-		
+
 		// set image scale factor
 		$pdf->setImageScale(1.25);
 		$pdf->SetAuthor('HRSALE');
@@ -2971,39 +2972,39 @@ class Payroll extends MY_Controller {
 		$pdf->SetKeywords($this->lang->line('xin_payslip'));
 		// set font
 		$pdf->SetFont('helvetica', 'B', 10);
-				
+
 		// set header and footer fonts
 		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-		
+
 		// set default monospaced font
 		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-		
+
 		// set margins
 		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-		
+
 		// set auto page breaks
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-		
+
 		// set image scale factor
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-		
+
 		// ---------------------------------------------------------
-		
+
 		// set default font subsetting mode
 		$pdf->setFontSubsetting(true);
-		
+
 		// Set font
 		// dejavusans is a UTF-8 Unicode font, if you only need to
 		// print standard ASCII chars, you can use core fonts like
 		// helvetica or times to reduce file size.
 		$pdf->SetFont('dejavusans', '', 10, '', true);
-		
+
 		// Add a page
 		// This method has several options, check the source code documentation for more information.
-		$pdf->AddPage();		
+		$pdf->AddPage();
 		// -----------------------------------------------------------------------------
 		$fname = $user[0]->first_name.' '.$user[0]->last_name;
 		$created_at = $this->Xin_model->set_date_format($payment[0]->created_at);
@@ -3036,12 +3037,12 @@ class Payroll extends MY_Controller {
 		$loan = $this->Employees_model->set_employee_deductions_payslip($payment[0]->payslip_id);
 		//
 		$statutory_deduction_amount = 0; $loan_de_amount = 0; $allowances_amount = 0;
-		$commissions_amount = 0; $other_payments_amount = 0; $overtime_amount = 0;		
+		$commissions_amount = 0; $other_payments_amount = 0; $overtime_amount = 0;
 		// laon
 		if($count_loan > 0):
 			foreach($loan->result() as $r_loan) {
 				$loan_de_amount += $r_loan->loan_amount;
-			}	
+			}
 			$loan_de_amount = $loan_de_amount;
 		else:
 			$loan_de_amount = 0;
@@ -3091,10 +3092,10 @@ class Payroll extends MY_Controller {
 		// -----------------------------------------------------------------------------
 		// set cell padding
 		$pdf->setCellPaddings(1, 1, 1, 1);
-		
+
 		// set cell margins
 		$pdf->setCellMargins(0, 0, 0, 0);
-		
+
 		// set color for background
 		$pdf->SetFillColor(255, 255, 127);
 		// set some text for example
@@ -3124,25 +3125,25 @@ class Payroll extends MY_Controller {
 			</tr>
 		</table>
 		';
-		
+
 		$pdf->writeHTML($tbl1, true, false, true, false, '');
-		
-		$total_earning = $bs + $allowances_amount + $commissions_amount + $other_payments_amount + $overtime_amount;	
+
+		$total_earning = $bs + $allowances_amount + $commissions_amount + $other_payments_amount + $overtime_amount;
 		$total_deductions = $loan_de_amount + $statutory_deduction_amount;
 		$pdf->Ln(7);
 		$tblc = '<table cellpadding="3" cellspacing="0" border="1"><tr>
 				<td colspan="2">'.$this->lang->line('xin_payroll_total_earning').'</td>
-				<td colspan="2">'.$this->lang->line('xin_payroll_total_deductions').'</td>				
+				<td colspan="2">'.$this->lang->line('xin_payroll_total_deductions').'</td>
 			</tr>
 			<tr>
 				<td colspan="2">'.$this->Xin_model->currency_sign($total_earning).'</td>
-				<td colspan="2">'.$this->Xin_model->currency_sign($total_deductions).'</td>				
+				<td colspan="2">'.$this->Xin_model->currency_sign($total_deductions).'</td>
 			</tr>
 			</table>';
 		$pdf->writeHTML($tblc, true, false, true, false, '');
-		
+
 		if(null!=$this->uri->segment(4) && $this->uri->segment(4)=='p') {
-		// -----------------------------------------------------------------------------		
+		// -----------------------------------------------------------------------------
 		$tbl2 = '';
 		// -----------------------------------------------------------------------------
 		$txt = 'Payslip Details';
@@ -3222,9 +3223,9 @@ class Payroll extends MY_Controller {
 			</tr>
 		</table>
 		';
-		
+
 		$pdf->writeHTML($tbl2, true, false, false, false, '');
-		}		
+		}
 		$tbl = '
 		<table cellpadding="5" cellspacing="0" border="0">
 			<tr>
@@ -3232,9 +3233,9 @@ class Payroll extends MY_Controller {
 			</tr>
 		</table>';
 		$pdf->writeHTML($tbl, true, false, false, false, '');
-				
+
 		// ---------------------------------------------------------
-		
+
 		// Close and output PDF document
 		// This method has several options, check the source code documentation for more information.
 		$fname = strtolower($fname);
@@ -3243,18 +3244,18 @@ class Payroll extends MY_Controller {
 		ob_start();
 		$pdf->Output('payslip_'.$fname.'_'.$pay_month.'.pdf', 'I');
 		ob_end_flush();
-	 }		 	
+	 }
 	// get company > employees
 	 public function get_employees() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'company_id' => $id
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/payroll/get_employees", $data);
 		} else {
 			redirect('admin/');
@@ -3263,13 +3264,13 @@ class Payroll extends MY_Controller {
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-	 }  
-	 
+	 }
+
 	// make payment info by id
 	public function make_payment_view()
 	{
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
@@ -3283,16 +3284,16 @@ class Payroll extends MY_Controller {
 		if(!is_null($designation)){
 			$designation_name = $designation[0]->designation_name;
 		} else {
-			$designation_name = '--';	
+			$designation_name = '--';
 		}
 		// department
 		$department = $this->Department_model->read_department_information($user[0]->department_id);
 		if(!is_null($department)){
 			$department_name = $department[0]->department_name;
 		} else {
-			$department_name = '--';	
+			$department_name = '--';
 		}
-		
+
 		$data = array(
 				'first_name' => $user[0]->first_name,
 				'last_name' => $user[0]->last_name,
@@ -3330,16 +3331,16 @@ class Payroll extends MY_Controller {
 				'comments' => $result[0]->comments,
 				);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view('admin/payroll/dialog_payslip', $data);
 		} else {
 			redirect('admin/');
 		}
 	}
 	public function payslip_delete() {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		/* Define return | here result is used to return user data and error for error message */
@@ -3361,9 +3362,9 @@ class Payroll extends MY_Controller {
 		$this->output($Return);
 	}
 	public function payslip_delete_all($id) {
-		
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		/* Define return | here result is used to return user data and error for error message */
@@ -3378,7 +3379,7 @@ class Payroll extends MY_Controller {
 		$this->Payroll_model->delete_payslip_overtime_items($id);
 		$this->Payroll_model->delete_payslip_loan_items($id);
 	}
-	
+
 	// get company > locations
 	 public function get_company_plocations() {
 
@@ -3386,12 +3387,12 @@ class Payroll extends MY_Controller {
 		$keywords = preg_split("/[\s,]+/", $this->uri->segment(4));
 		if(is_numeric($keywords[0])) {
 			$id = $keywords[0];
-		
+
 			$data = array(
 				'company_id' => $id
 				);
 			$session = $this->session->userdata('username');
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data = $this->security->xss_clean($data);
 				$this->load->view("admin/payroll/get_company_plocations", $data);
 			} else {
@@ -3410,12 +3411,12 @@ class Payroll extends MY_Controller {
 		$keywords = preg_split("/[\s,]+/", $this->uri->segment(4));
 		if(is_numeric($keywords[0])) {
 			$id = $keywords[0];
-		
+
 			$data = array(
 				'location_id' => $id
 				);
 			$session = $this->session->userdata('username');
-			if(!empty($session)){ 
+			if(!empty($session)){
 				$data = $this->security->xss_clean($data);
 				$this->load->view("admin/payroll/get_location_pdepartments", $data);
 			} else {
@@ -3431,13 +3432,13 @@ class Payroll extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		
+
 		$data = array(
 			'department_id' => $id,
 			'all_designations' => $this->Designation_model->all_designations(),
 			);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/payroll/get_department_pdesignations", $data);
 		} else {
 			redirect('admin/');
@@ -3447,17 +3448,17 @@ class Payroll extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	 }
-	 
+
 	  // Validate and update info in database // update_status
 	public function update_payroll_status() {
-	
-		if($this->input->post('type')=='update_status') {		
+
+		if($this->input->post('type')=='update_status') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();	
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		if($this->input->post('status')==='') {
 			$Return['error'] = $this->lang->line('xin_error_template_status');
-		}	
+		}
 		if($Return['error']!=''){
 			$this->output($Return);
     	}
@@ -3492,7 +3493,7 @@ class Payroll extends MY_Controller {
 	public function selary_emp(){
         $session = $this->session->userdata('username');
 		//  dd($session);
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['result'] = $this->Salary_model->getall_salary_with_id($session['user_id']);
@@ -3501,14 +3502,14 @@ class Payroll extends MY_Controller {
 		$data['title'] 			= 'Salary | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']	= 'Salary';
 		$data['subview'] 		= $this->load->view("admin/payroll/selary_emp", $data, TRUE);
-								  $this->load->view('admin/layout/layout_main', $data); 
-    }	
+								  $this->load->view('admin/layout/layout_main', $data);
+    }
 
     public function employee_bonus(){
     	exit("coming soon");
         $session = $this->session->userdata('username');
 		//  dd($session);
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['result'] = $this->Salary_model->getall_salary_with_id($session['user_id']);
@@ -3517,7 +3518,7 @@ class Payroll extends MY_Controller {
 		$data['title'] 			= 'Salary | '.$this->Xin_model->site_title();
 		$data['breadcrumbs']	= 'Salary';
 		$data['subview'] 		= $this->load->view("admin/payroll/selary_emp", $data, TRUE);
-								  $this->load->view('admin/layout/layout_main', $data); 
+								  $this->load->view('admin/layout/layout_main', $data);
     }
 
 
@@ -3529,7 +3530,7 @@ class Payroll extends MY_Controller {
 	public function advanced_salary(){
 		$data['session'] = $this->session->userdata('username');
 		// dd($data['session']);
-		if(empty($data['session'])){ 
+		if(empty($data['session'])){
 			redirect('admin/');
 		}
 		$data['title'] 		 = 'Advanced Salary | '.$this->Xin_model->site_title();
@@ -3554,7 +3555,7 @@ class Payroll extends MY_Controller {
 			$data['results'] =	$this->db->get()->result();
 			$data['subview'] = $this->load->view("admin/payroll/advanced_salary", $data, TRUE);
 		}
-						   $this->load->view('admin/layout/layout_main', $data); 
+						   $this->load->view('admin/layout/layout_main', $data);
 	}
 
 	// public function advanced_menu(){
@@ -3569,7 +3570,7 @@ class Payroll extends MY_Controller {
 	// 		$data['status']            = 2;
 	// 		$insert = $this->db->insert('xin_advance_salaries',$data);
 	// 	}
-					
+
 	// }
 
 	public function advanced_salary_add(){
@@ -3584,10 +3585,10 @@ class Payroll extends MY_Controller {
 			$insert = $this->db->insert('xin_advance_salaries',$data);
 		}
 		redirect('admin/payroll/advanced_salary');
-		
+
 	}
 
-	
+
 	public function update_salary(){
 		// dd($_POST);
 
@@ -3599,11 +3600,11 @@ class Payroll extends MY_Controller {
 			$data['id']   	  			= $_POST['rowId'];
 			// dd($data);
 			$insert = $this->db->where('id',$_POST['rowId'])->update('xin_advance_salaries',$data);
-			
+
 			if($insert){
 				return 'success';
 			}else{
-				return 'error';	
+				return 'error';
 			}
 			redirect('admin/payroll/advanced_salary');
 		// }
@@ -3631,12 +3632,12 @@ class Payroll extends MY_Controller {
 	public function emp_festival_bonus($id = null){
 		$data['session'] = $this->session->userdata('username');
 		// dd($data['session']);
-		if(empty($data['session'])){ 
+		if(empty($data['session'])){
 			redirect('admin/');
 		}
 		$data['title'] 		 = 'Festival Bonus | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Festival Bonus ';
-		$data['result']= $this->db->select('*')->get('xin_festival_bonus')->result();	
+		$data['result']= $this->db->select('*')->get('xin_festival_bonus')->result();
 		if($id != null){
 			$data['row']= $this->db->select('*')->where('id',$id)->get('xin_festival_bonus')->row();
 		}
@@ -3653,7 +3654,7 @@ class Payroll extends MY_Controller {
 					'festival_date' => $_POST['festival_date'],
 					'status' 		=> $_POST['status'],
 				);
-		$hidden_id = $_POST['hidden_id'] ;	
+		$hidden_id = $_POST['hidden_id'] ;
 		// dd($hidden_id);
 		$insert_update =  $this->Payroll_model->save_update_festival_bonus($table,$data,$hidden_id);
 		if(isset($insert_update) == TRUE){

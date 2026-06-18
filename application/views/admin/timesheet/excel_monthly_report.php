@@ -5,7 +5,7 @@
 
 <body style="width:800px;">
 
-  
+
   <?php
 $month_year=$first_date;
 
@@ -18,7 +18,8 @@ $imonth_year = explode('-',$month_year);
 
 
 // total days in month
-$daysInMonth = cal_days_in_month(0, $month, $year);
+// $daysInMonth = cal_days_in_month(0, $month, $year);
+$daysInMonth = date('t', strtotime("$year-$month-01"));
 $imonth = date('F', $date);
 ?>
 <?php
@@ -36,7 +37,7 @@ header('Cache-Control: max-age=0'); //no cache
     <td colspan="39" style="text-align:center;">
         <div style="font-size:35px; font-weight:bold; text-align:center;margin-top:3px"><?php echo xin_company_info(1)->company_name; ?></div>
         <div style="font-size:25px; font-weight:bold; text-align:center;"><?php echo xin_company_info(1)->address_1 ." ". xin_company_info(1)->address_2; ?></div>
-        
+
         <div style="font-size:20px; font-weight:bold; text-align:center;margin-bottom:3px">Attendenc Month : <?php echo $month_year; ?></div>
         <div style="font-size:12px; color:red; font-weight:bold; text-align:left;"> A: Absent, P: Present, H: Holiday, L: Leave, W=Weekend</div>
     </td>
@@ -44,7 +45,7 @@ header('Cache-Control: max-age=0'); //no cache
 
 
 
-	
+
 		<tr  style="font-size:20px; font-weight:bold; text-align:center;margin-top:10px;">
             <th style="background-color: #4CAF50;color: white;"><?php echo $this->lang->line('xin_employee');?></th>
             <th style="background-color: #4CAF50;color: white;">Designation</th>
@@ -64,10 +65,10 @@ header('Cache-Control: max-age=0'); //no cache
             <th style="background-color: #d5b2b2; color: black;">H</th>
             <th style="background-color: #d5b2b2; color: black;" >L</th>
             <th style="background-color: #d5b2b2; color: black;">T.D</th>
-            
+
           </tr>
 		  <?php $j=0;foreach($xin_employees as $r):?>
-          <?php 
+          <?php
            $holiday=0;
            $weekend=0;
            $leave=0;
@@ -80,14 +81,14 @@ header('Cache-Control: max-age=0'); //no cache
 						if(!is_null($designation)){
 							$designation_name = $designation[0]->designation_name;
 						} else {
-							$designation_name = '--';	
+							$designation_name = '--';
 						}
 						// department
 						$department = $this->Department_model->read_department_information($r->department_id);
 						if(!is_null($department)){
 						$department_name = $department[0]->department_name;
 						} else {
-						$department_name = '--';	
+						$department_name = '--';
 						}
 						$department_designation = $designation_name.' ('.$department_name.')';$pcount=0;
 					?>
@@ -96,7 +97,7 @@ header('Cache-Control: max-age=0'); //no cache
           <tr>
             <td><?php echo $employee_name;?></td>
             <td><?php echo $designation_name;?></td>
-            
+
             <?php for($i = 1; $i <= $daysInMonth; $i++):
 							$i = str_pad($i, 2, 0, STR_PAD_LEFT);
 							// get date <
@@ -113,11 +114,11 @@ header('Cache-Control: max-age=0'); //no cache
 								$h_date = $this->Timesheet_model->holiday_date($attendance_date);
 								$begin = new DateTime( $h_date[0]->start_date );
 								$end = new DateTime( $h_date[0]->end_date);
-								$end = $end->modify( '+1 day' ); 
-								
+								$end = $end->modify( '+1 day' );
+
 								$interval = new DateInterval('P1D');
 								$daterange = new DatePeriod($begin, $interval ,$end);
-								
+
 								foreach($daterange as $date){
 									$holiday_arr[] =  $date->format("Y-m-d");
 								}
@@ -132,14 +133,14 @@ header('Cache-Control: max-age=0'); //no cache
 								$leave_date = $this->Timesheet_model->leave_date($r->user_id,$attendance_date);
 								$begin1 = new DateTime( $leave_date[0]->from_date );
 								$end1 = new DateTime( $leave_date[0]->to_date);
-								$end1 = $end1->modify( '+1 day' ); 
-								
+								$end1 = $end1->modify( '+1 day' );
+
 								$interval1 = new DateInterval('P1D');
 								$daterange1 = new DatePeriod($begin1, $interval1 ,$end1);
-								
+
 								foreach($daterange1 as $date1){
 									$leave_arr[] =  $date1->format("Y-m-d");
-								}	
+								}
 							} else {
 								$leave_arr[] = '99-99-99';
 							}
@@ -181,15 +182,15 @@ header('Cache-Control: max-age=0'); //no cache
 							$attendance = $this->Timesheet_model->attendance_first_in($r->user_id,$attendance_date);
 							$status = 'P';//$attendance[0]->attendance_status;
                             $present++;
-								
+
 							} else {
-								
-								 
+
+
 								$status = 'A';
                                 $absent++;
 								//$pcount += 0;
 							}
-                            
+
 							$pcount += $check->num_rows();
 							// set to present date
 							$iattendance_date = strtotime($attendance_date);

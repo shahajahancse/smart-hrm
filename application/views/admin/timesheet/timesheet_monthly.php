@@ -12,7 +12,7 @@ if($user_info[0]->user_role_id==3){
 		$month 		   = date($imonth_year[1], $date);
 		$year 		   = date($imonth_year[0], $date);
 		$xin_employees = $user_info;
-} 
+}
  else if(in_array('10',$role_resources_ids)) {
 
 	$employee_id = $this->input->post('employee_id');
@@ -54,7 +54,8 @@ if($user_info[0]->user_role_id==3){
 	$xin_employees = $this->Xin_model->read_user_info($session['user_id']);
 }
 // total days in month
-$daysInMonth = cal_days_in_month(0, $month, $year);
+// $daysInMonth = cal_days_in_month(0, $month, $year);
+$daysInMonth = date('t', strtotime("$year-$month-01"));
 $imonth = date('F', $date);
 ?>
 
@@ -79,7 +80,7 @@ $imonth = date('F', $date);
               <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>" required>
                 <option value=""></option>
                 <?php foreach($get_all_companies as $company) {?>
-                <option value="<?php echo $company->company_id?>" 
+                <option value="<?php echo $company->company_id?>"
 								<?php if(isset($employee_id)): if($company->company_id==$company->company_id): ?> selected="selected" <?php endif; endif;?>><?php echo $company->name?></option>
                 <?php } ?>
               </select>
@@ -92,8 +93,8 @@ $imonth = date('F', $date);
                 <?php if(isset($employee_id)): ?>
                 <?php $result = $this->Department_model->ajax_company_employee_info($company_id); ?>
                 <option value="0">All</option>
-                <?php 
-                if (!empty($result)) { 
+                <?php
+                if (!empty($result)) {
                 foreach($result as $employee) {?>
                 <option value="<?php echo $employee->user_id;?>" <?php if($employee->user_id==$employee_id): ?> selected="selected" <?php endif;?>> <?php echo $employee->first_name.' '.$employee->last_name;?></option>
                 <?php } }?>
@@ -109,12 +110,12 @@ $imonth = date('F', $date);
               <?php echo form_button(array('name' => 'hrsale_form', 'type' => 'submit', 'class' => 'btn btn-primary', 'content' => '<i class="fa fa fa-check-square-o"></i> '.$this->lang->line('xin_get'))); ?> </div>
           </div>
         </div>
-        <?php echo form_close(); ?> 
+        <?php echo form_close(); ?>
       </div>
       <div class="col-md-2">
       	<div class="row" style="margin-top: 20px; margin-right: 15px;" >
       		<!-- <button class="btn btn-success" onclick="jobCard()">Job Card</button> -->
-			<?php 
+			<?php
 				if($user_info[0]->user_role_id==1){?>
 					<button class="btn btn-info pull-right" onclick="printDiv()">print</button>
 		    <?php }?>
@@ -156,21 +157,21 @@ $imonth = date('F', $date);
         </thead>
         <tbody>
           <?php $j=0;foreach($xin_employees as $r):?>
-          <?php 
+          <?php
           	$full_name = $r->first_name.' '.$r->last_name;
 						// get designation
 						$designation = $this->Designation_model->read_designation_information($r->designation_id);
 						if(!is_null($designation)){
 							$designation_name = $designation[0]->designation_name;
 						} else {
-							$designation_name = '--';	
+							$designation_name = '--';
 						}
 						// department
 						$department = $this->Department_model->read_department_information($r->department_id);
 						if(!is_null($department)){
 						$department_name = $department[0]->department_name;
 						} else {
-						$department_name = '--';	
+						$department_name = '--';
 						}
 						$department_designation = $designation_name.' ('.$department_name.')';$pcount=0;
 					?>
@@ -194,11 +195,11 @@ $imonth = date('F', $date);
 								$h_date = $this->Timesheet_model->holiday_date($attendance_date);
 								$begin = new DateTime( $h_date[0]->start_date );
 								$end = new DateTime( $h_date[0]->end_date);
-								$end = $end->modify( '+1 day' ); 
-								
+								$end = $end->modify( '+1 day' );
+
 								$interval = new DateInterval('P1D');
 								$daterange = new DatePeriod($begin, $interval ,$end);
-								
+
 								foreach($daterange as $date){
 									$holiday_arr[] =  $date->format("Y-m-d");
 								}
@@ -213,21 +214,21 @@ $imonth = date('F', $date);
 								$leave_date = $this->Timesheet_model->leave_date($r->user_id,$attendance_date);
 								$begin1 = new DateTime( $leave_date[0]->from_date );
 								$end1 = new DateTime( $leave_date[0]->to_date);
-								$end1 = $end1->modify( '+1 day' ); 
-								
+								$end1 = $end1->modify( '+1 day' );
+
 								$interval1 = new DateInterval('P1D');
 								$daterange1 = new DatePeriod($begin1, $interval1 ,$end1);
-								
+
 								foreach($daterange1 as $date1){
 									$leave_arr[] =  $date1->format("Y-m-d");
-								}	
+								}
 							} else {
 								$leave_arr[] = '99-99-99';
 							}
 							$attendance_status = '';
 							$check = $this->Timesheet_model->attendance_first_in_check($r->user_id,$attendance_date);
 							if($office_shift[0]->monday_in_time == '' && $day == 'Monday') {
-								$status = 'H';	
+								$status = 'H';
 							} else if($office_shift[0]->tuesday_in_time == '' && $day == 'Tuesday') {
 								$status = 'H';
 							} else if($office_shift[0]->wednesday_in_time == '' && $day == 'Wednesday') {
@@ -247,10 +248,10 @@ $imonth = date('F', $date);
 							} else if($check->num_rows() > 0){
 							$attendance = $this->Timesheet_model->attendance_first_in($r->user_id,$attendance_date);
 							$status = 'P';//$attendance[0]->attendance_status;
-								
+
 							} else {
-								
-								 
+
+
 								$status = 'A';
 								//$pcount += 0;
 							}
@@ -307,7 +308,7 @@ $imonth = date('F', $date);
 		{
 			var ajaxRequest;  // The variable that makes Ajax possible!
 	    ajaxRequest = new XMLHttpRequest();
-			
+
 		  url = "<?php echo base_url() ?>admin/timesheet/monthly_attn_sheet_print";
 		  ajaxRequest.open("GET", url, true);
 		  ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -323,7 +324,7 @@ $imonth = date('F', $date);
 		      a.document.write(resp);
 		      // a.document.write('</body></html>');
 		      a.print();
-		      a.close();	
+		      a.close();
 				}
 			}
 		}
@@ -350,7 +351,7 @@ $imonth = date('F', $date);
 				alert("Please select Company option");
 				return;
 			}
-			
+
 			var queryString="month_year="+month_year+"&company="+company+"&employee_id="+employee_id;
 
 		  url = "<?php echo base_url() ?>admin/timesheet/job_card/"+month_year+"/"+company+"/"+employee_id;
