@@ -73,7 +73,11 @@ class CI_Controller {
 	public function __construct()
 	{
 		self::$instance =& $this;
-
+		header('Access-Control-Allow-Origin: *');
+        // Allow methods: GET, POST, OPTIONS
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        // Allow header Content-Type: application/json
+        header("Access-Control-Allow-Headers: Content-Type");
 		// Assign all the class objects that were instantiated by the
 		// bootstrap file (CodeIgniter.php) to local class variables
 		// so that CI can run as one big super object.
