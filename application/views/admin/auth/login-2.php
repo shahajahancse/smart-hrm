@@ -30,6 +30,7 @@ if($system[0]->enable_auth_background!='yes'):
 else:
 	$auth_bg = '';	
 endif;
+// dd($system[0]->application_name);
 ?>
 <!DOCTYPE html>
 <html>
@@ -107,7 +108,7 @@ endif;
               <?php endif;?>
               <div class="authfy-panel panel-login text-center active">
                 <div class="authfy-heading">
-                  <h3 class="auth-title"><?php echo $this->lang->line('xin_hrsale_login_to_your_account');?></h3>
+                  <h3 class="auth-title"><?php echo $system[0]->application_name ;?> Login</h3>
                 </div>
                 <div class="row">
                   <div class="col-xs-12 col-sm-12">
